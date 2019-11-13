@@ -1,0 +1,2 @@
+-keep class com.google.android.material.** { *; }
+-keep interface com.google.android.material.** { *; }

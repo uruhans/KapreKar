@@ -10,4 +10,8 @@
 
   <string name="alert_generic_message">We encountered an error. Please try again later.</string>
   <string name="alert_generic_title">An error occurred</string>
+
+  <string name="dialog_permission_location_title">Not allowed</string>
+  <string name="dialog_permission_location_message">The app needs permission to access location in order to use Bluetooth</string>
+  <string name="dialog_permission_ask">Ask</string>
 </resources>

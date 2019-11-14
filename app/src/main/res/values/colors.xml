@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <color name="colorPrimary">@color/navy</color>
+  <color name="colorPrimary">@color/default_background</color>
   <color name="colorPrimaryDark">#00574b</color>
-  <color name="colorAccent">@color/navy</color>
+  <color name="colorAccent">@color/text_blue_green</color>
 
-  <color name="gray">#66727b</color>
   <color name="white">#ffffff</color>
   <color name="black">#000000</color>
-  <color name="red">#d62f00</color>
-  <color name="navy">#001965</color>
-  <color name="green">#cee003</color>
+  <color name="olympus_bluegreen">#00b0ca</color>
+  <color name="grey">#858585</color>
+  <color name="darkgrey">#465051</color>
+  <color name="red">#e21b44</color>
 
-  <color name="default_background">#f5f6f9</color>
-  <color name="other_background">#e5e5e5</color>
+  <color name="default_background">#fcfaf9</color>
 
   <color name="toolbar_icon_tint">@color/colorAccent</color>
   <color name="toolbar_text_color">@color/black</color>
@@ -29,7 +28,9 @@
   <color name="pagerindicator_selected">@color/colorAccent</color>
   <color name="pagerindicator_unselected">#38001965</color>
 
-  <color name="text_blue">@color/navy</color>
+  <color name="text_dark_grey">@color/darkgrey</color>
+  <color name="text_blue_green">@color/olympus_bluegreen</color>
+
   <color name="text_black">#001423</color>
   <color name="text_gray">#666666</color>
   <color name="text_red">@color/red</color>
@@ -40,4 +41,9 @@
   <color name="color_error">@color/red</color>
 
   <color name="day_selector_disabled">#bfc0c2</color>
+
+  <color name="icon_disabled">#d5d5d5</color>
+  <color name="icon_enabled">@color/colorAccent</color>
+
+
 </resources>

@@ -10,25 +10,101 @@
 
   </data>
 
-  <ScrollView
+  <androidx.drawerlayout.widget.DrawerLayout
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    android:fillViewport="true">
+    android:fitsSystemWindows="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
       android:layout_width="match_parent"
-      android:layout_height="wrap_content">
+      android:layout_height="match_parent">
 
-      <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Home Controller"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+      <ImageView
+        android:id="@+id/icon_bluetooth"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="@dimen/spacing_standard"
+        android:layout_marginTop="@dimen/spacing_standard"
+        android:padding="2dp"
+        android:src="@drawable/ic_bluetooth_black_24dp"
+        android:tint="@color/icon_disabled"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+      <TextView
+        style="@style/Text.Large"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/spacing_half"
+        android:gravity="center_vertical"
+        android:text="Disconnected"
+        android:textColor="@color/grey"
+        app:layout_constraintBottom_toBottomOf="@+id/icon_bluetooth"
+        app:layout_constraintStart_toEndOf="@+id/icon_bluetooth"
+        app:layout_constraintTop_toTopOf="@+id/icon_bluetooth" />
+
+      <ImageView
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="@dimen/spacing_standard"
+        android:layout_marginEnd="@dimen/spacing_standard"
+        android:background="?attr/actionBarItemBackground"
+        android:onClick="@{() -> controller.onMenuClicked()}"
+        android:src="@drawable/ic_menu_24dp"
+        android:tint="@color/darkgrey"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+      <FrameLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/spacing_standard"
+        android:layout_marginBottom="@dimen/spacing_standard"
+        app:layout_constraintBottom_toTopOf="@+id/imageView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/icon_bluetooth">
+
+        <include
+          layout="@layout/view_bluetooth_not_enabled"
+          app:controller="@{controller}" />
+
+      </FrameLayout>
+
+      <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginBottom="@dimen/spacing_standard"
+        android:src="@drawable/ic_battery_full_24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/icon_bluetooth" />
+
+      <TextView
+        style="@style/Text.Large"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginEnd="@dimen/spacing_standard"
+        android:gravity="center_vertical"
+        android:text="Last check 19:08:08"
+        android:textColor="@color/grey"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imageView" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
-  </ScrollView>
+
+    <com.google.android.material.navigation.NavigationView
+      android:id="@+id/nav_view"
+      android:layout_width="wrap_content"
+      android:layout_height="match_parent"
+      android:layout_gravity="end"
+      android:fitsSystemWindows="true">
+
+      <!-- TODO - add navigation content here -->
+
+    </com.google.android.material.navigation.NavigationView>
+
+  </androidx.drawerlayout.widget.DrawerLayout>
 </layout>

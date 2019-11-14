@@ -6,7 +6,7 @@ buildscript {
   ext.glide_version = '4.10.0'
   ext.retrofit_version = '2.6.2'
   ext.moshi_version = '1.8.0'
-  ext.rxjava_version = '2.2.12'
+  ext.rxjava_version = '2.2.8'
   ext.timber_version = '4.7.1'
   ext.threeten_version = '1.2.1'
   ext.okhttp_logging_version = '4.2.2'
@@ -22,6 +22,10 @@ buildscript {
     // NOTE: Do not place your application dependencies here; they belong
     // in the individual module build.gradle files
   }
+
+    
+
+
 }
 
 allprojects {

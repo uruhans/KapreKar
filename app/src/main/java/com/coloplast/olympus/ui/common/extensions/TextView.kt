@@ -1,6 +1,7 @@
 package com.coloplast.olympus.ui.common.extensions
 
 import android.animation.Animator
+import android.annotation.SuppressLint
 import android.graphics.*
 import android.os.Build
 import android.text.Html
@@ -16,6 +17,7 @@ import com.coloplast.olympus.utils.Strings
 import com.coloplast.olympus.utils.UiUtils
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDateTime
+import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.TextStyle
 import timber.log.Timber
 import java.util.*
@@ -190,5 +192,13 @@ fun TextView.setDayOfWeek(dayOfWeek: DayOfWeek, textStyle: TextStyle) {
 fun TextView.underlineText(underline: Boolean) {
   if (underline) {
     paintFlags = paintFlags or Paint.UNDERLINE_TEXT_FLAG
+  }
+}
+
+@SuppressLint("SetTextI18n")
+@BindingAdapter("lastCheck")
+fun TextView.lastCheck(localDateTime: LocalDateTime?) {
+  localDateTime?.let {
+    text = "Last check ${it.format(DateTimeFormatter.ISO_LOCAL_TIME)}"
   }
 }

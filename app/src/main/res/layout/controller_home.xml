@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto">
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools">
 
   <data>
+
+    <import type="android.view.View" />
+
+    <import type="com.coloplast.olympus.R" />
 
     <variable
       name="controller"
@@ -28,7 +33,7 @@
         android:layout_marginTop="@dimen/spacing_standard"
         android:padding="2dp"
         android:src="@drawable/ic_bluetooth_black_24dp"
-        android:tint="@color/icon_disabled"
+        app:tintDrawable="@{controller.isConnected() ? R.color.icon_enabled : R.color.icon_disabled}"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -38,7 +43,7 @@
         android:layout_height="0dp"
         android:layout_marginStart="@dimen/spacing_half"
         android:gravity="center_vertical"
-        android:text="Disconnected"
+        android:text='@{controller.isConnected() ? "Connected" : "Disconnected"}'
         android:textColor="@color/grey"
         app:layout_constraintBottom_toBottomOf="@+id/icon_bluetooth"
         app:layout_constraintStart_toEndOf="@+id/icon_bluetooth"
@@ -68,7 +73,30 @@
 
         <include
           layout="@layout/view_bluetooth_not_enabled"
+          android:visibility="@{controller.readyToScan ? View.GONE : View.VISIBLE}"
           app:controller="@{controller}" />
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:orientation="vertical"
+          android:visibility="@{controller.readyToScan ? View.VISIBLE : View.GONE}">
+
+          <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:enabled="@{!controller.isScanning}"
+            android:onClick="@{() -> controller.onScanClicked()}"
+            android:text='@{controller.isScanning() ? "Scanning" : "Start"}' />
+
+          <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:itemBinding="@{controller.itemBinding}"
+            app:items="@{controller.items}"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+        </LinearLayout>
 
       </FrameLayout>
 
@@ -77,9 +105,9 @@
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_marginBottom="@dimen/spacing_standard"
-        android:src="@drawable/ic_battery_full_24dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/icon_bluetooth" />
+        app:layout_constraintStart_toStartOf="@+id/icon_bluetooth"
+        app:powerLevel="@{controller.powerLevel}" />
 
       <TextView
         style="@style/Text.Large"
@@ -87,7 +115,8 @@
         android:layout_height="0dp"
         android:layout_marginEnd="@dimen/spacing_standard"
         android:gravity="center_vertical"
-        android:text="Last check 19:08:08"
+        app:lastCheck="@{controller.lastCheck}"
+        tools:text="Last update"
         android:textColor="@color/grey"
         app:layout_constraintBottom_toBottomOf="@+id/imageView"
         app:layout_constraintEnd_toEndOf="parent"

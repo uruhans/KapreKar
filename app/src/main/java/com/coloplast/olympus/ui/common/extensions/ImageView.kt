@@ -11,7 +11,7 @@ import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import com.coloplast.olympus.R
-import com.coloplast.olympus.bluetooth.businesslayer.models.PowerLevel
+import com.coloplast.olympus.bluetooth.businesslayer.enums.PowerLevel
 
 @BindingAdapter("resource")
 fun ImageView.setResource(@DrawableRes resource: Int?) {

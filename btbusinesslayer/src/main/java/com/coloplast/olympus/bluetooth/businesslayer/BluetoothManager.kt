@@ -1,14 +1,18 @@
 package com.coloplast.olympus.bluetooth.businesslayer
 
 import android.content.Context
-import com.coloplast.olympus.bluetooth.businesslayer.services.BatteryPowerService
+import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
+import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
+import com.coloplast.olympus.bluetooth.businesslayer.enums.PowerLevel
 import com.coloplast.olympus.bluetooth.businesslayer.models.*
+import com.coloplast.olympus.bluetooth.businesslayer.services.BatteryPowerService
 import com.coloplast.olympus.bluetooth.businesslayer.services.OlympusWirelessProtocol
+import com.coloplast.olympus.bluetooth.businesslayer.transformers.BatteryPowerTransformer
+import com.coloplast.olympus.bluetooth.businesslayer.transformers.OlympusStatusTransformer
 import com.dawn.bluetooth.BluetoothHandler
 import com.polidea.rxandroidble2.RxBleClient
 import com.polidea.rxandroidble2.RxBleConnection
 import com.polidea.rxandroidble2.RxBleDevice
-import com.polidea.rxandroidble2.helpers.ValueInterpreter
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 
@@ -89,8 +93,8 @@ class BluetoothManager(context: Context, isDebugging: Boolean) {
     return Observable.combineLatest(
       notifyOlympusStatus(rxBleConnection),
       notifyBattery(rxBleConnection),
-      BiFunction { olympusStatus: ByteArray, powerLevel: PowerLevel ->
-        Peripheral(olympusStatus, powerLevel)
+      BiFunction { status: Status, powerLevel: PowerLevel ->
+        Peripheral(status, powerLevel)
       })
   }
   
@@ -99,14 +103,14 @@ class BluetoothManager(context: Context, isDebugging: Boolean) {
       rxBleConnection.setupNotification(BatteryPowerService.Characteristics.POWER).flatMap { it },
       rxBleConnection.readCharacteristic(BatteryPowerService.Characteristics.POWER).toObservable()
     )
-        .map { ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_UINT8, 0) }
-        .map { PowerLevel.fromPercentage(it) }
+        .compose(BatteryPowerTransformer())
   }
   
-  private fun notifyOlympusStatus(rxBleConnection: RxBleConnection): Observable<ByteArray> {
+  private fun notifyOlympusStatus(rxBleConnection: RxBleConnection): Observable<Status> {
     return Observable.merge(
       rxBleConnection.setupNotification(OlympusWirelessProtocol.Characteristics.STATUS).flatMap { it },
       rxBleConnection.readCharacteristic(OlympusWirelessProtocol.Characteristics.STATUS).toObservable()
     )
+        .compose(OlympusStatusTransformer())
   }
 }

@@ -12,8 +12,8 @@ import com.artemzin.rxui.RxUi
 import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.BR
 import com.coloplast.olympus.R
-import com.coloplast.olympus.bluetooth.businesslayer.models.BluetoothState
-import com.coloplast.olympus.bluetooth.businesslayer.models.PowerLevel
+import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
+import com.coloplast.olympus.bluetooth.businesslayer.enums.PowerLevel
 import com.coloplast.olympus.bluetooth.businesslayer.models.ScanResult
 import com.coloplast.olympus.databinding.ControllerHomeBinding
 import com.coloplast.olympus.ui.common.BaseController

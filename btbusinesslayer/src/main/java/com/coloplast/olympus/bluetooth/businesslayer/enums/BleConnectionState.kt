@@ -1,4 +1,4 @@
-package com.coloplast.olympus.bluetooth.businesslayer.models
+package com.coloplast.olympus.bluetooth.businesslayer.enums
 
 import com.polidea.rxandroidble2.RxBleConnection
 

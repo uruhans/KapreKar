@@ -1,7 +1,7 @@
 package com.coloplast.olympus.ui.feature.home.models
 
 import com.coloplast.olympus.bluetooth.businesslayer.models.BleDevice
-import com.coloplast.olympus.bluetooth.businesslayer.models.BluetoothState
+import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
 import com.coloplast.olympus.bluetooth.businesslayer.models.ScanResult
 import com.coloplast.olympus.ui.common.models.UiModel
 import org.threeten.bp.LocalDateTime

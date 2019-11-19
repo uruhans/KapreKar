@@ -1,18 +1,16 @@
 package com.coloplast.olympus.bluetooth.businesslayer
 
 import android.content.Context
-import com.coloplast.olympus.bluetooth.businesslayer.characteristics.Characteristics
-import com.coloplast.olympus.bluetooth.businesslayer.characteristics.Services
+import com.coloplast.olympus.bluetooth.businesslayer.services.BatteryPowerService
 import com.coloplast.olympus.bluetooth.businesslayer.models.*
+import com.coloplast.olympus.bluetooth.businesslayer.services.OlympusWirelessProtocol
 import com.dawn.bluetooth.BluetoothHandler
 import com.polidea.rxandroidble2.RxBleClient
 import com.polidea.rxandroidble2.RxBleConnection
 import com.polidea.rxandroidble2.RxBleDevice
 import com.polidea.rxandroidble2.helpers.ValueInterpreter
 import io.reactivex.Observable
-import io.reactivex.Scheduler
 import io.reactivex.functions.BiFunction
-import java.util.concurrent.TimeUnit
 
 class BluetoothManager(context: Context, isDebugging: Boolean) {
   
@@ -59,7 +57,7 @@ class BluetoothManager(context: Context, isDebugging: Boolean) {
   }
   
   fun scanBleDevices(): Observable<ScanResult> {
-    return bluetoothHandler.scanBleDevices(Services.OLYMPUS_WIRELESS_PROTOCOL.asUUID())
+    return bluetoothHandler.scanBleDevices(OlympusWirelessProtocol.UUID)
         .map { ScanResult(it.bleDevice.name, it.bleDevice.macAddress, it.rssi) }
   }
   
@@ -81,13 +79,13 @@ class BluetoothManager(context: Context, isDebugging: Boolean) {
                 rxBleDeviceConnectionState(macAddress)
                     .filter { it.isFullyConnected() }
                     .flatMapSingle { rxBleConnection.discoverServices() }
-                    .flatMap { addNotifications(rxBleConnection) }
+                    .flatMap { setupNotifications(rxBleConnection) }
                     .map { BleDevice(rxBleDevice.name, rxBleDevice.macAddress, BleConnectionState.fromRxBleState(rxBleDevice.connectionState), it) }
               }
         }
   }
   
-  private fun addNotifications(rxBleConnection: RxBleConnection): Observable<Peripheral> {
+  private fun setupNotifications(rxBleConnection: RxBleConnection): Observable<Peripheral> {
     return Observable.combineLatest(
       notifyOlympusStatus(rxBleConnection),
       notifyBattery(rxBleConnection),
@@ -98,18 +96,17 @@ class BluetoothManager(context: Context, isDebugging: Boolean) {
   
   private fun notifyBattery(rxBleConnection: RxBleConnection): Observable<PowerLevel> {
     return Observable.merge(
-      rxBleConnection.setupNotification(Characteristics.POWER.asUUID()).flatMap { it },
-      rxBleConnection.readCharacteristic(Characteristics.POWER.asUUID()).toObservable()
+      rxBleConnection.setupNotification(BatteryPowerService.Characteristics.POWER).flatMap { it },
+      rxBleConnection.readCharacteristic(BatteryPowerService.Characteristics.POWER).toObservable()
     )
         .map { ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_UINT8, 0) }
         .map { PowerLevel.fromPercentage(it) }
   }
   
-  
   private fun notifyOlympusStatus(rxBleConnection: RxBleConnection): Observable<ByteArray> {
     return Observable.merge(
-      rxBleConnection.setupNotification(Characteristics.STATUS.asUUID()).flatMap { it },
-      rxBleConnection.readCharacteristic(Characteristics.STATUS.asUUID()).toObservable()
+      rxBleConnection.setupNotification(OlympusWirelessProtocol.Characteristics.STATUS).flatMap { it },
+      rxBleConnection.readCharacteristic(OlympusWirelessProtocol.Characteristics.STATUS).toObservable()
     )
   }
 }

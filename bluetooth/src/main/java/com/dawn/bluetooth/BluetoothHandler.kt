@@ -61,5 +61,4 @@ class BluetoothHandler(context: Context, isDebugging: Boolean) {
   fun connectRxBleDevice(rxBleDevice: RxBleDevice): Observable<RxBleConnection> {
     return rxBleDevice.establishConnection(false)
   }
-  
 }

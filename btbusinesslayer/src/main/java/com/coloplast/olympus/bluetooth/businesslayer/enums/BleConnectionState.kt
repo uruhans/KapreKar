@@ -6,8 +6,7 @@ enum class BleConnectionState {
   CONNECTING,
   CONNECTED,
   DISCONNECTED,
-  DISCONNECTING,
-  UNDEFINED;
+  DISCONNECTING;
   
   companion object {
     fun fromRxBleState(state: RxBleConnection.RxBleConnectionState) : BleConnectionState {

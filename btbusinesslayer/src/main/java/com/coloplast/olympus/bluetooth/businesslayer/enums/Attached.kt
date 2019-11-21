@@ -6,8 +6,8 @@ enum class Attached(val id: Int) {
   UNKNOWN(-1);
   
   companion object {
-    fun fromId(id: Int): Attached {
-      return values().associateBy { attached: Attached -> attached.id }[id]
+    fun fromId(id: UByte): Attached {
+      return values().associateBy { attached: Attached -> attached.id }[id.toInt()]
         ?: UNKNOWN
     }
   }

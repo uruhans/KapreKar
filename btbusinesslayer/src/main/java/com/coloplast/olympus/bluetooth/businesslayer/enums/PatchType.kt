@@ -9,8 +9,8 @@ enum class PatchType(val id: Int) {
   UNKNOWN(-1);
   
   companion object {
-    fun fromId(id: Int): PatchType {
-      return values().associateBy { patchType: PatchType -> patchType.id }[id]
+    fun fromId(id: UByte): PatchType {
+      return values().associateBy { patchType: PatchType -> patchType.id }[id.toInt()]
         ?: UNKNOWN
     }
   }

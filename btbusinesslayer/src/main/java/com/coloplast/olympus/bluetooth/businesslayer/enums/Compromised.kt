@@ -6,8 +6,8 @@ enum class Compromised(val id: Int) {
   UNKNOWN(-1);
   
   companion object {
-    fun fromId(id: Int): Compromised {
-      return values().associateBy { compromised: Compromised -> compromised.id }[id]
+    fun fromId(id: UByte): Compromised {
+      return values().associateBy { compromised: Compromised -> compromised.id }[id.toInt()]
         ?: UNKNOWN
     }
   }

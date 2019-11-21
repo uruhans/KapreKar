@@ -107,8 +107,8 @@ class BluetoothManager(context: Context, isDebugging: Boolean) {
       notifyOlympusStatus(rxBleConnection),
       notifyBattery(rxBleConnection),
       notifyOlympusRawDataPackage(rxBleConnection),
-      Function3 { status: Status, powerLevel: PowerLevel, rawDataPackage: RawDataPackage ->
-        Peripheral(status, powerLevel)
+      Function3 { statusVector: StatusVector, powerLevel: PowerLevel, rawDataPackage: RawDataPackage ->
+        Peripheral(statusVector.patchState, statusVector.transmitterState, powerLevel)
       })
   }
   
@@ -119,7 +119,7 @@ class BluetoothManager(context: Context, isDebugging: Boolean) {
         .compose(BatteryPowerTransformer())
   }
   
-  private fun notifyOlympusStatus(rxBleConnection: RxBleConnection): Observable<Status> {
+  private fun notifyOlympusStatus(rxBleConnection: RxBleConnection): Observable<StatusVector> {
     return rxBleConnection.setupNotification(OlympusWirelessProtocol.Characteristics.STATUS)
         .flatMap { it }
         .startWith(rxBleConnection.readCharacteristic(OlympusWirelessProtocol.Characteristics.STATUS).toObservable())

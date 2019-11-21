@@ -8,8 +8,8 @@ enum class Battery(val id: Int) {
   UNKNOWN(-1);
   
   companion object {
-    fun fromId(id: Int): Battery {
-      return values().associateBy { battery: Battery -> battery.id }[id]
+    fun fromId(id: UByte): Battery {
+      return values().associateBy { battery: Battery -> battery.id }[id.toInt()]
         ?: UNKNOWN
     }
   }

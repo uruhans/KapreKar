@@ -15,8 +15,8 @@ enum class SensorStatus(val id: Int) {
   UNKNOWN(-1);
   
   companion object {
-    fun fromId(id: Int): SensorStatus {
-      return values().associateBy { sensorStatus: SensorStatus -> sensorStatus.id }[id]
+    fun fromId(id: UByte): SensorStatus {
+      return values().associateBy { sensorStatus: SensorStatus -> sensorStatus.id }[id.toInt()]
         ?: UNKNOWN
     }
   }

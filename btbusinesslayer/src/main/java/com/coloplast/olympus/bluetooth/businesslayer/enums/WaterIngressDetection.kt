@@ -6,8 +6,8 @@ enum class WaterIngressDetection(val id: Int) {
   UNKNOWN(-1);
   
   companion object {
-    fun fromId(id: Int): WaterIngressDetection {
-      return values().associateBy { wid: WaterIngressDetection -> wid.id }[id]
+    fun fromId(id: UByte): WaterIngressDetection {
+      return values().associateBy { wid: WaterIngressDetection -> wid.id }[id.toInt()]
         ?: UNKNOWN
     }
   }

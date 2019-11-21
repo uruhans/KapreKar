@@ -8,13 +8,16 @@ import com.coloplast.olympus.bluetooth.businesslayer.models.*
 import com.coloplast.olympus.bluetooth.businesslayer.services.BatteryPowerService
 import com.coloplast.olympus.bluetooth.businesslayer.services.OlympusWirelessProtocol
 import com.coloplast.olympus.bluetooth.businesslayer.transformers.BatteryPowerTransformer
+import com.coloplast.olympus.bluetooth.businesslayer.transformers.OlympusRawDataPackageTransformer
 import com.coloplast.olympus.bluetooth.businesslayer.transformers.OlympusStatusTransformer
 import com.dawn.bluetooth.BluetoothHandler
 import com.polidea.rxandroidble2.RxBleClient
 import com.polidea.rxandroidble2.RxBleConnection
 import com.polidea.rxandroidble2.RxBleDevice
+import com.polidea.rxandroidble2.internal.RxBleLog
 import io.reactivex.Observable
-import io.reactivex.functions.BiFunction
+import io.reactivex.functions.Function3
+import timber.log.Timber
 
 class BluetoothManager(context: Context, isDebugging: Boolean) {
   
@@ -22,6 +25,13 @@ class BluetoothManager(context: Context, isDebugging: Boolean) {
   
   private val bleDevices = mutableMapOf<String, RxBleDevice>()
   private val bleConnections = mutableMapOf<String, RxBleConnection>()
+  
+  init {
+    RxBleLog.setLogger { level: Int, tag: String?, msg: String? ->
+      Timber.tag(tag)
+          .log(level, msg)
+    }
+  }
   
   fun bluetoothStateObservable(): Observable<BluetoothState> {
     return bluetoothHandler.rxBleClientStateObservable()
@@ -82,6 +92,7 @@ class BluetoothManager(context: Context, isDebugging: Boolean) {
               .flatMap { rxBleConnection ->
                 rxBleDeviceConnectionState(macAddress)
                     .filter { it.isFullyConnected() }
+                    .flatMapSingle { rxBleConnection.requestMtu(64) }
                     .flatMapSingle { rxBleConnection.discoverServices() }
                     .flatMap { setupNotifications(rxBleConnection) }
                     .map { BleDevice(rxBleDevice.name, rxBleDevice.macAddress, BleConnectionState.fromRxBleState(rxBleDevice.connectionState), it) }
@@ -93,24 +104,30 @@ class BluetoothManager(context: Context, isDebugging: Boolean) {
     return Observable.combineLatest(
       notifyOlympusStatus(rxBleConnection),
       notifyBattery(rxBleConnection),
-      BiFunction { status: Status, powerLevel: PowerLevel ->
+      notifyOlympusRawDataPackage(rxBleConnection),
+      Function3 { status: Status, powerLevel: PowerLevel, rawDataPackage: RawDataPackage ->
         Peripheral(status, powerLevel)
       })
   }
   
   private fun notifyBattery(rxBleConnection: RxBleConnection): Observable<PowerLevel> {
-    return Observable.merge(
-      rxBleConnection.setupNotification(BatteryPowerService.Characteristics.POWER).flatMap { it },
-      rxBleConnection.readCharacteristic(BatteryPowerService.Characteristics.POWER).toObservable()
-    )
+    return rxBleConnection.setupNotification(BatteryPowerService.Characteristics.POWER)
+        .flatMap { it }
+        .startWith(rxBleConnection.readCharacteristic(BatteryPowerService.Characteristics.POWER).toObservable())
         .compose(BatteryPowerTransformer())
   }
   
   private fun notifyOlympusStatus(rxBleConnection: RxBleConnection): Observable<Status> {
-    return Observable.merge(
-      rxBleConnection.setupNotification(OlympusWirelessProtocol.Characteristics.STATUS).flatMap { it },
-      rxBleConnection.readCharacteristic(OlympusWirelessProtocol.Characteristics.STATUS).toObservable()
-    )
+    return rxBleConnection.setupNotification(OlympusWirelessProtocol.Characteristics.STATUS)
+        .flatMap { it }
+        .startWith(rxBleConnection.readCharacteristic(OlympusWirelessProtocol.Characteristics.STATUS).toObservable())
         .compose(OlympusStatusTransformer())
+  }
+  
+  private fun notifyOlympusRawDataPackage(rxBleConnection: RxBleConnection): Observable<RawDataPackage> {
+    return rxBleConnection.setupNotification(OlympusWirelessProtocol.Characteristics.RAW_SENSOR_DATA)
+        .flatMap { it }
+        .startWith(rxBleConnection.readCharacteristic(OlympusWirelessProtocol.Characteristics.RAW_SENSOR_DATA).toObservable())
+        .compose(OlympusRawDataPackageTransformer())
   }
 }

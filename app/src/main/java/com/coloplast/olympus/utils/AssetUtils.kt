@@ -3,8 +3,11 @@ package com.coloplast.olympus.utils
 import android.content.Context
 import android.content.Intent
 import androidx.core.content.FileProvider
+import com.coloplast.olympus.shared.AppSettings
+import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream
+import java.io.InputStream
 
 object AssetUtils {
   
@@ -42,6 +45,19 @@ object AssetUtils {
       }
       asset.close()
       output.close()
+    }
+  }
+  
+  fun getFromAssets(filename: String): String {
+    Timber.d("getFromAssets: $filename")
+    return try {
+      val inputStream: InputStream = AppSettings.applicationContext.resources.assets.open(filename)
+      inputStream.bufferedReader()
+          .use { it.readText() }
+    }
+    catch (e: Exception) {
+      Timber.e("getFromAssets: $e")
+      ""
     }
   }
 }

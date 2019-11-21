@@ -1,6 +1,5 @@
 package com.coloplast.olympus.ui.feature.home
 
-import android.Manifest
 import android.bluetooth.BluetoothAdapter
 import android.content.Intent
 import android.os.Bundle
@@ -23,6 +22,7 @@ import com.coloplast.olympus.ui.common.dialogs.DialogController
 import com.coloplast.olympus.ui.dialogs.ImageDialogController
 import com.coloplast.olympus.ui.feature.home.models.HomeUiModel
 import com.coloplast.olympus.ui.feature.home.models.ScanResultItem
+import com.coloplast.olympus.utils.OSUtils
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
@@ -126,10 +126,10 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   override fun onDialogDismissed(requestCode: Int) {
     when (requestCode) {
       REQUEST_CODE_PERMISSION_LOCATION -> {
-        requestPermission(this, REQUEST_CODE_PERMISSION_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
+        requestPermission(this, REQUEST_CODE_PERMISSION_LOCATION, OSUtils.bleLocationPermission())
       }
       REQUEST_CODE_PERMISSION_RATIONALE -> {
-        requestPermissionAgain(this, REQUEST_CODE_PERMISSION_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
+        requestPermissionAgain(this, REQUEST_CODE_PERMISSION_LOCATION, OSUtils.bleLocationPermission())
       }
       else -> {
         super.onDialogDismissed(requestCode)
@@ -211,7 +211,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
     when (requestCode) {
       REQUEST_CODE_BLUETOOTH_ENABLE -> {
         if (resultCode == REQUEST_CODE_BLUETOOTH_ENABLE) {
-          Timber.d("are you dumb? enable it, dude")
+          Timber.d("enable it, dude")
         }
       }
       else -> super.onActivityResult(requestCode, resultCode, data)

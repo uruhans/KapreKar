@@ -1,12 +1,12 @@
 package com.coloplast.olympus.utils
 
+import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Build
 import com.coloplast.olympus.shared.AppSettings
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.temporal.WeekFields
-import timber.log.Timber
-import java.io.InputStream
 import java.util.*
 
 object OSUtils {
@@ -16,21 +16,19 @@ object OSUtils {
     return list.isNotEmpty()
   }
   
-  fun getFromAssets(filename: String): String {
-    Timber.d("getFromAssets: $filename")
-    return try {
-      val inputStream: InputStream = AppSettings.applicationContext.resources.assets.open(filename)
-      inputStream.bufferedReader()
-        .use { it.readText() }
-    }
-    catch (e: Exception) {
-      Timber.e("getFromAssets: $e")
-      ""
-    }
-  }
-  
   fun firstDayOfWeek(): DayOfWeek {
     return WeekFields.of(Locale.getDefault())
-      .firstDayOfWeek
+        .firstDayOfWeek
+  }
+  
+  fun bleLocationPermission(): String {
+    val sdkInt = Build.VERSION.SDK_INT
+    
+    return if (sdkInt >= 29) {
+      Manifest.permission.ACCESS_FINE_LOCATION
+    }
+    else {
+      Manifest.permission.ACCESS_COARSE_LOCATION
+    }
   }
 }

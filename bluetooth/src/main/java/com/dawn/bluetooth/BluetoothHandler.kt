@@ -2,7 +2,6 @@ package com.dawn.bluetooth
 
 import android.content.Context
 import android.os.ParcelUuid
-import com.akaita.java.rxjava2debug.RxJava2Debug
 import com.polidea.rxandroidble2.*
 import com.polidea.rxandroidble2.scan.ScanFilter
 import com.polidea.rxandroidble2.scan.ScanResult
@@ -17,7 +16,7 @@ class BluetoothHandler(context: Context, isDebugging: Boolean) {
   init {
     if (isDebugging) {
       val logOptions = LogOptions.Builder()
-          .setLogLevel(LogConstants.INFO)
+          .setLogLevel(LogConstants.DEBUG)
           .setMacAddressLogSetting(LogConstants.MAC_ADDRESS_FULL)
           .setUuidsLogSetting(LogConstants.UUIDS_FULL)
           .setShouldLogAttributeValues(true)
@@ -25,8 +24,6 @@ class BluetoothHandler(context: Context, isDebugging: Boolean) {
       
       RxBleClient.updateLogOptions(logOptions)
     }
-    
-    RxJava2Debug.enableRxJava2AssemblyTracking()
   }
   
   fun rxBleClientStateObservable(): Observable<RxBleClient.State> {

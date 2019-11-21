@@ -85,10 +85,12 @@ class BluetoothManager(context: Context, isDebugging: Boolean) {
         }
   }
   
+  @ExperimentalUnsignedTypes
   fun connectBleDevice(macAddress: String): Observable<BleDevice> {
     return getBleDevice(macAddress)
         .flatMap { rxBleDevice ->
           bluetoothHandler.connectRxBleDevice(rxBleDevice)
+              .doOnNext { bleConnections[macAddress] = it }
               .flatMap { rxBleConnection ->
                 rxBleDeviceConnectionState(macAddress)
                     .filter { it.isFullyConnected() }

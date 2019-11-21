@@ -11,50 +11,50 @@ class OlympusRawDataPackageTransformer : ObservableTransformer<ByteArray, RawDat
   override fun apply(upstream: Observable<ByteArray>): ObservableSource<RawDataPackage> {
     return upstream
         .map {
-          val wid_r = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_UINT16, 0)
-          val s0_sensor_data = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_UINT16, 2)
-          val s1_sensor_data = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_UINT16, 4)
-          val s2_sensor_data = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_UINT16, 6)
-          val s3_sensor_data = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_UINT16, 8)
-          val s4_sensor_data = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_UINT16, 10)
-          val s5_sensor_data = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_UINT16, 12)
-          val cs0_data = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_UINT16, 14)
-          val cs1_data = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_UINT16, 16)
-          val cs2_data = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_UINT16, 18)
-          val cs3_data = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_UINT16, 20)
-          val cs4_data = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_UINT16, 22)
-          val cs5_data = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_UINT16, 24)
-          val wid_c = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_UINT16, 26)
-          val accX = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_SINT8, 28)
-          val accY = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_SINT8, 29)
-          val accZ = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_SINT8, 30)
-          val accAngleRaw = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_UINT8, 31)
-          val batteryPercentage = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_UINT8, 32)
-          val batteryVoltageRaw = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_UINT8, 33)
+          val widR = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_UINT16, 0).toUShort()
+          val s0SensorData = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_UINT16, 2).toUShort()
+          val s1SensorData = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_UINT16, 4).toUShort()
+          val s2SensorData = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_UINT16, 6).toUShort()
+          val s3SensorData = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_UINT16, 8).toUShort()
+          val s4SensorData = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_UINT16, 10).toUShort()
+          val s5SensorData = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_UINT16, 12).toUShort()
+          val cs0Data = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_UINT16, 14).toUShort()
+          val cs1Data = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_UINT16, 16).toUShort()
+          val cs2Data = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_UINT16, 18).toUShort()
+          val cs3Data = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_UINT16, 20).toUShort()
+          val cs4Data = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_UINT16, 22).toUShort()
+          val cs5Data = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_UINT16, 24).toUShort()
+          val widC = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_UINT16, 26).toUShort()
+          val accX = it[28]
+          val accY = it[29]
+          val accZ = it[30]
+          val accAngleRaw = it[31].toUByte()
+          val batteryPercentage = it[32].toUByte()
+          val batteryVoltageRaw = it[33].toUByte()
           
-          val year = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_UINT16, 34)
-          val month = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_UINT8, 36)
-          val day = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_UINT8, 37)
-          val hour = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_UINT8, 38)
-          val minute = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_UINT8, 39)
-          val seconds = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_UINT8, 40)
-          val seconds256 = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_UINT8, 41)
+          val year = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_UINT16, 34).toUShort()
+          val month = it[36].toUByte()
+          val day = it[37].toUByte()
+          val hour = it[38].toUByte()
+          val minute = it[39].toUByte()
+          val seconds = it[40].toUByte()
+          val seconds256 = it[41].toUByte()
           
           RawDataPackage(
-            wid_r,
-            s0_sensor_data,
-            s1_sensor_data,
-            s2_sensor_data,
-            s3_sensor_data,
-            s4_sensor_data,
-            s5_sensor_data,
-            cs0_data,
-            cs1_data,
-            cs2_data,
-            cs3_data,
-            cs4_data,
-            cs5_data,
-            wid_c,
+            widR,
+            s0SensorData,
+            s1SensorData,
+            s2SensorData,
+            s3SensorData,
+            s4SensorData,
+            s5SensorData,
+            cs0Data,
+            cs1Data,
+            cs2Data,
+            cs3Data,
+            cs4Data,
+            cs5Data,
+            widC,
             accX,
             accY,
             accZ,

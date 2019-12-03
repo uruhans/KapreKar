@@ -103,7 +103,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         }
         is HomeUiModel.StatusUpdate -> {
           powerLevel.set(uiModel.bleDevice.peripheral?.powerLevel)
-          isConnected.set(uiModel.bleDevice.isConnected())
+          isConnected.set(uiModel.bleDevice.isConnectedOrConnecting())
           lastCheck.set(uiModel.lastUpdate)
         }
       }

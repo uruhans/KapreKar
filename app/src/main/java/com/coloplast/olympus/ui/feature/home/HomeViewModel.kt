@@ -16,7 +16,6 @@ class HomeViewModel(private val bluetoothManager: BluetoothManager) : BaseHomeVi
     val disposable = CompositeDisposable()
     
     val currentBluetoothStateObservable: Observable<BluetoothState> = bluetoothManager.bluetoothStateObservable()
-        .doOnNext { Timber.d("BluetoothState: $it") }
     
     val bluetoothStateObservable: Observable<HomeUiModel> = currentBluetoothStateObservable
         .map { HomeUiModel.BluetoothIssue(it) }

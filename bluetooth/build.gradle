@@ -29,7 +29,7 @@ dependencies {
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
   // https://github.com/Polidea/RxAndroidBle
-  api "com.polidea.rxandroidble2:rxandroidble:1.10.4"
+  api "com.polidea.rxandroidble2:rxandroidble:1.10.5"
 
   api 'com.akaita.java:rxjava2-debug:1.4.0'
 

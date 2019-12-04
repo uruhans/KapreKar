@@ -1,0 +1,3 @@
+-dontwarn com.roughike.bottombar.**
+-keep class com.roughike.bottombar.** {*;}
+-keep interface com.roughike.bottombar.** {*;}

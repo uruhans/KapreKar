@@ -1,0 +1,17 @@
+<resources>
+  <string name="app_name">olympus</string>
+
+  <string name="button_confirm">Confirm</string>
+
+  <string name="button_quit">Quit</string>
+  <string name="button_cancel">Cancel</string>
+  <string name="button_previous">Previous</string>
+  <string name="button_next">Next</string>
+
+  <string name="alert_generic_message">We encountered an error. Please try again later.</string>
+  <string name="alert_generic_title">An error occurred</string>
+
+  <string name="dialog_permission_location_title">Not allowed</string>
+  <string name="dialog_permission_location_message">The app needs permission to access location in order to use Bluetooth</string>
+  <string name="dialog_permission_ask">Ask</string>
+</resources>

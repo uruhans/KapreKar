@@ -1,0 +1,2 @@
+include ':app', ':datalayer', ':shared', ':bluetooth', ':btbusinesslayer'
+rootProject.name='olympus'

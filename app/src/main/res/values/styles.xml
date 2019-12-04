@@ -1,0 +1,134 @@
+<resources>
+
+  <!-- Base application theme. -->
+  <style name="BaseAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <!-- Customize your theme here. -->
+    <item name="colorPrimary">@color/colorPrimary</item>
+    <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+    <item name="colorAccent">@color/colorAccent</item>
+    <item name="colorControlNormal">@color/colorPrimary</item>
+    <!-- this controls (amongst other things) the selectableItemBackground color -->
+    <item name="colorControlHighlight">@color/divider</item>
+    <item name="android:disabledAlpha">0.4</item>
+  </style>
+
+  <style name="AppTheme" parent="BaseAppTheme">
+    <item name="android:windowLightStatusBar">true</item>
+    <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+    <item name="android:windowTranslucentNavigation">true</item>
+    <!-- v23 and above statusBarColor is in values-v23/styles.xml -->
+    <item name="android:statusBarColor">@color/white</item>
+    <item name="android:windowContentTransitions">true</item>
+    <item name="android:colorBackground">@color/default_background</item>
+  </style>
+
+  <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Light">
+    <item name="colorControlNormal">?android:attr/textColorPrimaryInverse</item>
+  </style>
+
+  <style name="Toolbar">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">?android:attr/actionBarSize</item>
+    <item name="android:popupTheme">@style/AppTheme.AppBarOverlay</item>
+    <item name="android:theme">@style/AppTheme.AppBarOverlay</item>
+    <item name="android:background">@color/white</item>
+    <item name="android:tint">?android:attr/textColorPrimaryInverse</item>
+    <item name="titleTextAppearance">@style/ToolbarText</item>
+    <item name="android:elevation">@dimen/toolbar_elevation</item>
+  </style>
+
+  <style name="ToolbarText">
+    <item name="android:textColor">@color/text_black</item>
+    <item name="android:textAllCaps">true</item>
+<!--    <item name="android:fontFamily">@font/frutiger_neue_lt_pro_bold</item>-->
+    <item name="android:textSize">@dimen/text_18</item>
+  </style>
+
+  <style name="Button.Borderless" parent="Widget.AppCompat.Button.Borderless.Colored">
+    <item name="android:background">?android:attr/selectableItemBackground</item>
+    <item name="android:textColor">@color/colorAccent</item>
+  </style>
+  <!--
+    <style name="SubmitButton">
+      <item name="android:background">@drawable/button_submit</item>
+      <item name="android:foreground">?android:attr/selectableItemBackground</item>
+      <item name="android:gravity">center</item>
+  &lt;!&ndash;    <item name="android:fontFamily">@font/frutiger_neue_lt_pro_regular</item>&ndash;&gt;
+      <item name="android:textColor">@color/white</item>
+      <item name="android:textSize">@dimen/text_larger</item>
+    </style>
+
+    <style name="SubmitButton.Red" parent="SubmitButton">
+      <item name="android:background">@drawable/button_submit_red</item>
+    </style>
+
+    <style name="OutlineButton" parent="SubmitButton">
+      <item name="android:background">@drawable/button_outline</item>
+      <item name="android:textColor">@color/text_blue</item>
+    </style>
+
+    <style name="OutlineButton.Red" parent="OutlineButton">
+      <item name="android:background">@drawable/button_outline_red</item>
+      <item name="android:textColor">@color/text_red</item>
+    </style>-->
+
+  <style name="Headline">
+    <item name="android:fontFamily">@font/coloplast_bold</item>
+    <item name="android:textColor">@color/text_dark_grey</item>
+  </style>
+
+  <style name="Headline.XLarge" parent="Headline">
+    <item name="android:textSize">@dimen/text_38</item>
+    <item name="android:lineSpacingExtra">6dp</item>
+  </style>
+
+  <style name="Headline.Large" parent="Headline">
+    <item name="android:textSize">@dimen/text_32</item>
+    <item name="android:lineSpacingExtra">4dp</item>
+  </style>
+
+  <style name="Headline.Medium" parent="Headline">
+    <item name="android:textSize">@dimen/text_30</item>
+    <item name="android:lineSpacingExtra">6dp</item>
+  </style>
+
+  <style name="Headline.Small" parent="Headline">
+    <item name="android:textSize">@dimen/text_24</item>
+    <item name="android:lineSpacingExtra">8dp</item>
+  </style>
+
+  <style name="Headline.XSmall" parent="Headline">
+    <item name="android:textSize">@dimen/text_18</item>
+    <item name="android:lineSpacingExtra">10dp</item>
+  </style>
+
+  <style name="Text">
+    <item name="android:fontFamily">sans-serif</item> <!-- roboto regular -->
+    <item name="android:textColor">@color/text_dark_grey</item>
+  </style>
+
+  <style name="Text.Large" parent="Text">
+    <item name="android:textSize">@dimen/text_18</item>
+    <item name="android:lineSpacingExtra">10dp</item>
+  </style>
+
+  <style name="Text.Medium" parent="Text">
+    <item name="android:textSize">@dimen/text_16</item>
+    <item name="android:lineSpacingExtra">8dp</item>
+  </style>
+
+  <style name="Text.Link">
+    <item name="android:fontFamily">sans-serif-medium</item> <!-- roboto medium -->
+    <item name="android:textColor">@color/text_blue_green</item>
+    <item name="android:textSize">@dimen/text_18</item>
+    <item name="android:lineSpacingExtra">10dp</item>
+  </style>
+  
+  <style name="BoldItalic">
+    <item name="android:fontFamily">@font/coloplast_bold_italic</item>
+    <item name="android:textColor">@color/white</item>
+    <item name="android:textSize">@dimen/text_34</item>
+    <item name="android:lineSpacingExtra">6dp</item>
+  </style>
+
+</resources>

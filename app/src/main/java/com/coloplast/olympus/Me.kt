@@ -10,13 +10,13 @@ class Me {
   private var currentUser: CurrentUser = CurrentUser.Empty()
   private val userRelay: PublishRelay<CurrentUser> = PublishRelay.create()
   
-  fun get(): Observable<CurrentUser> {
+  fun currentUserObservable(): Observable<CurrentUser> {
     return userRelay.publish()
       .refCount()
       .startWith(currentUser)
   }
   
-  fun set(currentUser: CurrentUser, notifySubscribers: Boolean = true) {
+  fun setCurrentUser(currentUser: CurrentUser, notifySubscribers: Boolean = true) {
     synchronized(this) {
       this.currentUser = currentUser
       
@@ -28,16 +28,6 @@ class Me {
   
   fun logout(notifySubscribers: Boolean = true) {
     Preferences.get().clear()
-    set(CurrentUser.LoggedOut(), notifySubscribers)
-  }
-  
-  companion object {
-    private var me: Me? = null
-    
-    fun get(): Me {
-      return me ?: Me().apply {
-        me = this
-      }
-    }
+    setCurrentUser(CurrentUser.LoggedOut(), notifySubscribers)
   }
 }

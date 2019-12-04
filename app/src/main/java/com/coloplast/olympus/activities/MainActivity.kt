@@ -14,11 +14,15 @@ import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import org.koin.standalone.KoinComponent
+import org.koin.standalone.inject
 import java.util.concurrent.TimeUnit
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), KoinComponent {
   
   private lateinit var navigation: Navigation
+  
+  private val currentUser: Me by inject()
   
   private val compositeDisposable = CompositeDisposable()
   private val changeNavigationRelay: PublishRelay<Int> = PublishRelay.create()
@@ -41,11 +45,10 @@ class MainActivity : AppCompatActivity() {
     
     // code to verify that the user is logged in, and if not display the LandingPage
     compositeDisposable.add(
-      Me.get().get().filter { it is CurrentUser.LoggedOut }.delay(
-        500, TimeUnit.MILLISECONDS
-      ).bind(
-        openLoginScreen()
-      )
+      currentUser.currentUserObservable()
+        .filter { it is CurrentUser.LoggedOut }
+        .delay(500, TimeUnit.MILLISECONDS)
+        .bind(openLoginScreen())
     )
   }
   
@@ -62,9 +65,9 @@ class MainActivity : AppCompatActivity() {
   
   private fun initializeRouters(args: Bundle?) {
     navigation = Navigation.Builder()
-        .addRouter(R.id.content_overlay_controller)
-        .addRouter(R.id.main_navigation_controller_container)
-        .build(this, args)
+      .addRouter(R.id.content_overlay_controller)
+      .addRouter(R.id.main_navigation_controller_container)
+      .build(this, args)
   }
   
   override fun onBackPressed() {

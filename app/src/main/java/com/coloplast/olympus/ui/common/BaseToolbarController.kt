@@ -30,10 +30,8 @@ abstract class BaseToolbarController<T : ViewDataBinding> : BaseController<T> {
       initToolbar(toolbar)
     }
     else {
-      Timber.e("You are using BaseToolbarController, but I can't find the toolbar - maybe override getToolbar() to set a custom id?")
+      throw NullPointerException("You are using BaseToolbarController, but I can't find the toolbar - maybe override getToolbar() to set a custom id?")
     }
-    
-    toolbar!! // this will crash the app if the toolbar cannot be found (this is on purpose)
   }
   
   private fun initToolbar(toolbar: Toolbar) {
@@ -43,12 +41,11 @@ abstract class BaseToolbarController<T : ViewDataBinding> : BaseController<T> {
     // we could have a case where we want a toolbar with a navigation icon, but not
     // necessarily want our own menu items
     if (getMenuId() != UiUtils.INVALID_INT) {
-      toolbar.inflateMenu(getMenuId())
       
-      afterMenuInflated(toolbar.menu)
-      
-      toolbar.setOnMenuItemClickListener { menuItem: MenuItem? ->
-        return@setOnMenuItemClickListener onMenuItemClicked(menuItem!!)
+      with(toolbar) {
+        this.inflateMenu(getMenuId())
+        afterMenuInflated(this.menu)
+        this.setOnMenuItemClickListener { onMenuItemClicked(it) }
       }
       
       marginEnd = resources!!.getDimensionPixelSize(R.dimen.spacing_larger)
@@ -57,16 +54,13 @@ abstract class BaseToolbarController<T : ViewDataBinding> : BaseController<T> {
     if (displayNavigationIcon() && getNavigationIconResId() != 0) {
       // initialize the navigation icon and set click listener
       toolbar.setNavigationIcon(getNavigationIconResId())
-      toolbar.navigationIcon?.setTint(
-        ContextCompat.getColor(
-          activity!!.applicationContext, R.color.toolbar_icon_tint
-        )
-      )
+      
+      applicationContext?.let {
+        toolbar.navigationIcon?.setTint(ContextCompat.getColor(it, R.color.toolbar_icon_tint))
+      }
       
       toolbar.setNavigationOnClickListener { onNavigationMenuItemClicked() }
-      
-      (toolbar.findViewById<LinearLayout>(R.id.toolbar_content_layout).layoutParams as Toolbar.LayoutParams).marginEnd =
-        marginEnd
+      (toolbar.findViewById<LinearLayout>(R.id.toolbar_content_layout).layoutParams as Toolbar.LayoutParams).marginEnd = marginEnd
     }
     
     toolbar.visibility = if (showToolbar()) View.VISIBLE else View.GONE
@@ -129,7 +123,13 @@ abstract class BaseToolbarController<T : ViewDataBinding> : BaseController<T> {
    * Override this method to change that behavior and implement your own.
    */
   open fun onNavigationMenuItemClicked() {
-    activity!!.onBackPressed()
+    // at this point the activity should not be able to be null, as something would be *seriously* wrong
+    // but lets crash and notify developer
+    if(activity == null) {
+      throw NullPointerException("activity is null - this should not be possible")
+    }
+    
+    activity?.onBackPressed()
   }
   
   /**

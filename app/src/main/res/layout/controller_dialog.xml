@@ -5,8 +5,6 @@
 
   <data>
 
-    <import type="android.view.View" />
-
     <variable
       name="controller"
       type="com.coloplast.olympus.ui.common.dialogs.DialogController" />
@@ -19,7 +17,7 @@
     android:background="@color/transparent_black"
     android:onClick="@{() -> controller.onDismissClicked()}">
 
-  <androidx.cardview.widget.CardView
+    <androidx.cardview.widget.CardView
       android:id="@+id/cardView"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
@@ -108,8 +106,8 @@
             android:paddingLeft="@dimen/dialog_button_padding"
             android:paddingRight="@dimen/dialog_button_padding"
             android:textAllCaps="true"
-            android:visibility="@{controller.neutralButtonTextId > 0 ? View.VISIBLE : View.INVISIBLE}"
             app:safeText="@{controller.neutralButtonTextId}"
+            app:visibleOrInvisible="@{controller.neutralButtonTextId > 0}"
             tools:text="neutral" />
 
           <Button

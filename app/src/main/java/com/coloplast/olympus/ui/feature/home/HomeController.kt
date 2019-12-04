@@ -1,5 +1,6 @@
 package com.coloplast.olympus.ui.feature.home
 
+import android.app.Activity
 import android.bluetooth.BluetoothAdapter
 import android.content.Intent
 import android.os.Bundle
@@ -210,7 +211,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     when (requestCode) {
       REQUEST_CODE_BLUETOOTH_ENABLE -> {
-        if (resultCode == REQUEST_CODE_BLUETOOTH_ENABLE) {
+        if (resultCode == Activity.RESULT_CANCELED) {
           Timber.d("enable it, dude")
         }
       }

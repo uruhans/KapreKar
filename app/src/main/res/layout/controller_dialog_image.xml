@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools">
+
+  <data>
+
+    <import type="android.view.View" />
+
+    <variable
+      name="controller"
+      type="com.coloplast.olympus.ui.dialogs.ImageDialogController" />
+  </data>
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/transparent_black"
+    android:onClick="@{() -> controller.onDismissClicked()}">
+
+    <androidx.cardview.widget.CardView
+      android:id="@+id/cardView"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="40dp"
+      android:layout_marginEnd="40dp"
+      app:cardBackgroundColor="@color/cardview_background"
+      app:cardCornerRadius="@dimen/cardview_corner_radius"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent">
+
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <FrameLayout
+          android:layout_width="match_parent"
+          android:layout_height="220dp"
+          android:layout_marginStart="-2dp"
+          android:background="@color/default_background">
+
+          <ImageView
+            android:layout_width="54dp"
+            android:layout_height="86dp"
+            android:layout_gravity="center"
+            android:scaleType="centerCrop"
+            android:tint="@color/icon_disabled"
+            android:visibility="@{controller.showTopImage ? View.VISIBLE : View.GONE}"
+            app:resource="@{controller.topImage}"
+            tools:src="@drawable/ic_bluetooth_black_24dp" />
+
+        </FrameLayout>
+
+        <TextView
+          android:id="@+id/title"
+          style="@style/Headline.Small"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="@dimen/spacing_standard"
+          android:layout_marginTop="@dimen/spacing_double"
+          android:layout_marginEnd="@dimen/spacing_standard"
+          android:text="@{controller.titleResId}"
+          android:textSize="@dimen/text_24"
+          tools:text="@string/alert_generic_title" />
+
+        <TextView
+          style="@style/Text.Large"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="@dimen/spacing_standard"
+          android:layout_marginTop="@dimen/spacing_half"
+          android:layout_marginEnd="@dimen/spacing_standard"
+          android:layout_marginBottom="@dimen/spacing_half"
+          android:lineSpacingExtra="0dp"
+          android:text="@{controller.messageResId}"
+          android:textColor="@color/grey"
+          tools:text="@string/alert_generic_message" />
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="@dimen/spacing_larger"
+          android:orientation="vertical"
+          android:paddingStart="@dimen/spacing_standard"
+          android:paddingEnd="@dimen/spacing_standard"
+          android:visibility="@{controller.verticalButtons ? View.VISIBLE : View.GONE}"
+          tools:visibility="visible">
+
+          <TextView
+            style="@style/Text.Link"
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:gravity="center_vertical"
+            android:onClick="@{() -> controller.onPositiveButtonClicked() }"
+            android:text="@{controller.positiveButtonTextResId}"
+            tools:text="@string/button_quit" />
+
+          <TextView
+            style="@style/Text.Link"
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:background="@null"
+            android:gravity="center_vertical"
+            android:onClick="@{() -> controller.onNegativeButtonClicked() }"
+            android:visibility="@{controller.showNegativeButton ? View.VISIBLE : View.GONE}"
+            app:safeText="@{controller.negativeButtonTextResId}"
+            tools:text="@string/button_cancel" />
+
+        </LinearLayout>
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="horizontal"
+          android:padding="@dimen/spacing_standard"
+          android:visibility="@{controller.verticalButtons ? View.GONE : View.VISIBLE}"
+          tools:visibility="gone">
+
+          <TextView
+            android:id="@+id/next_button"
+            style="@style/Text.Link"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="@dimen/spacing_standard"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:onClick="@{() -> controller.onNegativeButtonClicked() }"
+            android:visibility="@{controller.showNegativeButton ? View.VISIBLE : View.GONE}"
+            app:safeText="@{controller.negativeButtonTextResId}"
+            tools:text="@string/button_cancel" />
+
+          <TextView
+            style="@style/Text.Link"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:onClick="@{() -> controller.onPositiveButtonClicked() }"
+            android:text="@{controller.positiveButtonTextResId}"
+            tools:text="@string/button_quit" />
+
+        </LinearLayout>
+      </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

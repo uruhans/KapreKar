@@ -38,8 +38,6 @@ dependencies {
   // joda time
   // api 'net.danlew:android.joda:2.10.3'
 
-  api "com.jakewharton.threetenabp:threetenabp:$threeten_version"
-
   api "io.reactivex.rxjava2:rxjava:$rxjava_version"
   api "com.jakewharton.timber:timber:$timber_version"
 

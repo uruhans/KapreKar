@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools">
+
+  <data>
+
+    <variable
+      name="item"
+      type="com.coloplast.olympus.ui.feature.home.models.ScanResultItem" />
+  </data>
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="56dp"
+    android:background="?attr/selectableItemBackground"
+    android:onClick="@{() -> item.onItemClicked()}"
+    android:orientation="vertical">
+
+    <TextView
+      style="@style/Headline.Small"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:gravity="center"
+      android:text="@{item.scanResult.nameOrAddress}"
+      tools:text="23:23:23:23:23:23" />
+
+  </LinearLayout>
+</layout>

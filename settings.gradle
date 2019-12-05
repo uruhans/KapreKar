@@ -1,2 +1,2 @@
-include ':app', ':datalayer', ':shared', ':bluetooth', ':btbusinesslayer'
+include ':app', ':datalayer', ':shared', ':bluetooth', ':blebusinesslayer'
 rootProject.name='olympus'

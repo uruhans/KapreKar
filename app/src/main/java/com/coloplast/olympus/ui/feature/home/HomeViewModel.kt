@@ -9,14 +9,12 @@ import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import org.threeten.bp.LocalDateTime
-import timber.log.Timber
 
 class HomeViewModel(private val bluetoothManager: BluetoothManager) : BaseHomeViewModel() {
   override fun bind(uiView: HomeView): Disposable {
     val disposable = CompositeDisposable()
     
     val currentBluetoothStateObservable: Observable<BluetoothState> = bluetoothManager.bluetoothStateObservable()
-        .doOnNext { Timber.d("BluetoothState: $it") }
     
     val bluetoothStateObservable: Observable<HomeUiModel> = currentBluetoothStateObservable
         .map { HomeUiModel.BluetoothIssue(it) }

@@ -90,7 +90,7 @@
             android:paddingLeft="@dimen/dialog_button_padding"
             android:paddingRight="@dimen/dialog_button_padding"
             android:textAllCaps="true"
-            android:visibility="@{controller.negativeButtonTextId > 0 ? View.VISIBLE : View.INVISIBLE}"
+            app:visibleOrInvisible="@{controller.negativeButtonTextId > 0}"
             app:safeText="@{controller.negativeButtonTextId}"
             tools:text="negative" />
 

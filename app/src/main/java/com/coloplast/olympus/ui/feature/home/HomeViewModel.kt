@@ -9,7 +9,6 @@ import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import org.threeten.bp.LocalDateTime
-import timber.log.Timber
 
 class HomeViewModel(private val bluetoothManager: BluetoothManager) : BaseHomeViewModel() {
   override fun bind(uiView: HomeView): Disposable {

@@ -17,7 +17,7 @@ import com.polidea.rxandroidble2.RxBleDevice
 import io.reactivex.Observable
 import io.reactivex.functions.Function3
 
-class BluetoothManager(context: Context, isDebugging: Boolean) {
+class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothManager {
   
   // a reference to the bluetoothHandler
   private val bluetoothHandler = BluetoothHandler(context, isDebugging)
@@ -32,7 +32,7 @@ class BluetoothManager(context: Context, isDebugging: Boolean) {
    * - output -> current bluetooth state (ready to SCAN/CONNECT when BluetoothState -> BluetoothState.READY)
    * - startWith -> BluetoothState.UNDEFINED
    */
-  fun bluetoothStateObservable(): Observable<BluetoothState> {
+  override fun bluetoothStateObservable(): Observable<BluetoothState> {
     return bluetoothHandler.rxBleClientStateObservable()
         .map { state: RxBleClient.State ->
           when (state) {
@@ -77,7 +77,7 @@ class BluetoothManager(context: Context, isDebugging: Boolean) {
    * Initiate a scan of ble devices filtered by the Olympus Wireless Protocol UUID to limit results only to specific devices
    * - output -> BleDevice containing BleDevice Name, MacAddress and current ConnectionState
    */
-  fun scanBleDevices(): Observable<ScanResult> {
+  override fun scanBleDevices(): Observable<ScanResult> {
     return bluetoothHandler.scanBleDevices(OlympusWirelessProtocol.UUID)
         .map { ScanResult(it.bleDevice.name, it.bleDevice.macAddress, it.rssi) }
   }
@@ -101,11 +101,11 @@ class BluetoothManager(context: Context, isDebugging: Boolean) {
    *
    * 1. we will wait until the connection state changes to CONNECTED
    * 2. we will request a change to the Mtu size, allowing for larger packages to be sent (it's upped from default 23 -> 64)
-   * 3. then we discoverServices that exist on the connection - this is required to allow for READ, WRITE and NOTIFY on specific characteristics
-   * 4. setup notifications (will cause initial READ on each notification subscription)
+   * 3. then we discoverServices that exist on the connection - this is required to allow for READ, WRITE and NOTIFY on characteristics
+   * 4. setup notifications (will cause an initial READ on each notification subscription)
    * 5. map result of notifications to a BleDevice containing Device Name, MacAddress, current ConnectionState and Peripheral state
    */
-  fun connectBleDevice(macAddress: String): Observable<BleDevice> {
+  override fun connectBleDevice(macAddress: String): Observable<BleDevice> {
     return getBleDevice(macAddress)
         .flatMap { rxBleDevice ->
           bluetoothHandler.connectRxBleDevice(rxBleDevice)

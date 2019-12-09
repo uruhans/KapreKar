@@ -4,6 +4,9 @@ import android.content.Context
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
 import com.coloplast.olympus.bluetooth.businesslayer.enums.PowerLevel
+import com.coloplast.olympus.bluetooth.businesslayer.exceptions.DisconnectException
+import com.coloplast.olympus.bluetooth.businesslayer.exceptions.GattCallbackTimeoutException
+import com.coloplast.olympus.bluetooth.businesslayer.exceptions.GattException
 import com.coloplast.olympus.bluetooth.businesslayer.models.*
 import com.coloplast.olympus.bluetooth.businesslayer.services.BatteryPowerService
 import com.coloplast.olympus.bluetooth.businesslayer.services.OlympusWirelessProtocol
@@ -14,8 +17,14 @@ import com.dawn.bluetooth.BluetoothHandler
 import com.polidea.rxandroidble2.RxBleClient
 import com.polidea.rxandroidble2.RxBleConnection
 import com.polidea.rxandroidble2.RxBleDevice
+import com.polidea.rxandroidble2.exceptions.BleDisconnectedException
+import com.polidea.rxandroidble2.exceptions.BleException
+import com.polidea.rxandroidble2.exceptions.BleGattCallbackTimeoutException
+import com.polidea.rxandroidble2.exceptions.BleGattException
 import io.reactivex.Observable
-import io.reactivex.functions.Function3
+import io.reactivex.exceptions.UndeliverableException
+import io.reactivex.functions.BiFunction
+import io.reactivex.plugins.RxJavaPlugins
 
 class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothManager {
   
@@ -27,6 +36,25 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
   // a cached version of the ble connections that we are currently connected to
   private val bleConnections = mutableMapOf<String, RxBleConnection>()
   
+  init {
+    /**
+     * We set a custom error handler - first of all to convert rx library exceptions into something our app can handle
+     * but also because there is an internal error in the library causing an Undeliverable Exception to be delivered multiple times
+     * check here -> https://github.com/Polidea/RxAndroidBle/wiki/FAQ:-UndeliverableException
+     */
+    RxJavaPlugins.setErrorHandler {
+      when {
+        // ignore if undeliverable (others should have received it first) - Rx issue ->
+        // https://github.com/Polidea/RxAndroidBle/wiki/FAQ:-UndeliverableException
+        it is UndeliverableException && it.cause is BleException -> return@setErrorHandler
+        it is BleDisconnectedException -> throw DisconnectException(it)
+        it is BleGattCallbackTimeoutException -> throw GattCallbackTimeoutException(it)
+        it is BleGattException -> throw GattException(it)
+        else -> throw RuntimeException("Unexpected Throwable in RxJavaPlugins error handler", it)
+      }
+    }
+  }
+  
   /**
    * An observable to listen to the current state of the BlueTooth radio, including PermissionStates and Location Services check
    * - output -> current bluetooth state (ready to SCAN/CONNECT when BluetoothState -> BluetoothState.READY)
@@ -34,26 +62,26 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
    */
   override fun bluetoothStateObservable(): Observable<BluetoothState> {
     return bluetoothHandler.rxBleClientStateObservable()
-        .map { state: RxBleClient.State ->
-          when (state) {
-            RxBleClient.State.BLUETOOTH_NOT_AVAILABLE -> {
-              BluetoothState.BLUETOOTH_NOT_AVAILABLE
-            }
-            RxBleClient.State.LOCATION_PERMISSION_NOT_GRANTED -> {
-              BluetoothState.LOCATION_PERMISSION_NOT_GRANTED
-            }
-            RxBleClient.State.BLUETOOTH_NOT_ENABLED -> {
-              BluetoothState.BLUETOOTH_NOT_ENABLED
-            }
-            RxBleClient.State.LOCATION_SERVICES_NOT_ENABLED -> {
-              BluetoothState.LOCATION_SERVICES_NOT_ENABLED
-            }
-            RxBleClient.State.READY -> {
-              BluetoothState.READY
-            }
+      .map { state: RxBleClient.State ->
+        when (state) {
+          RxBleClient.State.BLUETOOTH_NOT_AVAILABLE -> {
+            BluetoothState.BLUETOOTH_NOT_AVAILABLE
+          }
+          RxBleClient.State.LOCATION_PERMISSION_NOT_GRANTED -> {
+            BluetoothState.LOCATION_PERMISSION_NOT_GRANTED
+          }
+          RxBleClient.State.BLUETOOTH_NOT_ENABLED -> {
+            BluetoothState.BLUETOOTH_NOT_ENABLED
+          }
+          RxBleClient.State.LOCATION_SERVICES_NOT_ENABLED -> {
+            BluetoothState.LOCATION_SERVICES_NOT_ENABLED
+          }
+          RxBleClient.State.READY -> {
+            BluetoothState.READY
           }
         }
-        .startWith(BluetoothState.UNDEFINED)
+      }
+      .startWith(BluetoothState.UNDEFINED)
   }
   
   /**
@@ -79,7 +107,7 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
    */
   override fun scanBleDevices(): Observable<ScanResult> {
     return bluetoothHandler.scanBleDevices(OlympusWirelessProtocol.UUID)
-        .map { ScanResult(it.bleDevice.name, it.bleDevice.macAddress, it.rssi) }
+      .map { ScanResult(it.bleDevice.name, it.bleDevice.macAddress, it.rssi) }
   }
   
   /**
@@ -88,12 +116,16 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
    */
   private fun rxBleDeviceConnectionState(macAddress: String): Observable<BleDevice> {
     return getBleDevice(macAddress)
-        .flatMap { rxBleDevice ->
-          bluetoothHandler.rxBleDeviceConnectionStateObservable(rxBleDevice)
-              .map { state: RxBleConnection.RxBleConnectionState ->
-                BleDevice(rxBleDevice.name, rxBleDevice.macAddress, BleConnectionState.fromRxBleState(state))
-              }
-        }
+      .flatMap { rxBleDevice ->
+        bluetoothHandler.rxBleDeviceConnectionStateObservable(rxBleDevice)
+          .map { BleDevice(rxBleDevice.name, rxBleDevice.macAddress, BleConnectionState.fromRxBleState(it)) }
+      }
+  }
+  
+  private fun bleDisconnectedObservable(macAddress: String): Observable<BleConnectionState> {
+    return rxBleDeviceConnectionState(macAddress)
+      .map { it.connectionState }
+      .filter { it == BleConnectionState.DISCONNECTED || it == BleConnectionState.DISCONNECTING }
   }
   
   /**
@@ -107,19 +139,24 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
    */
   override fun connectBleDevice(macAddress: String): Observable<BleDevice> {
     return getBleDevice(macAddress)
-        .flatMap { rxBleDevice ->
-          bluetoothHandler.connectRxBleDevice(rxBleDevice)
-              .doOnNext { bleConnections[macAddress] = it }
-              .flatMap { rxBleConnection ->
-                rxBleDeviceConnectionState(macAddress)
-                    .filter { it.isConnected() }
-                    .flatMapSingle { rxBleConnection.requestMtu(64) }
-                    .flatMapSingle { rxBleConnection.discoverServices() }
-                    .flatMap { setupNotifications(rxBleConnection) }
-                    .map { BleDevice(rxBleDevice.name, rxBleDevice.macAddress, BleConnectionState.fromRxBleState(rxBleDevice.connectionState), it) }
-              }
-        }
+      .flatMap { rxBleDevice ->
+        bluetoothHandler.connectRxBleDevice(rxBleDevice)
+          .doOnNext { bleConnections[macAddress] = it }
+          .flatMapSingle {
+            it.requestMtu(64)
+              .ignoreElement()
+              .toSingle { it }
+          }
+          .flatMapSingle {
+            it.discoverServices()
+              .ignoreElement()
+              .toSingle { it }
+          }
+          .flatMap { setupNotifications(it) }
+          .map { BleDevice(rxBleDevice.name, rxBleDevice.macAddress, BleConnectionState.fromRxBleState(rxBleDevice.connectionState), it) }
+      }
   }
+  
   
   /**
    * setup notifications to get notified when changes occur with the ble transmitter
@@ -130,8 +167,7 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
     return Observable.combineLatest(
       notifyOlympusStatus(rxBleConnection),
       notifyBattery(rxBleConnection),
-      notifyOlympusRawDataPackage(rxBleConnection),
-      Function3 { statusVector: StatusVector, powerLevel: PowerLevel, rawDataPackage: RawDataPackage ->
+      BiFunction { statusVector: StatusVector, powerLevel: PowerLevel ->
         Peripheral(statusVector.patch, statusVector.transmitter, powerLevel)
       })
   }
@@ -144,9 +180,9 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
    */
   private fun notifyBattery(rxBleConnection: RxBleConnection): Observable<PowerLevel> {
     return rxBleConnection.setupNotification(BatteryPowerService.Characteristics.POWER)
-        .flatMap { it }
-        .startWith(rxBleConnection.readCharacteristic(BatteryPowerService.Characteristics.POWER).toObservable())
-        .compose(BatteryPowerTransformer())
+      .flatMap { it }
+      .startWith(rxBleConnection.readCharacteristic(BatteryPowerService.Characteristics.POWER).toObservable())
+      .compose(BatteryPowerTransformer())
   }
   
   /**
@@ -157,9 +193,9 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
    */
   private fun notifyOlympusStatus(rxBleConnection: RxBleConnection): Observable<StatusVector> {
     return rxBleConnection.setupNotification(OlympusWirelessProtocol.Characteristics.STATUS)
-        .flatMap { it }
-        .startWith(rxBleConnection.readCharacteristic(OlympusWirelessProtocol.Characteristics.STATUS).toObservable())
-        .compose(OlympusStatusTransformer())
+      .flatMap { it }
+      .startWith(rxBleConnection.readCharacteristic(OlympusWirelessProtocol.Characteristics.STATUS).toObservable())
+      .compose(OlympusStatusTransformer())
   }
   
   /**
@@ -170,8 +206,8 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
    */
   private fun notifyOlympusRawDataPackage(rxBleConnection: RxBleConnection): Observable<RawDataPackage> {
     return rxBleConnection.setupNotification(OlympusWirelessProtocol.Characteristics.RAW_SENSOR_DATA)
-        .flatMap { it }
-        .startWith(rxBleConnection.readCharacteristic(OlympusWirelessProtocol.Characteristics.RAW_SENSOR_DATA).toObservable())
-        .compose(OlympusRawDataPackageTransformer())
+      .flatMap { it }
+      .startWith(rxBleConnection.readCharacteristic(OlympusWirelessProtocol.Characteristics.RAW_SENSOR_DATA).toObservable())
+      .compose(OlympusRawDataPackageTransformer())
   }
 }

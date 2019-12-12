@@ -56,6 +56,8 @@ class HomeViewModel(private val bluetoothManager: BluetoothManager) : BaseHomeVi
     val disposable = CompositeDisposable()
     
     val peripheralObservable = uiView.onConnectPeripheral()
+      // delay added based on issues with some devices that cannot immediately connect right after a scan
+      // reference: https://github.com/Polidea/RxAndroidBle/wiki/FAQ:-Cannot-connect
       .delay(500, TimeUnit.MILLISECONDS)
       .switchMap { macAddress ->
         bluetoothManager.connectBleDevice(macAddress)

@@ -42,6 +42,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   private val viewModel: HomeViewModel by inject()
   
   private val scannerDisposable = CompositeDisposable()
+  private val connectDisposable = CompositeDisposable()
   
   private val startScanRelay: PublishRelay<Any> = PublishRelay.create()
   private val connectPeripheralRelay: PublishRelay<String> = PublishRelay.create()
@@ -96,7 +97,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
             }
           }
         }
-        is HomeUiModel.Result -> {
+        is HomeUiModel.ScannerResult -> {
           if (!items.any { it.scanResult.macAddress == uiModel.scanResult.macAddress }) {
             items.add(ScanResultItem(uiModel.scanResult, this))
           }
@@ -105,6 +106,9 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
           powerLevel.set(uiModel.bleDevice.peripheral?.powerLevel)
           isConnected.set(uiModel.bleDevice.isConnectedOrConnecting())
           lastCheck.set(uiModel.lastUpdate)
+        }
+        is HomeUiModel.OverlayUpdate -> {
+          Timber.d("Overlay state change: [${uiModel.overlayState}]")
         }
       }
     }
@@ -196,16 +200,16 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
     }
   }
   
-  override fun onScanResultClicked(scanResult: ScanResult) {
-    if (!scannerDisposable.isDisposed) {
-      scannerDisposable.dispose()
-    }
-    connectPeripheralRelay.accept(scanResult.macAddress)
-  }
-  
   fun onScanClicked() {
     isScanning.set(true)
     startScanRelay.accept("")
+  }
+  
+  override fun onScanResultClicked(scanResult: ScanResult) {
+    scannerDisposable.dispose()
+    
+    connectDisposable.add(viewModel.connectBleDevice(this))
+    connectPeripheralRelay.accept(scanResult.macAddress)
   }
   
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -221,12 +225,12 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   
   override fun onScanRequested(): Observable<Any> {
     return startScanRelay.publish()
-        .refCount()
+      .refCount()
   }
   
   override fun onConnectPeripheral(): Observable<String> {
     return connectPeripheralRelay.publish()
-        .refCount()
+      .refCount()
   }
   
   override fun getLayout(): Int {

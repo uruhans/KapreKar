@@ -1,0 +1,206 @@
+package com.coloplast.olympus.ui.feature.statemachine
+
+import com.coloplast.olympus.ui.feature.statemachine.models.UiState
+
+/**
+ * This UiStateMachine determines *where* we can go next.
+ *
+ * When a new state is coming in, the referenced method (which is the state we are currently in - ie: ok_A) will be hit.
+ *  - this method then determines where we can go from here by the *when* statement
+ *  - add or remove states to *when* statements to either support or remote state transitions from a given state
+ */
+class UiStateMachineImpl : BaseUiStateMachine() {
+  
+  override fun initial(newState: UiState): Boolean {
+    return when (newState) {
+      UiState.BLUETOOTH_NOT_ENABLED,
+      UiState.OK_A,
+      UiState.INNER_LEAK_B,
+      UiState.OUTER_LEAK_C,
+      UiState.INNER_BLIND_D,
+      UiState.TOTAL_BLIND_E,
+      UiState.PAY_ATTENTION_F,
+      UiState.WATER_INGRESS_DETECTION_J,
+      UiState.CUTGUARD_DIRT_IN_TRANSMITTER_K,
+      UiState.TRANSMITTER_DETACHED_V,
+      UiState.TRANSMITTER_BATTERY_CHARGING_W,
+      UiState.DISCONNECTED -> {
+        true
+      }
+      else -> false
+    }
+  }
+  
+  override fun somethingElse(newState: UiState): Boolean {
+    return when (newState) {
+      UiState.BLUETOOTH_NOT_ENABLED,
+      UiState.OK_A,
+      UiState.INNER_LEAK_B,
+      UiState.OUTER_LEAK_C,
+      UiState.INNER_BLIND_D,
+      UiState.TOTAL_BLIND_E,
+      UiState.PAY_ATTENTION_F,
+      UiState.WATER_INGRESS_DETECTION_J,
+      UiState.CUTGUARD_DIRT_IN_TRANSMITTER_K,
+      UiState.TRANSMITTER_DETACHED_V,
+      UiState.TRANSMITTER_BATTERY_CHARGING_W,
+      UiState.DISCONNECTED -> {
+        true
+      }
+      else -> false
+    }
+  }
+  
+  override fun ok_A(newState: UiState): Boolean {
+    return when (newState) {
+      UiState.BLUETOOTH_NOT_ENABLED,
+      UiState.SOMETHING_ELSE,
+      UiState.INNER_LEAK_B,
+      UiState.OUTER_LEAK_C,
+      UiState.INNER_BLIND_D,
+      UiState.TOTAL_BLIND_E,
+      UiState.PAY_ATTENTION_F,
+      UiState.CUTGUARD_BROKEN_I,
+      UiState.WATER_INGRESS_DETECTION_J,
+      UiState.CUTGUARD_DIRT_IN_TRANSMITTER_K,
+      UiState.TRANSMITTER_DETACHED_V,
+      UiState.TRANSMITTER_BATTERY_CHARGING_W,
+      UiState.DISCONNECTED -> {
+        true
+      }
+      else -> false
+    }
+  }
+  
+  override fun innerLeak_B(newState: UiState): Boolean {
+    return when (newState) {
+      UiState.BLUETOOTH_NOT_ENABLED,
+      UiState.SOMETHING_ELSE,
+      UiState.OK_A,
+      UiState.OUTER_LEAK_C,
+      UiState.PAY_ATTENTION_F,
+      UiState.DISCONNECTED -> {
+        true
+      }
+      else -> false
+    }
+  }
+  
+  override fun outerLeak_C(newState: UiState): Boolean {
+    return when (newState) {
+      UiState.BLUETOOTH_NOT_ENABLED,
+      UiState.SOMETHING_ELSE,
+      UiState.OK_A,
+      UiState.INNER_LEAK_B,
+      UiState.DISCONNECTED -> {
+        true
+      }
+      else -> false
+    }
+  }
+  
+  override fun innerBlind_D(newState: UiState): Boolean {
+    return when (newState) {
+      UiState.BLUETOOTH_NOT_ENABLED,
+      UiState.SOMETHING_ELSE,
+      UiState.OK_A,
+      UiState.INNER_LEAK_B,
+      UiState.OUTER_LEAK_C,
+      UiState.TOTAL_BLIND_E,
+      UiState.PAY_ATTENTION_F,
+      UiState.DISCONNECTED -> {
+        true
+      }
+      else -> false
+    }
+  }
+  
+  override fun totalBlind_E(newState: UiState): Boolean {
+    return when (newState) {
+      UiState.BLUETOOTH_NOT_ENABLED,
+      UiState.SOMETHING_ELSE,
+      UiState.OK_A,
+      UiState.INNER_LEAK_B,
+      UiState.OUTER_LEAK_C,
+      UiState.PAY_ATTENTION_F,
+      UiState.DISCONNECTED -> {
+        true
+      }
+      else -> false
+    }
+  }
+  
+  override fun payAttention_F(newState: UiState): Boolean {
+    return when (newState) {
+      UiState.BLUETOOTH_NOT_ENABLED,
+      UiState.SOMETHING_ELSE,
+      UiState.OK_A,
+      UiState.INNER_LEAK_B,
+      UiState.OUTER_LEAK_C,
+      UiState.DISCONNECTED -> {
+        true
+      }
+      else -> false
+    }
+  }
+  
+  override fun cutguardBroken_I(newState: UiState): Boolean {
+    return when (newState) {
+      UiState.BLUETOOTH_NOT_ENABLED,
+      UiState.SOMETHING_ELSE,
+      UiState.OK_A,
+      UiState.DISCONNECTED -> {
+        true
+      }
+      else -> false
+    }
+  }
+  
+  override fun waterIngressDetection_J(newState: UiState): Boolean {
+    return when (newState) {
+      UiState.BLUETOOTH_NOT_ENABLED,
+      UiState.SOMETHING_ELSE,
+      UiState.OK_A,
+      UiState.DISCONNECTED -> {
+        true
+      }
+      else -> false
+    }
+  }
+  
+  override fun cutguardDirtInTransmitter_K(newState: UiState): Boolean {
+    return when (newState) {
+      UiState.BLUETOOTH_NOT_ENABLED,
+      UiState.SOMETHING_ELSE,
+      UiState.OK_A,
+      UiState.DISCONNECTED -> {
+        true
+      }
+      else -> false
+    }
+  }
+  
+  override fun transmitterDetached_V(newState: UiState): Boolean {
+    return when (newState) {
+      UiState.BLUETOOTH_NOT_ENABLED,
+      UiState.SOMETHING_ELSE,
+      UiState.OK_A,
+      UiState.DISCONNECTED -> {
+        true
+      }
+      else -> false
+    }
+  }
+  
+  override fun transmitterBatteryCharging_W(newState: UiState): Boolean {
+    return when (newState) {
+      UiState.BLUETOOTH_NOT_ENABLED,
+      UiState.SOMETHING_ELSE,
+      UiState.OK_A,
+      UiState.DISCONNECTED -> {
+        true
+      }
+      else -> false
+    }
+  }
+}

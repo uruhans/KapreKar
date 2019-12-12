@@ -7,7 +7,7 @@ import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
  *
  * if the peripheral exists it means we are currently connected to the
  */
-data class BleDevice(val name: String?, val macAddress: String, val connectionState: BleConnectionState, val peripheral: Peripheral? = null) {
+data class BleDevice(val name: String?, val macAddress: String, val connectionState: BleConnectionState, var peripheral: Peripheral? = null) {
   fun isConnectedOrConnecting() : Boolean {
     return isConnected() || connectionState == BleConnectionState.CONNECTING
   }

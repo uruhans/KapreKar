@@ -9,10 +9,10 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module.module
 
 val koinModule = module {
+  single { Me() }
   
   // Components
   single<BluetoothManager> { BluetoothManagerImpl(androidContext(), BuildConfig.DEBUG) }
-  single { Me() }
   
   // ViewModels
   single { HomeViewModel(get()) }

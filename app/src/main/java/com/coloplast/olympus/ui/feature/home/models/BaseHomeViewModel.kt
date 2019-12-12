@@ -7,5 +7,6 @@ import io.reactivex.disposables.Disposable
 abstract class BaseHomeViewModel : BaseViewModel<HomeUiModel, HomeView>() {
   
   abstract fun bindScanner(uiView: HomeView): Disposable
+  abstract fun connectBleDevice(uiView: HomeView) : Disposable
 
 }

@@ -1,12 +1,13 @@
 package com.coloplast.olympus.bluetooth.businesslayer.models
 
-enum class PatchState {
-  OK,
-  INNER_BLIND,
-  TOTAL_BLIND,
-  INNER_LEAK,
-  OUTER_LEAK,
-  PAY_ATTENTION,
-  CUTGUARD_DIRT_IN_TRANSMITTER,
-  CUTGUARD_CUT_BROKEN
+enum class PatchState(val priority: Int) {
+  OK(15),
+  INNER_BLIND(14),
+  TOTAL_BLIND(13),
+  PAY_ATTENTION_12(12),
+  INNER_LEAK(11),
+  PAY_ATTENTION_10(10),
+  OUTER_LEAK(9),
+  CUTGUARD_DIRT_IN_TRANSMITTER(8),
+  CUTGUARD_CUT_BROKEN(7)
 }

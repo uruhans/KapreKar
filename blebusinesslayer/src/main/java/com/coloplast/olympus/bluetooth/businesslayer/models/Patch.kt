@@ -41,11 +41,11 @@ data class Patch(
       // PRIORITY 9
       outerSensor == SensorStatus.BREACH -> PatchState.OUTER_LEAK
       // PRIORITY 10
-      outerSensor == SensorStatus.PAY_ATTENTION && innerSensorBreach -> PatchState.PAY_ATTENTION
+      outerSensor == SensorStatus.PAY_ATTENTION && innerSensorBreach -> PatchState.PAY_ATTENTION_10
       // PRIORITY 11
       innerSensorBreach -> PatchState.INNER_LEAK
       // PRIORITY 12
-      innerSensorPayAttention || outerSensor == SensorStatus.PAY_ATTENTION -> PatchState.PAY_ATTENTION
+      innerSensorPayAttention || outerSensor == SensorStatus.PAY_ATTENTION -> PatchState.PAY_ATTENTION_12
       // PRIORITY 13
       outerSensor == SensorStatus.BLINDED -> PatchState.TOTAL_BLIND
       // PRIORITY 14

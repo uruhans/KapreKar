@@ -4,13 +4,28 @@ import com.coloplast.olympus.bluetooth.businesslayer.models.BleDevice
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
 import com.coloplast.olympus.bluetooth.businesslayer.models.ScanResult
 import com.coloplast.olympus.ui.common.models.UiModel
+import com.coloplast.olympus.ui.feature.statemachine.models.OverlayState
+import com.coloplast.olympus.ui.feature.statemachine.models.UiState
 import org.threeten.bp.LocalDateTime
 
 sealed class HomeUiModel : UiModel {
   
-  data class DeviceConnection(val state: BleDevice) : HomeUiModel()
   data class BluetoothIssue(val bluetoothState: BluetoothState) : HomeUiModel()
-  data class Result(val scanResult: ScanResult) : HomeUiModel()
-  data class StatusUpdate(val bleDevice: BleDevice, val lastUpdate: LocalDateTime) : HomeUiModel()
+  data class ScannerResult(val scanResult: ScanResult) : HomeUiModel()
   
+  data class GattError(val state: State = State.Exception) : HomeUiModel() {
+    enum class State {
+      TimeOutException,
+      Exception
+    }
+  }
+  data class Disconnected(val disconnected: Boolean = true) : HomeUiModel()
+  data class Error(val state: State = State.Unknown) : HomeUiModel() {
+    enum class State {
+      Unknown
+    }
+  }
+  
+  data class StatusUpdate(val uiState: UiState, val bleDevice: BleDevice, val lastUpdate: LocalDateTime = LocalDateTime.now()) : HomeUiModel()
+  data class OverlayUpdate(val overlayState: OverlayState, val bleDevice: BleDevice, val lastUpdate: LocalDateTime = LocalDateTime.now()) : HomeUiModel()
 }

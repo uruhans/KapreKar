@@ -59,9 +59,7 @@ class HomeViewModel(private val bluetoothManager: BluetoothManager) : BaseHomeVi
       // delay added based on issues with some devices that cannot immediately connect right after a scan
       // reference: https://github.com/Polidea/RxAndroidBle/wiki/FAQ:-Cannot-connect
       .delay(500, TimeUnit.MILLISECONDS)
-      .switchMap { macAddress ->
-        bluetoothManager.connectBleDevice(macAddress)
-      }
+      .switchMap { bluetoothManager.connectBleDevice(it) }
       .publish()
       .autoConnect()
     
@@ -69,7 +67,7 @@ class HomeViewModel(private val bluetoothManager: BluetoothManager) : BaseHomeVi
       .compose(BleToUiStateTransformer())
       .map {
         val newState = stateMachine.invoke(it.uiState)
-        HomeUiModel.StatusUpdate(newState, it.bleDevice) as HomeUiModel
+        HomeUiModel.StatusUpdate(newState, it.bleDevice)
       }
     
     val overlayStateObservable = peripheralObservable

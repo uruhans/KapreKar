@@ -66,15 +66,15 @@ class HomeViewModel(private val bluetoothManager: BluetoothManager) : BaseHomeVi
     val uiStateObservable = peripheralObservable
       .compose(BleToUiStateTransformer())
       .map {
-        val newState = stateMachine.invoke(it.uiState)
-        HomeUiModel.StatusUpdate(newState, it.bleDevice)
+        val newState = stateMachine.invoke(it.state)
+        HomeUiModel.StatusUpdate(newState, bleDevice = it.bleDevice)
       }
     
     val overlayStateObservable = peripheralObservable
       .compose(BleToOverlayStateTransformer())
       .map {
         val newState = overlayStateMachine.invoke(it.overlayState)
-        HomeUiModel.OverlayUpdate(newState, it.bleDevice)
+        HomeUiModel.StatusUpdate(overlayState = newState, bleDevice = it.bleDevice)
       }
     
     val uiModelObservable =
@@ -82,6 +82,7 @@ class HomeViewModel(private val bluetoothManager: BluetoothManager) : BaseHomeVi
         uiStateObservable,
         overlayStateObservable
       )
+        .map { it as HomeUiModel }
         .onErrorReturn {
           when (it) {
             is DisconnectException -> HomeUiModel.Disconnected()

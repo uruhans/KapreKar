@@ -56,3 +56,10 @@ fun ImageView.tintDrawable(@ColorRes colorRes: Int?) {
     }
   }
 }
+
+@BindingAdapter("rawRotationalAngle")
+fun ImageView.rotateViewBasedOnAngle(rawRotationalAngle: Int?) {
+  rawRotationalAngle?.let {
+    rotation = it.times(360).div(128).toFloat()
+  }
+}

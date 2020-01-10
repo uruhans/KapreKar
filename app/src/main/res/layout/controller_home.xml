@@ -33,9 +33,9 @@
         android:layout_marginTop="@dimen/spacing_standard"
         android:padding="2dp"
         android:src="@drawable/ic_bluetooth_black_24dp"
-        app:tintDrawable="@{controller.isConnected() ? R.color.icon_enabled : R.color.icon_disabled}"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:tintDrawable="@{controller.isConnected() ? R.color.icon_enabled : R.color.icon_disabled}" />
 
       <TextView
         style="@style/Text.Large"
@@ -61,51 +61,24 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-      <FrameLayout
+      <com.bluelinelabs.conductor.ChangeHandlerFrameLayout
+        android:id="@+id/content_container"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="@dimen/spacing_standard"
         android:layout_marginBottom="@dimen/spacing_standard"
-        app:layout_constraintBottom_toTopOf="@+id/imageView"
+        android:fitsSystemWindows="true"
+        app:layout_constraintBottom_toTopOf="@+id/power_icon"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/icon_bluetooth">
-
-        <include
-          layout="@layout/view_bluetooth_not_enabled"
-          android:visibility="@{controller.readyToScan ? View.GONE : View.VISIBLE}"
-          app:controller="@{controller}" />
-
-        <LinearLayout
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:orientation="vertical"
-          android:visibility="@{controller.readyToScan ? View.VISIBLE : View.GONE}">
-
-          <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:enabled="@{!controller.isScanning}"
-            android:onClick="@{() -> controller.onScanClicked()}"
-            android:text='@{controller.isScanning() ? "Scanning" : "Start"}' />
-
-          <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:itemBinding="@{controller.itemBinding}"
-            app:items="@{controller.items}"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-
-        </LinearLayout>
-
-      </FrameLayout>
+        app:layout_constraintTop_toBottomOf="@+id/icon_bluetooth" />
 
       <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/power_icon"
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_marginBottom="@dimen/spacing_standard"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/progress_animator"
         app:layout_constraintStart_toStartOf="@+id/icon_bluetooth"
         app:powerLevel="@{controller.powerLevel}" />
 
@@ -115,12 +88,21 @@
         android:layout_height="0dp"
         android:layout_marginEnd="@dimen/spacing_standard"
         android:gravity="center_vertical"
-        app:lastCheck="@{controller.lastCheck}"
-        tools:text="Last update"
         android:textColor="@color/grey"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView"
+        app:lastCheck="@{controller.lastCheck}"
+        app:layout_constraintBottom_toBottomOf="@+id/power_icon"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/imageView" />
+        app:layout_constraintTop_toTopOf="@+id/power_icon"
+        tools:text="Last update" />
+
+      <com.coloplast.olympus.ui.common.widgets.AnimatedProgressView
+        android:id="@+id/progress_animator"
+        android:layout_width="0dp"
+        android:layout_height="10dp"
+        android:background="@color/progress_animation_background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:update="@{controller.updateAnimation}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

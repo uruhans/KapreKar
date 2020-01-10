@@ -2,7 +2,10 @@ package com.coloplast.olympus.bluetooth.businesslayer
 
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
 import com.coloplast.olympus.bluetooth.businesslayer.models.BleDevice
+import com.coloplast.olympus.bluetooth.businesslayer.models.Peripheral
+import com.coloplast.olympus.bluetooth.businesslayer.models.RawDataPackage
 import com.coloplast.olympus.bluetooth.businesslayer.models.ScanResult
+import com.polidea.rxandroidble2.RxBleConnection
 import io.reactivex.Observable
 
 interface BluetoothManager {

@@ -10,6 +10,10 @@ abstract class BaseUiStateMachine : UiStateMachine {
   // contains reference to the method that is meant to be run in the current state we are in
   private var currentState: (uiModelState: UiState) -> Boolean = { initial(it) }
   
+  override fun currentState(): UiState {
+    return invoke(state)
+  }
+  
   /**
    * the method that is run on every new state coming in
    */

@@ -142,25 +142,19 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
       .flatMap { rxBleDevice ->
         bluetoothHandler.connectRxBleDevice(rxBleDevice)
           .doOnNext { bleConnections[macAddress] = it }
-          .flatMapSingle {
-            it.requestMtu(64)
-              .ignoreElement()
-              .toSingle { it }
+          .flatMap { rxBleConnection ->
+            rxBleDeviceConnectionState(macAddress)
+              .filter { it.isConnected() }
+              .flatMapSingle { rxBleConnection.requestMtu(64) }
+              .flatMapSingle { rxBleConnection.discoverServices() }
+              .flatMap { setupNotifications(rxBleConnection) }
+              .map { BleDevice(rxBleDevice.name, rxBleDevice.macAddress, BleConnectionState.fromRxBleState(rxBleDevice.connectionState), it) }
           }
-          .flatMapSingle {
-            it.discoverServices()
-              .ignoreElement()
-              .toSingle { it }
-          }
-          .flatMap { setupNotifications(it) }
-          .map { BleDevice(rxBleDevice.name, rxBleDevice.macAddress, BleConnectionState.fromRxBleState(rxBleDevice.connectionState), it) }
       }
   }
   
-  
   /**
    * setup notifications to get notified when changes occur with the ble transmitter
-   * TODO - move the rawDataPackage to it's own - since we have to do things differently with this (store in database) - for now this is for testing
    * - output -> Peripheral containing the PatchState and Transmitter state from the StatusVector and the current PowerLevel
    */
   private fun setupNotifications(rxBleConnection: RxBleConnection): Observable<Peripheral> {

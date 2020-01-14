@@ -129,15 +129,14 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
   }
   
   /**
-   * connect to a specific ble device using it's MacAddress
+   * connect to a specific ble device using it's macAddress
    *
    * 1. we will wait until the connection state changes to CONNECTED
    * 2. we will request a change to the Mtu size, allowing for larger packages to be sent (it's upped from default 23 -> 64)
    * 3. then we discoverServices that exist on the connection - this is required to allow for READ, WRITE and NOTIFY on characteristics
-   * 4. setup notifications (will cause an initial READ on each notification subscription)
-   * 5. map result of notifications to a BleDevice containing Device Name, MacAddress, current ConnectionState and Peripheral state
+   * - output -> incoming macAddress
    */
-  override fun connectBleDevice(macAddress: String): Observable<BleDevice> {
+  override fun connectBleDevice(macAddress: String): Observable<String> {
     return getBleDevice(macAddress)
       .flatMap { rxBleDevice ->
         bluetoothHandler.connectRxBleDevice(rxBleDevice)
@@ -147,32 +146,48 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
               .filter { it.isConnected() }
               .flatMapSingle { rxBleConnection.requestMtu(64) }
               .flatMapSingle { rxBleConnection.discoverServices() }
-              .flatMap { setupNotifications(rxBleConnection) }
-              .map { BleDevice(rxBleDevice.name, rxBleDevice.macAddress, BleConnectionState.fromRxBleState(rxBleDevice.connectionState), it) }
+              .map { macAddress }
           }
       }
   }
   
   /**
-   * setup notifications to get notified when changes occur with the ble transmitter
-   * - output -> Peripheral containing the PatchState and Transmitter state from the StatusVector and the current PowerLevel
+   * subscribe to the PeripheralObservable (which returns the current status of the transmitter)
+   * - output -> a BleDevice containing name, macAddress, connectionState and Peripheral Status
    */
-  private fun setupNotifications(rxBleConnection: RxBleConnection): Observable<Peripheral> {
+  override fun bleDeviceResultObservable(macAddress: String): Observable<BleDevice> {
+    return peripheralObservable(bleConnections[macAddress]!!)
+      .map {
+        val rxBleDevice = bleDevices[macAddress]!!
+        BleDevice(rxBleDevice.name, rxBleDevice.macAddress, BleConnectionState.fromRxBleState(rxBleDevice.connectionState), it)
+      }
+  }
+  
+  /**
+   * setup notifications to get notified when changes occur with the ble transmitter
+   * 1. setup notifications for StatusVector
+   * 2. setup notifications for BatteryPower
+   * - output -> a Peripheral object containing 1. and 2.
+   *
+   * note: even though only one of the the subscriptions are notifying we are returning the latest result from the others,
+   * meaning we *always* get a full object containing the latest data sent from the transmitteræ
+   */
+  private fun peripheralObservable(rxBleConnection: RxBleConnection): Observable<Peripheral> {
     return Observable.combineLatest(
-      notifyOlympusStatus(rxBleConnection),
-      notifyBattery(rxBleConnection),
+      setupOlympusStatusVectorNotifications(rxBleConnection),
+      setupBatteryPowerNotifications(rxBleConnection),
       BiFunction { statusVector: StatusVector, powerLevel: PowerLevel ->
         Peripheral(statusVector.patch, statusVector.transmitter, powerLevel)
       })
   }
   
   /**
-   * setup notifications for the POWER characteristics on the BatteryPowerService
+   * setup notifications for the BATTERY POWER characteristics on the BatteryPowerService
    *
    * - upon subscription this observable with do a READ CHARACTERISTIC in order to get the initial state of the characteristics
    * - output -> PowerLevel describing the current powerlevel of the transmitter (0-100% is converted into NEAR_EMPTY, LOW, MEDIUM and HIGH)
    */
-  private fun notifyBattery(rxBleConnection: RxBleConnection): Observable<PowerLevel> {
+  private fun setupBatteryPowerNotifications(rxBleConnection: RxBleConnection): Observable<PowerLevel> {
     return rxBleConnection.setupNotification(BatteryPowerService.Characteristics.POWER)
       .flatMap { it }
       .startWith(rxBleConnection.readCharacteristic(BatteryPowerService.Characteristics.POWER).toObservable())
@@ -180,12 +195,12 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
   }
   
   /**
-   * setup notification for the STATUS VECTOR on the Olympus Wireless Protocol
+   * setup notifications for the STATUS VECTOR on the Olympus Wireless Protocol
    *
    * - upon subscription this observable with do a READ CHARACTERISTIC in order to get the initial state of the characteristics
    * - output -> StatusVector describing the current state of the patch and transmitter
    */
-  private fun notifyOlympusStatus(rxBleConnection: RxBleConnection): Observable<StatusVector> {
+  private fun setupOlympusStatusVectorNotifications(rxBleConnection: RxBleConnection): Observable<StatusVector> {
     return rxBleConnection.setupNotification(OlympusWirelessProtocol.Characteristics.STATUS)
       .flatMap { it }
       .startWith(rxBleConnection.readCharacteristic(OlympusWirelessProtocol.Characteristics.STATUS).toObservable())
@@ -193,15 +208,23 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
   }
   
   /**
-   * setup notification for the RAW DATA PACKAGE on the Olympus Wireless Protocol
+   * setup notifications for the RawDataPackage on the Olympus Wireless Protocol (currently set to notify roughly every 10 seconds)
    *
    * - upon subscription this observable with do a READ CHARACTERISTIC in order to get the initial state of the characteristics
-   * - output -> RawDataPackage containing the raw data state that the transmitter currently posses
+   * - output -> RawDataPackage describing the current transmitter state
    */
-  private fun notifyOlympusRawDataPackage(rxBleConnection: RxBleConnection): Observable<RawDataPackage> {
-    return rxBleConnection.setupNotification(OlympusWirelessProtocol.Characteristics.RAW_SENSOR_DATA)
-      .flatMap { it }
-      .startWith(rxBleConnection.readCharacteristic(OlympusWirelessProtocol.Characteristics.RAW_SENSOR_DATA).toObservable())
-      .compose(OlympusRawDataPackageTransformer())
+  override fun setupOlympusRawDataPackageNotifications(macAddress: String): Observable<RawDataPackage> {
+    // fetch the ongoing connection based on the macAddress
+    val rxBleConnection = bleConnections[macAddress]
+  
+    return if (rxBleConnection == null) {
+      Observable.empty()
+    }
+    else {
+      rxBleConnection.setupNotification(OlympusWirelessProtocol.Characteristics.RAW_SENSOR_DATA)
+        .flatMap { it }
+        .startWith(rxBleConnection.readCharacteristic(OlympusWirelessProtocol.Characteristics.RAW_SENSOR_DATA).toObservable())
+        .compose(OlympusRawDataPackageTransformer())
+    }
   }
 }

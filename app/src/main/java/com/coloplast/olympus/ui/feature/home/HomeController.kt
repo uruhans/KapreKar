@@ -120,12 +120,8 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
           }
         }
         is HomeUiModel.StatusUpdate -> {
-          updateAnimation.set(true)
-          updateAnimation.notifyChange()
-          
           powerLevel.set(uiModel.bleDevice.peripheral?.powerLevel)
           isConnected.set(uiModel.bleDevice.isConnected())
-          lastCheck.set(uiModel.lastUpdate)
           
           uiModel.bleDevice.peripheral?.transmitter?.rawRotationalAngle?.let {
             rawRotationAngle.set(it)
@@ -133,6 +129,13 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
           
           changeUiState(uiModel.state)
           // TODO - check overlay state too once we are ready
+        }
+        is HomeUiModel.RawDataPackageUpdate -> {
+          updateAnimation.set(true)
+          updateAnimation.notifyChange()
+          lastCheck.set(uiModel.lastUpdate)
+          
+          // TODO - store rawDataPackage to send to the server at a later point
         }
       }
     }

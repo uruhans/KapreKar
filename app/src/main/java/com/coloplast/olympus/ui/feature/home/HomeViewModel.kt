@@ -55,32 +55,40 @@ class HomeViewModel(private val bluetoothManager: BluetoothManager) : BaseHomeVi
   override fun connectBleDevice(uiView: HomeView): Disposable {
     val disposable = CompositeDisposable()
     
-    val peripheralObservable = uiView.onConnectPeripheral()
+    val bleDeviceConnectedObservable = uiView.onConnectPeripheral()
       // delay added based on issues with some devices that cannot immediately connect right after a scan
       // reference: https://github.com/Polidea/RxAndroidBle/wiki/FAQ:-Cannot-connect
       .delay(500, TimeUnit.MILLISECONDS)
       .switchMap { bluetoothManager.connectBleDevice(it) }
       .publish()
       .autoConnect()
+  
+    val notificationSubscriptionObservable = bleDeviceConnectedObservable
+      .flatMap { bluetoothManager.bleDeviceResultObservable(it) }
     
-    val uiStateObservable = peripheralObservable
+    val uiStateObservable = notificationSubscriptionObservable
       .compose(BleToUiStateTransformer())
       .map {
         val newState = stateMachine.invoke(it.state)
         HomeUiModel.StatusUpdate(newState, bleDevice = it.bleDevice)
       }
     
-    val overlayStateObservable = peripheralObservable
+    val overlayStateObservable = notificationSubscriptionObservable
       .compose(BleToOverlayStateTransformer())
       .map {
         val newState = overlayStateMachine.invoke(it.overlayState)
         HomeUiModel.StatusUpdate(overlayState = newState, bleDevice = it.bleDevice)
       }
     
+    val rawDataPackageObservable = bleDeviceConnectedObservable
+      .flatMap { bluetoothManager.setupOlympusRawDataPackageNotifications(it) }
+      .map { HomeUiModel.RawDataPackageUpdate(it) }
+    
     val uiModelObservable =
       Observable.merge(
         uiStateObservable,
-        overlayStateObservable
+        overlayStateObservable,
+        rawDataPackageObservable
       )
         .map { it as HomeUiModel }
         .onErrorReturn {

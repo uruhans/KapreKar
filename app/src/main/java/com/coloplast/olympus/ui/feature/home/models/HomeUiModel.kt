@@ -2,6 +2,7 @@ package com.coloplast.olympus.ui.feature.home.models
 
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
 import com.coloplast.olympus.bluetooth.businesslayer.models.BleDevice
+import com.coloplast.olympus.bluetooth.businesslayer.models.RawDataPackage
 import com.coloplast.olympus.bluetooth.businesslayer.models.ScanResult
 import com.coloplast.olympus.ui.common.models.UiModel
 import com.coloplast.olympus.ui.feature.statemachine.models.OverlayState
@@ -15,9 +16,11 @@ sealed class HomeUiModel : UiModel {
   data class StatusUpdate(
     val state: UiState = UiState.NO_CHANGE,
     val overlayState: OverlayState = OverlayState.NONE,
-    val bleDevice: BleDevice,
-    val lastUpdate: LocalDateTime = LocalDateTime.now()
+    val bleDevice: BleDevice
   ) : HomeUiModel()
+  
+  data class RawDataPackageUpdate(val rawDataPackage: RawDataPackage,
+    val lastUpdate: LocalDateTime = LocalDateTime.now()) : HomeUiModel()
   
   data class GattError(val state: State = State.Exception) : HomeUiModel() {
     enum class State {

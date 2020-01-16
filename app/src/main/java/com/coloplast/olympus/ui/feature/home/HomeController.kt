@@ -150,6 +150,9 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         UiState.OK_A -> {
           OkController.routerTransaction()
         }
+        UiState.INNER_LEAK_B -> {
+          InnerLeakController.routerTransaction()
+        }
         UiState.BLUETOOTH_NOT_ENABLED,
         UiState.DISCONNECTED -> {
           BluetoothNotEnabledController.routerTransaction()

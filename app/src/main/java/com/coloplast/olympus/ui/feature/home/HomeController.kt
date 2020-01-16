@@ -36,7 +36,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Function
 import me.tatarka.bindingcollectionadapter2.ItemBinding
-import org.koin.standalone.inject
+import org.koin.core.inject
 import org.threeten.bp.LocalDateTime
 import timber.log.Timber
 

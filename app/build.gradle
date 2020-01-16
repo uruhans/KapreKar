@@ -22,6 +22,12 @@ android {
     buildConfigField("String", "ServerUrl", "\"https://novo8devfunc.azurewebsites.net/api/\"")
   }
 
+  sourceSets {
+    main {
+      res.srcDirs = ['src/main/res', 'src/main/i18n']
+    }
+  }
+
   flavorDimensions "type"
   productFlavors {
     dev {

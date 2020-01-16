@@ -10,9 +10,6 @@ import com.coloplast.olympus.bluetooth.businesslayer.exceptions.GattException
 import com.coloplast.olympus.bluetooth.businesslayer.models.*
 import com.coloplast.olympus.bluetooth.businesslayer.services.BatteryPowerService
 import com.coloplast.olympus.bluetooth.businesslayer.services.OlympusWirelessProtocol
-import com.coloplast.olympus.bluetooth.businesslayer.transformers.BatteryPowerTransformer
-import com.coloplast.olympus.bluetooth.businesslayer.transformers.OlympusRawDataPackageTransformer
-import com.coloplast.olympus.bluetooth.businesslayer.transformers.OlympusStatusTransformer
 import com.dawn.bluetooth.BluetoothHandler
 import com.polidea.rxandroidble2.RxBleClient
 import com.polidea.rxandroidble2.RxBleConnection
@@ -191,7 +188,7 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
     return rxBleConnection.setupNotification(BatteryPowerService.Characteristics.POWER)
       .flatMap { it }
       .startWith(rxBleConnection.readCharacteristic(BatteryPowerService.Characteristics.POWER).toObservable())
-      .compose(BatteryPowerTransformer())
+      .compose(BatteryPowerService.transformer)
   }
   
   /**
@@ -204,7 +201,7 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
     return rxBleConnection.setupNotification(OlympusWirelessProtocol.Characteristics.STATUS)
       .flatMap { it }
       .startWith(rxBleConnection.readCharacteristic(OlympusWirelessProtocol.Characteristics.STATUS).toObservable())
-      .compose(OlympusStatusTransformer())
+      .compose(OlympusWirelessProtocol.statusTransformer)
   }
   
   /**
@@ -224,7 +221,7 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
       rxBleConnection.setupNotification(OlympusWirelessProtocol.Characteristics.RAW_SENSOR_DATA)
         .flatMap { it }
         .startWith(rxBleConnection.readCharacteristic(OlympusWirelessProtocol.Characteristics.RAW_SENSOR_DATA).toObservable())
-        .compose(OlympusRawDataPackageTransformer())
+        .compose(OlympusWirelessProtocol.rawDataPackageTransformer)
     }
   }
 }

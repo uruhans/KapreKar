@@ -22,6 +22,12 @@ android {
     buildConfigField("String", "ServerUrl", "\"https://novo8devfunc.azurewebsites.net/api/\"")
   }
 
+  sourceSets {
+    main {
+      res.srcDirs = ['src/main/res', 'src/main/i18n']
+    }
+  }
+
   flavorDimensions "type"
   productFlavors {
     dev {
@@ -96,7 +102,7 @@ dependencies {
   implementation project(':blebusinesslayer')
 
   // Android
-  implementation 'com.google.android.material:material:1.2.0-alpha02'
+  implementation 'com.google.android.material:material:1.2.0-alpha03'
 
   implementation 'androidx.appcompat:appcompat:1.1.0'
   implementation 'androidx.core:core-ktx:1.2.0-rc01'

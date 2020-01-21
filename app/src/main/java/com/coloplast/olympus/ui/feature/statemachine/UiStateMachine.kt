@@ -4,6 +4,8 @@ import com.coloplast.olympus.ui.feature.statemachine.models.UiState
 
 interface UiStateMachine {
   
+  fun currentState() : UiState
+  
   fun invoke(newState: UiState) : UiState
   
   fun initial(newState: UiState): Boolean

@@ -25,6 +25,8 @@
 
   <color name="divider">#33000000</color>
 
+  <color name="progress_animation_background">#ebebeb</color>
+
   <color name="pagerindicator_selected">@color/colorAccent</color>
   <color name="pagerindicator_unselected">#38001965</color>
 

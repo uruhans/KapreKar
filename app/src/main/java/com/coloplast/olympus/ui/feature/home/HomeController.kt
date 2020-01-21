@@ -8,8 +8,12 @@ import androidx.core.view.GravityCompat
 import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
+import androidx.databinding.ObservableInt
 import com.artemzin.rxui.RxUi
+import com.bluelinelabs.conductor.Conductor
+import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
+import com.bluelinelabs.conductor.changehandler.FadeChangeHandler
 import com.coloplast.olympus.BR
 import com.coloplast.olympus.R
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
@@ -23,6 +27,8 @@ import com.coloplast.olympus.ui.common.dialogs.DialogController
 import com.coloplast.olympus.ui.dialogs.ImageDialogController
 import com.coloplast.olympus.ui.feature.home.models.HomeUiModel
 import com.coloplast.olympus.ui.feature.home.models.ScanResultItem
+import com.coloplast.olympus.ui.feature.statemachine.models.UiState
+import com.coloplast.olympus.ui.feature.uistates.*
 import com.coloplast.olympus.utils.OSUtils
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
@@ -30,7 +36,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Function
 import me.tatarka.bindingcollectionadapter2.ItemBinding
-import org.koin.standalone.inject
+import org.koin.core.inject
 import org.threeten.bp.LocalDateTime
 import timber.log.Timber
 
@@ -50,12 +56,17 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   private var dialogController: DialogController? = null
   private var imageDialogController: ImageDialogController? = null
   
-  val readyToScan = ObservableBoolean(false)
+  val updateAnimation = ObservableBoolean(false)
   val isScanning = ObservableBoolean(false)
   
   val powerLevel = ObservableField<PowerLevel>()
   val isConnected = ObservableBoolean(false)
   val lastCheck = ObservableField<LocalDateTime>()
+  
+  val rawRotationAngle = ObservableInt()
+  
+  private var currentUiState = UiState.INITIAL
+  private var stateRouter: Router? = null
   
   constructor() : super()
   constructor(args: Bundle?) : super(args)
@@ -65,8 +76,12 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   }
   
   override fun onViewBound(viewBinding: ControllerHomeBinding) {
-    compositeDisposable.add(viewModel.bind(this))
+    stateRouter = Conductor.attachRouter(activity!!, viewBinding.contentContainer, args)
+    
+    // the scanner observable should be disposed when we start connecting to a bledevice
+    // this is why it's added to it's own disposable
     scannerDisposable.add(viewModel.bindScanner(this))
+    compositeDisposable.add(viewModel.bind(this))
   }
   
   override fun render(): Function<Observable<HomeUiModel>, Disposable> {
@@ -84,7 +99,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
               showPermissionDialog()
             }
             BluetoothState.BLUETOOTH_NOT_ENABLED -> {
-              readyToScan.set(false)
+              changeUiState(UiState.BLUETOOTH_NOT_ENABLED)
             }
             BluetoothState.LOCATION_SERVICES_NOT_ENABLED -> {
             
@@ -93,25 +108,75 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
             
             }
             BluetoothState.READY -> {
-              readyToScan.set(true)
+              changeUiState(UiState.READY_TO_SCAN)
             }
           }
         }
         is HomeUiModel.ScannerResult -> {
+          changeUiState(UiState.SCANNING)
+          
           if (!items.any { it.scanResult.macAddress == uiModel.scanResult.macAddress }) {
             items.add(ScanResultItem(uiModel.scanResult, this))
           }
         }
         is HomeUiModel.StatusUpdate -> {
           powerLevel.set(uiModel.bleDevice.peripheral?.powerLevel)
-          isConnected.set(uiModel.bleDevice.isConnectedOrConnecting())
-          lastCheck.set(uiModel.lastUpdate)
+          isConnected.set(uiModel.bleDevice.isConnected())
+          
+          uiModel.bleDevice.peripheral?.transmitter?.rawRotationalAngle?.let {
+            rawRotationAngle.set(it)
+          }
+          
+          changeUiState(uiModel.state)
+          // TODO - check overlay state too once we are ready
         }
-        is HomeUiModel.OverlayUpdate -> {
-          Timber.d("Overlay state change: [${uiModel.overlayState}]")
+        is HomeUiModel.RawDataPackageUpdate -> {
+          updateAnimation.set(true)
+          updateAnimation.notifyChange()
+          lastCheck.set(uiModel.lastUpdate)
+          
+          // TODO - store rawDataPackage to send to the server at a later point
         }
       }
     }
+  }
+  
+  private fun changeUiState(newState: UiState) {
+    if (currentUiState == newState) {
+      Timber.d("Same state was hit [${newState}] - Skipping")
+    }
+    else {
+      val routerTransaction = when (newState) {
+        UiState.OK_A -> {
+          OkController.routerTransaction()
+        }
+        UiState.BLUETOOTH_NOT_ENABLED,
+        UiState.DISCONNECTED -> {
+          BluetoothNotEnabledController.routerTransaction()
+        }
+        UiState.READY_TO_SCAN -> {
+          ReadyToScanController.routerTransaction()
+        }
+        UiState.SCANNING -> {
+          ScanningController.routerTransaction()
+        }
+        UiState.INITIAL -> {
+          UnknownController.routerTransaction()
+        }
+        else -> {
+          null
+        }
+      }
+      
+      routerTransaction?.let {
+        stateRouter?.replaceTopController(
+          it.pushChangeHandler(FadeChangeHandler(400))
+            .popChangeHandler(FadeChangeHandler(400))
+        )
+      }
+    }
+    
+    currentUiState = newState
   }
   
   override fun onPositiveButtonClicked(requestCode: Int) {
@@ -238,11 +303,12 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   }
   
   companion object {
-    private const val TAG_CONTROLLER = "home_controller"
+    const val TAG_CONTROLLER = "home_controller"
     
     private const val REQUEST_CODE_PERMISSION_LOCATION = 5001
     private const val REQUEST_CODE_PERMISSION_RATIONALE = 5002
-    private const val REQUEST_CODE_BLUETOOTH_ENABLE = 5005
+    
+    const val REQUEST_CODE_BLUETOOTH_ENABLE = 5005
     
     fun routerTransaction() = RouterTransaction.with(HomeController()).tag(TAG_CONTROLLER)
   }

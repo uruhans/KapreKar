@@ -14,11 +14,10 @@ import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
-import org.koin.standalone.KoinComponent
-import org.koin.standalone.inject
+import org.koin.android.ext.android.inject
 import java.util.concurrent.TimeUnit
 
-class MainActivity : AppCompatActivity(), KoinComponent {
+class MainActivity : AppCompatActivity() {
   
   private lateinit var navigation: Navigation
   

@@ -21,7 +21,7 @@ class BleToOverlayStateTransformer : ObservableTransformer<BleDevice, OverlaySta
               peripheral.transmitter.battery == Battery.BATTERY_LOW -> OverlayState.BATTERY_LOW
               else -> OverlayState.NONE
             }
-  
+            
             OverlayStateModel(overlayState, bleDevice)
           }
           false -> {

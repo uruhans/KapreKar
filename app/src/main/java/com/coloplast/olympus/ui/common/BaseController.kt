@@ -12,7 +12,7 @@ import com.bluelinelabs.conductor.Controller
 import com.bluelinelabs.conductor.Router
 import com.coloplast.olympus.ui.common.models.Navigation
 import io.reactivex.disposables.CompositeDisposable
-import org.koin.standalone.KoinComponent
+import org.koin.core.KoinComponent
 import timber.log.Timber
 
 abstract class BaseController<T : ViewDataBinding> : Controller, KoinComponent {

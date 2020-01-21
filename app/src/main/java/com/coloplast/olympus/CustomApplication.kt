@@ -4,7 +4,9 @@ import android.app.Application
 import com.coloplast.olympus.koin.koinModule
 import com.coloplast.olympus.shared.AppSettings
 import com.jakewharton.threetenabp.AndroidThreeTen
-import org.koin.android.ext.android.startKoin
+import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
+import org.koin.core.context.startKoin
 import timber.log.Timber
 
 class CustomApplication : Application() {
@@ -17,6 +19,10 @@ class CustomApplication : Application() {
     
     Timber.plant(Timber.DebugTree())
     
-    startKoin(this, listOf(koinModule))
+    startKoin {
+      androidLogger()
+      androidContext(this@CustomApplication)
+      modules(koinModule)
+    }
   }
 }

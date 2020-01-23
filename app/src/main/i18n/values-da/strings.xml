@@ -1,20 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<string name="dart">En fejl opstod.</string>
+<string name="dialog_permission_ask">Ask</string>
+<string name="dialog_permission_location_message">The app needs permission to access location in order to use Bluetooth</string>
+<string name="dialog_permission_location_title">Not allowed</string>
+<string name="dialog_permission_rationale_location_ask_again">Ask me again, please</string>
+<string name="dialog_permission_rationale_location_message">The app will not be able to connect to any bluetooth devices if you have not granted permission to location</string>
+<string name="dialog_permission_rationale_location_title">Location permission required</string>
 <string name="error_connect_framework_error">Forbundet</string>
-<string name="error_data_corruption_">MISSING TEXT</string>
+<string name="error_data_corruption_">error_disconnect_framework_error</string>
 <string name="error_disconnect_framework_error">Ikke forbundet</string>
 <string name="error_no_found_devices_in_scan">Batteriet er løbet tør — ellers er transmitteren muligvis i stykker.</string>
 <string name="error_no_found_devices_in_scan_action">Søg efter transmitter</string>
-<string name="error_no_found_devices_in_scan_title">Transmitteren kan ikke lokaliseres.</string>
-<string name="error_peripheral_configuration">MISSING TEXT</string>
+<string name="error_peripheral_configuration">error_disconnect_framework_error</string>
+<string name="generic_cancel">Cancel</string>
 <string name="generic_close">Luk</string>
+<string name="generic_error">En fejl opstod.</string>
 <string name="generic_error_call_support">Ring til sygeplejersken fra det kliniske studie for at få hjælp.</string>
 <string name="generic_error_call_support_action">Ring op</string>
 <string name="generic_error_call_support_title">Der opstod en ukendt fejl.</string>
+<string name="generic_error_message">We encountered an error. Please try again later.</string>
 <string name="generic_menu">Menu</string>
 <string name="generic_no">Nej</string>
 <string name="generic_ok">OK</string>
+<string name="generic_previous">Previous</string>
+<string name="generic_quit">Quit</string>
 <string name="guide_ble_connection">Guide til Bluetooth</string>
 <string name="guide_ble_connection_body">Dette produkt afhænger af Bluetooth for at kommunikere med dig. For at du kan modtage beskeder på den udleverede mobiltelefon, skal den være tæt på dig. \n\nBluetoothforbindelsen kan blive afbrudt pga. for stor afstand mellem mobiltelefon og transmitter, tykke vægge eller for mange ting, der er forbundet med Bluetooth.</string>
 <string name="guide_ble_connection_title">Guide til Bluetooth</string>
@@ -192,6 +201,8 @@
 <string name="status_not_in_use_title">Ingen forbindelse.</string>
 <string name="status_outer_breach">Lækage kan ske når som helst.</string>
 <string name="status_outer_breach_title">Tjek nu.</string>
+<string name="status_searching">Søger</string>
 <string name="status_wet_mount">Overvej at skifte sensorlag for at holde dig opdateret.</string>
 <string name="status_wet_mount_title">Din hud er ikke helt tør.</string>
+<string name="t">Transmitteren kan ikke lokaliseres.</string>
 </resources>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <data>
+
+    <variable
+      name="home"
+      type="com.coloplast.olympus.ui.feature.home.HomeController" />
+  </data>
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="bottom"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/spacing_double">
+
+    <ImageView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="@dimen/spacing_standard"
+      android:layout_marginEnd="@dimen/spacing_standard"
+      android:src="@drawable/ic_plate_inner"
+      app:rawRotationalAngle="@{home.rawRotationAngle}" />
+
+    <TextView
+      style="@style/Headline.Large"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="@dimen/spacing_standard"
+      android:layout_marginTop="@dimen/spacing_half"
+      android:layout_marginEnd="@dimen/spacing_standard"
+      android:text="There's a problem." />
+
+    <TextView
+      style="@style/Headline.Large"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="@dimen/spacing_standard"
+      android:layout_marginEnd="@dimen/spacing_standard"
+      android:layout_marginBottom="@dimen/spacing_double"
+      android:fontFamily="@font/coloplast"
+      android:text="Look out for signs of\nleakage."
+      android:textColor="@color/grey" />
+
+  </LinearLayout>
+</layout>

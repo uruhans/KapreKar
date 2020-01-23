@@ -35,7 +35,7 @@
       android:layout_marginStart="@dimen/spacing_standard"
       android:layout_marginTop="@dimen/spacing_standard"
       android:layout_marginEnd="@dimen/spacing_standard"
-      android:text="Bluetooth\nis disabled" />
+      android:text="@string/status_ble_turned_off_title" />
 
     <TextView
       style="@style/Headline.Large"
@@ -45,7 +45,7 @@
       android:layout_marginTop="@dimen/spacing_half"
       android:layout_marginEnd="@dimen/spacing_standard"
       android:fontFamily="@font/coloplast"
-      android:text="Turn on bluetooth to begin monitoring."
+      android:text="@string/status_ble_turned_off"
       android:textColor="@color/grey" />
 
     <androidx.cardview.widget.CardView
@@ -70,7 +70,7 @@
         android:layout_gravity="center"
         android:fontFamily="sans-serif-medium"
         android:gravity="center"
-        android:text="Enable bluetooth"
+        android:text="@string/bluetooth_enable"
         android:textSize="18sp" />
 
     </androidx.cardview.widget.CardView>

@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+<string name="bluetooth_enable">Enable bluetooth</string>
+<string name="bluetooth_scanning">Scanning</string>
+<string name="bluetooth_start_scanning">Start</string>
 <string name="dialog_permission_ask">Ask</string>
 <string name="dialog_permission_location_message">The app needs permission to access location in order to use Bluetooth</string>
 <string name="dialog_permission_location_title">Not allowed</string>

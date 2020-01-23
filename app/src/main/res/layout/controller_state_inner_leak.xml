@@ -31,7 +31,7 @@
       android:layout_marginStart="@dimen/spacing_standard"
       android:layout_marginTop="@dimen/spacing_half"
       android:layout_marginEnd="@dimen/spacing_standard"
-      android:text="There's a problem." />
+      android:text="@string/status_inner_breach_title" />
 
     <TextView
       style="@style/Headline.Large"
@@ -41,7 +41,7 @@
       android:layout_marginEnd="@dimen/spacing_standard"
       android:layout_marginBottom="@dimen/spacing_double"
       android:fontFamily="@font/coloplast"
-      android:text="Look out for signs of\nleakage."
+      android:text="@string/status_inner_breach"
       android:textColor="@color/grey" />
 
   </LinearLayout>

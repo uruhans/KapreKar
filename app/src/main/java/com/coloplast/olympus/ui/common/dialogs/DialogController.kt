@@ -12,10 +12,10 @@ import timber.log.Timber
 @Suppress("PrivatePropertyName")
 class DialogController(args: Bundle?) : BaseDialogController<ControllerDialogBinding>(args) {
   
-  val titleId = ObservableInt(R.string.alert_generic_title)
+  val titleId = ObservableInt(R.string.generic_error)
   val titleFormatArgs = ObservableArrayList<String>()
   
-  val messageId = ObservableInt(R.string.alert_generic_message)
+  val messageId = ObservableInt(R.string.generic_error_message)
   val messageFormatArgs = ObservableArrayList<String>()
   
   val positiveButtonTextId = ObservableInt()

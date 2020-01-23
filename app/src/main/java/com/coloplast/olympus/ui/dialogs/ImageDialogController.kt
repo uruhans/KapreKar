@@ -13,8 +13,8 @@ import timber.log.Timber
 
 class ImageDialogController(args: Bundle) : BaseDialogController<ControllerDialogImageBinding>(args) {
   
-  val titleResId = ObservableInt(R.string.alert_generic_title)
-  val messageResId = ObservableInt(R.string.alert_generic_message)
+  val titleResId = ObservableInt(R.string.generic_error)
+  val messageResId = ObservableInt(R.string.generic_error_message)
   
   val positiveButtonTextResId = ObservableInt()
   val negativeButtonTextResId = ObservableInt(0)

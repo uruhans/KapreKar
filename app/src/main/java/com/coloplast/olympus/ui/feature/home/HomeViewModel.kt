@@ -90,7 +90,6 @@ class HomeViewModel(private val bluetoothManager: BluetoothManager) : BaseHomeVi
         overlayStateObservable,
         rawDataPackageObservable
       )
-        .map { it as HomeUiModel }
         .onErrorReturn {
           when (it) {
             is DisconnectException -> HomeUiModel.Disconnected()

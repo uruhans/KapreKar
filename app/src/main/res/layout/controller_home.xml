@@ -43,7 +43,7 @@
         android:layout_height="0dp"
         android:layout_marginStart="@dimen/spacing_half"
         android:gravity="center_vertical"
-        android:text='@{controller.isConnected() ? "Connected" : "Disconnected"}'
+        android:text='@{controller.isConnected() ? @string/status_connected : @string/status_disconnected}'
         android:textColor="@color/grey"
         app:layout_constraintBottom_toBottomOf="@+id/icon_bluetooth"
         app:layout_constraintStart_toEndOf="@+id/icon_bluetooth"
@@ -93,7 +93,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/power_icon"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/power_icon"
-        tools:text="Last update" />
+        tools:text="@string/status_last_check" />
 
       <com.coloplast.olympus.ui.common.widgets.AnimatedProgressView
         android:id="@+id/progress_animator"

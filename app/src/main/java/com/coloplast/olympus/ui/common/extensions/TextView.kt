@@ -12,6 +12,7 @@ import androidx.annotation.ColorRes
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
+import com.coloplast.olympus.R
 import com.coloplast.olympus.ui.common.listeners.AnimatorListenerImpl
 import com.coloplast.olympus.utils.Strings
 import com.coloplast.olympus.utils.UiUtils
@@ -199,6 +200,6 @@ fun TextView.underlineText(underline: Boolean) {
 @BindingAdapter("lastCheck")
 fun TextView.lastCheck(localDateTime: LocalDateTime?) {
   localDateTime?.let {
-    text = "Last check ${it.format(DateTimeFormatter.ISO_LOCAL_TIME)}"
+    text = "${context.getString(R.string.status_last_check)} ${it.format(DateTimeFormatter.ISO_LOCAL_TIME)}"
   }
 }

@@ -64,7 +64,7 @@
           android:layout_marginEnd="@dimen/spacing_standard"
           android:text="@{controller.titleResId}"
           android:textSize="@dimen/text_24"
-          tools:text="@string/alert_generic_title" />
+          tools:text="@string/generic_error" />
 
         <TextView
           style="@style/Text.Large"
@@ -77,7 +77,7 @@
           android:lineSpacingExtra="0dp"
           android:text="@{controller.messageResId}"
           android:textColor="@color/grey"
-          tools:text="@string/alert_generic_message" />
+          tools:text="@string/generic_error_message" />
 
         <LinearLayout
           android:layout_width="match_parent"
@@ -96,7 +96,7 @@
             android:gravity="center_vertical"
             android:onClick="@{() -> controller.onPositiveButtonClicked() }"
             android:text="@{controller.positiveButtonTextResId}"
-            tools:text="@string/button_quit" />
+            tools:text="@string/generic_quit" />
 
           <TextView
             style="@style/Text.Link"
@@ -107,7 +107,7 @@
             android:onClick="@{() -> controller.onNegativeButtonClicked() }"
             android:visibility="@{controller.showNegativeButton ? View.VISIBLE : View.GONE}"
             app:safeText="@{controller.negativeButtonTextResId}"
-            tools:text="@string/button_cancel" />
+            tools:text="@string/generic_cancel" />
 
         </LinearLayout>
 
@@ -130,7 +130,7 @@
             android:onClick="@{() -> controller.onNegativeButtonClicked() }"
             android:visibility="@{controller.showNegativeButton ? View.VISIBLE : View.GONE}"
             app:safeText="@{controller.negativeButtonTextResId}"
-            tools:text="@string/button_cancel" />
+            tools:text="@string/generic_cancel" />
 
           <TextView
             style="@style/Text.Link"
@@ -140,7 +140,7 @@
             android:gravity="center"
             android:onClick="@{() -> controller.onPositiveButtonClicked() }"
             android:text="@{controller.positiveButtonTextResId}"
-            tools:text="@string/button_quit" />
+            tools:text="@string/generic_quit" />
 
         </LinearLayout>
       </LinearLayout>

@@ -33,7 +33,7 @@
       android:layout_marginEnd="@dimen/spacing_standard"
       android:layout_marginBottom="@dimen/spacing_double"
       android:fontFamily="@font/coloplast"
-      android:text="Everything looks\nsecure."
+      android:text="@string/status_all_ok"
       android:textColor="@color/grey" />
 
   </LinearLayout>

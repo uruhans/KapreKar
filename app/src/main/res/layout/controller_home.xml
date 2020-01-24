@@ -38,6 +38,7 @@
         app:tintDrawable="@{controller.isConnected() ? R.color.icon_enabled : R.color.icon_disabled}" />
 
       <TextView
+        android:id="@+id/textView"
         style="@style/Text.Large"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
@@ -67,11 +68,11 @@
         android:layout_height="0dp"
         android:layout_marginTop="@dimen/spacing_standard"
         android:layout_marginBottom="@dimen/spacing_standard"
-        android:fitsSystemWindows="true"
         app:layout_constraintBottom_toTopOf="@+id/power_icon"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/icon_bluetooth" />
+        app:layout_constraintTop_toBottomOf="@+id/icon_bluetooth"
+        app:layout_constraintVertical_bias="1" />
 
       <ImageView
         android:id="@+id/power_icon"

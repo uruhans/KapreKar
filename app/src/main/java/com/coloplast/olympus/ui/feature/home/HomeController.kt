@@ -4,16 +4,14 @@ import android.app.Activity
 import android.bluetooth.BluetoothAdapter
 import android.content.Intent
 import android.os.Bundle
+import android.view.ViewGroup
 import androidx.core.view.GravityCompat
 import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.databinding.ObservableInt
 import com.artemzin.rxui.RxUi
-import com.bluelinelabs.conductor.Conductor
-import com.bluelinelabs.conductor.Router
-import com.bluelinelabs.conductor.RouterTransaction
-import com.bluelinelabs.conductor.changehandler.FadeChangeHandler
+import com.bluelinelabs.conductor.*
 import com.coloplast.olympus.BR
 import com.coloplast.olympus.R
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
@@ -22,6 +20,7 @@ import com.coloplast.olympus.bluetooth.businesslayer.models.ScanResult
 import com.coloplast.olympus.databinding.ControllerHomeBinding
 import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.common.PermissionHandler
+import com.coloplast.olympus.ui.common.conductor.PatchSharedElementTransitionChangeHandler
 import com.coloplast.olympus.ui.common.dialogs.BaseDialogController
 import com.coloplast.olympus.ui.common.dialogs.DialogController
 import com.coloplast.olympus.ui.dialogs.ImageDialogController
@@ -146,16 +145,25 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
       Timber.d("Same state was hit [${newState}] - Skipping")
     }
     else {
+      
+      
       val routerTransaction = when (newState) {
         UiState.OK_A -> {
           OkController.routerTransaction()
+            .popChangeHandler(PatchSharedElementTransitionChangeHandler())
+            .pushChangeHandler(PatchSharedElementTransitionChangeHandler())
         }
         UiState.INNER_LEAK_B -> {
           InnerLeakController.routerTransaction()
+            .popChangeHandler(PatchSharedElementTransitionChangeHandler())
+            .pushChangeHandler(PatchSharedElementTransitionChangeHandler())
         }
         UiState.BLUETOOTH_NOT_ENABLED,
         UiState.DISCONNECTED -> {
           BluetoothNotEnabledController.routerTransaction()
+        }
+        UiState.INITIAL -> {
+          UnknownController.routerTransaction()
         }
         UiState.READY_TO_SCAN -> {
           ReadyToScanController.routerTransaction()
@@ -163,19 +171,18 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         UiState.SCANNING -> {
           ScanningController.routerTransaction()
         }
-        UiState.INITIAL -> {
-          UnknownController.routerTransaction()
-        }
         else -> {
           null
         }
       }
       
       routerTransaction?.let {
-        stateRouter?.replaceTopController(
-          it.pushChangeHandler(FadeChangeHandler(400))
-            .popChangeHandler(FadeChangeHandler(400))
-        )
+        if (stateRouter?.hasRootController() == true) {
+          stateRouter?.replaceTopController(it)
+        }
+        else {
+          stateRouter?.setRoot(it)
+        }
       }
     }
     

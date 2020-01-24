@@ -10,31 +10,30 @@
   </data>
 
   <LinearLayout
+    android:id="@+id/ok_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="bottom"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/spacing_double">
+    android:paddingStart="@dimen/spacing_standard"
+    android:paddingEnd="@dimen/spacing_standard">
 
     <ImageView
+      android:id="@+id/icon_patch"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginStart="@dimen/spacing_standard"
-      android:layout_marginEnd="@dimen/spacing_standard"
       android:src="@drawable/ic_plate_ok"
+      android:transitionName="Patch"
       app:rawRotationalAngle="@{home.rawRotationAngle}" />
 
     <TextView
       style="@style/Headline.Large"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginStart="@dimen/spacing_standard"
-      android:layout_marginTop="@dimen/spacing_half"
-      android:layout_marginEnd="@dimen/spacing_standard"
-      android:layout_marginBottom="@dimen/spacing_double"
       android:fontFamily="@font/coloplast"
       android:text="@string/status_all_ok"
-      android:textColor="@color/grey" />
+      android:textColor="@color/grey"
+      android:transitionName="test" />
 
   </LinearLayout>
 </layout>

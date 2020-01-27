@@ -145,8 +145,6 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
       Timber.d("Same state was hit [${newState}] - Skipping")
     }
     else {
-      
-      
       val routerTransaction = when (newState) {
         UiState.OK_A -> {
           OkController.routerTransaction()

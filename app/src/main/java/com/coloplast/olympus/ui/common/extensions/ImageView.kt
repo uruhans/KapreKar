@@ -1,10 +1,13 @@
 package com.coloplast.olympus.ui.common.extensions
 
+import android.animation.ObjectAnimator
 import android.graphics.BlendMode
 import android.graphics.BlendModeColorFilter
 import android.graphics.PorterDuff
 import android.os.Build
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AnimationUtils
+import android.view.animation.Interpolator
 import android.widget.ImageView
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
@@ -12,6 +15,7 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import com.coloplast.olympus.R
 import com.coloplast.olympus.bluetooth.businesslayer.enums.PowerLevel
+import com.coloplast.olympus.utils.UiUtils
 
 @BindingAdapter("resource")
 fun ImageView.setResource(@DrawableRes resource: Int?) {
@@ -60,6 +64,18 @@ fun ImageView.tintDrawable(@ColorRes colorRes: Int?) {
 @BindingAdapter("rawRotationalAngle")
 fun ImageView.rotateViewBasedOnAngle(rawRotationalAngle: Int?) {
   rawRotationalAngle?.let {
-    rotation = it.times(360).div(128).toFloat()
+    val angle = it.times(360).div(128)
+    val newAngle = UiUtils.calculatePatchRotation(angle)
+    
+    if(rotation != newAngle) {
+      val animation = ObjectAnimator.ofFloat(rotation, newAngle)
+  
+      animation.addUpdateListener { valueAnimator ->
+        rotation = valueAnimator.animatedValue as Float
+      }
+  
+      animation.duration = 500
+      animation.start()
+    }
   }
 }

@@ -18,13 +18,13 @@
     android:paddingStart="@dimen/spacing_standard"
     android:paddingEnd="@dimen/spacing_standard">
 
-    <ImageView
-      android:id="@+id/icon_patch"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:src="@drawable/ic_plate_ok_detailed"
-      android:transitionName="Patch"
-      app:rawRotationalAngle="@{home.rawRotationAngle}" />
+<!--    <ImageView-->
+<!--      android:id="@+id/icon_patch"-->
+<!--      android:layout_width="wrap_content"-->
+<!--      android:layout_height="wrap_content"-->
+<!--      android:src="@drawable/ic_plate_ok_detailed"-->
+<!--      android:transitionName="Patch"-->
+<!--      app:rawRotationalAngle="@{home.rawRotationAngle}" />-->
 
     <TextView
       style="@style/Headline.Large"

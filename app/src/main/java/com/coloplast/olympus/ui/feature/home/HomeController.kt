@@ -4,7 +4,6 @@ import android.app.Activity
 import android.bluetooth.BluetoothAdapter
 import android.content.Intent
 import android.os.Bundle
-import android.view.ViewGroup
 import androidx.core.view.GravityCompat
 import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableBoolean
@@ -20,11 +19,12 @@ import com.coloplast.olympus.bluetooth.businesslayer.models.ScanResult
 import com.coloplast.olympus.databinding.ControllerHomeBinding
 import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.common.PermissionHandler
-import com.coloplast.olympus.ui.common.conductor.PatchSharedElementTransitionChangeHandler
+import com.coloplast.olympus.ui.common.conductor.ResizeChangeHandler
 import com.coloplast.olympus.ui.common.dialogs.BaseDialogController
 import com.coloplast.olympus.ui.common.dialogs.DialogController
 import com.coloplast.olympus.ui.dialogs.ImageDialogController
 import com.coloplast.olympus.ui.feature.home.models.HomeUiModel
+import com.coloplast.olympus.ui.feature.home.models.PatchVisible
 import com.coloplast.olympus.ui.feature.home.models.ScanResultItem
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
 import com.coloplast.olympus.ui.feature.uistates.*
@@ -63,6 +63,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   val lastCheck = ObservableField<LocalDateTime>()
   
   val rawRotationAngle = ObservableInt()
+  val isPatchVisible = ObservableBoolean(false)
   
   private var currentUiState = UiState.INITIAL
   private var stateRouter: Router? = null
@@ -148,13 +149,13 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
       val routerTransaction = when (newState) {
         UiState.OK_A -> {
           OkController.routerTransaction()
-            .popChangeHandler(PatchSharedElementTransitionChangeHandler())
-            .pushChangeHandler(PatchSharedElementTransitionChangeHandler())
+            .popChangeHandler(ResizeChangeHandler())
+            .pushChangeHandler(ResizeChangeHandler())
         }
         UiState.INNER_LEAK_B -> {
           InnerLeakController.routerTransaction()
-            .popChangeHandler(PatchSharedElementTransitionChangeHandler())
-            .pushChangeHandler(PatchSharedElementTransitionChangeHandler())
+            .popChangeHandler(ResizeChangeHandler())
+            .pushChangeHandler(ResizeChangeHandler())
         }
         UiState.BLUETOOTH_NOT_ENABLED,
         UiState.DISCONNECTED -> {
@@ -181,6 +182,9 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         else {
           stateRouter?.setRoot(it)
         }
+        
+        // controller implementing PatchVisible interface will show PatchIcon
+        isPatchVisible.set(it.controller() is PatchVisible)
       }
     }
     

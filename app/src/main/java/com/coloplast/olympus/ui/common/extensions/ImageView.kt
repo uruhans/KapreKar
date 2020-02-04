@@ -74,7 +74,7 @@ fun ImageView.rotateViewBasedOnAngle(rawRotationalAngle: Int?) {
         rotation = valueAnimator.animatedValue as Float
       }
   
-      animation.duration = 500
+      animation.duration = 1500
       animation.start()
     }
   }

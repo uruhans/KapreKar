@@ -61,21 +61,3 @@ fun ImageView.tintDrawable(@ColorRes colorRes: Int?) {
   }
 }
 
-@BindingAdapter("rawRotationalAngle")
-fun ImageView.rotateViewBasedOnAngle(rawRotationalAngle: Int?) {
-  rawRotationalAngle?.let {
-    val angle = it.times(360).div(128)
-    val newAngle = UiUtils.calculatePatchRotation(angle)
-    
-    if(rotation != newAngle) {
-      val animation = ObjectAnimator.ofFloat(rotation, newAngle)
-  
-      animation.addUpdateListener { valueAnimator ->
-        rotation = valueAnimator.animatedValue as Float
-      }
-  
-      animation.duration = 1500
-      animation.start()
-    }
-  }
-}

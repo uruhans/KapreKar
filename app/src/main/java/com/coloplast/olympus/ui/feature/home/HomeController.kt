@@ -15,6 +15,7 @@ import com.coloplast.olympus.BR
 import com.coloplast.olympus.R
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
 import com.coloplast.olympus.bluetooth.businesslayer.enums.PowerLevel
+import com.coloplast.olympus.bluetooth.businesslayer.models.Patch
 import com.coloplast.olympus.bluetooth.businesslayer.models.ScanResult
 import com.coloplast.olympus.databinding.ControllerHomeBinding
 import com.coloplast.olympus.ui.common.BaseController
@@ -62,6 +63,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   val isConnected = ObservableBoolean(false)
   val lastCheck = ObservableField<LocalDateTime>()
   
+  val currentPatch = ObservableField<Patch>()
   val rawRotationAngle = ObservableInt()
   val isPatchVisible = ObservableBoolean(false)
   
@@ -125,6 +127,10 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
           
           uiModel.bleDevice.peripheral?.transmitter?.rawRotationalAngle?.let {
             rawRotationAngle.set(it)
+          }
+          
+          uiModel.bleDevice.peripheral?.patch?.let {
+            currentPatch.set(it)
           }
           
           changeUiState(uiModel.state)

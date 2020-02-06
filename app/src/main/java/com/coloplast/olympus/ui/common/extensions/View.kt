@@ -18,27 +18,34 @@ fun View.visibleOrGone(visible: Boolean) {
 
 @BindingAdapter("visibleOrInvisibleFade")
 fun View.visibleOrInvisibleFade(visible: Boolean) {
-  visibility = if(visible) View.VISIBLE else View.INVISIBLE
+  animateFade(this, if(visible) View.VISIBLE else View.INVISIBLE)
 }
 
 @BindingAdapter("visibleOrGoneFade")
 fun View.visibleOrGoneFade(visible: Boolean) {
+  animateFade(this, if(visible) View.VISIBLE else View.GONE)
+}
+
+private fun animateFade(target: View, endResult: Int) {
+  val visible = endResult == View.VISIBLE
   
-  val animator = ObjectAnimator.ofFloat(this, View.ALPHA, if(visible) 1f else 0f)
+  val animator = ObjectAnimator.ofFloat(target, View.ALPHA, if(visible) 1f else 0f)
+  animator.duration = 1500
+  
   animator.addListener(object: AnimatorListenerImpl {
     override fun onAnimationEnd(animation: Animator?) {
       if(visible.not()) {
-        visibility = View.GONE
+        target.visibility = endResult
       }
     }
-  
+    
     override fun onAnimationStart(animation: Animator?, isReverse: Boolean) {
       if(visible) {
-        visibility = View.VISIBLE
+        target.visibility = View.VISIBLE
       }
     }
   })
   
-  visibility = if(visible) View.VISIBLE else View.GONE
+  target.visibility = if(visible) View.VISIBLE else endResult
   animator.start()
 }

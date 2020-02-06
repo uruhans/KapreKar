@@ -1,5 +1,9 @@
 package com.coloplast.olympus.utils
 
+import android.util.TypedValue
+import com.coloplast.olympus.shared.AppSettings
+
+
 object UiUtils {
   
   const val INVALID_INT = -1
@@ -33,6 +37,18 @@ object UiUtils {
       (((rawAngleRotation.plus(ROTATION_180_DEGREES).plus((SECTOR_SIZE / 2))) % FULL_ROTATION)) / SECTOR_SIZE * DEGREES_PR_FULL_ROTATION / SECTORS_PR_FULL_ROTATION
   
     return orientation.toFloat()
+  }
+  
+  fun Int.dpToPx() : Float {
+    return this.toFloat().dpToPx()
+  }
+  
+  fun Float.dpToPx() : Float {
+    return TypedValue.applyDimension(
+      TypedValue.COMPLEX_UNIT_DIP,
+      this,
+      AppSettings.applicationContext.resources.displayMetrics
+    )
   }
   
 }

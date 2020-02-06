@@ -66,6 +66,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   val currentPatch = ObservableField<Patch>()
   val rawRotationAngle = ObservableInt()
   val isPatchVisible = ObservableBoolean(false)
+  val isInError = ObservableBoolean(false)
   
   private var currentUiState = UiState.INITIAL
   private var stateRouter: Router? = null
@@ -122,6 +123,10 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
           }
         }
         is HomeUiModel.StatusUpdate -> {
+//          if(uiModel.state != UiState.NO_CHANGE) {
+//            isInError.set(!isInError.get())
+//          }
+          
           powerLevel.set(uiModel.bleDevice.peripheral?.powerLevel)
           isConnected.set(uiModel.bleDevice.isConnected())
           

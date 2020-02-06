@@ -1,5 +1,7 @@
 package com.coloplast.olympus.ui.common.widgets
 
+import android.animation.Animator
+import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Context
 import android.graphics.Canvas
@@ -8,10 +10,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
+import androidx.core.view.setPadding
+import androidx.databinding.Observable
+import androidx.databinding.ObservableBoolean
 import com.coloplast.olympus.R
 import com.coloplast.olympus.bluetooth.businesslayer.enums.SensorStatus
 import com.coloplast.olympus.bluetooth.businesslayer.models.Patch
+import com.coloplast.olympus.ui.common.extensions.tintDrawable
 import com.coloplast.olympus.ui.common.extensions.visibleOrGoneFade
+import com.coloplast.olympus.ui.common.listeners.AnimatorListenerImpl
 import com.coloplast.olympus.utils.UiUtils
 
 class PatchView @JvmOverloads constructor(
@@ -23,18 +30,46 @@ class PatchView @JvmOverloads constructor(
   private var previousPatchState: Patch? = null
   
   private var isDetailView = false
+  private var isInError = ObservableBoolean(false)
+  private var rawRotationalAngle: Int? = null
+  
+  private val errorStateChanged = object: Observable.OnPropertyChangedCallback() {
+    override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
+      if(isInError.get()) {
+        clearTopImages()
+        background.tintDrawable(R.color.patch_grey)
+        rotateBasedOnAngle(0, forceRotation = true)
+      }
+      else {
+        background.clearColorFilter()
+        rotateBasedOnAngle(rawRotationalAngle, forceRotation = true)
+      }
+    }
+  }
   
   init {
     background.setImageResource(R.drawable.ic_detailed_plate_ok)
     addView(background)
     background.visibility = View.VISIBLE
+    
+    isInError.addOnPropertyChangedCallback(errorStateChanged)
+    clipChildren = false
+    clipToPadding = false
   }
   
   fun isDetailView(isDetailView: Boolean = false) {
     this.isDetailView = isDetailView
   }
   
+  fun setError(error: Boolean = false) {
+    this.isInError.set(error)
+  }
+  
   fun setPatch(patch: Patch?) {
+    if(isInError.get()) {
+      return
+    }
+    
     patch?.let { newPatch ->
       var isSameState = false
       
@@ -49,6 +84,8 @@ class PatchView @JvmOverloads constructor(
       previousPatchState = newPatch
       
       val patchIcons = mutableListOf<Int>()
+      
+      var animatePulse = PulseAnim.NONE
       
       if(isDetailView) {
         if (newPatch.outerSensor == SensorStatus.OK) {
@@ -86,43 +123,104 @@ class PatchView @JvmOverloads constructor(
       else {
         if (newPatch.outerSensor == SensorStatus.BREACH) {
           patchIcons.add(R.drawable.ic_detailed_plate_outer)
+          animatePulse = PulseAnim.OUTER
         }
         
         if(newPatch.innerSensorBreach) {
           patchIcons.add(R.drawable.ic_detailed_plate_inner_full)
+          if(animatePulse == PulseAnim.NONE) {
+            animatePulse = PulseAnim.INNER
+          }
         }
       }
-      
-      if (childCount > 1) {
-        removeViews(1, childCount - 1)
-      }
+
+      clearTopImages()
       
       patchIcons.forEach {
         val imageView = inflater.inflate(R.layout.view_imageview, this, false) as ImageView
-        imageView.setImageResource(it)
-        addView(imageView)
-        imageView.visibleOrGoneFade(true)
+        imageView.apply {
+          setImageResource(it)
+          addView(this)
+          visibleOrGoneFade(true)
+        }
       }
+      
+      addPulseAnimation(animatePulse)
+    }
+  }
+  
+  private fun clearTopImages() {
+    if (childCount > 1) {
+      removeViews(1, childCount - 1)
     }
   }
   
   fun setRawRotationalAngle(rawRotationalAngle: Int?) {
+    rotateBasedOnAngle(rawRotationalAngle)
+  }
+  
+  private fun rotateBasedOnAngle(rawRotationalAngle: Int?, forceRotation: Boolean = false) {
+    if(isInError.get() && !forceRotation) {
+      return
+    }
+    
     rawRotationalAngle?.let {
+      this.rawRotationalAngle = it
+    
       val angle = it.times(360)
         .div(128)
       val newAngle = UiUtils.calculatePatchRotation(angle)
-      
+    
       if (rotation != newAngle) {
         val animation = ObjectAnimator.ofFloat(rotation, newAngle)
-        
+      
         animation.addUpdateListener { valueAnimator ->
           rotation = valueAnimator.animatedValue as Float
         }
-        
+      
         animation.duration = 1500
         animation.start()
       }
     }
+  }
+  
+  private fun addPulseAnimation(pulseAnim: PulseAnim) {
+    if(pulseAnim == PulseAnim.NONE) {
+      return
+    }
+    
+    val imageView = inflater.inflate(R.layout.view_imageview, this, false) as ImageView
+    imageView.apply {
+      addView(imageView, 1)
+    }
+  
+    val endScale = if(pulseAnim == PulseAnim.OUTER) {
+      imageView.setImageResource(R.drawable.ic_detailed_plate_outer)
+      1.2f
+    }
+    else {
+      imageView.setImageResource(R.drawable.ic_detailed_plate_inner_full)
+      1.5f
+    }
+    
+    val animation = AnimatorSet()
+    val alphaAnim = ObjectAnimator.ofFloat(imageView, View.ALPHA, 0f, .7f, 0f)
+    val scaleAnimY = ObjectAnimator.ofFloat(imageView, View.SCALE_Y, 1f, endScale)
+    val scaleAnimX = ObjectAnimator.ofFloat(imageView, View.SCALE_X, 1f, endScale)
+    
+    animation.duration = 900
+    animation.addListener(object: AnimatorListenerImpl {
+      override fun onAnimationEnd(animation: Animator?) {
+        removeView(imageView)
+      }
+    
+      override fun onAnimationStart(animation: Animator?, isReverse: Boolean) {
+        imageView.visibility = View.VISIBLE
+      }
+    })
+  
+    animation.playTogether(alphaAnim, scaleAnimX, scaleAnimY)
+    animation.start()
   }
   
   override fun onDraw(canvas: Canvas?) {
@@ -131,5 +229,11 @@ class PatchView @JvmOverloads constructor(
     if (isInEditMode) {
       setBackgroundResource(R.drawable.ic_detailed_plate_ok)
     }
+  }
+  
+  enum class PulseAnim {
+    NONE,
+    OUTER,
+    INNER
   }
 }

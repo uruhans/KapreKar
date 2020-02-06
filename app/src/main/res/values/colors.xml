@@ -47,5 +47,7 @@
   <color name="icon_disabled">#d5d5d5</color>
   <color name="icon_enabled">@color/colorAccent</color>
 
+  <color name="patch_grey">#d4d4d4</color>
+
 
 </resources>

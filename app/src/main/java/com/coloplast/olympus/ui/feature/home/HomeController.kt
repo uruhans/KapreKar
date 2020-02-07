@@ -161,13 +161,12 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
       val routerTransaction = when (newState) {
         UiState.OK_A -> {
           OkController.routerTransaction()
-            .popChangeHandler(ResizeChangeHandler())
-            .pushChangeHandler(ResizeChangeHandler())
         }
-        UiState.INNER_LEAK_B -> {
-          InnerLeakController.routerTransaction()
-            .popChangeHandler(ResizeChangeHandler())
-            .pushChangeHandler(ResizeChangeHandler())
+        UiState.INNER_BREACH_B -> {
+          InnerBreachController.routerTransaction()
+        }
+        UiState.OUTER_BREACH_C -> {
+          OuterBreachController.routerTransaction()
         }
         UiState.BLUETOOTH_NOT_ENABLED,
         UiState.DISCONNECTED -> {
@@ -188,6 +187,11 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
       }
       
       routerTransaction?.let {
+        if(it.controller() is PatchVisible) {
+          it.popChangeHandler(ResizeChangeHandler())
+            .pushChangeHandler(ResizeChangeHandler())
+        }
+        
         if (stateRouter?.hasRootController() == true) {
           stateRouter?.replaceTopController(it)
         }

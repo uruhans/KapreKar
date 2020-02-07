@@ -56,10 +56,10 @@ abstract class BaseUiStateMachine : UiStateMachine {
       UiState.OK_A -> {
         { ok_A(it) }
       }
-      UiState.INNER_LEAK_B -> {
+      UiState.INNER_BREACH_B -> {
         { innerLeak_B(it) }
       }
-      UiState.OUTER_LEAK_C -> {
+      UiState.OUTER_BREACH_C -> {
         { outerLeak_C(it) }
       }
       UiState.INNER_BLIND_D -> {

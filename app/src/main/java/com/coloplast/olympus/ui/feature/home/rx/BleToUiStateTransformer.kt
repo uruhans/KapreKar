@@ -24,8 +24,8 @@ class BleToUiStateTransformer : ObservableTransformer<BleDevice, UiStateModel> {
               TransmitterState.OK -> {
                 when (peripheral.patch.getState()) {
                   PatchState.OK -> UiState.OK_A
-                  PatchState.INNER_LEAK -> UiState.INNER_LEAK_B
-                  PatchState.OUTER_LEAK -> UiState.OUTER_LEAK_C
+                  PatchState.INNER_LEAK -> UiState.INNER_BREACH_B
+                  PatchState.OUTER_LEAK -> UiState.OUTER_BREACH_C
                   PatchState.INNER_BLIND -> UiState.INNER_BLIND_D
                   PatchState.TOTAL_BLIND -> UiState.TOTAL_BLIND_E
                   PatchState.PAY_ATTENTION_10,

@@ -73,6 +73,7 @@
         app:isDetailView="@{false}"
         app:layout_constraintBottom_toTopOf="@+id/content_container"
         app:layout_constraintStart_toStartOf="parent"
+        app:listener="@{controller.patchClickedListener}"
         app:patch="@{controller.currentPatch}"
         app:rawRotationalAngle="@{controller.rawRotationAngle}"
         app:visibleOrGoneFade="@{controller.isPatchVisible}" />

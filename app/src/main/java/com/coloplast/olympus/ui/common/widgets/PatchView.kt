@@ -25,6 +25,10 @@ class PatchView @JvmOverloads constructor(
   context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
   
+  interface Listener {
+    fun onPatchClicked(patch: Patch);
+  }
+  
   private val inflater = LayoutInflater.from(context)
   private val background = inflater.inflate(R.layout.view_imageview, this, false) as ImageView
   private var previousPatchState: Patch? = null
@@ -32,6 +36,7 @@ class PatchView @JvmOverloads constructor(
   private var isDetailView = false
   private var isInError = ObservableBoolean(false)
   private var rawRotationalAngle: Int? = null
+  private var listener: Listener? = null
   
   private val errorStateChanged = object: Observable.OnPropertyChangedCallback() {
     override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
@@ -63,6 +68,16 @@ class PatchView @JvmOverloads constructor(
   
   fun setError(error: Boolean = false) {
     this.isInError.set(error)
+  }
+  
+  fun setListener(listener: Listener) {
+    this.listener = listener
+    
+    setOnClickListener {
+      previousPatchState?.let {
+        this.listener?.onPatchClicked(it)
+      }
+    }
   }
   
   fun setPatch(patch: Patch?) {

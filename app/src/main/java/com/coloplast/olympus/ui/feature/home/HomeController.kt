@@ -23,6 +23,7 @@ import com.coloplast.olympus.ui.common.PermissionHandler
 import com.coloplast.olympus.ui.common.conductor.ResizeChangeHandler
 import com.coloplast.olympus.ui.common.dialogs.BaseDialogController
 import com.coloplast.olympus.ui.common.dialogs.DialogController
+import com.coloplast.olympus.ui.common.widgets.PatchView
 import com.coloplast.olympus.ui.dialogs.ImageDialogController
 import com.coloplast.olympus.ui.feature.home.models.HomeUiModel
 import com.coloplast.olympus.ui.feature.home.models.PatchVisible
@@ -200,6 +201,12 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
     }
     
     currentUiState = newState
+  }
+  
+  val patchClickedListener = object: PatchView.Listener {
+    override fun onPatchClicked(patch: Patch) {
+      Timber.e("Patch was clicked")
+    }
   }
   
   override fun onPositiveButtonClicked(requestCode: Int) {

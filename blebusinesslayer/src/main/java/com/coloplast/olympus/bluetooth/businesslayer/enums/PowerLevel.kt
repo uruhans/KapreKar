@@ -4,15 +4,15 @@ enum class PowerLevel {
   HIGH,
   MEDIUM,
   LOW,
-  NEAR_EMPTY;
+  EMPTY;
   
   companion object {
     fun fromPercentage(percentage: Int): PowerLevel {
       return when {
-        percentage > 85 -> HIGH
-        percentage > 40 -> MEDIUM
-        percentage > 5 -> LOW
-        else -> NEAR_EMPTY
+        percentage >= 75 -> HIGH
+        percentage >= 25 -> MEDIUM
+        percentage >= 1 -> LOW
+        else -> EMPTY
       }
     }
   }

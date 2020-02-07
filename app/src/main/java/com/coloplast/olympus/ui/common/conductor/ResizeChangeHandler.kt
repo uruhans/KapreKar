@@ -6,9 +6,15 @@ import android.animation.ObjectAnimator
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.core.view.children
+import androidx.core.view.marginBottom
+import androidx.core.view.marginTop
 import com.bluelinelabs.conductor.changehandler.AnimatorChangeHandler
+import com.coloplast.olympus.R
+import com.coloplast.olympus.shared.AppSettings
 import com.coloplast.olympus.ui.common.listeners.AnimatorListenerImpl
+import com.coloplast.olympus.utils.UiUtils
 
 class ResizeChangeHandler : AnimatorChangeHandler() {
   
@@ -23,6 +29,11 @@ class ResizeChangeHandler : AnimatorChangeHandler() {
         if(it is TextView) {
           newHeight += it.lineHeight.times(it.lineCount)
         }
+        else if(it is CardView) {
+          newHeight += AppSettings.applicationContext.resources.getDimensionPixelSize(R.dimen.cardview_button_height_default)
+        }
+        
+        newHeight += it.marginTop.plus(it.marginBottom)
   
         it.visibility = View.GONE
       }
@@ -36,7 +47,7 @@ class ResizeChangeHandler : AnimatorChangeHandler() {
       }
       
       objectAnimator.startDelay = 200
-      objectAnimator.duration = 200
+      objectAnimator.duration = 400
       viewAnimators.add(objectAnimator)
   
       val textAnimIn = ObjectAnimator.ofFloat(to, View.TRANSLATION_Y, to.height.toFloat(), 0f)

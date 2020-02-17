@@ -224,6 +224,7 @@ class PatchView @JvmOverloads constructor(
     val scaleAnimX = ObjectAnimator.ofFloat(imageView, View.SCALE_X, 1f, endScale)
     
     animation.duration = 900
+    animation.startDelay = 700
     animation.addListener(object: AnimatorListenerImpl {
       override fun onAnimationEnd(animation: Animator?) {
         removeView(imageView)

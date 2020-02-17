@@ -1,13 +1,9 @@
 package com.coloplast.olympus.ui.common.extensions
 
-import android.animation.ObjectAnimator
 import android.graphics.BlendMode
 import android.graphics.BlendModeColorFilter
 import android.graphics.PorterDuff
 import android.os.Build
-import android.view.animation.AccelerateDecelerateInterpolator
-import android.view.animation.AnimationUtils
-import android.view.animation.Interpolator
 import android.widget.ImageView
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
@@ -15,7 +11,6 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import com.coloplast.olympus.R
 import com.coloplast.olympus.bluetooth.businesslayer.enums.PowerLevel
-import com.coloplast.olympus.utils.UiUtils
 
 @BindingAdapter("resource")
 fun ImageView.setResource(@DrawableRes resource: Int?) {
@@ -34,16 +29,16 @@ fun ImageView.setPowerLevel(powerLevel: PowerLevel?) {
       PowerLevel.NEAR_EMPTY -> setImageResource(R.drawable.ic_battery_empty_24dp)
     }
     
-    if (it == PowerLevel.NEAR_EMPTY) {
-      val anim = AnimationUtils.loadAnimation(context, R.anim.blink)
-      animation = anim
-      animation.startNow()
-    }
-    else if (animation != null && animation.hasStarted()) {
-      animation.cancel()
-      animation.reset()
-      animation = null
-    }
+//    if (it == PowerLevel.NEAR_EMPTY) {
+    //      val anim = AnimationUtils.loadAnimation(context, R.anim.blink)
+    //      animation = anim
+    //      animation.startNow()
+    //    }
+    //    else if (animation != null && animation.hasStarted()) {
+    //      animation.cancel()
+    //      animation.reset()
+    //      animation = null
+    //    }
   }
 }
 

@@ -2,17 +2,17 @@ package com.coloplast.olympus.ui.feature.uistates
 
 import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.R
-import com.coloplast.olympus.databinding.ControllerStateInnerLeakBinding
+import com.coloplast.olympus.databinding.ControllerStateInnerBreachBinding
 import com.coloplast.olympus.ui.feature.home.models.PatchVisible
 
-class InnerLeakController : BaseHomeUIController<ControllerStateInnerLeakBinding>(), PatchVisible {
+class InnerLeakController : BaseHomeUIController<ControllerStateInnerBreachBinding>(), PatchVisible {
   
-  override fun onViewBound(viewBinding: ControllerStateInnerLeakBinding) {
+  override fun onViewBound(viewBinding: ControllerStateInnerBreachBinding) {
     // no-op
   }
   
   override fun getLayout(): Int {
-    return R.layout.controller_state_inner_leak
+    return R.layout.controller_state_inner_breach
   }
   
   companion object {

@@ -7,23 +7,23 @@ import com.coloplast.olympus.bluetooth.businesslayer.enums.SensorStatus
  */
 data class Patch(
   // p0
-  private val cutguardSensor: SensorStatus,
+  val cutguardSensor: SensorStatus,
   // p1
-  private val innerSensor1: SensorStatus,
+  val innerSensor1: SensorStatus,
   // p2
-  private val innerSensor2: SensorStatus,
+  val innerSensor2: SensorStatus,
   // p3
-  private val innerSensor3: SensorStatus,
+  val innerSensor3: SensorStatus,
   // p4
-  private val wearSensor: SensorStatus,
+  val wearSensor: SensorStatus,
   // p5
-  private val outerSensor: SensorStatus
+  val outerSensor: SensorStatus
 ) {
   
   // the list of inner sensors
   private val innerSensors = listOf(innerSensor1, innerSensor2, innerSensor3)
   // do we have an inner sensor breach
-  private val innerSensorBreach: Boolean by lazy { innerSensors.any { it == SensorStatus.BREACH } }
+  val innerSensorBreach: Boolean by lazy { innerSensors.any { it == SensorStatus.BREACH } }
   // do any of the inner sensors have a state of PAY_ATTENTION
   private val innerSensorPayAttention: Boolean by lazy { innerSensors.any { it == SensorStatus.PAY_ATTENTION } }
   // a list of inner sensors that are currently in the BLINDED state
@@ -53,5 +53,12 @@ data class Patch(
       // PRIORITY 15
       else -> PatchState.OK
     }
+  }
+  
+  fun isSameState(otherPatch: Patch) : Boolean {
+    return innerSensor1.id == otherPatch.innerSensor1.id
+        && innerSensor2.id == otherPatch.innerSensor2.id
+        && innerSensor3.id == otherPatch.innerSensor3.id
+        && outerSensor.id == otherPatch.outerSensor.id
   }
 }

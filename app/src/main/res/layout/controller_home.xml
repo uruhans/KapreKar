@@ -52,7 +52,7 @@
         app:layout_constraintTop_toTopOf="@+id/icon_bluetooth" />
 
       <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/menu_icon"
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_marginTop="@dimen/spacing_standard"

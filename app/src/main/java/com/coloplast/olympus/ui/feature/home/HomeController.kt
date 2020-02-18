@@ -49,8 +49,8 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   
   private val viewModel: HomeViewModel by inject()
   
-  private var scannerDisposable = CompositeDisposable()
-  private var connectDisposable = CompositeDisposable()
+  private val scannerDisposable = CompositeDisposable()
+  private val connectDisposable = CompositeDisposable()
   
   private val startScanRelay: PublishRelay<Any> = PublishRelay.create()
   private val connectPeripheralRelay: PublishRelay<String> = PublishRelay.create()
@@ -92,12 +92,10 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
       
       when (uiModel) {
         is HomeUiModel.Disconnected -> {
-          if(!connectDisposable.isDisposed) {
-            connectDisposable.dispose()
-          }
-          
+          // make sure original connections are disposed of
+          connectDisposable.clear()
           isConnected.set(false)
-          
+
           changeUiState(UiState.READY_TO_SCAN)
         }
         is HomeUiModel.BluetoothIssue -> {
@@ -182,7 +180,6 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         UiState.READY_TO_SCAN -> {
           isScanning.set(false)
           
-          scannerDisposable = CompositeDisposable()
           // the scanner observable should be disposed when we start connecting to a bledevice
           // this is why it's added to it's own disposable
           scannerDisposable.add(viewModel.bindScanner(this))
@@ -322,9 +319,8 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   }
   
   override fun onScanResultClicked(scanResult: ScanResult) {
-    scannerDisposable.dispose()
-  
-    connectDisposable = CompositeDisposable()
+    // dispose the observable that do the scanning - at this point it is no longer needed
+    scannerDisposable.clear()
     connectDisposable.add(viewModel.connectBleDevice(this))
     
     connectPeripheralRelay.accept(scanResult.macAddress)

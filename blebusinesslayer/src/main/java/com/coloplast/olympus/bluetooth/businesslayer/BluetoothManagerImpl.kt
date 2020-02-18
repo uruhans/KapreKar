@@ -47,7 +47,7 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
         it is BleDisconnectedException -> throw DisconnectException(it)
         it is BleGattCallbackTimeoutException -> throw GattCallbackTimeoutException(it)
         it is BleGattException -> throw GattException(it)
-        else -> throw RuntimeException("Unexpected Throwable in RxJavaPlugins error handler", it)
+        else -> return@setErrorHandler //throw RuntimeException("Unexpected Throwable in RxJavaPlugins error handler", it)
       }
     }
   }
@@ -119,7 +119,7 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
       }
   }
   
-  private fun bleDisconnectedObservable(macAddress: String): Observable<BleConnectionState> {
+  override fun bleDisconnectedObservable(macAddress: String): Observable<BleConnectionState> {
     return rxBleDeviceConnectionState(macAddress)
       .map { it.connectionState }
       .filter { it == BleConnectionState.DISCONNECTED || it == BleConnectionState.DISCONNECTING }
@@ -144,6 +144,16 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
               .flatMapSingle { rxBleConnection.requestMtu(64) }
               .flatMapSingle { rxBleConnection.discoverServices() }
               .map { macAddress }
+          }
+          .onErrorResumeNext { throwable: Throwable ->
+              val mappedThrowable = when(throwable) {
+                is BleDisconnectedException -> DisconnectException(throwable)
+                is BleGattCallbackTimeoutException -> GattCallbackTimeoutException(throwable)
+                is BleGattException -> GattException(throwable)
+                else -> RuntimeException("Unexpected Throwable in connectBleDevice handler", throwable)
+            }
+
+            Observable.error(mappedThrowable)
           }
       }
   }

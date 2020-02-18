@@ -21,8 +21,8 @@ import java.util.concurrent.TimeUnit
 
 class HomeViewModel(private val bluetoothManager: BluetoothManager) : BaseHomeViewModel() {
   
-  private val stateMachine: UiStateMachine = UiStateMachineImpl()
-  private val overlayStateMachine: OverlayStateMachine = OverlayStateMachineImpl()
+  private lateinit var stateMachine: UiStateMachine
+  private lateinit var overlayStateMachine: OverlayStateMachine
   
   override fun bind(uiView: HomeView): Disposable {
     val disposable = CompositeDisposable()
@@ -36,6 +36,9 @@ class HomeViewModel(private val bluetoothManager: BluetoothManager) : BaseHomeVi
   }
   
   override fun bindScanner(uiView: HomeView): Disposable {
+    stateMachine = UiStateMachineImpl()
+    overlayStateMachine = OverlayStateMachineImpl()
+    
     val disposable = CompositeDisposable()
     
     val scanResultObservable: Observable<HomeUiModel> = uiView.onScanRequested()
@@ -83,6 +86,12 @@ class HomeViewModel(private val bluetoothManager: BluetoothManager) : BaseHomeVi
     val rawDataPackageObservable = bleDeviceConnectedObservable
       .flatMap { bluetoothManager.setupOlympusRawDataPackageNotifications(it) }
       .map { HomeUiModel.RawDataPackageUpdate(it) }
+    
+//    val bleDeviceDisconnectedObservable = bleDeviceConnectedObservable
+//      .switchMap {
+//        bluetoothManager.bleDisconnectedObservable(it)
+//          .map { HomeUiModel.Disconnected() }
+//      }
     
     val uiModelObservable =
       Observable.merge(

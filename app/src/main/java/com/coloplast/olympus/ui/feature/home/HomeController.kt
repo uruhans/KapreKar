@@ -11,6 +11,7 @@ import androidx.databinding.ObservableField
 import androidx.databinding.ObservableInt
 import com.artemzin.rxui.RxUi
 import com.bluelinelabs.conductor.*
+import com.bluelinelabs.conductor.changehandler.FadeChangeHandler
 import com.coloplast.olympus.BR
 import com.coloplast.olympus.R
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
@@ -48,8 +49,8 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   
   private val viewModel: HomeViewModel by inject()
   
-  private val scannerDisposable = CompositeDisposable()
-  private val connectDisposable = CompositeDisposable()
+  private var scannerDisposable = CompositeDisposable()
+  private var connectDisposable = CompositeDisposable()
   
   private val startScanRelay: PublishRelay<Any> = PublishRelay.create()
   private val connectPeripheralRelay: PublishRelay<String> = PublishRelay.create()
@@ -81,10 +82,6 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   
   override fun onViewBound(viewBinding: ControllerHomeBinding) {
     stateRouter = Conductor.attachRouter(activity!!, viewBinding.contentContainer, args)
-    
-    // the scanner observable should be disposed when we start connecting to a bledevice
-    // this is why it's added to it's own disposable
-    scannerDisposable.add(viewModel.bindScanner(this))
     compositeDisposable.add(viewModel.bind(this))
   }
   
@@ -94,10 +91,18 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
       Timber.d("uiModel: $uiModel")
       
       when (uiModel) {
+        is HomeUiModel.Disconnected -> {
+          if(!connectDisposable.isDisposed) {
+            connectDisposable.dispose()
+          }
+          
+          isConnected.set(false)
+          
+          changeUiState(UiState.READY_TO_SCAN)
+        }
         is HomeUiModel.BluetoothIssue -> {
           when (uiModel.bluetoothState) {
             BluetoothState.BLUETOOTH_NOT_AVAILABLE -> {
-            
             }
             BluetoothState.LOCATION_PERMISSION_NOT_GRANTED -> {
               showPermissionDialog()
@@ -176,6 +181,13 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
           UnknownController.routerTransaction()
         }
         UiState.READY_TO_SCAN -> {
+          isScanning.set(false)
+          
+          scannerDisposable = CompositeDisposable()
+          // the scanner observable should be disposed when we start connecting to a bledevice
+          // this is why it's added to it's own disposable
+          scannerDisposable.add(viewModel.bindScanner(this))
+          
           ReadyToScanController.routerTransaction()
         }
         UiState.SCANNING -> {
@@ -190,6 +202,10 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         if(it.controller() is PatchVisible) {
           it.popChangeHandler(ResizeChangeHandler())
             .pushChangeHandler(ResizeChangeHandler())
+        }
+        else {
+          it.popChangeHandler(FadeChangeHandler())
+            .pushChangeHandler(FadeChangeHandler())
         }
         
         if (stateRouter?.hasRootController() == true) {
@@ -306,8 +322,10 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   
   override fun onScanResultClicked(scanResult: ScanResult) {
     scannerDisposable.dispose()
-    
+  
+    connectDisposable = CompositeDisposable()
     connectDisposable.add(viewModel.connectBleDevice(this))
+    
     connectPeripheralRelay.accept(scanResult.macAddress)
   }
   

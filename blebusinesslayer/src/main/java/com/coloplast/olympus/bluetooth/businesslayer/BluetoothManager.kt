@@ -1,5 +1,6 @@
 package com.coloplast.olympus.bluetooth.businesslayer
 
+import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
 import com.coloplast.olympus.bluetooth.businesslayer.models.BleDevice
 import com.coloplast.olympus.bluetooth.businesslayer.models.Peripheral
@@ -13,6 +14,7 @@ interface BluetoothManager {
   fun bluetoothStateObservable(): Observable<BluetoothState>
   fun scanBleDevices(): Observable<ScanResult>
   fun connectBleDevice(macAddress: String): Observable<String>
+  fun bleDisconnectedObservable(macAddress: String): Observable<BleConnectionState>
   fun bleDeviceResultObservable(macAddress: String) : Observable<BleDevice>
   fun setupOlympusRawDataPackageNotifications(macAddress: String): Observable<RawDataPackage>
   

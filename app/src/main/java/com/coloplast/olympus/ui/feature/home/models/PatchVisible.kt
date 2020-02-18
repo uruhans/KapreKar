@@ -1,3 +1,5 @@
 package com.coloplast.olympus.ui.feature.home.models
 
-interface PatchVisible
+interface PatchVisible {
+  fun patchInError() : Boolean = false
+}

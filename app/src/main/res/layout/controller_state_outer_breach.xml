@@ -5,10 +5,6 @@
   <data>
 
     <variable
-      name="home"
-      type="com.coloplast.olympus.ui.feature.home.HomeController" />
-
-    <variable
       name="controller"
       type="com.coloplast.olympus.ui.feature.uistates.OuterBreachController" />
 
@@ -19,14 +15,6 @@
     android:layout_height="match_parent"
     android:gravity="bottom"
     android:orientation="vertical">
-
-<!--    <ImageView-->
-<!--      android:layout_width="wrap_content"-->
-<!--      android:layout_height="wrap_content"-->
-<!--      android:layout_marginStart="@dimen/spacing_standard"-->
-<!--      android:layout_marginEnd="@dimen/spacing_standard"-->
-<!--      android:src="@drawable/ic_plate_full"-->
-<!--      app:rawRotationalAngle="@{home.rawRotationAngle}" />-->
 
     <TextView
       style="@style/Headline.Large"
@@ -69,7 +57,7 @@
         android:layout_gravity="center"
         android:fontFamily="sans-serif-medium"
         android:gravity="center"
-        android:text="Application guide"
+        android:text="@string/guide_change_plate"
         android:textSize="18sp" />
 
     </androidx.cardview.widget.CardView>

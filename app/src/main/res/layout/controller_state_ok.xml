@@ -1,13 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto">
-
-  <data>
-
-    <variable
-      name="home"
-      type="com.coloplast.olympus.ui.feature.home.HomeController" />
-  </data>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
   <LinearLayout
     android:id="@+id/ok_container"
@@ -17,14 +9,6 @@
     android:orientation="vertical"
     android:paddingStart="@dimen/spacing_standard"
     android:paddingEnd="@dimen/spacing_standard">
-
-<!--    <ImageView-->
-<!--      android:id="@+id/icon_patch"-->
-<!--      android:layout_width="wrap_content"-->
-<!--      android:layout_height="wrap_content"-->
-<!--      android:src="@drawable/ic_plate_ok_detailed"-->
-<!--      android:transitionName="Patch"-->
-<!--      app:rawRotationalAngle="@{home.rawRotationAngle}" />-->
 
     <TextView
       style="@style/Headline.Large"

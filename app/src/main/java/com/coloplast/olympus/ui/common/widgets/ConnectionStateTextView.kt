@@ -22,7 +22,6 @@ class ConnectionStateTextView @JvmOverloads constructor(
   }
   
   override fun setText(text: CharSequence?, type: BufferType?) {
-    Timber.d("setText: $text")
     if(text != this.text && text?.isNotEmpty() == true) {
       super.setText(text, type)
     }

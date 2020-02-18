@@ -30,16 +30,16 @@ fun ImageView.setPowerLevel(powerLevel: PowerLevel?) {
       PowerLevel.EMPTY -> setImageResource(R.drawable.ic_battery_empty_24dp)
     }
     
-    if (it == PowerLevel.EMPTY) {
-      val anim = AnimationUtils.loadAnimation(context, R.anim.blink)
-      animation = anim
-      animation.startNow()
-    }
-    else if (animation != null && animation.hasStarted()) {
-      animation.cancel()
-      animation.reset()
-      animation = null
-    }
+//    if (it == PowerLevel.EMPTY) {
+//      val anim = AnimationUtils.loadAnimation(context, R.anim.blink)
+//      animation = anim
+//      animation.startNow()
+//    }
+//    else if (animation != null && animation.hasStarted()) {
+//      animation.cancel()
+//      animation.reset()
+//      animation = null
+//    }
   }
 }
 

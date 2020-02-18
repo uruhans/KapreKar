@@ -6,9 +6,15 @@ import android.animation.ObjectAnimator
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.core.view.children
+import androidx.core.view.marginBottom
+import androidx.core.view.marginTop
 import com.bluelinelabs.conductor.changehandler.AnimatorChangeHandler
+import com.coloplast.olympus.R
+import com.coloplast.olympus.shared.AppSettings
 import com.coloplast.olympus.ui.common.listeners.AnimatorListenerImpl
+import com.coloplast.olympus.utils.UiUtils
 
 class ResizeChangeHandler : AnimatorChangeHandler() {
   
@@ -23,21 +29,25 @@ class ResizeChangeHandler : AnimatorChangeHandler() {
         if(it is TextView) {
           newHeight += it.lineHeight.times(it.lineCount)
         }
-  
-        it.visibility = View.GONE
+        else if(it is CardView) {
+          newHeight += it.context.resources.getDimensionPixelSize(R.dimen.cardview_button_height_default)
+        }
+        
+        newHeight += it.marginTop.plus(it.marginBottom)
+        it.visibility = View.INVISIBLE
       }
   
-      val objectAnimator = ObjectAnimator.ofInt(from.height, newHeight)
+      val heightAnimator = ObjectAnimator.ofInt(from.height, newHeight)
   
-      objectAnimator.addUpdateListener {
+      heightAnimator.addUpdateListener {
         val params = container.layoutParams
         params.height = it.animatedValue as Int
         container.layoutParams = params
       }
-      
-      objectAnimator.startDelay = 200
-      objectAnimator.duration = 200
-      viewAnimators.add(objectAnimator)
+  
+      heightAnimator.startDelay = 200
+      heightAnimator.duration = 400
+      viewAnimators.add(heightAnimator)
   
       val textAnimIn = ObjectAnimator.ofFloat(to, View.TRANSLATION_Y, to.height.toFloat(), 0f)
       textAnimIn.addListener(object : AnimatorListenerImpl {
@@ -47,13 +57,27 @@ class ResizeChangeHandler : AnimatorChangeHandler() {
           }
         }
       })
-      textAnimIn.startDelay = 400
-      textAnimIn.duration = 200
-      
+      textAnimIn.startDelay = 600
+      textAnimIn.duration = 300
+
       viewAnimators.add(textAnimIn)
       
-      val textAnimOut = ObjectAnimator.ofFloat(from, View.ALPHA, 0f)
-      textAnimIn.duration = 100
+      val textAnimAlphaIn = ObjectAnimator.ofFloat(to, View.ALPHA, 0f, 1f)
+      textAnimAlphaIn.duration = 300
+      textAnimAlphaIn.startDelay = 600
+  
+      viewAnimators.add(textAnimAlphaIn)
+      
+      val textAnimOut = ObjectAnimator.ofFloat(from, View.ALPHA, 1f, 0f)
+      textAnimOut.duration = 200
+      textAnimOut.addListener(object: AnimatorListenerImpl {
+        override fun onAnimationEnd(animation: Animator?) {
+          (from as? ViewGroup)?.children?.forEach {
+            it.visibility = View.INVISIBLE
+          }
+        }
+      })
+      
       viewAnimators.add(textAnimOut)
     }
 
@@ -63,6 +87,6 @@ class ResizeChangeHandler : AnimatorChangeHandler() {
   }
   
   override fun resetFromView(from: View) {
-    from.alpha = 1f
+    //from.alpha = 1f
   }
 }

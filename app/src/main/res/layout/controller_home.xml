@@ -38,21 +38,21 @@
         app:layout_constraintTop_toTopOf="parent"
         app:tintDrawable="@{controller.isConnected() ? R.color.icon_enabled : R.color.icon_disabled}" />
 
-      <TextView
-        android:id="@+id/textView"
+      <com.coloplast.olympus.ui.common.widgets.ConnectionStateTextView
+        android:id="@+id/connection_state_text"
         style="@style/Text.Large"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginStart="@dimen/spacing_half"
         android:gravity="center_vertical"
-        android:text='@{controller.isConnected() ? @string/status_connected : @string/status_disconnected}'
         android:textColor="@color/grey"
+        app:animateText='@{controller.isConnected() ? @string/status_connected : @string/status_disconnected}'
         app:layout_constraintBottom_toBottomOf="@+id/icon_bluetooth"
         app:layout_constraintStart_toEndOf="@+id/icon_bluetooth"
         app:layout_constraintTop_toTopOf="@+id/icon_bluetooth" />
 
       <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/menu_icon"
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_marginTop="@dimen/spacing_standard"

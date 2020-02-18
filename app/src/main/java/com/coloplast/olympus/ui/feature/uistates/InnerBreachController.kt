@@ -5,7 +5,7 @@ import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerStateInnerBreachBinding
 import com.coloplast.olympus.ui.feature.home.models.PatchVisible
 
-class InnerLeakController : BaseHomeUIController<ControllerStateInnerBreachBinding>(), PatchVisible {
+class InnerBreachController : BaseHomeUIController<ControllerStateInnerBreachBinding>(), PatchVisible {
   
   override fun onViewBound(viewBinding: ControllerStateInnerBreachBinding) {
     // no-op
@@ -16,7 +16,7 @@ class InnerLeakController : BaseHomeUIController<ControllerStateInnerBreachBindi
   }
   
   companion object {
-    private const val TAG_CONTROLLER = "state_inner_leak_controller"
-    fun routerTransaction() = RouterTransaction.with(InnerLeakController()).tag(TAG_CONTROLLER)
+    private const val TAG_CONTROLLER = "state_inner_breach_controller"
+    fun routerTransaction() = RouterTransaction.with(InnerBreachController()).tag(TAG_CONTROLLER)
   }
 }

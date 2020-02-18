@@ -15,8 +15,8 @@ class UiStateMachineImpl : BaseUiStateMachine() {
     return when (newState) {
       UiState.BLUETOOTH_NOT_ENABLED,
       UiState.OK_A,
-      UiState.INNER_LEAK_B,
-      UiState.OUTER_LEAK_C,
+      UiState.INNER_BREACH_B,
+      UiState.OUTER_BREACH_C,
       UiState.INNER_BLIND_D,
       UiState.TOTAL_BLIND_E,
       UiState.PAY_ATTENTION_F,
@@ -35,8 +35,8 @@ class UiStateMachineImpl : BaseUiStateMachine() {
     return when (newState) {
       UiState.BLUETOOTH_NOT_ENABLED,
       UiState.OK_A,
-      UiState.INNER_LEAK_B,
-      UiState.OUTER_LEAK_C,
+      UiState.INNER_BREACH_B,
+      UiState.OUTER_BREACH_C,
       UiState.INNER_BLIND_D,
       UiState.TOTAL_BLIND_E,
       UiState.PAY_ATTENTION_F,
@@ -55,8 +55,8 @@ class UiStateMachineImpl : BaseUiStateMachine() {
     return when (newState) {
       UiState.BLUETOOTH_NOT_ENABLED,
       UiState.SOMETHING_ELSE,
-      UiState.INNER_LEAK_B,
-      UiState.OUTER_LEAK_C,
+      UiState.INNER_BREACH_B,
+      UiState.OUTER_BREACH_C,
       UiState.INNER_BLIND_D,
       UiState.TOTAL_BLIND_E,
       UiState.PAY_ATTENTION_F,
@@ -77,7 +77,7 @@ class UiStateMachineImpl : BaseUiStateMachine() {
       UiState.BLUETOOTH_NOT_ENABLED,
       UiState.SOMETHING_ELSE,
       UiState.OK_A,
-      UiState.OUTER_LEAK_C,
+      UiState.OUTER_BREACH_C,
       UiState.PAY_ATTENTION_F,
       UiState.DISCONNECTED -> {
         true
@@ -91,7 +91,7 @@ class UiStateMachineImpl : BaseUiStateMachine() {
       UiState.BLUETOOTH_NOT_ENABLED,
       UiState.SOMETHING_ELSE,
       UiState.OK_A,
-      UiState.INNER_LEAK_B,
+      UiState.INNER_BREACH_B,
       UiState.DISCONNECTED -> {
         true
       }
@@ -104,8 +104,8 @@ class UiStateMachineImpl : BaseUiStateMachine() {
       UiState.BLUETOOTH_NOT_ENABLED,
       UiState.SOMETHING_ELSE,
       UiState.OK_A,
-      UiState.INNER_LEAK_B,
-      UiState.OUTER_LEAK_C,
+      UiState.INNER_BREACH_B,
+      UiState.OUTER_BREACH_C,
       UiState.TOTAL_BLIND_E,
       UiState.PAY_ATTENTION_F,
       UiState.DISCONNECTED -> {
@@ -120,8 +120,8 @@ class UiStateMachineImpl : BaseUiStateMachine() {
       UiState.BLUETOOTH_NOT_ENABLED,
       UiState.SOMETHING_ELSE,
       UiState.OK_A,
-      UiState.INNER_LEAK_B,
-      UiState.OUTER_LEAK_C,
+      UiState.INNER_BREACH_B,
+      UiState.OUTER_BREACH_C,
       UiState.PAY_ATTENTION_F,
       UiState.DISCONNECTED -> {
         true
@@ -135,8 +135,8 @@ class UiStateMachineImpl : BaseUiStateMachine() {
       UiState.BLUETOOTH_NOT_ENABLED,
       UiState.SOMETHING_ELSE,
       UiState.OK_A,
-      UiState.INNER_LEAK_B,
-      UiState.OUTER_LEAK_C,
+      UiState.INNER_BREACH_B,
+      UiState.OUTER_BREACH_C,
       UiState.DISCONNECTED -> {
         true
       }

@@ -68,7 +68,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   val currentPatch = ObservableField<Patch>()
   val rawRotationAngle = ObservableInt()
   val isPatchVisible = ObservableBoolean(false)
-  val isInError = ObservableBoolean(false)
+  val patchInErrorState = ObservableBoolean(false)
   
   private var currentUiState = UiState.INITIAL
   private var stateRouter: Router? = null
@@ -129,10 +129,6 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
           }
         }
         is HomeUiModel.StatusUpdate -> {
-//          if(uiModel.state != UiState.NO_CHANGE) {
-//            isInError.set(!isInError.get())
-//          }
-          
           powerLevel.set(uiModel.bleDevice.peripheral?.powerLevel)
           isConnected.set(uiModel.bleDevice.isConnected())
           
@@ -173,6 +169,9 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         UiState.OUTER_BREACH_C -> {
           OuterBreachController.routerTransaction()
         }
+        UiState.CUTGUARD_BROKEN_I -> {
+          CutGuardController.routerTransaction()
+        }
         UiState.BLUETOOTH_NOT_ENABLED,
         UiState.DISCONNECTED -> {
           BluetoothNotEnabledController.routerTransaction()
@@ -202,6 +201,8 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         if(it.controller() is PatchVisible) {
           it.popChangeHandler(ResizeChangeHandler())
             .pushChangeHandler(ResizeChangeHandler())
+          
+          patchInErrorState.set((it.controller() as PatchVisible).patchInError())
         }
         else {
           it.popChangeHandler(FadeChangeHandler())
@@ -214,7 +215,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         else {
           stateRouter?.setRoot(it)
         }
-        
+  
         // controller implementing PatchVisible interface will show PatchIcon
         isPatchVisible.set(it.controller() is PatchVisible)
       }

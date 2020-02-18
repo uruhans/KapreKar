@@ -87,12 +87,6 @@ class HomeViewModel(private val bluetoothManager: BluetoothManager) : BaseHomeVi
       .flatMap { bluetoothManager.setupOlympusRawDataPackageNotifications(it) }
       .map { HomeUiModel.RawDataPackageUpdate(it) }
     
-//    val bleDeviceDisconnectedObservable = bleDeviceConnectedObservable
-//      .switchMap {
-//        bluetoothManager.bleDisconnectedObservable(it)
-//          .map { HomeUiModel.Disconnected() }
-//      }
-    
     val uiModelObservable =
       Observable.merge(
         uiStateObservable,

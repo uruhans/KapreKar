@@ -18,10 +18,17 @@
     <activity android:name=".activities.MainActivity">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
-
         <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
     </activity>
+
+    <!-- a receiver for local notifications when a user snooze their notification -->
+    <receiver android:name=".notifications.SnoozeReceiver" android:exported="false">
+      <intent-filter>
+        <action android:name="${applicationId}.NOTIFICATION_ACTION_SNOOZE" />
+        <action android:name="${applicationId}.NOTIFICATION_SHOW" />
+      </intent-filter>
+    </receiver>
   </application>
 
 </manifest>

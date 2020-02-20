@@ -168,10 +168,7 @@ abstract class BaseController<T : ViewDataBinding> : Controller, KoinComponent {
   override fun onContextUnavailable() {
     super.onContextUnavailable()
     
-    if(!compositeDisposable.isDisposed) {
-      compositeDisposable.dispose()
-    }
-    
+    compositeDisposable.clear()
     onUnbind(getBinding())
   }
   

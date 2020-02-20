@@ -10,7 +10,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
-import androidx.core.view.setPadding
 import androidx.databinding.Observable
 import androidx.databinding.ObservableBoolean
 import com.coloplast.olympus.R
@@ -38,9 +37,9 @@ class PatchView @JvmOverloads constructor(
   private var rawRotationalAngle: Int? = null
   private var listener: Listener? = null
   
-  private val errorStateChanged = object: Observable.OnPropertyChangedCallback() {
+  private val errorStateChanged = object : Observable.OnPropertyChangedCallback() {
     override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
-      if(isInError.get()) {
+      if (isInError.get()) {
         clearTopImages()
         background.tintDrawable(R.color.patch_grey)
         rotateBasedOnAngle(0, forceRotation = true)
@@ -66,8 +65,10 @@ class PatchView @JvmOverloads constructor(
     this.isDetailView = isDetailView
   }
   
-  fun setError(error: Boolean = false) {
-    this.isInError.set(error)
+  fun setError(error: Boolean?) {
+    error?.let {
+      isInError.set(it)
+    }
   }
   
   fun setListener(listener: Listener) {
@@ -81,7 +82,7 @@ class PatchView @JvmOverloads constructor(
   }
   
   fun setPatch(patch: Patch?) {
-    if(isInError.get()) {
+    if (isInError.get()) {
       return
     }
     
@@ -102,16 +103,16 @@ class PatchView @JvmOverloads constructor(
       
       var animatePulse = PulseAnim.NONE
       
-      if(isDetailView) {
+      if (isDetailView) {
         if (newPatch.outerSensor == SensorStatus.OK) {
           if (newPatch.innerSensor1 == SensorStatus.BREACH) {
             patchIcons.add(R.drawable.ic_detailed_plate_inner_nw)
           }
-    
+          
           if (newPatch.innerSensor2 == SensorStatus.BREACH) {
             patchIcons.add(R.drawable.ic_detailed_plate_inner_ne)
           }
-    
+          
           if (newPatch.innerSensor3 == SensorStatus.BREACH) {
             patchIcons.add(R.drawable.ic_detailed_plate_inner_s)
           }
@@ -124,11 +125,11 @@ class PatchView @JvmOverloads constructor(
             if (newPatch.innerSensor1 == SensorStatus.BREACH) {
               patchIcons.add(R.drawable.ic_detailed_plate_outer_inner_nw)
             }
-      
+            
             if (newPatch.innerSensor2 == SensorStatus.BREACH) {
               patchIcons.add(R.drawable.ic_detailed_plate_outer_inner_ne)
             }
-      
+            
             if (newPatch.innerSensor3 == SensorStatus.BREACH) {
               patchIcons.add(R.drawable.ic_detailed_plate_outer_inner_s)
             }
@@ -141,14 +142,14 @@ class PatchView @JvmOverloads constructor(
           animatePulse = PulseAnim.OUTER
         }
         
-        if(newPatch.innerSensorBreach) {
+        if (newPatch.innerSensorBreach) {
           patchIcons.add(R.drawable.ic_detailed_plate_inner_full)
-          if(animatePulse == PulseAnim.NONE) {
+          if (animatePulse == PulseAnim.NONE) {
             animatePulse = PulseAnim.INNER
           }
         }
       }
-
+      
       clearTopImages()
       
       patchIcons.forEach {
@@ -175,24 +176,26 @@ class PatchView @JvmOverloads constructor(
   }
   
   private fun rotateBasedOnAngle(rawRotationalAngle: Int?, forceRotation: Boolean = false) {
-    if(isInError.get() && !forceRotation) {
+    if (isInError.get() && !forceRotation) {
       return
     }
     
     rawRotationalAngle?.let {
-      this.rawRotationalAngle = it
-    
+      if (!isInError.get()) {
+        this.rawRotationalAngle = it
+      }
+      
       val angle = it.times(360)
         .div(128)
       val newAngle = UiUtils.calculatePatchRotation(angle)
-    
+      
       if (rotation != newAngle) {
         val animation = ObjectAnimator.ofFloat(rotation, newAngle)
-      
+        
         animation.addUpdateListener { valueAnimator ->
           rotation = valueAnimator.animatedValue as Float
         }
-      
+        
         animation.duration = 1500
         animation.start()
       }
@@ -200,7 +203,7 @@ class PatchView @JvmOverloads constructor(
   }
   
   private fun addPulseAnimation(pulseAnim: PulseAnim) {
-    if(pulseAnim == PulseAnim.NONE) {
+    if (pulseAnim == PulseAnim.NONE) {
       return
     }
     
@@ -208,8 +211,8 @@ class PatchView @JvmOverloads constructor(
     imageView.apply {
       addView(imageView, 1)
     }
-  
-    val endScale = if(pulseAnim == PulseAnim.OUTER) {
+    
+    val endScale = if (pulseAnim == PulseAnim.OUTER) {
       imageView.setImageResource(R.drawable.ic_detailed_plate_outer)
       1.2f
     }
@@ -225,16 +228,16 @@ class PatchView @JvmOverloads constructor(
     
     animation.duration = 900
     animation.startDelay = 700
-    animation.addListener(object: AnimatorListenerImpl {
+    animation.addListener(object : AnimatorListenerImpl {
       override fun onAnimationEnd(animation: Animator?) {
         removeView(imageView)
       }
-    
+      
       override fun onAnimationStart(animation: Animator?, isReverse: Boolean) {
         imageView.visibility = View.VISIBLE
       }
     })
-  
+    
     animation.playTogether(alphaAnim, scaleAnimX, scaleAnimY)
     animation.start()
   }

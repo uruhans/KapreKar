@@ -200,6 +200,6 @@ fun TextView.underlineText(underline: Boolean) {
 @BindingAdapter("lastCheck")
 fun TextView.lastCheck(localDateTime: LocalDateTime?) {
   localDateTime?.let {
-    text = "${context.getString(R.string.status_last_check)} ${it.format(DateTimeFormatter.ISO_LOCAL_TIME)}"
+    text = "${context.getString(R.string.status_last_check)} ${it.format(UiUtils.ISO_LOCAL_TIME_NO_NANO_OF_SECOND)}"
   }
 }

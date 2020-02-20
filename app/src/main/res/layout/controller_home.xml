@@ -46,7 +46,7 @@
         android:layout_marginStart="@dimen/spacing_half"
         android:gravity="center_vertical"
         android:textColor="@color/grey"
-        app:animateText='@{controller.isConnected() ? @string/status_connected : @string/status_disconnected}'
+        app:animateText='@{controller.isConnected ? @string/status_connected : @string/status_disconnected}'
         app:layout_constraintBottom_toBottomOf="@+id/icon_bluetooth"
         app:layout_constraintStart_toEndOf="@+id/icon_bluetooth"
         app:layout_constraintTop_toTopOf="@+id/icon_bluetooth" />
@@ -69,7 +69,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="8dp"
-        app:error="@{controller.isInError}"
+        app:error="@{controller.patchInErrorState}"
         app:isDetailView="@{false}"
         app:layout_constraintBottom_toTopOf="@+id/content_container"
         app:layout_constraintStart_toStartOf="parent"
@@ -95,7 +95,8 @@
         android:layout_marginBottom="@dimen/spacing_standard"
         app:layout_constraintBottom_toTopOf="@id/progress_animator"
         app:layout_constraintStart_toStartOf="@+id/icon_bluetooth"
-        app:powerLevel="@{controller.powerLevel}" />
+        app:powerLevel="@{controller.powerLevel}"
+        app:visibleOrInvisibleFade="@{controller.isConnected}" />
 
       <TextView
         android:id="@+id/lastcheck"
@@ -109,6 +110,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/power_icon"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/power_icon"
+        app:visibleOrInvisibleFade="@{controller.isConnected}"
         tools:text="@string/status_last_check" />
 
       <com.coloplast.olympus.ui.common.widgets.AnimatedProgressView
@@ -118,7 +120,8 @@
         android:background="@color/progress_animation_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:update="@{controller.updateAnimation}" />
+        app:update="@{controller.updateAnimation}"
+        app:visibleOrInvisibleFade="@{controller.isConnected}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

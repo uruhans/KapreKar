@@ -13,6 +13,7 @@ import com.artemzin.rxui.RxUi
 import com.bluelinelabs.conductor.Conductor
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
+import com.bluelinelabs.conductor.changehandler.FadeChangeHandler
 import com.coloplast.olympus.BR
 import com.coloplast.olympus.R
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
@@ -71,7 +72,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   val currentPatch = ObservableField<Patch>()
   val rawRotationAngle = ObservableInt()
   val isPatchVisible = ObservableBoolean(false)
-  val isInError = ObservableBoolean(false)
+  val patchInErrorState = ObservableBoolean(false)
   
   private var macAddress: String = ""
   
@@ -87,10 +88,6 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   
   override fun onViewBound(viewBinding: ControllerHomeBinding) {
     stateRouter = Conductor.attachRouter(activity!!, viewBinding.contentContainer, args)
-    
-    // the scanner observable should be disposed when we start connecting to a bledevice
-    // this is why it's added to it's own disposable
-    scannerDisposable.add(viewModel.bindScanner(this))
     compositeDisposable.add(viewModel.bind(this))
   }
   
@@ -100,10 +97,16 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
       Timber.d("uiModel: $uiModel")
       
       when (uiModel) {
+        is HomeUiModel.Disconnected -> {
+          // make sure original connections are disposed of
+          connectDisposable.clear()
+          isConnected.set(false)
+
+          changeUiState(UiState.READY_TO_SCAN)
+        }
         is HomeUiModel.BluetoothIssue -> {
           when (uiModel.bluetoothState) {
             BluetoothState.BLUETOOTH_NOT_AVAILABLE -> {
-            
             }
             BluetoothState.LOCATION_PERMISSION_NOT_GRANTED -> {
               showPermissionDialog()
@@ -172,6 +175,9 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         UiState.OUTER_BREACH_C -> {
           OuterBreachController.routerTransaction()
         }
+        UiState.CUTGUARD_BROKEN_I -> {
+          CutGuardController.routerTransaction()
+        }
         UiState.BLUETOOTH_NOT_ENABLED,
         UiState.DISCONNECTED -> {
           BluetoothNotEnabledController.routerTransaction()
@@ -180,6 +186,12 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
           UnknownController.routerTransaction()
         }
         UiState.READY_TO_SCAN -> {
+          isScanning.set(false)
+          
+          // the scanner observable should be disposed when we start connecting to a bledevice
+          // this is why it's added to it's own disposable
+          scannerDisposable.add(viewModel.bindScanner(this))
+          
           ReadyToScanController.routerTransaction()
         }
         UiState.SCANNING -> {
@@ -194,6 +206,12 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         if (it.controller() is PatchVisible) {
           it.popChangeHandler(ResizeChangeHandler())
             .pushChangeHandler(ResizeChangeHandler())
+          
+          patchInErrorState.set((it.controller() as PatchVisible).patchInError())
+        }
+        else {
+          it.popChangeHandler(FadeChangeHandler())
+            .pushChangeHandler(FadeChangeHandler())
         }
         
         if (stateRouter?.hasRootController() == true) {
@@ -311,9 +329,10 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   override fun onScanResultClicked(scanResult: ScanResult) {
     macAddress = scanResult.macAddress
     
-    scannerDisposable.dispose()
-    
+    // dispose the observable that do the scanning - at this point it is no longer needed
+    scannerDisposable.clear()
     connectDisposable.add(viewModel.connectBleDevice(this))
+    
     connectPeripheralRelay.accept(scanResult.macAddress)
   }
   

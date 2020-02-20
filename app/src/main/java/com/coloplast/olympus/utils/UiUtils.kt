@@ -2,13 +2,13 @@ package com.coloplast.olympus.utils
 
 import android.util.TypedValue
 import com.coloplast.olympus.shared.AppSettings
-
+import org.threeten.bp.format.DateTimeFormatterBuilder
+import org.threeten.bp.format.ResolverStyle
+import org.threeten.bp.temporal.ChronoField
 
 object UiUtils {
   
   const val INVALID_INT = -1
-  
-  
   
   private const val ROTATION_180_DEGREES = 64 // because transmitter values are rotated 180 degrees
   private const val FULL_ROTATION = 128
@@ -50,5 +50,12 @@ object UiUtils {
       AppSettings.applicationContext.resources.displayMetrics
     )
   }
-  
+
+  val ISO_LOCAL_TIME_NO_NANO_OF_SECOND = (DateTimeFormatterBuilder().appendValue(ChronoField.HOUR_OF_DAY, 2)
+    .appendLiteral(':')
+    .appendValue(ChronoField.MINUTE_OF_HOUR, 2)
+    .optionalStart()
+    .appendLiteral(':')
+    .appendValue(ChronoField.SECOND_OF_MINUTE, 2).toFormatter())
+    
 }

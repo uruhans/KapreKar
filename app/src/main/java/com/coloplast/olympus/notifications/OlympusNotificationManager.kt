@@ -46,7 +46,9 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
       UiState.INNER_BREACH_B -> {
         NotificationPayload(state.notificationId(), R.string.lock_notification_inner)
       }
-      UiState.OUTER_BREACH_C -> { null }
+      UiState.OUTER_BREACH_C -> {
+        NotificationPayload(state.notificationId(), R.string.lock_notification_outer)
+      }
       UiState.CUTGUARD_BROKEN_I -> {
         NotificationPayload(state.notificationId(), R.string.lock_notification_broken)
       }

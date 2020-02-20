@@ -14,6 +14,7 @@
 <string name="error_disconnect_framework_error">error_disconnect_framework_error</string>
 <string name="error_no_found_devices_in_scan">error_no_found_devices_in_scan</string>
 <string name="error_no_found_devices_in_scan_action">error_no_found_devices_in_scan_action</string>
+<string name="error_no_found_devices_in_scan_title">error_no_found_devices_in_scan_title</string>
 <string name="error_peripheral_configuration">error_peripheral_configuration</string>
 <string name="generic_cancel">Cancel</string>
 <string name="generic_close">generic_close</string>
@@ -126,6 +127,9 @@
 <string name="lock_notification_ble_disconnected">lock_notification_ble_disconnected</string>
 <string name="lock_notification_ble_off">lock_notification_ble_off</string>
 <string name="lock_notification_broken">lock_notification_broken</string>
+<string name="lock_notification_channel_description">Notifies you of status changes on your patch and transmitter connection</string>
+<string name="lock_notification_channel_id">1</string>
+<string name="lock_notification_channel_name">Olympus Status Notifications</string>
 <string name="lock_notification_dirt">lock_notification_dirt</string>
 <string name="lock_notification_disconnection_battery">lock_notification_disconnection_battery</string>
 <string name="lock_notification_inner">lock_notification_inner</string>
@@ -148,9 +152,7 @@
 <string name="missing_translation">missing_translation</string>
 <string name="overlay_battery_critical">overlay_battery_critical</string>
 <string name="overlay_battery_low_title">overlay_battery_low_title</string>
-<string name="overlay_battery_second_transmitter_charged">overlay_battery_second_transmitter_charged</string>
 <string name="overlay_battery_second_transmitter_charged_title">overlay_battery_second_transmitter_charged_title</string>
-<string name="overlay_battery_second_transmitter_charging">overlay_battery_second_transmitter_charging</string>
 <string name="overlay_battery_second_transmitter_charging_title">overlay_battery_second_transmitter_charging_title</string>
 <string name="overlay_ble_disconnected">overlay_ble_disconnected</string>
 <string name="overlay_ble_disconnected_title">overlay_ble_disconnected_title</string>
@@ -161,15 +163,11 @@
 <string name="overlay_leak_attactment_action_old">overlay_leak_attactment_action_old</string>
 <string name="overlay_leak_attactment_title">overlay_leak_attactment_title</string>
 <string name="overlay_leak_disconnection">overlay_leak_disconnection</string>
-<string name="overlay_leak_disconnection_action">overlay_leak_disconnection_action</string>
-<string name="overlay_leak_disconnection_battery">overlay_leak_disconnection_battery</string>
-<string name="overlay_leak_disconnection_battery_title">overlay_leak_disconnection_battery_title</string>
 <string name="overlay_leak_disconnection_title">overlay_leak_disconnection_title</string>
 <string name="overlay_network">overlay_network</string>
 <string name="overlay_network_title">overlay_network_title</string>
 <string name="overlay_no_breach_title">overlay_no_breach_title</string>
 <string name="status_all_ok">status_all_ok</string>
-<string name="status_all_ok_title">status_all_ok_title</string>
 <string name="status_ble_turned_off">status_ble_turned_off</string>
 <string name="status_ble_turned_off_title">status_ble_turned_off_title</string>
 <string name="status_broken_sensors">status_broken_sensors</string>
@@ -207,5 +205,4 @@
 <string name="status_searching">status_searching</string>
 <string name="status_wet_mount">status_wet_mount</string>
 <string name="status_wet_mount_title">status_wet_mount_title</string>
-<string name="t">error_no_found_devices_in_scan_title</string>
 </resources>

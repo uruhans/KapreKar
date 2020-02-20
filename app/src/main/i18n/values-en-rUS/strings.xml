@@ -14,6 +14,7 @@
 <string name="error_disconnect_framework_error">Disconnected</string>
 <string name="error_no_found_devices_in_scan">Detach transmitter, place it in charger, and wait until the charger light turns on. Meanwhile, attach the other transmitter.</string>
 <string name="error_no_found_devices_in_scan_action">Search for transmitter</string>
+<string name="error_no_found_devices_in_scan_title">Transmitter not found.</string>
 <string name="error_peripheral_configuration">error_disconnect_framework_error</string>
 <string name="generic_cancel">Cancel</string>
 <string name="generic_close">Close</string>
@@ -103,8 +104,11 @@
 <string name="lock_notification_ble_disconnected">Bluetooth connection lost.</string>
 <string name="lock_notification_ble_off">Bluetooth disconnected.</string>
 <string name="lock_notification_broken">Sensors damaged.</string>
+<string name="lock_notification_channel_description">Notifies you of status changes on your patch and transmitter connection</string>
+<string name="lock_notification_channel_id">1</string>
+<string name="lock_notification_channel_name">Olympus Status Notifications</string>
 <string name="lock_notification_dirt">Blocked transmitter connection.</string>
-<string name="lock_notification_disconnection_battery">DELETE MESSAGE KEY</string>
+<string name="lock_notification_disconnection_battery">Transmitter battery is empty. Please charge now.</string>
 <string name="lock_notification_inner">There\'s a problem.</string>
 <string name="lock_notification_inner_blind">Sensors not working.</string>
 <string name="lock_notification_moisture">Sensors not working.</string>
@@ -125,9 +129,7 @@
 <string name="missing_translation">Missing translation</string>
 <string name="overlay_battery_critical">Charge now to stay informed.</string>
 <string name="overlay_battery_low_title">Transmitter battery very low.</string>
-<string name="overlay_battery_second_transmitter_charged">DELETE MESSAGE KEY</string>
 <string name="overlay_battery_second_transmitter_charged_title">Back-up transmitter fully charged.</string>
-<string name="overlay_battery_second_transmitter_charging">DELETE MESSAGE KEY</string>
 <string name="overlay_battery_second_transmitter_charging_title">The other transmitter is charging.</string>
 <string name="overlay_ble_disconnected">Connect now to stay informed.</string>
 <string name="overlay_ble_disconnected_title">Bluetooth connection lost.</string>
@@ -138,15 +140,11 @@
 <string name="overlay_leak_attactment_action_old">Layer in use</string>
 <string name="overlay_leak_attactment_title">Have you connected to a new sensor layer or one already in use?</string>
 <string name="overlay_leak_disconnection">Check for leakage now.</string>
-<string name="overlay_leak_disconnection_action">DELETE MESSAGE KEY</string>
-<string name="overlay_leak_disconnection_battery">DELETE MESSAGE KEY</string>
-<string name="overlay_leak_disconnection_battery_title">DELETE MESSAGE KEY</string>
 <string name="overlay_leak_disconnection_title">Something happened after losing bluetooth connection.</string>
 <string name="overlay_network">Check that you are not in flightmode and that wifi and mobile data is turned on. We cannot recieve necessary data for the study.</string>
 <string name="overlay_network_title">No network connection</string>
 <string name="overlay_no_breach_title">No breaches registrered</string>
 <string name="status_all_ok">Everything looks secure.</string>
-<string name="status_all_ok_title">DELETE MESSAGE KEY</string>
 <string name="status_ble_turned_off">Turn on bluetooth to stay informed. (Are you in flight mode?)</string>
 <string name="status_ble_turned_off_title">Bluetooth disconnected.</string>
 <string name="status_broken_sensors">To stay informed, you might want to change your sensor layer.</string>
@@ -184,5 +182,4 @@
 <string name="status_searching">Searching</string>
 <string name="status_wet_mount">To stay informed, you might want to change your sensor layer.</string>
 <string name="status_wet_mount_title">Your skin is wet.</string>
-<string name="t">Transmitter not found.</string>
 </resources>

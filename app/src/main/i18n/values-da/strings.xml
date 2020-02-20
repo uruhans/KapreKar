@@ -14,6 +14,7 @@
 <string name="error_disconnect_framework_error">Ikke forbundet</string>
 <string name="error_no_found_devices_in_scan">Batteriet er løbet tør — ellers er transmitteren muligvis i stykker.</string>
 <string name="error_no_found_devices_in_scan_action">Søg efter transmitter</string>
+<string name="error_no_found_devices_in_scan_title">Transmitteren kan ikke lokaliseres.</string>
 <string name="error_peripheral_configuration">error_disconnect_framework_error</string>
 <string name="generic_cancel">Cancel</string>
 <string name="generic_close">Luk</string>
@@ -122,12 +123,15 @@
 <string name="guide_wiping_title">Guide til aftørring</string>
 <string name="launch_screen_title">Olympus</string>
 <string name="lock_notification_action_snooze">Snooze.</string>
-<string name="lock_notification_battery_critical">Transmitterens battery er lavt.</string>
+<string name="lock_notification_battery_critical">Transmitterens batteri er meget lavt.</string>
 <string name="lock_notification_ble_disconnected">Ingen Bluetooth forbindelse.</string>
 <string name="lock_notification_ble_off">Bluetooth er slået fra.</string>
 <string name="lock_notification_broken">Beskadigede sensorer.</string>
+<string name="lock_notification_channel_description">Notifies you of status changes on your patch and transmitter connection</string>
+<string name="lock_notification_channel_id">1</string>
+<string name="lock_notification_channel_name">Olympus Status Notifikationer</string>
 <string name="lock_notification_dirt">Blokeret transmitterforbindelse.</string>
-<string name="lock_notification_disconnection_battery">DELETE MESSAGE KEY</string>
+<string name="lock_notification_disconnection_battery">Transmitterens batteri er løbet tør. Oplad venligst nu.</string>
 <string name="lock_notification_inner">Tjek snart.</string>
 <string name="lock_notification_inner_blind">Sensorerne virker ikke.</string>
 <string name="lock_notification_moisture">Sensorerne virker ikke.</string>
@@ -148,9 +152,7 @@
 <string name="missing_translation">Manglende oversættelse</string>
 <string name="overlay_battery_critical">Oplad nu for at holde dig opdateret.</string>
 <string name="overlay_battery_low_title">Transmitterens batteri er lavt.</string>
-<string name="overlay_battery_second_transmitter_charged">DELETE MESSAGE KEY</string>
 <string name="overlay_battery_second_transmitter_charged_title">Back-up transmitteren er fuldt opladt.</string>
-<string name="overlay_battery_second_transmitter_charging">DELETE MESSAGE KEY</string>
 <string name="overlay_battery_second_transmitter_charging_title">Den anden transmitteren oplader.</string>
 <string name="overlay_ble_disconnected">Genopret forbindelsen for at holde dig opdateret.</string>
 <string name="overlay_ble_disconnected_title">Ingen Bluetooth forbindelse.</string>
@@ -161,15 +163,11 @@
 <string name="overlay_leak_attactment_action_old">Lag i brug</string>
 <string name="overlay_leak_attactment_title">Har du forbundet til et nyt sensorlag eller et, du allerede bruger?</string>
 <string name="overlay_leak_disconnection">Tjek for lækage nu.</string>
-<string name="overlay_leak_disconnection_action">DELETE MESSAGE KEY</string>
-<string name="overlay_leak_disconnection_battery">DELETE MESSAGE KEY</string>
-<string name="overlay_leak_disconnection_battery_title">DELETE MESSAGE KEY</string>
 <string name="overlay_leak_disconnection_title">Der skete noget efter at Bluetooth blev afbrudt.</string>
 <string name="overlay_network">Tjek at du ikke er i flytilstand og at wifi eller mobildata er slået til. Lige nu modtager vi ikke din\ndata til studiet</string>
 <string name="overlay_network_title">Ingen netværksforbindelse</string>
 <string name="overlay_no_breach_title">Ingen lækage opfanget</string>
 <string name="status_all_ok">Alt ser fint ud.</string>
-<string name="status_all_ok_title">DELETE MESSAGE KEY</string>
 <string name="status_ble_turned_off">Slå Bluetooth til for at holde dig opdateret (er din telefon i flytilstand?)</string>
 <string name="status_ble_turned_off_title">Bluetooth er slået fra.</string>
 <string name="status_broken_sensors">Overvej at skifte sensorlag for at holde dig opdateret.</string>
@@ -207,5 +205,4 @@
 <string name="status_searching">Søger</string>
 <string name="status_wet_mount">Overvej at skifte sensorlag for at holde dig opdateret.</string>
 <string name="status_wet_mount_title">Din hud er ikke helt tør.</string>
-<string name="t">Transmitteren kan ikke lokaliseres.</string>
 </resources>

@@ -19,5 +19,26 @@ enum class UiState {
   WATER_INGRESS_DETECTION_J,
   CUTGUARD_DIRT_IN_TRANSMITTER_K,
   TRANSMITTER_DETACHED_V,
-  TRANSMITTER_BATTERY_CHARGING_W,
+  TRANSMITTER_BATTERY_CHARGING_W;
+  
+  /**
+   * return a notificationId based on the UiState
+   *
+   * - Notice: We are adding a magic number here, because we have multiple enums that can display notifications, and hence the magic number
+   *           will make this particular notificationId unique for UiState notifications
+   */
+  fun notificationId(): Int {
+    return this.ordinal + MAGIC_NUMBER
+  }
+  
+  companion object {
+    private const val MAGIC_NUMBER = 100
+  
+    /**
+     * Convert notification Id into a UiState
+     */
+    fun fromNotificationId(notificationId: Int) : UiState {
+      return values()[notificationId - MAGIC_NUMBER]
+    }
+  }
 }

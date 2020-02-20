@@ -10,7 +10,9 @@ import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.databinding.ObservableInt
 import com.artemzin.rxui.RxUi
-import com.bluelinelabs.conductor.*
+import com.bluelinelabs.conductor.Conductor
+import com.bluelinelabs.conductor.Router
+import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.FadeChangeHandler
 import com.coloplast.olympus.BR
 import com.coloplast.olympus.R
@@ -19,6 +21,7 @@ import com.coloplast.olympus.bluetooth.businesslayer.enums.PowerLevel
 import com.coloplast.olympus.bluetooth.businesslayer.models.Patch
 import com.coloplast.olympus.bluetooth.businesslayer.models.ScanResult
 import com.coloplast.olympus.databinding.ControllerHomeBinding
+import com.coloplast.olympus.notifications.OlympusNotificationManager
 import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.common.PermissionHandler
 import com.coloplast.olympus.ui.common.conductor.ResizeChangeHandler
@@ -48,6 +51,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   val itemBinding = ItemBinding.of<ScanResultItem>(BR.item, R.layout.item_scan_result)
   
   private val viewModel: HomeViewModel by inject()
+  private val olympusNotificationManager: OlympusNotificationManager by inject()
   
   private val scannerDisposable = CompositeDisposable()
   private val connectDisposable = CompositeDisposable()
@@ -69,6 +73,8 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   val rawRotationAngle = ObservableInt()
   val isPatchVisible = ObservableBoolean(false)
   val patchInErrorState = ObservableBoolean(false)
+  
+  private var macAddress: String = ""
   
   private var currentUiState = UiState.INITIAL
   private var stateRouter: Router? = null
@@ -127,6 +133,8 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
           }
         }
         is HomeUiModel.StatusUpdate -> {
+          olympusNotificationManager.send(uiModel.state)
+          
           powerLevel.set(uiModel.bleDevice.peripheral?.powerLevel)
           isConnected.set(uiModel.bleDevice.isConnected())
           
@@ -195,7 +203,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
       }
       
       routerTransaction?.let {
-        if(it.controller() is PatchVisible) {
+        if (it.controller() is PatchVisible) {
           it.popChangeHandler(ResizeChangeHandler())
             .pushChangeHandler(ResizeChangeHandler())
           
@@ -212,7 +220,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         else {
           stateRouter?.setRoot(it)
         }
-  
+        
         // controller implementing PatchVisible interface will show PatchIcon
         isPatchVisible.set(it.controller() is PatchVisible)
       }
@@ -221,7 +229,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
     currentUiState = newState
   }
   
-  val patchClickedListener = object: PatchView.Listener {
+  val patchClickedListener = object : PatchView.Listener {
     override fun onPatchClicked(patch: Patch) {
       Timber.e("Patch was clicked")
     }
@@ -319,6 +327,8 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   }
   
   override fun onScanResultClicked(scanResult: ScanResult) {
+    macAddress = scanResult.macAddress
+    
     // dispose the observable that do the scanning - at this point it is no longer needed
     scannerDisposable.clear()
     connectDisposable.add(viewModel.connectBleDevice(this))
@@ -349,6 +359,27 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   
   override fun getLayout(): Int {
     return R.layout.controller_home
+  }
+  
+  override fun onSaveInstanceState(outState: Bundle) {
+    outState.putBoolean("CONNECTED", isConnected.get())
+    outState.putString("MAC_ADDRESS", macAddress)
+    outState.putInt("UI_STATE", currentUiState.ordinal)
+    
+    super.onSaveInstanceState(outState)
+  }
+  
+  override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+    restoreInstance(savedInstanceState)
+    super.onRestoreInstanceState(savedInstanceState)
+  }
+  
+  private fun restoreInstance(bundle: Bundle?) {
+    bundle?.let {
+      currentUiState = UiState.values()[bundle.getInt("UI_STATE")]
+      isConnected.set(bundle.getBoolean("CONNECTED"))
+      macAddress = bundle.getString("MAC_ADDRESS", "")
+    }
   }
   
   companion object {

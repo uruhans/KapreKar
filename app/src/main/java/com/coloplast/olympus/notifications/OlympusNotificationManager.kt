@@ -32,12 +32,12 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
   fun send(state: UiState) {
     val payload = when (state) {
       UiState.NO_CHANGE -> { null }
-      UiState.INITIAL,
-      UiState.BLUETOOTH_NOT_ENABLED,
-      UiState.READY_TO_SCAN,
-      UiState.SCANNING,
-      UiState.SOMETHING_ELSE,
-      UiState.DISCONNECTED,
+      UiState.INITIAL -> { null }
+      UiState.BLUETOOTH_NOT_ENABLED -> { null }
+      UiState.READY_TO_SCAN -> { null }
+      UiState.SCANNING -> { null }
+      UiState.SOMETHING_ELSE -> { null }
+      UiState.DISCONNECTED -> { null }
       UiState.OK_A -> {
         // we will clear all notifications that may be shown - now that everything is OK - we don't need earlier notification warnings
         notificationCenter.clear()
@@ -52,15 +52,15 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
       UiState.CUTGUARD_BROKEN_I -> {
         NotificationPayload(state.notificationId(), R.string.lock_notification_broken)
       }
-      UiState.INNER_BLIND_D,
-      UiState.TOTAL_BLIND_E,
-      UiState.PAY_ATTENTION_F,
-      UiState.WATER_INGRESS_DETECTION_J,
-      UiState.CUTGUARD_DIRT_IN_TRANSMITTER_K,
-      UiState.TRANSMITTER_DETACHED_V,
-      UiState.TRANSMITTER_BATTERY_CHARGING_W -> {
-        null
+      UiState.INNER_BLIND_D -> { null }
+      UiState.TOTAL_BLIND_E -> { null }
+      UiState.PAY_ATTENTION_F -> { null }
+      UiState.WATER_INGRESS_DETECTION_J -> {
+        NotificationPayload(state.notificationId(), R.string.lock_notification_water)
       }
+      UiState.CUTGUARD_DIRT_IN_TRANSMITTER_K -> { null }
+      UiState.TRANSMITTER_DETACHED_V -> { null }
+      UiState.TRANSMITTER_BATTERY_CHARGING_W -> { null }
     }
     
     payload?.let {

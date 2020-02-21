@@ -178,6 +178,9 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         UiState.CUTGUARD_BROKEN_I -> {
           CutGuardController.routerTransaction()
         }
+        UiState.WATER_INGRESS_DETECTION_J -> {
+          WaterIngressDetectionController.routerTransaction()
+        }
         UiState.TRANSMITTER_DETACHED_V -> {
           TransmitterDetachedController.routerTransaction()
         }

@@ -181,6 +181,9 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         UiState.WATER_INGRESS_DETECTION_J -> {
           WaterIngressDetectionController.routerTransaction()
         }
+        UiState.TRANSMITTER_DETACHED_V -> {
+          TransmitterDetachedController.routerTransaction()
+        }
         UiState.BLUETOOTH_NOT_ENABLED,
         UiState.DISCONNECTED -> {
           BluetoothNotEnabledController.routerTransaction()

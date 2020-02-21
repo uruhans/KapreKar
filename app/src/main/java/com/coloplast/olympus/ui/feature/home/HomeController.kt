@@ -178,6 +178,9 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         UiState.CUTGUARD_BROKEN_I -> {
           CutGuardController.routerTransaction()
         }
+        UiState.TRANSMITTER_DETACHED_V -> {
+          TransmitterDetachedController.routerTransaction()
+        }
         UiState.BLUETOOTH_NOT_ENABLED,
         UiState.DISCONNECTED -> {
           BluetoothNotEnabledController.routerTransaction()

@@ -129,7 +129,7 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
    * connect to a specific ble device using it's macAddress
    *
    * 1. we will wait until the connection state changes to CONNECTED
-   * 2. we will request a change to the Mtu size, allowing for larger packages to be sent (it's upped from default 23 -> 64)
+   * 2. we will request a change to the Mtu size, allowing for larger packages to be sent (it's upped from default 23 -> 185)
    * 3. then we discoverServices that exist on the connection - this is required to allow for READ, WRITE and NOTIFY on characteristics
    * - output -> incoming macAddress
    */
@@ -138,23 +138,17 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
       .flatMap { rxBleDevice ->
         bluetoothHandler.connectRxBleDevice(rxBleDevice)
           .doOnNext { bleConnections[macAddress] = it }
-          .flatMap { rxBleConnection ->
-            rxBleDeviceConnectionState(macAddress)
-              .filter { it.isConnected() }
-              .flatMapSingle { rxBleConnection.requestMtu(64) }
-              .flatMapSingle { rxBleConnection.discoverServices() }
-              .map { macAddress }
-          }
-          .onErrorResumeNext { throwable: Throwable ->
-              val mappedThrowable = when(throwable) {
-                is BleDisconnectedException -> DisconnectException(throwable)
-                is BleGattCallbackTimeoutException -> GattCallbackTimeoutException(throwable)
-                is BleGattException -> GattException(throwable)
-                else -> RuntimeException("Unexpected Throwable in connectBleDevice handler", throwable)
-            }
-
-            Observable.error(mappedThrowable)
-          }
+          .map { macAddress }
+      }
+      .onErrorResumeNext { throwable: Throwable ->
+        val mappedThrowable = when (throwable) {
+          is BleDisconnectedException -> DisconnectException(throwable)
+          is BleGattCallbackTimeoutException -> GattCallbackTimeoutException(throwable)
+          is BleGattException -> GattException(throwable)
+          else -> RuntimeException("Unexpected Throwable in connectBleDevice handler", throwable)
+        }
+      
+        Observable.error(mappedThrowable)
       }
   }
   
@@ -223,7 +217,7 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
   override fun setupOlympusRawDataPackageNotifications(macAddress: String): Observable<RawDataPackage> {
     // fetch the ongoing connection based on the macAddress
     val rxBleConnection = bleConnections[macAddress]
-  
+    
     return if (rxBleConnection == null) {
       Observable.empty()
     }

@@ -3,14 +3,12 @@ package com.dawn.bluetooth
 import android.content.Context
 import android.os.ParcelUuid
 import com.polidea.rxandroidble2.*
-import com.polidea.rxandroidble2.exceptions.BleException
 import com.polidea.rxandroidble2.scan.ScanFilter
 import com.polidea.rxandroidble2.scan.ScanResult
 import com.polidea.rxandroidble2.scan.ScanSettings
 import io.reactivex.Observable
-import io.reactivex.exceptions.UndeliverableException
-import io.reactivex.plugins.RxJavaPlugins
 import java.util.*
+
 
 class BluetoothHandler(context: Context, isDebugging: Boolean) {
   
@@ -36,7 +34,7 @@ class BluetoothHandler(context: Context, isDebugging: Boolean) {
   
   fun scanBleDevices(uuidFilter: UUID? = null): Observable<ScanResult> {
     val scanSettings = ScanSettings.Builder()
-      .setScanMode(ScanSettings.SCAN_MODE_LOW_POWER)
+      .setScanMode(ScanSettings.SCAN_MODE_BALANCED)
       .setCallbackType(ScanSettings.CALLBACK_TYPE_ALL_MATCHES)
       .build()
     
@@ -60,5 +58,12 @@ class BluetoothHandler(context: Context, isDebugging: Boolean) {
   
   fun connectRxBleDevice(rxBleDevice: RxBleDevice): Observable<RxBleConnection> {
     return rxBleDevice.establishConnection(false)
+      .flatMap { rxBleConnection ->
+        rxBleDeviceConnectionStateObservable(rxBleDevice)
+          .filter { it == RxBleConnection.RxBleConnectionState.CONNECTED }
+          .flatMapSingle { rxBleConnection.requestMtu(185) }
+          .flatMapSingle { rxBleConnection.discoverServices() }
+          .map { rxBleConnection }
+      }
   }
 }

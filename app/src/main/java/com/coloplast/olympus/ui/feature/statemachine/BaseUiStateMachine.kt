@@ -57,10 +57,10 @@ abstract class BaseUiStateMachine : UiStateMachine {
         { ok_A(it) }
       }
       UiState.INNER_BREACH_B -> {
-        { innerLeak_B(it) }
+        { innerBreach_B(it) }
       }
       UiState.OUTER_BREACH_C -> {
-        { outerLeak_C(it) }
+        { outerBreach_C(it) }
       }
       UiState.INNER_BLIND_D -> {
         { innerBlind_D(it) }

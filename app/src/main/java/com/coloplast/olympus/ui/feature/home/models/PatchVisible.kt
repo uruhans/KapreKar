@@ -9,4 +9,6 @@ interface PatchVisible {
    * In some UiStates the patch is broken (ie: cutguard) - override this to set the state of the patch in error
    */
   fun patchInError() : Boolean = false
+  
+  fun patchVisible() : Boolean = true
 }

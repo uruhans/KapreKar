@@ -11,8 +11,8 @@ interface UiStateMachine {
   fun initial(newState: UiState): Boolean
   fun somethingElse(newState: UiState): Boolean
   fun ok_A(newState: UiState): Boolean
-  fun innerLeak_B(newState: UiState): Boolean
-  fun outerLeak_C(newState: UiState): Boolean
+  fun innerBreach_B(newState: UiState): Boolean
+  fun outerBreach_C(newState: UiState): Boolean
   fun innerBlind_D(newState: UiState): Boolean
   fun totalBlind_E(newState: UiState): Boolean
   fun payAttention_F(newState: UiState): Boolean

@@ -17,6 +17,7 @@ import com.coloplast.olympus.ui.feature.statemachine.UiStateMachineImpl
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 class HomeViewModel(private val bluetoothManager: BluetoothManager) : BaseHomeViewModel() {
@@ -29,7 +30,11 @@ class HomeViewModel(private val bluetoothManager: BluetoothManager) : BaseHomeVi
     
     val currentBluetoothStateObservable: Observable<BluetoothState> = bluetoothManager.bluetoothStateObservable()
     val bluetoothStateObservable: Observable<HomeUiModel> = currentBluetoothStateObservable
-      .map { HomeUiModel.BluetoothIssue(it) }
+      .map { HomeUiModel.BluetoothIssue(it) as HomeUiModel }
+      .onErrorReturn {
+        Timber.e(it)
+        HomeUiModel.Disconnected()
+      }
     
     disposable.add(bluetoothStateObservable.bind(uiView.render()))
     return disposable
@@ -47,7 +52,11 @@ class HomeViewModel(private val bluetoothManager: BluetoothManager) : BaseHomeVi
           .filter { it == BluetoothState.READY }
           .flatMap {
             bluetoothManager.scanBleDevices()
-              .map { HomeUiModel.ScannerResult(it) }
+              .map { HomeUiModel.ScannerResult(it) as HomeUiModel }
+          }
+          .onErrorReturn {
+            Timber.e(it)
+            HomeUiModel.Disconnected()
           }
       }
     
@@ -65,7 +74,7 @@ class HomeViewModel(private val bluetoothManager: BluetoothManager) : BaseHomeVi
       .switchMap { bluetoothManager.connectBleDevice(it) }
       .publish()
       .autoConnect()
-  
+    
     val notificationSubscriptionObservable = bleDeviceConnectedObservable
       .flatMap { bluetoothManager.bleDeviceResultObservable(it) }
     
@@ -85,7 +94,8 @@ class HomeViewModel(private val bluetoothManager: BluetoothManager) : BaseHomeVi
     
     val rawDataPackageObservable = bleDeviceConnectedObservable
       .flatMap { bluetoothManager.setupOlympusRawDataPackageNotifications(it) }
-      .map { HomeUiModel.RawDataPackageUpdate(it) }
+      .map { HomeUiModel.RawDataPackageUpdate(it) as HomeUiModel }
+      .onErrorReturn { HomeUiModel.Disconnected() }
     
     val uiModelObservable =
       Observable.merge(
@@ -94,10 +104,11 @@ class HomeViewModel(private val bluetoothManager: BluetoothManager) : BaseHomeVi
         rawDataPackageObservable
       )
         .onErrorReturn {
+          Timber.e(it)
           when (it) {
             is DisconnectException -> HomeUiModel.Disconnected()
             is GattCallbackTimeoutException -> HomeUiModel.GattError(HomeUiModel.GattError.State.TimeOutException)
-            is GattException -> HomeUiModel.GattError()
+            is GattException -> HomeUiModel.Disconnected()
             else -> HomeUiModel.Error()
           }
         }

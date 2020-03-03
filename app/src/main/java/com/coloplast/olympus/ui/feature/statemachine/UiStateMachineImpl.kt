@@ -72,7 +72,7 @@ class UiStateMachineImpl : BaseUiStateMachine() {
     }
   }
   
-  override fun innerLeak_B(newState: UiState): Boolean {
+  override fun innerBreach_B(newState: UiState): Boolean {
     return when (newState) {
       UiState.BLUETOOTH_NOT_ENABLED,
       UiState.SOMETHING_ELSE,
@@ -86,7 +86,7 @@ class UiStateMachineImpl : BaseUiStateMachine() {
     }
   }
   
-  override fun outerLeak_C(newState: UiState): Boolean {
+  override fun outerBreach_C(newState: UiState): Boolean {
     return when (newState) {
       UiState.BLUETOOTH_NOT_ENABLED,
       UiState.SOMETHING_ELSE,
@@ -108,6 +108,7 @@ class UiStateMachineImpl : BaseUiStateMachine() {
       UiState.OUTER_BREACH_C,
       UiState.TOTAL_BLIND_E,
       UiState.PAY_ATTENTION_F,
+      UiState.TRANSMITTER_BATTERY_CHARGING_W,
       UiState.DISCONNECTED -> {
         true
       }
@@ -185,6 +186,7 @@ class UiStateMachineImpl : BaseUiStateMachine() {
       UiState.BLUETOOTH_NOT_ENABLED,
       UiState.SOMETHING_ELSE,
       UiState.OK_A,
+      UiState.TRANSMITTER_BATTERY_CHARGING_W,
       UiState.DISCONNECTED -> {
         true
       }
@@ -197,6 +199,7 @@ class UiStateMachineImpl : BaseUiStateMachine() {
       UiState.BLUETOOTH_NOT_ENABLED,
       UiState.SOMETHING_ELSE,
       UiState.OK_A,
+      UiState.TRANSMITTER_DETACHED_V,
       UiState.DISCONNECTED -> {
         true
       }

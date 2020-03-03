@@ -5,6 +5,7 @@ import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.view.children
@@ -12,9 +13,7 @@ import androidx.core.view.marginBottom
 import androidx.core.view.marginTop
 import com.bluelinelabs.conductor.changehandler.AnimatorChangeHandler
 import com.coloplast.olympus.R
-import com.coloplast.olympus.shared.AppSettings
 import com.coloplast.olympus.ui.common.listeners.AnimatorListenerImpl
-import com.coloplast.olympus.utils.UiUtils
 
 class ResizeChangeHandler : AnimatorChangeHandler() {
   
@@ -26,11 +25,16 @@ class ResizeChangeHandler : AnimatorChangeHandler() {
       var newHeight = 0
       
       (to as? ViewGroup)?.children?.forEach {
-        if(it is TextView) {
-          newHeight += it.lineHeight.times(it.lineCount)
-        }
-        else if(it is CardView) {
-          newHeight += it.context.resources.getDimensionPixelSize(R.dimen.cardview_button_height_default)
+        when (it) {
+          is TextView -> {
+            newHeight += it.lineHeight.times(it.lineCount)
+          }
+          is CardView -> {
+            newHeight += it.context.resources.getDimensionPixelSize(R.dimen.cardview_button_height_default)
+          }
+          is ImageView -> {
+            newHeight += it.context.resources.getDimensionPixelSize(R.dimen.imageview_height_default)
+          }
         }
         
         newHeight += it.marginTop.plus(it.marginBottom)
@@ -80,13 +84,10 @@ class ResizeChangeHandler : AnimatorChangeHandler() {
       
       viewAnimators.add(textAnimOut)
     }
-
     
     animator.playTogether(viewAnimators)
     return animator
   }
   
-  override fun resetFromView(from: View) {
-    //from.alpha = 1f
-  }
+  override fun resetFromView(from: View) { }
 }

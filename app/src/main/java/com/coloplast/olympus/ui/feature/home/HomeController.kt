@@ -184,6 +184,9 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         UiState.TRANSMITTER_DETACHED_V -> {
           TransmitterDetachedController.routerTransaction()
         }
+        UiState.TRANSMITTER_BATTERY_CHARGING_W -> {
+          TransmitterChargingController.routerTransaction()
+        }
         UiState.BLUETOOTH_NOT_ENABLED,
         UiState.DISCONNECTED -> {
           BluetoothNotEnabledController.routerTransaction()
@@ -214,6 +217,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
             .pushChangeHandler(ResizeChangeHandler())
           
           patchInErrorState.set((it.controller() as PatchVisible).patchInError())
+          isPatchVisible.set((it.controller() as PatchVisible).patchVisible())
         }
         else {
           it.popChangeHandler(FadeChangeHandler())
@@ -226,9 +230,6 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         else {
           stateRouter?.setRoot(it)
         }
-        
-        // controller implementing PatchVisible interface will show PatchIcon
-        isPatchVisible.set(it.controller() is PatchVisible)
       }
     }
     

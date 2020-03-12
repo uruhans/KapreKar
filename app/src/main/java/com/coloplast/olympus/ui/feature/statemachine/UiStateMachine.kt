@@ -7,6 +7,7 @@ interface UiStateMachine {
   fun currentState() : UiState
   
   fun invoke(newState: UiState) : UiState
+  fun reset()
   
   fun initial(newState: UiState): Boolean
   fun somethingElse(newState: UiState): Boolean

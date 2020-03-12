@@ -22,6 +22,8 @@ sealed class HomeUiModel : UiModel {
   data class RawDataPackageUpdate(val rawDataPackage: RawDataPackage,
     val lastUpdate: LocalDateTime = LocalDateTime.now()) : HomeUiModel()
   
+  data class ConnectedDevicesUpdate(val list: List<BleDevice>) : HomeUiModel()
+  
   data class GattError(val state: State = State.Exception) : HomeUiModel() {
     enum class State {
       TimeOutException,

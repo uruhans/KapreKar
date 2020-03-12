@@ -1,20 +1,23 @@
-package com.coloplast.olympus.ui.feature.home.rx
+package com.coloplast.olympus.ui.feature.rx
 
 import com.coloplast.olympus.bluetooth.businesslayer.enums.Battery
 import com.coloplast.olympus.bluetooth.businesslayer.models.BleDevice
+import com.coloplast.olympus.bluetooth.businesslayer.models.DeviceResult
 import com.coloplast.olympus.ui.feature.home.models.OverlayStateModel
 import com.coloplast.olympus.ui.feature.statemachine.models.OverlayState
 import io.reactivex.Observable
 import io.reactivex.ObservableSource
 import io.reactivex.ObservableTransformer
 
-class BleToOverlayStateTransformer : ObservableTransformer<BleDevice, OverlayStateModel> {
-  override fun apply(upstream: Observable<BleDevice>): ObservableSource<OverlayStateModel> {
+class BleToOverlayStateTransformer : ObservableTransformer<DeviceResult, OverlayStateModel> {
+  override fun apply(upstream: Observable<DeviceResult>): ObservableSource<OverlayStateModel> {
     return upstream
-      .map { bleDevice ->
-        val peripheral = bleDevice.peripheral
+      .filter { it is DeviceResult.DeviceUpdateResult }
+      .map { it as DeviceResult.DeviceUpdateResult }
+      .map { deviceResult ->
+        val peripheral = deviceResult.bleDevice.peripheral
         
-        when (bleDevice.isConnected() && peripheral != null) {
+        when (deviceResult.bleDevice.isConnected() && peripheral != null) {
           true -> {
             
             val overlayState = when {
@@ -22,10 +25,10 @@ class BleToOverlayStateTransformer : ObservableTransformer<BleDevice, OverlaySta
               else -> OverlayState.NONE
             }
             
-            OverlayStateModel(overlayState, bleDevice)
+            OverlayStateModel(overlayState, deviceResult.bleDevice)
           }
           false -> {
-            OverlayStateModel(OverlayState.NONE, bleDevice)
+            OverlayStateModel(OverlayState.NONE, deviceResult.bleDevice)
           }
         }
       }

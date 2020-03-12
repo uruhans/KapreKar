@@ -1,6 +1,6 @@
-package com.coloplast.olympus.ui.feature.home.rx
+package com.coloplast.olympus.ui.feature.rx
 
-import com.coloplast.olympus.bluetooth.businesslayer.models.BleDevice
+import com.coloplast.olympus.bluetooth.businesslayer.models.DeviceResult
 import com.coloplast.olympus.bluetooth.businesslayer.models.PatchState
 import com.coloplast.olympus.bluetooth.businesslayer.models.TransmitterState
 import com.coloplast.olympus.ui.feature.home.models.UiStateModel
@@ -9,13 +9,15 @@ import io.reactivex.Observable
 import io.reactivex.ObservableSource
 import io.reactivex.ObservableTransformer
 
-class BleToUiStateTransformer : ObservableTransformer<BleDevice, UiStateModel> {
-  override fun apply(upstream: Observable<BleDevice>): ObservableSource<UiStateModel> {
+class BleToUiStateTransformer : ObservableTransformer<DeviceResult, UiStateModel> {
+  override fun apply(upstream: Observable<DeviceResult>): ObservableSource<UiStateModel> {
     return upstream
-      .map { bleDevice ->
-        val peripheral = bleDevice.peripheral
+      .filter { it is DeviceResult.DeviceUpdateResult }
+      .map { it as DeviceResult.DeviceUpdateResult }
+      .map { deviceResult ->
+        val peripheral = deviceResult.bleDevice.peripheral
         
-        when (bleDevice.isConnected() && peripheral != null) {
+        when (deviceResult.bleDevice.isConnected() && peripheral != null) {
           true -> {
             val uiState = when (peripheral.transmitter.getState()) {
               TransmitterState.WATER_INGRESS_DETECTION -> UiState.WATER_INGRESS_DETECTION_J
@@ -37,11 +39,11 @@ class BleToUiStateTransformer : ObservableTransformer<BleDevice, UiStateModel> {
               }
               else -> UiState.SOMETHING_ELSE
             }
-  
-            UiStateModel(uiState, bleDevice)
+            
+            UiStateModel(uiState, deviceResult.bleDevice)
           }
           false -> {
-            UiStateModel(UiState.DISCONNECTED, bleDevice)
+            UiStateModel(UiState.DISCONNECTED, deviceResult.bleDevice)
           }
         }
       }

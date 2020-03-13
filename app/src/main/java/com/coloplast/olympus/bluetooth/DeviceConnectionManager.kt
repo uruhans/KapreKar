@@ -2,12 +2,13 @@ package com.coloplast.olympus.bluetooth
 
 import com.coloplast.olympus.bluetooth.businesslayer.DeviceConnection
 import com.coloplast.olympus.bluetooth.businesslayer.models.DeviceResult
+import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import org.koin.core.KoinComponent
 import org.koin.core.get
 import timber.log.Timber
 
-class DeviceConnectionManager() : KoinComponent {
+class DeviceConnectionManager : KoinComponent {
   
   interface Listener {
     fun onResult(deviceResult: DeviceResult)
@@ -18,9 +19,10 @@ class DeviceConnectionManager() : KoinComponent {
   private val listeners = mutableListOf<Listener>()
   
   fun connect(macAddress: String, listener: Listener) {
-    if (!listeners.contains(listener)) {
-      Timber.d("adding listener $listener")
-      listeners.add(listener)
+    synchronized(listeners) {
+      if (!listeners.contains(listener)) {
+        listeners.add(listener)
+      }
     }
     
     if (connections.containsKey(macAddress)) {
@@ -32,10 +34,15 @@ class DeviceConnectionManager() : KoinComponent {
     
     disposables[macAddress] = deviceConnection.subscribeForNotifications(macAddress)
       .subscribe(
-        { deviceResult -> listeners.forEach { it.onResult(deviceResult) } },
-        { throwable ->
-          Timber.e("$throwable")
-          cleanup(macAddress, listener)
+        { deviceResult ->
+          // TODO - we need to figure out which device we want results from on any given time
+          listeners.forEach { it.onResult(deviceResult) }
+        },
+        {
+          Timber.e("$it")
+          //cleanup(macAddress, listener)
+          
+          Observable.error<Throwable>(it)
         },
         { cleanup(macAddress, listener) }
       )
@@ -45,6 +52,12 @@ class DeviceConnectionManager() : KoinComponent {
     connections.remove(macAddress)
     disposables[macAddress]?.dispose()
     disposables.remove(macAddress)
-    listeners.remove(listener)
+    removeListener(listener)
+  }
+  
+  fun removeListener(listener: Listener) {
+    synchronized(listeners) {
+      listeners.remove(listener)
+    }
   }
 }

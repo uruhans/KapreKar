@@ -152,16 +152,16 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
           }
           .map { macAddress }
       }
-//      .onErrorResumeNext { throwable: Throwable ->
-//        val mappedThrowable = when (throwable) {
-//          is BleDisconnectedException -> DisconnectException(throwable)
-//          is BleGattCallbackTimeoutException -> GattCallbackTimeoutException(throwable)
-//          is BleGattException -> GattException(throwable)
-//          else -> RuntimeException("Unexpected Throwable in connectBleDevice handler", throwable)
-//        }
-//
-//        Observable.error(mappedThrowable)
-//      }
+      //.onErrorResumeNext { throwable: Throwable ->
+        //val mappedThrowable = when (throwable) {
+          //is BleDisconnectedException -> DisconnectException(throwable)
+          //is BleGattCallbackTimeoutException -> GattCallbackTimeoutException(throwable)
+          //is BleGattException -> GattException(throwable)
+          //else -> RuntimeException("Unexpected Throwable in connectBleDevice handler", throwable)
+        //}
+
+        //Observable.error(mappedThrowable)
+      //}
   }
   
   /**

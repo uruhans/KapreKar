@@ -3,9 +3,14 @@ package com.coloplast.olympus.bluetooth.businesslayer
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.bluetooth.businesslayer.models.DeviceResult
 import io.reactivex.Observable
+import io.reactivex.functions.BiFunction
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
+import kotlin.math.pow
 
 class DeviceConnection(private val bluetoothManager: BluetoothManager) {
+  
+  private val maxConnectionAttempts = 3
   
   fun subscribeForNotifications(macAddress: String): Observable<DeviceResult> {
     // connect to specific device or use the connection we already have
@@ -21,8 +26,8 @@ class DeviceConnection(private val bluetoothManager: BluetoothManager) {
         else {
           // do actual connection to the new device
           bluetoothManager.connectBleDevice(macAddress)
-            .map { bleConnectionState }
             .delay(3, TimeUnit.SECONDS)
+            .map { bleConnectionState }
         }
       }
       // continue to do so until the device gets disconnected
@@ -31,6 +36,20 @@ class DeviceConnection(private val bluetoothManager: BluetoothManager) {
         bluetoothManager.bleDisconnectedObservable(macAddress)
           .skip(1)
       )
+      .retryWhen { errors ->
+        // zip the errors with a range (which represents the number of times to retry
+        Observable.zip(
+            errors,
+            Observable.range(1, maxConnectionAttempts),
+            BiFunction { _: Throwable, retryCount: Int -> retryCount }
+          )
+          .doOnNext { Timber.d("retry: $it") }
+          // retry after 5 seconds (with exponential backoff on each retry)
+          .flatMap { retryCount ->
+            Observable.timer(5.0.pow(retryCount).toLong(), TimeUnit.SECONDS)
+              .doOnNext { Timber.d("Now we retry: $retryCount") }
+          }
+      }
       .filter { it == BleConnectionState.CONNECTED }
       // i need multiple subscribers on this particular one
       .publish()

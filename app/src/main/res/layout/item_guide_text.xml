@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools">
+
+  <data>
+    <variable
+      name="item"
+      type="com.coloplast.olympus.ui.feature.guide.model.TextItem" />
+  </data>
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <TextView
+      android:layout_height="wrap_content"
+      android:layout_width="wrap_content"
+      style="@style/Text"
+      android:layout_marginStart="0dp"
+      android:layout_marginBottom="@dimen/spacing_standard"
+      android:text="@{item.title}"
+      tools:text="Get started" />
+
+  </LinearLayout>
+
+</layout>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <data>
+    <variable
+      name="item"
+      type="com.coloplast.olympus.ui.feature.guide.model.ArticleItem" />
+  </data>
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginTop="@dimen/spacing_large"
+    android:background="@color/white">
+
+    <ImageView
+      android:id="@+id/article_image"
+      android:layout_width="match_parent"
+      android:layout_height="250dp"
+      app:resource="@{item.image}"
+      tools:src="@drawable/guide_get_started_1"/>
+
+    <TextView
+      android:id="@+id/article_title"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      style="@style/Headline.XSmall"
+      android:layout_marginStart="0dp"
+      android:layout_marginTop="@dimen/spacing_small"
+      android:layout_marginBottom="@dimen/spacing_small"
+      android:text="@{item.title}"
+      tools:text="@string/guide_get_started_1_text" />
+
+    <TextView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="@{item.description}"
+      android:layout_marginBottom="@dimen/spacing_small"
+      style="@style/Text"
+      tools:text="@string/guide_get_started_sub_title_1"/>
+
+  </LinearLayout>
+</layout>

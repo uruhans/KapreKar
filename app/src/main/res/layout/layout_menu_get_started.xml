@@ -23,7 +23,7 @@
       android:scaleType="fitXY"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"
-      app:srcCompat="@drawable/ic_baseline_list_alt_24" />
+      app:srcCompat="@drawable/ic_icon_guides" />
 
 
     <TextView

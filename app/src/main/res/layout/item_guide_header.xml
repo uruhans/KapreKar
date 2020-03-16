@@ -15,11 +15,11 @@
 
   <ImageView
     android:id="@+id/iv_icon"
-    android:layout_width="37dp"
+    android:layout_width="40dp"
     android:layout_height="40dp"
     android:layout_marginTop="@dimen/spacing_half"
     android:scaleType="fitXY"
-    android:src="@drawable/ic_baseline_list_alt_24"
+    android:src="@drawable/ic_icon_guides"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent" />
 
@@ -30,6 +30,7 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="@dimen/spacing_large"
     app:safeText="@{item.header}"
+    app:visibleOrGone="@{item.showHeader}"
     tools:text="@string/guide_get_started_title"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/iv_icon" />
@@ -42,6 +43,7 @@
     android:layout_marginTop="@dimen/spacing_half"
     android:layout_marginBottom="@dimen/spacing_standard"
     app:safeText="@{item.subHeader}"
+    app:visibleOrGone="@{item.showSubHeader}"
     tools:text="@string/guide_get_started_sub_title_1"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintStart_toStartOf="parent"

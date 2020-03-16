@@ -8,7 +8,7 @@ import com.coloplast.olympus.databinding.ItemConnectedBleDeviceBinding
 import com.coloplast.olympus.ui.feature.home.models.ConnectedBleDevice
 
 @BindingAdapter("connectedDevices")
-fun LinearLayout.connectedDevices(connectedDevices: ObservableArrayList<ConnectedBleDevice>?) {
+fun LinearLayout.connectedDevices(connectedDevices: ArrayList<ConnectedBleDevice>?) {
   if (connectedDevices.isNullOrEmpty()) {
     return
   }

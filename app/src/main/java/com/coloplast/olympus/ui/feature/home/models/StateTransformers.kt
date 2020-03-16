@@ -7,7 +7,7 @@ import com.coloplast.olympus.bluetooth.businesslayer.models.TransmitterState
 import com.coloplast.olympus.ui.feature.statemachine.models.OverlayState
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
 
-object Transformers {
+object StateTransformers {
   fun bleToUiState(deviceResult: DeviceResult.DeviceUpdateResult): UiStateModel {
     val peripheral = deviceResult.bleDevice.peripheral
     

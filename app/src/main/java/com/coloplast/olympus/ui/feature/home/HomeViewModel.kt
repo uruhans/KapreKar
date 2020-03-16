@@ -7,7 +7,7 @@ import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
 import com.coloplast.olympus.bluetooth.businesslayer.models.DeviceResult
 import com.coloplast.olympus.ui.feature.home.models.BaseHomeViewModel
 import com.coloplast.olympus.ui.feature.home.models.HomeUiModel
-import com.coloplast.olympus.ui.feature.home.models.Transformers
+import com.coloplast.olympus.ui.feature.home.models.StateTransformers
 import com.coloplast.olympus.ui.feature.statemachine.OverlayStateMachine
 import com.coloplast.olympus.ui.feature.statemachine.OverlayStateMachineImpl
 import com.coloplast.olympus.ui.feature.statemachine.UiStateMachine
@@ -82,25 +82,6 @@ class HomeViewModel(private val bluetoothManager: BluetoothManager, private val 
       uiView.onConnectPeripheral()
         .map { macAddress ->
           deviceConnectionManager.connect(macAddress, listener)
-          
-//          deviceConnectionManager.connect(macAddress, object : DeviceConnectionManager.Listener {
-//            override fun onResult(deviceResult: DeviceResult) {
-//              val uiModel = when (deviceResult) {
-//                is DeviceResult.DeviceUpdateResult -> {
-//                  val stateModel = Transformers.bleToUiState(deviceResult)
-//                  val newUiState = stateMachine.invoke(stateModel.state)
-//
-//                  val overlayStateModel = Transformers.bleToOverlayState(deviceResult)
-//                  val newOverlayState = overlayStateMachine.invoke(overlayStateModel.overlayState)
-//                  HomeUiModel.StatusUpdate(newUiState, newOverlayState, deviceResult.bleDevice)
-//                }
-//                is DeviceResult.RawDataPackageResult -> {
-//                  HomeUiModel.RawDataPackageUpdate(deviceResult.rawDataPackage)
-//                }
-//              }
-//              emitter.onNext(uiModel)
-//            }
-//          })
         }
         .onErrorReturn {
           emitter.onError(it)
@@ -120,10 +101,10 @@ class HomeViewModel(private val bluetoothManager: BluetoothManager, private val 
     override fun onResult(deviceResult: DeviceResult) {
       val uiModel = when (deviceResult) {
         is DeviceResult.DeviceUpdateResult -> {
-          val stateModel = Transformers.bleToUiState(deviceResult)
+          val stateModel = StateTransformers.bleToUiState(deviceResult)
           val newUiState = stateMachine.invoke(stateModel.state)
       
-          val overlayStateModel = Transformers.bleToOverlayState(deviceResult)
+          val overlayStateModel = StateTransformers.bleToOverlayState(deviceResult)
           val newOverlayState = overlayStateMachine.invoke(overlayStateModel.overlayState)
           HomeUiModel.StatusUpdate(newUiState, newOverlayState, deviceResult.bleDevice)
         }
@@ -135,67 +116,4 @@ class HomeViewModel(private val bluetoothManager: BluetoothManager, private val 
       emitter?.onNext(uiModel)
     }
   }
-  
-  //  override fun connectBleDevice(uiView: HomeView): Disposable {
-  //    val disposable = CompositeDisposable()
-  //
-  //    val bleDeviceConnectedObservable = uiView.onConnectPeripheral()
-  //      .scan { previous: String, now: String ->
-  //        if(previous.isNotEmpty()) {
-  //          ""
-  //        }
-  //        else {
-  //          now
-  //        }
-  //      }
-  //      .doOnNext { Timber.d("macAddress: $it") }
-  //      .filter { it.isNotEmpty() }
-  //      // delay added based on issues with some devices that cannot immediately connect right after a scan
-  //      // reference: https://github.com/Polidea/RxAndroidBle/wiki/FAQ:-Cannot-connect
-  //      .delay(500, TimeUnit.MILLISECONDS)
-  //      .switchMap { bluetoothManager.connectBleDevice(it) }
-  //      .publish()
-  //      .autoConnect()
-  //
-  //    val notificationSubscriptionObservable = bleDeviceConnectedObservable
-  //      .flatMap { bluetoothManager.bleDeviceResultObservable(it) }
-  //
-  //    val uiStateObservable = notificationSubscriptionObservable
-  //      .compose(BleToUiStateTransformer())
-  //      .map {
-  //        val newState = stateMachine.invoke(it.state)
-  //        HomeUiModel.StatusUpdate(newState, bleDevice = it.bleDevice)
-  //      }
-  //
-  //    val overlayStateObservable = notificationSubscriptionObservable
-  //      .compose(BleToOverlayStateTransformer())
-  //      .map {
-  //        val newState = overlayStateMachine.invoke(it.overlayState)
-  //        HomeUiModel.StatusUpdate(overlayState = newState, bleDevice = it.bleDevice)
-  //      }
-  //
-  //    val rawDataPackageObservable = bleDeviceConnectedObservable
-  //      .flatMap { bluetoothManager.setupOlympusRawDataPackageNotifications(it) }
-  //      .map { HomeUiModel.RawDataPackageUpdate(it) as HomeUiModel }
-  //      .onErrorReturn { HomeUiModel.Disconnected() }
-  //
-  //    val uiModelObservable =
-  //      Observable.merge(
-  //        uiStateObservable,
-  //        overlayStateObservable,
-  //        rawDataPackageObservable
-  //      )
-  //        .onErrorReturn {
-  //          Timber.e(it)
-  //          when (it) {
-  //            is DisconnectException -> HomeUiModel.Disconnected()
-  //            is GattCallbackTimeoutException -> HomeUiModel.GattError(HomeUiModel.GattError.State.TimeOutException)
-  //            is GattException -> HomeUiModel.Disconnected()
-  //            else -> HomeUiModel.Error()
-  //          }
-  //        }
-  //
-  //    disposable.add(uiModelObservable.bind(uiView.render()))
-  //    return disposable
-  //  }
 }

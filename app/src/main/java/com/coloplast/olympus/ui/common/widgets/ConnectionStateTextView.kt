@@ -26,6 +26,7 @@ class ConnectionStateTextView @JvmOverloads constructor(
       super.setText(text, type)
     }
     
+    // we have to do this - because not doing it caused weird crashes on *some* devices
     super.setText("", type)
   }
   

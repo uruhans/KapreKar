@@ -4,8 +4,6 @@ import android.app.Activity
 import android.bluetooth.BluetoothAdapter
 import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.core.view.GravityCompat
 import androidx.databinding.ObservableArrayList
@@ -33,8 +31,7 @@ import com.coloplast.olympus.ui.common.dialogs.BaseDialogController
 import com.coloplast.olympus.ui.common.dialogs.DialogController
 import com.coloplast.olympus.ui.common.widgets.PatchView
 import com.coloplast.olympus.ui.dialogs.ImageDialogController
-import com.coloplast.olympus.ui.feature.guide.GuideController
-import com.coloplast.olympus.ui.feature.home.HomeController.Companion.routerTransaction
+import com.coloplast.olympus.ui.feature.guides.getstarted.GetStartedGuideController
 import com.coloplast.olympus.ui.feature.home.models.HomeUiModel
 import com.coloplast.olympus.ui.feature.home.models.PatchVisible
 import com.coloplast.olympus.ui.feature.home.models.ScanResultItem
@@ -52,7 +49,7 @@ import org.koin.core.inject
 import org.threeten.bp.LocalDateTime
 import timber.log.Timber
 
-class HomeController : BaseController<ControllerHomeBinding>, HomeView, PermissionHandler, BaseDialogController.Listener, ScanResultItem.Listener, NavigationView.OnNavigationItemSelectedListener {
+class HomeController : BaseController<ControllerHomeBinding>, HomeView, PermissionHandler, BaseDialogController.Listener, ScanResultItem.Listener {
   
   val items = ObservableArrayList<ScanResultItem>()
   val itemBinding = ItemBinding.of<ScanResultItem>(BR.item, R.layout.item_scan_result)
@@ -94,7 +91,6 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   }
   
   override fun onViewBound(viewBinding: ControllerHomeBinding) {
-    viewBinding.navView.setNavigationItemSelectedListener(this)
     stateRouter = Conductor.attachRouter(activity!!, viewBinding.contentContainer, args)
     compositeDisposable.add(viewModel.bind(this))
     
@@ -251,10 +247,10 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
     }
   }
   
-  
-  private fun getStartedClicked(){
+  fun onButtonGetStartedGuideClick(){
+    
     router.pushController(
-      GuideController.routerTransaction()
+      GetStartedGuideController.routerTransaction()
         .popChangeHandler(VerticalChangeHandler())
         .pushChangeHandler(VerticalChangeHandler())
     )
@@ -418,13 +414,4 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
     fun routerTransaction() = RouterTransaction.with(HomeController()).tag(TAG_CONTROLLER)
   }
   
-  override fun onNavigationItemSelected(item: MenuItem): Boolean {
-    return when (item.itemId) {
-      R.id.menu_get_started -> {
-        getStartedClicked()
-        true
-      }
-      else -> super.onOptionsItemSelected(item)
-    }
-  }
 }

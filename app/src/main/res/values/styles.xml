@@ -72,6 +72,30 @@
       <item name="android:textColor">@color/text_red</item>
     </style>-->
 
+  <style name="GuideHeader">
+    <item name="android:fontFamily">@font/coloplast_bold</item>
+    <item name="android:textColor">@color/text_dark_grey_01</item>
+    <item name="android:lineSpacingExtra">6dp</item>
+  </style>
+  <style name="GuideHeader.32" parent="GuideHeader">
+    <item name="android:textSize">@dimen/text_32</item>
+  </style>
+  <style name="GuideHeader.20" parent="GuideHeader">
+    <item name="android:textSize">@dimen/text_20</item>
+  </style>
+
+  <style name="GuideHeaderDescription">
+    <item name="android:fontFamily">@font/coloplast</item>
+    <item name="android:textSize">@dimen/text_30</item>
+    <item name="android:textColor">@color/text_dark_grey_03</item>
+  </style>
+
+  <style name="GuideSubTitle">
+    <item name="android:fontFamily">sans-serif</item>
+    <item name="android:textSize">@dimen/text_18</item>
+    <item name="android:textColor">@color/text_dark_grey_03</item>
+  </style>
+
   <style name="Headline">
     <item name="android:fontFamily">@font/coloplast_bold</item>
     <item name="android:textColor">@color/text_dark_grey</item>

@@ -9,6 +9,8 @@
   <color name="olympus_bluegreen">#00b0ca</color>
   <color name="grey">#858585</color>
   <color name="darkgrey">#465051</color>
+  <color name="darkGrey01">#2e3233</color>
+  <color name="darkGrey03">#969899</color>
   <color name="red">#e21b44</color>
 
   <color name="default_background">#fcfaf9</color>
@@ -31,6 +33,8 @@
   <color name="pagerindicator_unselected">#38001965</color>
 
   <color name="text_dark_grey">@color/darkgrey</color>
+  <color name="text_dark_grey_01">@color/darkGrey01</color>
+  <color name="text_dark_grey_03">@color/darkGrey03</color>
   <color name="text_blue_green">@color/olympus_bluegreen</color>
 
   <color name="text_black">#001423</color>

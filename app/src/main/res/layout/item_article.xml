@@ -14,25 +14,28 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <ImageView
-      android:id="@+id/article_image"
-      android:layout_width="match_parent"
-      android:layout_height="250dp"
-      android:layout_marginTop="@dimen/spacing_double"
-      app:resource="@{item.image}"
-      app:visibleOrGone="@{item.showImage}"
-      tools:src="@drawable/guide_get_started_1"
-      android:scaleType="centerInside" />
-
     <TextView
       android:id="@+id/article_title"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       style="@style/GuideHeader.20"
+      android:layout_marginTop="@dimen/spacing_standard"
       android:layout_marginBottom="@dimen/spacing_half"
       app:safeText="@{item.title}"
       app:visibleOrGone="@{item.showTitle}"
       tools:text="@string/guide_get_started_1_text" />
+
+
+    <ImageView
+      android:id="@+id/article_image"
+      android:layout_width="match_parent"
+      android:layout_height="250dp"
+      app:resource="@{item.image}"
+      app:visibleOrGone="@{item.showImage}"
+      tools:src="@drawable/guide_get_started_1"
+      android:scaleType="centerInside"
+      android:layout_marginBottom="@dimen/spacing_small"/>
+
 
     <TextView
       android:layout_width="match_parent"
@@ -40,6 +43,7 @@
       app:safeText="@{item.description}"
       app:visibleOrGone="@{item.showDescription}"
       style="@style/GuideSubTitle"
+      android:layout_marginBottom="@dimen/spacing_half"
       tools:text="@string/guide_get_started_sub_title_1" />
 
   </LinearLayout>

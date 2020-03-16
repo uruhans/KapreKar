@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <data>
+
+    <variable
+      name="controller"
+      type="com.coloplast.olympus.ui.feature.home.HomeController" />
+  </data>
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <ImageView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="@dimen/spacing_standard"
+      android:layout_marginEnd="@dimen/spacing_standard"
+      android:foreground="?attr/actionBarItemBackground"
+      android:onClick="@{() -> controller.onMenuClicked()}"
+      android:src="@drawable/main_sidemenu_close"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="1"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+      android:id="@+id/connected_devices"
+      android:layout_width="match_parent"
+      android:layout_height="200dp"
+      android:orientation="vertical"
+      app:connectedDevices="@{controller.connectedDevices}"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent">
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+      android:layout_width="0dp"
+      android:layout_height="0dp"
+      app:itemBinding="@{controller.itemBinding}"
+      app:items="@{controller.items}"
+      app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+      app:layout_constraintBottom_toTopOf="@+id/bottom_layout"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/connected_devices" />
+
+    <LinearLayout
+      android:id="@+id/bottom_layout"
+      android:layout_width="match_parent"
+      android:layout_height="160dp"
+      android:background="@color/default_background"
+      android:gravity="center_vertical"
+      android:orientation="vertical"
+      android:paddingStart="@dimen/spacing_double"
+      android:paddingEnd="@dimen/spacing_double"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent">
+
+      <TextView
+        style="@style/Text.Medium"
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
+        android:gravity="center_vertical"
+        android:onClick="@{() -> controller.onScanClicked()}"
+        android:text="Profile"
+        android:textColor="@color/grey" />
+
+      <TextView
+        style="@style/Text.Medium"
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
+        android:gravity="center_vertical"
+        android:text="About"
+        android:textColor="@color/grey" />
+
+      <TextView
+        style="@style/Text.Medium"
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
+        android:gravity="center_vertical"
+        android:text="Contact"
+        android:textColor="@color/grey" />
+
+    </LinearLayout>
+  </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

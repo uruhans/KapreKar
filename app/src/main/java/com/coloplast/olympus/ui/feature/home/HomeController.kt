@@ -16,6 +16,7 @@ import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.FadeChangeHandler
 import com.coloplast.olympus.BR
 import com.coloplast.olympus.R
+import com.coloplast.olympus.bluetooth.businesslayer.DeviceConnection
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
 import com.coloplast.olympus.bluetooth.businesslayer.enums.PowerLevel
 import com.coloplast.olympus.bluetooth.businesslayer.models.Patch
@@ -29,6 +30,7 @@ import com.coloplast.olympus.ui.common.dialogs.BaseDialogController
 import com.coloplast.olympus.ui.common.dialogs.DialogController
 import com.coloplast.olympus.ui.common.widgets.PatchView
 import com.coloplast.olympus.ui.dialogs.ImageDialogController
+import com.coloplast.olympus.ui.feature.home.models.ConnectedBleDevice
 import com.coloplast.olympus.ui.feature.home.models.HomeUiModel
 import com.coloplast.olympus.ui.feature.home.models.PatchVisible
 import com.coloplast.olympus.ui.feature.home.models.ScanResultItem
@@ -50,7 +52,11 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   val items = ObservableArrayList<ScanResultItem>()
   val itemBinding = ItemBinding.of<ScanResultItem>(BR.item, R.layout.item_scan_result)
   
+  val connectedDevices = ObservableArrayList<ConnectedBleDevice>()
+  
   private val viewModel: HomeViewModel by inject()
+  private val deviceConnection: DeviceConnection by inject()
+  
   private val olympusNotificationManager: OlympusNotificationManager by inject()
   
   private val scannerDisposable = CompositeDisposable()
@@ -89,6 +95,8 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   override fun onViewBound(viewBinding: ControllerHomeBinding) {
     stateRouter = Conductor.attachRouter(activity!!, viewBinding.contentContainer, args)
     compositeDisposable.add(viewModel.bind(this))
+    
+    connectDisposable.add(viewModel.connectBleDevice(this))
   }
   
   override fun render(): Function<Observable<HomeUiModel>, Disposable> {
@@ -101,7 +109,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
           // make sure original connections are disposed of
           connectDisposable.clear()
           isConnected.set(false)
-
+          
           changeUiState(UiState.READY_TO_SCAN)
         }
         is HomeUiModel.BluetoothIssue -> {
@@ -125,8 +133,12 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
             }
           }
         }
+        is HomeUiModel.ConnectedDevicesUpdate -> {
+          connectedDevices.clear()
+          connectedDevices.addAll(uiModel.list.map { ConnectedBleDevice(it) })
+        }
         is HomeUiModel.ScannerResult -> {
-          changeUiState(UiState.SCANNING)
+          //changeUiState(UiState.SCANNING)
           
           if (!items.any { it.scanResult.macAddress == uiModel.scanResult.macAddress }) {
             items.add(ScanResultItem(uiModel.scanResult, this))
@@ -319,7 +331,12 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   }
   
   fun onMenuClicked() {
-    getBinding().drawerLayout.openDrawer(GravityCompat.END, true)
+    if (getBinding().drawerLayout.isDrawerOpen(GravityCompat.END)) {
+      getBinding().drawerLayout.closeDrawer(GravityCompat.END, true)
+    }
+    else {
+      getBinding().drawerLayout.openDrawer(GravityCompat.END, true)
+    }
   }
   
   fun enableBluetoothClicked() {
@@ -338,8 +355,6 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
     
     // dispose the observable that do the scanning - at this point it is no longer needed
     scannerDisposable.clear()
-    connectDisposable.add(viewModel.connectBleDevice(this))
-    
     connectPeripheralRelay.accept(scanResult.macAddress)
   }
   
@@ -397,6 +412,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
     
     const val REQUEST_CODE_BLUETOOTH_ENABLE = 5005
     
-    fun routerTransaction() = RouterTransaction.with(HomeController()).tag(TAG_CONTROLLER)
+    fun routerTransaction() = RouterTransaction.with(HomeController())
+      .tag(TAG_CONTROLLER)
   }
 }

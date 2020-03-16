@@ -96,4 +96,8 @@ abstract class BaseUiStateMachine : UiStateMachine {
     
     state = newState
   }
+  
+  override fun reset() {
+    state = UiState.INITIAL
+  }
 }

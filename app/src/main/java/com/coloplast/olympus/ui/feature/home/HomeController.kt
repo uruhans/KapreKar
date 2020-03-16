@@ -4,6 +4,7 @@ import android.app.Activity
 import android.bluetooth.BluetoothAdapter
 import android.content.Intent
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.core.view.GravityCompat
 import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableBoolean
@@ -14,6 +15,7 @@ import com.bluelinelabs.conductor.Conductor
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.FadeChangeHandler
+import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import com.coloplast.olympus.BR
 import com.coloplast.olympus.R
 import com.coloplast.olympus.bluetooth.businesslayer.DeviceConnection
@@ -30,6 +32,7 @@ import com.coloplast.olympus.ui.common.dialogs.BaseDialogController
 import com.coloplast.olympus.ui.common.dialogs.DialogController
 import com.coloplast.olympus.ui.common.widgets.PatchView
 import com.coloplast.olympus.ui.dialogs.ImageDialogController
+import com.coloplast.olympus.ui.feature.guides.getstarted.GetStartedGuideController
 import com.coloplast.olympus.ui.feature.home.models.ConnectedBleDevice
 import com.coloplast.olympus.ui.feature.home.models.HomeUiModel
 import com.coloplast.olympus.ui.feature.home.models.PatchVisible
@@ -37,6 +40,7 @@ import com.coloplast.olympus.ui.feature.home.models.ScanResultItem
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
 import com.coloplast.olympus.ui.feature.uistates.*
 import com.coloplast.olympus.utils.OSUtils
+import com.google.android.material.navigation.NavigationView
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
@@ -254,6 +258,15 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
     }
   }
   
+  fun onButtonGetStartedGuideClick(){
+    
+    router.pushController(
+      GetStartedGuideController.routerTransaction()
+        .popChangeHandler(VerticalChangeHandler())
+        .pushChangeHandler(VerticalChangeHandler())
+    )
+  }
+  
   override fun onPositiveButtonClicked(requestCode: Int) {
     when (requestCode) {
       REQUEST_CODE_PERMISSION_LOCATION -> {
@@ -415,4 +428,5 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
     fun routerTransaction() = RouterTransaction.with(HomeController())
       .tag(TAG_CONTROLLER)
   }
+  
 }

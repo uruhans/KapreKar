@@ -36,8 +36,7 @@ class GetStartedGuideController : BaseController<ControllerGetStartedGuideBindin
         ArticleItem(
           R.drawable.guide_get_started_1,
           R.string.guide_get_started_1_text,
-          R.string.guide_get_started_sub_title_2,
-          showDescription = true
+          R.string.guide_get_started_sub_title_2
         )
       )
       items.add(
@@ -59,8 +58,7 @@ class GetStartedGuideController : BaseController<ControllerGetStartedGuideBindin
         ArticleItem(
           R.drawable.guide_get_started_5,
           R.string.guide_get_started_5_text,
-          R.string.guide_get_started_sub_title_6,
-          showDescription = true
+          R.string.guide_get_started_sub_title_6
         )
       )
       items.add(
@@ -92,12 +90,11 @@ class GetStartedGuideController : BaseController<ControllerGetStartedGuideBindin
         ArticleItem(
           R.drawable.guide_get_started_11,
           R.string.guide_get_started_11_text,
-          R.string.guide_get_started_sub_title_12,
-          showDescription = true
+          R.string.guide_get_started_sub_title_12
         )
       )
       items.add(
-        ArticleItem(description = R.string.guide_get_started_12_text, showImage = false, showTitle = false, showDescription = true)
+        ArticleItem(description = R.string.guide_get_started_12_text)
       )
     }
     

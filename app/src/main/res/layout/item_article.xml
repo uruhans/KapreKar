@@ -4,7 +4,6 @@
   xmlns:app="http://schemas.android.com/apk/res-auto">
 
   <data>
-    <import type="android.view.View" />
     <variable
       name="item"
       type="com.coloplast.olympus.ui.feature.guides.getstarted.model.ArticleItem" />
@@ -21,7 +20,7 @@
       android:layout_height="250dp"
       android:layout_marginTop="@dimen/spacing_double"
       app:resource="@{item.image}"
-      android:visibility="@{item.showImage ? View.VISIBLE : View.GONE}"
+      app:visibleOrGone="@{item.showImage}"
       tools:src="@drawable/guide_get_started_1"
       android:scaleType="centerInside"
       tools:visibility="gone"/>
@@ -34,7 +33,7 @@
       android:layout_marginTop="@dimen/spacing_small"
       android:layout_marginBottom="@dimen/spacing_small"
       app:safeText="@{item.title}"
-      android:visibility="@{item.showTitle ? View.VISIBLE : View.GONE}"
+      app:visibleOrGone="@{item.showTitle}"
       tools:text="@string/guide_get_started_1_text"
       tools:visibility="gone"/>
 
@@ -43,7 +42,7 @@
       android:layout_height="wrap_content"
       app:safeText="@{item.description}"
       android:layout_marginBottom="@dimen/spacing_small"
-      android:visibility="@{item.showDescription ? View.VISIBLE : View.GONE}"
+      app:visibleOrGone="@{item.showDescription}"
       style="@style/GuideSubTitle"
       tools:text="@string/guide_get_started_sub_title_1"
       tools:visibility="gone"/>

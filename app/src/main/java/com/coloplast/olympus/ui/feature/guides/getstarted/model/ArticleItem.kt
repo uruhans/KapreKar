@@ -5,9 +5,10 @@ import androidx.annotation.StringRes
 
 
 data class ArticleItem (
-  @DrawableRes val image: Int? = null,
-  @StringRes val title: Int? = null,
-  @StringRes val description: Int? = null,
-  val showImage: Boolean = true,
-  val showTitle: Boolean = true,
-  val showDescription: Boolean = false)
+  @DrawableRes val image: Int = 0,
+  @StringRes val title: Int = 0,
+  @StringRes val description: Int = 0) {
+  val showImage = image != 0
+  val showTitle = title != 0
+  val showDescription = description != 0
+}

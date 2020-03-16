@@ -4,8 +4,10 @@ import android.app.NotificationManager
 import android.content.Context
 import com.coloplast.olympus.BuildConfig
 import com.coloplast.olympus.Me
+import com.coloplast.olympus.bluetooth.DeviceConnectionManager
 import com.coloplast.olympus.bluetooth.businesslayer.BluetoothManager
 import com.coloplast.olympus.bluetooth.businesslayer.BluetoothManagerImpl
+import com.coloplast.olympus.bluetooth.businesslayer.DeviceConnection
 import com.coloplast.olympus.notifications.NotificationCenter
 import com.coloplast.olympus.notifications.NotificationScheduler
 import com.coloplast.olympus.notifications.OlympusNotificationManager
@@ -24,6 +26,10 @@ val koinModule = module {
   single<BluetoothManager> { BluetoothManagerImpl(androidContext(), BuildConfig.DEBUG) }
   
   // ViewModels
-  single { HomeViewModel(get()) }
+  
+  single { DeviceConnectionManager() }
+  
+  factory { HomeViewModel(get(), get()) }
+  factory { DeviceConnection(get()) }
   
 }

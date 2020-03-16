@@ -92,6 +92,8 @@ class UiStateMachineImpl : BaseUiStateMachine() {
       UiState.SOMETHING_ELSE,
       UiState.OK_A,
       UiState.INNER_BREACH_B,
+      UiState.TRANSMITTER_DETACHED_V,
+      UiState.TRANSMITTER_BATTERY_CHARGING_W,
       UiState.DISCONNECTED -> {
         true
       }

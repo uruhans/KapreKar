@@ -31,7 +31,7 @@ class ChargingGuideController:BaseToolbarController<ControllerChargingGuideBindi
         )
       items.add(
         ArticleItem(
-          R.drawable.guide_get_started_1,
+          image = R.drawable.guide_get_started_1,
           description = R.string.guide_charging_1_text
         )
       )

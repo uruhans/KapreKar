@@ -71,32 +71,5 @@
 
 
   </androidx.constraintlayout.widget.ConstraintLayout>
-  <!--<androidx.constraintlayout.widget.ConstraintLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/spacing_double"
-    android:onClick="@{() -> controller.onButtonGetStartedGuideClick()}">
 
-    <ImageView
-      android:id="@+id/icon"
-      android:layout_width="40dp"
-      android:layout_height="40dp"
-      android:layout_marginStart="@dimen/spacing_double"
-      android:scaleType="fitXY"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent"
-      app:srcCompat="@drawable/ic_baseline_list_alt_24" />
-
-
-    <TextView
-      android:id="@+id/about_description_p4"
-      style="@style/Headline.Medium"
-      android:layout_width="0dp"
-      android:layout_height="wrap_content"
-      android:layout_marginStart="@dimen/spacing_standard"
-      android:text="@string/menu_guides"
-      app:layout_constraintStart_toEndOf="@+id/icon"
-      app:layout_constraintTop_toTopOf="parent" />
-
-  </androidx.constraintlayout.widget.ConstraintLayout>-->
 </layout>

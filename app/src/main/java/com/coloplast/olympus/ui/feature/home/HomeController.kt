@@ -32,11 +32,8 @@ import com.coloplast.olympus.ui.common.dialogs.BaseDialogController
 import com.coloplast.olympus.ui.common.dialogs.DialogController
 import com.coloplast.olympus.ui.common.widgets.PatchView
 import com.coloplast.olympus.ui.dialogs.ImageDialogController
-<<<<<<< HEAD
 import com.coloplast.olympus.ui.feature.guides.getstarted.GetStartedGuideController
-=======
 import com.coloplast.olympus.ui.feature.home.models.ConnectedBleDevice
->>>>>>> develop
 import com.coloplast.olympus.ui.feature.home.models.HomeUiModel
 import com.coloplast.olympus.ui.feature.home.models.PatchVisible
 import com.coloplast.olympus.ui.feature.home.models.ScanResultItem
@@ -103,10 +100,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
     stateRouter = Conductor.attachRouter(activity!!, viewBinding.contentContainer, args)
     compositeDisposable.add(viewModel.bind(this))
     
-<<<<<<< HEAD
-=======
     connectDisposable.add(viewModel.connectBleDevice(this))
->>>>>>> develop
   }
   
   override fun render(): Function<Observable<HomeUiModel>, Disposable> {

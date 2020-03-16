@@ -4,6 +4,10 @@
 
   <data>
     <variable
+      name="toolbarSupport"
+      type="com.coloplast.olympus.ui.common.ToolbarSupportController" />
+
+    <variable
       name="controller"
       type="com.coloplast.olympus.ui.feature.guides.getstarted.ChargingGuideController" />
   </data>
@@ -12,26 +16,10 @@
   android:layout_height="match_parent"
   android:background="@color/white">
 
-  <ImageView
-    android:id="@+id/icon_back"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:onClick="@{() -> controller.handleBack()}"
-    android:padding="@dimen/spacing_small"
-    android:src="@drawable/ic_arrow_back_black_24dp"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent" />
-
-  <ImageView
-    android:id="@+id/icon_close"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:onClick="@{() -> controller.handleBack()}"
-    android:padding="@dimen/spacing_small"
-    android:src="@drawable/ic_close"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintTop_toTopOf="parent" />
-
+  <include
+    android:id="@+id/toolbar"
+    layout="@layout/view_toolbar"
+    app:support="@{toolbarSupport}" />
 
   <androidx.recyclerview.widget.RecyclerView
     android:id="@+id/charging_guide_recyclerView"
@@ -47,7 +35,7 @@
     app:layout_constraintBottom_toTopOf="@+id/accept_button"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/icon_back" />
+    app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
   <Button
     android:id="@+id/accept_button"

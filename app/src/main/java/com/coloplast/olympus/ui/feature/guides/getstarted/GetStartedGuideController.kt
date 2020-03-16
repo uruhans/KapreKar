@@ -28,52 +28,52 @@ class GetStartedGuideController : BaseToolbarController<ControllerGetStartedGuid
     if(items.isNullOrEmpty()) {
       items.add(
         HeaderItem(
-          R.string.guide_get_started,
-          R.string.guide_get_started_sub_title_1
+          R.string.guide_get_started_sub_title_1,
+          R.string.guide_get_started
         )
       )
       items.add(
         ArticleItem(
           R.drawable.guide_get_started_1,
-          R.string.guide_get_started_1_text,
-          R.string.guide_get_started_sub_title_2
+          R.string.guide_get_started_sub_title_2,
+          R.string.guide_get_started_1_text
         )
       )
       items.add(
         ArticleItem(
-          R.drawable.guide_get_started_2,  R.string.guide_get_started_2_text
+          R.drawable.guide_get_started_2,  description = R.string.guide_get_started_2_text
         )
       )
       items.add(
         ArticleItem(
-          R.drawable.guide_get_started_3, R.string.guide_get_started_3_text
+          R.drawable.guide_get_started_3, description = R.string.guide_get_started_3_text
         )
       )
       items.add(
         ArticleItem(
-          R.drawable.guide_get_started_4, R.string.guide_get_started_4_text
+          R.drawable.guide_get_started_4, description = R.string.guide_get_started_4_text
         )
       )
       items.add(
         ArticleItem(
           R.drawable.guide_get_started_5,
-          R.string.guide_get_started_5_text,
-          R.string.guide_get_started_sub_title_6
+          R.string.guide_get_started_sub_title_6,
+          R.string.guide_get_started_5_text
         )
       )
       items.add(
         ArticleItem(
-          R.drawable.guide_get_started_6, R.string.guide_get_started_6_text
+          R.drawable.guide_get_started_6, description = R.string.guide_get_started_6_text
         )
       )
       items.add(
         ArticleItem(
-          R.drawable.guide_get_started_7, R.string.guide_get_started_7_text
+          R.drawable.guide_get_started_7, description = R.string.guide_get_started_7_text
         )
       )
       items.add(
         ArticleItem(
-          R.drawable.guide_get_started_8, R.string.guide_get_started_8_text
+          R.drawable.guide_get_started_8, description = R.string.guide_get_started_8_text
         )
       )
       items.add(
@@ -83,14 +83,14 @@ class GetStartedGuideController : BaseToolbarController<ControllerGetStartedGuid
       )
       items.add(
         ArticleItem(
-          R.drawable.guide_get_started_10, R.string.guide_get_started_10_text
+          R.drawable.guide_get_started_10, description = R.string.guide_get_started_10_text
         )
       )
       items.add(
         ArticleItem(
           R.drawable.guide_get_started_11,
-          R.string.guide_get_started_11_text,
-          R.string.guide_get_started_sub_title_12
+          R.string.guide_get_started_sub_title_12,
+          R.string.guide_get_started_11_text
         )
       )
       items.add(

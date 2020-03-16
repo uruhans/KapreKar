@@ -1,17 +1,15 @@
 package com.coloplast.olympus.ui.feature.guides.getstarted
 
 import com.bluelinelabs.conductor.RouterTransaction
-import com.coloplast.olympus.R
 import com.coloplast.olympus.BR
+import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerGetStartedGuideBinding
-import com.coloplast.olympus.ui.common.BaseController
+import com.coloplast.olympus.ui.common.BaseToolbarController
 import com.coloplast.olympus.ui.feature.guides.getstarted.model.ArticleItem
 import com.coloplast.olympus.ui.feature.guides.getstarted.model.HeaderItem
 import me.tatarka.bindingcollectionadapter2.itembindings.OnItemBindClass
 
-class GetStartedGuideController : BaseController<ControllerGetStartedGuideBinding>() {
-  
-  
+class GetStartedGuideController : BaseToolbarController<ControllerGetStartedGuideBinding>() {
   
   val items = mutableListOf<Any>()
   val itemBinding: OnItemBindClass<Any> = OnItemBindClass<Any>()
@@ -20,10 +18,12 @@ class GetStartedGuideController : BaseController<ControllerGetStartedGuideBindin
    
   
   override fun attachVariables(viewBinding: ControllerGetStartedGuideBinding) {
+    super.attachVariables(viewBinding)
     viewBinding.controller = this
   }
   
   override fun onViewBound(viewBinding: ControllerGetStartedGuideBinding) {
+    super.onViewBound(viewBinding)
     
     if(items.isNullOrEmpty()) {
       items.add(
@@ -97,17 +97,21 @@ class GetStartedGuideController : BaseController<ControllerGetStartedGuideBindin
         ArticleItem(description = R.string.guide_get_started_12_text)
       )
     }
-    
+  }
+  
+  override fun getTitle(): Any {
+    return ""
+  }
+  
+  override fun displayNavigationIcon(): Boolean {
+    return true
   }
   
   override fun getLayout() = R.layout.controller_get_started_guide
   
   companion object {
-    private const val ROUTER_TAG = "get_started_guide_controller"
+    private const val TAG_CONTROLLER = "get_started_guide_controller"
     
-    fun routerTransaction() = RouterTransaction.with(GetStartedGuideController()).tag(
-      ROUTER_TAG
-    )
+    fun routerTransaction() = RouterTransaction.with(GetStartedGuideController()).tag(TAG_CONTROLLER)
   }
-  
 }

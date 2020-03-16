@@ -17,4 +17,8 @@ class OverlayStateMachineImpl : OverlayStateMachine {
     state = newState
     return newState
   }
+  
+  override fun reset() {
+    state = OverlayState.NONE
+  }
 }

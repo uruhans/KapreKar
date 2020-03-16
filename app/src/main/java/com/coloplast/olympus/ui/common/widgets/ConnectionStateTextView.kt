@@ -25,6 +25,9 @@ class ConnectionStateTextView @JvmOverloads constructor(
     if(text != this.text && text?.isNotEmpty() == true) {
       super.setText(text, type)
     }
+    
+    // we have to do this - because not doing it caused weird crashes on *some* devices
+    super.setText("", type)
   }
   
   fun animateText(@StringRes textRes: Int) {

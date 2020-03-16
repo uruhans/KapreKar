@@ -22,8 +22,7 @@
       app:resource="@{item.image}"
       app:visibleOrGone="@{item.showImage}"
       tools:src="@drawable/guide_get_started_1"
-      android:scaleType="centerInside"
-      tools:visibility="visible"/>
+      android:scaleType="centerInside" />
 
     <TextView
       android:id="@+id/article_title"
@@ -33,8 +32,7 @@
       android:layout_marginBottom="@dimen/spacing_half"
       app:safeText="@{item.title}"
       app:visibleOrGone="@{item.showTitle}"
-      tools:text="@string/guide_get_started_1_text"
-      tools:visibility="visible"/>
+      tools:text="@string/guide_get_started_1_text" />
 
     <TextView
       android:layout_width="match_parent"
@@ -42,8 +40,7 @@
       app:safeText="@{item.description}"
       app:visibleOrGone="@{item.showDescription}"
       style="@style/GuideSubTitle"
-      tools:text="@string/guide_get_started_sub_title_1"
-      tools:visibility="visible"/>
+      tools:text="@string/guide_get_started_sub_title_1" />
 
   </LinearLayout>
 </layout>

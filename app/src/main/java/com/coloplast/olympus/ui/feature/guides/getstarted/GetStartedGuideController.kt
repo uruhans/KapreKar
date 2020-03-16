@@ -28,15 +28,15 @@ class GetStartedGuideController : BaseToolbarController<ControllerGetStartedGuid
     if(items.isNullOrEmpty()) {
       items.add(
         HeaderItem(
-          R.string.guide_get_started_sub_title_1,
-          R.string.guide_get_started
+          header = R.string.guide_get_started_sub_title_1,
+          subHeader =  R.string.guide_get_started
         )
       )
       items.add(
         ArticleItem(
           R.drawable.guide_get_started_1,
-          R.string.guide_get_started_sub_title_2,
-          R.string.guide_get_started_1_text
+          title = R.string.guide_get_started_sub_title_2,
+          description =  R.string.guide_get_started_1_text
          
         )
       )
@@ -47,7 +47,7 @@ class GetStartedGuideController : BaseToolbarController<ControllerGetStartedGuid
       )
       items.add(
         ArticleItem(
-          R.drawable.guide_get_started_3, description = R.string.guide_get_started_3_text
+         R.drawable.guide_get_started_3, description = R.string.guide_get_started_3_text
         )
       )
       items.add(
@@ -58,8 +58,8 @@ class GetStartedGuideController : BaseToolbarController<ControllerGetStartedGuid
       items.add(
         ArticleItem(
           R.drawable.guide_get_started_5,
-          R.string.guide_get_started_sub_title_6,
-          R.string.guide_get_started_5_text
+          title = R.string.guide_get_started_sub_title_6,
+          description = R.string.guide_get_started_5_text
          
         )
       )
@@ -80,7 +80,7 @@ class GetStartedGuideController : BaseToolbarController<ControllerGetStartedGuid
       )
       items.add(
         ArticleItem(
-          R.drawable.guide_get_started_9, R.string.guide_get_started_sub_title_10
+          R.drawable.guide_get_started_9, title = R.string.guide_get_started_sub_title_10
         )
       )
       items.add(
@@ -91,8 +91,8 @@ class GetStartedGuideController : BaseToolbarController<ControllerGetStartedGuid
       items.add(
         ArticleItem(
           R.drawable.guide_get_started_11,
-          R.string.guide_get_started_sub_title_12,
-          R.string.guide_get_started_11_text
+          title = R.string.guide_get_started_sub_title_12,
+          description =  R.string.guide_get_started_11_text
         )
       )
       items.add(

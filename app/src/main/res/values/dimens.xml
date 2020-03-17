@@ -13,6 +13,8 @@
   <dimen name="spacing_larger">24dp</dimen>
   <dimen name="spacing_double">32dp</dimen>
 
+  <dimen name="menu_spacing">14dp</dimen>
+
   <!-- dialog -->
   <dimen name="dialog_text_margin">24dp</dimen>
   <dimen name="dialog_button_padding">4dp</dimen>
@@ -31,5 +33,8 @@
   <dimen name="text_20">20sp</dimen>
   <dimen name="text_18">18sp</dimen>
   <dimen name="text_16">16sp</dimen>
+
+  <dimen name="default_button_radius">28dp</dimen>
+  <dimen name="default_button_elevation">4dp</dimen>
 
 </resources>

@@ -4,6 +4,8 @@
 
   <data>
 
+    <import type="com.coloplast.olympus.ui.feature.home.models.SideMenuType" />
+
     <variable
       name="controller"
       type="com.coloplast.olympus.ui.feature.home.HomeController" />
@@ -13,6 +15,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white">
+
+    <!-- this recyclerview is only temporary -->
+    <androidx.recyclerview.widget.RecyclerView
+      android:id="@+id/devices"
+      android:layout_width="0dp"
+      android:layout_height="200dp"
+      app:itemBinding="@{controller.itemBinding}"
+      app:items="@{controller.items}"
+      app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
       android:layout_width="wrap_content"
@@ -28,27 +42,123 @@
       app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
-      android:id="@+id/connected_devices"
       android:layout_width="match_parent"
-      android:layout_height="200dp"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="@dimen/spacing_standard"
       android:orientation="vertical"
-      app:connectedDevices="@{controller.connectedDevices}"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent">
-
-    </LinearLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-      android:layout_width="0dp"
-      android:layout_height="0dp"
-      app:itemBinding="@{controller.itemBinding}"
-      app:items="@{controller.items}"
-      app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
       app:layout_constraintBottom_toTopOf="@+id/bottom_layout"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/connected_devices" />
+      app:layout_constraintTop_toBottomOf="@+id/devices">
+
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:onClick="@{() -> controller.onSideMenuClicked(SideMenuType.STATUS)}"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/spacing_double"
+        android:paddingTop="@dimen/menu_spacing"
+        android:paddingBottom="@dimen/menu_spacing">
+
+        <ImageView
+          android:layout_width="36dp"
+          android:layout_height="36dp"
+          android:scaleType="center"
+          android:src="@drawable/ic_sidemenu_status" />
+
+        <TextView
+          style="@style/Headline.Large"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center_vertical"
+          android:layout_marginStart="@dimen/spacing_standard"
+          android:text="@string/menu_status"
+          android:textColor="@color/text_dark_grey_01" />
+
+      </LinearLayout>
+
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:onClick="@{() -> controller.onSideMenuClicked(SideMenuType.GUIDES)}"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/spacing_double"
+        android:paddingTop="@dimen/menu_spacing"
+        android:paddingBottom="@dimen/menu_spacing">
+
+        <ImageView
+          android:layout_width="36dp"
+          android:layout_height="36dp"
+          android:scaleType="center"
+          android:src="@drawable/ic_sidemenu_guides" />
+
+        <TextView
+          style="@style/Headline.Large"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center_vertical"
+          android:layout_marginStart="@dimen/spacing_standard"
+          android:text="@string/menu_guides"
+          android:textColor="@color/text_dark_grey_01" />
+
+      </LinearLayout>
+
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:onClick="@{() -> controller.onSideMenuClicked(SideMenuType.TRANSMITTERS)}"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/spacing_double"
+        android:paddingTop="@dimen/menu_spacing"
+        android:paddingBottom="@dimen/menu_spacing">
+
+        <ImageView
+          android:layout_width="36dp"
+          android:layout_height="36dp"
+          android:scaleType="center"
+          android:src="@drawable/ic_sidemenu_transmitters" />
+
+        <TextView
+          style="@style/Headline.Large"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center_vertical"
+          android:layout_marginStart="@dimen/spacing_standard"
+          android:text="[Transmitters]"
+          android:textColor="@color/text_dark_grey_01" />
+
+      </LinearLayout>
+
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:onClick="@{() -> controller.onSideMenuClicked(SideMenuType.SETTINGS)}"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/spacing_double"
+        android:paddingTop="@dimen/menu_spacing"
+        android:paddingBottom="@dimen/menu_spacing">
+
+        <ImageView
+          android:layout_width="36dp"
+          android:layout_height="36dp"
+          android:scaleType="center"
+          android:src="@drawable/ic_sidemenu_settings" />
+
+        <TextView
+          style="@style/Headline.Large"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center_vertical"
+          android:layout_marginStart="@dimen/spacing_standard"
+          android:text="@string/menu_settings"
+          android:textColor="@color/text_dark_grey_01" />
+
+      </LinearLayout>
+    </LinearLayout>
 
     <LinearLayout
       android:id="@+id/bottom_layout"
@@ -67,25 +177,30 @@
         style="@style/Text.Medium"
         android:layout_width="wrap_content"
         android:layout_height="36dp"
+        android:background="?attr/selectableItemBackground"
         android:gravity="center_vertical"
-        android:onClick="@{() -> controller.onScanClicked()}"
-        android:text="Profile"
+        android:onClick="@{() -> controller.onSideMenuClicked(SideMenuType.PROFILE)}"
+        android:text="[Profile]"
         android:textColor="@color/grey" />
 
       <TextView
         style="@style/Text.Medium"
         android:layout_width="wrap_content"
         android:layout_height="36dp"
+        android:background="?attr/selectableItemBackground"
         android:gravity="center_vertical"
-        android:text="About"
+        android:onClick="@{() -> controller.onSideMenuClicked(SideMenuType.ABOUT)}"
+        android:text="[About]"
         android:textColor="@color/grey" />
 
       <TextView
         style="@style/Text.Medium"
         android:layout_width="wrap_content"
         android:layout_height="36dp"
+        android:background="?attr/selectableItemBackground"
         android:gravity="center_vertical"
-        android:text="Contact"
+        android:onClick="@{() -> controller.onSideMenuClicked(SideMenuType.CONTACT)}"
+        android:text="[Contact]"
         android:textColor="@color/grey" />
 
     </LinearLayout>

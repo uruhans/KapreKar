@@ -16,7 +16,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:enabled="@{!home.isScanning}"
-      android:onClick="@{() -> home.onScanClicked()}"
+      android:onClick="@{() -> home.onStartClicked()}"
       android:text='@{home.isScanning() ? @string/bluetooth_scanning : @string/bluetooth_start_scanning}' />
 
   </LinearLayout>

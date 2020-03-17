@@ -36,6 +36,7 @@
   <color name="text_dark_grey_01">@color/darkGrey01</color>
   <color name="text_dark_grey_03">@color/darkGrey03</color>
   <color name="text_blue_green">@color/olympus_bluegreen</color>
+  <color name="text_white">@color/white</color>
 
   <color name="text_black">#001423</color>
   <color name="text_gray">#666666</color>

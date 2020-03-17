@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <data>
+
+    <variable
+      name="item"
+      type="com.coloplast.olympus.ui.feature.guides.models.ButtonItem" />
+  </data>
+
+  <androidx.cardview.widget.CardView
+    android:id="@+id/back_button"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/cardview_button_height_default"
+    android:layout_marginStart="@dimen/spacing_standard"
+    android:layout_marginTop="@dimen/spacing_standard"
+    android:layout_marginEnd="@dimen/spacing_standard"
+    android:layout_marginBottom="@dimen/spacing_standard"
+    android:foreground="?attr/selectableItemBackground"
+    android:onClick="@{() -> item.onButtonClicked()}"
+    app:cardBackgroundColor="@{item.backgroundColor}"
+    app:cardCornerRadius="@dimen/default_button_radius"
+    app:cardElevation="@dimen/default_button_elevation"
+    app:cardPreventCornerOverlap="true"
+    app:cardUseCompatPadding="false">
+
+    <TextView
+      style="@style/Text.Medium"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:fontFamily="sans-serif-medium"
+      android:gravity="center"
+      android:textColor="@{item.textColor}"
+      android:textSize="18sp"
+      app:safeText="@{item.title}" />
+
+  </androidx.cardview.widget.CardView>
+
+</layout>

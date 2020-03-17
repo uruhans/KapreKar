@@ -1,4 +1,4 @@
-package com.coloplast.olympus.ui.feature.guides.getstarted.model
+package com.coloplast.olympus.ui.feature.guides.models
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes

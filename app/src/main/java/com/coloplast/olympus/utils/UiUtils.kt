@@ -1,6 +1,7 @@
 package com.coloplast.olympus.utils
 
 import android.util.TypedValue
+import androidx.annotation.ColorRes
 import com.coloplast.olympus.shared.AppSettings
 import org.threeten.bp.format.DateTimeFormatterBuilder
 import org.threeten.bp.format.ResolverStyle
@@ -49,6 +50,10 @@ object UiUtils {
       this,
       AppSettings.applicationContext.resources.displayMetrics
     )
+  }
+  
+  fun getColor(@ColorRes colorRes: Int) : Int {
+    return AppSettings.applicationContext.getColor(colorRes)
   }
 
   val ISO_LOCAL_TIME_NO_NANO_OF_SECOND = (DateTimeFormatterBuilder().appendValue(ChronoField.HOUR_OF_DAY, 2)

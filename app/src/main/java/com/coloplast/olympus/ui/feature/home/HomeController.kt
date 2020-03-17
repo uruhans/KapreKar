@@ -4,7 +4,6 @@ import android.app.Activity
 import android.bluetooth.BluetoothAdapter
 import android.content.Intent
 import android.os.Bundle
-import android.view.MenuItem
 import androidx.core.view.GravityCompat
 import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableBoolean
@@ -32,17 +31,12 @@ import com.coloplast.olympus.ui.common.dialogs.BaseDialogController
 import com.coloplast.olympus.ui.common.dialogs.DialogController
 import com.coloplast.olympus.ui.common.widgets.PatchView
 import com.coloplast.olympus.ui.dialogs.ImageDialogController
-import com.coloplast.olympus.ui.feature.guides.getstarted.ApplicationGuideController
-import com.coloplast.olympus.ui.feature.guides.getstarted.ChargingGuideController
+import com.coloplast.olympus.ui.feature.guides.application.ApplicationGuideController
 import com.coloplast.olympus.ui.feature.guides.getstarted.GetStartedGuideController
-import com.coloplast.olympus.ui.feature.home.models.ConnectedBleDevice
-import com.coloplast.olympus.ui.feature.home.models.HomeUiModel
-import com.coloplast.olympus.ui.feature.home.models.PatchVisible
-import com.coloplast.olympus.ui.feature.home.models.ScanResultItem
+import com.coloplast.olympus.ui.feature.home.models.*
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
 import com.coloplast.olympus.ui.feature.uistates.*
 import com.coloplast.olympus.utils.OSUtils
-import com.google.android.material.navigation.NavigationView
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
@@ -260,31 +254,6 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
     }
   }
   
-  fun onButtonGetStartedGuideClick(){
-    
-    router.pushController(
-      GetStartedGuideController.routerTransaction()
-        .popChangeHandler(VerticalChangeHandler())
-        .pushChangeHandler(VerticalChangeHandler())
-    )
-  }
-  
- fun onButtonChargingGuideClick(){
-   router.pushController(
-     ChargingGuideController.routerTransaction()
-       .popChangeHandler(VerticalChangeHandler())
-       .pushChangeHandler(VerticalChangeHandler())
-   )
- }
-  
-  fun onButtonApplicationGuideClick(){
-    router.pushController(
-      ApplicationGuideController.routerTransaction()
-        .popChangeHandler(VerticalChangeHandler())
-        .pushChangeHandler(VerticalChangeHandler())
-    )
-  }
-  
   override fun onPositiveButtonClicked(requestCode: Int) {
     when (requestCode) {
       REQUEST_CODE_PERMISSION_LOCATION -> {
@@ -370,6 +339,30 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
     }
   }
   
+  fun onSideMenuClicked(menuType: SideMenuType) {
+    when(menuType) {
+      SideMenuType.STATUS -> {
+        router.pushController(
+          GetStartedGuideController.routerTransaction()
+            .pushChangeHandler(VerticalChangeHandler())
+            .popChangeHandler(VerticalChangeHandler())
+        )
+      }
+      SideMenuType.GUIDES -> {
+        router.pushController(
+          ApplicationGuideController.routerTransaction()
+            .pushChangeHandler(VerticalChangeHandler())
+            .popChangeHandler(VerticalChangeHandler())
+        )
+      }
+      SideMenuType.TRANSMITTERS,
+      SideMenuType.SETTINGS,
+      SideMenuType.PROFILE,
+      SideMenuType.ABOUT -> { /* TODO - fix this */ }
+      SideMenuType.CONTACT -> onScanClicked() // this is temporary for testing
+    }
+  }
+  
   fun enableBluetoothClicked() {
     Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE).also {
       startActivityForResult(it, REQUEST_CODE_BLUETOOTH_ENABLE)
@@ -379,6 +372,14 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   fun onScanClicked() {
     isScanning.set(true)
     startScanRelay.accept("")
+  }
+  
+  fun onStartClicked() {
+    router.pushController(
+      ApplicationGuideController.routerTransaction()
+        .popChangeHandler(VerticalChangeHandler())
+        .pushChangeHandler(VerticalChangeHandler())
+    )
   }
   
   override fun onScanResultClicked(scanResult: ScanResult) {

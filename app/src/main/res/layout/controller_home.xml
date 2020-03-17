@@ -132,20 +132,10 @@
       android:layout_gravity="end"
       android:fitsSystemWindows="true">
 
-      <include layout="@layout/view_sidemenu" app:controller="@{controller}" />
-
-     <!-- <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/button_submit"
-        android:layout_margin="@dimen/spacing_half"
-        android:text="Get Started"
-        android:onClick="@{() -> controller.onButtonGetStartedGuideClick()}"/>
--->
       <include
-        android:id="@+id/menu_get_started_layout"
-        layout="@layout/layout_menu_get_started"
+        layout="@layout/view_sidemenu"
         app:controller="@{controller}" />
+
     </com.google.android.material.navigation.NavigationView>
 
   </androidx.drawerlayout.widget.DrawerLayout>

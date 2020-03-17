@@ -3,6 +3,7 @@
   xmlns:app="http://schemas.android.com/apk/res-auto">
 
   <data>
+
     <variable
       name="controller"
       type="com.coloplast.olympus.ui.feature.home.HomeController" />
@@ -40,6 +41,7 @@
         android:text="@string/guide_get_started" />
 
     </LinearLayout>
+
     <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="0dp"
@@ -64,8 +66,6 @@
         android:text="@string/guide_charge" />
 
     </LinearLayout>
-
-
 
 
   </androidx.constraintlayout.widget.ConstraintLayout>

@@ -54,7 +54,7 @@
         android:layout_height="40dp"
         android:layout_marginStart="@dimen/spacing_double"
         android:scaleType="fitXY"
-        app:srcCompat="@drawable/ic_baseline_list_alt_24" />
+        app:srcCompat="@drawable/ic_icon_guides" />
 
       <TextView
         style="@style/Headline.Medium"

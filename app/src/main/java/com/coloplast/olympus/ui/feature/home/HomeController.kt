@@ -32,6 +32,7 @@ import com.coloplast.olympus.ui.common.dialogs.BaseDialogController
 import com.coloplast.olympus.ui.common.dialogs.DialogController
 import com.coloplast.olympus.ui.common.widgets.PatchView
 import com.coloplast.olympus.ui.dialogs.ImageDialogController
+import com.coloplast.olympus.ui.feature.guides.getstarted.ChargingGuideController
 import com.coloplast.olympus.ui.feature.guides.getstarted.GetStartedGuideController
 import com.coloplast.olympus.ui.feature.home.models.ConnectedBleDevice
 import com.coloplast.olympus.ui.feature.home.models.HomeUiModel
@@ -266,6 +267,14 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         .pushChangeHandler(VerticalChangeHandler())
     )
   }
+  
+ fun onButtonChargingGuideClick(){
+   router.pushController(
+     ChargingGuideController.routerTransaction()
+       .popChangeHandler(VerticalChangeHandler())
+       .pushChangeHandler(VerticalChangeHandler())
+   )
+ }
   
   override fun onPositiveButtonClicked(requestCode: Int) {
     when (requestCode) {

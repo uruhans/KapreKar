@@ -32,6 +32,7 @@ import com.coloplast.olympus.ui.common.dialogs.DialogController
 import com.coloplast.olympus.ui.common.widgets.PatchView
 import com.coloplast.olympus.ui.dialogs.ImageDialogController
 import com.coloplast.olympus.ui.feature.guides.application.ApplicationGuideController
+import com.coloplast.olympus.ui.feature.guides.cleaning.CleaningGuideController
 import com.coloplast.olympus.ui.feature.guides.getstarted.GetStartedGuideController
 import com.coloplast.olympus.ui.feature.home.models.*
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
@@ -350,7 +351,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
       }
       SideMenuType.GUIDES -> {
         router.pushController(
-          ApplicationGuideController.routerTransaction()
+          CleaningGuideController.routerTransaction()
             .pushChangeHandler(VerticalChangeHandler())
             .popChangeHandler(VerticalChangeHandler())
         )

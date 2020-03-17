@@ -17,7 +17,7 @@
 
 
     <LinearLayout
-      android:id="@+id/linearLayout"
+      android:id="@+id/get_started_layout"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_marginTop="50dp"
@@ -43,13 +43,14 @@
 
     </LinearLayout>
     <LinearLayout
+      android:id="@+id/chargin_guide_layout"
       android:layout_width="match_parent"
       android:layout_height="0dp"
       android:layout_marginTop="@dimen/spacing_standard"
       android:onClick="@{() -> controller.onButtonChargingGuideClick()}"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+      app:layout_constraintTop_toBottomOf="@+id/get_started_layout">
 
       <ImageView
         android:layout_width="40dp"
@@ -64,6 +65,31 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/spacing_standard"
         android:text="@string/guide_charge" />
+
+    </LinearLayout>
+    <LinearLayout
+      android:id="@+id/application_guide_layout"
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
+      android:layout_marginTop="@dimen/spacing_standard"
+      android:onClick="@{() -> controller.onButtonApplicationGuideClick()}"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/chargin_guide_layout">
+
+      <ImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="@dimen/spacing_double"
+        android:scaleType="fitXY"
+        app:srcCompat="@drawable/ic_baseline_list_alt_24" />
+
+      <TextView
+        style="@style/Headline.Medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_standard"
+        android:text="@string/guide_change_plate" />
 
     </LinearLayout>
 

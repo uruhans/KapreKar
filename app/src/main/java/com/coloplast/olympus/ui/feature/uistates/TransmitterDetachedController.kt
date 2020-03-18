@@ -1,8 +1,10 @@
 package com.coloplast.olympus.ui.feature.uistates
 
 import com.bluelinelabs.conductor.RouterTransaction
+import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerStateTransmitterDetachedBinding
+import com.coloplast.olympus.ui.feature.guides.getstarted.GetStartedGuideController
 import com.coloplast.olympus.ui.feature.home.models.PatchVisible
 
 class TransmitterDetachedController : BaseHomeUIController<ControllerStateTransmitterDetachedBinding>(), PatchVisible {
@@ -17,7 +19,11 @@ class TransmitterDetachedController : BaseHomeUIController<ControllerStateTransm
   }
   
   fun onApplicationGuideClicked() {
-  
+    router.pushController(
+      GetStartedGuideController.routerTransaction()
+        .pushChangeHandler(VerticalChangeHandler())
+        .popChangeHandler(VerticalChangeHandler())
+    )
   }
   
   override fun patchInError(): Boolean {

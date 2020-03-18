@@ -53,7 +53,9 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
         NotificationPayload(state.notificationId(), R.string.lock_notification_broken)
       }
       UiState.INNER_BLIND_D -> { null }
-      UiState.TOTAL_BLIND_E -> { null }
+      UiState.TOTAL_BLIND_E -> {
+        NotificationPayload(state.notificationId(), R.string.lock_notification_total_blind)
+      }
       UiState.PAY_ATTENTION_F -> { null }
       UiState.WATER_INGRESS_DETECTION_J -> {
         NotificationPayload(state.notificationId(), R.string.lock_notification_water)
@@ -69,7 +71,7 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
   }
   
   /**
-   * Send notification base on current OverlayState
+   * Send notification based on current OverlayState
    */
   fun send(state: OverlayState) {
     val payload = when(state) {

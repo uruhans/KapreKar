@@ -188,6 +188,7 @@ class UiStateMachineImpl : BaseUiStateMachine() {
       UiState.BLUETOOTH_NOT_ENABLED,
       UiState.SOMETHING_ELSE,
       UiState.OK_A,
+      UiState.TOTAL_BLIND_E,
       UiState.TRANSMITTER_BATTERY_CHARGING_W,
       UiState.DISCONNECTED -> {
         true

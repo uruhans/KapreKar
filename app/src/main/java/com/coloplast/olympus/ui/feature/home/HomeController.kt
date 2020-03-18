@@ -17,7 +17,6 @@ import com.bluelinelabs.conductor.changehandler.FadeChangeHandler
 import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import com.coloplast.olympus.BR
 import com.coloplast.olympus.R
-import com.coloplast.olympus.bluetooth.businesslayer.DeviceConnection
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
 import com.coloplast.olympus.bluetooth.businesslayer.enums.PowerLevel
 import com.coloplast.olympus.bluetooth.businesslayer.models.Patch
@@ -32,12 +31,12 @@ import com.coloplast.olympus.ui.common.dialogs.DialogController
 import com.coloplast.olympus.ui.common.widgets.PatchView
 import com.coloplast.olympus.ui.dialogs.ImageDialogController
 import com.coloplast.olympus.ui.feature.guides.application.ApplicationGuideController
-import com.coloplast.olympus.ui.feature.guides.applicationtips.ApplicationTipsGuideController
-import com.coloplast.olympus.ui.feature.guides.cleaning.CleaningGuideController
 import com.coloplast.olympus.ui.feature.guides.connection.ConnectionGuideController
 import com.coloplast.olympus.ui.feature.guides.getstarted.GetStartedGuideController
-import com.coloplast.olympus.ui.feature.guides.learnmore.LearnMoreGuideController
-import com.coloplast.olympus.ui.feature.home.models.*
+import com.coloplast.olympus.ui.feature.home.models.HomeUiModel
+import com.coloplast.olympus.ui.feature.home.models.PatchVisible
+import com.coloplast.olympus.ui.feature.home.models.ScanResultItem
+import com.coloplast.olympus.ui.feature.home.models.SideMenuType
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
 import com.coloplast.olympus.ui.feature.uistates.*
 import com.coloplast.olympus.utils.OSUtils
@@ -56,10 +55,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   val items = ObservableArrayList<ScanResultItem>()
   val itemBinding = ItemBinding.of<ScanResultItem>(BR.item, R.layout.item_scan_result)
   
-  val connectedDevices = ObservableArrayList<ConnectedBleDevice>()
-  
   private val viewModel: HomeViewModel by inject()
-  private val deviceConnection: DeviceConnection by inject()
   
   private val olympusNotificationManager: OlympusNotificationManager by inject()
   
@@ -138,8 +134,6 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
           }
         }
         is HomeUiModel.ConnectedDevicesUpdate -> {
-          connectedDevices.clear()
-          connectedDevices.addAll(uiModel.list.map { ConnectedBleDevice(it) })
         }
         is HomeUiModel.ScannerResult -> {
           //changeUiState(UiState.SCANNING)
@@ -190,6 +184,9 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         }
         UiState.OUTER_BREACH_C -> {
           OuterBreachController.routerTransaction()
+        }
+        UiState.TOTAL_BLIND_E -> {
+          TotalBlindController.routerTransaction()
         }
         UiState.CUTGUARD_BROKEN_I -> {
           CutGuardController.routerTransaction()

@@ -21,7 +21,7 @@ class TotalBlindController : BaseHomeUIController<ControllerStateTotalBlindBindi
   }
   
   fun onApplicationGuideClicked() {
-    router.pushController(
+    getContentRouter().pushController(
       ApplicationGuideController.routerTransaction()
         .pushChangeHandler(VerticalChangeHandler())
         .popChangeHandler(VerticalChangeHandler())

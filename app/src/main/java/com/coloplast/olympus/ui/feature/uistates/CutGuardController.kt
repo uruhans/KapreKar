@@ -19,7 +19,7 @@ class CutGuardController : BaseHomeUIController<ControllerStateCutguardBinding>(
   }
   
   fun onApplicationGuideClicked() {
-    router.pushController(
+    getContentRouter().pushController(
       ApplicationGuideController.routerTransaction()
         .pushChangeHandler(VerticalChangeHandler())
         .popChangeHandler(VerticalChangeHandler())

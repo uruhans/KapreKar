@@ -19,7 +19,7 @@ class TransmitterDetachedController : BaseHomeUIController<ControllerStateTransm
   }
   
   fun onApplicationGuideClicked() {
-    router.pushController(
+    getContentRouter().pushController(
       GetStartedGuideController.routerTransaction()
         .pushChangeHandler(VerticalChangeHandler())
         .popChangeHandler(VerticalChangeHandler())

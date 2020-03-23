@@ -30,6 +30,7 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
   
   // a cached version of the bleDevices that we are currently connected to
   private val bleDevices = mutableMapOf<String, RxBleDevice>()
+  
   // a cached version of the ble connections that we are currently connected to
   private val bleConnections = mutableMapOf<String, RxBleConnection>()
   
@@ -124,7 +125,6 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
       .filter { it == BleConnectionState.DISCONNECTED || it == BleConnectionState.DISCONNECTING }
       .flatMap { bleConnectionState ->
         getBleDevice(macAddress)
-//          .doOnNext { removeDeviceFromConnectedList(it) }
           .map { bleConnectionState }
       }
   }
@@ -146,22 +146,11 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
     return getBleDevice(macAddress)
       .flatMap { rxBleDevice ->
         bluetoothHandler.connectRxBleDevice(rxBleDevice)
-          .doOnNext {
+          .map {
             bleConnections[macAddress] = it
-//            addDeviceToConnectedList(rxBleDevice)
+            macAddress
           }
-          .map { macAddress }
       }
-      //.onErrorResumeNext { throwable: Throwable ->
-        //val mappedThrowable = when (throwable) {
-          //is BleDisconnectedException -> DisconnectException(throwable)
-          //is BleGattCallbackTimeoutException -> GattCallbackTimeoutException(throwable)
-          //is BleGattException -> GattException(throwable)
-          //else -> RuntimeException("Unexpected Throwable in connectBleDevice handler", throwable)
-        //}
-
-        //Observable.error(mappedThrowable)
-      //}
   }
   
   /**
@@ -241,33 +230,33 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
     }
   }
   
-//  override fun connectedDevicesObservable(): Observable<List<BleDevice>> {
-//    return bleDeviceRelay.publish()
-//      .refCount()
-//  }
+  //  override fun connectedDevicesObservable(): Observable<List<BleDevice>> {
+  //    return bleDeviceRelay.publish()
+  //      .refCount()
+  //  }
   
   override fun connectedDeviceObservable(macAddress: String): Observable<BleDevice> {
     return getBleDevice(macAddress)
       .map { BleDevice(it.name, it.macAddress, BleConnectionState.fromRxBleState(it.connectionState)) }
   }
   
-//  private fun addDeviceToConnectedList(rxBleDevice: RxBleDevice) {
-//    bleDevices[rxBleDevice.macAddress] = rxBleDevice
-//    notifyConnectedDevices()
-//  }
-//
-//  private fun removeDeviceFromConnectedList(rxBleDevice: RxBleDevice) {
-//    bleDevices.remove(rxBleDevice.macAddress)
-//    notifyConnectedDevices()
-//  }
-//
-//  private fun notifyConnectedDevices() {
-//    bleDeviceRelay.accept(bleDevices.map {
-//      BleDevice(
-//        it.value.name,
-//        it.value.macAddress,
-//        BleConnectionState.fromRxBleState(it.value.connectionState)
-//      )
-//    })
-//  }
+  //  private fun addDeviceToConnectedList(rxBleDevice: RxBleDevice) {
+  //    bleDevices[rxBleDevice.macAddress] = rxBleDevice
+  //    notifyConnectedDevices()
+  //  }
+  //
+  //  private fun removeDeviceFromConnectedList(rxBleDevice: RxBleDevice) {
+  //    bleDevices.remove(rxBleDevice.macAddress)
+  //    notifyConnectedDevices()
+  //  }
+  //
+  //  private fun notifyConnectedDevices() {
+  //    bleDeviceRelay.accept(bleDevices.map {
+  //      BleDevice(
+  //        it.value.name,
+  //        it.value.macAddress,
+  //        BleConnectionState.fromRxBleState(it.value.connectionState)
+  //      )
+  //    })
+  //  }
 }

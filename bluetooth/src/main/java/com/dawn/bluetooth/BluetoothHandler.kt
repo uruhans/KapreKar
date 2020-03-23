@@ -1,25 +1,21 @@
 package com.dawn.bluetooth
 
+import android.bluetooth.BluetoothDevice
 import android.content.Context
 import android.os.ParcelUuid
-import android.util.Log
 import com.polidea.rxandroidble2.*
 import com.polidea.rxandroidble2.scan.ScanFilter
 import com.polidea.rxandroidble2.scan.ScanResult
 import com.polidea.rxandroidble2.scan.ScanSettings
-import io.reactivex.Completable
 import io.reactivex.Observable
-import io.reactivex.Single
 import java.util.*
-import java.util.concurrent.TimeUnit
-
 
 class BluetoothHandler(private val context: Context, isDebugging: Boolean) {
   
   private val rxBleClient = RxBleClient.create(context)
   
   init {
-    /*if (isDebugging) {
+    if (isDebugging) {
       val logOptions = LogOptions.Builder()
         .setLogLevel(LogConstants.DEBUG)
         .setMacAddressLogSetting(LogConstants.MAC_ADDRESS_FULL)
@@ -28,7 +24,7 @@ class BluetoothHandler(private val context: Context, isDebugging: Boolean) {
         .build()
       
       RxBleClient.updateLogOptions(logOptions)
-    }*/
+    }
   }
   
   fun rxBleClientStateObservable(): Observable<RxBleClient.State> {
@@ -66,8 +62,8 @@ class BluetoothHandler(private val context: Context, isDebugging: Boolean) {
       .flatMap { rxBleConnection ->
         rxBleDeviceConnectionStateObservable(rxBleDevice)
           .filter { it == RxBleConnection.RxBleConnectionState.CONNECTED }
-          .flatMap { PairingManager.pairWithDevice(context, rxBleDevice) }
-          .delay(5, TimeUnit.SECONDS)
+          .flatMap { BleDeviceBondingManager.createBond(context, rxBleDevice) }
+          .filter { rxBleDevice.bluetoothDevice.bondState == BluetoothDevice.BOND_BONDED }
           .flatMapSingle { rxBleConnection.requestMtu(185) }
           .flatMapSingle { rxBleConnection.discoverServices() }
           .map { rxBleConnection }

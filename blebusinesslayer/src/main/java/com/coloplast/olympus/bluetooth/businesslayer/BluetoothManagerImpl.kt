@@ -22,7 +22,6 @@ import io.reactivex.Observable
 import io.reactivex.exceptions.UndeliverableException
 import io.reactivex.functions.BiFunction
 import io.reactivex.plugins.RxJavaPlugins
-import timber.log.Timber
 
 class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothManager {
   
@@ -31,6 +30,7 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
   
   // a cached version of the bleDevices that we are currently connected to
   private val bleDevices = mutableMapOf<String, RxBleDevice>()
+  
   // a cached version of the ble connections that we are currently connected to
   private val bleConnections = mutableMapOf<String, RxBleConnection>()
   
@@ -116,7 +116,7 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
     return getBleDevice(macAddress)
       .flatMap { rxBleDevice ->
         bluetoothHandler.rxBleDeviceConnectionStateObservable(rxBleDevice)
-          .map { BleDevice(rxBleDevice.name, rxBleDevice.macAddress, BleConnectionState.fromRxBleState(it), rxBleDevice.bluetoothDevice.bondState) }
+          .map { BleDevice(rxBleDevice.name, rxBleDevice.macAddress, BleConnectionState.fromRxBleState(it)) }
       }
   }
   
@@ -125,7 +125,6 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
       .filter { it == BleConnectionState.DISCONNECTED || it == BleConnectionState.DISCONNECTING }
       .flatMap { bleConnectionState ->
         getBleDevice(macAddress)
-//          .doOnNext { removeDeviceFromConnectedList(it) }
           .map { bleConnectionState }
       }
   }
@@ -148,7 +147,6 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
       .flatMap { rxBleDevice ->
         bluetoothHandler.connectRxBleDevice(rxBleDevice)
           .map {
-            Timber.d("Connected and paired")
             bleConnections[macAddress] = it
             macAddress
           }
@@ -161,10 +159,9 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
    */
   override fun bleDeviceResultObservable(macAddress: String): Observable<BleDevice> {
     return peripheralObservable(bleConnections[macAddress]!!)
-      .doOnNext { Timber.d("bleDeviceResultObservable was hit") }
       .map {
         val rxBleDevice = bleDevices[macAddress]!!
-        BleDevice(rxBleDevice.name, rxBleDevice.macAddress, BleConnectionState.fromRxBleState(rxBleDevice.connectionState), rxBleDevice.bluetoothDevice.bondState, it)
+        BleDevice(rxBleDevice.name, rxBleDevice.macAddress, BleConnectionState.fromRxBleState(rxBleDevice.connectionState), it)
       }
   }
   
@@ -194,11 +191,9 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
    */
   private fun setupBatteryPowerNotifications(rxBleConnection: RxBleConnection): Observable<PowerLevel> {
     return rxBleConnection.setupNotification(BatteryPowerService.Characteristics.POWER)
-      .doOnError { Timber.e("setupBatteryPowerNotifications 1: $it") }
       .flatMap { it }
       .startWith(rxBleConnection.readCharacteristic(BatteryPowerService.Characteristics.POWER).toObservable())
       .compose(BatteryPowerService.transformer)
-      .doOnError { Timber.e("setupBatteryPowerNotifications: $it") }
   }
   
   /**
@@ -209,11 +204,9 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
    */
   private fun setupOlympusStatusVectorNotifications(rxBleConnection: RxBleConnection): Observable<StatusVector> {
     return rxBleConnection.setupNotification(OlympusWirelessProtocol.Characteristics.STATUS)
-      .doOnError { Timber.e("setupOlympusStatusVectorNotifications 1: $it") }
       .flatMap { it }
       .startWith(rxBleConnection.readCharacteristic(OlympusWirelessProtocol.Characteristics.STATUS).toObservable())
       .compose(OlympusWirelessProtocol.statusTransformer)
-      .doOnError { Timber.e("setupOlympusStatusVectorNotifications: $it") }
   }
   
   /**
@@ -237,33 +230,33 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
     }
   }
   
-//  override fun connectedDevicesObservable(): Observable<List<BleDevice>> {
-//    return bleDeviceRelay.publish()
-//      .refCount()
-//  }
+  //  override fun connectedDevicesObservable(): Observable<List<BleDevice>> {
+  //    return bleDeviceRelay.publish()
+  //      .refCount()
+  //  }
   
   override fun connectedDeviceObservable(macAddress: String): Observable<BleDevice> {
     return getBleDevice(macAddress)
-      .map { BleDevice(it.name, it.macAddress, BleConnectionState.fromRxBleState(it.connectionState), it.bluetoothDevice.bondState) }
+      .map { BleDevice(it.name, it.macAddress, BleConnectionState.fromRxBleState(it.connectionState)) }
   }
   
-//  private fun addDeviceToConnectedList(rxBleDevice: RxBleDevice) {
-//    bleDevices[rxBleDevice.macAddress] = rxBleDevice
-//    notifyConnectedDevices()
-//  }
-//
-//  private fun removeDeviceFromConnectedList(rxBleDevice: RxBleDevice) {
-//    bleDevices.remove(rxBleDevice.macAddress)
-//    notifyConnectedDevices()
-//  }
-//
-//  private fun notifyConnectedDevices() {
-//    bleDeviceRelay.accept(bleDevices.map {
-//      BleDevice(
-//        it.value.name,
-//        it.value.macAddress,
-//        BleConnectionState.fromRxBleState(it.value.connectionState)
-//      )
-//    })
-//  }
+  //  private fun addDeviceToConnectedList(rxBleDevice: RxBleDevice) {
+  //    bleDevices[rxBleDevice.macAddress] = rxBleDevice
+  //    notifyConnectedDevices()
+  //  }
+  //
+  //  private fun removeDeviceFromConnectedList(rxBleDevice: RxBleDevice) {
+  //    bleDevices.remove(rxBleDevice.macAddress)
+  //    notifyConnectedDevices()
+  //  }
+  //
+  //  private fun notifyConnectedDevices() {
+  //    bleDeviceRelay.accept(bleDevices.map {
+  //      BleDevice(
+  //        it.value.name,
+  //        it.value.macAddress,
+  //        BleConnectionState.fromRxBleState(it.value.connectionState)
+  //      )
+  //    })
+  //  }
 }

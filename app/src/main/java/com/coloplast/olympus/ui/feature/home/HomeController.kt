@@ -94,9 +94,13 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   
   override fun onViewBound(viewBinding: ControllerHomeBinding) {
     stateRouter = Conductor.attachRouter(activity!!, viewBinding.contentContainer, args)
-    compositeDisposable.add(viewModel.bind(this))
     
+    compositeDisposable.add(viewModel.bind(this))
     connectDisposable.add(viewModel.connectBleDevice(this))
+    
+    if(currentUiState != UiState.INITIAL) {
+      changeUiState(currentUiState, true)
+    }
   }
   
   override fun render(): Function<Observable<HomeUiModel>, Disposable> {
@@ -120,7 +124,9 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
               showPermissionDialog()
             }
             BluetoothState.BLUETOOTH_NOT_ENABLED -> {
-              changeUiState(UiState.BLUETOOTH_NOT_ENABLED)
+              if(currentUiState == UiState.INITIAL) {
+                changeUiState(UiState.BLUETOOTH_NOT_ENABLED)
+              }
             }
             BluetoothState.LOCATION_SERVICES_NOT_ENABLED -> {
             
@@ -129,7 +135,9 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
             
             }
             BluetoothState.READY -> {
-              changeUiState(UiState.READY_TO_SCAN)
+              if(currentUiState == UiState.INITIAL) {
+                changeUiState(UiState.READY_TO_SCAN)
+              }
             }
           }
         }
@@ -170,8 +178,8 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
     }
   }
   
-  private fun changeUiState(newState: UiState) {
-    if (currentUiState == newState) {
+  private fun changeUiState(newState: UiState, forceUpdate: Boolean = false) {
+    if (currentUiState == newState && !forceUpdate) {
       Timber.d("Same state was hit [${newState}] - Skipping")
     }
     else {
@@ -246,7 +254,9 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
       }
     }
     
-    currentUiState = newState
+    if(newState != UiState.NO_CHANGE) {
+      currentUiState = newState
+    }
   }
   
   val patchClickedListener = object : PatchView.Listener {

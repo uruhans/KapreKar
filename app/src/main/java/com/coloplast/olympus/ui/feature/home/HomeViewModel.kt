@@ -5,6 +5,7 @@ import com.coloplast.olympus.bluetooth.DeviceConnectionManager
 import com.coloplast.olympus.bluetooth.businesslayer.BluetoothManager
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
 import com.coloplast.olympus.bluetooth.businesslayer.models.DeviceResult
+import com.coloplast.olympus.ui.common.models.Navigation
 import com.coloplast.olympus.ui.feature.home.models.BaseHomeViewModel
 import com.coloplast.olympus.ui.feature.home.models.HomeUiModel
 import com.coloplast.olympus.ui.feature.home.models.StateTransformers

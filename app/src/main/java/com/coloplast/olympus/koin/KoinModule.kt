@@ -12,6 +12,7 @@ import com.coloplast.olympus.notifications.NotificationCenter
 import com.coloplast.olympus.notifications.NotificationScheduler
 import com.coloplast.olympus.notifications.OlympusNotificationManager
 import com.coloplast.olympus.ui.feature.home.HomeViewModel
+import com.coloplast.olympus.ui.feature.transmitters.TransmittersViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
@@ -28,6 +29,7 @@ val koinModule = module {
   // ViewModels
   
   single { DeviceConnectionManager() }
+  single { TransmittersViewModel(get()) }
   
   factory { HomeViewModel(get(), get()) }
   factory { DeviceConnection(get()) }

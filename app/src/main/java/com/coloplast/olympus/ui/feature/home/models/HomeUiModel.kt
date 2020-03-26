@@ -19,7 +19,7 @@ sealed class HomeUiModel : UiModel {
     val bleDevice: BleDevice
   ) : HomeUiModel()
   
-  data class RawDataPackageUpdate(val rawDataPackage: RawDataPackage,
+  data class RawDataPackageUpdate(val macAddress: String, val rawDataPackage: RawDataPackage,
     val lastUpdate: LocalDateTime = LocalDateTime.now()) : HomeUiModel()
   
   data class ConnectedDevicesUpdate(val list: List<BleDevice>) : HomeUiModel()

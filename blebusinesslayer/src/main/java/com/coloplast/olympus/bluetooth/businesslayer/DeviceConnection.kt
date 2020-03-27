@@ -10,7 +10,7 @@ import kotlin.math.pow
 
 class DeviceConnection(private val bluetoothManager: BluetoothManager) {
   
-  private val maxConnectionAttempts = 3
+  private val maxConnectionAttempts = 10
   
   fun subscribeForNotifications(macAddress: String): Observable<DeviceResult> {
     // connect to specific device or use the connection we already have
@@ -35,6 +35,7 @@ class DeviceConnection(private val bluetoothManager: BluetoothManager) {
         // continue to do so until the device gets disconnected
         // skip first because initial state is disconnected
         bluetoothManager.bleDisconnectedObservable(macAddress)
+          .doOnNext { Timber.e("ConnectionState: $it") }
           .skip(1)
       )
       .retryWhen { errors ->
@@ -60,15 +61,21 @@ class DeviceConnection(private val bluetoothManager: BluetoothManager) {
     
     val notificationSubscriptionObservable = connectedBleDeviceObservable
       // this one subscribes to notifications and returns a peripheral object containing the latest state of the device
-      .flatMap { bluetoothManager.bleDeviceResultObservable(macAddress) }
+      .flatMap {
+        bluetoothManager.bleDeviceResultObservable(macAddress)
+          .retryWhen{ it }
+      }
       // map it to an actual device update
       .map { DeviceResult.DeviceUpdateResult(it) }
     
     val rawDataPackageObservable = connectedBleDeviceObservable
       // subscribe to raw data packages
-      .flatMap { bluetoothManager.setupOlympusRawDataPackageNotifications(macAddress) }
+      .flatMap {
+        bluetoothManager.setupOlympusRawDataPackageNotifications(macAddress)
+          .retryWhen{ it }
+      }
       // and map to a raw data result
-      .map { DeviceResult.RawDataPackageResult(it) }
+      .map { DeviceResult.RawDataPackageResult(macAddress, it) }
     
     // finally merge and return result
     return Observable.merge(

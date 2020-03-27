@@ -17,6 +17,7 @@ import com.bluelinelabs.conductor.changehandler.FadeChangeHandler
 import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import com.coloplast.olympus.BR
 import com.coloplast.olympus.R
+import com.coloplast.olympus.bluetooth.businesslayer.enums.Attached
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
 import com.coloplast.olympus.bluetooth.businesslayer.enums.PowerLevel
 import com.coloplast.olympus.bluetooth.businesslayer.models.Patch
@@ -151,6 +152,19 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
           }
         }
         is HomeUiModel.StatusUpdate -> {
+          if (uiModel.bleDevice.peripheral?.transmitter?.attached == Attached.ATTACHED_ON_PATCH) {
+            if (uiModel.bleDevice.macAddress != macAddress) {
+              // new transmitter has been attached, so change to that one
+              // set new transmitter as the one being shown on screen
+              macAddress = uiModel.bleDevice.macAddress
+            }
+          }
+  
+          // if the StatusUpdate coming from a device does not correspond the currently attached transmitter - skip it
+          if (uiModel.bleDevice.macAddress != macAddress) {
+            return@ui
+          }
+          
           olympusNotificationManager.send(uiModel.state)
           
           powerLevel.set(uiModel.bleDevice.peripheral?.powerLevel)
@@ -168,6 +182,11 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
           // TODO - check overlay state too once we are ready
         }
         is HomeUiModel.RawDataPackageUpdate -> {
+          // if the PackageUpdate coming from a device does not correspond the currently attached transmitter - skip it
+          if (uiModel.macAddress != macAddress) {
+            return@ui
+          }
+          
           updateAnimation.set(true)
           updateAnimation.notifyChange()
           lastCheck.set(uiModel.lastUpdate)

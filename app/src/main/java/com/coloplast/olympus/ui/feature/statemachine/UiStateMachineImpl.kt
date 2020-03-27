@@ -24,7 +24,8 @@ class UiStateMachineImpl : BaseUiStateMachine() {
       UiState.CUTGUARD_DIRT_IN_TRANSMITTER_K,
       UiState.TRANSMITTER_DETACHED_V,
       UiState.TRANSMITTER_BATTERY_CHARGING_W,
-      UiState.DISCONNECTED -> {
+      UiState.DISCONNECTED,
+      UiState.SOMETHING_ELSE -> {
         true
       }
       else -> false

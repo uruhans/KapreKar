@@ -16,17 +16,16 @@ import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import io.reactivex.functions.BiFunction
 import timber.log.Timber
+import java.util.concurrent.TimeUnit
+import kotlin.math.pow
 
 class HomeViewModel(private val bluetoothManager: BluetoothManager, private val deviceConnectionManager: DeviceConnectionManager) :
     BaseHomeViewModel() {
   
-  private val stateMachine: UiStateMachine by lazy {
-    UiStateMachineImpl()
-  }
-  private val overlayStateMachine: OverlayStateMachine by lazy {
-    OverlayStateMachineImpl()
-  }
+  private val stateMachines = mutableMapOf<String, UiStateMachine>()
+  private val overlayStateMachines = mutableMapOf<String, OverlayStateMachine>()
   
   private val listener: DeviceResultListener by lazy {
     DeviceResultListener()
@@ -83,10 +82,14 @@ class HomeViewModel(private val bluetoothManager: BluetoothManager, private val 
         .map { macAddress ->
           deviceConnectionManager.connect(macAddress, listener)
         }
-        .onErrorReturn {
-          emitter.onError(it)
+        .doOnError {
+          Timber.e("$it")
           listener.emitter = null
         }
+//        .onErrorReturn {
+//          emitter.onError(it)
+//          listener.emitter = null
+//        }
         .doOnComplete { listener.emitter = null }
         .subscribe()
     }
@@ -101,6 +104,11 @@ class HomeViewModel(private val bluetoothManager: BluetoothManager, private val 
     override fun onResult(deviceResult: DeviceResult) {
       val uiModel = when (deviceResult) {
         is DeviceResult.DeviceUpdateResult -> {
+          val macAddress = deviceResult.bleDevice.macAddress
+          
+          val stateMachine = stateMachines[macAddress] ?: UiStateMachineImpl().also { stateMachines[macAddress] = it }
+          val overlayStateMachine = overlayStateMachines[macAddress] ?: OverlayStateMachineImpl().also { overlayStateMachines[macAddress] = it }
+          
           val stateModel = StateTransformers.bleToUiState(deviceResult)
           val newUiState = stateMachine.invoke(stateModel.state)
       
@@ -109,7 +117,10 @@ class HomeViewModel(private val bluetoothManager: BluetoothManager, private val 
           HomeUiModel.StatusUpdate(newUiState, newOverlayState, deviceResult.bleDevice)
         }
         is DeviceResult.RawDataPackageResult -> {
-          HomeUiModel.RawDataPackageUpdate(deviceResult.rawDataPackage)
+          HomeUiModel.RawDataPackageUpdate(deviceResult.macAddress, deviceResult.rawDataPackage)
+        }
+        is DeviceResult.Error -> {
+          HomeUiModel.Disconnected()
         }
       }
       

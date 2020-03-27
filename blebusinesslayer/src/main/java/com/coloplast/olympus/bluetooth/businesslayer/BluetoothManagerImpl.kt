@@ -181,6 +181,7 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
       BiFunction { statusVector: StatusVector, powerLevel: PowerLevel ->
         Peripheral(statusVector.patch, statusVector.transmitter, powerLevel)
       })
+      .distinctUntilChanged()
   }
   
   /**

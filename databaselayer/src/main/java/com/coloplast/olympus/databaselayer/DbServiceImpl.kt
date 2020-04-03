@@ -2,6 +2,7 @@ package com.coloplast.olympus.databaselayer
 
 import com.coloplast.olympus.databaselayer.entities.DbTransmitter
 import com.coloplast.olympus.databaselayer.exceptions.DeleteFailedException
+import com.coloplast.olympus.databaselayer.exceptions.InsertOrUpdateFailedException
 import com.coloplast.olympus.databaselayer.rx.RxHelper
 import com.coloplast.olympus.shared.AppSettings
 import com.coloplast.olympus.shared.models.DataResult
@@ -29,7 +30,7 @@ class DbServiceImpl : DbService {
   override fun insertOrUpdateTransmitter(transmitter: Transmitter): Completable {
     return db.transmitterDao()
       .insertOrUpdate(DbTransmitter.fromTransmitter(transmitter))
-      .flatMapCompletable { RxHelper.completeOrError(it.toInt(), DeleteFailedException()) }
+      .flatMapCompletable { RxHelper.completeOrError(it.toInt(), InsertOrUpdateFailedException()) }
   }
   
   override fun deleteTransmitter(macAddress: String): Completable {

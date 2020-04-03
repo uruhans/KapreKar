@@ -1,9 +1,8 @@
 package com.coloplast.olympus.databaselayer
 
-import android.util.Log
 import com.coloplast.olympus.databaselayer.entities.DbTransmitter
 import com.coloplast.olympus.databaselayer.exceptions.DeleteFailedException
-import com.coloplast.olympus.databaselayer.exceptions.InsertOrUpdateFailedException
+import com.coloplast.olympus.databaselayer.rx.RxHelper
 import com.coloplast.olympus.shared.AppSettings
 import com.coloplast.olympus.shared.models.DataResult
 import com.coloplast.olympus.shared.models.Transmitter
@@ -30,40 +29,18 @@ class DbServiceImpl : DbService {
   override fun insertOrUpdateTransmitter(transmitter: Transmitter): Completable {
     return db.transmitterDao()
       .insertOrUpdate(DbTransmitter.fromTransmitter(transmitter))
-      .flatMapCompletable {
-        if (it > 0) {
-          Completable.complete()
-        }
-        else {
-          Completable.error(InsertOrUpdateFailedException())
-        }
-      }
-      .doOnError { Log.e("DbServiceImpl", it?.message ?: "error") }
+      .flatMapCompletable { RxHelper.completeOrError(it.toInt(), DeleteFailedException()) }
   }
   
   override fun deleteTransmitter(macAddress: String): Completable {
     return db.transmitterDao()
       .deleteTransmitter(macAddress)
-      .flatMapCompletable {
-        if (it > 0) {
-          Completable.complete()
-        }
-        else {
-          Completable.error(DeleteFailedException())
-        }
-      }
+      .flatMapCompletable { RxHelper.completeOrError(it, DeleteFailedException()) }
   }
   
   override fun deleteAllTransmitters(): Completable {
     return db.transmitterDao()
       .deleteAll()
-      .flatMapCompletable {
-        if (it > 0) {
-          Completable.complete()
-        }
-        else {
-          Completable.error(DeleteFailedException())
-        }
-      }
+      .flatMapCompletable { RxHelper.completeOrError(it, DeleteFailedException()) }
   }
 }

@@ -1,3 +1,3 @@
 package com.coloplast.olympus.databaselayer.exceptions
 
-class InsertOrUpdateFailedException : Exception()
+class InsertOrUpdateFailedException : DatabaseException()

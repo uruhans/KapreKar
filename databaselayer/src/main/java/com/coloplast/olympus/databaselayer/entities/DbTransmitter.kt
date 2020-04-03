@@ -10,16 +10,13 @@ class DbTransmitter(
   val customName: String
 ) {
   
-  fun toTransmitter() : Transmitter {
-    return Transmitter(
-      id,
-      customName
-    )
+  fun toTransmitter(): Transmitter {
+    return Transmitter(id, customName)
   }
   
   companion object {
     
-    fun fromTransmitter(transmitter: Transmitter) : DbTransmitter {
+    fun fromTransmitter(transmitter: Transmitter): DbTransmitter {
       return DbTransmitter(
         transmitter.macAddress,
         transmitter.customName

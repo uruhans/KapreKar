@@ -25,6 +25,11 @@ import org.koin.core.KoinComponent
 import org.koin.core.inject
 import timber.log.Timber
 
+/**
+ * A foreground service that connects and maintains connection to already added transmitters
+ * - will try to reconnect after connection lost or out-of-range
+ * - will also stay connected to transmitter even if app is in the background
+ */
 class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceResult<BluetoothServiceModel> {
   
   private val viewModel: BluetoothServiceViewModel by inject()
@@ -35,16 +40,13 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
   private val compositeDisposable = CompositeDisposable()
   
   override fun onBind(intent: Intent?): IBinder? {
+    // we are not binding to this service, so just return null
     return null
   }
   
   override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-    IntentFilter().let {
-      it.addAction(INTENT_FILTER_STOP_SERVICE)
-      registerReceiver(intentReceiver, it)
-    }
-    
-    startForeground(1212, getServiceNotification())
+    // start the actual foreground service (a permanent notification is required to inform the user of it)
+    startForeground(2125, getServiceNotification())
     
     compositeDisposable.add(viewModel.bind(this))
     return START_STICKY
@@ -66,21 +68,14 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
     }
   }
   
-  private val intentReceiver = object : BroadcastReceiver() {
-    override fun onReceive(context: Context?, intent: Intent?) {
-      if (intent?.action == INTENT_FILTER_STOP_SERVICE) {
-        killService()
-      }
-    }
-  }
-  
   private fun getServiceNotification(): Notification {
     createNotificationChannel()
     
     val pendingIntent: PendingIntent = Intent(this, MainActivity::class.java).let { notificationIntent ->
       PendingIntent.getActivity(this, 0, notificationIntent, 0)
     }
-    
+
+    // TODO - remove hardcoded text
     val notification = NotificationCompat.Builder(this, "2")
       .setContentTitle("Olympus Bluetooth Connection")
       .setContentText("Maintaining transmitter connection")
@@ -94,14 +89,10 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
   }
   
   private fun createNotificationChannel() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-      notificationManager.deleteNotificationChannel("2")
-    }
-    
     // only create the notification channel if we are above API 25 and the channel doesn't already exist
     if (Build.VERSION.SDK_INT >= 26 && notificationManager.getNotificationChannel("2") == null) {
       NotificationChannel(
-        "2", "Service Notifications", NotificationManager.IMPORTANCE_DEFAULT
+        "2", "Service Notification", NotificationManager.IMPORTANCE_DEFAULT
       ).apply {
         description = "Notifies you when the background service is working"
         enableVibration(false)
@@ -113,12 +104,8 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
   }
   
   private fun killService() {
-    unregisterReceiver(intentReceiver)
+    compositeDisposable.dispose()
     stopForeground(true)
     stopSelf()
-  }
-  
-  companion object {
-    const val INTENT_FILTER_STOP_SERVICE = "${BuildConfig.APPLICATION_ID}.BLUETOOTH.STOP_SERVICE"
   }
 }

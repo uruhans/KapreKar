@@ -44,6 +44,8 @@ class HomeViewModel(private val bluetoothManager: BluetoothManager) :
     return disposable
   }
   
+// TODO - need to properly test the changes i made before removing the below commented lines
+
 //  override fun bindScanner(uiView: HomeView): Disposable {
 //    val disposable = CompositeDisposable()
 //

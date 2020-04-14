@@ -34,26 +34,32 @@ class BluetoothServiceViewModel(
     DeviceResultListener()
   }
   
-  // TODO - to be replaced by database call
+  // TODO - to be replaced by database call once we can add transmitters to database
   private val storedBleDevices = Observable.fromArray("CA:6C:F7:03:1E:69", "C3:40:E1:28:64:E9")
 
+  // the repeatIntervalObservable to determine when to repeat something
   private fun repeatIntervalObservable(seconds: Long) = Observable.interval(seconds, TimeUnit.SECONDS)
   
   override fun bind(serviceResult: BluetoothServiceResult<BluetoothServiceModel>): Disposable {
     val compositeDisposable = CompositeDisposable()
   
     val currentBluetoothStateObservable: Observable<BluetoothState> = bluetoothManager.bluetoothStateObservable()
-    val bluetoothStateObservable = currentBluetoothStateObservable
+    
+    val bluetoothReadyObservable = currentBluetoothStateObservable
       .filter { it == BluetoothState.READY }
     
-    val beaconEnteredRange = bluetoothStateObservable
+    val beaconEnteredRange = bluetoothReadyObservable
       .flatMap {
         bluetoothManager.scanBeacons()
+          // scan for 5 seconds only
           .takeUntil(repeatIntervalObservable(5))
           .doOnNext { Timber.d(it) }
+          // retryWhen happens when the observables onError hits
           .retryWhen { repeatIntervalObservable(60) }
+          // repeatWhen happens when the observables onComplete hits
           .repeatWhen { repeatIntervalObservable(60) }
           .doOnNext { Timber.d("Found beacon: $it") }
+          // locate the transmitter in the database (only reconnect to transmitters that we have added)
           .flatMap { macAddress -> storedBleDevices.filter { macAddress == it } }
           .doOnNext { Timber.d("macAddress is in our database list - continue") }
       }
@@ -63,6 +69,7 @@ class BluetoothServiceViewModel(
       
       beaconEnteredRange
         .map { macAddress ->
+          // connect to the beacon that has just entered out range
           deviceConnectionManager.connect(macAddress, listener)
         }
         .doOnError {

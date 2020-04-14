@@ -37,7 +37,6 @@ dependencies {
 
   // https://github.com/Polidea/RxAndroidBle
   api 'com.polidea.rxandroidble2:rxandroidble:1.11.0'
-
   api 'com.akaita.java:rxjava2-debug:1.4.0'
 
   implementation fileTree(dir: 'libs', include: ['*.jar'])

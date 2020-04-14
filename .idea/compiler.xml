@@ -5,6 +5,7 @@
       <module name="app" target="1.8" />
       <module name="blebusinesslayer" target="1.8" />
       <module name="bluetooth" target="1.8" />
+      <module name="businesslayer" target="1.7" />
       <module name="datalayer" target="1.8" />
       <module name="shared" target="1.8" />
     </bytecodeTargetLevel>

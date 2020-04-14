@@ -17,6 +17,9 @@ interface TransmitterDao {
   @Query("SELECT * FROM DbTransmitter")
   fun getTransmitters(): Observable<List<DbTransmitter>>
   
+  @Query("SELECT * FROM DbTransmitter WHERE id = :macAddress")
+  fun getTransmitter(macAddress: String): Observable<List<DbTransmitter>>
+  
   @Query("DELETE FROM DbTransmitter WHERE id = :macAddress")
   fun deleteTransmitter(macAddress: String): Single<Int>
   

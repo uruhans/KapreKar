@@ -4,6 +4,7 @@ import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
 import com.coloplast.olympus.bluetooth.businesslayer.models.BleDevice
 import com.coloplast.olympus.bluetooth.businesslayer.models.RawDataPackage
 import com.coloplast.olympus.bluetooth.businesslayer.models.ScanResult
+import com.coloplast.olympus.bluetooth.model.StateChange
 import com.coloplast.olympus.ui.common.models.UiModel
 import com.coloplast.olympus.ui.feature.statemachine.models.OverlayState
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
@@ -13,6 +14,8 @@ sealed class HomeUiModel : UiModel {
   
   data class BluetoothIssue(val bluetoothState: BluetoothState) : HomeUiModel()
   data class ScannerResult(val scanResult: ScanResult) : HomeUiModel()
+  data class DeviceUpdate(val stateChange: StateChange) : HomeUiModel()
+  
   data class StatusUpdate(
     val state: UiState = UiState.NO_CHANGE,
     val overlayState: OverlayState = OverlayState.NONE,

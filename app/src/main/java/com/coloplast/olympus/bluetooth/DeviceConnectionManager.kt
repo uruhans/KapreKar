@@ -2,6 +2,8 @@ package com.coloplast.olympus.bluetooth
 
 import com.coloplast.olympus.bluetooth.businesslayer.DeviceConnection
 import com.coloplast.olympus.bluetooth.businesslayer.models.DeviceResult
+import com.coloplast.olympus.bluetooth.businesslayer.models.Transmitter
+import com.coloplast.olympus.businesslayer.interfaces.TransmitterComponent
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.BiFunction

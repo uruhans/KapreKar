@@ -82,6 +82,10 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
       .startWith(BluetoothState.UNDEFINED)
   }
   
+  override fun scanBeacons() : Observable<String> {
+    return bluetoothHandler.scanBeacons(OlympusWirelessProtocol.UUID)
+  }
+  
   /**
    * get a specific BleDevice based on it's MacAddress
    * if the device has already been connected too, it is stored locally and returned from here if possible, else we get it from the BluetoothHandler

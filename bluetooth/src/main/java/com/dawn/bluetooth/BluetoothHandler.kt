@@ -70,7 +70,7 @@ class BluetoothHandler(private val context: Context, isDebugging: Boolean) {
       }
   }
   
-  fun scanBeacons(uuidFilter: UUID?) : Observable<String> {
+  fun scanBeacons(uuidFilter: UUID?, macAddress: String? = null) : Observable<String> {
     val scanSettings = ScanSettings.Builder()
       .setScanMode(ScanSettings.SCAN_MODE_LOW_POWER)
       .setCallbackType(ScanSettings.CALLBACK_TYPE_ALL_MATCHES)
@@ -79,6 +79,10 @@ class BluetoothHandler(private val context: Context, isDebugging: Boolean) {
     val scanFilter = ScanFilter.Builder()
     if (uuidFilter != null) {
       scanFilter.setServiceUuid(ParcelUuid(uuidFilter))
+    }
+    
+    macAddress?.let {
+      scanFilter.setDeviceAddress(macAddress)
     }
   
     return rxBleClient.scanBleDevices(scanSettings, scanFilter.build())

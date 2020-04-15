@@ -1,5 +1,6 @@
 package com.coloplast.olympus.bluetooth
 
+import android.text.format.Time
 import com.artemzin.rxui.kotlin.bind
 import com.coloplast.olympus.bluetooth.businesslayer.BluetoothManager
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
@@ -18,6 +19,7 @@ import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import io.reactivex.functions.BiFunction
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
@@ -35,14 +37,15 @@ class BluetoothServiceViewModel(
   }
   
   // TODO - to be replaced by database call once we can add transmitters to database
-  private val storedBleDevices = Observable.fromArray("CA:6C:F7:03:1E:69", "C3:40:E1:28:64:E9")
-
+  private val storedBleDevices = Observable.fromArray("C3:40:E1:28:64:E9", "CA:6C:F7:03:1E:69")
+  private val connectedBleDevices = mutableListOf<String>()
+  
   // the repeatIntervalObservable to determine when to repeat something
   private fun repeatIntervalObservable(seconds: Long) = Observable.interval(seconds, TimeUnit.SECONDS)
   
   override fun bind(serviceResult: BluetoothServiceResult<BluetoothServiceModel>): Disposable {
     val compositeDisposable = CompositeDisposable()
-  
+    
     val currentBluetoothStateObservable: Observable<BluetoothState> = bluetoothManager.bluetoothStateObservable()
     
     val bluetoothReadyObservable = currentBluetoothStateObservable
@@ -50,41 +53,72 @@ class BluetoothServiceViewModel(
     
     val beaconEnteredRange = bluetoothReadyObservable
       .flatMap {
-        bluetoothManager.scanBeacons()
+        storedBleDevices
+          .zipWith(repeatIntervalObservable(5),
+            BiFunction { macAddress: String, _: Long -> macAddress }
+          )
+          .repeatWhen { repeatIntervalObservable(60) }
+      }
+      .filter { macAddress -> connectedBleDevices.none { macAddress == it } }
+      .doOnNext { Timber.d(it) }
+      .flatMap { deviceAddress ->
+        bluetoothManager.scanSpecificBeacon(deviceAddress)
           // scan for 5 seconds only
           .takeUntil(repeatIntervalObservable(5))
-          .doOnNext { Timber.d(it) }
-          // retryWhen happens when the observables onError hits
-          .retryWhen { repeatIntervalObservable(60) }
-          // repeatWhen happens when the observables onComplete hits
-          .repeatWhen { repeatIntervalObservable(60) }
           .doOnNext { Timber.d("Found beacon: $it") }
-          // locate the transmitter in the database (only reconnect to transmitters that we have added)
-          .flatMap { macAddress -> storedBleDevices.filter { macAddress == it } }
-          .doOnNext { Timber.d("macAddress is in our database list - continue") }
+      }
+      // retryWhen happens when the observables onError hits
+      .retryWhen { repeatIntervalObservable(60) }
+      // repeatWhen happens when the observables onComplete hits
+      .repeatWhen { repeatIntervalObservable(60) }
+      .distinctUntilChanged()
+  
+    val transmitterResultObservable = Observable.create<BluetoothServiceModel> { emitter ->
+      listener.emitter = emitter
+    }
+      .publish()
+      .refCount()
+    
+    val connectTransmitterObservable = beaconEnteredRange
+      .flatMap { macAddress ->
+        deviceConnectionManager.connect(macAddress, listener)
+        transmitterResultObservable
+          .takeUntil(
+            bluetoothManager.bleDisconnectedObservable(macAddress)
+              .doOnNext { connectedBleDevices.remove(macAddress) }
+              .skip(1)
+          )
+          .doOnNext { connectedBleDevices.add(macAddress) }
+          .doOnError {
+            Timber.e("$it")
+            listener.emitter = null
+          }
+          .doOnComplete { listener.emitter = null }
       }
     
-    val connectObservable = Observable.create<BluetoothServiceModel> { emitter ->
-      listener.emitter = emitter
-      
-      beaconEnteredRange
-        .map { macAddress ->
-          // connect to the beacon that has just entered out range
-          deviceConnectionManager.connect(macAddress, listener)
-        }
-        .doOnError {
-          Timber.e("$it")
-          listener.emitter = null
-        }
-        //        .onErrorReturn {
-        //          emitter.onError(it)
-        //          listener.emitter = null
-        //        }
-        .doOnComplete { listener.emitter = null }
-        .subscribe()
-    }
     
-    compositeDisposable.add(connectObservable.bind(serviceResult.onResult()))
+//    val connectObservable = Observable.create<BluetoothServiceModel> { emitter ->
+//      listener.emitter = emitter
+//    }
+//
+//    beaconEnteredRange
+//      .flatMap { macAddress ->
+//        // connect to the beacon that has just entered out range
+//        deviceConnectionManager.connect(macAddress, listener)
+//        connectObservable
+//      }
+//      .doOnError {
+//        Timber.e("$it")
+//        listener.emitter = null
+//      }
+//      //        .onErrorReturn {
+//      //          emitter.onError(it)
+//      //          listener.emitter = null
+//      //        }
+//      .doOnComplete { listener.emitter = null }
+//      .subscribe()
+//
+    compositeDisposable.add(connectTransmitterObservable.bind(serviceResult.onResult()))
     return compositeDisposable
   }
   

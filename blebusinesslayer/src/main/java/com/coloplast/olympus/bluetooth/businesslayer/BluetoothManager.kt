@@ -9,6 +9,7 @@ import io.reactivex.Observable
 
 interface BluetoothManager {
   fun scanBeacons() : Observable<String>
+  fun scanSpecificBeacon(macAddress: String) : Observable<String>
   
   fun bluetoothStateObservable(): Observable<BluetoothState>
   fun scanBleDevices(): Observable<ScanResult>

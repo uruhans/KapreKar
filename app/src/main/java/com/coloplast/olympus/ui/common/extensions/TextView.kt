@@ -16,11 +16,10 @@ import com.coloplast.olympus.R
 import com.coloplast.olympus.ui.common.listeners.AnimatorListenerImpl
 import com.coloplast.olympus.utils.Strings
 import com.coloplast.olympus.utils.UiUtils
-import org.threeten.bp.DayOfWeek
-import org.threeten.bp.LocalDateTime
-import org.threeten.bp.format.DateTimeFormatter
-import org.threeten.bp.format.TextStyle
 import timber.log.Timber
+import java.time.DayOfWeek
+import java.time.LocalDateTime
+import java.time.format.TextStyle
 import java.util.*
 
 @BindingAdapter("safeText")

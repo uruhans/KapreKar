@@ -1,7 +1,7 @@
 package com.coloplast.olympus.ui.common.extensions
 
-import org.threeten.bp.LocalDateTime
-import org.threeten.bp.ZoneOffset
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 import java.util.*
 
 fun LocalDateTime.withDate(year: Int, month: Int, dayOfMonth: Int) : LocalDateTime {

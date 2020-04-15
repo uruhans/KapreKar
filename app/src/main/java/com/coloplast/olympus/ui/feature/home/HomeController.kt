@@ -48,8 +48,8 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Function
 import me.tatarka.bindingcollectionadapter2.ItemBinding
 import org.koin.core.inject
-import org.threeten.bp.LocalDateTime
 import timber.log.Timber
+import java.time.LocalDateTime
 
 class HomeController : BaseController<ControllerHomeBinding>, HomeView, PermissionHandler, BaseDialogController.Listener, ScanResultItem.Listener {
   
@@ -408,11 +408,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
     startScanRelay.accept(Unit)
   }
   
-  fun onStartClicked() {
-    with(Intent(BluetoothConnectionService.INTENT_FILTER_STOP_SERVICE)) {
-      activity?.sendBroadcast(this)
-    }
-  }
+  fun onStartClicked() { }
   
   override fun onScanResultClicked(scanResult: ScanResult) {
     macAddress = scanResult.macAddress

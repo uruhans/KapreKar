@@ -8,7 +8,7 @@ import com.coloplast.olympus.bluetooth.model.StateChange
 import com.coloplast.olympus.ui.common.models.UiModel
 import com.coloplast.olympus.ui.feature.statemachine.models.OverlayState
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
-import org.threeten.bp.LocalDateTime
+import java.time.LocalDateTime
 
 sealed class HomeUiModel : UiModel {
   

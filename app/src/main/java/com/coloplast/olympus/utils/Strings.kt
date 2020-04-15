@@ -9,11 +9,13 @@ import androidx.core.content.ContextCompat
 import com.coloplast.olympus.R
 import com.coloplast.olympus.shared.AppSettings
 import com.coloplast.olympus.ui.common.extensions.LocalDateTimeHelper
-import org.threeten.bp.*
-import org.threeten.bp.format.TextStyle
 import timber.log.Timber
 import java.io.InputStream
 import java.text.DateFormat
+import java.time.DayOfWeek
+import java.time.LocalDateTime
+import java.time.ZoneOffset
+import java.time.format.TextStyle
 import java.util.*
 
 object Strings {

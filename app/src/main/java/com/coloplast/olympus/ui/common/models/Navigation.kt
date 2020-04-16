@@ -7,12 +7,31 @@ import androidx.annotation.IdRes
 import com.bluelinelabs.conductor.Conductor
 import com.bluelinelabs.conductor.Router
 import com.coloplast.olympus.R
+import io.reactivex.Maybe
 
 object Navigation {
   private val routerMap: LinkedHashMap<Int, Router> = LinkedHashMap()
   
   fun getOverlayRouter() = routerMap[R.id.content_overlay_controller]
   fun getContentRouter() = routerMap[R.id.main_navigation_controller_container]
+  
+  fun <T> locateControllerOfType(clazz: Class<T>): Maybe<T> {
+    return Maybe.create { emitter ->
+      
+      val controller: T? = getContentRouter()?.backstack.orEmpty()
+        .map { it.controller() }
+        .filter { clazz.isAssignableFrom(it::class.java) }
+        .map { clazz.cast(it) }
+        .first()
+      
+      if (controller != null) {
+        emitter.onSuccess(controller)
+      }
+      else {
+        emitter.onError(NullPointerException())
+      }
+    }
+  }
   
   class Builder {
     private val routerContainers: ArrayList<Int> = ArrayList()

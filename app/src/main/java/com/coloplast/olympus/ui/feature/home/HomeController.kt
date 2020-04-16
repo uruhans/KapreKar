@@ -39,6 +39,7 @@ import com.coloplast.olympus.ui.feature.home.models.PatchVisible
 import com.coloplast.olympus.ui.feature.home.models.ScanResultItem
 import com.coloplast.olympus.ui.feature.home.models.SideMenuType
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
+import com.coloplast.olympus.ui.feature.transmitters.TransmittersController
 import com.coloplast.olympus.ui.feature.uistates.*
 import com.coloplast.olympus.utils.OSUtils
 import com.jakewharton.rxrelay2.PublishRelay
@@ -99,14 +100,13 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
     compositeDisposable.add(viewModel.bind(this))
 //    connectDisposable.add(viewModel.connectBleDevice(this))
     
-    if(currentUiState != UiState.INITIAL) {
+    if (currentUiState != UiState.INITIAL) {
       changeUiState(currentUiState, true)
     }
   }
   
   override fun render(): Function<Observable<HomeUiModel>, Disposable> {
     return RxUi.ui { uiModel ->
-      
       Timber.d("uiModel: $uiModel")
       
       when (uiModel) {
@@ -125,7 +125,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
               showPermissionDialog()
             }
             BluetoothState.BLUETOOTH_NOT_ENABLED -> {
-              if(currentUiState == UiState.INITIAL) {
+              if (currentUiState == UiState.INITIAL) {
                 changeUiState(UiState.BLUETOOTH_NOT_ENABLED)
               }
             }
@@ -136,7 +136,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
             
             }
             BluetoothState.READY -> {
-              if(currentUiState == UiState.INITIAL) {
+              if (currentUiState == UiState.INITIAL) {
                 changeUiState(UiState.READY_TO_SCAN)
               }
             }
@@ -277,7 +277,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
       }
     }
     
-    if(newState != UiState.NO_CHANGE) {
+    if (newState != UiState.NO_CHANGE) {
       currentUiState = newState
     }
   }
@@ -374,7 +374,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   }
   
   fun onSideMenuClicked(menuType: SideMenuType) {
-    when(menuType) {
+    when (menuType) {
       SideMenuType.STATUS -> {
         router.pushController(
           GetStartedGuideController.routerTransaction()
@@ -389,7 +389,13 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
             .popChangeHandler(VerticalChangeHandler())
         )
       }
-      SideMenuType.TRANSMITTERS,
+      SideMenuType.TRANSMITTERS -> {
+        router.pushController(
+          TransmittersController.routerTransaction()
+            .pushChangeHandler(VerticalChangeHandler())
+            .popChangeHandler(VerticalChangeHandler())
+        )
+      }
       SideMenuType.SETTINGS,
       SideMenuType.PROFILE,
       SideMenuType.ABOUT -> { /* TODO - fix this */ }
@@ -404,6 +410,8 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   }
   
   fun onScanClicked() {
+    //scannerDisposable.add(viewModel.bindScanner(this))
+    
     isScanning.set(true)
     startScanRelay.accept(Unit)
   }

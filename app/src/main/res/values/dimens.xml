@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <dimen name="toolbar_elevation">2dp</dimen>
+  <dimen name="toolbar_elevation">0dp</dimen>
   <dimen name="toolbar_margin_with_navigation_icon">72dp</dimen>
   <dimen name="toolbar_margin_with_navigation_icon_2">56dp</dimen>
   <dimen name="toolbar_margin_without_navigation_icon">@dimen/spacing_standard</dimen>

@@ -19,4 +19,6 @@ interface BluetoothManager {
   fun bleDeviceResultObservable(macAddress: String): Observable<BleDevice>
   fun setupOlympusRawDataPackageNotifications(macAddress: String): Observable<RawDataPackage>
   fun connectedDeviceObservable(macAddress: String): Observable<BleDevice>
+  
+  fun connectedDevicesObservable(): Observable<List<BleDevice>>
 }

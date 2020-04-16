@@ -1,6 +1,5 @@
 package com.coloplast.olympus.bluetooth
 
-import android.text.format.Time
 import com.artemzin.rxui.kotlin.bind
 import com.coloplast.olympus.bluetooth.businesslayer.BluetoothManager
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
@@ -15,8 +14,8 @@ import com.coloplast.olympus.ui.feature.statemachine.OverlayStateMachine
 import com.coloplast.olympus.ui.feature.statemachine.OverlayStateMachineImpl
 import com.coloplast.olympus.ui.feature.statemachine.UiStateMachine
 import com.coloplast.olympus.ui.feature.statemachine.UiStateMachineImpl
+import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
-import io.reactivex.ObservableEmitter
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.BiFunction
@@ -42,6 +41,8 @@ class BluetoothServiceViewModel(
   
   // the repeatIntervalObservable to determine when to repeat something
   private fun repeatIntervalObservable(seconds: Long) = Observable.interval(seconds, TimeUnit.SECONDS)
+  
+  private val transmitterResultRelay = PublishRelay.create<BluetoothServiceModel>()
   
   override fun bind(serviceResult: BluetoothServiceResult<BluetoothServiceModel>): Disposable {
     val compositeDisposable = CompositeDisposable()
@@ -72,12 +73,14 @@ class BluetoothServiceViewModel(
       // repeatWhen happens when the observables onComplete hits
       .repeatWhen { repeatIntervalObservable(60) }
       .distinctUntilChanged()
-  
-    val transmitterResultObservable = Observable.create<BluetoothServiceModel> { emitter ->
-      listener.emitter = emitter
-    }
-      .publish()
-      .refCount()
+    
+    val transmitterResultObservable = transmitterResultRelay.publish().refCount()
+    
+//    val transmitterResultObservable = Observable.create<BluetoothServiceModel> { emitter ->
+//      listener.emitter = emitter
+//    }
+//      .publish()
+//      .refCount()
     
     val connectTransmitterObservable = beaconEnteredRange
       .flatMap { macAddress ->
@@ -91,9 +94,9 @@ class BluetoothServiceViewModel(
           .doOnNext { connectedBleDevices.add(macAddress) }
           .doOnError {
             Timber.e("$it")
-            listener.emitter = null
+            //listener.emitter = null
           }
-          .doOnComplete { listener.emitter = null }
+          .doOnComplete { /*listener.emitter = null*/ }
       }
     
     
@@ -123,10 +126,10 @@ class BluetoothServiceViewModel(
   }
   
   inner class DeviceResultListener : DeviceConnectionManager.Listener {
-    var emitter: ObservableEmitter<BluetoothServiceModel>? = null
+    //var emitter: ObservableEmitter<BluetoothServiceModel>? = null
     
     override fun onResult(deviceResult: DeviceResult) {
-      val uiModel = when (deviceResult) {
+      val result = when (deviceResult) {
         is DeviceResult.DeviceUpdateResult -> {
           val macAddress = deviceResult.bleDevice.macAddress
           
@@ -148,7 +151,10 @@ class BluetoothServiceViewModel(
         }
       }
       
-      emitter?.onNext(uiModel)
+      transmitterResultRelay.accept(result)
+      
+      
+      //emitter?.onNext(uiModel)
     }
   }
 }

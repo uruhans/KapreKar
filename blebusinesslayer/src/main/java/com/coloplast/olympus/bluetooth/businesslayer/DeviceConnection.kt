@@ -68,7 +68,7 @@ class DeviceConnection(private val bluetoothManager: BluetoothManager) {
       // subscribe to raw data packages
       .flatMap { bluetoothManager.setupOlympusRawDataPackageNotifications(macAddress) }
       // and map to a raw data result
-      .map { DeviceResult.RawDataPackageResult(it) }
+      .map { DeviceResult.RawDataPackageResult(macAddress, it) }
     
     // finally merge and return result
     return Observable.merge(

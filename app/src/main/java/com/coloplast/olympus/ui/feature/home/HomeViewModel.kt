@@ -21,12 +21,8 @@ import timber.log.Timber
 class HomeViewModel(private val bluetoothManager: BluetoothManager, private val deviceConnectionManager: DeviceConnectionManager) :
     BaseHomeViewModel() {
   
-  private val stateMachine: UiStateMachine by lazy {
-    UiStateMachineImpl()
-  }
-  private val overlayStateMachine: OverlayStateMachine by lazy {
-    OverlayStateMachineImpl()
-  }
+  private val stateMachines = mutableMapOf<String, UiStateMachine>()
+  private val overlayStateMachines = mutableMapOf<String, OverlayStateMachine>()
   
   private val listener: DeviceResultListener by lazy {
     DeviceResultListener()
@@ -61,7 +57,7 @@ class HomeViewModel(private val bluetoothManager: BluetoothManager, private val 
           .filter { it == BluetoothState.READY }
           .flatMap {
             bluetoothManager.scanBleDevices()
-              .map { HomeUiModel.ScannerResult(it) as HomeUiModel }
+              .map<HomeUiModel> { HomeUiModel.ScannerResult(it) }
           }
           .onErrorReturn {
             Timber.e(it)
@@ -101,15 +97,33 @@ class HomeViewModel(private val bluetoothManager: BluetoothManager, private val 
     override fun onResult(deviceResult: DeviceResult) {
       val uiModel = when (deviceResult) {
         is DeviceResult.DeviceUpdateResult -> {
+          val macAddress = deviceResult.bleDevice.macAddress
+          
+          val stateMachine = if(stateMachines.containsKey(macAddress)) {
+            stateMachines[macAddress]
+          }
+          else {
+            stateMachines[macAddress] = UiStateMachineImpl()
+            stateMachines[macAddress]
+          }
+  
+          val overlayStateMachine = if(overlayStateMachines.containsKey(macAddress)) {
+            overlayStateMachines[macAddress]
+          }
+          else {
+            overlayStateMachines[macAddress] = OverlayStateMachineImpl()
+            overlayStateMachines[macAddress]
+          }
+          
           val stateModel = StateTransformers.bleToUiState(deviceResult)
-          val newUiState = stateMachine.invoke(stateModel.state)
+          val newUiState = stateMachine!!.invoke(stateModel.state)
       
           val overlayStateModel = StateTransformers.bleToOverlayState(deviceResult)
-          val newOverlayState = overlayStateMachine.invoke(overlayStateModel.overlayState)
+          val newOverlayState = overlayStateMachine!!.invoke(overlayStateModel.overlayState)
           HomeUiModel.StatusUpdate(newUiState, newOverlayState, deviceResult.bleDevice)
         }
         is DeviceResult.RawDataPackageResult -> {
-          HomeUiModel.RawDataPackageUpdate(deviceResult.rawDataPackage)
+          HomeUiModel.RawDataPackageUpdate(deviceResult.macAddress, deviceResult.rawDataPackage)
         }
       }
       

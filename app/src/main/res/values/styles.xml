@@ -28,7 +28,7 @@
 
   <style name="Toolbar">
     <item name="android:layout_width">match_parent</item>
-    <item name="android:layout_height">?android:attr/actionBarSize</item>
+    <item name="android:layout_height">wrap_content</item>
     <item name="android:popupTheme">@style/AppTheme.AppBarOverlay</item>
     <item name="android:theme">@style/AppTheme.AppBarOverlay</item>
     <item name="android:background">@color/white</item>

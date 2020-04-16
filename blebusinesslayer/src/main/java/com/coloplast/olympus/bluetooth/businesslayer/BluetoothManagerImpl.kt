@@ -11,6 +11,7 @@ import com.coloplast.olympus.bluetooth.businesslayer.models.*
 import com.coloplast.olympus.bluetooth.businesslayer.services.BatteryPowerService
 import com.coloplast.olympus.bluetooth.businesslayer.services.OlympusWirelessProtocol
 import com.dawn.bluetooth.BluetoothHandler
+import com.jakewharton.rxrelay2.PublishRelay
 import com.polidea.rxandroidble2.RxBleClient
 import com.polidea.rxandroidble2.RxBleConnection
 import com.polidea.rxandroidble2.RxBleDevice
@@ -33,6 +34,8 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
   
   // a cached version of the ble connections that we are currently connected to
   private val bleConnections = mutableMapOf<String, RxBleConnection>()
+  
+  private val bleDeviceRelay = PublishRelay.create<List<BleDevice>>()
   
   init {
     /**
@@ -125,6 +128,7 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
       .filter { it == BleConnectionState.DISCONNECTED || it == BleConnectionState.DISCONNECTING }
       .flatMap { bleConnectionState ->
         getBleDevice(macAddress)
+          .doOnNext { removeDeviceFromConnectedList(it) }
           .map { bleConnectionState }
       }
   }
@@ -146,6 +150,7 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
     return getBleDevice(macAddress)
       .flatMap { rxBleDevice ->
         bluetoothHandler.connectRxBleDevice(rxBleDevice)
+          .doOnNext { addDeviceToConnectedList(rxBleDevice) }
           .map {
             bleConnections[macAddress] = it
             macAddress
@@ -230,33 +235,39 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
     }
   }
   
-  //  override fun connectedDevicesObservable(): Observable<List<BleDevice>> {
-  //    return bleDeviceRelay.publish()
-  //      .refCount()
-  //  }
+  override fun connectedDevicesObservable(): Observable<List<BleDevice>> {
+    return bleDeviceRelay.publish()
+      .refCount()
+      // todo - this does not contain the latest peripheral - it probably should
+      .startWith(bleDevices.map { BleDevice(it.value.name, it.value.macAddress, BleConnectionState.fromRxBleState(it.value.connectionState)) })
+  }
   
   override fun connectedDeviceObservable(macAddress: String): Observable<BleDevice> {
     return getBleDevice(macAddress)
       .map { BleDevice(it.name, it.macAddress, BleConnectionState.fromRxBleState(it.connectionState)) }
   }
   
-  //  private fun addDeviceToConnectedList(rxBleDevice: RxBleDevice) {
-  //    bleDevices[rxBleDevice.macAddress] = rxBleDevice
-  //    notifyConnectedDevices()
-  //  }
-  //
-  //  private fun removeDeviceFromConnectedList(rxBleDevice: RxBleDevice) {
-  //    bleDevices.remove(rxBleDevice.macAddress)
-  //    notifyConnectedDevices()
-  //  }
-  //
-  //  private fun notifyConnectedDevices() {
-  //    bleDeviceRelay.accept(bleDevices.map {
-  //      BleDevice(
-  //        it.value.name,
-  //        it.value.macAddress,
-  //        BleConnectionState.fromRxBleState(it.value.connectionState)
-  //      )
-  //    })
-  //  }
+  private fun addDeviceToConnectedList(rxBleDevice: RxBleDevice) {
+    synchronized(bleDevices) {
+      bleDevices[rxBleDevice.macAddress] = rxBleDevice
+    }
+    notifyConnectedDevices()
+  }
+
+  private fun removeDeviceFromConnectedList(rxBleDevice: RxBleDevice) {
+    synchronized(bleDevices) {
+      bleDevices.remove(rxBleDevice.macAddress)
+    }
+    notifyConnectedDevices()
+  }
+
+  private fun notifyConnectedDevices() {
+    bleDeviceRelay.accept(bleDevices.map {
+      BleDevice(
+        it.value.name,
+        it.value.macAddress,
+        BleConnectionState.fromRxBleState(it.value.connectionState)
+      )
+    })
+  }
 }

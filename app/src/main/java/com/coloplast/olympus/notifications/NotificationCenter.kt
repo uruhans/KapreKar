@@ -69,7 +69,7 @@ class NotificationCenter(
   }
   
   private fun getPendingIntent(): PendingIntent {
-  // create an explicit intent to open main activity
+    // create an explicit intent to open main activity
     val intent = Intent(context, MainActivity::class.java).apply {
       flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
     }
@@ -146,17 +146,11 @@ class NotificationCenter(
   }
   
   private fun createNotificationChannel() {
-    if (Build.VERSION.SDK_INT >= 26) {
-      deleteNotificationChannel()
-    }
-  
     // only create the notification channel if we are above API 25 and the channel doesn't already exist
     if (Build.VERSION.SDK_INT >= 26 && notificationManager.getNotificationChannel(channelId) == null) {
       NotificationChannel(
         channelId, channelName, getImportance()
       ).apply {
-        enableVibration(false)
-        enableLights(false)
         description = channelDescription
         notificationManager.createNotificationChannel(this)
       }

@@ -27,6 +27,19 @@ class DbServiceImpl : DbService {
       }
   }
   
+  override fun getTransmitter(macAddress: String): Observable<DataResult<Transmitter>> {
+    return db.transmitterDao()
+      .getTransmitter(macAddress)
+      .map { dbTransmitters ->
+        if (dbTransmitters.isEmpty()) {
+          DataResult.Empty<Transmitter>()
+        }
+        else {
+          DataResult.Success(dbTransmitters.first().toTransmitter())
+        }
+      }
+  }
+  
   override fun insertOrUpdateTransmitter(transmitter: Transmitter): Completable {
     return db.transmitterDao()
       .insertOrUpdate(DbTransmitter.fromTransmitter(transmitter))

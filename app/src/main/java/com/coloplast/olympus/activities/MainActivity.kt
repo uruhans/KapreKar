@@ -1,5 +1,6 @@
 package com.coloplast.olympus.activities
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.ContentFrameLayout
@@ -7,6 +8,7 @@ import com.artemzin.rxui.RxUi
 import com.artemzin.rxui.kotlin.bind
 import com.coloplast.olympus.Me
 import com.coloplast.olympus.R
+import com.coloplast.olympus.bluetooth.service.BluetoothConnectionService
 import com.coloplast.olympus.shared.models.CurrentUser
 import com.coloplast.olympus.ui.common.models.Navigation
 import com.coloplast.olympus.ui.feature.home.HomeController
@@ -49,6 +51,8 @@ class MainActivity : AppCompatActivity() {
         .delay(500, TimeUnit.MILLISECONDS)
         .bind(openLoginScreen())
     )
+  
+    startService(Intent(this, BluetoothConnectionService::class.java))
   }
   
   private fun openLoginScreen(): io.reactivex.functions.Function<Observable<CurrentUser>, Disposable> {

@@ -3,8 +3,6 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 android {
   compileSdkVersion 29
-  buildToolsVersion "29.0.2"
-
 
   defaultConfig {
     minSdkVersion 23
@@ -36,11 +34,7 @@ dependencies {
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
   // https://github.com/Polidea/RxAndroidBle
-  api 'com.polidea.rxandroidble2:rxandroidble:1.11.0'
-
-  api 'com.akaita.java:rxjava2-debug:1.4.0'
-
-  implementation fileTree(dir: 'libs', include: ['*.jar'])
+  api 'com.polidea.rxandroidble2:rxandroidble:1.11.1'
 
   testImplementation 'junit:junit:4.13'
   androidTestImplementation 'androidx.test.ext:junit:1.1.1'

@@ -2,11 +2,16 @@ package com.coloplast.olympus.bluetooth
 
 import com.coloplast.olympus.bluetooth.businesslayer.DeviceConnection
 import com.coloplast.olympus.bluetooth.businesslayer.models.DeviceResult
+import com.coloplast.olympus.bluetooth.businesslayer.models.Transmitter
+import com.coloplast.olympus.businesslayer.interfaces.TransmitterComponent
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
+import io.reactivex.functions.BiFunction
 import org.koin.core.KoinComponent
 import org.koin.core.get
 import timber.log.Timber
+import java.util.concurrent.TimeUnit
+import kotlin.math.pow
 
 class DeviceConnectionManager : KoinComponent {
   
@@ -37,12 +42,6 @@ class DeviceConnectionManager : KoinComponent {
         { deviceResult ->
           // TODO - we need to figure out which device we want results from on any given time
           listeners.forEach { it.onResult(deviceResult) }
-        },
-        {
-          Timber.e("$it")
-          //cleanup(macAddress, listener)
-          
-          Observable.error<Throwable>(it)
         },
         { cleanup(macAddress, listener) }
       )

@@ -1,6 +1,6 @@
 package com.coloplast.olympus.bluetooth.businesslayer.models
 
-import org.threeten.bp.LocalDateTime
+import java.time.LocalDateTime
 
 data class RawDataPackage(
   val year : UShort,

@@ -29,7 +29,6 @@ android {
   kotlinOptions {
     jvmTarget = JavaVersion.VERSION_1_8.toString()
   }
-  buildToolsVersion '29.0.2'
 }
 
 dependencies {
@@ -37,7 +36,7 @@ dependencies {
 
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
   implementation "com.jakewharton.timber:timber:$timber_version"
-  implementation "com.jakewharton.threetenabp:threetenabp:$threeten_version"
+  //implementation "com.jakewharton.threetenabp:threetenabp:$threeten_version"
 
   testImplementation 'junit:junit:4.13'
   androidTestImplementation 'androidx.test.ext:junit:1.1.1'

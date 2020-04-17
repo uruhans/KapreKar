@@ -22,6 +22,7 @@ import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
 import com.coloplast.olympus.bluetooth.businesslayer.enums.PowerLevel
 import com.coloplast.olympus.bluetooth.businesslayer.models.Patch
 import com.coloplast.olympus.bluetooth.businesslayer.models.ScanResult
+import com.coloplast.olympus.bluetooth.service.BluetoothConnectionService
 import com.coloplast.olympus.databinding.ControllerHomeBinding
 import com.coloplast.olympus.notifications.OlympusNotificationManager
 import com.coloplast.olympus.ui.common.BaseController
@@ -31,7 +32,6 @@ import com.coloplast.olympus.ui.common.dialogs.BaseDialogController
 import com.coloplast.olympus.ui.common.dialogs.DialogController
 import com.coloplast.olympus.ui.common.widgets.PatchView
 import com.coloplast.olympus.ui.dialogs.ImageDialogController
-import com.coloplast.olympus.ui.feature.guides.application.ApplicationGuideController
 import com.coloplast.olympus.ui.feature.guides.connection.ConnectionGuideController
 import com.coloplast.olympus.ui.feature.guides.getstarted.GetStartedGuideController
 import com.coloplast.olympus.ui.feature.home.models.HomeUiModel
@@ -49,8 +49,8 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Function
 import me.tatarka.bindingcollectionadapter2.ItemBinding
 import org.koin.core.inject
-import org.threeten.bp.LocalDateTime
 import timber.log.Timber
+import java.time.LocalDateTime
 
 class HomeController : BaseController<ControllerHomeBinding>, HomeView, PermissionHandler, BaseDialogController.Listener, ScanResultItem.Listener {
   
@@ -64,7 +64,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   private val scannerDisposable = CompositeDisposable()
   private val connectDisposable = CompositeDisposable()
   
-  private val startScanRelay: PublishRelay<Any> = PublishRelay.create()
+  private val startScanRelay: PublishRelay<Unit> = PublishRelay.create()
   private val connectPeripheralRelay: PublishRelay<String> = PublishRelay.create()
   
   private var dialogController: DialogController? = null
@@ -98,7 +98,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
     stateRouter = Conductor.attachRouter(activity!!, viewBinding.contentContainer, args)
     
     compositeDisposable.add(viewModel.bind(this))
-    connectDisposable.add(viewModel.connectBleDevice(this))
+//    connectDisposable.add(viewModel.connectBleDevice(this))
     
     if (currentUiState != UiState.INITIAL) {
       changeUiState(currentUiState, true)
@@ -142,8 +142,9 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
             }
           }
         }
-        is HomeUiModel.ConnectedDevicesUpdate -> {
-        }
+/*        is HomeUiModel.ConnectedDevicesUpdate -> {
+        }*/
+/*
         is HomeUiModel.ScannerResult -> {
           //changeUiState(UiState.SCANNING)
           
@@ -151,38 +152,41 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
             items.add(ScanResultItem(uiModel.scanResult, this))
           }
         }
-        is HomeUiModel.StatusUpdate -> {
-          if (uiModel.bleDevice.peripheral?.transmitter?.attached == Attached.ATTACHED_ON_PATCH) {
-            if (uiModel.bleDevice.macAddress != macAddress) {
+*/
+        is HomeUiModel.DeviceUpdate -> {
+          val stateUpdate = uiModel.stateChange
+          
+          if (stateUpdate.bleDevice.peripheral?.transmitter?.attached == Attached.ATTACHED_ON_PATCH) {
+            if (stateUpdate.bleDevice.macAddress != macAddress) {
               // new transmitter has been attached, so change to that one
               // set new transmitter as the one being shown on screen
-              macAddress = uiModel.bleDevice.macAddress
+              macAddress = stateUpdate.bleDevice.macAddress
             }
           }
-          
+  
           // if the StatusUpdate coming from a device does not correspond the currently attached transmitter - skip it
-          if (uiModel.bleDevice.macAddress != macAddress) {
+          if (macAddress.isNotEmpty() && stateUpdate.bleDevice.macAddress != macAddress) {
             return@ui
           }
           
-          olympusNotificationManager.send(uiModel.state)
+          olympusNotificationManager.send(stateUpdate.state)
           
-          powerLevel.set(uiModel.bleDevice.peripheral?.powerLevel)
-          isConnected.set(uiModel.bleDevice.isConnected())
-          
-          uiModel.bleDevice.peripheral?.transmitter?.rawRotationalAngle?.let {
+          powerLevel.set(stateUpdate.bleDevice.peripheral?.powerLevel)
+          isConnected.set(stateUpdate.bleDevice.isConnected())
+  
+          stateUpdate.bleDevice.peripheral?.transmitter?.rawRotationalAngle?.let {
             rawRotationAngle.set(it)
           }
-          
-          uiModel.bleDevice.peripheral?.patch?.let {
+  
+          stateUpdate.bleDevice.peripheral?.patch?.let {
             currentPatch.set(it)
           }
           
-          changeUiState(uiModel.state)
+          changeUiState(stateUpdate.state)
           // TODO - check overlay state too once we are ready
         }
         is HomeUiModel.RawDataPackageUpdate -> {
-          // if the StatusUpdate coming from a device does not correspond the currently attached transmitter - skip it
+          // if the PackageUpdate coming from a device does not correspond the currently attached transmitter - skip it
           if (uiModel.macAddress != macAddress) {
             return@ui
           }
@@ -239,7 +243,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
           
           // the scanner observable should be disposed when we start connecting to a bledevice
           // this is why it's added to it's own disposable
-          scannerDisposable.add(viewModel.bindScanner(this))
+          /*scannerDisposable.add(viewModel.bindScanner(this))*/
           
           ReadyToScanController.routerTransaction()
         }
@@ -394,8 +398,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
       }
       SideMenuType.SETTINGS,
       SideMenuType.PROFILE,
-      SideMenuType.ABOUT -> { /* TODO - fix this */
-      }
+      SideMenuType.ABOUT -> { /* TODO - fix this */ }
       SideMenuType.CONTACT -> onScanClicked() // this is temporary for testing
     }
   }
@@ -407,25 +410,19 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   }
   
   fun onScanClicked() {
-    scannerDisposable.add(viewModel.bindScanner(this))
+    //scannerDisposable.add(viewModel.bindScanner(this))
     
     isScanning.set(true)
-    startScanRelay.accept("")
+    startScanRelay.accept(Unit)
   }
   
-  fun onStartClicked() {
-    router.pushController(
-      ApplicationGuideController.routerTransaction()
-        .popChangeHandler(VerticalChangeHandler())
-        .pushChangeHandler(VerticalChangeHandler())
-    )
-  }
+  fun onStartClicked() { }
   
   override fun onScanResultClicked(scanResult: ScanResult) {
     macAddress = scanResult.macAddress
     
     // dispose the observable that do the scanning - at this point it is no longer needed
-    scannerDisposable.clear()
+//    scannerDisposable.clear()
     connectPeripheralRelay.accept(scanResult.macAddress)
   }
   
@@ -440,7 +437,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
     }
   }
   
-  override fun onScanRequested(): Observable<Any> {
+  override fun onScanRequested(): Observable<Unit> {
     return startScanRelay.publish()
       .refCount()
   }

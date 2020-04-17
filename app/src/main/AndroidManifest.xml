@@ -2,10 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
   package="com.coloplast.olympus">
 
-  <uses-permission android:name="android.permission.BLUETOOTH"/>
-  <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+  <uses-permission android:name="android.permission.BLUETOOTH" />
+  <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+  <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
-  <uses-feature android:name="android.hardware.bluetooth_le" android:required="true"/>
+  <uses-feature
+    android:name="android.hardware.bluetooth_le"
+    android:required="true" />
 
   <application
     android:name=".CustomApplication"
@@ -23,12 +26,16 @@
     </activity>
 
     <!-- a receiver for local notifications when a user snooze their notification -->
-    <receiver android:name=".notifications.SnoozeReceiver" android:exported="false">
+    <receiver
+      android:name=".notifications.SnoozeReceiver"
+      android:exported="false">
       <intent-filter>
         <action android:name="${applicationId}.NOTIFICATION_ACTION_SNOOZE" />
         <action android:name="${applicationId}.NOTIFICATION_SHOW" />
       </intent-filter>
     </receiver>
+
+    <service android:name=".bluetooth.service.BluetoothConnectionService" />
   </application>
 
 </manifest>

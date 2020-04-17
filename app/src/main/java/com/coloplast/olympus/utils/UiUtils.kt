@@ -3,9 +3,9 @@ package com.coloplast.olympus.utils
 import android.util.TypedValue
 import androidx.annotation.ColorRes
 import com.coloplast.olympus.shared.AppSettings
-import org.threeten.bp.format.DateTimeFormatterBuilder
-import org.threeten.bp.format.ResolverStyle
-import org.threeten.bp.temporal.ChronoField
+import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeFormatterBuilder
+import java.time.temporal.ChronoField
 
 object UiUtils {
   
@@ -56,7 +56,7 @@ object UiUtils {
     return AppSettings.applicationContext.getColor(colorRes)
   }
 
-  val ISO_LOCAL_TIME_NO_NANO_OF_SECOND = (DateTimeFormatterBuilder().appendValue(ChronoField.HOUR_OF_DAY, 2)
+  val ISO_LOCAL_TIME_NO_NANO_OF_SECOND: DateTimeFormatter = (DateTimeFormatterBuilder().appendValue(ChronoField.HOUR_OF_DAY, 2)
     .appendLiteral(':')
     .appendValue(ChronoField.MINUTE_OF_HOUR, 2)
     .optionalStart()

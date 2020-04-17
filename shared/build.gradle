@@ -40,7 +40,7 @@ dependencies {
   api "org.jetbrains.kotlin:kotlin-android-extensions-runtime:$kotlin_version"
   implementation "androidx.preference:preference-ktx:1.1.0"
 
-  api "com.jakewharton.threetenabp:threetenabp:$threeten_version"
+  //api "com.jakewharton.threetenabp:threetenabp:$threeten_version"
 
   // dont update these quite yet
   api "com.squareup.moshi:moshi-kotlin:$moshi_version"

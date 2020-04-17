@@ -5,8 +5,8 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import com.coloplast.olympus.shared.AppSettings
-import org.threeten.bp.DayOfWeek
-import org.threeten.bp.temporal.WeekFields
+import java.time.DayOfWeek
+import java.time.temporal.WeekFields
 import java.util.*
 
 object OSUtils {

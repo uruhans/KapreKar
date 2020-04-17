@@ -15,6 +15,10 @@ class TransmitterComponentImpl : TransmitterComponent {
     return dbService.getTransmitters()
   }
   
+  override fun getTransmitter(macAddress: String): Observable<DataResult<Transmitter>> {
+    return dbService.getTransmitter(macAddress)
+  }
+  
   override fun insertOrUpdateTransmitter(transmitter: Transmitter): Completable {
     return dbService.insertOrUpdateTransmitter(transmitter)
   }

@@ -86,6 +86,21 @@ class BluetoothServiceViewModel(
       .flatMap { macAddress ->
         deviceConnectionManager.connect(macAddress, listener)
         transmitterResultObservable
+          .map {
+            if(it is BluetoothServiceModel.DeviceUpdate) {
+              if(it.statusChange.bleDevice.macAddress == macAddress) {
+                return@map it
+              }
+            }
+            else if(it is BluetoothServiceModel.RawDataPackageUpdate) {
+              if(it.macAddress == macAddress) {
+                return@map it
+              }
+            }
+
+            return@map BluetoothServiceModel.Ignore(macAddress)
+          }
+          .filter { it !is BluetoothServiceModel.Ignore }
           .takeUntil(
             bluetoothManager.bleDisconnectedObservable(macAddress)
               .doOnNext { connectedBleDevices.remove(macAddress) }

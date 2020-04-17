@@ -61,7 +61,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   
   private val olympusNotificationManager: OlympusNotificationManager by inject()
   
-  private val scannerDisposable = CompositeDisposable()
+  //private val scannerDisposable = CompositeDisposable()
   private val connectDisposable = CompositeDisposable()
   
   private val startScanRelay: PublishRelay<Unit> = PublishRelay.create()
@@ -169,7 +169,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
             return@ui
           }
           
-          olympusNotificationManager.send(stateUpdate.state)
+          //olympusNotificationManager.send(stateUpdate.state)
           
           powerLevel.set(stateUpdate.bleDevice.peripheral?.powerLevel)
           isConnected.set(stateUpdate.bleDevice.isConnected())

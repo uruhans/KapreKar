@@ -4,6 +4,8 @@ import android.os.Bundle
 import androidx.databinding.ObservableArrayList
 import com.artemzin.rxui.RxUi
 import com.bluelinelabs.conductor.RouterTransaction
+import com.bluelinelabs.conductor.changehandler.HorizontalChangeHandler
+import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import com.coloplast.olympus.BR
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerTransmittersBinding
@@ -58,6 +60,13 @@ class TransmittersController(args: Bundle? = null) : CustomToolbarController<Con
     }
   }
   
+  fun onAddButtonClicked(){
+    router.pushController(
+      GuideTransmitterAT1Controller.routerTransaction()
+        .pushChangeHandler(HorizontalChangeHandler())
+        .popChangeHandler(HorizontalChangeHandler())
+    )
+  }
   override fun onDeviceClicked() {
     // bleDevice was clicked
   }

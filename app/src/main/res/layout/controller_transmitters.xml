@@ -125,6 +125,7 @@
       android:fontFamily="sans-serif-medium"
       android:text="[Add transmitter]"
       android:textColor="@color/colorAccent"
+      android:onClick="@{() -> controller.onAddButtonClicked()}"
       android:textSize="@dimen/text_18"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"

@@ -15,15 +15,13 @@ object Navigation {
   fun getOverlayRouter() = routerMap[R.id.content_overlay_controller]
   fun getContentRouter() = routerMap[R.id.main_navigation_controller_container]
   
-  fun <T> locateControllerOfType(clazz: Class<T>): Maybe<T> {
+  inline fun <reified T> locateControllerOfType(): Maybe<T> {
     return Maybe.create { emitter ->
-      
       val controller: T? = getContentRouter()?.backstack.orEmpty()
         .map { it.controller() }
-        .filter { clazz.isAssignableFrom(it::class.java) }
-        .map { clazz.cast(it) }
+        .filterIsInstance(T::class.java)
         .first()
-      
+    
       if (controller != null) {
         emitter.onSuccess(controller)
       }

@@ -17,6 +17,8 @@ import com.coloplast.olympus.bluetooth.StateDispatcher
 import com.coloplast.olympus.bluetooth.model.BluetoothServiceModel
 import com.coloplast.olympus.bluetooth.model.BluetoothServiceResult
 import com.coloplast.olympus.notifications.OlympusNotificationManager
+import com.coloplast.olympus.ui.feature.statemachine.models.OverlayState
+import com.coloplast.olympus.ui.feature.statemachine.models.UiState
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -58,11 +60,15 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
     
       when(it) {
         is BluetoothServiceModel.DeviceUpdate -> {
+          if(it.statusChange.state == UiState.NO_CHANGE && it.statusChange.overlayState == OverlayState.NONE) {
+            return@ui
+          }
+          
           // this will allow for notifications to be send when app is in the background
           olympusNotificationManager.send(it.statusChange.state)
           
           // this will dispatch the state change to any who observes it (none if app is in background)
-          StateDispatcher.stateChangeRelay.accept(it.statusChange)
+          StateDispatcher.dispatch(it.statusChange)
         }
       }
     }

@@ -2,16 +2,11 @@ package com.coloplast.olympus.bluetooth
 
 import com.coloplast.olympus.bluetooth.businesslayer.DeviceConnection
 import com.coloplast.olympus.bluetooth.businesslayer.models.DeviceResult
-import com.coloplast.olympus.bluetooth.businesslayer.models.Transmitter
-import com.coloplast.olympus.businesslayer.interfaces.TransmitterComponent
+import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
-import io.reactivex.functions.BiFunction
 import org.koin.core.KoinComponent
 import org.koin.core.get
-import timber.log.Timber
-import java.util.concurrent.TimeUnit
-import kotlin.math.pow
 
 class DeviceConnectionManager : KoinComponent {
   
@@ -21,42 +16,63 @@ class DeviceConnectionManager : KoinComponent {
   
   private val connections = mutableMapOf<String, DeviceConnection>()
   private val disposables = mutableMapOf<String, Disposable>()
-  private val listeners = mutableListOf<Listener>()
+  private var listener: Listener? = null
   
-  fun connect(macAddress: String, listener: Listener) {
-    synchronized(listeners) {
-      if (!listeners.contains(listener)) {
-        listeners.add(listener)
-      }
-    }
-    
-    if (connections.containsKey(macAddress)) {
-      return
-    }
-    
-    val deviceConnection = get<DeviceConnection>()
-    connections[macAddress] = deviceConnection
-    
-    disposables[macAddress] = deviceConnection.subscribeForNotifications(macAddress)
-      .subscribe(
-        { deviceResult ->
-          // TODO - we need to figure out which device we want results from on any given time
-          listeners.forEach { it.onResult(deviceResult) }
-        },
-        { cleanup(macAddress, listener) }
-      )
+  private val resultRelay = PublishRelay.create<DeviceResult>()
+  
+  private val disposables2 = mutableMapOf<String, Observable<DeviceResult>>()
+  
+  fun onResultObservable(): Observable<DeviceResult> {
+    return resultRelay.publish()
+      .refCount()
   }
   
-  private fun cleanup(macAddress: String, listener: Listener) {
+  fun connect(macAddress: String): Observable<DeviceResult> {
+    disposables[macAddress]?.dispose()
+    disposables.remove(macAddress)
+    
+    
+    //    synchronized(listeners) {
+    //      if (!listeners.contains(listener)) {
+    //        listeners.add(listener)
+    //      }
+    //    }
+    
+    //this.listener = listener
+    
+    //    if (connections.containsKey(macAddress)) {
+    //      return
+    //    }
+    
+    if (!connections.containsKey(macAddress)) {
+      get<DeviceConnection>().also { connections[macAddress] = it }
+    }
+    
+    disposables[macAddress] = connections[macAddress]!!.subscribeForNotifications(macAddress)
+      .subscribe(
+        { deviceResult -> resultRelay.accept(deviceResult) },
+        { cleanup(macAddress) }
+      )
+    
+    if (!disposables2.containsKey(macAddress)) {
+      disposables2[macAddress] = onResultObservable()
+    }
+    
+    return disposables2[macAddress]!!
+  }
+  
+  fun cleanup() {
+    connections.clear()
+    
+    disposables.forEach { it.value.dispose() }
+    disposables.clear()
+    listener = null
+  }
+  
+  fun cleanup(macAddress: String) {
     connections.remove(macAddress)
     disposables[macAddress]?.dispose()
     disposables.remove(macAddress)
-    removeListener(listener)
-  }
-  
-  fun removeListener(listener: Listener) {
-    synchronized(listeners) {
-      listeners.remove(listener)
-    }
+    this.listener = null
   }
 }

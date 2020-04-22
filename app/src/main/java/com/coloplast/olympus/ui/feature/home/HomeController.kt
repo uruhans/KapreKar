@@ -40,6 +40,7 @@ import com.coloplast.olympus.ui.feature.home.models.ScanResultItem
 import com.coloplast.olympus.ui.feature.home.models.SideMenuType
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
 import com.coloplast.olympus.ui.feature.transmitters.TransmittersController
+import com.coloplast.olympus.ui.feature.transmitters.guides.at2.GuideTransmitterAT2Controller
 import com.coloplast.olympus.ui.feature.uistates.*
 import com.coloplast.olympus.utils.OSUtils
 import com.jakewharton.rxrelay2.PublishRelay
@@ -391,7 +392,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
       }
       SideMenuType.TRANSMITTERS -> {
         router.pushController(
-          TransmittersController.routerTransaction()
+          GuideTransmitterAT2Controller.routerTransaction()
             .pushChangeHandler(VerticalChangeHandler())
             .popChangeHandler(VerticalChangeHandler())
         )

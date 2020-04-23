@@ -124,7 +124,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
               showPermissionDialog()
             }
             BluetoothState.BLUETOOTH_NOT_ENABLED -> {
-              if (currentUiState == UiState.INITIAL) {
+              if (currentUiState == UiState.INITIAL || currentUiState == UiState.READY_TO_SCAN) {
                 changeUiState(UiState.BLUETOOTH_NOT_ENABLED)
               }
             }
@@ -135,7 +135,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
             
             }
             BluetoothState.READY -> {
-              if (currentUiState == UiState.INITIAL) {
+              if (currentUiState == UiState.INITIAL || currentUiState == UiState.BLUETOOTH_NOT_ENABLED) {
                 changeUiState(UiState.READY_TO_SCAN)
               }
             }
@@ -155,17 +155,23 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         is HomeUiModel.DeviceUpdate -> {
           val stateUpdate = uiModel.stateChange
           
-          if (stateUpdate.bleDevice.macAddress != macAddress) {
-            if (stateUpdate.bleDevice.peripheral?.transmitter?.attached == Attached.ATTACHED_ON_PATCH) {
-              // new transmitter has been attached, so change to that one
-              // set new transmitter as the one being shown on screen
-              macAddress = stateUpdate.bleDevice.macAddress
-            }
+          if(macAddress.isEmpty()) {
+            // this is the first time coming through this controller - just pass it along
+            macAddress = stateUpdate.bleDevice.macAddress
           }
-          
-          // if the StatusUpdate coming from a device does not correspond the currently attached transmitter - skip it
-          if (macAddress.isNotEmpty() && stateUpdate.bleDevice.macAddress != macAddress) {
-            return@ui
+          else {
+            // it's not the first time - and its actually another transmitter
+            if (stateUpdate.bleDevice.macAddress != macAddress) {
+              // is the new transmitter attached to a patch
+              if (stateUpdate.bleDevice.peripheral?.transmitter?.attached == Attached.ATTACHED_ON_PATCH) {
+                // yes it is - so replace current transmitter with the new one
+                macAddress = stateUpdate.bleDevice.macAddress
+              }
+              else {
+                // no it's not attached, so we skip the result of this one
+                return@ui
+              }
+            }
           }
           
           //olympusNotificationManager.send(stateUpdate.state)
@@ -206,7 +212,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
     }
     else {
       val routerTransaction = when (newState) {
-        UiState.SOMETHING_ELSE,
+        UiState.SOMETHING_ELSE, // TODO - something else might need to be removed
         UiState.OK_A -> {
           OkController.routerTransaction()
         }
@@ -398,8 +404,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
       }
       SideMenuType.SETTINGS,
       SideMenuType.PROFILE,
-      SideMenuType.ABOUT -> { /* TODO - fix this */
-      }
+      SideMenuType.ABOUT -> { /* TODO - fix this */ }
       SideMenuType.CONTACT -> onScanClicked() // this is temporary for testing
     }
   }

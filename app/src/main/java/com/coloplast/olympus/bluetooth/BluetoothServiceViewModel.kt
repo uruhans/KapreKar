@@ -2,6 +2,7 @@ package com.coloplast.olympus.bluetooth
 
 import com.artemzin.rxui.kotlin.bind
 import com.coloplast.olympus.bluetooth.businesslayer.BluetoothManager
+import com.coloplast.olympus.bluetooth.businesslayer.DeviceConnection
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
 import com.coloplast.olympus.bluetooth.businesslayer.models.DeviceResult
 import com.coloplast.olympus.bluetooth.model.BluetoothServiceModel
@@ -28,16 +29,12 @@ import java.util.concurrent.TimeUnit
 class BluetoothServiceViewModel(
   private val bluetoothManager: BluetoothManager,
   private val transmitterComponent: TransmitterComponent,
-  private val deviceConnectionManager: DeviceConnectionManager
+  private val deviceConnection: DeviceConnection
 ) : ServiceViewModel<BluetoothServiceModel, BluetoothServiceResult<BluetoothServiceModel>>() {
   
   private val stateMachines = mutableMapOf<String, UiStateMachine>()
   private val overlayStateMachines = mutableMapOf<String, OverlayStateMachine>()
-  
-//  private val listener: DeviceResultListener by lazy {
-//    DeviceResultListener()
-//  }
-  
+ 
   private val storedBleDevicesWithDelay: Observable<Transmitter> = transmitterComponent.getTransmitters()
     .subscribeOn(Schedulers.io())
     .map {
@@ -68,10 +65,10 @@ class BluetoothServiceViewModel(
     
     val beacon = bluetoothStateReadyObservable
       .doOnNext {
-        deviceConnectionManager.cleanup()
+//        deviceConnectionManager.cleanup()
         Timber.d("ready")
       }
-      .flatMap {
+      .switchMap {
         storedBleDevicesWithDelay
           .zipWith(repeatIntervalObservable(5),
             BiFunction { transmitter: Transmitter, _: Long -> transmitter })
@@ -121,8 +118,8 @@ class BluetoothServiceViewModel(
     val connectTransmitterObservable = beacon
       .doOnNext { Timber.d("trying to connect") }
       .flatMap { macAddress ->
-        // TODO - it seems that this observable can have multiple instances on the same transmitter (i believe its because if connection fails in the beginning - it's not properly disposed of)
-        deviceConnectionManager.connect(macAddress)
+        
+        deviceConnection.subscribeForNotifications(macAddress)
 //          .takeUntil(
 //            // only get results as long as the transmitter is connected
 //            bluetoothManager.bleDisconnectedObservable(macAddress)
@@ -132,28 +129,35 @@ class BluetoothServiceViewModel(
 //              .skip(1)
 //          )
           .doOnNext { connectedBleDevices.add(macAddress) }
-          .doOnError { deviceConnectionManager.cleanup(macAddress) }
-          .doOnComplete { deviceConnectionManager.cleanup(macAddress) }
-          .map {
-            // this is an attempt (perhaps unneeded - further testing required) to reduce the number of callbacks
-            // what seems to be happening, is that we have two connected transmitter relays, and for each onNext (no matter which transmitter is sending info)
-            // the relay is hit once for each subscription (ie: twice when two transmitters connected)
-            // this will compare the incoming macAddress with the one in the result and only onNext if they match
-            // TODO - verify this is needed, or find another way to get results from two transmitters at the same time
-            if (it is DeviceResult.DeviceUpdateResult) {
-              if (it.bleDevice.macAddress == macAddress) {
-                return@map it
-              }
-            }
-            else if (it is DeviceResult.RawDataPackageResult) {
-              if (it.macAddress == macAddress) {
-                return@map it
-              }
-            }
-    
-            return@map DeviceResult.Error()
+          .doOnError {
+            //deviceConnectionManager.cleanup(macAddress)
+            connectedBleDevices.remove(macAddress)
           }
-          .filter { it !is DeviceResult.Error }
+          .doOnComplete {
+            //deviceConnectionManager.cleanup(macAddress)
+            connectedBleDevices.remove(macAddress)
+          }
+  
+          //          .map {
+//            // this is an attempt (perhaps unneeded - further testing required) to reduce the number of callbacks
+//            // what seems to be happening, is that we have two connected transmitter relays, and for each onNext (no matter which transmitter is sending info)
+//            // the relay is hit once for each subscription (ie: twice when two transmitters connected)
+//            // this will compare the incoming macAddress with the one in the result and only onNext if they match
+//            // TODO - verify this is needed, or find another way to get results from two transmitters at the same time
+//            if (it is DeviceResult.DeviceUpdateResult) {
+//              if (it.bleDevice.macAddress == macAddress) {
+//                return@map it
+//              }
+//            }
+//            else if (it is DeviceResult.RawDataPackageResult) {
+//              if (it.macAddress == macAddress) {
+//                return@map it
+//              }
+//            }
+//
+//            return@map DeviceResult.Error()
+//          }
+//          .filter { it !is DeviceResult.Error }
           .map { deviceResult ->
             when (deviceResult) {
               is DeviceResult.DeviceUpdateResult -> {

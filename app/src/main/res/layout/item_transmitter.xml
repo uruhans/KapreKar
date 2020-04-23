@@ -5,6 +5,8 @@
 
   <data>
 
+    <import type="com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState" />
+
     <variable
       name="item"
       type="com.coloplast.olympus.ui.feature.transmitters.models.TransmitterItem" />
@@ -26,7 +28,7 @@
       <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/transmitter_side"
+        android:src="@{item.connectionState == BleConnectionState.CONNECTED ? @drawable/transmitter_side : @drawable/transmitter_side_2}"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

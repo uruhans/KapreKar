@@ -14,8 +14,10 @@ import com.coloplast.olympus.R
 import com.coloplast.olympus.activities.MainActivity
 import com.coloplast.olympus.bluetooth.BluetoothServiceViewModel
 import com.coloplast.olympus.bluetooth.StateDispatcher
+import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.bluetooth.model.BluetoothServiceModel
 import com.coloplast.olympus.bluetooth.model.BluetoothServiceResult
+import com.coloplast.olympus.bluetooth.model.ConnectionState
 import com.coloplast.olympus.notifications.OlympusNotificationManager
 import com.coloplast.olympus.ui.feature.statemachine.models.OverlayState
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
@@ -69,6 +71,9 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
           
           // this will dispatch the state change to any who observes it (none if app is in background)
           StateDispatcher.dispatch(it.statusChange)
+          
+          // TODO - change this - it's only temporary - would be nice to have real connection states being sent
+          StateDispatcher.dispatch(ConnectionState(it.statusChange.bleDevice.macAddress, BleConnectionState.CONNECTED))
         }
       }
     }

@@ -3,6 +3,8 @@ package com.coloplast.olympus.ui.feature.transmitters
 import com.artemzin.rxui.kotlin.bind
 import com.coloplast.olympus.bluetooth.StateDispatcher
 import com.coloplast.olympus.bluetooth.businesslayer.BluetoothManager
+import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
+import com.coloplast.olympus.bluetooth.model.ConnectionState
 import com.coloplast.olympus.bluetooth.model.StateChange
 import com.coloplast.olympus.businesslayer.interfaces.TransmitterComponent
 import com.coloplast.olympus.shared.models.DataResult
@@ -13,6 +15,7 @@ import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.BiFunction
+import io.reactivex.functions.Function3
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
@@ -23,7 +26,7 @@ class TransmittersViewModel(private val bluetoothManager: BluetoothManager, priv
   override fun bind(uiView: TransmittersView): Disposable {
     val disposable = CompositeDisposable()
     
-    val connectedDevices = transmitterComponent.getTransmitters()
+    val storedTransmitters = transmitterComponent.getTransmitters()
       .subscribeOn(Schedulers.io())
       .doOnNext { Timber.d("getTransmitters hit") }
       .map {
@@ -34,21 +37,21 @@ class TransmittersViewModel(private val bluetoothManager: BluetoothManager, priv
           emptyList()
         }
       }
+      .doOnNext { Timber.d("size: ${it.size}") }
+      .map { TransmittersUiModel.ConnectedDevices(it) as TransmittersUiModel }
+      .startWith(TransmittersUiModel.Empty())
     
-    val transmitterStateObservable = StateDispatcher.stateChangeObservable()
+    val delayedSubscriptionUntilCorrectReturnType = storedTransmitters.filter { it is TransmittersUiModel.ConnectedDevices }
     
-    val transmitters = connectedDevices
-      .zipWith(
-        transmitterStateObservable,
-        BiFunction { transmitters: List<Transmitter>, states: StateChange ->
-          TransmittersUiModel.ConnectedDevices(transmitters, states)
-        })
+    val connectionStateObservable = StateDispatcher.connectionStateObservable()
+      .delaySubscription(delayedSubscriptionUntilCorrectReturnType)
+      .map { TransmittersUiModel.TransmitterConnectionState(it) }
+   
+    val latestStateObservable = StateDispatcher.stateChangeObservable()
+      .delaySubscription(delayedSubscriptionUntilCorrectReturnType)
+      .map { TransmittersUiModel.StateUpdate(it) }
     
-    
-    disposable.add(
-      Observable.merge(transmitterStateObservable.map { TransmittersUiModel.StateUpdate(it) }.delay(20, TimeUnit.SECONDS), transmitters)
-        .bind(uiView.render())
-    )
+    disposable.add(Observable.merge(storedTransmitters, connectionStateObservable, latestStateObservable).bind(uiView.render()))
     return disposable
   }
 }

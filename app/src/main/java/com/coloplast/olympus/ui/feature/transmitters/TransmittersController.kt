@@ -54,14 +54,7 @@ class TransmittersController(args: Bundle? = null) : CustomToolbarController<Con
             SmallHeaderItem(R.string.guide_wiping_title)
           )
           
-          uiModel.devices.map {
-            TransmitterItem(it, this).also { transmitterItem ->
-              uiModel.stateChange.bleDevice.peripheral?.powerLevel?.let { powerLevel ->
-                transmitterItem.setPowerLevel(powerLevel)
-              }
-            }
-          }
-            .let { list.addAll(it) }
+          uiModel.devices.map { TransmitterItem(it, this) }.also { list.addAll(it) }
           
           items.addAll(list)
         }
@@ -71,6 +64,11 @@ class TransmittersController(args: Bundle? = null) : CustomToolbarController<Con
               .first { it.transmitter.macAddress == uiModel.stateChange.bleDevice.macAddress }
               .setPowerLevel(powerLevel)
           }
+        }
+        is TransmittersUiModel.TransmitterConnectionState -> {
+          items.filterIsInstance<TransmitterItem>()
+            .first { it.transmitter.macAddress == uiModel.connectionState.macAddress }
+            .setConnectionState(uiModel.connectionState.connectionState)
         }
       }
     }

@@ -10,14 +10,22 @@
   <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
     android:orientation="vertical">
 
-    <Button
+    <TextView
+      style="@style/Text.Large"
+      android:layout_gravity="center"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:enabled="@{!home.isScanning}"
-      android:onClick="@{() -> home.onStartClicked()}"
-      android:text='@{home.isScanning() ? @string/bluetooth_scanning : @string/bluetooth_start_scanning}' />
+      android:text="Waiting for transmitter connection" />
+
+<!--    <Button-->
+<!--      android:layout_width="wrap_content"-->
+<!--      android:layout_height="wrap_content"-->
+<!--      android:enabled="@{!home.isScanning}"-->
+<!--      android:onClick="@{() -> home.onStartClicked()}"-->
+<!--      android:text='@{home.isScanning() ? @string/bluetooth_scanning : @string/bluetooth_start_scanning}' />-->
 
   </LinearLayout>
 

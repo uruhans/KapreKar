@@ -1,5 +1,6 @@
 package com.coloplast.olympus.bluetooth
 
+import com.coloplast.olympus.bluetooth.model.ConnectionState
 import com.coloplast.olympus.bluetooth.model.StateChange
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
@@ -13,13 +14,25 @@ object StateDispatcher {
   private val stateChangeRelay = PublishRelay.create<StateChange>()
   private val latestState = mutableMapOf<String, StateChange>()
   
+  private val connectionStateRelay = PublishRelay.create<ConnectionState>()
+  private val latestConnectionState = mutableMapOf<String, ConnectionState>()
+  
   fun dispatch(stateChange: StateChange) {
     latestState[stateChange.bleDevice.macAddress] = stateChange
     stateChangeRelay.accept(stateChange)
   }
   
-  private fun dispatchLatestStateChangesToNewObservers() : Observable<StateChange> {
+  fun dispatch(connectionState: ConnectionState) {
+    latestConnectionState[connectionState.macAddress] = connectionState
+    connectionStateRelay.accept(connectionState)
+  }
+  
+  private fun dispatchLatestStateChangesToNewObservers(): Observable<StateChange> {
     return Observable.fromIterable(latestState.values)
+  }
+  
+  private fun dispatchLatestConnectionStateToNewObservers(): Observable<ConnectionState> {
+    return Observable.fromIterable(latestConnectionState.values)
   }
   
   /**
@@ -27,10 +40,17 @@ object StateDispatcher {
    * NOTICE: it will return states for *all* connected transmitters, so it's your job to determine filter out which you need
    * NOTICE 2: will repeat it's latest state to new subscribers
    */
-  fun stateChangeObservable() : Observable<StateChange> {
+  fun stateChangeObservable(): Observable<StateChange> {
     return stateChangeRelay.publish()
       .refCount()
       .startWith(dispatchLatestStateChangesToNewObservers())
+      .doOnNext { Timber.d("Dispatcher $it") }
+  }
+  
+  fun connectionStateObservable(): Observable<ConnectionState> {
+    return connectionStateRelay.publish()
+      .refCount()
+      .startWith(dispatchLatestConnectionStateToNewObservers())
       .doOnNext { Timber.d("Dispatcher $it") }
   }
 }

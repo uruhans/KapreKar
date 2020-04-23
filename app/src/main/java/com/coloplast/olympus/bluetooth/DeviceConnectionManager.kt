@@ -10,69 +10,49 @@ import org.koin.core.get
 
 class DeviceConnectionManager : KoinComponent {
   
-  interface Listener {
-    fun onResult(deviceResult: DeviceResult)
-  }
-  
   private val connections = mutableMapOf<String, DeviceConnection>()
   private val disposables = mutableMapOf<String, Disposable>()
-  private var listener: Listener? = null
   
   private val resultRelay = PublishRelay.create<DeviceResult>()
+  private val observables = mutableMapOf<String, Observable<DeviceResult>>()
   
-  private val disposables2 = mutableMapOf<String, Observable<DeviceResult>>()
-  
-  fun onResultObservable(): Observable<DeviceResult> {
+  private fun onResultObservable(): Observable<DeviceResult> {
     return resultRelay.publish()
       .refCount()
   }
   
   fun connect(macAddress: String): Observable<DeviceResult> {
-    disposables[macAddress]?.dispose()
-    disposables.remove(macAddress)
+    return get<DeviceConnection>().subscribeForNotifications(macAddress)
     
-    
-    //    synchronized(listeners) {
-    //      if (!listeners.contains(listener)) {
-    //        listeners.add(listener)
-    //      }
-    //    }
-    
-    //this.listener = listener
-    
-    //    if (connections.containsKey(macAddress)) {
-    //      return
-    //    }
-    
-    if (!connections.containsKey(macAddress)) {
-      get<DeviceConnection>().also { connections[macAddress] = it }
-    }
-    
-    disposables[macAddress] = connections[macAddress]!!.subscribeForNotifications(macAddress)
-      .subscribe(
-        { deviceResult -> resultRelay.accept(deviceResult) },
-        { cleanup(macAddress) }
-      )
-    
-    if (!disposables2.containsKey(macAddress)) {
-      disposables2[macAddress] = onResultObservable()
-    }
-    
-    return disposables2[macAddress]!!
+//    disposables[macAddress]?.dispose()
+//    disposables.remove(macAddress)
+//
+//    if (!connections.containsKey(macAddress)) {
+//      get<DeviceConnection>().also { connections[macAddress] = it }
+//    }
+//
+//    disposables[macAddress] = connections[macAddress]!!.subscribeForNotifications(macAddress)
+//      .subscribe(
+//        { deviceResult -> resultRelay.accept(deviceResult) },
+//        { cleanup(macAddress) }
+//      )
+//
+//    if (!observables.containsKey(macAddress)) {
+//      observables[macAddress] = onResultObservable()
+//    }
+//
+//    return observables[macAddress]!!
   }
   
   fun cleanup() {
     connections.clear()
-    
     disposables.forEach { it.value.dispose() }
     disposables.clear()
-    listener = null
   }
   
   fun cleanup(macAddress: String) {
     connections.remove(macAddress)
     disposables[macAddress]?.dispose()
     disposables.remove(macAddress)
-    this.listener = null
   }
 }

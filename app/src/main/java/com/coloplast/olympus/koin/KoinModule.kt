@@ -5,7 +5,6 @@ import android.content.Context
 import com.coloplast.olympus.BuildConfig
 import com.coloplast.olympus.Me
 import com.coloplast.olympus.bluetooth.BluetoothServiceViewModel
-import com.coloplast.olympus.bluetooth.DeviceConnectionManager
 import com.coloplast.olympus.bluetooth.businesslayer.BluetoothManager
 import com.coloplast.olympus.bluetooth.businesslayer.BluetoothManagerImpl
 import com.coloplast.olympus.bluetooth.businesslayer.DeviceConnection
@@ -34,7 +33,6 @@ val koinModule = module {
   single { AddTransmitterViewModel(get(), get()) }
   single { BluetoothServiceViewModel(get(), get(), get()) }
   
-  single { DeviceConnectionManager() }
   single { TransmittersViewModel(get(), get()) }
   
   factory { HomeViewModel(get()) }

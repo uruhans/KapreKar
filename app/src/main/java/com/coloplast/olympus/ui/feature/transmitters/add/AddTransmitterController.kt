@@ -74,6 +74,10 @@ class AddTransmitterController(args: Bundle? = null) : CustomToolbarController<C
     return addTransmitterRelay.publish().refCount()
   }
   
+  override fun getNavigationIconResId(): Int {
+    return R.drawable.ic_arrow
+  }
+  
   override fun getLayout(): Int {
     return R.layout.controller_transmitters_add
   }

@@ -1,15 +1,11 @@
 package com.coloplast.olympus.bluetooth.service
 
 import android.app.*
-import android.content.BroadcastReceiver
-import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import com.artemzin.rxui.RxUi
-import com.coloplast.olympus.BuildConfig
 import com.coloplast.olympus.R
 import com.coloplast.olympus.activities.MainActivity
 import com.coloplast.olympus.bluetooth.BluetoothServiceViewModel

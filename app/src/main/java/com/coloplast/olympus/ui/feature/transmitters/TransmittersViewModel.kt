@@ -26,6 +26,7 @@ class TransmittersViewModel(private val bluetoothManager: BluetoothManager, priv
   override fun bind(uiView: TransmittersView): Disposable {
     val disposable = CompositeDisposable()
     
+    // transmitters stored in database
     val storedTransmitters = transmitterComponent.getTransmitters()
       .subscribeOn(Schedulers.io())
       .doOnNext { Timber.d("getTransmitters hit") }
@@ -37,21 +38,45 @@ class TransmittersViewModel(private val bluetoothManager: BluetoothManager, priv
           emptyList()
         }
       }
-      .doOnNext { Timber.d("size: ${it.size}") }
+      
+    // transforming the stored transmitters into UiModel to be displayed on the screen
+    val transformedTransmitters = storedTransmitters
       .map { TransmittersUiModel.ConnectedDevices(it) as TransmittersUiModel }
       .startWith(TransmittersUiModel.Empty())
     
-    val delayedSubscriptionUntilCorrectReturnType = storedTransmitters.filter { it is TransmittersUiModel.ConnectedDevices }
+    // a delayed subscription (others should only subscribe once transmitters have been returned to the controller)
+    val delayedSubscriptionUntilCorrectReturnType = transformedTransmitters.filter { it is TransmittersUiModel.ConnectedDevices }
+  
+    // this is to prevent multiple subscriptions on the same transmitter
+    val connectedTransmitters = mutableListOf<String>()
     
-    val connectionStateObservable = StateDispatcher.connectionStateObservable()
+    // get the connectionstate of the transmitters
+    val bleConnectionStateObservable = storedTransmitters
       .delaySubscription(delayedSubscriptionUntilCorrectReturnType)
-      .map { TransmittersUiModel.TransmitterConnectionState(it) }
+      .filter { it.isNotEmpty() }
+      .flatMapIterable { it }
+      .map { it.macAddress }
+      .filter { macAddress -> connectedTransmitters.none { it == macAddress } }
+      .flatMap { macAddress ->
+        bluetoothManager.bleConnectionStateObservable(macAddress)
+          .doOnNext {
+            if(it == BleConnectionState.CONNECTED) {
+              connectedTransmitters.add(macAddress)
+            }
+            else {
+              connectedTransmitters.remove(macAddress)
+            }
+          }
+          .doOnNext { Timber.d("transmitter: $macAddress - $it") }
+          .map { TransmittersUiModel.TransmitterConnectionState(ConnectionState(macAddress, it)) as TransmittersUiModel }
+      }
    
+    // and return the latest update from the transmitters
     val latestStateObservable = StateDispatcher.stateChangeObservable()
       .delaySubscription(delayedSubscriptionUntilCorrectReturnType)
       .map { TransmittersUiModel.StateUpdate(it) }
     
-    disposable.add(Observable.merge(storedTransmitters, connectionStateObservable, latestStateObservable).bind(uiView.render()))
+    disposable.add(Observable.merge(transformedTransmitters, bleConnectionStateObservable, latestStateObservable).bind(uiView.render()))
     return disposable
   }
 }

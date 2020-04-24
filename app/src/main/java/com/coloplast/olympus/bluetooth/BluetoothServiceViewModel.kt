@@ -70,10 +70,10 @@ class BluetoothServiceViewModel(
       }
       .switchMap {
         storedBleDevicesWithDelay
-          .zipWith(repeatIntervalObservable(5),
-            BiFunction { transmitter: Transmitter, _: Long -> transmitter })
           .repeatWhen { repeatIntervalObservable(20) }
           .retryWhen { repeatIntervalObservable(20) }
+          .zipWith(repeatIntervalObservable(5),
+            BiFunction { transmitter: Transmitter, _: Long -> transmitter })
           .filter { transmitter -> connectedBleDevices.none { transmitter.macAddress == it } }
           .flatMap {
             Timber.d("Begin scan")

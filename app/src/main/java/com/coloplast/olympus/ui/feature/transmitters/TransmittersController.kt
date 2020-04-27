@@ -4,10 +4,12 @@ import android.os.Bundle
 import androidx.databinding.ObservableArrayList
 import com.artemzin.rxui.RxUi
 import com.bluelinelabs.conductor.RouterTransaction
+import com.bluelinelabs.conductor.changehandler.HorizontalChangeHandler
 import com.coloplast.olympus.BR
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerTransmittersBinding
 import com.coloplast.olympus.ui.common.CustomToolbarController
+import com.coloplast.olympus.ui.feature.transmitters.add.AddTransmitterController
 import com.coloplast.olympus.ui.feature.transmitters.models.SectionDivider
 import com.coloplast.olympus.ui.feature.transmitters.models.SmallHeaderItem
 import com.coloplast.olympus.ui.feature.transmitters.models.TransmitterItem
@@ -17,6 +19,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Function
 import me.tatarka.bindingcollectionadapter2.itembindings.OnItemBindClass
 import org.koin.core.inject
+import timber.log.Timber
 
 class TransmittersController(args: Bundle? = null) : CustomToolbarController<ControllerTransmittersBinding>(args), TransmittersView,
     TransmitterItem.Listener {
@@ -41,25 +44,46 @@ class TransmittersController(args: Bundle? = null) : CustomToolbarController<Con
   
   override fun render(): Function<Observable<TransmittersUiModel>, Disposable> {
     return RxUi.ui { uiModel ->
-    
-      when(uiModel) {
+      Timber.d("$uiModel")
+      
+      when (uiModel) {
         is TransmittersUiModel.ConnectedDevices -> {
           items.clear()
           
           val list = mutableListOf<Any>(
             SmallHeaderItem(R.string.guide_wiping_title)
           )
-  
-          uiModel.devices.map { TransmitterItem(it, this) }.let { list.addAll(it) }
-  
+          
+          uiModel.devices.map { TransmitterItem(it, this) }.also { list.addAll(it) }
+          
           items.addAll(list)
+        }
+        is TransmittersUiModel.StateUpdate -> {
+          uiModel.stateChange.bleDevice.peripheral?.powerLevel?.let { powerLevel ->
+            items.filterIsInstance<TransmitterItem>()
+              .first { it.transmitter.macAddress == uiModel.stateChange.bleDevice.macAddress }
+              .setPowerLevel(powerLevel)
+          }
+        }
+        is TransmittersUiModel.TransmitterConnectionState -> {
+          items.filterIsInstance<TransmitterItem>()
+            .first { it.transmitter.macAddress == uiModel.connectionState.macAddress }
+            .setConnectionState(uiModel.connectionState.connectionState)
         }
       }
     }
   }
   
-  override fun onDeviceClicked() {
-    // bleDevice was clicked
+  override fun onTransmitterClicked() {
+  
+  }
+  
+  fun onAddTransmitterClicked() {
+    router.pushController(
+      AddTransmitterController.routerTransaction()
+        .pushChangeHandler(HorizontalChangeHandler())
+        .popChangeHandler(HorizontalChangeHandler())
+    )
   }
   
   override fun getNavigationIconResId(): Int {

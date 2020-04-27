@@ -1,22 +1,22 @@
 package com.coloplast.olympus.bluetooth.service
 
 import android.app.*
-import android.content.BroadcastReceiver
-import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import com.artemzin.rxui.RxUi
-import com.coloplast.olympus.BuildConfig
 import com.coloplast.olympus.R
 import com.coloplast.olympus.activities.MainActivity
 import com.coloplast.olympus.bluetooth.BluetoothServiceViewModel
 import com.coloplast.olympus.bluetooth.StateDispatcher
+import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.bluetooth.model.BluetoothServiceModel
 import com.coloplast.olympus.bluetooth.model.BluetoothServiceResult
+import com.coloplast.olympus.bluetooth.model.ConnectionState
 import com.coloplast.olympus.notifications.OlympusNotificationManager
+import com.coloplast.olympus.ui.feature.statemachine.models.OverlayState
+import com.coloplast.olympus.ui.feature.statemachine.models.UiState
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -58,11 +58,18 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
     
       when(it) {
         is BluetoothServiceModel.DeviceUpdate -> {
+          if(it.statusChange.state == UiState.NO_CHANGE && it.statusChange.overlayState == OverlayState.NONE) {
+            return@ui
+          }
+          
           // this will allow for notifications to be send when app is in the background
           olympusNotificationManager.send(it.statusChange.state)
           
           // this will dispatch the state change to any who observes it (none if app is in background)
-          StateDispatcher.stateChangeRelay.accept(it.statusChange)
+          StateDispatcher.dispatch(it.statusChange)
+          
+          // TODO - change this - it's only temporary - would be nice to have real connection states being sent
+          StateDispatcher.dispatch(ConnectionState(it.statusChange.bleDevice.macAddress, BleConnectionState.CONNECTED))
         }
       }
     }

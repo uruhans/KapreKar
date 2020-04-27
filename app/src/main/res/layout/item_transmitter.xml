@@ -5,6 +5,8 @@
 
   <data>
 
+    <import type="com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState" />
+
     <variable
       name="item"
       type="com.coloplast.olympus.ui.feature.transmitters.models.TransmitterItem" />
@@ -26,7 +28,7 @@
       <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/transmitter_side"
+        android:src="@{item.connectionState == BleConnectionState.CONNECTED ? @drawable/transmitter_side : @drawable/transmitter_side_2}"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -38,7 +40,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/spacing_larger"
         android:layout_marginTop="@dimen/spacing_standard"
-        android:text="@{item.bleDevice.name}"
+        android:text="@{item.transmitter.customName}"
         android:textColor="@color/darkGrey01"
         android:textSize="@dimen/text_20"
         app:layout_constraintStart_toStartOf="parent"
@@ -55,6 +57,7 @@
         app:layout_constraintHorizontal_bias="1"
         app:layout_constraintStart_toStartOf="@+id/name"
         app:layout_constraintTop_toTopOf="@+id/name"
+        app:powerLevel="@{item.currentPowerLevel}"
         tools:src="@drawable/ic_battery_full_24dp" />
 
       <TextView
@@ -63,7 +66,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/spacing_larger"
-        android:text="@{item.bleDevice.macAddress}"
+        android:text="@{item.transmitter.macAddress}"
         android:textColor="@color/darkGrey03"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/name"

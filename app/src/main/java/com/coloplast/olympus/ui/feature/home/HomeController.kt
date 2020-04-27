@@ -26,8 +26,8 @@ import com.coloplast.olympus.ui.common.dialogs.BaseDialogController
 import com.coloplast.olympus.ui.common.dialogs.DialogController
 import com.coloplast.olympus.ui.common.widgets.PatchView
 import com.coloplast.olympus.ui.dialogs.ImageDialogController
-import com.coloplast.olympus.ui.feature.guides.connection.ConnectionGuideController
-import com.coloplast.olympus.ui.feature.guides.getstarted.GetStartedGuideController
+import com.coloplast.olympus.ui.feature.guides.GuideController
+import com.coloplast.olympus.ui.feature.guides.models.GuideType
 import com.coloplast.olympus.ui.feature.home.models.HomeUiModel
 import com.coloplast.olympus.ui.feature.home.models.PatchVisible
 import com.coloplast.olympus.ui.feature.home.models.SideMenuType
@@ -340,14 +340,14 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
     when (menuType) {
       SideMenuType.STATUS -> {
         router.pushController(
-          GetStartedGuideController.routerTransaction()
+          GuideController.routerTransaction(GuideType.GET_STARTED)
             .pushChangeHandler(VerticalChangeHandler())
             .popChangeHandler(VerticalChangeHandler())
         )
       }
       SideMenuType.GUIDES -> {
         router.pushController(
-          ConnectionGuideController.routerTransaction()
+          GuideController.routerTransaction(GuideType.CONNECTION)
             .pushChangeHandler(VerticalChangeHandler())
             .popChangeHandler(VerticalChangeHandler())
         )

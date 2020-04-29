@@ -2,18 +2,23 @@ package com.coloplast.olympus.ui.feature.transmitters
 
 import android.os.Bundle
 import androidx.databinding.ObservableArrayList
+import androidx.databinding.ObservableField
 import com.artemzin.rxui.RxUi
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.HorizontalChangeHandler
 import com.coloplast.olympus.BR
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerTransmittersBinding
+import com.coloplast.olympus.shared.models.Transmitter
 import com.coloplast.olympus.ui.common.CustomToolbarController
+import com.coloplast.olympus.ui.common.dialogs.BaseDialogController
+import com.coloplast.olympus.ui.common.dialogs.DialogController
 import com.coloplast.olympus.ui.feature.transmitters.add.AddTransmitterController
 import com.coloplast.olympus.ui.feature.transmitters.models.SectionDivider
 import com.coloplast.olympus.ui.feature.transmitters.models.SmallHeaderItem
 import com.coloplast.olympus.ui.feature.transmitters.models.TransmitterItem
 import com.coloplast.olympus.ui.feature.transmitters.models.TransmittersUiModel
+import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Function
@@ -22,15 +27,23 @@ import org.koin.core.inject
 import timber.log.Timber
 
 class TransmittersController(args: Bundle? = null) : CustomToolbarController<ControllerTransmittersBinding>(args), TransmittersView,
-    TransmitterItem.Listener {
+    TransmitterItem.Listener, BaseDialogController.Listener {
   
   private val viewModel: TransmittersViewModel by inject()
+  
+  private val deleteTransmitterRelay = PublishRelay.create<String>()
   
   val items = ObservableArrayList<Any>()
   val itemBinding: OnItemBindClass<Any> = OnItemBindClass<Any>()
     .map(SmallHeaderItem::class.java, BR.item, R.layout.item_small_header)
     .map(SectionDivider::class.java, BR.item, R.layout.item_recyclerview_section_divider)
     .map(TransmitterItem::class.java, BR.item, R.layout.item_transmitter)
+  
+  val addTransmitterVisible = ObservableField(false)
+  
+  private var dialogController: DialogController? = null
+  
+  private var transmitterToDelete : Transmitter? = null
   
   override fun attachVariables(viewBinding: ControllerTransmittersBinding) {
     super.attachVariables(viewBinding)
@@ -48,15 +61,28 @@ class TransmittersController(args: Bundle? = null) : CustomToolbarController<Con
       
       when (uiModel) {
         is TransmittersUiModel.ConnectedDevices -> {
-          items.clear()
+          //items.clear()
           
           val list = mutableListOf<Any>(
             SmallHeaderItem(R.string.guide_wiping_title)
           )
           
-          uiModel.devices.map { TransmitterItem(it, this) }.also { list.addAll(it) }
+          uiModel.devices.map { TransmitterItem(it, this) }
+            .also { list.addAll(it) }
           
-          items.addAll(list)
+          list.filterIsInstance(TransmitterItem::class.java).forEach { transmitterItem ->
+            if(items.filterIsInstance(TransmitterItem::class.java).none { it.transmitter.macAddress == transmitterItem.transmitter.macAddress }) {
+              items.add(transmitterItem)
+            }
+          }
+  
+          items.filterIsInstance(TransmitterItem::class.java).forEach { transmitterItem ->
+            if(list.filterIsInstance(TransmitterItem::class.java).none { it.transmitter.macAddress == transmitterItem.transmitter.macAddress }) {
+              items.remove(transmitterItem)
+            }
+          }
+          
+          addTransmitterVisible.set(items.filterIsInstance(TransmitterItem::class.java).size < 2)
         }
         is TransmittersUiModel.StateUpdate -> {
           uiModel.stateChange.bleDevice.peripheral?.powerLevel?.let { powerLevel ->
@@ -70,12 +96,53 @@ class TransmittersController(args: Bundle? = null) : CustomToolbarController<Con
             .first { it.transmitter.macAddress == uiModel.connectionState.macAddress }
             .setConnectionState(uiModel.connectionState.connectionState)
         }
+        is TransmittersUiModel.TransmitterDeleted -> {
+        
+        }
       }
     }
   }
   
-  override fun onTransmitterClicked() {
+  override fun onTransmitterClicked(transmitter: Transmitter) {
+    transmitterToDelete = transmitter
+    
+    dialogController = DialogController.create(
+      this,
+      1000,
+      R.string.delete_transmitter_title,
+      R.string.delete_transmitter_message,
+      R.string.generic_ok,
+      R.string.generic_cancel,
+      dismissAllowed = true
+    )
+    
+    dialogController?.show()
+  }
   
+  override fun onPositiveButtonClicked(requestCode: Int) {
+    when(requestCode) {
+      1000 -> {
+        dialogController?.dismissDialog(true)
+      }
+    }
+  }
+  
+  override fun onNeutralButtonClicked(requestCode: Int) {
+    when(requestCode) {
+      1000 -> {
+        dialogController?.dismissDialog(false)
+      }
+    }
+  }
+  
+  override fun onDialogDismissed(requestCode: Int) {
+    when(requestCode) {
+      1000 -> {
+        transmitterToDelete?.let {
+          deleteTransmitterRelay.accept(it.macAddress)
+        }
+      }
+    }
   }
   
   fun onAddTransmitterClicked() {
@@ -84,6 +151,10 @@ class TransmittersController(args: Bundle? = null) : CustomToolbarController<Con
         .pushChangeHandler(HorizontalChangeHandler())
         .popChangeHandler(HorizontalChangeHandler())
     )
+  }
+  
+  override fun requestDeleteTransmitter() : Observable<String> {
+    return deleteTransmitterRelay.publish().refCount()
   }
   
   override fun getNavigationIconResId(): Int {

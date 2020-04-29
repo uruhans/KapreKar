@@ -1,6 +1,6 @@
 package com.coloplast.olympus.bluetooth
 
-import com.coloplast.olympus.bluetooth.model.ConnectionState
+import com.coloplast.olympus.bluetooth.businesslayer.models.RawDataPackage
 import com.coloplast.olympus.bluetooth.model.StateChange
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
@@ -14,25 +14,19 @@ object StateDispatcher {
   private val stateChangeRelay = PublishRelay.create<StateChange>()
   private val latestState = mutableMapOf<String, StateChange>()
   
-  private val connectionStateRelay = PublishRelay.create<ConnectionState>()
-  private val latestConnectionState = mutableMapOf<String, ConnectionState>()
+  private val rawDataPackageRelay = PublishRelay.create<String>()
   
   fun dispatch(stateChange: StateChange) {
     latestState[stateChange.bleDevice.macAddress] = stateChange
     stateChangeRelay.accept(stateChange)
   }
   
-  fun dispatch(connectionState: ConnectionState) {
-    latestConnectionState[connectionState.macAddress] = connectionState
-    connectionStateRelay.accept(connectionState)
+  fun dispatch(macAddress: String) {
+    rawDataPackageRelay.accept(macAddress)
   }
   
   private fun dispatchLatestStateChangesToNewObservers(): Observable<StateChange> {
     return Observable.fromIterable(latestState.values)
-  }
-  
-  private fun dispatchLatestConnectionStateToNewObservers(): Observable<ConnectionState> {
-    return Observable.fromIterable(latestConnectionState.values)
   }
   
   /**
@@ -47,10 +41,8 @@ object StateDispatcher {
       .doOnNext { Timber.d("Dispatcher $it") }
   }
   
-  fun connectionStateObservable(): Observable<ConnectionState> {
-    return connectionStateRelay.publish()
+  fun rawPackageUpdateObservable(): Observable<String> {
+    return rawDataPackageRelay.publish()
       .refCount()
-      .startWith(dispatchLatestConnectionStateToNewObservers())
-      .doOnNext { Timber.d("Dispatcher $it") }
   }
 }

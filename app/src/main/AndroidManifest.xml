@@ -36,6 +36,14 @@
       </intent-filter>
     </receiver>
 
+    <receiver
+      android:name=".bluetooth.service.ResetReceiver"
+      android:exported="true">
+      <intent-filter>
+        <action android:name="${applicationId}.BLUETOOTH.RESET_SERVICE" />
+      </intent-filter>
+    </receiver>
+
     <service android:name=".bluetooth.service.BluetoothConnectionService" />
   </application>
 

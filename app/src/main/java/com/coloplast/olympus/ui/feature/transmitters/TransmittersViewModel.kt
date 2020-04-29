@@ -30,6 +30,9 @@ class TransmittersViewModel(private val bluetoothManager: BluetoothManager, priv
     val storedTransmitters = transmitterComponent.getTransmitters()
       .subscribeOn(Schedulers.io())
       .doOnNext { Timber.d("getTransmitters hit") }
+      .distinctUntilChanged()
+      
+    val transmittersOrEmptyObservable = storedTransmitters
       .map {
         if (it is DataResult.Success<*>) {
           it.data as List<Transmitter>
@@ -38,9 +41,10 @@ class TransmittersViewModel(private val bluetoothManager: BluetoothManager, priv
           emptyList()
         }
       }
+      .cache()
       
     // transforming the stored transmitters into UiModel to be displayed on the screen
-    val transformedTransmitters = storedTransmitters
+    val transformedTransmitters = transmittersOrEmptyObservable
       .map { TransmittersUiModel.ConnectedDevices(it) as TransmittersUiModel }
       .startWith(TransmittersUiModel.Empty())
     
@@ -51,7 +55,7 @@ class TransmittersViewModel(private val bluetoothManager: BluetoothManager, priv
     val connectedTransmitters = mutableListOf<String>()
     
     // get the connectionstate of the transmitters
-    val bleConnectionStateObservable = storedTransmitters
+    val bleConnectionStateObservable = transmittersOrEmptyObservable
       .delaySubscription(delayedSubscriptionUntilCorrectReturnType)
       .filter { it.isNotEmpty() }
       .flatMapIterable { it }
@@ -76,7 +80,16 @@ class TransmittersViewModel(private val bluetoothManager: BluetoothManager, priv
       .delaySubscription(delayedSubscriptionUntilCorrectReturnType)
       .map { TransmittersUiModel.StateUpdate(it) }
     
-    disposable.add(Observable.merge(transformedTransmitters, bleConnectionStateObservable, latestStateObservable).bind(uiView.render()))
+    val deleteTransmitterObservable = uiView.requestDeleteTransmitter()
+      .switchMap {macAddress ->
+        transmitterComponent.deleteTransmitter(macAddress)
+          .subscribeOn(Schedulers.io())
+          .toSingle { true }
+          .toObservable()
+          .map { TransmittersUiModel.TransmitterDeleted(it) }
+      }
+    
+    disposable.add(Observable.merge(transformedTransmitters, bleConnectionStateObservable, latestStateObservable, deleteTransmitterObservable).bind(uiView.render()))
     return disposable
   }
 }

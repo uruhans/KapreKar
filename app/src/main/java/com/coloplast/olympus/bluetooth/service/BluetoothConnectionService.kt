@@ -1,27 +1,28 @@
 package com.coloplast.olympus.bluetooth.service
 
 import android.app.*
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import com.artemzin.rxui.RxUi
+import com.coloplast.olympus.BuildConfig
 import com.coloplast.olympus.R
 import com.coloplast.olympus.activities.MainActivity
 import com.coloplast.olympus.bluetooth.BluetoothServiceViewModel
 import com.coloplast.olympus.bluetooth.StateDispatcher
-import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.bluetooth.model.BluetoothServiceModel
 import com.coloplast.olympus.bluetooth.model.BluetoothServiceResult
-import com.coloplast.olympus.bluetooth.model.ConnectionState
 import com.coloplast.olympus.notifications.OlympusNotificationManager
-import com.coloplast.olympus.ui.feature.statemachine.models.OverlayState
-import com.coloplast.olympus.ui.feature.statemachine.models.UiState
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Function
 import org.koin.core.KoinComponent
+import org.koin.core.get
 import org.koin.core.inject
 import timber.log.Timber
 
@@ -32,11 +33,8 @@ import timber.log.Timber
  */
 class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceResult<BluetoothServiceModel> {
   
-  private val viewModel: BluetoothServiceViewModel by inject()
   private val notificationManager: NotificationManager by inject()
-  
   private val olympusNotificationManager: OlympusNotificationManager by inject()
-  
   private val compositeDisposable = CompositeDisposable()
   
   override fun onBind(intent: Intent?): IBinder? {
@@ -45,31 +43,41 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
   }
   
   override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+    return startService()
+  }
+  
+  private fun startService(): Int {
+    IntentFilter().let {
+      it.addAction(INTENT_FILTER_STOP_SERVICE)
+      it.addAction(INTENT_FILTER_INITIATE_RESET)
+      registerReceiver(intentReceiver, it)
+    }
+    
     // start the actual foreground service (a permanent notification is required to inform the user of it)
     startForeground(2125, getServiceNotification())
     
-    compositeDisposable.add(viewModel.bind(this))
+    compositeDisposable.add(get<BluetoothServiceViewModel>().bind(this))
     return START_STICKY
   }
   
   override fun onResult(): Function<Observable<BluetoothServiceModel>, Disposable> {
     return RxUi.ui {
       Timber.d("$it")
-    
-      when(it) {
+      
+      when (it) {
         is BluetoothServiceModel.DeviceUpdate -> {
-          if(it.statusChange.state == UiState.NO_CHANGE && it.statusChange.overlayState == OverlayState.NONE) {
-            return@ui
-          }
+          //          if(it.statusChange.state == UiState.NO_CHANGE && it.statusChange.overlayState == OverlayState.NONE) {
+          //            return@ui
+          //          }
           
           // this will allow for notifications to be send when app is in the background
           olympusNotificationManager.send(it.statusChange.state)
           
           // this will dispatch the state change to any who observes it (none if app is in background)
           StateDispatcher.dispatch(it.statusChange)
-          
-          // TODO - change this - it's only temporary - would be nice to have real connection states being sent
-          StateDispatcher.dispatch(ConnectionState(it.statusChange.bleDevice.macAddress, BleConnectionState.CONNECTED))
+        }
+        is BluetoothServiceModel.RawDataPackageUpdate -> {
+          StateDispatcher.dispatch(it.macAddress)
         }
       }
     }
@@ -81,11 +89,15 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
     val pendingIntent: PendingIntent = Intent(this, MainActivity::class.java).let { notificationIntent ->
       PendingIntent.getActivity(this, 0, notificationIntent, 0)
     }
-
+    
+//    val resetPendingIntent: PendingIntent = Intent(INTENT_FILTER_INITIATE_RESET)
+//      .let { resetIntent -> PendingIntent.getBroadcast(this, 0, resetIntent, 0) }
+    
     // TODO - remove hardcoded text
     val notification = NotificationCompat.Builder(this, "2")
       .setContentTitle("Olympus Bluetooth Connection")
       .setContentText("Maintaining transmitter connection")
+//      .addAction(R.drawable.ic_arrow, "Reset", resetPendingIntent)
       .setSmallIcon(R.drawable.ic_detailed_plate_ok)
       .setContentIntent(pendingIntent)
       .setPriority(NotificationCompat.PRIORITY_MIN)
@@ -110,9 +122,36 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
     }
   }
   
+  private val intentReceiver = object : BroadcastReceiver() {
+    override fun onReceive(context: Context?, intent: Intent?) {
+      if (intent?.action == INTENT_FILTER_STOP_SERVICE) {
+        killService()
+      }
+      else if (intent?.action == INTENT_FILTER_INITIATE_RESET) {
+        with(Intent(this@BluetoothConnectionService, ResetReceiver::class.java)
+          .also { it.action = INTENT_FILTER_RESET_SERVICE }
+        ) {
+          sendBroadcast(this)
+        }
+      }
+    }
+  }
+  
   private fun killService() {
-    compositeDisposable.dispose()
+    unregisterReceiver(intentReceiver)
+    compositeDisposable.clear()
     stopForeground(true)
     stopSelf()
+  }
+  
+  companion object {
+    const val INTENT_FILTER_STOP_SERVICE = "${BuildConfig.APPLICATION_ID}.BLUETOOTH.STOP_SERVICE"
+    const val INTENT_FILTER_INITIATE_RESET = "${BuildConfig.APPLICATION_ID}.BLUETOOTH.INTENT_FILTER_INITIATE_RESET"
+    const val INTENT_FILTER_RESET_SERVICE = " ${BuildConfig.APPLICATION_ID}.BLUETOOTH.RESET_SERVICE"
+    //    fun resetService(activity: Activity) {
+    //      with(Intent(INTENT_FILTER_RESET_SERVICE)) {
+    //        activity.sendBroadcast(this)
+    //      }
+    //    }
   }
 }

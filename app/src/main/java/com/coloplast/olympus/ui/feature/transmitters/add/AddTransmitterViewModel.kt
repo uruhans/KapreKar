@@ -40,7 +40,6 @@ class AddTransmitterViewModel(private val bluetoothManager: BluetoothManager, pr
           .toObservable()
       }
     
-    
     disposable.add(Observable.merge(addTransmitterObservable, scanResultObservable).bind(uiView.render()))
     return disposable
   }

@@ -28,6 +28,7 @@ import com.coloplast.olympus.ui.common.dialogs.BaseDialogController
 import com.coloplast.olympus.ui.common.dialogs.DialogController
 import com.coloplast.olympus.ui.common.widgets.PatchView
 import com.coloplast.olympus.ui.dialogs.ImageDialogController
+import com.coloplast.olympus.ui.dialogs.PatchDialogController
 import com.coloplast.olympus.ui.feature.guides.GuideController
 import com.coloplast.olympus.ui.feature.guides.models.GuideType
 import com.coloplast.olympus.ui.feature.home.models.HomeUiModel
@@ -72,6 +73,8 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   
   private var currentUiState = UiState.INITIAL
   private var stateRouter: Router? = null
+  
+  private var patchDialog: PatchDialogController? = null
   
   constructor() : super()
   constructor(args: Bundle?) : super(args)
@@ -272,12 +275,19 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   
   override fun requestConnectionState(): Observable<String> {
     return requestConnectionStateRelay
-      .publish().refCount()
+      .publish()
+      .refCount()
   }
   
   val patchClickedListener = object : PatchView.Listener {
     override fun onPatchClicked(patch: Patch) {
-      Timber.e("Patch was clicked")
+      patchDialog = PatchDialogController.create(
+        this@HomeController,
+        1212,
+        dismissAllowed = true
+      )
+      
+      patchDialog?.show()
     }
   }
   

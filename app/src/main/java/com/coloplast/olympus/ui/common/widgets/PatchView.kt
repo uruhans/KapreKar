@@ -19,6 +19,7 @@ import com.coloplast.olympus.ui.common.extensions.tintDrawable
 import com.coloplast.olympus.ui.common.extensions.visibleOrGoneFade
 import com.coloplast.olympus.ui.common.listeners.AnimatorListenerImpl
 import com.coloplast.olympus.utils.UiUtils
+import com.coloplast.olympus.utils.UiUtils.dpToPx
 
 class PatchView @JvmOverloads constructor(
   context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
@@ -37,6 +38,8 @@ class PatchView @JvmOverloads constructor(
   private var rawRotationalAngle: Int? = null
   private var listener: Listener? = null
   
+  private var patchSize: Int? = null
+  
   private val errorStateChanged = object : Observable.OnPropertyChangedCallback() {
     override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
       if (isInError.get()) {
@@ -53,6 +56,9 @@ class PatchView @JvmOverloads constructor(
   
   init {
     background.setImageResource(R.drawable.ic_detailed_plate_ok)
+  
+    setSize(background)
+    
     addView(background)
     background.visibility = View.VISIBLE
     
@@ -157,11 +163,22 @@ class PatchView @JvmOverloads constructor(
         imageView.apply {
           setImageResource(it)
           addView(this)
+  
+          setSize(this)
           visibleOrGoneFade(true)
         }
       }
       
       addPulseAnimation(animatePulse)
+    }
+  }
+  
+  private fun setSize(imageView: ImageView) {
+    if(isDetailView) {
+      val params = imageView.layoutParams
+      params.height = 245.dpToPx().toInt()
+      params.width = 245.dpToPx().toInt()
+      this.layoutParams = params
     }
   }
   

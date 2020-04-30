@@ -5,8 +5,6 @@ import com.coloplast.olympus.ui.feature.home.HomeView
 import io.reactivex.disposables.Disposable
 
 abstract class BaseHomeViewModel : BaseViewModel<HomeUiModel, HomeView>() {
-  
-//  abstract fun bindScanner(uiView: HomeView): Disposable
-//  abstract fun connectBleDevice(uiView: HomeView): Disposable
-  
+  //  abstract fun bindScanner(uiView: HomeView): Disposable
+  abstract fun bindConnectionState(uiView: HomeView): Disposable
 }

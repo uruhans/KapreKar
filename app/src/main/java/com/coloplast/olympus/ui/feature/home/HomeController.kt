@@ -3,6 +3,7 @@ package com.coloplast.olympus.ui.feature.home
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.core.view.GravityCompat
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
@@ -15,6 +16,7 @@ import com.bluelinelabs.conductor.changehandler.FadeChangeHandler
 import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import com.coloplast.olympus.R
 import com.coloplast.olympus.bluetooth.businesslayer.enums.Attached
+import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
 import com.coloplast.olympus.bluetooth.businesslayer.enums.PowerLevel
 import com.coloplast.olympus.bluetooth.businesslayer.models.Patch
@@ -35,7 +37,9 @@ import com.coloplast.olympus.ui.feature.statemachine.models.UiState
 import com.coloplast.olympus.ui.feature.transmitters.TransmittersController
 import com.coloplast.olympus.ui.feature.uistates.*
 import com.coloplast.olympus.utils.OSUtils
+import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Function
 import org.koin.core.inject
@@ -45,6 +49,10 @@ import java.time.LocalDateTime
 class HomeController : BaseController<ControllerHomeBinding>, HomeView, PermissionHandler, BaseDialogController.Listener {
   
   private val viewModel: HomeViewModel by inject()
+  
+  private val requestConnectionStateRelay = PublishRelay.create<String>()
+  private val connectionStateDisposable = CompositeDisposable()
+  
   
   private var dialogController: DialogController? = null
   private var imageDialogController: ImageDialogController? = null
@@ -87,10 +95,13 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
       Timber.d("uiModel: $uiModel")
       
       when (uiModel) {
-        is HomeUiModel.Disconnected -> {
-          isConnected.set(false)
+        is HomeUiModel.ConnectionStateUpdate -> {
+          isConnected.set(uiModel.connectionState == BleConnectionState.CONNECTED)
           
-          changeUiState(UiState.READY_TO_SCAN)
+          if(uiModel.connectionState != BleConnectionState.CONNECTED) {
+            changeUiState(UiState.DISCONNECTED)
+          }
+          //changeUiState(UiState.READY_TO_SCAN)
         }
         is HomeUiModel.BluetoothIssue -> {
           when (uiModel.bluetoothState) {
@@ -120,9 +131,12 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         is HomeUiModel.DeviceUpdate -> {
           val stateUpdate = uiModel.stateChange
           
+          var updateConnectionState = false
+          
           if(macAddress.isEmpty()) {
             // this is the first time coming through this controller - just pass it along
             macAddress = stateUpdate.bleDevice.macAddress
+            updateConnectionState = true
           }
           else {
             // it's not the first time - and its actually another transmitter
@@ -131,12 +145,19 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
               if (stateUpdate.bleDevice.peripheral?.transmitter?.attached == Attached.ATTACHED_ON_PATCH) {
                 // yes it is - so replace current transmitter with the new one
                 macAddress = stateUpdate.bleDevice.macAddress
+                updateConnectionState = true
               }
               else {
                 // no it's not attached, so we skip the result of this one
                 return@ui
               }
             }
+          }
+          
+          if(updateConnectionState) {
+            connectionStateDisposable.clear()
+            connectionStateDisposable.add(viewModel.bindConnectionState(this))
+            requestConnectionStateRelay.accept(macAddress)
           }
           
           powerLevel.set(stateUpdate.bleDevice.peripheral?.powerLevel)
@@ -200,9 +221,11 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         UiState.TRANSMITTER_BATTERY_CHARGING_W -> {
           TransmitterChargingController.routerTransaction()
         }
-        UiState.BLUETOOTH_NOT_ENABLED,
-        UiState.DISCONNECTED -> {
+        UiState.BLUETOOTH_NOT_ENABLED -> {
           BluetoothNotEnabledController.routerTransaction()
+        }
+        UiState.DISCONNECTED -> {
+          ReadyToScanController.routerTransaction()
         }
         UiState.INITIAL -> {
           UnknownController.routerTransaction()
@@ -229,6 +252,8 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         else {
           it.popChangeHandler(FadeChangeHandler())
             .pushChangeHandler(FadeChangeHandler())
+  
+          isPatchVisible.set(false)
         }
         
         if (stateRouter?.hasRootController() == true) {
@@ -243,6 +268,11 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
     if (newState != UiState.NO_CHANGE) {
       currentUiState = newState
     }
+  }
+  
+  override fun requestConnectionState(): Observable<String> {
+    return requestConnectionStateRelay
+      .publish().refCount()
   }
   
   val patchClickedListener = object : PatchView.Listener {
@@ -400,6 +430,11 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
       isConnected.set(bundle.getBoolean("CONNECTED"))
       macAddress = bundle.getString("MAC_ADDRESS", "")
     }
+  }
+  
+  override fun onDestroyView(view: View) {
+    connectionStateDisposable.clear()
+    super.onDestroyView(view)
   }
   
   companion object {

@@ -31,10 +31,11 @@ val koinModule = module {
   single<TransmitterComponent> { TransmitterComponentImpl() }
   
   single { AddTransmitterViewModel(get(), get()) }
-  single { BluetoothServiceViewModel(get(), get(), get()) }
+  
   
   single { TransmittersViewModel(get(), get()) }
   
+  factory { BluetoothServiceViewModel(get(), get(), get()) }
   factory { HomeViewModel(get()) }
   factory { DeviceConnection(get()) }
   

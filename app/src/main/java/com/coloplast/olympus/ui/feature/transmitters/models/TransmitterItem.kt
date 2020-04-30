@@ -7,7 +7,7 @@ import com.coloplast.olympus.shared.models.Transmitter
 
 class TransmitterItem(val transmitter: Transmitter, val listener: Listener) {
   interface Listener {
-    fun onTransmitterClicked()
+    fun onTransmitterClicked(transmitter: Transmitter)
   }
   
   val currentPowerLevel = ObservableField<PowerLevel>()
@@ -19,5 +19,9 @@ class TransmitterItem(val transmitter: Transmitter, val listener: Listener) {
   
   fun setConnectionState(connectionState: BleConnectionState) {
     this.connectionState.set(connectionState)
+  }
+  
+  fun onItemClicked() {
+    listener.onTransmitterClicked(transmitter)
   }
 }

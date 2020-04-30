@@ -11,5 +11,6 @@ sealed class TransmittersUiModel : UiModel {
   data class Empty(val empty: Boolean = true): TransmittersUiModel()
   data class StateUpdate(val stateChange: StateChange) : TransmittersUiModel()
   data class TransmitterConnectionState(val connectionState: ConnectionState) : TransmittersUiModel()
+  data class TransmitterDeleted(val success: Boolean = true): TransmittersUiModel()
   
 }

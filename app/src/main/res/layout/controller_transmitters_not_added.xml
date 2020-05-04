@@ -22,10 +22,10 @@
     <include
       android:id="@+id/toolbar"
       layout="@layout/view_toolbar"
+      app:support="@{toolbarSupport}"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent"
-      app:support="@{toolbarSupport}" />
+      app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
       android:id="@+id/title"
@@ -53,15 +53,15 @@
 
     <androidx.cardview.widget.CardView
       android:layout_width="match_parent"
-      android:layout_height="56dp"
+      android:layout_height="@dimen/cardview_button_height_default"
       android:layout_marginStart="@dimen/spacing_standard"
       android:layout_marginEnd="@dimen/spacing_standard"
       android:layout_marginBottom="@dimen/spacing_double"
       android:foreground="?attr/selectableItemBackground"
       app:cardBackgroundColor="@color/olympus_bluegreen"
       android:onClick="@{() -> controller.onAddTransmitterClicked()}"
-      app:cardCornerRadius="28dp"
-      app:cardElevation="4dp"
+      app:cardCornerRadius="@dimen/default_button_radius"
+      app:cardElevation="@dimen/default_button_elevation"
       app:cardPreventCornerOverlap="true"
       app:cardUseCompatPadding="false"
       app:layout_constraintBottom_toBottomOf="parent"
@@ -76,9 +76,8 @@
         android:fontFamily="sans-serif-medium"
         android:gravity="center"
         android:text="@string/transmitters_add_transmitter"
-        android:textSize="18sp"
-        android:textColor="@color/white"
-        />
+        android:textSize="@dimen/text_18"
+        android:textColor="@color/white" />
 
     </androidx.cardview.widget.CardView>
 

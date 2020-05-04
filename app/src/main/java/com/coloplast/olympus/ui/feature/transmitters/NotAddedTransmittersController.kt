@@ -25,9 +25,8 @@ class NotAddedTransmittersController : CustomToolbarController<ControllerTransmi
     return R.drawable.ic_arrow
   }
   
-  override fun getLayout(): Int {
-    return R.layout.controller_transmitters_not_added
-  }
+  override fun getLayout() = R.layout.controller_transmitters_not_added
+  
   
   companion object {
     private const val TAG_CONTROLLER = "not_added_transmitters_controller"

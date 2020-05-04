@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="delete_transmitter_title">Delete transmitter</string>
+  <string name="delete_transmitter_message">Are you sure you want to delete this transmitter?</string>
 <string name="bluetooth_enable">Enable bluetooth</string>
 <string name="bluetooth_scanning">Scanning</string>
 <string name="bluetooth_start_scanning">Start</string>

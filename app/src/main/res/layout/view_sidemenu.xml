@@ -16,18 +16,6 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
-    <!-- this recyclerview is only temporary -->
-    <androidx.recyclerview.widget.RecyclerView
-      android:id="@+id/devices"
-      android:layout_width="0dp"
-      android:layout_height="200dp"
-      app:itemBinding="@{controller.itemBinding}"
-      app:items="@{controller.items}"
-      app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent" />
-
     <ImageView
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
@@ -49,7 +37,7 @@
       app:layout_constraintBottom_toTopOf="@+id/bottom_layout"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/devices">
+      app:layout_constraintTop_toTopOf="parent">
 
       <LinearLayout
         android:layout_width="match_parent"

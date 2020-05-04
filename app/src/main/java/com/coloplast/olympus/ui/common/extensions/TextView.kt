@@ -161,20 +161,20 @@ fun TextView.setAnimateText(value: String) {
   if (value.isBlank()) {
     return
   }
-  
+
   val propertyAnimator = animate().alpha(0f)
   propertyAnimator.duration = 200
-  
+
   propertyAnimator.setListener(object : AnimatorListenerImpl {
     override fun onAnimationEnd(animation: Animator?) {
       text = value
-      
+
       val reverse = animate().alpha(1f)
       reverse.duration = 200
       reverse.start()
     }
   })
-  
+
   propertyAnimator.start()
 }
 

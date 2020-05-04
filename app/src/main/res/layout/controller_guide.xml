@@ -6,7 +6,7 @@
 
     <variable
       name="controller"
-      type="com.coloplast.olympus.ui.feature.guides.cleaning.CleaningGuideController" />
+      type="com.coloplast.olympus.ui.feature.guides.GuideController" />
   </data>
 
   <androidx.recyclerview.widget.RecyclerView

@@ -4,7 +4,8 @@ import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerStateWaterIngressDetectionBinding
-import com.coloplast.olympus.ui.feature.guides.cleaning.CleaningGuideController
+import com.coloplast.olympus.ui.feature.guides.GuideController
+import com.coloplast.olympus.ui.feature.guides.models.GuideType
 import com.coloplast.olympus.ui.feature.home.models.PatchVisible
 
 class WaterIngressDetectionController : BaseHomeUIController<ControllerStateWaterIngressDetectionBinding>(), PatchVisible {
@@ -20,7 +21,7 @@ class WaterIngressDetectionController : BaseHomeUIController<ControllerStateWate
   
   fun onApplicationGuideClicked() {
     getContentRouter().pushController(
-      CleaningGuideController.routerTransaction()
+      GuideController.routerTransaction(GuideType.CLEANING)
         .pushChangeHandler(VerticalChangeHandler())
         .popChangeHandler(VerticalChangeHandler())
     )

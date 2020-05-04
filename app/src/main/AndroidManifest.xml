@@ -5,6 +5,7 @@
   <uses-permission android:name="android.permission.BLUETOOTH" />
   <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
   <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
   <uses-feature
     android:name="android.hardware.bluetooth_le"
@@ -32,6 +33,14 @@
       <intent-filter>
         <action android:name="${applicationId}.NOTIFICATION_ACTION_SNOOZE" />
         <action android:name="${applicationId}.NOTIFICATION_SHOW" />
+      </intent-filter>
+    </receiver>
+
+    <receiver
+      android:name=".bluetooth.service.ResetReceiver"
+      android:exported="true">
+      <intent-filter>
+        <action android:name="${applicationId}.BLUETOOTH.RESET_SERVICE" />
       </intent-filter>
     </receiver>
 

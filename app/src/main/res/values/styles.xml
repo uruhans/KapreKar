@@ -48,29 +48,30 @@
     <item name="android:background">?android:attr/selectableItemBackground</item>
     <item name="android:textColor">@color/colorAccent</item>
   </style>
-  <!--
-    <style name="SubmitButton">
-      <item name="android:background">@drawable/button_submit</item>
+
+    <style name="ColorSubmitButton">
+      <item name="android:background">@drawable/button_color_accent</item>
       <item name="android:foreground">?android:attr/selectableItemBackground</item>
       <item name="android:gravity">center</item>
-  &lt;!&ndash;    <item name="android:fontFamily">@font/frutiger_neue_lt_pro_regular</item>&ndash;&gt;
+      <item name="android:fontFamily">@font/coloplast</item>
       <item name="android:textColor">@color/white</item>
-      <item name="android:textSize">@dimen/text_larger</item>
+      <item name="android:textSize">@dimen/text_18</item>
+      <item name="android:textAllCaps">false</item>
     </style>
+  <!--
+     <style name="SubmitButton.Red" parent="SubmitButton">
+       <item name="android:background">@drawable/button_submit_red</item>
+     </style>
 
-    <style name="SubmitButton.Red" parent="SubmitButton">
-      <item name="android:background">@drawable/button_submit_red</item>
-    </style>
+     <style name="OutlineButton" parent="SubmitButton">
+       <item name="android:background">@drawable/button_outline</item>
+       <item name="android:textColor">@color/text_blue</item>
+     </style>
 
-    <style name="OutlineButton" parent="SubmitButton">
-      <item name="android:background">@drawable/button_outline</item>
-      <item name="android:textColor">@color/text_blue</item>
-    </style>
-
-    <style name="OutlineButton.Red" parent="OutlineButton">
-      <item name="android:background">@drawable/button_outline_red</item>
-      <item name="android:textColor">@color/text_red</item>
-    </style>-->
+     <style name="OutlineButton.Red" parent="OutlineButton">
+       <item name="android:background">@drawable/button_outline_red</item>
+       <item name="android:textColor">@color/text_red</item>
+     </style>-->
 
   <style name="GuideHeader">
     <item name="android:fontFamily">@font/coloplast_bold</item>

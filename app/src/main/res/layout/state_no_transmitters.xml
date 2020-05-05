@@ -1,42 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
-  xmlns:tools="http://schemas.android.com/tools">
+  xmlns:app="http://schemas.android.com/apk/res-auto">
 
   <data>
 
     <variable
-      name="toolbarSupport"
-      type="com.coloplast.olympus.ui.common.ToolbarSupportController" />
-
-    <variable
       name="controller"
-      type="com.coloplast.olympus.ui.feature.transmitters.NotAddedTransmittersController" />
+      type="com.coloplast.olympus.ui.feature.transmitters.TransmittersController" />
   </data>
 
   <androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/layout_transmitters_empty"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
-
-    <include
-      android:id="@+id/toolbar"
-      layout="@layout/view_toolbar"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent"
-      app:support="@{toolbarSupport}" />
-
-    <TextView
-      android:id="@+id/title"
-      style="@style/Headline.Large"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginStart="@dimen/spacing_standard"
-      android:text="@string/transmitters_title"
-      android:textColor="@color/darkGrey01"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+    android:orientation="vertical">
 
     <TextView
       android:id="@+id/address"
@@ -44,12 +21,12 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginStart="@dimen/spacing_standard"
-      android:layout_marginEnd="@dimen/spacing_standard"
       android:layout_marginTop="@dimen/spacing_small"
-      android:textColor="@color/darkGrey03"
+      android:layout_marginEnd="@dimen/spacing_standard"
       android:text="@string/transmitters_no_transmitters_added_body"
+      android:textColor="@color/darkGrey03"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@id/title" />
+      app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.cardview.widget.CardView
       android:layout_width="match_parent"
@@ -58,8 +35,8 @@
       android:layout_marginEnd="@dimen/spacing_standard"
       android:layout_marginBottom="@dimen/spacing_double"
       android:foreground="?attr/selectableItemBackground"
-      app:cardBackgroundColor="@color/olympus_bluegreen"
       android:onClick="@{() -> controller.onAddTransmitterClicked()}"
+      app:cardBackgroundColor="@color/olympus_bluegreen"
       app:cardCornerRadius="28dp"
       app:cardElevation="4dp"
       app:cardPreventCornerOverlap="true"
@@ -76,14 +53,13 @@
         android:fontFamily="sans-serif-medium"
         android:gravity="center"
         android:text="@string/transmitters_add_transmitter"
-        android:textSize="18sp"
         android:textColor="@color/white"
-        />
+        android:textSize="18sp" />
 
     </androidx.cardview.widget.CardView>
 
-
-
   </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>
+
 

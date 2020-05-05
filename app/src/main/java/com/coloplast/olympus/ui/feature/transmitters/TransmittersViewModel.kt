@@ -45,8 +45,14 @@ class TransmittersViewModel(private val bluetoothManager: BluetoothManager, priv
       
     // transforming the stored transmitters into UiModel to be displayed on the screen
     val transformedTransmitters = transmittersOrEmptyObservable
-      .map { TransmittersUiModel.ConnectedDevices(it) as TransmittersUiModel }
-      .startWith(TransmittersUiModel.Empty())
+      .map {
+        if(it.isEmpty()) {
+          TransmittersUiModel.Empty()
+        }
+        else {
+          TransmittersUiModel.ConnectedDevices(it) as TransmittersUiModel
+        }
+      }
     
     // a delayed subscription (others should only subscribe once transmitters have been returned to the controller)
     val delayedSubscriptionUntilCorrectReturnType = transformedTransmitters.filter { it is TransmittersUiModel.ConnectedDevices }

@@ -191,6 +191,8 @@
 <string name="menu_subItem_faq">Ofte stillede spørgsmål</string>
 <string name="menu_subItem_history">Historisk data</string>
 <string name="menu_subItem_terms">Brugsbetingelser</string>
+<string name="menu_subitem_profile">Profil</string>
+<string name="menu_transmitters">Transmitters</string>
 <string name="missing_translation">Manglende oversættelse</string>
 <string name="overlay_battery_critical">Oplad nu for at holde dig opdateret.</string>
 <string name="overlay_battery_low_title">Transmitterens batteri er lavt.</string>

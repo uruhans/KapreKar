@@ -2,7 +2,7 @@ package com.coloplast.olympus.ui.feature.transmitters
 
 import android.os.Bundle
 import androidx.databinding.ObservableArrayList
-import androidx.databinding.ObservableField
+import androidx.databinding.ObservableBoolean
 import com.artemzin.rxui.RxUi
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.HorizontalChangeHandler
@@ -39,10 +39,10 @@ class TransmittersController(args: Bundle? = null) : CustomToolbarController<Con
     .map(SectionDivider::class.java, BR.item, R.layout.item_recyclerview_section_divider)
     .map(TransmitterItem::class.java, BR.item, R.layout.item_transmitter)
   
-  val addTransmitterVisible = ObservableField(false)
+  val hasTransmittersAdded = ObservableBoolean(false);
+  val canAddMoreControllers = ObservableBoolean(true);
   
   private var dialogController: DialogController? = null
-  
   private var transmitterToDelete : Transmitter? = null
   
   override fun attachVariables(viewBinding: ControllerTransmittersBinding) {
@@ -61,7 +61,7 @@ class TransmittersController(args: Bundle? = null) : CustomToolbarController<Con
       
       when (uiModel) {
         is TransmittersUiModel.ConnectedDevices -> {
-          //items.clear()
+          hasTransmittersAdded.set(true)
           
           val list = mutableListOf<Any>(
             SmallHeaderItem(R.string.guide_wiping_title)
@@ -81,8 +81,8 @@ class TransmittersController(args: Bundle? = null) : CustomToolbarController<Con
               items.remove(transmitterItem)
             }
           }
-          
-          addTransmitterVisible.set(items.filterIsInstance(TransmitterItem::class.java).size < 2)
+  
+          canAddMoreControllers.set(items.filterIsInstance(TransmitterItem::class.java).size < 2)
         }
         is TransmittersUiModel.StateUpdate -> {
           uiModel.stateChange.bleDevice.peripheral?.powerLevel?.let { powerLevel ->
@@ -98,6 +98,9 @@ class TransmittersController(args: Bundle? = null) : CustomToolbarController<Con
         }
         is TransmittersUiModel.TransmitterDeleted -> {
         
+        }
+        is TransmittersUiModel.Empty -> {
+          hasTransmittersAdded.set(false)
         }
       }
     }

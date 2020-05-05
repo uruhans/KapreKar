@@ -191,6 +191,8 @@
 <string name="menu_subItem_faq">menu_subItem_faq</string>
 <string name="menu_subItem_history">menu_subItem_history</string>
 <string name="menu_subItem_terms">menu_subItem_terms</string>
+<string name="menu_subitem_profile">manu_subitem_profile</string>
+<string name="menu_transmitters">menu_transmitters</string>
 <string name="missing_translation">missing_translation</string>
 <string name="overlay_battery_critical">overlay_battery_critical</string>
 <string name="overlay_battery_low_title">overlay_battery_low_title</string>

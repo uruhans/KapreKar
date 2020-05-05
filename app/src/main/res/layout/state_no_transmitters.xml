@@ -30,15 +30,15 @@
 
     <androidx.cardview.widget.CardView
       android:layout_width="match_parent"
-      android:layout_height="56dp"
+      android:layout_height="@dimen/cardview_button_height_default"
       android:layout_marginStart="@dimen/spacing_standard"
       android:layout_marginEnd="@dimen/spacing_standard"
       android:layout_marginBottom="@dimen/spacing_double"
       android:foreground="?attr/selectableItemBackground"
       android:onClick="@{() -> controller.onAddTransmitterClicked()}"
       app:cardBackgroundColor="@color/olympus_bluegreen"
-      app:cardCornerRadius="28dp"
-      app:cardElevation="4dp"
+      app:cardCornerRadius="@dimen/default_button_radius"
+      app:cardElevation="@dimen/default_button_elevation"
       app:cardPreventCornerOverlap="true"
       app:cardUseCompatPadding="false"
       app:layout_constraintBottom_toBottomOf="parent"
@@ -53,13 +53,9 @@
         android:fontFamily="sans-serif-medium"
         android:gravity="center"
         android:text="@string/transmitters_add_transmitter"
-        android:textColor="@color/white"
-        android:textSize="18sp" />
+        android:textSize="@dimen/text_18"
+        android:textColor="@color/white" />
 
     </androidx.cardview.widget.CardView>
-
   </androidx.constraintlayout.widget.ConstraintLayout>
-
 </layout>
-
-

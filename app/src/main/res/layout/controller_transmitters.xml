@@ -49,7 +49,8 @@
       android:textSize="@dimen/text_18"
       app:layout_constraintBottom_toBottomOf="@+id/headline"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintTop_toTopOf="@+id/headline" />
+      app:layout_constraintTop_toTopOf="@+id/headline"
+      app:visibleOrInvisible="@{false}" />
 
     <androidx.recyclerview.widget.RecyclerView
       android:id="@+id/recyclerView"
@@ -85,7 +86,8 @@
       android:scaleY="0.7"
       android:src="@drawable/transmitter_fab"
       app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintStart_toStartOf="parent" />
+      app:layout_constraintStart_toStartOf="parent"
+      app:visibleOrInvisible="@{false}" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
       android:id="@+id/floating_action_button"
@@ -100,7 +102,8 @@
       app:fabSize="normal"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:srcCompat="@drawable/ic_bluetooth_black_24dp" />
+      app:srcCompat="@drawable/ic_bluetooth_black_24dp"
+      app:visibleOrInvisible="@{false}" />
 
     <TextView
       android:id="@+id/bluetooth_status"
@@ -114,7 +117,8 @@
       android:textSize="@dimen/text_16"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/floating_action_button" />
+      app:layout_constraintTop_toBottomOf="@+id/floating_action_button"
+      app:visibleOrInvisible="@{false}" />
 
     <TextView
       android:id="@+id/button_add"
@@ -123,12 +127,14 @@
       android:layout_height="wrap_content"
       android:layout_marginEnd="@dimen/spacing_standard"
       android:fontFamily="sans-serif-medium"
+      android:onClick="@{() -> controller.onAddTransmitterClicked()}"
       android:text="[Add transmitter]"
       android:textColor="@color/colorAccent"
       android:textSize="@dimen/text_18"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/divider" />
+      app:layout_constraintTop_toBottomOf="@+id/divider"
+      app:visibleOrInvisible="@{controller.addTransmitterVisible}" />
 
   </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

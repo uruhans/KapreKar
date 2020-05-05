@@ -5,6 +5,5 @@ import com.coloplast.olympus.ui.feature.home.models.HomeUiModel
 import io.reactivex.Observable
 
 interface HomeView : UiView<HomeUiModel> {
-  fun onScanRequested(): Observable<Unit>
-  fun onConnectPeripheral(): Observable<String>
+  fun requestConnectionState() : Observable<String>
 }

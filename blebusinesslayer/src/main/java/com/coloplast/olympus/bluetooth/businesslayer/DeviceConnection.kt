@@ -31,13 +31,13 @@ class DeviceConnection(private val bluetoothManager: BluetoothManager) {
       }
       // only continue if we are fully connected
       .filter { it.connectionState == BleConnectionState.CONNECTED }
-      .takeUntil(
-        // continue to do so until the device gets disconnected
-        // skip first because initial state is disconnected
-        bluetoothManager.bleDisconnectedObservable(macAddress)
-          .doOnNext { Timber.e("ConnectionState: $it") }
-          .skip(1)
-      )
+//      .takeUntil(
+//        // continue to do so until the device gets disconnected
+//        // skip first because initial state is disconnected
+//        bluetoothManager.bleDisconnectedObservable(macAddress)
+//          .doOnNext { Timber.e("ConnectionState: $it") }
+//          .skip(1)
+//      )
 //      .retryWhen { errors ->
 //        // zip the errors with a range (which represents the number of times to retry)
 //        Observable.zip(

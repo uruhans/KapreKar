@@ -4,7 +4,8 @@ import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerStateCutguardBinding
-import com.coloplast.olympus.ui.feature.guides.application.ApplicationGuideController
+import com.coloplast.olympus.ui.feature.guides.GuideController
+import com.coloplast.olympus.ui.feature.guides.models.GuideType
 import com.coloplast.olympus.ui.feature.home.models.PatchVisible
 
 class CutGuardController : BaseHomeUIController<ControllerStateCutguardBinding>(), PatchVisible {
@@ -20,7 +21,7 @@ class CutGuardController : BaseHomeUIController<ControllerStateCutguardBinding>(
   
   fun onApplicationGuideClicked() {
     getContentRouter().pushController(
-      ApplicationGuideController.routerTransaction()
+      GuideController.routerTransaction(GuideType.APPLICATION)
         .pushChangeHandler(VerticalChangeHandler())
         .popChangeHandler(VerticalChangeHandler())
     )

@@ -165,18 +165,13 @@ abstract class BaseController<T : ViewDataBinding> : Controller, KoinComponent {
     return applicationContext?.getString(resId, *formatArgs)
   }
   
-  override fun onContextUnavailable() {
-    super.onContextUnavailable()
-    
-    compositeDisposable.clear()
-    onUnbind(getBinding())
-  }
-  
   /**
    * when view is being destroyed we need to unbind everything
    */
   override fun onDestroyView(view: View) {
     super.onDestroyView(view)
-
+  
+    compositeDisposable.clear()
+    onUnbind(getBinding())
   }
 }

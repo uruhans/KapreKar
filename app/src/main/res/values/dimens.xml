@@ -12,6 +12,8 @@
   <dimen name="spacing_large">20dp</dimen>
   <dimen name="spacing_larger">24dp</dimen>
   <dimen name="spacing_double">32dp</dimen>
+  <dimen name="spacing_triple">48dp</dimen>
+  <dimen name="spacing_quadruple">64dp</dimen>
 
   <dimen name="menu_spacing">14dp</dimen>
 

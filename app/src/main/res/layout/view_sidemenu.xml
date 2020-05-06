@@ -61,8 +61,7 @@
           android:layout_height="wrap_content"
           android:layout_gravity="center_vertical"
           android:layout_marginStart="@dimen/spacing_standard"
-          android:text="@string/menu_status"
-          android:textColor="@color/text_dark_grey_01" />
+          android:text="@string/menu_status" />
 
       </LinearLayout>
 
@@ -88,8 +87,7 @@
           android:layout_height="wrap_content"
           android:layout_gravity="center_vertical"
           android:layout_marginStart="@dimen/spacing_standard"
-          android:text="@string/menu_guides"
-          android:textColor="@color/text_dark_grey_01" />
+          android:text="@string/menu_guides"/>
 
       </LinearLayout>
 
@@ -115,8 +113,7 @@
           android:layout_height="wrap_content"
           android:layout_gravity="center_vertical"
           android:layout_marginStart="@dimen/spacing_standard"
-          android:text="@string/menu_transmitters"
-          android:textColor="@color/text_dark_grey_01" />
+          android:text="@string/menu_transmitters" />
 
       </LinearLayout>
 
@@ -142,8 +139,7 @@
           android:layout_height="wrap_content"
           android:layout_gravity="center_vertical"
           android:layout_marginStart="@dimen/spacing_standard"
-          android:text="@string/menu_settings"
-          android:textColor="@color/text_dark_grey_01" />
+          android:text="@string/menu_settings"/>
 
       </LinearLayout>
     </LinearLayout>

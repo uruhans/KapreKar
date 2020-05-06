@@ -108,7 +108,7 @@ class NotificationCenter(
     val notification = NotificationCompat.Builder(context, channelId)
       .setSmallIcon(getNotificationIcon())
       .setWhen(System.currentTimeMillis())
-      .setColor(ContextCompat.getColor(context, R.color.olympus_bluegreen))
+      .setColor(ContextCompat.getColor(context, R.color.turquoise))
       .setContentText(context.getString(payload.body))
       .setPriority(NotificationCompat.PRIORITY_DEFAULT)
       // Set the intent that will fire when the user taps the notification

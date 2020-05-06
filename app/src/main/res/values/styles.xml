@@ -72,9 +72,7 @@
       <item name="android:textColor">@color/text_red</item>
     </style>-->
 
-  <style name="GuideHeader">
-    <item name="android:fontFamily">@font/coloplast_bold</item>
-    <item name="android:textColor">@color/text_dark_grey_01</item>
+  <style name="GuideHeader" parent="TextStyle.Coloplast.Bold.DarkGrey">
     <item name="android:lineSpacingExtra">6dp</item>
   </style>
   <style name="GuideHeader.32" parent="GuideHeader">
@@ -84,22 +82,15 @@
     <item name="android:textSize">@dimen/text_20</item>
   </style>
 
-  <style name="GuideHeaderDescription">
-    <item name="android:fontFamily">@font/coloplast</item>
+  <style name="GuideHeaderDescription" parent="TextStyle.Coloplast.Regular.ClearGrey">
     <item name="android:textSize">@dimen/text_30</item>
-    <item name="android:textColor">@color/text_dark_grey_03</item>
   </style>
 
-  <style name="GuideSubTitle">
-    <item name="android:fontFamily">sans-serif</item>
+  <style name="GuideSubTitle" parent="TextStyle.Roboto.Regular.ClearGrey">
     <item name="android:textSize">@dimen/text_18</item>
-    <item name="android:textColor">@color/text_dark_grey_03</item>
   </style>
 
-  <style name="Headline">
-    <item name="android:fontFamily">@font/coloplast_bold</item>
-    <item name="android:textColor">@color/text_dark_grey</item>
-  </style>
+  <style name="Headline" parent="TextStyle.Coloplast.Bold.Grey" />
 
   <style name="Headline.XLarge" parent="Headline">
     <item name="android:textSize">@dimen/text_38</item>
@@ -126,10 +117,7 @@
     <item name="android:lineSpacingExtra">10dp</item>
   </style>
 
-  <style name="Text">
-    <item name="android:fontFamily">sans-serif</item> <!-- roboto regular -->
-    <item name="android:textColor">@color/text_dark_grey</item>
-  </style>
+  <style name="Text" parent="TextStyle.Roboto.Regular.Grey" />
 
   <style name="Text.Large" parent="Text">
     <item name="android:textSize">@dimen/text_18</item>
@@ -141,18 +129,65 @@
     <item name="android:lineSpacingExtra">8dp</item>
   </style>
 
-  <style name="Text.Link">
-    <item name="android:fontFamily">sans-serif-medium</item> <!-- roboto medium -->
-    <item name="android:textColor">@color/text_blue_green</item>
+  <style name="Text.Link" parent="TextStyle.Roboto.Medium.Turquoise">
     <item name="android:textSize">@dimen/text_18</item>
     <item name="android:lineSpacingExtra">10dp</item>
   </style>
-  
-  <style name="BoldItalic">
+
+  <style name="TextStyle.Roboto.Regular" parent="BaseAppTheme">
+    <item name="android:fontFamily">sans-serif</item>
+  </style>
+
+  <style name="TextStyle.Roboto.Medium" parent="BaseAppTheme">
+    <item name="android:fontFamily">sans-serif-medium</item>
+  </style>
+
+  <style name="TextStyle.Coloplast.Regular" parent="BaseAppTheme">
+    <item name="android:fontFamily">@font/coloplast</item>
+  </style>
+
+  <style name="TextStyle.Coloplast.Bold" parent="BaseAppTheme">
+    <item name="android:fontFamily">@font/coloplast_bold</item>
+  </style>
+
+  <style name="TextStyle.Coloplast.Bold.Italic" parent="BaseAppTheme">
     <item name="android:fontFamily">@font/coloplast_bold_italic</item>
-    <item name="android:textColor">@color/white</item>
-    <item name="android:textSize">@dimen/text_34</item>
-    <item name="android:lineSpacingExtra">6dp</item>
+  </style>
+
+  <style name="TextStyle.Roboto.Regular.Grey" parent="TextStyle.Roboto.Regular">
+  <item name="android:textColor">@color/text_grey</item>
+</style>
+
+  <style name="TextStyle.Roboto.Regular.ClearGrey" parent="TextStyle.Roboto.Regular">
+    <item name="android:textColor">@color/text_clear_grey</item>
+  </style>
+
+  <style name="TextStyle.Roboto.Medium.Turquoise" parent="TextStyle.Roboto.Medium">
+    <item name="android:textColor">@color/text_turquoise</item>
+  </style>
+
+  <style name="TextStyle.Coloplast.Bold.DarkGrey" parent="TextStyle.Coloplast.Bold">
+    <item name="android:textColor">@color/text_dark_grey</item>
+  </style>
+
+  <style name="TextStyle.Coloplast.Bold.Grey" parent="TextStyle.Coloplast.Bold">
+    <item name="android:textColor">@color/text_grey</item>
+  </style>
+
+  <style name="TextStyle.Coloplast.Regular.ClearGrey" parent="TextStyle.Coloplast.Regular">
+    <item name="android:textColor">@color/text_clear_grey</item>
+  </style>
+
+  <style name="TextStyle.Coloplast.Bold.DarkGrey.32" parent="TextStyle.Coloplast.Bold.DarkGrey">
+    <item name="android:textSize">@dimen/text_32</item>
+  </style>
+
+  <style name="TextStyle.Coloplast.Bold.DarkGrey.30" parent="TextStyle.Coloplast.Bold.DarkGrey">
+    <item name="android:textSize">30sp</item>
+  </style>
+
+  <style name="TextStyle.Coloplast.Regular.ClearGrey.30" parent="TextStyle.Coloplast.Regular.ClearGrey">
+    <item name="android:textSize">30sp</item>
   </style>
 
 </resources>

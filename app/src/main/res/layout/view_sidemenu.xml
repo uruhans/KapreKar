@@ -74,7 +74,7 @@
           android:layout_gravity="center_vertical"
           android:layout_marginStart="@dimen/spacing_standard"
           android:text="@string/menu_status"
-          android:textColor="@color/text_dark_grey_01" />
+          android:textColor="@color/text_dark_grey" />
 
       </LinearLayout>
 
@@ -101,7 +101,7 @@
           android:layout_gravity="center_vertical"
           android:layout_marginStart="@dimen/spacing_standard"
           android:text="@string/menu_guides"
-          android:textColor="@color/text_dark_grey_01" />
+          android:textColor="@color/text_dark_grey" />
 
       </LinearLayout>
 
@@ -128,7 +128,7 @@
           android:layout_gravity="center_vertical"
           android:layout_marginStart="@dimen/spacing_standard"
           android:text="[Transmitters]"
-          android:textColor="@color/text_dark_grey_01" />
+          android:textColor="@color/text_dark_grey" />
 
       </LinearLayout>
 
@@ -155,7 +155,7 @@
           android:layout_gravity="center_vertical"
           android:layout_marginStart="@dimen/spacing_standard"
           android:text="@string/menu_settings"
-          android:textColor="@color/text_dark_grey_01" />
+          android:textColor="@color/text_dark_grey" />
 
       </LinearLayout>
     </LinearLayout>

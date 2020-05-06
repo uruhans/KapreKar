@@ -10,7 +10,7 @@
 
     <variable
       name="controller"
-      type="com.coloplast.olympus.ui.feature.transmitters.at1.AddTransmitterAT1Controller" />
+      type="com.coloplast.olympus.ui.feature.transmitters.add.at1.AddTransmitterAT1Controller" />
 
 
   </data>

@@ -320,7 +320,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
           R.string.dialog_permission_rationale_location_title,
           R.string.dialog_permission_rationale_location_message,
           R.string.dialog_permission_rationale_location_ask_again,
-          topImage = R.drawable.ic_bluetooth_black_24dp,
+          topImage = R.drawable.ic_bluetooth,
           verticalButtonLayout = true,
           dismissAllowed = true
         )

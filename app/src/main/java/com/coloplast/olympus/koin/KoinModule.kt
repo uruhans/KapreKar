@@ -16,6 +16,7 @@ import com.coloplast.olympus.notifications.OlympusNotificationManager
 import com.coloplast.olympus.ui.feature.home.HomeViewModel
 import com.coloplast.olympus.ui.feature.transmitters.TransmittersViewModel
 import com.coloplast.olympus.ui.feature.transmitters.add.AddTransmitterViewModel
+import com.coloplast.olympus.ui.feature.transmitters.add.at9.AddTransmitterAT9ViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
@@ -34,6 +35,7 @@ val koinModule = module {
   
   
   single { TransmittersViewModel(get(), get()) }
+  single { AddTransmitterAT9ViewModel(get()) }
   
   factory { BluetoothServiceViewModel(get(), get(), get()) }
   factory { HomeViewModel(get()) }

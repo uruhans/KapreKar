@@ -21,7 +21,7 @@
       android:layout_marginStart="@dimen/spacing_standard"
       android:layout_marginEnd="@dimen/spacing_standard"
       android:scaleType="centerCrop"
-      android:src="@drawable/ic_bluetooth_black_24dp"
+      android:src="@drawable/ic_bluetooth"
       android:tint="@color/icon_disabled" />
 
     <TextView

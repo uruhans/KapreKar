@@ -33,33 +33,28 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_margin="@dimen/spacing_standard"
+            android:layout_margin="@dimen/spacing_larger"
+            android:gravity="center"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent">
 
-            <ImageView
-                android:id="@+id/imageView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/spacing_larger"
-                android:scaleType="fitCenter"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_icon_guides" />
+            <include layout="@layout/item_checkmark_with_background" />
 
             <TextView
                 android:id="@+id/transmitter_guide_at1_title"
                 style="@style/GuideHeader.32"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/spacing_half"
-                android:text="@string/guide_at1_title" />
+                android:layout_marginTop="@dimen/spacing_double"
+                android:layout_marginBottom="@dimen/spacing_standard"
+                android:text="@string/guide_at10_title" />
 
             <TextView
                 android:id="@+id/application_guide_description"
-                style="@style/GuideHeaderDescription"
+                style="@style/GuideHeaderDescription.18"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/guide_at1_body" />
+                android:text="@string/guide_at10_body" />
 
         </LinearLayout>
 

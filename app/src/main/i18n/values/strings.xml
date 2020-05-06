@@ -44,8 +44,8 @@
 <string name="generic_ok">OK</string>
 <string name="generic_previous">Previous</string>
 <string name="generic_quit">Quit</string>
-<string name="guide_at11_body">Great! Your transmitter is now communicating with your phone. We recommend charging a new transmitter for at least 30 minutes before using.</string>
-<string name="guide_at11_title">Transmitter paired</string>
+<string name="guide_at10_body">Great! Your transmitter is now communicating with your phone. We recommend charging a new transmitter for at least 30 minutes before using.</string>
+<string name="guide_at10_title">Transmitter paired</string>
 <string name="guide_at1_action">Get started</string>
 <string name="guide_at1_body">A step-by-step guide to setting up a new transmitter.</string>
 <string name="guide_at1_title">Adding a transmitter</string>

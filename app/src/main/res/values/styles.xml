@@ -74,6 +74,7 @@
 
   <style name="GuideHeader" parent="TextStyle.Coloplast.Bold.DarkGrey">
     <item name="android:lineSpacingExtra">6dp</item>
+    <item name="android:gravity">center</item>
   </style>
   <style name="GuideHeader.32" parent="GuideHeader">
     <item name="android:textSize">@dimen/text_32</item>
@@ -84,10 +85,12 @@
 
   <style name="GuideHeaderDescription" parent="TextStyle.Coloplast.Regular.ClearGrey">
     <item name="android:textSize">@dimen/text_30</item>
+    <item name="android:gravity">center</item>
   </style>
 
   <style name="GuideSubTitle" parent="TextStyle.Roboto.Regular.ClearGrey">
     <item name="android:textSize">@dimen/text_18</item>
+    <item name="android:gravity">center</item>
   </style>
 
   <style name="Headline" parent="TextStyle.Coloplast.Bold.Grey" />

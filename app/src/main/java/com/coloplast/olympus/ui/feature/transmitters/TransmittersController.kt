@@ -2,7 +2,7 @@ package com.coloplast.olympus.ui.feature.transmitters
 
 import android.os.Bundle
 import androidx.databinding.ObservableArrayList
-import androidx.databinding.ObservableField
+import androidx.databinding.ObservableBoolean
 import com.artemzin.rxui.RxUi
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.HorizontalChangeHandler
@@ -11,10 +11,10 @@ import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerTransmittersBinding
 import com.coloplast.olympus.shared.models.Transmitter
 import com.coloplast.olympus.ui.common.CustomToolbarController
+import com.coloplast.olympus.ui.common.DrawerStateDispatcher.closeNavigationDrawerOnHome
 import com.coloplast.olympus.ui.common.dialogs.BaseDialogController
 import com.coloplast.olympus.ui.common.dialogs.DialogController
 import com.coloplast.olympus.ui.feature.transmitters.add.AddTransmitterController
-import com.coloplast.olympus.ui.feature.transmitters.at1.AddTransmitterAT1Controller
 import com.coloplast.olympus.ui.feature.transmitters.models.SectionDivider
 import com.coloplast.olympus.ui.feature.transmitters.models.SmallHeaderItem
 import com.coloplast.olympus.ui.feature.transmitters.models.TransmitterItem
@@ -33,19 +33,19 @@ class TransmittersController(args: Bundle? = null) : CustomToolbarController<Con
   private val viewModel: TransmittersViewModel by inject()
   
   private val deleteTransmitterRelay = PublishRelay.create<String>()
-
+  
   val items = ObservableArrayList<Any>()
   val itemBinding: OnItemBindClass<Any> = OnItemBindClass<Any>()
     .map(SmallHeaderItem::class.java, BR.item, R.layout.item_small_header)
     .map(SectionDivider::class.java, BR.item, R.layout.item_recyclerview_section_divider)
     .map(TransmitterItem::class.java, BR.item, R.layout.item_transmitter)
   
-  val addTransmitterVisible = ObservableField(false)
-
+  val hasTransmittersAdded = ObservableBoolean(false);
+  val canAddMoreControllers = ObservableBoolean(true);
+  
   private var dialogController: DialogController? = null
-
   private var transmitterToDelete : Transmitter? = null
-
+  
   override fun attachVariables(viewBinding: ControllerTransmittersBinding) {
     super.attachVariables(viewBinding)
     viewBinding.controller = this
@@ -59,31 +59,31 @@ class TransmittersController(args: Bundle? = null) : CustomToolbarController<Con
   override fun render(): Function<Observable<TransmittersUiModel>, Disposable> {
     return RxUi.ui { uiModel ->
       Timber.d("$uiModel")
-
+      
       when (uiModel) {
         is TransmittersUiModel.ConnectedDevices -> {
-          //items.clear()
+          hasTransmittersAdded.set(true)
           
           val list = mutableListOf<Any>(
             SmallHeaderItem(R.string.guide_wiping_title)
           )
-
+          
           uiModel.devices.map { TransmitterItem(it, this) }
             .also { list.addAll(it) }
-
+          
           list.filterIsInstance(TransmitterItem::class.java).forEach { transmitterItem ->
             if(items.filterIsInstance(TransmitterItem::class.java).none { it.transmitter.macAddress == transmitterItem.transmitter.macAddress }) {
               items.add(transmitterItem)
             }
           }
-
+  
           items.filterIsInstance(TransmitterItem::class.java).forEach { transmitterItem ->
             if(list.filterIsInstance(TransmitterItem::class.java).none { it.transmitter.macAddress == transmitterItem.transmitter.macAddress }) {
               items.remove(transmitterItem)
             }
           }
-
-          addTransmitterVisible.set(items.filterIsInstance(TransmitterItem::class.java).size < 2)
+  
+          canAddMoreControllers.set(items.filterIsInstance(TransmitterItem::class.java).size < 2)
         }
         is TransmittersUiModel.StateUpdate -> {
           uiModel.stateChange.bleDevice.peripheral?.powerLevel?.let { powerLevel ->
@@ -98,7 +98,10 @@ class TransmittersController(args: Bundle? = null) : CustomToolbarController<Con
             .setConnectionState(uiModel.connectionState.connectionState)
         }
         is TransmittersUiModel.TransmitterDeleted -> {
-
+        
+        }
+        is TransmittersUiModel.Empty -> {
+          hasTransmittersAdded.set(false)
         }
       }
     }
@@ -106,20 +109,20 @@ class TransmittersController(args: Bundle? = null) : CustomToolbarController<Con
   
   override fun onTransmitterClicked(transmitter: Transmitter) {
     transmitterToDelete = transmitter
-
+    
     dialogController = DialogController.create(
       this,
       1000,
       R.string.dialog_delete_transmitter_title,
-      R.string.dialog_delete_transmitter_message,
+      R.string.dialog_delete_transmitter_title,
       R.string.generic_ok,
       R.string.generic_cancel,
       dismissAllowed = true
     )
-
+    
     dialogController?.show()
   }
-
+  
   override fun onPositiveButtonClicked(requestCode: Int) {
     when(requestCode) {
       1000 -> {
@@ -127,7 +130,7 @@ class TransmittersController(args: Bundle? = null) : CustomToolbarController<Con
       }
     }
   }
-
+  
   override fun onNeutralButtonClicked(requestCode: Int) {
     when(requestCode) {
       1000 -> {
@@ -145,7 +148,7 @@ class TransmittersController(args: Bundle? = null) : CustomToolbarController<Con
       }
     }
   }
-
+  
   fun onAddTransmitterClicked() {
     router.pushController(
       AddTransmitterController.routerTransaction()
@@ -153,21 +156,20 @@ class TransmittersController(args: Bundle? = null) : CustomToolbarController<Con
         .popChangeHandler(HorizontalChangeHandler())
     )
   }
-
+  
   override fun requestDeleteTransmitter() : Observable<String> {
-    return deleteTransmitterRelay.publish().refCount()
-  }
-
-  fun onAddButtonClicked(){
-    router.pushController(
-      AddTransmitterAT1Controller.routerTransaction()
-        .pushChangeHandler(HorizontalChangeHandler())
-        .popChangeHandler(HorizontalChangeHandler())
-    )
+    return deleteTransmitterRelay
+      .publish()
+      .refCount()
   }
   
   override fun getNavigationIconResId(): Int {
     return R.drawable.ic_arrow
+  }
+  
+  override fun onCloseClicked() {
+    closeNavigationDrawerOnHome()
+    super.onCloseClicked()
   }
   
   override fun getLayout(): Int {

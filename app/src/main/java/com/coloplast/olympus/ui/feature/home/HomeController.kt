@@ -22,6 +22,8 @@ import com.coloplast.olympus.bluetooth.businesslayer.enums.PowerLevel
 import com.coloplast.olympus.bluetooth.businesslayer.models.Patch
 import com.coloplast.olympus.databinding.ControllerHomeBinding
 import com.coloplast.olympus.ui.common.BaseController
+import com.coloplast.olympus.ui.common.DrawerState
+import com.coloplast.olympus.ui.common.DrawerStateDispatcher
 import com.coloplast.olympus.ui.common.PermissionHandler
 import com.coloplast.olympus.ui.common.conductor.ResizeChangeHandler
 import com.coloplast.olympus.ui.common.dialogs.BaseDialogController
@@ -359,10 +361,17 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   
   fun onMenuClicked() {
     if (getBinding().drawerLayout.isDrawerOpen(GravityCompat.END)) {
-      getBinding().drawerLayout.closeDrawer(GravityCompat.END, true)
+      changeDrawerState(DrawerState.CLOSED)
     }
     else {
-      getBinding().drawerLayout.openDrawer(GravityCompat.END, true)
+      changeDrawerState(DrawerState.OPENED)
+    }
+  }
+  
+  fun changeDrawerState(drawerState: DrawerState) {
+    when(drawerState) {
+      DrawerState.OPENED -> getBinding().drawerLayout.openDrawer(GravityCompat.END, true)
+      DrawerState.CLOSED -> getBinding().drawerLayout.closeDrawer(GravityCompat.END, true)
     }
   }
   

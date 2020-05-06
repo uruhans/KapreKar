@@ -11,6 +11,7 @@ import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerTransmittersBinding
 import com.coloplast.olympus.shared.models.Transmitter
 import com.coloplast.olympus.ui.common.CustomToolbarController
+import com.coloplast.olympus.ui.common.DrawerStateDispatcher.closeNavigationDrawerOnHome
 import com.coloplast.olympus.ui.common.dialogs.BaseDialogController
 import com.coloplast.olympus.ui.common.dialogs.DialogController
 import com.coloplast.olympus.ui.feature.transmitters.add.AddTransmitterController
@@ -157,11 +158,18 @@ class TransmittersController(args: Bundle? = null) : CustomToolbarController<Con
   }
   
   override fun requestDeleteTransmitter() : Observable<String> {
-    return deleteTransmitterRelay.publish().refCount()
+    return deleteTransmitterRelay
+      .publish()
+      .refCount()
   }
   
   override fun getNavigationIconResId(): Int {
     return R.drawable.ic_arrow
+  }
+  
+  override fun onCloseClicked() {
+    closeNavigationDrawerOnHome()
+    super.onCloseClicked()
   }
   
   override fun getLayout(): Int {

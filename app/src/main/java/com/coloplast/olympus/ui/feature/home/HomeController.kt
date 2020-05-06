@@ -23,7 +23,6 @@ import com.coloplast.olympus.bluetooth.businesslayer.models.Patch
 import com.coloplast.olympus.databinding.ControllerHomeBinding
 import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.common.DrawerState
-import com.coloplast.olympus.ui.common.DrawerStateDispatcher
 import com.coloplast.olympus.ui.common.PermissionHandler
 import com.coloplast.olympus.ui.common.conductor.ResizeChangeHandler
 import com.coloplast.olympus.ui.common.dialogs.BaseDialogController

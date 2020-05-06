@@ -86,7 +86,7 @@ class BluetoothHandler(private val context: Context, isDebugging: Boolean) {
     }
   
     return rxBleClient.scanBleDevices(scanSettings, scanFilter.build())
-      .map { IBeacon.fromScanData(it.scanRecord.bytes, it.rssi, it.bleDevice.bluetoothDevice) }
-      .map { it.bluetoothAddress }
+      //.map { IBeacon.fromScanData(it.scanRecord.bytes, it.rssi, it.bleDevice.bluetoothDevice) }
+      .map { it.bleDevice.macAddress }
   }
 }

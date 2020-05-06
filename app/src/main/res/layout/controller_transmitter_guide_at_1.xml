@@ -48,7 +48,7 @@
       android:layout_marginStart="@dimen/spacing_standard"
       android:layout_marginEnd="@dimen/spacing_standard"
       android:layout_marginBottom="@dimen/spacing_half"
-      android:text="@string/guide_AT1_title"
+      android:text="@string/guide_at1_title"
       app:layout_constraintBottom_toTopOf="@+id/application_guide_description"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent" />
@@ -61,7 +61,7 @@
       android:layout_marginStart="@dimen/spacing_standard"
       android:layout_marginEnd="@dimen/spacing_standard"
       android:layout_marginBottom="@dimen/spacing_quadruple"
-      android:text="@string/guide_AT1_body"
+      android:text="@string/guide_at1_body"
       app:layout_constraintBottom_toTopOf="@+id/accept_button"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent" />
@@ -75,7 +75,7 @@
       android:layout_marginEnd="@dimen/spacing_standard"
       android:layout_marginBottom="@dimen/spacing_double"
       android:background="@drawable/button_color_accent"
-      android:text="@string/guide_AT1_action"
+      android:text="@string/guide_at1_action"
       android:textAllCaps="false"
       android:textSize="@dimen/text_18"
       android:textColor="@color/white"

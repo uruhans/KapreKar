@@ -13,10 +13,13 @@ class GuideTransmitterAT1Controller(args: Bundle? = null) : CustomToolbarControl
     viewBinding.controller = this
   }
   
-  override fun getNavigationIconResId() =  R.drawable.ic_arrow
+  override fun getNavigationIconResId(): Int {
+    return R.drawable.ic_arrow
+  }
   
-  
-  override fun getLayout() = R.layout.controller_transmitter_guide_at_1
+  override fun getLayout(): Int {
+    return R.layout.controller_transmitter_guide_at_1
+  }
   
   companion object {
     private const val TAG_CONTROLLER = "guide_transmitters_at1_controller"

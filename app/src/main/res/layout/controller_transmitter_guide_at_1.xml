@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto">
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools">
 
   <data>
-
     <variable
       name="toolbarSupport"
       type="com.coloplast.olympus.ui.common.ToolbarSupportController" />
@@ -49,12 +49,12 @@
       android:layout_marginEnd="@dimen/spacing_standard"
       android:layout_marginBottom="@dimen/spacing_half"
       android:text="@string/guide_AT1_title"
-      app:layout_constraintBottom_toTopOf="@+id/application_guide_at1_body"
+      app:layout_constraintBottom_toTopOf="@+id/application_guide_description"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-      android:id="@+id/application_guide_at1_body"
+      android:id="@+id/application_guide_description"
       style="@style/GuideHeaderDescription"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
@@ -62,23 +62,28 @@
       android:layout_marginEnd="@dimen/spacing_standard"
       android:layout_marginBottom="@dimen/spacing_quadruple"
       android:text="@string/guide_AT1_body"
-      app:layout_constraintBottom_toTopOf="@+id/submit_button"
+      app:layout_constraintBottom_toTopOf="@+id/accept_button"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent" />
 
 
     <Button
-      android:id="@+id/submit_button"
-      style="@style/ColorSubmitButton"
+      android:id="@+id/accept_button"
       android:layout_width="match_parent"
       android:layout_height="@dimen/cardview_button_height_default"
       android:layout_marginStart="@dimen/spacing_standard"
       android:layout_marginEnd="@dimen/spacing_standard"
       android:layout_marginBottom="@dimen/spacing_double"
+      android:background="@drawable/button_color_accent"
       android:text="@string/guide_AT1_action"
+      android:textAllCaps="false"
+      android:textSize="@dimen/text_18"
+      android:textColor="@color/white"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent" />
+
+
 
 
   </androidx.constraintlayout.widget.ConstraintLayout>

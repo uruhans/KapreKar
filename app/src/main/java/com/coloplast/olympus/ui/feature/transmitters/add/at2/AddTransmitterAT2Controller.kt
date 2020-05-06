@@ -36,7 +36,7 @@ class AddTransmitterAT2Controller : BaseController<ControllerAddTransmitterAt2Bi
   override fun getLayout() = R.layout.controller_add_transmitter_at_2
   
   companion object {
-    private const val TAG_CONTROLLER = "guide_transmitters_at2_controller"
+    private const val TAG_CONTROLLER = "add_transmitter_at2_controller"
     
     fun routerTransaction(): RouterTransaction {
       return RouterTransaction.with(AddTransmitterAT2Controller())

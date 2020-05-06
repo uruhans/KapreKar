@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="toolbarSupport"
+            type="com.coloplast.olympus.ui.common.ToolbarSupportController" />
+
+        <variable
+            name="controller"
+            type="com.coloplast.olympus.ui.feature.transmitters.add.at10.AddTransmitterAT10Controller" />
+
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/top"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/view_toolbar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:support="@{toolbarSupport}" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="@dimen/spacing_standard"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_larger"
+                android:scaleType="fitCenter"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_icon_guides" />
+
+            <TextView
+                android:id="@+id/transmitter_guide_at1_title"
+                style="@style/GuideHeader.32"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_half"
+                android:text="@string/guide_at1_title" />
+
+            <TextView
+                android:id="@+id/application_guide_description"
+                style="@style/GuideHeaderDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/guide_at1_body" />
+
+        </LinearLayout>
+
+
+        <Button
+            android:id="@+id/accept_button"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/cardview_button_height_default"
+            android:layout_marginStart="@dimen/spacing_standard"
+            android:layout_marginEnd="@dimen/spacing_standard"
+            android:layout_marginBottom="@dimen/spacing_double"
+            android:background="@drawable/button_color_accent"
+            android:text="@string/generic_close"
+            android:textAllCaps="false"
+            android:textSize="@dimen/text_18"
+            android:textColor="@color/white"
+            android:onClick="@{() -> controller.onCloseButtonClicked()}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

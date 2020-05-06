@@ -5,16 +5,16 @@ import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableBoolean
 import com.artemzin.rxui.RxUi
 import com.bluelinelabs.conductor.RouterTransaction
-import com.bluelinelabs.conductor.changehandler.HorizontalChangeHandler
+import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import com.coloplast.olympus.BR
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerTransmittersBinding
 import com.coloplast.olympus.shared.models.Transmitter
 import com.coloplast.olympus.ui.common.CustomToolbarController
-import com.coloplast.olympus.ui.common.DrawerStateDispatcher.closeNavigationDrawerOnHome
+import com.coloplast.olympus.ui.common.DrawerStateDispatcher
 import com.coloplast.olympus.ui.common.dialogs.BaseDialogController
 import com.coloplast.olympus.ui.common.dialogs.DialogController
-import com.coloplast.olympus.ui.feature.transmitters.add.AddTransmitterController
+import com.coloplast.olympus.ui.feature.transmitters.add.AddTransmitterFlowController
 import com.coloplast.olympus.ui.feature.transmitters.models.SectionDivider
 import com.coloplast.olympus.ui.feature.transmitters.models.SmallHeaderItem
 import com.coloplast.olympus.ui.feature.transmitters.models.TransmitterItem
@@ -40,8 +40,8 @@ class TransmittersController(args: Bundle? = null) : CustomToolbarController<Con
     .map(SectionDivider::class.java, BR.item, R.layout.item_recyclerview_section_divider)
     .map(TransmitterItem::class.java, BR.item, R.layout.item_transmitter)
   
-  val hasTransmittersAdded = ObservableBoolean(false);
-  val canAddMoreControllers = ObservableBoolean(true);
+  val hasTransmittersAdded = ObservableBoolean(false)
+  val canAddMoreControllers = ObservableBoolean(true)
   
   private var dialogController: DialogController? = null
   private var transmitterToDelete : Transmitter? = null
@@ -151,9 +151,9 @@ class TransmittersController(args: Bundle? = null) : CustomToolbarController<Con
   
   fun onAddTransmitterClicked() {
     router.pushController(
-      AddTransmitterController.routerTransaction()
-        .pushChangeHandler(HorizontalChangeHandler())
-        .popChangeHandler(HorizontalChangeHandler())
+      AddTransmitterFlowController.routerTransaction()
+        .pushChangeHandler(VerticalChangeHandler())
+        .popChangeHandler(VerticalChangeHandler())
     )
   }
   
@@ -168,7 +168,7 @@ class TransmittersController(args: Bundle? = null) : CustomToolbarController<Con
   }
   
   override fun onCloseClicked() {
-    closeNavigationDrawerOnHome()
+    DrawerStateDispatcher.closeNavigationDrawerOnHome()
     super.onCloseClicked()
   }
   

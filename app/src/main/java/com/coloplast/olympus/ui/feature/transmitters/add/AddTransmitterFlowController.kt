@@ -24,13 +24,14 @@ class AddTransmitterFlowController(args: Bundle) : BaseFlowController(args) {
   }
   
   companion object {
+    private const val CONTROLLER_TAG = "add_transmitter_flow_controller"
     private const val BUNDLE_START_FLOW_AT = "BUNDLE_START_FLOW_AT";
     
     fun routerTransaction(startAt: Int = 0) : RouterTransaction {
       with(Bundle()) {
         putInt(BUNDLE_START_FLOW_AT, startAt)
         
-        return RouterTransaction.with(AddTransmitterFlowController(this))
+        return RouterTransaction.with(AddTransmitterFlowController(this)).tag(CONTROLLER_TAG)
       }
     }
   }

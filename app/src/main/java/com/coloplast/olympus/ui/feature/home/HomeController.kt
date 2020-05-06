@@ -37,6 +37,7 @@ import com.coloplast.olympus.ui.feature.home.models.PatchVisible
 import com.coloplast.olympus.ui.feature.home.models.SideMenuType
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
 import com.coloplast.olympus.ui.feature.transmitters.TransmittersController
+import com.coloplast.olympus.ui.feature.transmitters.add.at9.AddTransmitterAT9Controller
 import com.coloplast.olympus.ui.feature.uistates.*
 import com.coloplast.olympus.utils.OSUtils
 import com.jakewharton.rxrelay2.PublishRelay
@@ -398,7 +399,13 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
             .popChangeHandler(VerticalChangeHandler())
         )
       }
-      SideMenuType.SETTINGS,
+      SideMenuType.SETTINGS -> {
+        router.pushController(
+          AddTransmitterAT9Controller.routerTransaction("asdf")
+            .pushChangeHandler(VerticalChangeHandler())
+            .popChangeHandler(VerticalChangeHandler())
+        )
+      }
       SideMenuType.PROFILE,
       SideMenuType.ABOUT,
       SideMenuType.CONTACT -> { /* TODO - fix this */ }

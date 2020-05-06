@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <data>
+
+    <variable
+      name="controller"
+      type="com.coloplast.olympus.ui.feature.transmitters.add.at9.AddTransmitterAT9Controller" />
+  </data>
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <FrameLayout
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:padding="@dimen/spacing_standard">
+
+      <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="144dp"
+        android:layout_height="144dp"
+        android:alpha="0.16"
+        android:scaleX="0.7"
+        android:scaleY="0.7"
+        android:src="@drawable/transmitter_fab" />
+
+      <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floating_action_button"
+        android:layout_width="144dp"
+        android:layout_height="144dp"
+        android:cropToPadding="false"
+        android:tint="@color/white"
+        app:backgroundTint="@color/colorAccent"
+        app:borderWidth="0dp"
+        app:fabCustomSize="100dp"
+        app:srcCompat="@drawable/ic_bluetooth_black_24dp" />
+    </FrameLayout>
+
+    <TextView
+      style="@style/Text.Large"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="@dimen/spacing_double"
+      android:text="Searching.."
+      android:textSize="@dimen/text_24" />
+
+    <TextView
+      style="@style/Text.Medium"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="@dimen/spacing_standard"
+      android:text="Searching for transmitters"
+      android:textColor="@color/text_dark_grey" />
+
+  </LinearLayout>
+
+</layout>

@@ -1,5 +1,6 @@
 package com.coloplast.olympus.ui.feature.home.models
 
+import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
 import com.coloplast.olympus.bluetooth.businesslayer.models.BleDevice
 import com.coloplast.olympus.bluetooth.businesslayer.models.RawDataPackage
@@ -22,8 +23,7 @@ sealed class HomeUiModel : UiModel {
     val bleDevice: BleDevice
   ) : HomeUiModel()
   
-  data class RawDataPackageUpdate(val macAddress: String, val rawDataPackage: RawDataPackage,
-    val lastUpdate: LocalDateTime = LocalDateTime.now()) : HomeUiModel()
+  data class RawDataPackageUpdate(val macAddress: String, val lastUpdate: LocalDateTime = LocalDateTime.now()) : HomeUiModel()
   
   data class ConnectedDevicesUpdate(val list: List<BleDevice>) : HomeUiModel()
   
@@ -34,7 +34,7 @@ sealed class HomeUiModel : UiModel {
     }
   }
   
-  data class Disconnected(val disconnected: Boolean = true) : HomeUiModel()
+  data class ConnectionStateUpdate(val connectionState: BleConnectionState) : HomeUiModel()
   data class Error(val state: State = State.Unknown) : HomeUiModel() {
     enum class State {
       Unknown

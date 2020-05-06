@@ -7,7 +7,7 @@
 
     <variable
       name="item"
-      type="com.coloplast.olympus.ui.feature.transmitters.guides.at2.ChecklistItem" />
+      type="com.coloplast.olympus.ui.feature.transmitters.add.models.ChecklistItem" />
   </data>
 
   <androidx.constraintlayout.widget.ConstraintLayout
@@ -21,7 +21,7 @@
       android:layout_height="wrap_content"
       android:layout_marginStart="@dimen/spacing_standard"
       android:layout_marginTop="@dimen/spacing_standard"
-      android:src="@drawable/ic_check_black_24dp"
+      android:src="@drawable/ic_checkmark"
       android:tint="@color/text_blue_green"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent" />

@@ -16,18 +16,6 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
-    <!-- this recyclerview is only temporary -->
-    <androidx.recyclerview.widget.RecyclerView
-      android:id="@+id/devices"
-      android:layout_width="0dp"
-      android:layout_height="200dp"
-      app:itemBinding="@{controller.itemBinding}"
-      app:items="@{controller.items}"
-      app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent" />
-
     <ImageView
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
@@ -49,7 +37,7 @@
       app:layout_constraintBottom_toTopOf="@+id/bottom_layout"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/devices">
+      app:layout_constraintTop_toTopOf="parent">
 
       <LinearLayout
         android:layout_width="match_parent"
@@ -127,7 +115,7 @@
           android:layout_height="wrap_content"
           android:layout_gravity="center_vertical"
           android:layout_marginStart="@dimen/spacing_standard"
-          android:text="[Transmitters]"
+          android:text="@string/menu_transmitters"
           android:textColor="@color/text_dark_grey_01" />
 
       </LinearLayout>
@@ -180,7 +168,7 @@
         android:background="?attr/selectableItemBackground"
         android:gravity="center_vertical"
         android:onClick="@{() -> controller.onSideMenuClicked(SideMenuType.PROFILE)}"
-        android:text="[Profile]"
+        android:text="@string/menu_subitem_profile"
         android:textColor="@color/grey" />
 
       <TextView
@@ -190,7 +178,7 @@
         android:background="?attr/selectableItemBackground"
         android:gravity="center_vertical"
         android:onClick="@{() -> controller.onSideMenuClicked(SideMenuType.ABOUT)}"
-        android:text="[About]"
+        android:text="@string/menu_subItem_about"
         android:textColor="@color/grey" />
 
       <TextView
@@ -200,7 +188,7 @@
         android:background="?attr/selectableItemBackground"
         android:gravity="center_vertical"
         android:onClick="@{() -> controller.onSideMenuClicked(SideMenuType.CONTACT)}"
-        android:text="[Contact]"
+        android:text="@string/menu_subItem_contact"
         android:textColor="@color/grey" />
 
     </LinearLayout>

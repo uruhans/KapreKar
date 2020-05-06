@@ -1,4 +1,4 @@
-package com.coloplast.olympus.ui.feature.transmitters.guides.at2
+package com.coloplast.olympus.ui.feature.transmitters.add.models
 
 import androidx.annotation.StringRes
 

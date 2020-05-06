@@ -41,7 +41,7 @@ class TransmittersController(args: Bundle? = null) : CustomToolbarController<Con
     .map(TransmitterItem::class.java, BR.item, R.layout.item_transmitter)
   
   val hasTransmittersAdded = ObservableBoolean(false)
-  val canAddMoreControllers = ObservableBoolean(true)
+  val canAddMoreTransmitters = ObservableBoolean(true)
   
   private var dialogController: DialogController? = null
   private var transmitterToDelete : Transmitter? = null
@@ -83,7 +83,7 @@ class TransmittersController(args: Bundle? = null) : CustomToolbarController<Con
             }
           }
   
-          canAddMoreControllers.set(items.filterIsInstance(TransmitterItem::class.java).size < 2)
+          canAddMoreTransmitters.set(items.filterIsInstance(TransmitterItem::class.java).size < 2)
         }
         is TransmittersUiModel.StateUpdate -> {
           uiModel.stateChange.bleDevice.peripheral?.powerLevel?.let { powerLevel ->

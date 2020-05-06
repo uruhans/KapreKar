@@ -19,7 +19,8 @@
 <string name="dialog_setting_notificaiton_turning_on_title">Turning on notifications!</string>
 <string name="dialog_transmitters_cannot_add_more_transmitters_message">[Missing translation]</string>
 <string name="dialog_transmitters_cannot_add_more_transmitters_title">You can\'t add any more transmitters.</string>
-<string name="dialog_transmitters_delete_title">You are about to delete transmitter. Do you want to continue?</string>
+<string name="dialog_transmitters_delete_message">You are about to delete transmitter. Do you want to continue?</string>
+<string name="dialog_transmitters_delete_title">Delete transmitter?</string>
 <string name="dialog_transmitters_no_bluetooth_message">Connect now to be able to choose a transmitter.</string>
 <string name="dialog_transmitters_no_bluetooth_title">No bluetooth connections</string>
 <string name="dialog_transmitters_not_available_message">Make sure you are within reach of your charged transmitter(s) and try again.</string>
@@ -181,6 +182,9 @@
 <string name="lock_notification_total_blind">Sensors not working.</string>
 <string name="lock_notification_update">Update needed.</string>
 <string name="lock_notification_water">Moisture in transmitter.</string>
+<string name="lock_service_notification_channel_description">Maintaining transmitter connection</string>
+<string name="lock_service_notification_channel_id">2</string>
+<string name="lock_service_notification_channel_name">Olympus Bluetooth Connection</string>
 <string name="menu_guides">Guides</string>
 <string name="menu_settings">Settings</string>
 <string name="menu_status">Status</string>

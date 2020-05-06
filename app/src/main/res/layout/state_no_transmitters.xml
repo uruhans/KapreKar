@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <data>
+
+    <variable
+      name="controller"
+      type="com.coloplast.olympus.ui.feature.transmitters.TransmittersController" />
+  </data>
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/layout_transmitters_empty"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+      android:id="@+id/address"
+      style="@style/Text.Large"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="@dimen/spacing_standard"
+      android:layout_marginTop="@dimen/spacing_small"
+      android:layout_marginEnd="@dimen/spacing_standard"
+      android:text="@string/transmitters_no_transmitters_added_body"
+      android:textColor="@color/darkGrey03"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.cardview.widget.CardView
+      android:layout_width="match_parent"
+      android:layout_height="@dimen/cardview_button_height_default"
+      android:layout_marginStart="@dimen/spacing_standard"
+      android:layout_marginEnd="@dimen/spacing_standard"
+      android:layout_marginBottom="@dimen/spacing_double"
+      android:foreground="?attr/selectableItemBackground"
+      android:onClick="@{() -> controller.onAddTransmitterClicked()}"
+      app:cardBackgroundColor="@color/olympus_bluegreen"
+      app:cardCornerRadius="@dimen/default_button_radius"
+      app:cardElevation="@dimen/default_button_elevation"
+      app:cardPreventCornerOverlap="true"
+      app:cardUseCompatPadding="false"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent">
+
+      <TextView
+        style="@style/Text.Medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:fontFamily="sans-serif-medium"
+        android:gravity="center"
+        android:text="@string/transmitters_add_transmitter"
+        android:textSize="@dimen/text_18"
+        android:textColor="@color/white" />
+
+    </androidx.cardview.widget.CardView>
+  </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

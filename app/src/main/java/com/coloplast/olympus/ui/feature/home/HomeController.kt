@@ -35,6 +35,7 @@ import com.coloplast.olympus.ui.feature.home.models.HomeUiModel
 import com.coloplast.olympus.ui.feature.home.models.PatchVisible
 import com.coloplast.olympus.ui.feature.home.models.SideMenuType
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
+import com.coloplast.olympus.ui.feature.transmitters.TransmittersController
 import com.coloplast.olympus.ui.feature.transmitters.add.at2.AddTransmitterAT2Controller
 import com.coloplast.olympus.ui.feature.uistates.*
 import com.coloplast.olympus.utils.OSUtils
@@ -392,7 +393,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
       }
       SideMenuType.TRANSMITTERS -> {
         router.pushController(
-          AddTransmitterAT2Controller.routerTransaction()
+          TransmittersController.routerTransaction()
             .pushChangeHandler(VerticalChangeHandler())
             .popChangeHandler(VerticalChangeHandler())
         )

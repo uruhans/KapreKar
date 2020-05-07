@@ -398,13 +398,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
             .popChangeHandler(VerticalChangeHandler())
         )
       }
-      SideMenuType.SETTINGS -> {
-        router.pushController(
-          AddTransmitterAT9Controller.routerTransaction("asdf")
-            .pushChangeHandler(VerticalChangeHandler())
-            .popChangeHandler(VerticalChangeHandler())
-        )
-      }
+      SideMenuType.SETTINGS,
       SideMenuType.PROFILE,
       SideMenuType.ABOUT,
       SideMenuType.CONTACT -> { /* TODO - fix this */ }

@@ -17,7 +17,7 @@ class AddTransmitterAT9ViewModel(private val bluetoothManager: BluetoothManager)
     val disposable = CompositeDisposable()
 
     // the repeatIntervalObservable to determine when to repeat something
-    val repeatIntervalObservable = Observable.interval(14, TimeUnit.SECONDS)
+    val intervalObservable = Observable.interval(14, TimeUnit.SECONDS)
 
     val scanResultObservable: Observable<SearchTransmitterUiModel> =
       bluetoothManager.bluetoothStateObservable()
@@ -26,15 +26,28 @@ class AddTransmitterAT9ViewModel(private val bluetoothManager: BluetoothManager)
           //uiView.getTransmitterName()
           // TODO - add name to filter or specific transmitter to scan for
           bluetoothManager.scanBleDevices()
-            .takeUntil(repeatIntervalObservable)
+            // TODO - add filter to test "nothing result"
+            // .filter { it.macAddress == "sdf" }
+            .takeUntil(intervalObservable)
             .timeout(15, TimeUnit.SECONDS)
             .buffer(15, TimeUnit.SECONDS)
-            .map { SearchTransmitterUiModel.TransmittersFound(it) as SearchTransmitterUiModel }
+            .map {
+              return@map if (it.isEmpty()) {
+                SearchTransmitterUiModel.NothingFound()
+              } else {
+                SearchTransmitterUiModel.TransmittersFound(it)
+              }
+            }
             .onErrorReturnItem(SearchTransmitterUiModel.NothingFound())
         }
         .startWith(SearchTransmitterUiModel.PendingUser())
-    
-    disposable.add(scanResultObservable.bind(uiView.render()))
+
+    val retryScanningObservable = uiView.retryTransmitterSearchObservable()
+      .switchMap { scanResultObservable }
+
+    disposable.add(
+      Observable.merge(scanResultObservable, retryScanningObservable).bind(uiView.render())
+    )
     return disposable
   }
 }

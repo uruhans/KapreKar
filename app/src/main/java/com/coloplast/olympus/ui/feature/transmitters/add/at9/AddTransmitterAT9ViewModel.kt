@@ -10,14 +10,15 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import java.util.concurrent.TimeUnit
 
-class AddTransmitterAT9ViewModel(private val bluetoothManager: BluetoothManager) : BaseViewModel<SearchTransmitterUiModel, AddTransmitterAT9View>() {
+class AddTransmitterAT9ViewModel(private val bluetoothManager: BluetoothManager) :
+  BaseViewModel<SearchTransmitterUiModel, AddTransmitterAT9View>() {
+
   override fun bind(uiView: AddTransmitterAT9View): Disposable {
     val disposable = CompositeDisposable()
-    
+
     // the repeatIntervalObservable to determine when to repeat something
-    val repeatIntervalObservable = Observable.interval(20, TimeUnit.SECONDS)
-      .map { SearchTransmitterUiModel.NothingFound() }
-    
+    val repeatIntervalObservable = Observable.interval(14, TimeUnit.SECONDS)
+
     val scanResultObservable: Observable<SearchTransmitterUiModel> =
       bluetoothManager.bluetoothStateObservable()
         .filter { it == BluetoothState.READY }
@@ -25,12 +26,13 @@ class AddTransmitterAT9ViewModel(private val bluetoothManager: BluetoothManager)
           //uiView.getTransmitterName()
           // TODO - add name to filter or specific transmitter to scan for
           bluetoothManager.scanBleDevices()
-            .map { SearchTransmitterUiModel.TransmitterFound(it) as SearchTransmitterUiModel }
-            .takeUntil { repeatIntervalObservable }
+            .takeUntil(repeatIntervalObservable)
+            .timeout(15, TimeUnit.SECONDS)
+            .buffer(15, TimeUnit.SECONDS)
+            .map { SearchTransmitterUiModel.TransmittersFound(it) as SearchTransmitterUiModel }
+            .onErrorReturnItem(SearchTransmitterUiModel.NothingFound())
         }
-        .onErrorReturnItem(SearchTransmitterUiModel.NothingFound())
         .startWith(SearchTransmitterUiModel.PendingUser())
-    
     
     disposable.add(scanResultObservable.bind(uiView.render()))
     return disposable

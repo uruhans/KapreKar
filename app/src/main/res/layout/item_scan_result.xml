@@ -1,28 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
   <data>
 
     <variable
-      name="item"
-      type="com.coloplast.olympus.ui.feature.home.models.ScanResultItem" />
+        name="item"
+        type="com.coloplast.olympus.ui.feature.home.models.ScanResultItem" />
   </data>
 
-  <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="56dp"
-    android:background="?attr/selectableItemBackground"
-    android:onClick="@{() -> item.onItemClicked()}"
-    android:orientation="vertical">
-
-    <TextView
-      style="@style/Headline.Small"
+  <androidx.cardview.widget.CardView
       android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:gravity="center"
-      android:text="@{item.scanResult.nameOrAddress}"
-      tools:text="23:23:23:23:23:23" />
+      android:layout_height="wrap_content"
+      android:layout_margin="@dimen/spacing_standard"
+      app:cardBackgroundColor="@color/white"
+      app:cardCornerRadius="8dp"
+      app:cardElevation="4dp"
+      app:cardUseCompatPadding="false">
 
-  </LinearLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="84dp"
+        android:onClick="@{() -> item.onItemClicked()}">
+
+      <TextView
+          android:id="@+id/name"
+          style="@style/Headline.Small"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="@dimen/spacing_larger"
+          android:layout_marginTop="@dimen/spacing_standard"
+          android:text="@{item.ScanResult.name}"
+          android:textColor="@color/darkGrey01"
+          android:textSize="@dimen/text_20"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toTopOf="parent"
+          tools:text="[Name]" />
+
+      <ImageView
+          android:id="@+id/battery"
+          android:layout_width="32dp"
+          android:layout_height="32dp"
+          android:layout_marginEnd="@dimen/spacing_larger"
+          app:layout_constraintBottom_toBottomOf="@+id/name"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintHorizontal_bias="1"
+          app:layout_constraintStart_toStartOf="@+id/name"
+          app:layout_constraintTop_toTopOf="@+id/name"
+          app:visibleOrGone="@{false}"
+          tools:src="@drawable/ic_battery_full_24dp" />
+
+      <!--      app:powerLevel="@{item.currentPowerLevel}"-->
+
+      <TextView
+          android:id="@+id/address"
+          style="@style/Text.Medium"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="@dimen/spacing_larger"
+          android:text="@{item.scanResult.macAddress}"
+          android:textColor="@color/darkGrey03"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toBottomOf="@id/name"
+          tools:text="[Address]" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+  </androidx.cardview.widget.CardView>
 </layout>

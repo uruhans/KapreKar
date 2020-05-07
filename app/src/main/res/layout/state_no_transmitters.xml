@@ -36,7 +36,7 @@
       android:layout_marginBottom="@dimen/spacing_double"
       android:foreground="?attr/selectableItemBackground"
       android:onClick="@{() -> controller.onAddTransmitterClicked()}"
-      app:cardBackgroundColor="@color/olympus_bluegreen"
+      app:cardBackgroundColor="@color/turquoise"
       app:cardCornerRadius="@dimen/default_button_radius"
       app:cardElevation="@dimen/default_button_elevation"
       app:cardPreventCornerOverlap="true"

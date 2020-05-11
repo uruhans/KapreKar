@@ -5,16 +5,28 @@
 
     <data>
         <import type="com.coloplast.olympus.R" />
+
+        <variable
+            name="toolbarSupport"
+            type="com.coloplast.olympus.ui.common.ToolbarSupportController" />
+
         <variable
             name="controller"
             type="com.coloplast.olympus.ui.common.ImageGuideController" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white">
+
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/view_toolbar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:support="@{toolbarSupport}" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline"

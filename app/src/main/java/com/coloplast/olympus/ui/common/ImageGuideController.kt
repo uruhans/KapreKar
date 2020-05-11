@@ -14,7 +14,7 @@ import com.coloplast.olympus.ui.feature.transmitters.add.at3.AddTransmitterAT3Co
  * Created by Kike Bodi (ebp@dawnhealth.com) on 07/05/2020.
  * Copyright by Dawn Health A/S. All rights reserved.
  */
-abstract class ImageGuideController : BaseController<ControllerImageGuideBinding>() {
+abstract class ImageGuideController : CustomToolbarController<ControllerImageGuideBinding>() {
 
     enum class Screen{
         AT1, AT2, AT3, AT4, AT5
@@ -33,11 +33,8 @@ abstract class ImageGuideController : BaseController<ControllerImageGuideBinding
     }
 
     override fun attachVariables(viewBinding: ControllerImageGuideBinding) {
+        super.attachVariables(viewBinding)
         viewBinding.controller = this
-    }
-
-    override fun onViewBound(viewBinding: ControllerImageGuideBinding) {
-        //no-op
     }
 
     fun onNextClicked() = getListener(Listener::class.java)!!.onNextClicked(screen)

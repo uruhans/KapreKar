@@ -1,8 +1,11 @@
 package com.coloplast.olympus.ui.common.extensions
 
+import android.graphics.Bitmap
 import android.graphics.BlendMode
 import android.graphics.BlendModeColorFilter
 import android.graphics.PorterDuff
+import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.os.Build
 import android.widget.ImageView
 import androidx.annotation.ColorRes
@@ -58,3 +61,12 @@ fun ImageView.tintDrawable(@ColorRes colorRes: Int?) {
   }
 }
 
+@BindingAdapter("safeResource")
+fun ImageView.setContent(content: Any?) {
+  when(content) {
+    is Bitmap -> setImageBitmap(content)
+    is Uri -> setImageURI(content)
+    is Int -> setResource(content)
+    is Drawable -> setImageDrawable(content)
+  }
+}

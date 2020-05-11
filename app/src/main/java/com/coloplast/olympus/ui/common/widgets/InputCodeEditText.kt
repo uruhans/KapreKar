@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.EditText
 import android.widget.FrameLayout
+import android.widget.LinearLayout
 import androidx.core.widget.addTextChangedListener
 import androidx.databinding.Bindable
 import androidx.databinding.BindingAdapter
@@ -21,7 +22,7 @@ import com.coloplast.olympus.utils.DeviceUtils
  */
 class InputCodeEditText @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
-) : FrameLayout(context, attrs, defStyleAttr) {
+) : LinearLayout(context, attrs, defStyleAttr) {
 
     interface Listener{
         fun onCodeInput(code: String)

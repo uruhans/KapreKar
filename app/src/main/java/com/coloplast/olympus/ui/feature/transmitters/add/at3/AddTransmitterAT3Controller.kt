@@ -8,7 +8,7 @@ import com.coloplast.olympus.ui.common.ImageGuideController
 class AddTransmitterAT3Controller : ImageGuideController(){
 
     override val screen: Screen = Screen.AT3
-    override val imageId: Int = R.drawable.ic_bluetooth_black_24dp
+    override val imageId: Int = R.drawable.image_at3
     override val titleId: Int = R.string.guide_at3_title
     override val descriptionId: Int = R.string.guide_at3_body
     override val position: Int = 2

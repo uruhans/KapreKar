@@ -8,6 +8,7 @@ import com.coloplast.olympus.bluetooth.businesslayer.models.StatusVector
 import com.coloplast.olympus.bluetooth.businesslayer.models.Transmitter
 import com.polidea.rxandroidble2.helpers.ValueInterpreter
 import io.reactivex.ObservableTransformer
+import timber.log.Timber
 
 object OlympusWirelessProtocol {
   val UUID = "cc7314cc-003c-40b2-9372-4881e4805672".asUUID()
@@ -45,6 +46,8 @@ object OlympusWirelessProtocol {
   val statusTransformer = ObservableTransformer<ByteArray, StatusVector> { upstream ->
     upstream
       .map {
+        Timber.d("{${it[0]}, ${it[1]}, ${it[2]}, ${it[3]}, ${it[4]}, ${it[5]}, ${it[6]}, ${it[7]}, ${it[8]}, ${it[9]}, ${it[10]}, ${it[11]}}")
+
         val sensor0 = SensorStatus.fromId(it[0].toUByte())
         val sensor1 = SensorStatus.fromId(it[1].toUByte())
         val sensor2 = SensorStatus.fromId(it[2].toUByte())

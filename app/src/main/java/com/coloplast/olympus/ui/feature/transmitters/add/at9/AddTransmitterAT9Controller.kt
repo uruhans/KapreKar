@@ -40,7 +40,7 @@ class AddTransmitterAT9Controller(args: Bundle) : BaseController<ControllerAddTr
   val currentState = ObservableField(ViewState.SEARCHING)
 
   // this boolean is a little bit of a hack
-  // when trying to connect (and bond) to a transmitter
+  // when trying to connect (and bond) to a transmitter (and failing)
   // connection state actually goes into CONNECTED - and then going to DISCONNECTED
   private var connectionAlreadyFailed = false
 

@@ -51,7 +51,7 @@
 
             <TextView
                 android:id="@+id/application_guide_description"
-                style="@style/GuideHeaderDescription.18"
+                style="@style/GuideHeaderDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/guide_at10_body" />

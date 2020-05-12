@@ -88,6 +88,10 @@
     <item name="android:gravity">center</item>
   </style>
 
+  <style name="GuideHeaderDescription.18" parent="GuideHeaderDescription">
+    <item name="android:textSize">@dimen/text_18</item>
+  </style>
+
   <style name="GuideSubTitle" parent="TextStyle.Roboto.Regular.ClearGrey">
     <item name="android:textSize">@dimen/text_18</item>
     <item name="android:gravity">center</item>

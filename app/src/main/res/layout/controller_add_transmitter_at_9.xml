@@ -5,6 +5,8 @@
 
   <data>
 
+    <import type="com.coloplast.olympus.ui.feature.transmitters.add.at9.AddTransmitterAT9Controller.ViewState" />
+
     <variable
         name="controller"
         type="com.coloplast.olympus.ui.feature.transmitters.add.at9.AddTransmitterAT9Controller" />
@@ -19,13 +21,13 @@
 
     <include
         layout="@layout/state_at9_searching"
-        app:visibleOrGone="@{controller.CurrentState == 0}"
+        app:visibleOrGone="@{controller.CurrentState == ViewState.SEARCHING}"
         tools:visibility="gone" />
 
     <include
         layout="@layout/state_at9_transmitters_found"
         app:controller="@{controller}"
-        app:visibleOrGone="@{controller.CurrentState == 1}" />
+        app:visibleOrGone="@{controller.CurrentState == ViewState.MULTIPLE_RESULTS}" />
 
   </LinearLayout>
 

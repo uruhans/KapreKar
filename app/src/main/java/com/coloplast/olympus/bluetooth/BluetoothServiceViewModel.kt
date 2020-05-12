@@ -168,41 +168,31 @@ class BluetoothServiceViewModel(
     compositeDisposable.add(connectTransmitterObservable.bind(serviceResult.onResult()))
     return compositeDisposable
   }
-
-
+  
   private fun connectObservable(macAddress: String) : Observable<BluetoothServiceModel> {
-    //return Observable.create { emitter ->
+    val stateMachine = UiStateMachineImpl()
+    val overlayStateMachine = OverlayStateMachineImpl()
 
-      val stateMachine = UiStateMachineImpl()
-      val overlayStateMachine = OverlayStateMachineImpl()
+    return deviceConnection.subscribeForNotifications(macAddress)
+      .map { deviceResult ->
+        when (deviceResult) {
+          is DeviceResult.DeviceUpdateResult -> {
+            val stateModel = StateTransformers.bleToUiState(deviceResult)
+            val newUiState = stateMachine.invoke(stateModel.state)
 
-      return deviceConnection.subscribeForNotifications(macAddress)
-        .map { deviceResult ->
-          when (deviceResult) {
-            is DeviceResult.DeviceUpdateResult -> {
-              val stateModel = StateTransformers.bleToUiState(deviceResult)
-              val newUiState = stateMachine.invoke(stateModel.state)
+            val overlayStateModel = StateTransformers.bleToOverlayState(deviceResult)
+            val newOverlayState = overlayStateMachine.invoke(overlayStateModel.overlayState)
 
-              val overlayStateModel = StateTransformers.bleToOverlayState(deviceResult)
-              val newOverlayState = overlayStateMachine.invoke(overlayStateModel.overlayState)
-
-              BluetoothServiceModel.DeviceUpdate(StateChange(newUiState, newOverlayState, deviceResult.bleDevice))
-            }
-            is DeviceResult.RawDataPackageResult -> {
-              BluetoothServiceModel.RawDataPackageUpdate(deviceResult.macAddress, deviceResult.rawDataPackage)
-            }
-            is DeviceResult.Error -> {
-              BluetoothServiceModel.Disconnected()
-            }
+            BluetoothServiceModel.DeviceUpdate(StateChange(newUiState, newOverlayState, deviceResult.bleDevice))
+          }
+          is DeviceResult.RawDataPackageResult -> {
+            BluetoothServiceModel.RawDataPackageUpdate(deviceResult.macAddress, deviceResult.rawDataPackage)
+          }
+          is DeviceResult.Error -> {
+            BluetoothServiceModel.Disconnected()
           }
         }
-        .onErrorReturn { BluetoothServiceModel.Disconnected() }
-/*        .subscribe(
-          {emitter.onNext(it) },
-          {emitter.onNext(BluetoothServiceModel.Disconnected())},
-          {emitter.onNext(BluetoothServiceModel.Disconnected())}
-        )*/
-    //}
-}
-  //}
+      }
+      .onErrorReturn { BluetoothServiceModel.Disconnected() }
+  }
 }

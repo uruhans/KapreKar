@@ -60,7 +60,9 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
       UiState.WATER_INGRESS_DETECTION_J -> {
         NotificationPayload(state.notificationId(), R.string.lock_notification_water)
       }
-      UiState.CUTGUARD_DIRT_IN_TRANSMITTER_K -> { null }
+      UiState.CUTGUARD_DIRT_IN_TRANSMITTER_K -> {
+        NotificationPayload(state.notificationId(), R.string.lock_notification_dirt)
+      }
       UiState.TRANSMITTER_DETACHED_V -> { null }
       UiState.TRANSMITTER_BATTERY_CHARGING_W -> { null }
     }

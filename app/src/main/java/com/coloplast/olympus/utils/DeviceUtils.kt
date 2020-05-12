@@ -2,6 +2,7 @@ package com.coloplast.olympus.utils
 
 import android.os.Build
 import com.coloplast.olympus.BuildConfig
+import com.coloplast.olympus.R
 import com.coloplast.olympus.shared.AppSettings
 
 object DeviceUtils {

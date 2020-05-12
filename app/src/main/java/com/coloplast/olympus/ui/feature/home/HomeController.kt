@@ -217,6 +217,9 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         UiState.WATER_INGRESS_DETECTION_J -> {
           WaterIngressDetectionController.routerTransaction()
         }
+        UiState.CUTGUARD_DIRT_IN_TRANSMITTER_K -> {
+          DirtInTransmitterController.routerTransaction()
+        }
         UiState.TRANSMITTER_DETACHED_V -> {
           TransmitterDetachedController.routerTransaction()
         }

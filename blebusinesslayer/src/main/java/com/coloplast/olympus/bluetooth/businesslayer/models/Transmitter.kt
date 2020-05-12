@@ -22,7 +22,7 @@ data class Transmitter(
       waterIngressDetection == WaterIngressDetection.TRIGGERED -> TransmitterState.WATER_INGRESS_DETECTION
       battery == Battery.CHARGING -> TransmitterState.BATTERY_CHARGING
       attached == Attached.DETACHED -> TransmitterState.DETACHED
-      waterIngressDetection == WaterIngressDetection.OK && attached == Attached.ATTACHED_ON_PATCH -> TransmitterState.OK
+      waterIngressDetection == WaterIngressDetection.OK && (attached == Attached.ATTACHED_ON_PATCH || attached == Attached.ATTACHED_ON_BODY) -> TransmitterState.OK
       else -> TransmitterState.UNKNOWN
     }
   }

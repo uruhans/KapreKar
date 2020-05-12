@@ -144,7 +144,8 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
             // it's not the first time - and its actually another transmitter
             if (stateUpdate.bleDevice.macAddress != macAddress) {
               // is the new transmitter attached to a patch
-              if (stateUpdate.bleDevice.peripheral?.transmitter?.attached == Attached.ATTACHED_ON_PATCH) {
+              val attachState = stateUpdate.bleDevice.peripheral?.transmitter?.attached
+              if (attachState == Attached.ATTACHED_ON_PATCH || attachState == Attached.ATTACHED_ON_BODY) {
                 // yes it is - so replace current transmitter with the new one
                 macAddress = stateUpdate.bleDevice.macAddress
                 updateConnectionState = true
@@ -216,6 +217,9 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         }
         UiState.WATER_INGRESS_DETECTION_J -> {
           WaterIngressDetectionController.routerTransaction()
+        }
+        UiState.CUTGUARD_DIRT_IN_TRANSMITTER_K -> {
+          DirtInTransmitterController.routerTransaction()
         }
         UiState.TRANSMITTER_DETACHED_V -> {
           TransmitterDetachedController.routerTransaction()

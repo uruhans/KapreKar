@@ -44,7 +44,8 @@
 <string name="generic_ok">OK</string>
 <string name="generic_previous">Previous</string>
 <string name="generic_quit">Quit</string>
-<string name="guide_at10_body">Great! Your transmitter is now communicating with your phone. We recommend charging a new transmitter for at least 30 minutes before using.</string>
+<string name="generic_yes">Yes</string>
+<string name="guide_at10_body">Great! Your transmitter is now communicating with your phone.</string>
 <string name="guide_at10_title">Transmitter paired</string>
 <string name="guide_at1_action">Get started</string>
 <string name="guide_at1_body">A step-by-step guide to setting up a new transmitter.</string>
@@ -55,7 +56,7 @@
 <string name="guide_at2_item2">Your transitter charger and charger cable</string>
 <string name="guide_at2_item3">Access to a power socket</string>
 <string name="guide_at2_item4">A USB plug (e.g. iPhone charger plug)</string>
-<string name="guide_at2_item5">Around 30 minutes for charging the transmitter</string>
+<string name="guide_at2_item5">guide_at2_item5</string>
 <string name="guide_at2_title">You will need ...</string>
 <string name="guide_at3_body">Look for the identification number of the transmitter you would like to add, on its darker grey reverse side.</string>
 <string name="guide_at3_title">Your new transmitter\'s code</string>
@@ -65,7 +66,7 @@
 <string name="guide_at5_title">Insert cable into charger</string>
 <string name="guide_at6_body">Insert the chargerinto a power socket and turn the power on.</string>
 <string name="guide_at6_title">Connect to power</string>
-<string name="guide_at7_body">Place your new trasmitter into the charger. Allow at least 30 minutes of charging whilst continuing with the next steps</string>
+<string name="guide_at7_body">Place your new trasmitter into the charger. Allow at least 30 minutes of charging before continuing with the next steps</string>
 <string name="guide_at7_title">Place transmitter in charger</string>
 <string name="guide_at8_body">Press the button on the charger for 2 seconds to put the transmitter in pairing mode. Then, continue and select \'Pair\' when prompted.</string>
 <string name="guide_at8_title">Put transmitter in pairing mode</string>
@@ -210,6 +211,8 @@
 <string name="overlay_leak_attactment_title">Have you connected to a new sensor layer or one already in use?</string>
 <string name="overlay_leak_disconnection">Check for leakage now.</string>
 <string name="overlay_leak_disconnection_title">Something happened after losing bluetooth connection.</string>
+<string name="overlay_multiple_transmitters_found_body">Please select</string>
+<string name="overlay_multiple_transmitters_found_title">Multiple transmitters found</string>
 <string name="overlay_network">Check that you are not in flightmode and that wifi and mobile data is turned on. We cannot recieve necessary data for the study.</string>
 <string name="overlay_network_title">No network connection</string>
 <string name="overlay_no_breach_title">No breaches registrered</string>

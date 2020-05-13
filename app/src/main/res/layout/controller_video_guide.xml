@@ -87,50 +87,20 @@
             android:layout_marginEnd="@dimen/spacing_double"
             android:src="@drawable/ic_icon_questionmark"
             app:backgroundTint="@color/white"
+            android:onClick="@{() -> controller.onQuestionClicked()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <LinearLayout
+        <com.coloplast.olympus.ui.common.widgets.CustomTabLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_marginStart="@dimen/spacing_double"
+            app:totalCount="@{controller.totalCount}"
+            app:currentIndex="@{controller.position}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/next_button"
-            app:layout_constraintBottom_toBottomOf="@id/next_button">
-            
-          <ImageView
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_margin="@dimen/spacing_quarter"
-              app:safeResource="@{controller.position == 0 ? R.drawable.shape_turquoise_dot : R.drawable.shape_grey_dot}"/>
-
-          <ImageView
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_margin="@dimen/spacing_quarter"
-              app:safeResource="@{controller.position == 1 ? R.drawable.shape_turquoise_dot : R.drawable.shape_grey_dot}"/>
-
-          <ImageView
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_margin="@dimen/spacing_quarter"
-              app:safeResource="@{controller.position == 2 ? R.drawable.shape_turquoise_dot : R.drawable.shape_grey_dot}"/>
-
-          <ImageView
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_margin="@dimen/spacing_quarter"
-              app:safeResource="@{controller.position == 3 ? R.drawable.shape_turquoise_dot : R.drawable.shape_grey_dot}"/>
-
-          <ImageView
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_margin="@dimen/spacing_quarter"
-              app:safeResource="@{controller.position == 4 ? R.drawable.shape_turquoise_dot : R.drawable.shape_grey_dot}"/>
-
-        </LinearLayout>
+            app:layout_constraintBottom_toBottomOf="@id/next_button" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/next_button"
@@ -140,6 +110,7 @@
             android:layout_marginBottom="@dimen/spacing_double"
             android:src="@drawable/ic_arrow"
             android:tint="@color/white"
+            android:onClick="@{() -> controller.onNextClicked()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 

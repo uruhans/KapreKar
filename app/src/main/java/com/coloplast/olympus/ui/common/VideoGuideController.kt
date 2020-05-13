@@ -17,36 +17,32 @@ import com.coloplast.olympus.ui.feature.transmitters.add.at3.AddTransmitterAT3Co
  * Created by Kike Bodi (ebp@dawnhealth.com) on 07/05/2020.
  * Copyright by Dawn Health A/S. All rights reserved.
  */
-class VideoGuideController : CustomToolbarController<ControllerVideoGuideBinding>() {
+abstract class VideoGuideController() : CustomToolbarController<ControllerVideoGuideBinding>() {
 
+    private val screenName: String = this.javaClass.simpleName
 
-    val videoId: Int = R.raw.at5_insert_charger_cable
-     val titleId: Int = R.string.guide_at4_title
-     val descriptionId: Int = R.string.guide_at4_body
-     val position: Int = 1
+    abstract val videoId: Int
+    abstract val titleId: Int
+    abstract val descriptionId: Int
+    abstract val position: Int
+    abstract val totalCount: Int
 
-   /* interface Listener{
-        fun onNextClicked(screen: Screen)
-        fun onQuestionClicked(screen: Screen)
+    interface Listener{
+        fun onNextClicked(screen: String)
+        fun onQuestionClicked(screen: String)
     }
-*/
     override fun attachVariables(viewBinding: ControllerVideoGuideBinding) {
         super.attachVariables(viewBinding)
        viewBinding.controller = this
     }
-/*
-    fun onNextClicked() = getListener(Listener::class.java)!!.onNextClicked(screen)
 
-    fun onQuestionClicked() = getListener(Listener::class.java)!!.onQuestionClicked(screen)*/
+    fun onNextClicked() = getListener(Listener::class.java)!!.onNextClicked("screen")
+
+    fun onQuestionClicked() = getListener(Listener::class.java)!!.onQuestionClicked("adsada")
 
     override fun getLayout() = R.layout.controller_video_guide
 
     companion object{
-        private const val TAG_CONTROLLER = "add_transmitter_at4_controller"
-
-        fun routerTransaction(): RouterTransaction {
-            return RouterTransaction.with(VideoGuideController())
-                .tag(TAG_CONTROLLER)
-        }
+        const val SCREEN_NAME = "SCREEN_NAME"
     }
 }

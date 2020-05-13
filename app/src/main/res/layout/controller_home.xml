@@ -33,7 +33,7 @@
         android:layout_marginStart="@dimen/spacing_standard"
         android:layout_marginTop="@dimen/spacing_standard"
         android:padding="2dp"
-        android:src="@drawable/ic_bluetooth_black_24dp"
+        android:src="@drawable/ic_bluetooth"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:tintDrawable="@{controller.isConnected() ? R.color.icon_enabled : R.color.icon_disabled}" />

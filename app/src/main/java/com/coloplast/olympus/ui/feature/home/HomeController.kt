@@ -36,6 +36,7 @@ import com.coloplast.olympus.ui.feature.home.models.PatchVisible
 import com.coloplast.olympus.ui.feature.home.models.SideMenuType
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
 import com.coloplast.olympus.ui.feature.transmitters.TransmittersController
+import com.coloplast.olympus.ui.feature.transmitters.add.at9.AddTransmitterAT9Controller
 import com.coloplast.olympus.ui.feature.uistates.*
 import com.coloplast.olympus.utils.OSUtils
 import com.jakewharton.rxrelay2.PublishRelay
@@ -143,7 +144,8 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
             // it's not the first time - and its actually another transmitter
             if (stateUpdate.bleDevice.macAddress != macAddress) {
               // is the new transmitter attached to a patch
-              if (stateUpdate.bleDevice.peripheral?.transmitter?.attached == Attached.ATTACHED_ON_PATCH) {
+              val attachState = stateUpdate.bleDevice.peripheral?.transmitter?.attached
+              if (attachState == Attached.ATTACHED_ON_PATCH || attachState == Attached.ATTACHED_ON_BODY) {
                 // yes it is - so replace current transmitter with the new one
                 macAddress = stateUpdate.bleDevice.macAddress
                 updateConnectionState = true
@@ -215,6 +217,9 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         }
         UiState.WATER_INGRESS_DETECTION_J -> {
           WaterIngressDetectionController.routerTransaction()
+        }
+        UiState.CUTGUARD_DIRT_IN_TRANSMITTER_K -> {
+          DirtInTransmitterController.routerTransaction()
         }
         UiState.TRANSMITTER_DETACHED_V -> {
           TransmitterDetachedController.routerTransaction()
@@ -319,7 +324,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
           R.string.dialog_permission_rationale_location_title,
           R.string.dialog_permission_rationale_location_message,
           R.string.dialog_permission_rationale_location_ask_again,
-          topImage = R.drawable.ic_bluetooth_black_24dp,
+          topImage = R.drawable.ic_bluetooth,
           verticalButtonLayout = true,
           dismissAllowed = true
         )

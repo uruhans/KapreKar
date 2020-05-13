@@ -3,6 +3,7 @@ package com.coloplast.olympus.bluetooth.businesslayer.enums
 enum class Attached(val id: Int) {
   DETACHED(0),
   ATTACHED_ON_PATCH(1),
+  ATTACHED_ON_BODY(2),
   UNKNOWN(-1);
   
   companion object {

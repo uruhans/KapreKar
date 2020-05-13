@@ -50,7 +50,7 @@
             android:tint="@color/icon_disabled"
             android:visibility="@{controller.showTopImage ? View.VISIBLE : View.GONE}"
             app:resource="@{controller.topImage}"
-            tools:src="@drawable/ic_bluetooth_black_24dp" />
+            tools:src="@drawable/ic_bluetooth" />
 
         </FrameLayout>
 

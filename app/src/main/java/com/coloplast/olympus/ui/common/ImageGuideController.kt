@@ -22,6 +22,7 @@ abstract class ImageGuideController : CustomToolbarController<ControllerImageGui
     abstract val titleId: Int
     abstract val descriptionId: Int
     abstract val position: Int
+    abstract val totalCount: Int
 
     interface Listener{
         fun onNextClicked(screenName: String)

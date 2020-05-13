@@ -11,6 +11,7 @@ class AddTransmitterAT3Controller : ImageGuideController(){
     override val titleId: Int = R.string.guide_at3_title
     override val descriptionId: Int = R.string.guide_at3_body
     override val position: Int = 2
+    override val totalCount: Int = 5
 
     companion object{
         private const val TAG_CONTROLLER = "add_transmitter_at3_controller"

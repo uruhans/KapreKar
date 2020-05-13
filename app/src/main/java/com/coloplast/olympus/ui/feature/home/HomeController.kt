@@ -402,7 +402,13 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
             .popChangeHandler(VerticalChangeHandler())
         )
       }
-      SideMenuType.SETTINGS,
+      SideMenuType.SETTINGS -> {
+        router.pushController(
+          AddTransmitterAT9Controller.routerTransaction("sdf")
+            .pushChangeHandler(VerticalChangeHandler())
+            .popChangeHandler(VerticalChangeHandler())
+        )
+      }
       SideMenuType.PROFILE,
       SideMenuType.ABOUT,
       SideMenuType.CONTACT -> { /* TODO - fix this */ }

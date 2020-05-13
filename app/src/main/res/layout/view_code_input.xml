@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <variable
+            name="view"
+            type="com.coloplast.olympus.ui.common.widgets.InputCodeEditText" />
+    </data>
+
+    <LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <EditText
+        android:id="@+id/input_1"
+        android:layout_width="69dp"
+        android:layout_height="76dp"
+        android:layout_margin="@dimen/spacing_quarter"
+        android:gravity="center"
+        android:inputType="textCapCharacters"
+        android:singleLine="true"
+        style="@style/TextStyle.Coloplast.Bold.DarkGrey.36"
+        android:background="@drawable/edittext_code_background"
+        android:imeOptions="actionNext"/>
+
+    <EditText
+        android:id="@+id/input_2"
+        android:layout_width="69dp"
+        android:layout_height="76dp"
+        android:layout_margin="@dimen/spacing_quarter"
+        android:gravity="center"
+        android:inputType="textCapCharacters"
+        android:singleLine="true"
+        style="@style/TextStyle.Coloplast.Bold.DarkGrey.36"
+        android:background="@drawable/edittext_code_background"
+        android:imeOptions="actionNext"/>
+
+    <EditText
+        android:id="@+id/input_3"
+        android:layout_width="69dp"
+        android:layout_height="76dp"
+        android:layout_margin="@dimen/spacing_quarter"
+        android:gravity="center"
+        android:inputType="textCapCharacters"
+        android:singleLine="true"
+        style="@style/TextStyle.Coloplast.Bold.DarkGrey.36"
+        android:background="@drawable/edittext_code_background"
+        android:imeOptions="actionNext"/>
+
+    <EditText
+        android:id="@+id/input_4"
+        android:layout_width="69dp"
+        android:layout_height="76dp"
+        android:layout_margin="@dimen/spacing_quarter"
+        android:gravity="center"
+        android:inputType="textCapCharacters"
+        android:singleLine="true"
+        style="@style/TextStyle.Coloplast.Bold.DarkGrey.36"
+        android:background="@drawable/edittext_code_background"
+        android:imeOptions="actionNext"/>
+
+</LinearLayout>
+</layout>

@@ -10,6 +10,7 @@ import com.coloplast.olympus.R
 import com.coloplast.olympus.bluetooth.businesslayer.models.ScanResult
 import com.coloplast.olympus.databinding.ControllerAddTransmitterAt9Binding
 import com.coloplast.olympus.ui.common.BaseController
+import com.coloplast.olympus.ui.dialogs.ImageDialogController
 import com.coloplast.olympus.ui.feature.home.models.ScanResultItem
 import com.coloplast.olympus.ui.feature.transmitters.add.at9.model.SearchTransmitterUiModel
 import com.jakewharton.rxrelay2.PublishRelay
@@ -43,6 +44,8 @@ class AddTransmitterAT9Controller(args: Bundle) : BaseController<ControllerAddTr
   // when trying to connect (and bond) to a transmitter (and failing)
   // connection state actually goes into CONNECTED - and then going to DISCONNECTED
   private var connectionAlreadyFailed = false
+  
+  private var imageDialogController: ImageDialogController? = null
 
   override fun attachVariables(viewBinding: ControllerAddTransmitterAt9Binding) {
     viewBinding.controller = this
@@ -75,7 +78,7 @@ class AddTransmitterAT9Controller(args: Bundle) : BaseController<ControllerAddTr
           }
         }
         is SearchTransmitterUiModel.NothingFound -> {
-          // TODO - show nothing found popup
+        
         }
         is SearchTransmitterUiModel.ConnectionSuccessful -> {
           // skip any result coming here if we've already failed once before

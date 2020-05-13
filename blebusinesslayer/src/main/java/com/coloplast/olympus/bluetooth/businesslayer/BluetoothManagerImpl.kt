@@ -116,7 +116,8 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
    */
   override fun scanBleDevices(): Observable<ScanResult> {
     return bluetoothHandler.scanBleDevices(OlympusWirelessProtocol.UUID)
-      .map { ScanResult(it.bleDevice.name, it.bleDevice.macAddress, it.rssi) }
+      // trimming the name to make sure we dont have whitespaces
+      .map { ScanResult(it.bleDevice.name?.trim(), it.bleDevice.macAddress, it.rssi) }
   }
   
   /**
@@ -144,6 +145,8 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
   override fun bleConnectionStateObservable(macAddress: String): Observable<BleConnectionState> {
     return rxBleDeviceConnectionState(macAddress)
       .map { it.connectionState }
+      .publish()
+      .refCount()
   }
   
   /**

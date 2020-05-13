@@ -50,7 +50,7 @@ class TransmittersViewModel(private val bluetoothManager: BluetoothManager, priv
           TransmittersUiModel.Empty()
         }
         else {
-          TransmittersUiModel.ConnectedDevices(it) as TransmittersUiModel
+          TransmittersUiModel.ConnectedDevices(it)
         }
       }
     

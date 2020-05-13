@@ -10,6 +10,8 @@ import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.core.widget.addTextChangedListener
+import androidx.core.widget.doAfterTextChanged
+import androidx.core.widget.doOnTextChanged
 import androidx.databinding.Bindable
 import androidx.databinding.BindingAdapter
 import com.coloplast.olympus.databinding.ViewCodeInputBinding
@@ -39,10 +41,10 @@ class InputCodeEditText @JvmOverloads constructor(
         this.input3.onFocusChangeListener = CustomOnFocusListener()
         this.input4.onFocusChangeListener = CustomOnFocusListener()
 
-        this.input1.addTextChangedListener(CustomTextChangedListener { input2.requestFocus() })
-        this.input2.addTextChangedListener(CustomTextChangedListener { input3.requestFocus() })
-        this.input3.addTextChangedListener(CustomTextChangedListener { input4.requestFocus() })
-        this.input4.addTextChangedListener(CustomTextChangedListener { callbackCode() })
+        this.input1.doAfterTextChanged { if(it?.isNotBlank() ?: false) input2.requestFocus() }
+        this.input2.doAfterTextChanged { if(it?.isNotBlank() ?: false) input3.requestFocus() }
+        this.input3.doAfterTextChanged { if(it?.isNotBlank() ?: false) input4.requestFocus() }
+        this.input4.doAfterTextChanged { if(it?.isNotBlank() ?: false) callbackCode() }
 
         //Start
         input1.requestFocus()
@@ -63,13 +65,4 @@ class InputCodeEditText @JvmOverloads constructor(
             if(focused) (view as EditText).text.clear()
         }
     }
-
-    inner class CustomTextChangedListener(private val action: () -> Unit): TextWatcher{
-        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-        override fun afterTextChanged(text: Editable) {
-            if(text.isNotBlank()) action.invoke()
-        }
-    }
-
 }

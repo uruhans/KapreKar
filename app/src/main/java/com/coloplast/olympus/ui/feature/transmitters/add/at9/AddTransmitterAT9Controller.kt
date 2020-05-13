@@ -36,7 +36,7 @@ class AddTransmitterAT9Controller(args: Bundle) : BaseController<ControllerAddTr
   val itemBinding: OnItemBindClass<ScanResultItem> = OnItemBindClass<ScanResultItem>()
           .map(ScanResultItem::class.java, BR.item, R.layout.item_scan_result)
 
-  override val transmitterToSearchFor = args.getString(BUNDLE_TRANSMITTER_NAME_TO_SEARCH)!!
+  private val transmitterToSearchFor = args.getString(BUNDLE_TRANSMITTER_NAME_TO_SEARCH)!!
 
   val currentState = ObservableField(ViewState.SEARCHING)
 
@@ -62,19 +62,23 @@ class AddTransmitterAT9Controller(args: Bundle) : BaseController<ControllerAddTr
       
       when(uiModel) {
         is SearchTransmitterUiModel.TransmittersFound -> {
-          if(uiModel.scanResults.size > 1) {
-            // we have more than one result, so show result set to the user to allow him to choose
-            uiModel.scanResults.forEach { newScanResult ->
-              if (items.none { item -> item.scanResult.macAddress == newScanResult.macAddress }) {
-                items.add(ScanResultItem(newScanResult, this))
-              }
+          
+          // try to see if *out* transmitter is amongst the scan results
+          uiModel.scanResults.find { it.name == transmitterToSearchFor }.let {
+            if(it != null) {
+              // we found it, so try to connect to it
+              onScanResultClicked(it)
             }
-
-            currentState.set(ViewState.MULTIPLE_RESULTS)
-          }
-          else {
-            // we only have one result, so try to connect to this one
-            onScanResultClicked(uiModel.scanResults.first())
+            else {
+              // we have more than one result, so show result set to the user to allow him to choose
+              uiModel.scanResults.forEach { newScanResult ->
+                if (items.none { item -> item.scanResult.macAddress == newScanResult.macAddress }) {
+                  items.add(ScanResultItem(newScanResult, this))
+                }
+              }
+    
+              currentState.set(ViewState.MULTIPLE_RESULTS)
+            }
           }
         }
         is SearchTransmitterUiModel.NothingFound -> {

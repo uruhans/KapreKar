@@ -7,6 +7,5 @@ import io.reactivex.Observable
 
 interface AddTransmitterAT9View : UiView<SearchTransmitterUiModel> {
   fun retryTransmitterSearchObservable() : Observable<Unit>
-  val transmitterToSearchFor : String
   fun scanResultToConnect() : Observable<ScanResult>
 }

@@ -31,8 +31,6 @@ class AddTransmitterAT9ViewModel(private val bluetoothManager: BluetoothManager,
         .flatMap {
           // scan for transmitters
           bluetoothManager.scanBleDevices()
-            // only get results that the user is specifically searching for
-            .filter { it.name == uiView.transmitterToSearchFor }
             // only return distinct items (based on macAddress)
             .distinctUntilChanged { scanResult: ScanResult -> scanResult.macAddress }
             // shut down the scanning after 14 seconds

@@ -16,20 +16,17 @@ import com.coloplast.olympus.ui.feature.transmitters.add.at3.AddTransmitterAT3Co
  */
 abstract class ImageGuideController : CustomToolbarController<ControllerImageGuideBinding>() {
 
-    enum class Screen{
-        AT1, AT2, AT3, AT4, AT5
-    }
-
-    abstract val screen: Screen
+    private val screenName: String = this.javaClass.simpleName
 
     abstract val imageId: Int
     abstract val titleId: Int
     abstract val descriptionId: Int
     abstract val position: Int
+    abstract val totalCount: Int
 
     interface Listener{
-        fun onNextClicked(screen: Screen)
-        fun onQuestionClicked(screen: Screen)
+        fun onNextClicked(screenName: String)
+        fun onQuestionClicked(screenName: String)
     }
 
     override fun attachVariables(viewBinding: ControllerImageGuideBinding) {
@@ -37,9 +34,9 @@ abstract class ImageGuideController : CustomToolbarController<ControllerImageGui
         viewBinding.controller = this
     }
 
-    fun onNextClicked() = getListener(Listener::class.java)!!.onNextClicked(screen)
+    fun onNextClicked() = getListener(Listener::class.java)!!.onNextClicked(screenName)
 
-    fun onQuestionClicked() = getListener(Listener::class.java)!!.onQuestionClicked(screen)
+    fun onQuestionClicked() = getListener(Listener::class.java)!!.onQuestionClicked(screenName)
 
     override fun getLayout() = R.layout.controller_image_guide
 }

@@ -21,7 +21,7 @@ class CustomTabLayout @JvmOverloads constructor(
             orientation = HORIZONTAL
 
             val layoutInflater = LayoutInflater.from(context)
-            for(i in 0 .. totalCount){
+            for(i in 1 .. totalCount){
                 ItemTablayoutDotBinding.inflate(layoutInflater, this, true).apply {
                     selected = (i == currentIndex)
                 }

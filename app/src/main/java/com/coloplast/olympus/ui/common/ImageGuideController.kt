@@ -14,9 +14,9 @@ import com.coloplast.olympus.ui.feature.transmitters.add.at3.AddTransmitterAT3Co
  * Created by Kike Bodi (ebp@dawnhealth.com) on 07/05/2020.
  * Copyright by Dawn Health A/S. All rights reserved.
  */
-abstract class ImageGuideController : CustomToolbarController<ControllerImageGuideBinding>() {
+abstract class ImageGuideController(args: Bundle) : CustomToolbarController<ControllerImageGuideBinding>(args) {
 
-    private val screenName: String = this.javaClass.simpleName
+    private val screenName: String = args.getString(SCREEN_NAME)!!
 
     abstract val imageId: Int
     abstract val titleId: Int
@@ -39,4 +39,8 @@ abstract class ImageGuideController : CustomToolbarController<ControllerImageGui
     fun onQuestionClicked() = getListener(Listener::class.java)!!.onQuestionClicked(screenName)
 
     override fun getLayout() = R.layout.controller_image_guide
+
+    companion object{
+        const val SCREEN_NAME = "SCREEN_NAME"
+    }
 }

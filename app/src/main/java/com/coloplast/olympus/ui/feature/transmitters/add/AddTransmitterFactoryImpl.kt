@@ -32,7 +32,7 @@ class AddTransmitterFactoryImpl() : FlowFactory<AddTransmitterModel>() {
       AddTransmitterFlow.AddTransmitterAT6 -> AddTransmitterAT6Controller.routerTransaction()
       AddTransmitterFlow.AddTransmitterAT7 -> AddTransmitterAT7Controller.routerTransaction()
       AddTransmitterFlow.AddTransmitterAT8 -> AddTransmitterAT8Controller.routerTransaction()
-      AddTransmitterFlow.AddTransmitterAT9 -> AddTransmitterAT9Controller.routerTransaction(model.transmitterName)
+      AddTransmitterFlow.AddTransmitterAT9 -> AddTransmitterAT9Controller.routerTransaction(model.transmitterNameToSearchFor)
       AddTransmitterFlow.Completed -> null
     }
   }
@@ -51,7 +51,7 @@ class AddTransmitterFactoryImpl() : FlowFactory<AddTransmitterModel>() {
       AddTransmitterFlow.AddTransmitterAT6 -> { }
       AddTransmitterFlow.AddTransmitterAT7 -> { }
       AddTransmitterFlow.AddTransmitterAT8 -> { }
-      AddTransmitterFlow.AddTransmitterAT9 -> { model.macAddress = result.toString() }
+      AddTransmitterFlow.AddTransmitterAT9 -> { }
       AddTransmitterFlow.Completed -> {  }
     }
   }

@@ -6,5 +6,6 @@ import com.coloplast.olympus.ui.feature.transmitters.add.at9.model.SearchTransmi
 import io.reactivex.Observable
 
 interface AddTransmitterAT9View : UiView<SearchTransmitterUiModel> {
+  fun retryTransmitterSearchObservable() : Observable<Unit>
   fun scanResultToConnect() : Observable<ScanResult>
 }

@@ -12,7 +12,11 @@ import com.coloplast.olympus.ui.common.dialogs.BaseDialogController
 import timber.log.Timber
 
 class ImageDialogController(args: Bundle) : BaseDialogController<ControllerDialogImageBinding>(args) {
-  
+
+  interface Listener : BaseDialogController.Listener {
+    fun onCloseClicked(requestCode: Int)
+  }
+
   val titleResId = ObservableInt(R.string.generic_error)
   val messageResId = ObservableInt(R.string.generic_error_message)
   
@@ -60,7 +64,11 @@ class ImageDialogController(args: Bundle) : BaseDialogController<ControllerDialo
   fun onNegativeButtonClicked() {
     getListener(Listener::class.java)?.onNegativeButtonClicked(requestCode)
   }
-  
+
+  fun onCloseClicked() {
+    getListener(Listener::class.java)?.onCloseClicked(requestCode)
+  }
+
   fun onDismissClicked() {
     if (dismissAllowed) {
       super.dismissDialog(false)

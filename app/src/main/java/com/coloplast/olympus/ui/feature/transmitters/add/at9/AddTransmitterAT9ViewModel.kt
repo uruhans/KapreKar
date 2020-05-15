@@ -89,7 +89,14 @@ class AddTransmitterAT9ViewModel(private val bluetoothManager: BluetoothManager,
           }
       }
 
-    disposable.add(Observable.merge(scanResultObservable, addToDatabaseAndObservableConnectionStateObservable).bind(uiView.render()))
+    val retryScanningObservable = uiView.retryTransmitterSearchObservable()
+      .switchMap { scanResultObservable }
+
+    disposable.add(Observable.merge(
+      scanResultObservable,
+      retryScanningObservable,
+      addToDatabaseAndObservableConnectionStateObservable).bind(uiView.render()))
+
     return disposable
   }
 }

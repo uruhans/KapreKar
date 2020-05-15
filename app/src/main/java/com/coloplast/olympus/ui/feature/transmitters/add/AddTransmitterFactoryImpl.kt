@@ -4,6 +4,7 @@ import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.ui.feature.transmitters.add.models.AddTransmitterModel
 import com.coloplast.olympus.ui.common.flow.FlowFactory
 import com.coloplast.olympus.ui.feature.transmitters.add.at1.AddTransmitterAT1Controller
+import com.coloplast.olympus.ui.feature.transmitters.add.at10.AddTransmitterAT10Controller
 import com.coloplast.olympus.ui.feature.transmitters.add.at2.AddTransmitterAT2Controller
 import com.coloplast.olympus.ui.feature.transmitters.add.at3.AddTransmitterAT3Controller
 import com.coloplast.olympus.ui.feature.transmitters.add.at4.AddTransmitterAT4Controller
@@ -33,6 +34,7 @@ class AddTransmitterFactoryImpl() : FlowFactory<AddTransmitterModel>() {
       AddTransmitterFlow.AddTransmitterAT7 -> AddTransmitterAT7Controller.routerTransaction()
       AddTransmitterFlow.AddTransmitterAT8 -> AddTransmitterAT8Controller.routerTransaction()
       AddTransmitterFlow.AddTransmitterAT9 -> AddTransmitterAT9Controller.routerTransaction(model.transmitterNameToSearchFor)
+      AddTransmitterFlow.AddTransmitterAT10 -> AddTransmitterAT10Controller.routerTransaction()
       AddTransmitterFlow.Completed -> null
     }
   }
@@ -52,6 +54,7 @@ class AddTransmitterFactoryImpl() : FlowFactory<AddTransmitterModel>() {
       AddTransmitterFlow.AddTransmitterAT7 -> { }
       AddTransmitterFlow.AddTransmitterAT8 -> { }
       AddTransmitterFlow.AddTransmitterAT9 -> { }
+      AddTransmitterFlow.AddTransmitterAT10 -> { }
       AddTransmitterFlow.Completed -> {  }
     }
   }

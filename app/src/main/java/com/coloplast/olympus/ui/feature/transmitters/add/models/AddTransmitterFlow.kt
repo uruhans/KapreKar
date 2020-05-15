@@ -10,6 +10,7 @@ enum class AddTransmitterFlow {
   AddTransmitterAT7,
   AddTransmitterAT8,
   AddTransmitterAT9,
+  AddTransmitterAT10,
   Completed;
   
   companion object {

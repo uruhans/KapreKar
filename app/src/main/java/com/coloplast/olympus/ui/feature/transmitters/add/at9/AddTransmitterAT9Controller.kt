@@ -77,8 +77,8 @@ class AddTransmitterAT9Controller(args: Bundle) :
         is SearchTransmitterUiModel.TransmittersFound -> {
 
           // try to see if *out* transmitter is amongst the scan results
-          uiModel.scanResults.find { it.name == transmitterToSearchFor }.let {
-            if (it != null) {
+          uiModel.scanResults.find { it.name?.contains(transmitterToSearchFor) ?: false }.let {
+            if (it != null && uiModel.scanResults.size == 1) {
               // we found it, so try to connect to it
               onScanResultClicked(it)
             } else {

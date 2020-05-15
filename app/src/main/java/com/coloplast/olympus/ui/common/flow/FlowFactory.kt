@@ -45,6 +45,9 @@ abstract class FlowFactory<V: FlowFactoryModel> {
    */
   abstract fun parseResultFromController(currentIndex: Int, result: Any?)
   
+  /**
+   * set the listener to receive results from the factory 
+   */
   fun setFlowFactoryListener(listener: Listener<V>) {
     this.listener = listener
   }

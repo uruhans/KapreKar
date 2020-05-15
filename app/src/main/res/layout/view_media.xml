@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="view"
+            type="com.coloplast.olympus.ui.common.widgets.MediaView" />
+    </data>
+
+    <FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.coloplast.olympus.ui.common.widgets.VideoPlayer
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            visibleOrGone="@{view.isVideo}"
+            app:videoSrc="@{view.resId}" />
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            visibleOrGone="@{!view.isVideo}"
+            android:layout_gravity="center"
+            android:scaleType="fitXY"
+            app:safeResource="@{view.resId}"/>
+    </FrameLayout>
+</layout>

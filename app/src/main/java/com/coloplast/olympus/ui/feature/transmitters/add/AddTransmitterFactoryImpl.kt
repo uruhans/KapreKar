@@ -8,6 +8,7 @@ import com.coloplast.olympus.ui.feature.transmitters.add.at2.AddTransmitterAT2Co
 import com.coloplast.olympus.ui.feature.transmitters.add.at3.AddTransmitterAT3Controller
 import com.coloplast.olympus.ui.feature.transmitters.add.at4.AddTransmitterAT4Controller
 import com.coloplast.olympus.ui.feature.transmitters.add.at5.AddTransmitterAT5Controller
+import com.coloplast.olympus.ui.feature.transmitters.add.at6.AddTransmitterAT6Controller
 import com.coloplast.olympus.ui.feature.transmitters.add.models.AddTransmitterFlow
 
 class AddTransmitterFactoryImpl() : FlowFactory<AddTransmitterModel>() {
@@ -25,6 +26,7 @@ class AddTransmitterFactoryImpl() : FlowFactory<AddTransmitterModel>() {
       AddTransmitterFlow.AddTransmitterAT3 -> AddTransmitterAT3Controller.routerTransaction()
       AddTransmitterFlow.AddTransmitterAT4 -> AddTransmitterAT4Controller.routerTransaction()
       AddTransmitterFlow.AddTransmitterAT5 -> AddTransmitterAT5Controller.routerTransaction()
+      AddTransmitterFlow.AddTransmitterAT6 -> AddTransmitterAT6Controller.routerTransaction()
       //AddTransmitterFlow.AddTransmitterAT9 -> AddTransmitterAT9Controller.routerTransaction(model.transmitterName)
       AddTransmitterFlow.Completed -> null
     }
@@ -41,6 +43,7 @@ class AddTransmitterFactoryImpl() : FlowFactory<AddTransmitterModel>() {
       AddTransmitterFlow.AddTransmitterAT3 -> { }
       AddTransmitterFlow.AddTransmitterAT4 -> { model.transmitterNameToSearchFor = result as String }
       AddTransmitterFlow.AddTransmitterAT5 -> { }
+      AddTransmitterFlow.AddTransmitterAT6 -> { }
       //AddTransmitterFlow.AddTransmitterAT9 -> { model.macAddress = result.toString() }
       AddTransmitterFlow.Completed -> {  }
     }

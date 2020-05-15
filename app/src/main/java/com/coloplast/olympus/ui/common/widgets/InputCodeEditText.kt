@@ -16,6 +16,7 @@ import androidx.databinding.Bindable
 import androidx.databinding.BindingAdapter
 import com.coloplast.olympus.databinding.ViewCodeInputBinding
 import com.coloplast.olympus.utils.DeviceUtils
+import kotlinx.android.synthetic.main.view_code_input.view.*
 
 
 /**
@@ -51,13 +52,19 @@ class InputCodeEditText @JvmOverloads constructor(
         DeviceUtils.showSoftKeyboard(context)
     }
 
-    override fun onViewRemoved(child: View?) {
-        DeviceUtils.closeSoftKeyboard(context)
-        super.onViewRemoved(child)
+    override fun onDetachedFromWindow() {
+        DeviceUtils.closeSoftKeyboard(this)
+
+        view.input1.text.clear()
+        view.input2.text.clear()
+        view.input3.text.clear()
+        view.input4.text.clear()
+
+        super.onDetachedFromWindow()
     }
 
     private fun callbackCode(){
-        DeviceUtils.closeSoftKeyboard(context)
+        DeviceUtils.closeSoftKeyboard(this)
         val code = "${view.input1.text}" +
                 "${view.input2.text}" +
                 "${view.input3.text}" +

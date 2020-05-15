@@ -16,11 +16,16 @@
 
   </data>
 
-  <LinearLayout
+  <FrameLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/default_background"
     android:orientation="vertical">
+
+    <com.bluelinelabs.conductor.ChangeHandlerFrameLayout
+      android:id="@+id/flow_controller_container"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent" />
 
     <androidx.appcompat.widget.Toolbar
       style="@style/Toolbar"
@@ -35,10 +40,5 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-    <com.bluelinelabs.conductor.ChangeHandlerFrameLayout
-      android:id="@+id/flow_controller_container"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent" />
-
-  </LinearLayout>
+  </FrameLayout>
 </layout>

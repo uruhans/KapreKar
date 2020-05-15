@@ -51,6 +51,11 @@ class InputCodeEditText @JvmOverloads constructor(
         DeviceUtils.showSoftKeyboard(context)
     }
 
+    override fun onViewRemoved(child: View?) {
+        DeviceUtils.closeSoftKeyboard(context)
+        super.onViewRemoved(child)
+    }
+
     private fun callbackCode(){
         DeviceUtils.closeSoftKeyboard(context)
         val code = "${view.input1.text}" +

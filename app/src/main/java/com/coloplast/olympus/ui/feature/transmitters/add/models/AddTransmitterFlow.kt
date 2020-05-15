@@ -7,6 +7,7 @@ enum class AddTransmitterFlow {
   AddTransmitterAT4,
   AddTransmitterAT5,
   AddTransmitterAT6,
+  AddTransmitterAT7,
   //AddTransmitterAT9(2),
   Completed;
   

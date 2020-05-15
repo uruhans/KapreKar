@@ -4,4 +4,6 @@ import com.coloplast.olympus.ui.common.flow.FlowFactoryModel
 
 class AddTransmitterModel : FlowFactoryModel {
   lateinit var transmitterNameToSearchFor : String
+  lateinit var transmitterName : String
+  lateinit var macAddress : String
 }

@@ -190,6 +190,10 @@
     <item name="android:textColor">@color/text_clear_grey</item>
   </style>
 
+  <style name="TextStyle.Coloplast.Bold.DarkGrey.36" parent="TextStyle.Coloplast.Bold.DarkGrey">
+    <item name="android:textSize">36sp</item>
+  </style>
+
   <style name="TextStyle.Coloplast.Bold.DarkGrey.32" parent="TextStyle.Coloplast.Bold.DarkGrey">
     <item name="android:textSize">@dimen/text_32</item>
   </style>

@@ -3,12 +3,13 @@ package com.coloplast.olympus.ui.feature.transmitters.add
 import android.os.Bundle
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
+import com.coloplast.olympus.ui.common.MediaGuideController
 import com.coloplast.olympus.ui.common.flow.FlowFactory
 import com.coloplast.olympus.ui.common.flow.FlowFactoryController
 import com.coloplast.olympus.ui.feature.transmitters.add.models.AddTransmitterModel
 import org.koin.core.inject
 
-class AddTransmitterFlowController(args: Bundle) : FlowFactoryController<AddTransmitterModel>(args) {
+class AddTransmitterFlowController(args: Bundle) : FlowFactoryController<AddTransmitterModel>(args), MediaGuideController.Listener {
   
   private val initialValue = args.getInt(BUNDLE_START_FLOW_AT, -1)
   private val addTransmitterFactory: FlowFactory<AddTransmitterModel> by inject()
@@ -20,6 +21,10 @@ class AddTransmitterFlowController(args: Bundle) : FlowFactoryController<AddTran
   
   override fun getFlowFactory(): FlowFactory<AddTransmitterModel> {
     return addTransmitterFactory
+  }
+
+  override fun onQuestionClicked(screen: String) {
+    //TODO: Guidelines on Questions have not been defined.
   }
   
   companion object {

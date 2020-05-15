@@ -3,6 +3,7 @@ package com.coloplast.olympus.ui.common
 import android.os.Bundle
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerMediaGuideBinding
+import com.coloplast.olympus.ui.common.listeners.FlowListener
 
 
 /**
@@ -22,7 +23,6 @@ abstract class MediaGuideController(args: Bundle) : CustomToolbarController<Cont
     abstract val totalCount: Int
 
     interface Listener{
-        fun onNextClicked(screen: String)
         fun onQuestionClicked(screen: String)
     }
     override fun attachVariables(viewBinding: ControllerMediaGuideBinding) {
@@ -30,7 +30,7 @@ abstract class MediaGuideController(args: Bundle) : CustomToolbarController<Cont
        viewBinding.controller = this
     }
 
-    fun onNextClicked() = getListener(Listener::class.java)!!.onNextClicked(screenName)
+    fun onNextClicked() = getListener(FlowListener::class.java)!!.onNextClicked()
 
     fun onQuestionClicked() = getListener(Listener::class.java)!!.onQuestionClicked(screenName)
 

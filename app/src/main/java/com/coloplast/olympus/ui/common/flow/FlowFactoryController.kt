@@ -17,12 +17,8 @@ abstract class FlowFactoryController<T : FlowFactoryModel>(args: Bundle) : BaseF
 
   @CallSuper
   override fun startFlow(flowChildRouter: Router) {
-    setFlowFactoryListener()
-    getFlowFactory().restart()
-  }
-  
-  private fun setFlowFactoryListener() {
     getFlowFactory().setFlowFactoryListener(this)
+    getFlowFactory().restart()
   }
   
   override fun next(routerTransaction: RouterTransaction) {

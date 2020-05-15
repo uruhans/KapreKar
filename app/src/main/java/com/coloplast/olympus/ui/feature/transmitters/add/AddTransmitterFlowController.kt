@@ -14,7 +14,7 @@ class AddTransmitterFlowController(args: Bundle) : FlowFactoryController<AddTran
   private val addTransmitterFactory: FlowFactory<AddTransmitterModel> by inject()
   
   override fun startFlow(flowChildRouter: Router) {
-    addTransmitterFactory.overrideInitialValue(initialValue)
+    addTransmitterFactory.overrideStartingPosition(initialValue)
     super.startFlow(flowChildRouter)
   }
   

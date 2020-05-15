@@ -53,10 +53,10 @@ abstract class FlowFactory<V: FlowFactoryModel> {
   }
   
   /**
-   * a method used to override the initial step to start the flow from
+   * a method used to override the initial starting position of the flow
    * Maybe you want to start from position 3 instead of 0
    */
-  fun overrideInitialValue(index: Int) {
+  fun overrideStartingPosition(index: Int) {
     initialValue = index
   }
   

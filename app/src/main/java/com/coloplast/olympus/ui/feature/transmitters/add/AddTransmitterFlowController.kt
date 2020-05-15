@@ -3,35 +3,35 @@ package com.coloplast.olympus.ui.feature.transmitters.add
 import android.os.Bundle
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
-import com.coloplast.olympus.databinding.ControllerFlowBinding
-import com.coloplast.olympus.ui.common.BaseFlowController
+import com.coloplast.olympus.ui.common.flow.FlowFactory
+import com.coloplast.olympus.ui.common.flow.FlowFactoryController
+import com.coloplast.olympus.ui.feature.transmitters.add.models.AddTransmitterModel
+import org.koin.core.inject
 
-class AddTransmitterFlowController(args: Bundle) : BaseFlowController(args) {
+class AddTransmitterFlowController(args: Bundle) : FlowFactoryController<AddTransmitterModel>(args) {
   
-  private val startFlowAt = args.getInt(BUNDLE_START_FLOW_AT)
+  private val initialValue = args.getInt(BUNDLE_START_FLOW_AT, -1)
+  private val addTransmitterFactory: FlowFactory<AddTransmitterModel> by inject()
   
   override fun startFlow(flowChildRouter: Router) {
-    flowChildRouter.pushController(getInitialController())
+    addTransmitterFactory.overrideInitialValue(initialValue)
+    super.startFlow(flowChildRouter)
   }
   
-  private fun getInitialController() : RouterTransaction {
-    TODO("Not yet implemented")
-  }
-  
-  override fun attachVariables(viewBinding: ControllerFlowBinding) {
-    super.attachVariables(viewBinding)
-    viewBinding.controller = this
+  override fun getFlowFactory(): FlowFactory<AddTransmitterModel> {
+    return addTransmitterFactory
   }
   
   companion object {
     private const val CONTROLLER_TAG = "add_transmitter_flow_controller"
-    private const val BUNDLE_START_FLOW_AT = "BUNDLE_START_FLOW_AT";
+    private const val BUNDLE_START_FLOW_AT = "BUNDLE_START_FLOW_AT"
     
-    fun routerTransaction(startAt: Int = 0) : RouterTransaction {
+    fun routerTransaction(startAt: Int = -1): RouterTransaction {
       with(Bundle()) {
         putInt(BUNDLE_START_FLOW_AT, startAt)
         
-        return RouterTransaction.with(AddTransmitterFlowController(this)).tag(CONTROLLER_TAG)
+        return RouterTransaction.with(AddTransmitterFlowController(this))
+          .tag(CONTROLLER_TAG)
       }
     }
   }

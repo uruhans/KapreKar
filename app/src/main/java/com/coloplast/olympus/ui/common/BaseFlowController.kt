@@ -1,7 +1,6 @@
 package com.coloplast.olympus.ui.common
 
 import android.os.Bundle
-import android.widget.LinearLayout
 import androidx.annotation.CallSuper
 import androidx.databinding.Observable
 import androidx.databinding.ObservableBoolean
@@ -12,17 +11,18 @@ import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.HorizontalChangeHandler
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerFlowBinding
+import com.coloplast.olympus.ui.common.listeners.FlowListener
 
 /**
  * Base class to support and hold controllers contained within a "step-based" flow (or wizard)
  * It shows no UI, but is merely a container that holds other controllers and navigates between them
  */
 @Suppress("PrivatePropertyName")
-abstract class BaseFlowController : BaseController<ControllerFlowBinding> {
+abstract class BaseFlowController : BaseController<ControllerFlowBinding>, FlowListener, ToolbarSupportController.Listener {
   
   private val ROUTER_TAG = "BaseFlowController.childRouter"
   
-  val title = ObservableField<String>("")
+  val title = ObservableField("")
   val showToolbar = ObservableBoolean(false)
   
   val progress = ObservableInt()
@@ -34,6 +34,7 @@ abstract class BaseFlowController : BaseController<ControllerFlowBinding> {
   constructor(args: Bundle?) : super(args)
   
   override fun attachVariables(viewBinding: ControllerFlowBinding) {
+    viewBinding.toolbarSupport = ToolbarSupportController(listener = this)
     viewBinding.controller = this
   }
   
@@ -42,24 +43,37 @@ abstract class BaseFlowController : BaseController<ControllerFlowBinding> {
     startFlow()
     
     showSubmitButton.addOnPropertyChangedCallback(onShowSubmitButtonChanged)
-    initializeToolbarMargins(viewBinding)
+//    initializeToolbarMargins(viewBinding)
+  }
+  
+  override fun onBackClicked() {
+    handleBack()
+  }
+  
+  override fun onCloseClicked() {
+    closeFlow()
   }
   
   /**
    * initialize toolbar margins depending on whether or not the submit button is displayed in the toolbar
    */
-  private fun initializeToolbarMargins(viewBinding: ControllerFlowBinding) {
-    val params = viewBinding.title.layoutParams as LinearLayout.LayoutParams
-    params.marginEnd = if (showSubmitButton.get()) 0
-    else viewBinding.title.context.resources.getDimensionPixelSize(
-      R.dimen.toolbar_margin_with_navigation_icon_2
-    )
-    viewBinding.title.layoutParams = params
-    
-    val iconParams = viewBinding.navigationIcon.layoutParams as LinearLayout.LayoutParams
-    iconParams.marginEnd = 0
-    viewBinding.navigationIcon.layoutParams = iconParams
-  }
+//  private fun initializeToolbarMargins(viewBinding: ControllerFlowBinding) {
+//    val params = viewBinding.title.layoutParams as LinearLayout.LayoutParams
+//    params.marginEnd = if (showSubmitButton.get()) {
+//      0
+//    }
+//    else {
+//      viewBinding.title.context.resources.getDimensionPixelSize(
+//      R.dimen.toolbar_margin_with_navigation_icon_2
+//      )
+//    }
+//
+//    viewBinding.title.layoutParams = params
+//
+//    val iconParams = viewBinding.navigationIcon.layoutParams as LinearLayout.LayoutParams
+//    iconParams.marginEnd = 0
+//    viewBinding.navigationIcon.layoutParams = iconParams
+//  }
   
   private fun startFlow() {
     if (childRouters.isEmpty()) {
@@ -89,12 +103,17 @@ abstract class BaseFlowController : BaseController<ControllerFlowBinding> {
     routerTransaction.controller()
         .targetController = this
     
-    if (!overrideDefaultChangeHandlers) {
-      routerTransaction.pushChangeHandler(HorizontalChangeHandler())
-          .popChangeHandler(HorizontalChangeHandler())
+    if(!getFlowChildRouter().hasRootController()) {
+      getFlowChildRouter().setRoot(routerTransaction)
     }
-    
-    getFlowChildRouter().pushController(routerTransaction)
+    else {
+      if (!overrideDefaultChangeHandlers) {
+        routerTransaction.pushChangeHandler(HorizontalChangeHandler())
+          .popChangeHandler(HorizontalChangeHandler())
+      }
+  
+      getFlowChildRouter().pushController(routerTransaction)
+    }
   }
   
   /**
@@ -103,7 +122,7 @@ abstract class BaseFlowController : BaseController<ControllerFlowBinding> {
    */
   private val onShowSubmitButtonChanged = object : Observable.OnPropertyChangedCallback() {
     override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
-      initializeToolbarMargins(getBinding())
+      //initializeToolbarMargins(getBinding())
     }
   }
   
@@ -128,7 +147,9 @@ abstract class BaseFlowController : BaseController<ControllerFlowBinding> {
   /**
    * override this to determine what should happen when you press the navigation icon (ie: top left button)
    */
-  open fun onNavigationButtonClicked() {}
+  open fun onNavigationButtonClicked() {
+    handleBack()
+  }
   
   /**
    * override this to determine what should happen when you press the submit button (ie: top right button)
@@ -159,5 +180,34 @@ abstract class BaseFlowController : BaseController<ControllerFlowBinding> {
   override fun onUnbind(viewBinding: ControllerFlowBinding) {
     showSubmitButton.removeOnPropertyChangedCallback(onShowSubmitButtonChanged)
     super.onUnbind(viewBinding)
+  }
+  
+  /**
+   * default implementation of FlowListener.onPreviousClicked
+   */
+  override fun onPreviousClicked() {
+    handleBack()
+  }
+  
+  /**
+   * default implementation of FlowListener.onCancelFlow
+   */
+  override fun onCancelFlow() {
+    closeFlow()
+  }
+  
+  /**
+   * default implementation of handleBack
+   */
+  @CallSuper
+  override fun handleBack(): Boolean {
+    if(getFlowChildRouter().backstackSize > 1) {
+      getFlowChildRouter().popCurrentController()
+    }
+    else {
+      closeFlow()
+    }
+    
+    return true
   }
 }

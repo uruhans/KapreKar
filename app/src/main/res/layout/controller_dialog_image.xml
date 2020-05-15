@@ -22,8 +22,8 @@
       android:id="@+id/cardView"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
-      android:layout_marginStart="40dp"
-      android:layout_marginEnd="40dp"
+      android:layout_marginStart="20dp"
+      android:layout_marginEnd="20dp"
       app:cardBackgroundColor="@color/cardview_background"
       app:cardCornerRadius="@dimen/cardview_corner_radius"
       app:layout_constraintBottom_toBottomOf="parent"
@@ -43,20 +43,31 @@
           android:background="@color/default_background">
 
           <ImageView
-            android:layout_width="54dp"
+            android:id="@+id/button_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="@dimen/spacing_standard"
+            android:layout_marginEnd="@dimen/spacing_standard"
+            android:foreground="?attr/actionBarItemBackground"
+            android:onClick="@{() -> controller.onCloseClicked()}"
+            android:src="@drawable/main_sidemenu_close" />
+
+          <ImageView
+            android:layout_width="86dp"
             android:layout_height="86dp"
             android:layout_gravity="center"
             android:scaleType="centerCrop"
-            android:tint="@color/icon_disabled"
-            android:visibility="@{controller.showTopImage ? View.VISIBLE : View.GONE}"
+            android:tint="@color/darkGrey01"
             app:resource="@{controller.topImage}"
-            tools:src="@drawable/ic_bluetooth" />
+            app:visibleOrGone="@{controller.showTopImage}"
+            tools:src="@drawable/ic_info_circle" />
 
         </FrameLayout>
 
         <TextView
           android:id="@+id/title"
-          style="@style/Headline.Small"
+          style="@style/TextStyle.Coloplast.Bold.DarkGrey"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginStart="@dimen/spacing_standard"
@@ -73,70 +84,81 @@
           android:layout_marginStart="@dimen/spacing_standard"
           android:layout_marginTop="@dimen/spacing_half"
           android:layout_marginEnd="@dimen/spacing_standard"
-          android:layout_marginBottom="@dimen/spacing_half"
           android:lineSpacingExtra="0dp"
           android:text="@{controller.messageResId}"
           android:textColor="@color/grey"
           tools:text="@string/generic_error_message" />
 
+        <View
+          android:layout_width="match_parent"
+          android:layout_height="1dp"
+          android:layout_marginTop="@dimen/spacing_double"
+          android:background="@color/divider" />
+
         <LinearLayout
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_marginBottom="@dimen/spacing_larger"
           android:orientation="vertical"
-          android:paddingStart="@dimen/spacing_standard"
-          android:paddingEnd="@dimen/spacing_standard"
-          android:visibility="@{controller.verticalButtons ? View.VISIBLE : View.GONE}"
+          app:visibleOrGone="@{controller.verticalButtons}"
           tools:visibility="visible">
 
           <TextView
             style="@style/Text.Link"
             android:layout_width="match_parent"
-            android:layout_height="46dp"
-            android:gravity="center_vertical"
+            android:layout_height="64dp"
+            android:background="?attr/selectableItemBackground"
+            android:gravity="center"
             android:onClick="@{() -> controller.onPositiveButtonClicked() }"
             android:text="@{controller.positiveButtonTextResId}"
             tools:text="@string/generic_quit" />
 
+          <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divider"
+            app:visibleOrGone="@{controller.showNegativeButton}"
+            tools:visibility="gone" />
+
           <TextView
             style="@style/Text.Link"
             android:layout_width="match_parent"
-            android:layout_height="46dp"
-            android:background="@null"
-            android:gravity="center_vertical"
+            android:layout_height="64dp"
+            android:background="?attr/selectableItemBackground"
+            android:gravity="center"
             android:onClick="@{() -> controller.onNegativeButtonClicked() }"
-            android:visibility="@{controller.showNegativeButton ? View.VISIBLE : View.GONE}"
             app:safeText="@{controller.negativeButtonTextResId}"
+            app:visibleOrGone="@{controller.showNegativeButton}"
             tools:text="@string/generic_cancel" />
 
         </LinearLayout>
 
         <LinearLayout
           android:layout_width="match_parent"
-          android:layout_height="wrap_content"
+          android:layout_height="64dp"
           android:orientation="horizontal"
-          android:padding="@dimen/spacing_standard"
-          android:visibility="@{controller.verticalButtons ? View.GONE : View.VISIBLE}"
+          app:visibleOrGone="@{!controller.verticalButtons}"
           tools:visibility="gone">
 
           <TextView
             android:id="@+id/next_button"
             style="@style/Text.Link"
             android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:layout_marginEnd="@dimen/spacing_standard"
+            android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="?attr/selectableItemBackground"
             android:gravity="center"
             android:onClick="@{() -> controller.onNegativeButtonClicked() }"
-            android:visibility="@{controller.showNegativeButton ? View.VISIBLE : View.GONE}"
             app:safeText="@{controller.negativeButtonTextResId}"
-            tools:text="@string/generic_cancel" />
+            app:visibleOrGone="@{controller.showNegativeButton}"
+            tools:text="@string/generic_cancel"
+            tools:visibility="visible" />
 
           <TextView
             style="@style/Text.Link"
             android:layout_width="0dp"
-            android:layout_height="48dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="?attr/selectableItemBackground"
             android:gravity="center"
             android:onClick="@{() -> controller.onPositiveButtonClicked() }"
             android:text="@{controller.positiveButtonTextResId}"

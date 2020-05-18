@@ -14,7 +14,8 @@ import com.coloplast.olympus.ui.common.CustomToolbarController
 import com.coloplast.olympus.ui.common.DrawerStateDispatcher
 import com.coloplast.olympus.ui.common.dialogs.BaseDialogController
 import com.coloplast.olympus.ui.common.dialogs.DialogController
-import com.coloplast.olympus.ui.feature.transmitters.add.AddTransmitterController
+import com.coloplast.olympus.ui.common.flow.FlowFactoryController
+import com.coloplast.olympus.ui.feature.transmitters.add.AddTransmitterFlowController
 import com.coloplast.olympus.ui.feature.transmitters.models.SectionDivider
 import com.coloplast.olympus.ui.feature.transmitters.models.SmallHeaderItem
 import com.coloplast.olympus.ui.feature.transmitters.models.TransmitterItem
@@ -156,7 +157,7 @@ class TransmittersController(args: Bundle? = null) :
 
   fun onAddTransmitterClicked() {
     router.pushController(
-      AddTransmitterController.routerTransaction()
+      AddTransmitterFlowController.routerTransaction()
         .pushChangeHandler(VerticalChangeHandler())
         .popChangeHandler(VerticalChangeHandler())
     )

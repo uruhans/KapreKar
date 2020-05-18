@@ -4,16 +4,22 @@ import android.os.Bundle
 import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerAddTransmitterAt1Binding
-import com.coloplast.olympus.ui.common.CustomToolbarController
+import com.coloplast.olympus.ui.common.BaseController
+import com.coloplast.olympus.ui.common.listeners.FlowListener
 
-class AddTransmitterAT1Controller(args: Bundle? = null) : CustomToolbarController<ControllerAddTransmitterAt1Binding>(args) {
+class AddTransmitterAT1Controller(args: Bundle? = null) : BaseController<ControllerAddTransmitterAt1Binding>(args) {
   
   override fun attachVariables(viewBinding: ControllerAddTransmitterAt1Binding) {
-    super.attachVariables(viewBinding)
     viewBinding.controller = this
   }
   
-  override fun getNavigationIconResId(): Int = R.drawable.ic_arrow
+  override fun onViewBound(viewBinding: ControllerAddTransmitterAt1Binding) {
+    /* no-op */
+  }
+  
+  fun onNextClicked() {
+    getListener(FlowListener::class.java)?.onNextClicked()
+  }
   
   override fun getLayout(): Int = R.layout.controller_add_transmitter_at_1
   

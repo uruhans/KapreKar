@@ -1,0 +1,21 @@
+package com.coloplast.olympus.ui.feature.transmitters.add.models
+
+enum class AddTransmitterFlow {
+  AddTransmitterAT1,
+  AddTransmitterAT2,
+  AddTransmitterAT3,
+  AddTransmitterAT4,
+  AddTransmitterAT5,
+  AddTransmitterAT6,
+  AddTransmitterAT7,
+  AddTransmitterAT8,
+  AddTransmitterAT9,
+  AddTransmitterAT10,
+  Completed;
+  
+  companion object {
+    fun fromIndex(index: Int) : AddTransmitterFlow {
+      return values().associateBy { flow: AddTransmitterFlow -> flow.ordinal}[index] ?: Completed
+    }
+  }
+}

@@ -6,6 +6,7 @@ import com.coloplast.olympus.BR
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerAddTransmitterAt2Binding
 import com.coloplast.olympus.ui.common.BaseController
+import com.coloplast.olympus.ui.common.listeners.FlowListener
 import com.coloplast.olympus.ui.feature.transmitters.add.models.ChecklistItem
 import me.tatarka.bindingcollectionadapter2.itembindings.OnItemBindClass
 
@@ -31,6 +32,10 @@ class AddTransmitterAT2Controller : BaseController<ControllerAddTransmitterAt2Bi
     
       items.addAll(list)
     }
+  }
+  
+  fun onNextClicked() {
+    getListener(FlowListener::class.java)?.onNextClicked()
   }
   
   override fun getLayout() = R.layout.controller_add_transmitter_at_2

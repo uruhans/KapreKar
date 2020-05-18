@@ -2,10 +2,10 @@ package com.coloplast.olympus.utils
 
 import android.content.Context
 import android.os.Build
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import com.coloplast.olympus.BuildConfig
 import com.coloplast.olympus.R
-import android.view.inputmethod.InputMethodManager
-import androidx.core.content.ContextCompat.getSystemService
 import com.coloplast.olympus.shared.AppSettings
 
 object DeviceUtils {
@@ -29,11 +29,15 @@ object DeviceUtils {
 
   fun showSoftKeyboard(context: Context){
     val imm: InputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
+    imm.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, InputMethodManager.HIDE_IMPLICIT_ONLY)
   }
 
-  fun closeSoftKeyboard(context: Context){
-    val imm: InputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-    imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, InputMethodManager.SHOW_FORCED)
+  fun closeSoftKeyboard(view: View){
+    /*val imm: InputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, InputMethodManager.SHOW_IMPLICIT)*/
+
+    val inputManager =
+      view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    inputManager.hideSoftInputFromWindow(view.windowToken, InputMethodManager.HIDE_IMPLICIT_ONLY)
   }
 }

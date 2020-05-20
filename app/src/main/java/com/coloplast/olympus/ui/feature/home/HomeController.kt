@@ -15,7 +15,6 @@ import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.FadeChangeHandler
 import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import com.coloplast.olympus.R
-import com.coloplast.olympus.bluetooth.businesslayer.enums.Attached
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
 import com.coloplast.olympus.bluetooth.businesslayer.enums.PowerLevel
@@ -36,7 +35,6 @@ import com.coloplast.olympus.ui.feature.home.models.PatchVisible
 import com.coloplast.olympus.ui.feature.home.models.SideMenuType
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
 import com.coloplast.olympus.ui.feature.transmitters.TransmittersController
-import com.coloplast.olympus.ui.feature.transmitters.add.at9.AddTransmitterAT9Controller
 import com.coloplast.olympus.ui.feature.uistates.*
 import com.coloplast.olympus.utils.OSUtils
 import com.jakewharton.rxrelay2.PublishRelay
@@ -70,11 +68,11 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   val isPatchVisible = ObservableBoolean(false)
   val patchInErrorState = ObservableBoolean(false)
   
-  private var macAddress: String = ""
+  private val transmitterManager = TransmitterManager()
   
   private var currentUiState = UiState.INITIAL
   private var stateRouter: Router? = null
-  
+
   constructor() : super()
   constructor(args: Bundle?) : super(args)
   
@@ -131,36 +129,27 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
           }
         }
         is HomeUiModel.DeviceUpdate -> {
-          val stateUpdate = uiModel.stateChange
-          
-          var updateConnectionState = false
-          
-          if(macAddress.isEmpty()) {
-            // this is the first time coming through this controller - just pass it along
-            macAddress = stateUpdate.bleDevice.macAddress
-            updateConnectionState = true
-          }
-          else {
-            // it's not the first time - and its actually another transmitter
-            if (stateUpdate.bleDevice.macAddress != macAddress) {
-              // is the new transmitter attached to a patch
-              val attachState = stateUpdate.bleDevice.peripheral?.transmitter?.attached
-              if (attachState == Attached.ATTACHED_ON_PATCH || attachState == Attached.ATTACHED_ON_BODY) {
-                // yes it is - so replace current transmitter with the new one
-                macAddress = stateUpdate.bleDevice.macAddress
-                updateConnectionState = true
-              }
-              else {
-                // no it's not attached, so we skip the result of this one
-                return@ui
-              }
-            }
-          }
-          
-          if(updateConnectionState) {
+          val updatedStateChange = transmitterManager.newStatusVector(uiModel.stateChange)
+          val stateUpdate = updatedStateChange.stateChange
+
+          if(updatedStateChange.activeTransmitterChanged) {
             connectionStateDisposable.clear()
             connectionStateDisposable.add(viewModel.bindConnectionState(this))
-            requestConnectionStateRelay.accept(macAddress)
+            requestConnectionStateRelay.accept(updatedStateChange.stateChange.getMacAddress())
+
+            imageDialogController = ImageDialogController.create(
+              this,
+              REQUEST_CODE_TRANSMITTERS_CHANGED,
+              R.string.overlay_leak_attactment_title,
+              0,
+              R.string.overlay_leak_attactment_action_new,
+              R.string.overlay_leak_attactment_action_old,
+              R.drawable.ic_info_circle,
+              verticalButtonLayout = true,
+              dismissAllowed = false
+            )
+
+            imageDialogController?.show()
           }
           
           powerLevel.set(stateUpdate.bleDevice.peripheral?.powerLevel)
@@ -179,7 +168,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         }
         is HomeUiModel.RawDataPackageUpdate -> {
           // if the PackageUpdate coming from a device does not correspond the currently attached transmitter - skip it
-          if (uiModel.macAddress != macAddress) {
+          if (!transmitterManager.isActiveTransmitter(uiModel.macAddress)) {
             return@ui
           }
           
@@ -295,12 +284,28 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
       REQUEST_CODE_PERMISSION_RATIONALE -> {
         imageDialogController?.dismissDialog(withCallback = true)
       }
+      REQUEST_CODE_TRANSMITTERS_CHANGED -> {
+        // TODO - NEW LAYER - RESET should be done
+        imageDialogController?.dismissDialog(false)
+      }
       else -> {
         super.onPositiveButtonClicked(requestCode)
       }
     }
   }
-  
+
+  override fun onNegativeButtonClicked(requestCode: Int) {
+    when (requestCode) {
+      REQUEST_CODE_TRANSMITTERS_CHANGED -> {
+        // TODO - LAYER IN USE - STITCHING should be done
+        imageDialogController?.dismissDialog(false)
+      }
+      else -> {
+        super.onPositiveButtonClicked(requestCode)
+      }
+    }
+  }
+
   override fun onDialogDismissed(requestCode: Int) {
     when (requestCode) {
       REQUEST_CODE_PERMISSION_LOCATION -> {
@@ -424,27 +429,6 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
     return R.layout.controller_home
   }
   
-  override fun onSaveInstanceState(outState: Bundle) {
-    outState.putBoolean("CONNECTED", isConnected.get())
-    outState.putString("MAC_ADDRESS", macAddress)
-    outState.putInt("UI_STATE", currentUiState.ordinal)
-    
-    super.onSaveInstanceState(outState)
-  }
-  
-  override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-    restoreInstance(savedInstanceState)
-    super.onRestoreInstanceState(savedInstanceState)
-  }
-  
-  private fun restoreInstance(bundle: Bundle?) {
-    bundle?.let {
-      currentUiState = UiState.values()[bundle.getInt("UI_STATE")]
-      isConnected.set(bundle.getBoolean("CONNECTED"))
-      macAddress = bundle.getString("MAC_ADDRESS", "")
-    }
-  }
-  
   override fun onDestroyView(view: View) {
     connectionStateDisposable.clear()
     super.onDestroyView(view)
@@ -455,7 +439,8 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
     
     private const val REQUEST_CODE_PERMISSION_LOCATION = 5001
     private const val REQUEST_CODE_PERMISSION_RATIONALE = 5002
-    
+    private const val REQUEST_CODE_TRANSMITTERS_CHANGED = 6001
+
     const val REQUEST_CODE_BLUETOOTH_ENABLE = 5005
     
     fun routerTransaction() = RouterTransaction.with(HomeController())

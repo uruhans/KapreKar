@@ -38,6 +38,7 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
       UiState.SCANNING -> { null }
       UiState.DISCONNECTED -> { null }
       UiState.SOMETHING_ELSE,
+      UiState.MULTIPLE_TRANSMITTERS,
       UiState.OK_A -> {
         // we will clear all notifications that may be shown - now that everything is OK - we don't need earlier notification warnings
         notificationCenter.clear()

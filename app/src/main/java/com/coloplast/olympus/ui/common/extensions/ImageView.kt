@@ -88,5 +88,11 @@ fun ImageView.startScaleAnimation(startScaleAnimation: Boolean = false) {
     anim.duration = 1000
     startAnimation(anim)
   }
+  else {
+    if(animation != null && animation.hasStarted()) {
+      animation.cancel()
+      animation.reset()
+    }
+  }
 }
 

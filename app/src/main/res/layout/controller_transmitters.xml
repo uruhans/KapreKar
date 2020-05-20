@@ -29,25 +29,21 @@
 
     <TextView
       android:id="@+id/headline"
-      style="@style/Headline.Large"
+      style="@style/TextStyle.Coloplast.Bold.DarkGrey.32"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginStart="@dimen/spacing_standard"
       android:text="@string/transmitters_title"
-      android:textColor="@color/darkGrey01"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
     <TextView
       android:id="@+id/button_edit"
-      style="@style/Text.Medium"
+      style="@style/TextStyle.Roboto.Medium.Turquoise.18"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginEnd="@dimen/spacing_standard"
-      android:fontFamily="sans-serif-medium"
-      android:text="[Edit]"
-      android:textColor="@color/colorAccent"
-      android:textSize="@dimen/text_18"
+      android:text="@string/transmitters_edit"
       app:layout_constraintBottom_toBottomOf="@+id/headline"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintTop_toTopOf="@+id/headline"
@@ -57,6 +53,7 @@
       layout="@layout/state_no_transmitters"
       android:layout_width="0dp"
       android:layout_height="0dp"
+      android:visibility="gone"
       app:controller="@{controller}"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
@@ -74,7 +71,7 @@
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/headline"
       app:visibleOrGone="@{controller.hasTransmittersAdded}"
-      tools:visibility="gone">
+      tools:visibility="visible">
 
       <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
@@ -100,61 +97,68 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-      <ImageView
-        android:layout_width="72dp"
-        android:layout_height="72dp"
-        android:layout_marginStart="@dimen/spacing_half"
-        android:layout_marginBottom="43dp"
-        android:alpha="0.16"
-        android:scaleX="0.7"
-        android:scaleY="0.7"
-        android:src="@drawable/transmitter_fab"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:visibleOrInvisible="@{false}" />
-
-      <com.google.android.material.floatingactionbutton.FloatingActionButton
+      <FrameLayout
         android:id="@+id/floating_action_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/spacing_standard"
-        android:layout_marginBottom="51dp"
-        android:cropToPadding="false"
-        android:tint="@color/colorAccent"
-        app:backgroundTint="@color/white"
-        app:borderWidth="0dp"
-        app:fabSize="normal"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:layout_marginBottom="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/ic_bluetooth"
-        app:visibleOrInvisible="@{false}" />
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+          android:id="@+id/imageView"
+          android:layout_width="110dp"
+          android:layout_height="110dp"
+          android:alpha="0.16"
+          android:padding="@dimen/spacing_standard"
+          android:scaleX="0.7"
+          android:scaleY="0.7"
+          android:src="@drawable/transmitter_fab"
+          app:visibleOrGone="@{controller.retryPressed}"
+          app:startScaleAnimation="@{controller.retryPressed}" />
+
+        <androidx.cardview.widget.CardView
+          android:layout_width="56dp"
+          android:layout_height="56dp"
+          android:layout_gravity="center"
+          android:backgroundTint="@color/white"
+          android:enabled="@{controller.searchEnabled}"
+          android:foreground="?attr/selectableItemBackgroundBorderless"
+          android:onClick="@{() -> controller.onSearchClicked()}"
+          app:cardCornerRadius="200dp"
+          app:cardElevation="4dp"
+          app:visibleOrGone="@{true}">
+
+          <ImageView
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_gravity="center"
+            android:tint="@color/turquoise"
+            app:srcCompat="@drawable/ic_bluetooth" />
+
+        </androidx.cardview.widget.CardView>
+      </FrameLayout>
 
       <TextView
         android:id="@+id/bluetooth_status"
-        style="@style/Text.Medium"
+        style="@style/TextStyle.Coloplast.Regular.ClearGrey.16"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/spacing_standard"
-        android:fontFamily="sans-serif-medium"
-        android:text="[Searching...]"
-        android:textColor="@color/darkGrey03"
-        android:textSize="@dimen/text_16"
+        android:layout_marginBottom="16dp"
+        android:text="@string/transmitters_searching"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/floating_action_button"
-        app:visibleOrInvisible="@{false}" />
+        app:visibleOrInvisible="@{controller.retryPressed}" />
 
       <TextView
         android:id="@+id/button_add"
-        style="@style/Text.Medium"
+        style="@style/TextStyle.Roboto.Medium.Turquoise.18"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/spacing_standard"
-        android:fontFamily="sans-serif-medium"
         android:onClick="@{() -> controller.onAddTransmitterClicked()}"
-        android:text="[Add transmitter]"
-        android:textColor="@color/colorAccent"
-        android:textSize="@dimen/text_18"
+        android:text="@string/transmitters_add_transmitter"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider"

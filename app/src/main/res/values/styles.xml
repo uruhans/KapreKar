@@ -168,6 +168,15 @@
     <item name="android:textColor">@color/text_clear_grey</item>
   </style>
 
+  <style name="TextStyle.Coloplast.Regular.ClearGrey" parent="TextStyle.Coloplast.Regular">
+    <item name="android:textColor">@color/text_clear_grey</item>
+  </style>
+
+  <style name="TextStyle.Coloplast.Regular.ClearGrey.16" parent="TextStyle.Coloplast.Regular">
+    <item name="android:textColor">@color/text_clear_grey</item>
+    <item name="android:textSize">@dimen/text_16</item>
+  </style>
+
   <style name="TextStyle.Roboto.Regular.ClearGrey.18" parent="TextStyle.Roboto.Regular">
     <item name="android:textColor">@color/text_clear_grey</item>
     <item name="android:textSize">@dimen/text_18</item>
@@ -177,16 +186,17 @@
     <item name="android:textColor">@color/text_turquoise</item>
   </style>
 
+  <style name="TextStyle.Roboto.Medium.Turquoise.18" parent="TextStyle.Roboto.Medium">
+    <item name="android:textColor">@color/text_turquoise</item>
+    <item name="android:textSize">@dimen/text_18</item>
+  </style>
+
   <style name="TextStyle.Coloplast.Bold.DarkGrey" parent="TextStyle.Coloplast.Bold">
     <item name="android:textColor">@color/text_dark_grey</item>
   </style>
 
   <style name="TextStyle.Coloplast.Bold.Grey" parent="TextStyle.Coloplast.Bold">
     <item name="android:textColor">@color/text_grey</item>
-  </style>
-
-  <style name="TextStyle.Coloplast.Regular.ClearGrey" parent="TextStyle.Coloplast.Regular">
-    <item name="android:textColor">@color/text_clear_grey</item>
   </style>
 
   <style name="TextStyle.Coloplast.Bold.DarkGrey.36" parent="TextStyle.Coloplast.Bold.DarkGrey">

@@ -6,4 +6,5 @@ import io.reactivex.Observable
 
 interface TransmittersView : UiView<TransmittersUiModel> {
   fun requestDeleteTransmitter() : Observable<String>
+  fun retryConnection() : Observable<Unit>
 }

@@ -8,13 +8,13 @@ import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import com.coloplast.olympus.BR
 import com.coloplast.olympus.R
+import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.databinding.ControllerTransmittersBinding
 import com.coloplast.olympus.shared.models.Transmitter
 import com.coloplast.olympus.ui.common.CustomToolbarController
 import com.coloplast.olympus.ui.common.DrawerStateDispatcher
 import com.coloplast.olympus.ui.common.dialogs.BaseDialogController
 import com.coloplast.olympus.ui.common.dialogs.DialogController
-import com.coloplast.olympus.ui.common.flow.FlowFactoryController
 import com.coloplast.olympus.ui.feature.transmitters.add.AddTransmitterFlowController
 import com.coloplast.olympus.ui.feature.transmitters.models.SectionDivider
 import com.coloplast.olympus.ui.feature.transmitters.models.SmallHeaderItem
@@ -33,8 +33,8 @@ class TransmittersController(args: Bundle? = null) :
   TransmitterItem.Listener, BaseDialogController.Listener {
 
   private val viewModel: TransmittersViewModel by inject()
-
   private val deleteTransmitterRelay = PublishRelay.create<String>()
+  private val retryConnectionRelay = PublishRelay.create<Unit>()
 
   val items = ObservableArrayList<Any>()
   val itemBinding: OnItemBindClass<Any> = OnItemBindClass<Any>()
@@ -44,6 +44,8 @@ class TransmittersController(args: Bundle? = null) :
 
   val hasTransmittersAdded = ObservableBoolean(false)
   val canAddMoreTransmitters = ObservableBoolean(true)
+  val searchEnabled = ObservableBoolean(true)
+  val retryPressed = ObservableBoolean(false)
 
   private var dialogController: DialogController? = null
   private var transmitterToDelete: Transmitter? = null
@@ -66,8 +68,9 @@ class TransmittersController(args: Bundle? = null) :
         is TransmittersUiModel.ConnectedDevices -> {
           hasTransmittersAdded.set(true)
 
+          // TODO - we need to change this into a list of Attached and / not attached list
           val list = mutableListOf<Any>(
-            SmallHeaderItem(R.string.guide_wiping_title)
+            SmallHeaderItem(R.string.transmitters_not_attached)
           )
 
           uiModel.devices.map { TransmitterItem(it, this) }
@@ -92,6 +95,7 @@ class TransmittersController(args: Bundle? = null) :
           canAddMoreTransmitters.set(items.filterIsInstance(TransmitterItem::class.java).size < 2)
         }
         is TransmittersUiModel.StateUpdate -> {
+          // state updates are coming from the Service (StateDispatcher)
           uiModel.stateChange.bleDevice.peripheral?.powerLevel?.let { powerLevel ->
             items.filterIsInstance<TransmitterItem>()
               .first { it.transmitter.macAddress == uiModel.stateChange.bleDevice.macAddress }
@@ -99,9 +103,19 @@ class TransmittersController(args: Bundle? = null) :
           }
         }
         is TransmittersUiModel.TransmitterConnectionState -> {
+          // TODO - here we need to update the state of the transmitters - and move them around in the list (put into attached / not attached)
+
           items.filterIsInstance<TransmitterItem>()
             .first { it.transmitter.macAddress == uiModel.connectionState.macAddress }
             .setConnectionState(uiModel.connectionState.connectionState)
+
+          searchEnabled.set(!allConnected())
+
+          if(retryPressed.get()) {
+            val allConnected = items.filterIsInstance<TransmitterItem>()
+              .any { it.connectionState.get() == BleConnectionState.CONNECTED }
+            retryPressed.set(!allConnected)
+          }
         }
         is TransmittersUiModel.TransmitterDeleted -> {
 
@@ -109,8 +123,21 @@ class TransmittersController(args: Bundle? = null) :
         is TransmittersUiModel.Empty -> {
           hasTransmittersAdded.set(false)
         }
+        is TransmittersUiModel.RetryConnectToTransmitters -> {
+          retryPressed.set(true)
+          searchEnabled.set(false)
+        }
+        is TransmittersUiModel.RetryConnectComplete -> {
+          retryPressed.set(false)
+          searchEnabled.set(!allConnected())
+        }
       }
     }
+  }
+
+  private fun allConnected() : Boolean {
+    // no reason to run through each transmitter if the current uiModel state is already *not* connected
+    return items.filterIsInstance<TransmitterItem>().all { it.connectionState.get() == BleConnectionState.CONNECTED }
   }
 
   override fun onTransmitterClicked(transmitter: Transmitter) {
@@ -155,6 +182,10 @@ class TransmittersController(args: Bundle? = null) :
     }
   }
 
+  fun onSearchClicked() {
+    retryConnectionRelay.accept(Unit)
+  }
+
   fun onAddTransmitterClicked() {
     router.pushController(
       AddTransmitterFlowController.routerTransaction()
@@ -165,6 +196,12 @@ class TransmittersController(args: Bundle? = null) :
 
   override fun requestDeleteTransmitter(): Observable<String> {
     return deleteTransmitterRelay
+      .publish()
+      .refCount()
+  }
+
+  override fun retryConnection() : Observable<Unit> {
+    return retryConnectionRelay
       .publish()
       .refCount()
   }

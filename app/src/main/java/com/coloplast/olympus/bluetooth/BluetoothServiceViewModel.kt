@@ -6,10 +6,7 @@ import com.coloplast.olympus.bluetooth.businesslayer.DeviceConnection
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
 import com.coloplast.olympus.bluetooth.businesslayer.models.DeviceResult
-import com.coloplast.olympus.bluetooth.model.BluetoothServiceModel
-import com.coloplast.olympus.bluetooth.model.BluetoothServiceResult
-import com.coloplast.olympus.bluetooth.model.ServiceViewModel
-import com.coloplast.olympus.bluetooth.model.StateChange
+import com.coloplast.olympus.bluetooth.model.*
 import com.coloplast.olympus.businesslayer.interfaces.TransmitterComponent
 import com.coloplast.olympus.shared.models.DataResult
 import com.coloplast.olympus.shared.models.Transmitter
@@ -125,18 +122,23 @@ class BluetoothServiceViewModel(
           .map { dbTransmitter.macAddress }
       }
 
+    // listen to service events for any retrys
+    val retryConnectionObservable = ServiceDispatcher.serviceEventObservable()
+      .filter { it == ServiceEvent.RETRY_CONNECTION }
+      .switchMap { bleBeaconScanningObservable }
+
+    val beaconScanningWithRetryObservable = Observable.merge(retryConnectionObservable, bleBeaconScanningObservable)
+
     // merging beacon scannings and database transmitters in order to
     // provide a list of transmitters to connect to
     val devicesToConnectToObservable = Observable.merge(
-      bleBeaconScanningObservable,
+      beaconScanningWithRetryObservable,
       immediateConnectionObservable
     )
       .filter { connectedBleDevicesList.none { address -> address == it } }
       // add delay to each onNext to allow for device to be connected to not overload the BLE stack
       .zipWith(repeatIntervalObservable(5),
         BiFunction { macAddress: String, _: Long -> macAddress })
-
-
 
     val connectTransmitterObservable = devicesToConnectToObservable
       .doOnNext { connectedBleDevicesList.add(it) }

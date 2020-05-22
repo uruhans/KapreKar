@@ -185,14 +185,10 @@ class BluetoothServiceViewModel(
             val newUiState = stateMachine.invoke(stateModel.state)
 
             val overlayStateModel = StateTransformers.bleToOverlayState(deviceResult)
+            val newOverlayState = overlayStateMachine.invoke(overlayStateModel.overlayState)
 
-            val stateChange = StateChange(newUiState, overlayStateModel.overlayState, deviceResult.bleDevice)
-            val updatedStateChange = transmitterManager.newStatusVector(stateChange)
 
-            val newStateChange = transmitterManager.determineTxLayerQuestioning(updatedStateChange)
-            val newOverlayState = overlayStateMachine.invoke(newStateChange.overlayState)
-
-            BluetoothServiceModel.DeviceUpdate(StateChange(newStateChange.state, newOverlayState, newStateChange.bleDevice))
+            BluetoothServiceModel.DeviceUpdate(StateChange(newUiState, newOverlayState, deviceResult.bleDevice))
           }
           is DeviceResult.RawDataPackageResult -> {
             val activeTransmitter = transmitterManager.isActiveTransmitter(deviceResult.macAddress)

@@ -11,7 +11,7 @@ class TransmitterManager {
   private val latestTransmitterStates = mutableMapOf<String, Stack<StateChange>>()
   private var currentActiveTransmitter = ""
 
-  fun newStatusVector(stateChange: StateChange): UpdatedStateChange {
+  fun stateChangeFromActiveTransmitter(stateChange: StateChange): UpdatedStateChange {
     addToLatestStates(stateChange)
 
     if(currentActiveTransmitter.isEmpty()) {
@@ -113,7 +113,7 @@ class TransmitterManager {
   }
 
   private fun wasAttachedBefore(macAddress: String) : Boolean {
-    val transmitter = latestTransmitterStates.entries.firstOrNull { it.key != macAddress }
+    val transmitter = latestTransmitterStates.entries.firstOrNull { it.key == macAddress }
     return transmitter?.value?.getPrevious()?.bleDevice?.isAttached() ?: false
   }
 

@@ -77,7 +77,13 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
           StateDispatcher.dispatch(it.statusChange)
         }
         is BluetoothServiceModel.RawDataPackageUpdate -> {
-          StateDispatcher.dispatch(it.macAddress)
+          // TODO - this may need to change if subscribers want rawpackages?
+          if(it.fromActiveTx) {
+            StateDispatcher.dispatch(it.macAddress)
+          }
+        }
+        is BluetoothServiceModel.Disconnected -> {
+          // TODO - dispatch device disconnect
         }
       }
     }

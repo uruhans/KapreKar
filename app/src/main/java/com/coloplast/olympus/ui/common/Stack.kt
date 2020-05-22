@@ -23,6 +23,10 @@ class Stack<T>(private var maxSize: Int) {
     return items.getOrNull(0)
   }
 
+  fun getPrevious() : T? {
+    return items.getOrNull(1)
+  }
+
   fun setMaxSize(newMaxSize: Int) {
     this.maxSize = newMaxSize
   }

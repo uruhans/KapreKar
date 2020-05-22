@@ -17,7 +17,7 @@ data class BleDevice(val name: String?, val macAddress: String, val connectionSt
     return connectionState == BleConnectionState.CONNECTED
   }
 
-  fun isOnPatch() : Boolean {
+  fun isAttached() : Boolean {
     return peripheral?.transmitter?.attached == Attached.ATTACHED_ON_BODY || peripheral?.transmitter?.attached == Attached.ATTACHED_ON_PATCH
   }
 }

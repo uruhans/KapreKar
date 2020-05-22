@@ -10,6 +10,7 @@ import com.coloplast.olympus.bluetooth.model.*
 import com.coloplast.olympus.businesslayer.interfaces.TransmitterComponent
 import com.coloplast.olympus.shared.models.DataResult
 import com.coloplast.olympus.shared.models.Transmitter
+import com.coloplast.olympus.ui.feature.home.TransmitterManager
 import com.coloplast.olympus.ui.feature.home.models.StateTransformers
 import com.coloplast.olympus.ui.feature.statemachine.OverlayStateMachineImpl
 import com.coloplast.olympus.ui.feature.statemachine.UiStateMachineImpl
@@ -25,7 +26,8 @@ import java.util.concurrent.TimeUnit
 class BluetoothServiceViewModel(
   private val bluetoothManager: BluetoothManager,
   private val transmitterComponent: TransmitterComponent,
-  private val deviceConnection: DeviceConnection
+  private val deviceConnection: DeviceConnection,
+  private val transmitterManager: TransmitterManager
 ) : ServiceViewModel<BluetoothServiceModel, BluetoothServiceResult<BluetoothServiceModel>>() {
 
   private val connectedTransmittersRelay = PublishRelay.create<List<String>>()
@@ -170,7 +172,7 @@ class BluetoothServiceViewModel(
     compositeDisposable.add(connectTransmitterObservable.bind(serviceResult.onResult()))
     return compositeDisposable
   }
-  
+
   private fun connectObservable(macAddress: String) : Observable<BluetoothServiceModel> {
     val stateMachine = UiStateMachineImpl()
     val overlayStateMachine = OverlayStateMachineImpl()
@@ -183,14 +185,21 @@ class BluetoothServiceViewModel(
             val newUiState = stateMachine.invoke(stateModel.state)
 
             val overlayStateModel = StateTransformers.bleToOverlayState(deviceResult)
-            val newOverlayState = overlayStateMachine.invoke(overlayStateModel.overlayState)
 
-            BluetoothServiceModel.DeviceUpdate(StateChange(newUiState, newOverlayState, deviceResult.bleDevice))
+            val stateChange = StateChange(newUiState, overlayStateModel.overlayState, deviceResult.bleDevice)
+            val updatedStateChange = transmitterManager.newStatusVector(stateChange)
+
+            val newStateChange = transmitterManager.determineTxLayerQuestioning(updatedStateChange)
+            val newOverlayState = overlayStateMachine.invoke(newStateChange.overlayState)
+
+            BluetoothServiceModel.DeviceUpdate(StateChange(newStateChange.state, newOverlayState, newStateChange.bleDevice))
           }
           is DeviceResult.RawDataPackageResult -> {
-            BluetoothServiceModel.RawDataPackageUpdate(deviceResult.macAddress, deviceResult.rawDataPackage)
+            val activeTransmitter = transmitterManager.isActiveTransmitter(deviceResult.macAddress)
+            BluetoothServiceModel.RawDataPackageUpdate(activeTransmitter, deviceResult.macAddress, deviceResult.rawDataPackage)
           }
           is DeviceResult.Error -> {
+            transmitterManager.transmitterDisconnected(macAddress)
             BluetoothServiceModel.Disconnected()
           }
         }

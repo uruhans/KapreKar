@@ -195,6 +195,7 @@ class UiStateMachineImpl : BaseUiStateMachine() {
       UiState.OUTER_BREACH_C,
       UiState.TOTAL_BLIND_E,
       UiState.INNER_BLIND_D,
+      UiState.WATER_INGRESS_DETECTION_J,
       UiState.TRANSMITTER_BATTERY_CHARGING_W,
       UiState.DISCONNECTED -> {
         true

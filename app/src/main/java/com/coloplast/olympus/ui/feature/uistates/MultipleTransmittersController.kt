@@ -12,7 +12,11 @@ class MultipleTransmittersController : BaseHomeUIController<ControllerStateMulti
   }
 
   override fun patchVisible(): Boolean {
-    return false
+    return true
+  }
+
+  override fun patchInError(): Boolean {
+    return true
   }
 
   override fun getLayout(): Int {

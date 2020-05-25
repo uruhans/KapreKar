@@ -130,6 +130,8 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
           val updatedStateChange = transmitterManager.stateChangeFromActiveTransmitter(uiModel.stateChange)
           val stateUpdate = transmitterManager.determineTxLayerQuestioning(updatedStateChange)
 
+          Timber.d("$updatedStateChange")
+
           powerLevel.set(stateUpdate.bleDevice.peripheral?.powerLevel)
           isConnected.set(stateUpdate.bleDevice.isConnected())
           
@@ -204,6 +206,9 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         }
         UiState.BLUETOOTH_NOT_ENABLED -> {
           BluetoothNotEnabledController.routerTransaction()
+        }
+        UiState.MULTIPLE_TRANSMITTERS -> {
+          MultipleTransmittersController.routerTransaction()
         }
         UiState.DISCONNECTED -> {
           ReadyToScanController.routerTransaction()

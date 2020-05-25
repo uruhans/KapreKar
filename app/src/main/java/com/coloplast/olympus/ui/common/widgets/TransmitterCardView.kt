@@ -35,8 +35,8 @@ class TransmitterCardView @JvmOverloads constructor(
   fun setEditState(state: Boolean){
     // X Axis difference from original position
     val xAxisDiff = when(state){
-      true -> 0f
-      false -> -view.deleteButton.width.toFloat()
+      true -> -view.deleteButton.width.toFloat()
+      false -> 0f
     }
     // Animation
     ObjectAnimator.ofFloat(view.cardTransmitter, "translationX", xAxisDiff).apply {

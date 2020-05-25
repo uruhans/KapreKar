@@ -34,6 +34,8 @@
       style="@style/CardViewStyle"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
+      android:focusable="true"
+      android:clickable="true"
       android:layout_marginStart="@dimen/spacing_larger"
       android:layout_marginTop="@dimen/cardview_elevation_default"
       android:layout_marginEnd="@dimen/cardview_elevation_default"

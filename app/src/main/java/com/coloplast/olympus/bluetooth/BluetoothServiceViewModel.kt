@@ -10,7 +10,7 @@ import com.coloplast.olympus.bluetooth.model.*
 import com.coloplast.olympus.businesslayer.interfaces.TransmitterComponent
 import com.coloplast.olympus.shared.models.DataResult
 import com.coloplast.olympus.shared.models.Transmitter
-import com.coloplast.olympus.ui.feature.home.TransmitterManager
+import com.coloplast.olympus.ui.feature.TransmitterManager
 import com.coloplast.olympus.ui.feature.home.models.StateTransformers
 import com.coloplast.olympus.ui.feature.statemachine.OverlayStateMachineImpl
 import com.coloplast.olympus.ui.feature.statemachine.UiStateMachineImpl

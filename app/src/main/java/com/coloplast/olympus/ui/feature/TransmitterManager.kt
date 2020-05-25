@@ -1,10 +1,11 @@
-package com.coloplast.olympus.ui.feature.home
+package com.coloplast.olympus.ui.feature
 
 import com.coloplast.olympus.bluetooth.model.StateChange
-import com.coloplast.olympus.ui.common.Stack
+import com.coloplast.olympus.ui.common.extensions.peekPrevious
 import com.coloplast.olympus.ui.feature.statemachine.models.OverlayState
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
 import timber.log.Timber
+import java.util.*
 
 class TransmitterManager {
 
@@ -18,11 +19,19 @@ class TransmitterManager {
       // we have no active transmitters
       return if(isAttached(stateChange)) {
         setActiveTransmitter(stateChange)
-        UpdatedStateChange(true, stateChange)
+        UpdatedStateChange(
+          true,
+          stateChange
+        )
       }
       else {
-        UpdatedStateChange(false,
-          StateChange(UiState.TRANSMITTER_DETACHED_V, stateChange.overlayState, stateChange.bleDevice)
+        UpdatedStateChange(
+          false,
+          StateChange(
+            UiState.TRANSMITTER_DETACHED_V,
+            stateChange.overlayState,
+            stateChange.bleDevice
+          )
         )
       }
     }
@@ -32,18 +41,27 @@ class TransmitterManager {
         // the current tx is already active
         if(isAttached(stateChange)) {
           // it's also already attached
-          return UpdatedStateChange(false, stateChange)
+          return UpdatedStateChange(
+            false,
+            stateChange
+          )
         }
         else {
           // is the other transmitter on patch
           return if(otherTransmitterOnPatch(stateChange.getMacAddress())) {
             val otherTxState = latestStateFromOtherTransmitter(stateChange.getMacAddress())!!
             setActiveTransmitter(otherTxState)
-            UpdatedStateChange(true, otherTxState)
+            UpdatedStateChange(
+              true,
+              otherTxState
+            )
           }
           else {
             // no transmitters are currently on patch
-            UpdatedStateChange(false, stateChange)
+            UpdatedStateChange(
+              false,
+              stateChange
+            )
           }
         }
       }
@@ -52,17 +70,30 @@ class TransmitterManager {
         return if(isAttached(stateChange)) {
           // is the other transmitter also attached?
           if(otherTransmitterOnPatch(stateChange.getMacAddress())) {
-            UpdatedStateChange(false, StateChange(UiState.MULTIPLE_TRANSMITTERS, stateChange.overlayState, stateChange.bleDevice))
+            UpdatedStateChange(
+              false,
+              StateChange(
+                UiState.MULTIPLE_TRANSMITTERS,
+                stateChange.overlayState,
+                stateChange.bleDevice
+              )
+            )
           }
           else {
             setActiveTransmitter(stateChange)
-            UpdatedStateChange(true, stateChange)
+            UpdatedStateChange(
+              true,
+              stateChange
+            )
           }
         }
         else {
           // no - this is not attached
           val otherTxState = latestStateFromOtherTransmitter(stateChange.getMacAddress())!!
-          UpdatedStateChange(false, otherTxState)
+          UpdatedStateChange(
+            false,
+            otherTxState
+          )
         }
       }
     }
@@ -95,7 +126,7 @@ class TransmitterManager {
   }
 
   private fun addToLatestStates(stateChange: StateChange) {
-    val stack = latestTransmitterStates[stateChange.getMacAddress()] ?: Stack(5)
+    val stack = latestTransmitterStates[stateChange.getMacAddress()] ?: Stack<StateChange>().also { it.setSize(5) }
     stack.push(stateChange)
     latestTransmitterStates[stateChange.getMacAddress()] = stack
   }
@@ -103,18 +134,18 @@ class TransmitterManager {
   private fun otherTransmitterOnPatch(thisTransmitterAddress: String): Boolean {
     val otherTransmitter =
       latestTransmitterStates.entries.firstOrNull { it.key != thisTransmitterAddress }
-    return otherTransmitter?.value?.getLatestOrNull()?.bleDevice?.isAttached() ?: false
+    return otherTransmitter?.value?.peek()?.bleDevice?.isAttached() ?: false
   }
 
   private fun latestStateFromOtherTransmitter(thisTransmitterAddress: String): StateChange? {
     val otherTransmitter =
       latestTransmitterStates.entries.firstOrNull { it.key != thisTransmitterAddress }
-    return otherTransmitter?.value?.getLatestOrNull()
+    return otherTransmitter?.value?.peek()
   }
 
   private fun wasAttachedBefore(macAddress: String) : Boolean {
     val transmitter = latestTransmitterStates.entries.firstOrNull { it.key == macAddress }
-    return transmitter?.value?.getPrevious()?.bleDevice?.isAttached() ?: false
+    return transmitter?.value?.peekPrevious()?.bleDevice?.isAttached() ?: false
   }
 
   private fun isAttached(stateChange: StateChange) : Boolean {

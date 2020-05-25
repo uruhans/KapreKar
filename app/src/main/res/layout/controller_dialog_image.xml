@@ -51,7 +51,8 @@
             android:layout_marginEnd="@dimen/spacing_standard"
             android:foreground="?attr/actionBarItemBackground"
             android:onClick="@{() -> controller.onCloseClicked()}"
-            android:src="@drawable/main_sidemenu_close" />
+            android:src="@drawable/main_sidemenu_close"
+            app:visibleOrGone="@{controller.dismissAllowed}" />
 
           <ImageView
             android:layout_width="86dp"
@@ -85,8 +86,9 @@
           android:layout_marginTop="@dimen/spacing_half"
           android:layout_marginEnd="@dimen/spacing_standard"
           android:lineSpacingExtra="0dp"
-          android:text="@{controller.messageResId}"
           android:textColor="@color/grey"
+          app:safeText="@{controller.messageResId}"
+          app:visibleOrGone="@{controller.messageResId > 0}"
           tools:text="@string/generic_error_message" />
 
         <View

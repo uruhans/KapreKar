@@ -1,5 +1,6 @@
 package com.coloplast.olympus.bluetooth.businesslayer.models
 
+import com.coloplast.olympus.bluetooth.businesslayer.enums.Attached
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 
 /**
@@ -14,5 +15,9 @@ data class BleDevice(val name: String?, val macAddress: String, val connectionSt
   
   fun isConnected() : Boolean {
     return connectionState == BleConnectionState.CONNECTED
+  }
+
+  fun isAttached() : Boolean {
+    return peripheral?.transmitter?.attached == Attached.ATTACHED_ON_BODY || peripheral?.transmitter?.attached == Attached.ATTACHED_ON_PATCH
   }
 }

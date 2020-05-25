@@ -30,7 +30,7 @@ class ImageDialogController(args: Bundle) : BaseDialogController<ControllerDialo
   val verticalButtons: Boolean
   val showTopImage: Boolean
   
-  private val dismissAllowed: Boolean
+  val dismissAllowed: Boolean
   private val requestCode: Int
   
   init {

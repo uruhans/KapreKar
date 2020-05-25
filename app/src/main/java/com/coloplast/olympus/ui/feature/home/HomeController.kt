@@ -28,6 +28,7 @@ import com.coloplast.olympus.ui.common.dialogs.BaseDialogController
 import com.coloplast.olympus.ui.common.dialogs.DialogController
 import com.coloplast.olympus.ui.common.widgets.PatchView
 import com.coloplast.olympus.ui.dialogs.ImageDialogController
+import com.coloplast.olympus.ui.feature.TransmitterManager
 import com.coloplast.olympus.ui.feature.guides.GuideController
 import com.coloplast.olympus.ui.feature.guides.models.GuideType
 import com.coloplast.olympus.ui.feature.home.models.HomeUiModel

@@ -50,6 +50,7 @@ import java.time.LocalDateTime
 class HomeController : BaseController<ControllerHomeBinding>, HomeView, PermissionHandler, BaseDialogController.Listener, ImageDialogController.Listener {
   
   private val viewModel: HomeViewModel by inject()
+  private val transmitterManager: TransmitterManager by inject()
   
   private val requestConnectionStateRelay = PublishRelay.create<String>()
   private val connectionStateDisposable = CompositeDisposable()
@@ -126,8 +127,9 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
           }
         }
         is HomeUiModel.DeviceUpdate -> {
-          val stateUpdate = uiModel.stateChange
-          
+          val updatedStateChange = transmitterManager.stateChangeFromActiveTransmitter(uiModel.stateChange)
+          val stateUpdate = transmitterManager.determineTxLayerQuestioning(updatedStateChange)
+
           powerLevel.set(stateUpdate.bleDevice.peripheral?.powerLevel)
           isConnected.set(stateUpdate.bleDevice.isConnected())
           

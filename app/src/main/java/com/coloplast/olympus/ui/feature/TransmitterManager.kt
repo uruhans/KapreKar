@@ -19,20 +19,10 @@ class TransmitterManager {
       // we have no active transmitters
       return if(isAttached(stateChange)) {
         setActiveTransmitter(stateChange)
-        UpdatedStateChange(
-          true,
-          stateChange
-        )
+        UpdatedStateChange(true, stateChange)
       }
       else {
-        UpdatedStateChange(
-          false,
-          StateChange(
-            UiState.TRANSMITTER_DETACHED_V,
-            stateChange.overlayState,
-            stateChange.bleDevice
-          )
-        )
+        UpdatedStateChange(false, StateChange(UiState.TRANSMITTER_DETACHED_V, stateChange.overlayState, stateChange.bleDevice))
       }
     }
     else {
@@ -41,27 +31,18 @@ class TransmitterManager {
         // the current tx is already active
         if(isAttached(stateChange)) {
           // it's also already attached
-          return UpdatedStateChange(
-            false,
-            stateChange
-          )
+          return UpdatedStateChange(false, stateChange)
         }
         else {
           // is the other transmitter on patch
           return if(otherTransmitterOnPatch(stateChange.getMacAddress())) {
             val otherTxState = latestStateFromOtherTransmitter(stateChange.getMacAddress())!!
             setActiveTransmitter(otherTxState)
-            UpdatedStateChange(
-              true,
-              otherTxState
-            )
+            UpdatedStateChange(true, otherTxState)
           }
           else {
             // no transmitters are currently on patch
-            UpdatedStateChange(
-              false,
-              stateChange
-            )
+            UpdatedStateChange(false, stateChange)
           }
         }
       }
@@ -70,30 +51,17 @@ class TransmitterManager {
         return if(isAttached(stateChange)) {
           // is the other transmitter also attached?
           if(otherTransmitterOnPatch(stateChange.getMacAddress())) {
-            UpdatedStateChange(
-              false,
-              StateChange(
-                UiState.MULTIPLE_TRANSMITTERS,
-                stateChange.overlayState,
-                stateChange.bleDevice
-              )
-            )
+            UpdatedStateChange(false, StateChange( UiState.MULTIPLE_TRANSMITTERS, stateChange.overlayState, stateChange.bleDevice))
           }
           else {
             setActiveTransmitter(stateChange)
-            UpdatedStateChange(
-              true,
-              stateChange
-            )
+            UpdatedStateChange(true, stateChange)
           }
         }
         else {
           // no - this is not attached
           val otherTxState = latestStateFromOtherTransmitter(stateChange.getMacAddress())!!
-          UpdatedStateChange(
-            false,
-            otherTxState
-          )
+          UpdatedStateChange(false, otherTxState)
         }
       }
     }
@@ -107,11 +75,7 @@ class TransmitterManager {
       if(updatedStateChange.stateChange.state != UiState.MULTIPLE_TRANSMITTERS) {
         if (!wasAttachedBefore(updatedStateChange.stateChange.getMacAddress())) {
           if (isAttached(updatedStateChange.stateChange)) {
-            return StateChange(
-              updatedStateChange.stateChange.state,
-              OverlayState.QUESTION,
-              updatedStateChange.stateChange.bleDevice
-            )
+            return StateChange(updatedStateChange.stateChange.state, OverlayState.QUESTION, updatedStateChange.stateChange.bleDevice)
           }
         }
       }

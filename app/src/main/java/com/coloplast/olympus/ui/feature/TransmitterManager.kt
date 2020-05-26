@@ -158,9 +158,7 @@ class TransmitterManager {
 
     if(shouldDispatchOtherTxState) {
       // dispatch it's latest stateUpdate (which triggers the whole process again)
-      latestStateFromOtherTransmitter(macAddress)?.let {
-        return it
-      }
+      return latestStateFromOtherTransmitter(macAddress)
     }
 
     return null

@@ -58,6 +58,7 @@
             android:layout_marginBottom="@dimen/spacing_double"
             app:isDetailView="@{true}"
             app:size="@{200}"
+            app:rawRotationalAngle="@{controller.rawRotationalAngle}"
             app:patch="@{controller.currentPatch}" />
 
         </FrameLayout>

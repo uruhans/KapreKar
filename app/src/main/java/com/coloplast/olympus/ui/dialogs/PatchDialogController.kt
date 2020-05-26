@@ -3,6 +3,7 @@ package com.coloplast.olympus.ui.dialogs
 import android.os.Bundle
 import androidx.databinding.Observable
 import androidx.databinding.ObservableField
+import androidx.databinding.ObservableInt
 import com.bluelinelabs.conductor.Controller
 import com.coloplast.olympus.R
 import com.coloplast.olympus.bluetooth.businesslayer.models.Patch
@@ -18,6 +19,7 @@ class PatchDialogController(args: Bundle) : BaseDialogController<ControllerDialo
   private val requestCode: Int
   
   val currentPatch = ObservableField<Patch>()
+  val rawRotationalAngle = ObservableInt()
   
   init {
     dismissAllowed = args.getBoolean(BUNDLE_DISMISS_ALLOWED)
@@ -39,6 +41,7 @@ class PatchDialogController(args: Bundle) : BaseDialogController<ControllerDialo
     homeController.currentPatch.addOnPropertyChangedCallback(object: Observable.OnPropertyChangedCallback() {
       override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
         currentPatch.set(homeController.currentPatch.get())
+        rawRotationalAngle.set(homeController.rawRotationAngle.get())
       }
     })
   }

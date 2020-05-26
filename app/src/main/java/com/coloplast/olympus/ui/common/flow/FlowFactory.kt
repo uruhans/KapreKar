@@ -20,10 +20,10 @@ abstract class FlowFactory<V: FlowFactoryModel> {
     fun onFlowCompleted(data: V)
   }
   
-  private var initialValue = -1
-  private val currentIndex = AtomicInteger(initialValue)
+  private var initialStartIndex: Int = 0
+  private val currentIndex: AtomicInteger = AtomicInteger(initialStartIndex)
   private var listener: Listener<V>? = null
-  
+
   /**
    * use this method to initialize any model objects or other things you need in the factory
    * NOTICE: this will be called whenever the flow restarts
@@ -57,7 +57,8 @@ abstract class FlowFactory<V: FlowFactoryModel> {
    * Maybe you want to start from position 3 instead of 0
    */
   fun overrideStartingPosition(index: Int) {
-    initialValue = index
+    initialStartIndex = index
+    currentIndex.set(initialStartIndex)
   }
   
   /**
@@ -67,11 +68,11 @@ abstract class FlowFactory<V: FlowFactoryModel> {
    */
   fun next() {
     // if this is the very first step, we call initialize
-    if(currentIndex.get() == initialValue) {
+    if(currentIndex.get() == initialStartIndex) {
       initialize()
     }
     
-    val routerTransaction = getRouterTransaction(currentIndex.incrementAndGet())
+    val routerTransaction = getRouterTransaction(currentIndex.get())
     
     if(routerTransaction == null) {
       listener?.onFlowCompleted(getData())
@@ -85,7 +86,7 @@ abstract class FlowFactory<V: FlowFactoryModel> {
    * Whenever a controller in the flow passes on a result, we parse the result and go next()
    */
   fun onResult(result: Any?) {
-    parseResultFromController(currentIndex.get(), result)
+    parseResultFromController(currentIndex.getAndIncrement(), result)
     next()
   }
   
@@ -100,7 +101,7 @@ abstract class FlowFactory<V: FlowFactoryModel> {
    * initiate a complete restart of the flow
    */
   fun restart() {
-    currentIndex.set(initialValue)
+    currentIndex.set(initialStartIndex)
     next()
   }
 }

@@ -191,6 +191,14 @@
     <item name="android:textSize">@dimen/text_18</item>
   </style>
 
+  <style name="TextStyle.Coloplast.Regular.DarkGrey" parent="TextStyle.Roboto.Regular">
+    <item name="android:textColor">@color/text_dark_grey</item>
+  </style>
+
+  <style name="TextStyle.Coloplast.Regular.DarkGrey.18" parent="TextStyle.Coloplast.Regular.DarkGrey">
+    <item name="android:textSize">@dimen/text_18</item>
+  </style>
+
   <style name="TextStyle.Coloplast.Bold.DarkGrey" parent="TextStyle.Coloplast.Bold">
     <item name="android:textColor">@color/text_dark_grey</item>
   </style>

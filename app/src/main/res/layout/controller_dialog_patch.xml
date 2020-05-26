@@ -54,40 +54,38 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="@dimen/spacing_double"
+            android:layout_marginTop="@dimen/spacing_triple"
             android:layout_marginBottom="@dimen/spacing_double"
             app:isDetailView="@{true}"
+            app:size="@{200}"
             app:patch="@{controller.currentPatch}" />
 
         </FrameLayout>
 
         <TextView
-          style="@style/Text.Medium"
+          style="@style/TextStyle.Coloplast.Regular.ClearGrey.16"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_gravity="center_horizontal"
           android:layout_marginTop="@dimen/spacing_double"
-          android:text="Leakage development"
-          android:textColor="@color/text_dark_grey_03" />
+          android:text="Leakage development" />
 
         <TextView
-          style="@style/Text.Large"
+          style="@style/TextStyle.Coloplast.Regular.DarkGrey.18"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_gravity="center_horizontal"
           android:layout_marginTop="@dimen/spacing_standard"
-          android:text="First detection 18:55"
-          android:textColor="@color/text_dark_grey_01" />
+          android:text="First detection 18:55" />
 
         <TextView
-          style="@style/Text.Large"
+          style="@style/TextStyle.Coloplast.Regular.DarkGrey.18"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_gravity="center_horizontal"
           android:layout_marginTop="@dimen/spacing_quarter"
           android:layout_marginBottom="60dp"
-          android:text="Second detection 18:55"
-          android:textColor="@color/text_dark_grey_01" />
+          android:text="Second detection 18:55" />
 
       </LinearLayout>
     </androidx.cardview.widget.CardView>

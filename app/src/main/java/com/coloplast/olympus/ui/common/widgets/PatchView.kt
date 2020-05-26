@@ -38,7 +38,7 @@ class PatchView @JvmOverloads constructor(
   private var rawRotationalAngle: Int? = null
   private var listener: Listener? = null
   
-  private var patchSize: Int? = null
+  private var patchSize: Int = 0
   
   private val errorStateChanged = object : Observable.OnPropertyChangedCallback() {
     override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
@@ -55,16 +55,25 @@ class PatchView @JvmOverloads constructor(
   }
   
   init {
+    initialize()
+  }
+
+  private fun initialize(sizeDp: Int = 0) {
+    removeAllViews()
     background.setImageResource(R.drawable.ic_detailed_plate_ok)
-  
-    setSize(background)
-    
+    setSize(background, sizeDp)
+
     addView(background)
     background.visibility = View.VISIBLE
-    
+
     isInError.addOnPropertyChangedCallback(errorStateChanged)
     clipChildren = false
     clipToPadding = false
+  }
+
+  fun setSize(sizeDp: Int) {
+    patchSize = sizeDp
+    initialize(patchSize)
   }
   
   fun isDetailView(isDetailView: Boolean = false) {
@@ -163,8 +172,8 @@ class PatchView @JvmOverloads constructor(
         imageView.apply {
           setImageResource(it)
           addView(this)
-  
-          setSize(this)
+
+          setSize(this, patchSize)
           visibleOrGoneFade(true)
         }
       }
@@ -173,12 +182,12 @@ class PatchView @JvmOverloads constructor(
     }
   }
   
-  private fun setSize(imageView: ImageView) {
-    if(isDetailView) {
-      val params = imageView.layoutParams
-      params.height = 245.dpToPx().toInt()
-      params.width = 245.dpToPx().toInt()
-      this.layoutParams = params
+  private fun setSize(imageView: ImageView, sizeDp: Int) {
+    if(isDetailView && sizeDp > 0) {
+      val layoutParams = imageView.layoutParams
+      layoutParams.height = sizeDp.dpToPx().toInt()
+      layoutParams.width = sizeDp.dpToPx().toInt()
+      imageView.layoutParams = layoutParams
     }
   }
   

@@ -5,7 +5,6 @@ import com.coloplast.olympus.bluetooth.StateDispatcher
 import com.coloplast.olympus.bluetooth.businesslayer.BluetoothManager
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
-import com.coloplast.olympus.ui.feature.TransmitterManager
 import com.coloplast.olympus.ui.feature.home.models.BaseHomeViewModel
 import com.coloplast.olympus.ui.feature.home.models.HomeUiModel
 import io.reactivex.Observable
@@ -21,7 +20,7 @@ class HomeViewModel(private val bluetoothManager: BluetoothManager) :
     
     val currentBluetoothStateObservable: Observable<BluetoothState> = bluetoothManager.bluetoothStateObservable()
     val bluetoothStateObservable: Observable<HomeUiModel> = currentBluetoothStateObservable
-      .map { HomeUiModel.BluetoothIssue(it) as HomeUiModel }
+      .map<HomeUiModel> { HomeUiModel.BluetoothIssue(it) }
       .onErrorReturn {
         Timber.e(it)
         HomeUiModel.ConnectionStateUpdate(BleConnectionState.DISCONNECTED)
@@ -36,14 +35,14 @@ class HomeViewModel(private val bluetoothManager: BluetoothManager) :
     val resetTransmitterObservable = uiView.requestReset()
       .switchMap { macAddress ->
         bluetoothManager.resetTransmitter(macAddress)
-          .toSingle { HomeUiModel.StitchOrResetComplete() as HomeUiModel }
+          .toSingle<HomeUiModel> { HomeUiModel.StitchOrResetComplete() }
           .toObservable()
       }
 
     val stitchTransmitterObservable = uiView.requestStitching()
-      .switchMap { pair ->
-        bluetoothManager.stitchTransmitter(pair.first, pair.second)
-          .toSingle { HomeUiModel.StitchOrResetComplete() as HomeUiModel }
+      .switchMap { stitch ->
+        bluetoothManager.stitchTransmitter(stitch.macAddress, stitch.dataPackage)
+          .toSingle<HomeUiModel> { HomeUiModel.StitchOrResetComplete() }
           .toObservable()
       }
 
@@ -59,7 +58,7 @@ class HomeViewModel(private val bluetoothManager: BluetoothManager) :
     val connectionStateObservable = uiView.requestConnectionState()
       .switchMap { macAddress ->
         bluetoothManager.bleConnectionStateObservable(macAddress)
-          .map { HomeUiModel.ConnectionStateUpdate(it) as HomeUiModel }
+          .map<HomeUiModel> { HomeUiModel.ConnectionStateUpdate(it) }
       }
     
     disposable.add(connectionStateObservable.bind(uiView.render()))

@@ -34,6 +34,7 @@ import com.coloplast.olympus.ui.feature.guides.models.GuideType
 import com.coloplast.olympus.ui.feature.home.models.HomeUiModel
 import com.coloplast.olympus.ui.feature.home.models.PatchVisible
 import com.coloplast.olympus.ui.feature.home.models.SideMenuType
+import com.coloplast.olympus.ui.feature.home.models.Stitch
 import com.coloplast.olympus.ui.feature.statemachine.models.OverlayState
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
 import com.coloplast.olympus.ui.feature.transmitters.TransmittersController
@@ -54,7 +55,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   private val transmitterManager: TransmitterManager by inject()
   
   private val requestConnectionStateRelay = PublishRelay.create<String>()
-  private val stitchRelay = PublishRelay.create<Pair<String, ByteArray>>() // macAddress, stitch array
+  private val stitchRelay = PublishRelay.create<Stitch>()
   private val resetRelay = PublishRelay.create<String>() // macAddress
 
   private val connectionStateDisposable = CompositeDisposable()
@@ -263,7 +264,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
       .publish().refCount()
   }
 
-  override fun requestStitching(): Observable<Pair<String, ByteArray>> {
+  override fun requestStitching(): Observable<Stitch> {
     return stitchRelay.publish().refCount()
   }
 
@@ -295,7 +296,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   override fun onNegativeButtonClicked(requestCode: Int) {
     when (requestCode) {
       REQUEST_CODE_TRANSMITTERS_CHANGED -> {
-        stitchRelay.accept(Pair(transmitterManager.activeTransmitterMacAddress(), transmitterManager.getStitchArrayFromOther()))
+        stitchRelay.accept(Stitch(transmitterManager.activeTransmitterMacAddress(), transmitterManager.getStitchArrayFromOther()))
         imageDialogController?.dismissDialog(false)
       }
     }

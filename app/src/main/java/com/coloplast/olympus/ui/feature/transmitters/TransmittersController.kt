@@ -3,6 +3,7 @@ package com.coloplast.olympus.ui.feature.transmitters
 import android.os.Bundle
 import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableBoolean
+import androidx.recyclerview.widget.DiffUtil
 import com.artemzin.rxui.RxUi
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
@@ -10,6 +11,7 @@ import com.coloplast.olympus.BR
 import com.coloplast.olympus.R
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.databinding.ControllerTransmittersBinding
+import com.coloplast.olympus.shared.models.DiffCallback
 import com.coloplast.olympus.shared.models.Transmitter
 import com.coloplast.olympus.ui.common.CustomToolbarController
 import com.coloplast.olympus.ui.common.DrawerStateDispatcher
@@ -24,6 +26,7 @@ import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Function
+import me.tatarka.bindingcollectionadapter2.collections.DiffObservableList
 import me.tatarka.bindingcollectionadapter2.itembindings.OnItemBindClass
 import org.koin.core.inject
 import timber.log.Timber
@@ -36,11 +39,16 @@ class TransmittersController(args: Bundle? = null) :
   private val deleteTransmitterRelay = PublishRelay.create<String>()
   private val retryConnectionRelay = PublishRelay.create<Unit>()
 
-  val items = ObservableArrayList<Any>()
-  val itemBinding: OnItemBindClass<Any> = OnItemBindClass<Any>()
+  val itemBinding: OnItemBindClass<DiffCallback> = OnItemBindClass<DiffCallback>()
     .map(SmallHeaderItem::class.java, BR.item, R.layout.item_small_header)
     .map(SectionDivider::class.java, BR.item, R.layout.item_recyclerview_section_divider)
     .map(TransmitterItem::class.java, BR.item, R.layout.item_transmitter)
+
+  private val diffUtil = object: DiffUtil.ItemCallback<DiffCallback>(){
+    override fun areItemsTheSame(oldItem: DiffCallback, newItem: DiffCallback): Boolean = oldItem.areItemsTheSame(newItem)
+    override fun areContentsTheSame(oldItem: DiffCallback, newItem: DiffCallback): Boolean = oldItem.areContentsTheSame(newItem)
+  }
+  val items = DiffObservableList(diffUtil)
 
   val hasTransmittersAdded = ObservableBoolean(false)
   val canAddMoreTransmitters = ObservableBoolean(true)
@@ -69,28 +77,14 @@ class TransmittersController(args: Bundle? = null) :
           hasTransmittersAdded.set(true)
 
           // TODO - we need to change this into a list of Attached and / not attached list
-          val list = mutableListOf<Any>(
+          val list = mutableListOf<DiffCallback>(
             SmallHeaderItem(R.string.transmitters_not_attached)
           )
 
           uiModel.devices.map { TransmitterItem(it, this) }
             .also { list.addAll(it) }
 
-          list.filterIsInstance(TransmitterItem::class.java).forEach { transmitterItem ->
-            if (items.filterIsInstance(TransmitterItem::class.java)
-                .none { it.transmitter.macAddress == transmitterItem.transmitter.macAddress }
-            ) {
-              items.add(transmitterItem)
-            }
-          }
-
-          items.filterIsInstance(TransmitterItem::class.java).forEach { transmitterItem ->
-            if (list.filterIsInstance(TransmitterItem::class.java)
-                .none { it.transmitter.macAddress == transmitterItem.transmitter.macAddress }
-            ) {
-              items.remove(transmitterItem)
-            }
-          }
+          items.update(list)
 
           canAddMoreTransmitters.set(items.filterIsInstance(TransmitterItem::class.java).size < 2)
         }

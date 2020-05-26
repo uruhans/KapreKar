@@ -19,10 +19,13 @@ import com.polidea.rxandroidble2.exceptions.BleDisconnectedException
 import com.polidea.rxandroidble2.exceptions.BleException
 import com.polidea.rxandroidble2.exceptions.BleGattCallbackTimeoutException
 import com.polidea.rxandroidble2.exceptions.BleGattException
+import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.exceptions.UndeliverableException
 import io.reactivex.functions.BiFunction
 import io.reactivex.plugins.RxJavaPlugins
+import timber.log.Timber
+import java.util.*
 
 class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothManager {
   
@@ -223,6 +226,7 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
     return rxBleConnection.setupNotification(OlympusWirelessProtocol.Characteristics.STATUS)
       .flatMap { it }
       .startWith(rxBleConnection.readCharacteristic(OlympusWirelessProtocol.Characteristics.STATUS).toObservable())
+      .filter { statusVector -> statusVector.copyOfRange(0, 6).none { sensor -> sensor.toInt() == -1 } }
       .compose(OlympusWirelessProtocol.statusTransformer)
   }
   
@@ -281,5 +285,26 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
         BleConnectionState.fromRxBleState(it.value.connectionState)
       )
     })
+  }
+
+  override fun resetTransmitter(macAddress: String): Completable {
+    return writeCharacteristic(macAddress, OlympusWirelessProtocol.Characteristics.STATUS, OlympusWirelessProtocol.Characteristics.RESET_STATUS_DATA)
+  }
+
+  override fun stitchTransmitter(macAddress: String, data: ByteArray): Completable {
+    return writeCharacteristic(macAddress, OlympusWirelessProtocol.Characteristics.STATUS, data)
+  }
+
+  private fun writeCharacteristic(macAddress: String, characteristic: UUID, data: ByteArray) : Completable {
+    val rxConnection = bleConnections[macAddress]
+
+    return if(rxConnection == null) {
+      Timber.e("writeCharacteristic: rxConnection was NULL")
+      Completable.complete()
+    }
+    else {
+      rxConnection.writeCharacteristic(characteristic, data)
+        .ignoreElement()
+    }
   }
 }

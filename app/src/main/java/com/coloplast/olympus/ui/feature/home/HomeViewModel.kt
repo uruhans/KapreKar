@@ -5,6 +5,7 @@ import com.coloplast.olympus.bluetooth.StateDispatcher
 import com.coloplast.olympus.bluetooth.businesslayer.BluetoothManager
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
+import com.coloplast.olympus.ui.feature.TransmitterManager
 import com.coloplast.olympus.ui.feature.home.models.BaseHomeViewModel
 import com.coloplast.olympus.ui.feature.home.models.HomeUiModel
 import io.reactivex.Observable
@@ -31,8 +32,24 @@ class HomeViewModel(private val bluetoothManager: BluetoothManager) :
     
     val rawPackageUpdateObservable = StateDispatcher.rawPackageUpdateObservable()
       .map { HomeUiModel.RawDataPackageUpdate(it) }
-    
+
+    val resetTransmitterObservable = uiView.requestReset()
+      .switchMap { macAddress ->
+        bluetoothManager.resetTransmitter(macAddress)
+          .toSingle { HomeUiModel.StitchOrResetComplete() as HomeUiModel }
+          .toObservable()
+      }
+
+    val stitchTransmitterObservable = uiView.requestStitching()
+      .switchMap { pair ->
+        bluetoothManager.stitchTransmitter(pair.first, pair.second)
+          .toSingle { HomeUiModel.StitchOrResetComplete() as HomeUiModel }
+          .toObservable()
+      }
+
     disposable.add(Observable.merge(stateUpdate, bluetoothStateObservable, rawPackageUpdateObservable).bind(uiView.render()))
+    disposable.add(Observable.merge(resetTransmitterObservable, stitchTransmitterObservable).bind(uiView.render()))
+
     return disposable
   }
   

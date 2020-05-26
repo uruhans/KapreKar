@@ -6,4 +6,6 @@ import io.reactivex.Observable
 
 interface HomeView : UiView<HomeUiModel> {
   fun requestConnectionState() : Observable<String>
+  fun requestStitching() : Observable<Pair<String, ByteArray>> // macAddress, stitch array
+  fun requestReset() : Observable<String> // macAddress
 }

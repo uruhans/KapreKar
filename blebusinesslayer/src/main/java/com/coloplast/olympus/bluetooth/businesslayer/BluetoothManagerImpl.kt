@@ -226,6 +226,9 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
     return rxBleConnection.setupNotification(OlympusWirelessProtocol.Characteristics.STATUS)
       .flatMap { it }
       .startWith(rxBleConnection.readCharacteristic(OlympusWirelessProtocol.Characteristics.STATUS).toObservable())
+      // this filter will filter out any status vectors where *all* sensors are returning an invalid value
+      // this occurs right after a reset, where the transmitter takes a little time to figure out it's actual state
+      // so filter is added to remove any garbage callbacks
       .filter { statusVector -> statusVector.copyOfRange(0, 6).none { sensor -> sensor.toInt() == -1 } }
       .compose(OlympusWirelessProtocol.statusTransformer)
   }

@@ -3,6 +3,7 @@ package com.coloplast.olympus.ui.feature
 import com.coloplast.olympus.bluetooth.businesslayer.services.OlympusWirelessProtocol
 import com.coloplast.olympus.bluetooth.model.StateChange
 import com.coloplast.olympus.ui.common.Stack
+import com.coloplast.olympus.ui.feature.home.models.Stitch
 import com.coloplast.olympus.ui.feature.statemachine.models.OverlayState
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
 import timber.log.Timber
@@ -91,9 +92,16 @@ class TransmitterManager {
     return currentActiveTransmitter
   }
 
-  fun getStitchArrayFromOther() : ByteArray {
+  fun getStitchArrayFromOther() : Stitch? {
     val otherTxState = latestStateFromOtherTransmitter(currentActiveTransmitter)
-    return otherTxState?.bleDevice?.peripheral?.getStitchArray() ?: OlympusWirelessProtocol.Characteristics.RESET_STATUS_DATA
+
+    if(otherTxState != null) {
+      return Stitch(
+        otherTxState.getMacAddress(),
+        otherTxState.bleDevice.peripheral?.getStitchArray() ?: OlympusWirelessProtocol.Characteristics.RESET_STATUS_DATA)
+    }
+
+    return null
   }
 
   private fun setActiveTransmitter(stateChange: StateChange) {

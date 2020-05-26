@@ -296,7 +296,9 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   override fun onNegativeButtonClicked(requestCode: Int) {
     when (requestCode) {
       REQUEST_CODE_TRANSMITTERS_CHANGED -> {
-        stitchRelay.accept(Stitch(transmitterManager.activeTransmitterMacAddress(), transmitterManager.getStitchArrayFromOther()))
+        transmitterManager.getStitchArrayFromOther()?.let {
+          stitchRelay.accept(it)
+        }
         imageDialogController?.dismissDialog(false)
       }
     }

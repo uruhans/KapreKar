@@ -17,6 +17,7 @@ import com.coloplast.olympus.bluetooth.StateDispatcher
 import com.coloplast.olympus.bluetooth.model.BluetoothServiceModel
 import com.coloplast.olympus.bluetooth.model.BluetoothServiceResult
 import com.coloplast.olympus.notifications.OlympusNotificationManager
+import com.coloplast.olympus.ui.feature.statemachine.models.UiState
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -66,10 +67,10 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
       
       when (it) {
         is BluetoothServiceModel.DeviceUpdate -> {
-          //          if(it.statusChange.state == UiState.NO_CHANGE && it.statusChange.overlayState == OverlayState.NONE) {
-          //            return@ui
-          //          }
-          
+          if(it.statusChange.state == UiState.SOMETHING_ELSE) {
+            return@ui
+          }
+
           // this will allow for notifications to be send when app is in the background
           olympusNotificationManager.send(it.statusChange.state)
           
@@ -83,7 +84,11 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
           }
         }
         is BluetoothServiceModel.Disconnected -> {
-          // TODO - dispatch device disconnect
+          // check to see if we have a stateChange in the uiModel
+          // this will be used to notify the Ui to change state (so we dont get stuck in multiple tx state or other state based on disconnected tx)
+          it.otherTxStateChange?.let { stateChange ->
+            StateDispatcher.dispatch(stateChange)
+          }
         }
       }
     }

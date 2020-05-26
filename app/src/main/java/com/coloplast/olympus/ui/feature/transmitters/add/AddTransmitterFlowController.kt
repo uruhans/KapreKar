@@ -11,11 +11,11 @@ import org.koin.core.inject
 
 class AddTransmitterFlowController(args: Bundle) : FlowFactoryController<AddTransmitterModel>(args), MediaGuideController.Listener {
   
-  private val initialValue = args.getInt(BUNDLE_START_FLOW_AT, -1)
+  private val startAtIndex = args.getInt(BUNDLE_START_FLOW_AT, 0)
   private val addTransmitterFactory: FlowFactory<AddTransmitterModel> by inject()
   
   override fun startFlow(flowChildRouter: Router) {
-    addTransmitterFactory.overrideStartingPosition(initialValue)
+    addTransmitterFactory.overrideStartingPosition(startAtIndex)
     super.startFlow(flowChildRouter)
   }
   
@@ -31,9 +31,9 @@ class AddTransmitterFlowController(args: Bundle) : FlowFactoryController<AddTran
     private const val CONTROLLER_TAG = "add_transmitter_flow_controller"
     private const val BUNDLE_START_FLOW_AT = "BUNDLE_START_FLOW_AT"
     
-    fun routerTransaction(startAt: Int = -1): RouterTransaction {
+    fun routerTransaction(startAtIndex: Int = 0): RouterTransaction {
       with(Bundle()) {
-        putInt(BUNDLE_START_FLOW_AT, startAt)
+        putInt(BUNDLE_START_FLOW_AT, startAtIndex)
         
         return RouterTransaction.with(AddTransmitterFlowController(this))
           .tag(CONTROLLER_TAG)

@@ -188,7 +188,7 @@ class TransmittersController(args: Bundle? = null) :
 
   fun onAddTransmitterClicked() {
     router.pushController(
-      AddTransmitterFlowController.routerTransaction()
+      AddTransmitterFlowController.routerTransaction(2)
         .pushChangeHandler(VerticalChangeHandler())
         .popChangeHandler(VerticalChangeHandler())
     )

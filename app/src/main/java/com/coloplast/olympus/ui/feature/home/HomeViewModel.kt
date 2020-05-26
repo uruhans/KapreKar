@@ -20,7 +20,7 @@ class HomeViewModel(private val bluetoothManager: BluetoothManager) :
     
     val currentBluetoothStateObservable: Observable<BluetoothState> = bluetoothManager.bluetoothStateObservable()
     val bluetoothStateObservable: Observable<HomeUiModel> = currentBluetoothStateObservable
-      .map { HomeUiModel.BluetoothIssue(it) as HomeUiModel }
+      .map<HomeUiModel> { HomeUiModel.BluetoothIssue(it) }
       .onErrorReturn {
         Timber.e(it)
         HomeUiModel.ConnectionStateUpdate(BleConnectionState.DISCONNECTED)
@@ -31,8 +31,24 @@ class HomeViewModel(private val bluetoothManager: BluetoothManager) :
     
     val rawPackageUpdateObservable = StateDispatcher.rawPackageUpdateObservable()
       .map { HomeUiModel.RawDataPackageUpdate(it) }
-    
+
+    val resetTransmitterObservable = uiView.requestReset()
+      .switchMap { macAddress ->
+        bluetoothManager.resetTransmitter(macAddress)
+          .toSingle<HomeUiModel> { HomeUiModel.StitchOrResetComplete() }
+          .toObservable()
+      }
+
+    val stitchTransmitterObservable = uiView.requestStitching()
+      .switchMap { stitch ->
+        bluetoothManager.stitchTransmitter(stitch.macAddress, stitch.dataPackage)
+          .toSingle<HomeUiModel> { HomeUiModel.StitchOrResetComplete() }
+          .toObservable()
+      }
+
     disposable.add(Observable.merge(stateUpdate, bluetoothStateObservable, rawPackageUpdateObservable).bind(uiView.render()))
+    disposable.add(Observable.merge(resetTransmitterObservable, stitchTransmitterObservable).bind(uiView.render()))
+
     return disposable
   }
   
@@ -42,7 +58,7 @@ class HomeViewModel(private val bluetoothManager: BluetoothManager) :
     val connectionStateObservable = uiView.requestConnectionState()
       .switchMap { macAddress ->
         bluetoothManager.bleConnectionStateObservable(macAddress)
-          .map { HomeUiModel.ConnectionStateUpdate(it) as HomeUiModel }
+          .map<HomeUiModel> { HomeUiModel.ConnectionStateUpdate(it) }
       }
     
     disposable.add(connectionStateObservable.bind(uiView.render()))

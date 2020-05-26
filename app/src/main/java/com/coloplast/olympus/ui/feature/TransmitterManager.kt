@@ -95,13 +95,9 @@ class TransmitterManager {
   fun getStitchArrayFromOther() : Stitch? {
     val otherTxState = latestStateFromOtherTransmitter(currentActiveTransmitter)
 
-    if(otherTxState != null) {
-      return Stitch(
-        otherTxState.getMacAddress(),
-        otherTxState.bleDevice.peripheral?.getStitchArray() ?: OlympusWirelessProtocol.Characteristics.RESET_STATUS_DATA)
-    }
-
-    return null
+    return Stitch(
+      currentActiveTransmitter,
+      otherTxState?.bleDevice?.peripheral?.getStitchArray() ?: OlympusWirelessProtocol.Characteristics.RESET_STATUS_DATA)
   }
 
   private fun setActiveTransmitter(stateChange: StateChange) {

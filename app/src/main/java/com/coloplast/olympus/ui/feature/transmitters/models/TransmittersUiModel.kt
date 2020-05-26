@@ -8,9 +8,10 @@ import com.coloplast.olympus.ui.common.models.UiModel
 sealed class TransmittersUiModel : UiModel {
 
   data class ConnectedDevices(val devices: List<Transmitter>) : TransmittersUiModel()
-  data class Empty(val empty: Boolean = true): TransmittersUiModel()
+  data class Empty(val empty: Boolean = true) : TransmittersUiModel()
   data class StateUpdate(val stateChange: StateChange) : TransmittersUiModel()
   data class TransmitterConnectionState(val connectionState: ConnectionState) : TransmittersUiModel()
-  data class TransmitterDeleted(val success: Boolean = true): TransmittersUiModel()
-  
+  data class TransmitterDeleted(val success: Boolean = true) : TransmittersUiModel()
+  data class RetryConnectToTransmitters(val retry: Boolean = true) : TransmittersUiModel()
+  data class RetryConnectComplete(val complete: Boolean = true) : TransmittersUiModel()
 }

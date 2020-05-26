@@ -37,6 +37,7 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
       UiState.READY_TO_SCAN -> { null }
       UiState.SCANNING -> { null }
       UiState.DISCONNECTED -> { null }
+      UiState.MULTIPLE_TRANSMITTERS -> { null }
       UiState.SOMETHING_ELSE,
       UiState.OK_A -> {
         // we will clear all notifications that may be shown - now that everything is OK - we don't need earlier notification warnings
@@ -60,7 +61,9 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
       UiState.WATER_INGRESS_DETECTION_J -> {
         NotificationPayload(state.notificationId(), R.string.lock_notification_water)
       }
-      UiState.CUTGUARD_DIRT_IN_TRANSMITTER_K -> { null }
+      UiState.CUTGUARD_DIRT_IN_TRANSMITTER_K -> {
+        NotificationPayload(state.notificationId(), R.string.lock_notification_dirt)
+      }
       UiState.TRANSMITTER_DETACHED_V -> { null }
       UiState.TRANSMITTER_BATTERY_CHARGING_W -> { null }
     }
@@ -82,6 +85,7 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
         // TODO - change when we have properly implemented overlay states
         NotificationPayload(state.notificationId(), R.string.lock_notification_battery_critical)
       }
+      OverlayState.QUESTION -> TODO()
     }
   
     payload?.let {

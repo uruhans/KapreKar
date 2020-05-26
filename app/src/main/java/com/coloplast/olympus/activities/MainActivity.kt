@@ -10,12 +10,15 @@ import com.coloplast.olympus.Me
 import com.coloplast.olympus.R
 import com.coloplast.olympus.bluetooth.service.BluetoothConnectionService
 import com.coloplast.olympus.shared.models.CurrentUser
+import com.coloplast.olympus.ui.common.DrawerState
+import com.coloplast.olympus.ui.common.DrawerStateDispatcher
 import com.coloplast.olympus.ui.common.models.Navigation
 import com.coloplast.olympus.ui.feature.home.HomeController
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import io.reactivex.functions.BiFunction
 import org.koin.android.ext.android.inject
 import java.util.concurrent.TimeUnit
 
@@ -51,7 +54,22 @@ class MainActivity : AppCompatActivity() {
         .delay(500, TimeUnit.MILLISECONDS)
         .bind(openLoginScreen())
     )
-  
+    
+    // this observable listens to drawer state changes
+    compositeDisposable.add(
+      DrawerStateDispatcher.drawerStateObservable()
+        // we delay for 500 ms because we need to have
+        // controllers on top removed first
+        .delay(500, TimeUnit.MILLISECONDS)
+        .flatMapMaybe { drawerState ->
+          // get the home controller
+          Navigation.locateControllerOfType<HomeController>()
+            // change the drawer state
+            .map { it.changeDrawerState(drawerState) }
+        }
+        .subscribe()
+    )
+    
     startService(Intent(this, BluetoothConnectionService::class.java))
   }
   

@@ -13,9 +13,14 @@ import com.coloplast.olympus.businesslayer.interfaces.TransmitterComponent
 import com.coloplast.olympus.notifications.NotificationCenter
 import com.coloplast.olympus.notifications.NotificationScheduler
 import com.coloplast.olympus.notifications.OlympusNotificationManager
+import com.coloplast.olympus.ui.common.flow.FlowFactory
 import com.coloplast.olympus.ui.feature.home.HomeViewModel
+import com.coloplast.olympus.ui.feature.TransmitterManager
 import com.coloplast.olympus.ui.feature.transmitters.TransmittersViewModel
+import com.coloplast.olympus.ui.feature.transmitters.add.AddTransmitterFactoryImpl
 import com.coloplast.olympus.ui.feature.transmitters.add.AddTransmitterViewModel
+import com.coloplast.olympus.ui.feature.transmitters.add.at9.AddTransmitterAT9ViewModel
+import com.coloplast.olympus.ui.feature.transmitters.add.models.AddTransmitterModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
@@ -25,6 +30,7 @@ val koinModule = module {
   single { NotificationCenter(androidContext(), get())}
   single { OlympusNotificationManager(get()) }
   single { NotificationScheduler() }
+  single { TransmitterManager() }
   
   // Components
   single<BluetoothManager> { BluetoothManagerImpl(androidContext(), BuildConfig.DEBUG) }
@@ -34,9 +40,12 @@ val koinModule = module {
   
   
   single { TransmittersViewModel(get(), get()) }
+  single { AddTransmitterAT9ViewModel(get(), get()) }
   
-  factory { BluetoothServiceViewModel(get(), get(), get()) }
+  factory { BluetoothServiceViewModel(get(), get(), get(), get()) }
   factory { HomeViewModel(get()) }
   factory { DeviceConnection(get()) }
   
+  
+  single<FlowFactory<AddTransmitterModel>> { AddTransmitterFactoryImpl() }
 }

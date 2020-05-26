@@ -80,6 +80,8 @@ class UiStateMachineImpl : BaseUiStateMachine() {
       UiState.OK_A,
       UiState.OUTER_BREACH_C,
       UiState.PAY_ATTENTION_F,
+      UiState.TRANSMITTER_BATTERY_CHARGING_W,
+      UiState.TRANSMITTER_DETACHED_V,
       UiState.DISCONNECTED -> {
         true
       }
@@ -127,6 +129,7 @@ class UiStateMachineImpl : BaseUiStateMachine() {
       UiState.INNER_BREACH_B,
       UiState.OUTER_BREACH_C,
       UiState.PAY_ATTENTION_F,
+      UiState.TRANSMITTER_DETACHED_V,
       UiState.DISCONNECTED -> {
         true
       }
@@ -189,7 +192,11 @@ class UiStateMachineImpl : BaseUiStateMachine() {
       UiState.BLUETOOTH_NOT_ENABLED,
       UiState.SOMETHING_ELSE,
       UiState.OK_A,
+      UiState.INNER_BREACH_B,
+      UiState.OUTER_BREACH_C,
       UiState.TOTAL_BLIND_E,
+      UiState.INNER_BLIND_D,
+      UiState.WATER_INGRESS_DETECTION_J,
       UiState.TRANSMITTER_BATTERY_CHARGING_W,
       UiState.DISCONNECTED -> {
         true

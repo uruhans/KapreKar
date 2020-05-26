@@ -1,5 +1,6 @@
 package com.coloplast.olympus.utils
 
+import android.content.Context
 import com.coloplast.olympus.shared.AppSettings
 import timber.log.Timber
 
@@ -23,5 +24,14 @@ object ResourceUtils {
     }
     
     return resourceId
+  }
+
+  fun isDrawableResource(context: Context, resourceId: Int): Boolean {
+    return try {
+      context.getDrawable(resourceId)!!
+      true
+    } catch (e: Exception){
+      false
+    }
   }
 }

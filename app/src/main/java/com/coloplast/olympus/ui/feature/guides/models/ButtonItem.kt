@@ -11,7 +11,7 @@ class ButtonItem(@StringRes val title: Int, private val buttonType: ButtonType =
   }
   
   val backgroundColor = UiUtils.getColor(if (buttonType == ButtonType.BACK) R.color.white else R.color.colorAccent)
-  val textColor = UiUtils.getColor(if (buttonType == ButtonType.BACK) R.color.text_dark_grey else R.color.text_white)
+  val textColor = UiUtils.getColor(if (buttonType == ButtonType.BACK) R.color.text_grey else R.color.text_white)
   
   fun onButtonClicked() {
     listener.onButtonClicked(buttonType)

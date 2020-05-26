@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto">
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools">
 
   <data>
+
+    <import type="com.coloplast.olympus.utils.DeviceUtils" />
 
     <import type="com.coloplast.olympus.ui.feature.home.models.SideMenuType" />
 
@@ -31,8 +34,9 @@
 
     <LinearLayout
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
+      android:layout_height="0dp"
       android:layout_marginBottom="@dimen/spacing_standard"
+      android:gravity="bottom"
       android:orientation="vertical"
       app:layout_constraintBottom_toTopOf="@+id/bottom_layout"
       app:layout_constraintEnd_toEndOf="parent"
@@ -61,8 +65,7 @@
           android:layout_height="wrap_content"
           android:layout_gravity="center_vertical"
           android:layout_marginStart="@dimen/spacing_standard"
-          android:text="@string/menu_status"
-          android:textColor="@color/text_dark_grey_01" />
+          android:text="@string/menu_status" />
 
       </LinearLayout>
 
@@ -88,8 +91,7 @@
           android:layout_height="wrap_content"
           android:layout_gravity="center_vertical"
           android:layout_marginStart="@dimen/spacing_standard"
-          android:text="@string/menu_guides"
-          android:textColor="@color/text_dark_grey_01" />
+          android:text="@string/menu_guides" />
 
       </LinearLayout>
 
@@ -115,8 +117,7 @@
           android:layout_height="wrap_content"
           android:layout_gravity="center_vertical"
           android:layout_marginStart="@dimen/spacing_standard"
-          android:text="[Transmitters]"
-          android:textColor="@color/text_dark_grey_01" />
+          android:text="@string/menu_transmitters" />
 
       </LinearLayout>
 
@@ -142,10 +143,19 @@
           android:layout_height="wrap_content"
           android:layout_gravity="center_vertical"
           android:layout_marginStart="@dimen/spacing_standard"
-          android:text="@string/menu_settings"
-          android:textColor="@color/text_dark_grey_01" />
+          android:text="@string/menu_settings" />
 
       </LinearLayout>
+
+      <TextView
+        style="@style/Text.Medium"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_triple"
+        android:gravity="center_horizontal"
+        android:text="@{DeviceUtils.getAppVersion()}"
+        tools:text="Olympus v1.0 (2323)" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -168,7 +178,7 @@
         android:background="?attr/selectableItemBackground"
         android:gravity="center_vertical"
         android:onClick="@{() -> controller.onSideMenuClicked(SideMenuType.PROFILE)}"
-        android:text="[Profile]"
+        android:text="@string/menu_subitem_profile"
         android:textColor="@color/grey" />
 
       <TextView
@@ -178,7 +188,7 @@
         android:background="?attr/selectableItemBackground"
         android:gravity="center_vertical"
         android:onClick="@{() -> controller.onSideMenuClicked(SideMenuType.ABOUT)}"
-        android:text="[About]"
+        android:text="@string/menu_subItem_about"
         android:textColor="@color/grey" />
 
       <TextView
@@ -188,7 +198,7 @@
         android:background="?attr/selectableItemBackground"
         android:gravity="center_vertical"
         android:onClick="@{() -> controller.onSideMenuClicked(SideMenuType.CONTACT)}"
-        android:text="[Contact]"
+        android:text="@string/menu_subItem_contact"
         android:textColor="@color/grey" />
 
     </LinearLayout>

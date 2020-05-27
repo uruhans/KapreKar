@@ -129,6 +129,7 @@ class UiStateMachineImpl : BaseUiStateMachine() {
       UiState.INNER_BREACH_B,
       UiState.OUTER_BREACH_C,
       UiState.PAY_ATTENTION_F,
+      UiState.TRANSMITTER_DETACHED_V,
       UiState.DISCONNECTED -> {
         true
       }

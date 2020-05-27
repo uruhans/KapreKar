@@ -35,6 +35,7 @@ import com.coloplast.olympus.ui.feature.guides.models.GuideType
 import com.coloplast.olympus.ui.feature.home.models.HomeUiModel
 import com.coloplast.olympus.ui.feature.home.models.PatchVisible
 import com.coloplast.olympus.ui.feature.home.models.SideMenuType
+import com.coloplast.olympus.ui.feature.home.models.Stitch
 import com.coloplast.olympus.ui.feature.statemachine.models.OverlayState
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
 import com.coloplast.olympus.ui.feature.transmitters.TransmittersController
@@ -55,6 +56,9 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   private val transmitterManager: TransmitterManager by inject()
   
   private val requestConnectionStateRelay = PublishRelay.create<String>()
+  private val stitchRelay = PublishRelay.create<Stitch>()
+  private val resetRelay = PublishRelay.create<String>() // macAddress
+
   private val connectionStateDisposable = CompositeDisposable()
 
   private var dialogController: DialogController? = null
@@ -207,6 +211,9 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         UiState.BLUETOOTH_NOT_ENABLED -> {
           BluetoothNotEnabledController.routerTransaction()
         }
+        UiState.MULTIPLE_TRANSMITTERS -> {
+          MultipleTransmittersController.routerTransaction()
+        }
         UiState.DISCONNECTED -> {
           ReadyToScanController.routerTransaction()
         }
@@ -257,7 +264,15 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
     return requestConnectionStateRelay
       .publish().refCount()
   }
-  
+
+  override fun requestStitching(): Observable<Stitch> {
+    return stitchRelay.publish().refCount()
+  }
+
+  override fun requestReset(): Observable<String> {
+    return resetRelay.publish().refCount()
+  }
+
   val patchClickedListener = object : PatchView.Listener {
     override fun onPatchClicked(patch: Patch) {
       Timber.e("Patch was clicked")
@@ -273,7 +288,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         imageDialogController?.dismissDialog(withCallback = true)
       }
       REQUEST_CODE_TRANSMITTERS_CHANGED -> {
-        // TODO - NEW LAYER - RESET should be done
+        resetRelay.accept(transmitterManager.activeTransmitterMacAddress())
         imageDialogController?.dismissDialog(false)
       }
     }
@@ -282,7 +297,9 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   override fun onNegativeButtonClicked(requestCode: Int) {
     when (requestCode) {
       REQUEST_CODE_TRANSMITTERS_CHANGED -> {
-        // TODO - LAYER IN USE - STITCHING should be done
+        transmitterManager.getStitchArrayFromOther()?.let {
+          stitchRelay.accept(it)
+        }
         imageDialogController?.dismissDialog(false)
       }
     }

@@ -1,18 +1,18 @@
 package com.coloplast.olympus.ui.feature.transmitters.models
 
+import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
-import com.coloplast.olympus.bluetooth.businesslayer.enums.BatteryState
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.bluetooth.businesslayer.enums.PowerLevel
 import com.coloplast.olympus.bluetooth.businesslayer.models.Battery
 import com.coloplast.olympus.shared.models.DiffCallback
 import com.coloplast.olympus.shared.models.Transmitter
 
-class TransmitterItem(val transmitter: Transmitter, val listener: Listener): DiffCallback {
+class TransmitterItem(val transmitter: Transmitter, val onEdit: ObservableBoolean, val listener: Listener): DiffCallback {
   interface Listener {
-    fun onTransmitterClicked(transmitter: Transmitter)
+    fun onDeleteTransmitter(transmitter: Transmitter)
   }
-  
+
   val battery = ObservableField<Battery>()
   val connectionState = ObservableField<BleConnectionState>()
 
@@ -23,9 +23,9 @@ class TransmitterItem(val transmitter: Transmitter, val listener: Listener): Dif
   fun setConnectionState(connectionState: BleConnectionState) {
     this.connectionState.set(connectionState)
   }
-  
+
   fun onItemClicked() {
-    listener.onTransmitterClicked(transmitter)
+    listener.onDeleteTransmitter(transmitter)
   }
 
   override fun areItemsTheSame(other: DiffCallback): Boolean {

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools">
+
+  <data>
+    <import type="com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState" />
+
+    <variable
+      name="item"
+      type="com.coloplast.olympus.ui.feature.transmitters.models.TransmitterItem" />
+  </data>
+
+  <merge tools:parentTag="FrameLayout">
+
+    <TextView
+      android:id="@+id/deleteButton"
+      style="@style/TextStyle.Roboto.Medium.Red.18"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center|end"
+      android:clickable="true"
+      android:focusable="true"
+      android:onClick="@{() -> item.listener.onDeleteTransmitter(item.transmitter)}"
+      android:padding="@dimen/spacing_large"
+      android:text="@string/transmitters_delete" />
+
+    <androidx.cardview.widget.CardView
+      android:id="@+id/cardTransmitter"
+      style="@style/CardViewStyle"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:focusable="true"
+      android:clickable="true"
+      android:layout_marginStart="@dimen/spacing_larger"
+      android:layout_marginTop="@dimen/cardview_elevation_default"
+      android:layout_marginEnd="@dimen/cardview_elevation_default"
+      android:layout_marginBottom="@dimen/cardview_elevation_default">
+
+      <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="84dp">
+
+        <ImageView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:src="@{item.connectionState == BleConnectionState.CONNECTED ? @drawable/transmitter_side : @drawable/transmitter_side_2}"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+          android:id="@+id/name"
+          style="@style/Headline.Small"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="@dimen/spacing_larger"
+          android:layout_marginTop="@dimen/spacing_standard"
+          android:text="@{item.transmitter.customName}"
+          android:textColor="@color/darkGrey01"
+          android:textSize="@dimen/text_20"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toTopOf="parent"
+          tools:text="[Name]" />
+
+        <ImageView
+          android:id="@+id/battery"
+          android:layout_width="32dp"
+          android:layout_height="32dp"
+          android:layout_marginEnd="@dimen/spacing_larger"
+          app:layout_constraintBottom_toBottomOf="@+id/name"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintHorizontal_bias="1"
+          app:layout_constraintStart_toStartOf="@+id/name"
+          app:layout_constraintTop_toTopOf="@+id/name"
+          app:battery="@{item.battery}"
+          tools:src="@drawable/ic_battery_full_24dp" />
+
+        <TextView
+          android:id="@+id/address"
+          style="@style/Text.Medium"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="@dimen/spacing_larger"
+          android:text="@{item.transmitter.macAddress}"
+          android:textColor="@color/darkGrey03"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toBottomOf="@id/name"
+          tools:text="[Address]" />
+
+      </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+  </merge>
+
+</layout>

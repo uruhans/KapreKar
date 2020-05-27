@@ -27,7 +27,6 @@ import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Function
-import me.tatarka.bindingcollectionadapter2.OnItemBind
 import me.tatarka.bindingcollectionadapter2.itembindings.OnItemBindClass
 import org.koin.core.inject
 import timber.log.Timber
@@ -154,7 +153,7 @@ class TransmittersController(args: Bundle? = null) :
 
     dialogController = ImageDialogController.create(
       this,
-      DELETE_TRANSMITTER_REQ_CODE,
+      REQUEST_CODE_1000,
       R.string.dialog_delete_transmitter_title,
       R.string.empty,
       R.string.generic_yes,
@@ -169,7 +168,7 @@ class TransmittersController(args: Bundle? = null) :
 
   override fun onPositiveButtonClicked(requestCode: Int) {
     when (requestCode) {
-      DELETE_TRANSMITTER_REQ_CODE -> {
+      REQUEST_CODE_1000 -> {
         transmitterToDelete?.let {
           deleteTransmitterRelay.accept(it.macAddress)
         }
@@ -179,8 +178,18 @@ class TransmittersController(args: Bundle? = null) :
 
   override fun onNegativeButtonClicked(requestCode: Int) {
     when (requestCode) {
-      DELETE_TRANSMITTER_REQ_CODE -> {
+      REQUEST_CODE_1000 -> {
         dialogController?.dismissDialog(false)
+      }
+    }
+  }
+
+  override fun onDialogDismissed(requestCode: Int) {
+    when (requestCode) {
+      REQUEST_CODE_1000 -> {
+        transmitterToDelete?.let {
+          deleteTransmitterRelay.accept(it.macAddress)
+        }
       }
     }
   }
@@ -224,7 +233,7 @@ class TransmittersController(args: Bundle? = null) :
 
   companion object {
     private const val TAG_CONTROLLER = "transmitters_controller"
-    private const val DELETE_TRANSMITTER_REQ_CODE = 1000
+    private const val REQUEST_CODE_1000 = 1000
 
     fun routerTransaction(): RouterTransaction {
       return RouterTransaction.with(TransmittersController())

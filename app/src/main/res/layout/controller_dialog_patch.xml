@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto">
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools">
 
   <data>
 
@@ -57,37 +58,62 @@
             android:layout_marginTop="@dimen/spacing_triple"
             android:layout_marginBottom="@dimen/spacing_double"
             app:isDetailView="@{true}"
-            app:size="@{200}"
+            app:patch="@{controller.currentPatch}"
             app:rawRotationalAngle="@{controller.rawRotationalAngle}"
-            app:patch="@{controller.currentPatch}" />
+            app:size="@{200}" />
 
         </FrameLayout>
 
-        <TextView
-          style="@style/TextStyle.Coloplast.Regular.ClearGrey.16"
-          android:layout_width="wrap_content"
+        <LinearLayout
+          android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_gravity="center_horizontal"
           android:layout_marginTop="@dimen/spacing_double"
-          android:text="Leakage development" />
+          android:orientation="vertical"
+          app:visibleOrGone="@{!controller.breachDetected}">
 
-        <TextView
-          style="@style/TextStyle.Coloplast.Regular.DarkGrey.18"
-          android:layout_width="wrap_content"
+          <TextView
+            style="@style/TextStyle.Roboto.Regular.ClearGrey.16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="60dp"
+            android:text="@string/overlay_no_breach_title" />
+
+        </LinearLayout>
+
+        <LinearLayout
+          android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_gravity="center_horizontal"
-          android:layout_marginTop="@dimen/spacing_standard"
-          android:text="First detection 18:55" />
+          android:layout_marginTop="@dimen/spacing_double"
+          android:orientation="vertical"
+          app:visibleOrGone="@{controller.breachDetected}"
+          tools:visibility="gone">
 
-        <TextView
-          style="@style/TextStyle.Coloplast.Regular.DarkGrey.18"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_gravity="center_horizontal"
-          android:layout_marginTop="@dimen/spacing_quarter"
-          android:layout_marginBottom="60dp"
-          android:text="Second detection 18:55" />
+          <TextView
+            style="@style/TextStyle.Roboto.Regular.ClearGrey.16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/overlay_breach_title" />
 
+          <!-- TODO - get breach times from first and second breach -->
+          <TextView
+            style="@style/TextStyle.Coloplast.Regular.DarkGrey.18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/spacing_standard"
+            android:text="@string/overlay_breach_first" />
+
+          <TextView
+            style="@style/TextStyle.Coloplast.Regular.DarkGrey.18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/spacing_quarter"
+            android:layout_marginBottom="60dp"
+            android:text="@string/overlay_breach_second" />
+        </LinearLayout>
       </LinearLayout>
     </androidx.cardview.widget.CardView>
 

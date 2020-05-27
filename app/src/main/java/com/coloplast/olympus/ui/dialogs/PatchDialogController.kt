@@ -2,6 +2,7 @@ package com.coloplast.olympus.ui.dialogs
 
 import android.os.Bundle
 import androidx.databinding.Observable
+import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.databinding.ObservableInt
 import com.bluelinelabs.conductor.Controller
@@ -20,7 +21,13 @@ class PatchDialogController(args: Bundle) : BaseDialogController<ControllerDialo
   
   val currentPatch = ObservableField<Patch>()
   val rawRotationalAngle = ObservableInt()
-  
+
+  val breachDetected = ObservableBoolean(false)
+
+  private val controller = Navigation.getContentRouter()!!.getControllerWithInstanceId(
+    args.getString(BUNDLE_TARGET_INSTANCE_ID)!!
+  ) as? HomeController
+
   init {
     dismissAllowed = args.getBoolean(BUNDLE_DISMISS_ALLOWED)
     requestCode = args.getInt(BUNDLE_REQUEST_CODE)
@@ -31,23 +38,12 @@ class PatchDialogController(args: Bundle) : BaseDialogController<ControllerDialo
   }
   
   override fun onViewBound(viewBinding: ControllerDialogPatchBinding) {
-    // no-op
-  
-    val controller = Navigation.getContentRouter()!!.getControllerWithInstanceId(
-      args.getString(BUNDLE_TARGET_INSTANCE_ID)!!
-    )
-    
-    val homeController = controller as HomeController
-    homeController.currentPatch.addOnPropertyChangedCallback(object: Observable.OnPropertyChangedCallback() {
-      override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
-        currentPatch.set(homeController.currentPatch.get())
-        rawRotationalAngle.set(homeController.rawRotationAngle.get())
-      }
-    })
+    controller?.currentPatch?.addOnPropertyChangedCallback(currentPatchChangedCallback)
+    setDataFromHomeController()
   }
-  
+
   fun onCloseClicked() {
-    onDismissClicked()
+    super.dismissDialog(false)
   }
   
   fun onDismissClicked() {
@@ -55,8 +51,20 @@ class PatchDialogController(args: Bundle) : BaseDialogController<ControllerDialo
       super.dismissDialog(false)
     }
   }
+
+  private fun setDataFromHomeController() {
+    currentPatch.set(controller?.currentPatch?.get())
+    rawRotationalAngle.set(controller?.rawRotationAngle?.get() ?: 0)
+  }
+
+  private val currentPatchChangedCallback = object : Observable.OnPropertyChangedCallback() {
+    override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
+      setDataFromHomeController()
+    }
+  }
   
   override fun onDismiss() {
+    controller?.currentPatch?.removeOnPropertyChangedCallback(currentPatchChangedCallback)
     getListener(Listener::class.java)?.onDialogDismissed(requestCode)
   }
   

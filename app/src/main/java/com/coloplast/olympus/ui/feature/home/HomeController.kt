@@ -278,13 +278,19 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
 
   val patchClickedListener = object : PatchView.Listener {
     override fun onPatchClicked(patch: Patch) {
-      patchDialog = PatchDialogController.create(
-        this@HomeController,
-        1212,
-        dismissAllowed = true
-      )
+      val controllerAsPatchVisible = stateRouter?.backstack?.first()?.controller() as? PatchVisible
 
-      patchDialog?.show()
+      // if the current patch is not shown as in error
+      // we show the patch details
+      if(controllerAsPatchVisible?.patchInError() == false) {
+        patchDialog = PatchDialogController.create(
+          this@HomeController,
+          REQUEST_CODE_PATCH_DETAILS,
+          dismissAllowed = false
+        )
+
+        patchDialog?.show()
+      }
     }
   }
   
@@ -449,6 +455,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
     private const val REQUEST_CODE_PERMISSION_LOCATION = 5001
     private const val REQUEST_CODE_PERMISSION_RATIONALE = 5002
     private const val REQUEST_CODE_TRANSMITTERS_CHANGED = 6001
+    private const val REQUEST_CODE_PATCH_DETAILS = 7001
 
     const val REQUEST_CODE_BLUETOOTH_ENABLE = 5005
     

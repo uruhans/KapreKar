@@ -123,13 +123,13 @@ class PatchView @JvmOverloads constructor(
           if (newPatch.innerSensor1 == SensorStatus.BREACH) {
             patchIcons.add(R.drawable.ic_detailed_plate_inner_nw)
           }
-          
+
           if (newPatch.innerSensor2 == SensorStatus.BREACH) {
-            patchIcons.add(R.drawable.ic_detailed_plate_inner_ne)
-          }
-          
-          if (newPatch.innerSensor3 == SensorStatus.BREACH) {
             patchIcons.add(R.drawable.ic_detailed_plate_inner_s)
+          }
+
+          if (newPatch.innerSensor3 == SensorStatus.BREACH) {
+            patchIcons.add(R.drawable.ic_detailed_plate_inner_ne)
           }
         }
         else {
@@ -140,13 +140,13 @@ class PatchView @JvmOverloads constructor(
             if (newPatch.innerSensor1 == SensorStatus.BREACH) {
               patchIcons.add(R.drawable.ic_detailed_plate_outer_inner_nw)
             }
-            
+
             if (newPatch.innerSensor2 == SensorStatus.BREACH) {
-              patchIcons.add(R.drawable.ic_detailed_plate_outer_inner_ne)
-            }
-            
-            if (newPatch.innerSensor3 == SensorStatus.BREACH) {
               patchIcons.add(R.drawable.ic_detailed_plate_outer_inner_s)
+            }
+
+            if (newPatch.innerSensor3 == SensorStatus.BREACH) {
+              patchIcons.add(R.drawable.ic_detailed_plate_outer_inner_ne)
             }
           }
         }

@@ -122,7 +122,7 @@ class TransmittersController(args: Bundle? = null) :
           }
         }
         is TransmittersUiModel.TransmitterDeleted -> {
-
+          dialogController?.dismissDialog(false)
         }
         is TransmittersUiModel.Empty -> {
           hasTransmittersAdded.set(false)
@@ -180,16 +180,6 @@ class TransmittersController(args: Bundle? = null) :
     when (requestCode) {
       REQUEST_CODE_1000 -> {
         dialogController?.dismissDialog(false)
-      }
-    }
-  }
-
-  override fun onDialogDismissed(requestCode: Int) {
-    when (requestCode) {
-      REQUEST_CODE_1000 -> {
-        transmitterToDelete?.let {
-          deleteTransmitterRelay.accept(it.macAddress)
-        }
       }
     }
   }

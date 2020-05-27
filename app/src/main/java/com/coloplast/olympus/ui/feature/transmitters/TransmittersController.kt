@@ -16,6 +16,8 @@ import com.coloplast.olympus.ui.common.DrawerStateDispatcher
 import com.coloplast.olympus.ui.common.dialogs.BaseDialogController
 import com.coloplast.olympus.ui.common.dialogs.DialogController
 import com.coloplast.olympus.ui.common.extensions.toggle
+import com.coloplast.olympus.ui.common.widgets.TransmitterCardView
+import com.coloplast.olympus.ui.dialogs.ImageDialogController
 import com.coloplast.olympus.ui.feature.transmitters.add.AddTransmitterFlowController
 import com.coloplast.olympus.ui.feature.transmitters.models.SectionDivider
 import com.coloplast.olympus.ui.feature.transmitters.models.SmallHeaderItem
@@ -31,7 +33,7 @@ import timber.log.Timber
 
 class TransmittersController(args: Bundle? = null) :
   CustomToolbarController<ControllerTransmittersBinding>(args), TransmittersView,
-  TransmitterItem.Listener, BaseDialogController.Listener {
+  TransmitterItem.Listener, ImageDialogController.Listener {
 
   private val viewModel: TransmittersViewModel by inject()
   private val deleteTransmitterRelay = PublishRelay.create<String>()
@@ -49,7 +51,7 @@ class TransmittersController(args: Bundle? = null) :
   val retryPressed = ObservableBoolean(false)
   val editEnabled = ObservableBoolean(false)
 
-  private var dialogController: DialogController? = null
+  private var dialogController: ImageDialogController? = null
   private var transmitterToDelete: Transmitter? = null
 
   override fun attachVariables(viewBinding: ControllerTransmittersBinding) {
@@ -120,7 +122,7 @@ class TransmittersController(args: Bundle? = null) :
           }
         }
         is TransmittersUiModel.TransmitterDeleted -> {
-
+          dialogController?.dismissDialog(false)
         }
         is TransmittersUiModel.Empty -> {
           hasTransmittersAdded.set(false)
@@ -149,41 +151,35 @@ class TransmittersController(args: Bundle? = null) :
   override fun onDeleteTransmitter(transmitter: Transmitter) {
     transmitterToDelete = transmitter
 
-    dialogController = DialogController.create(
+    dialogController = ImageDialogController.create(
       this,
       REQUEST_CODE_1000,
       R.string.dialog_delete_transmitter_title,
-      R.string.dialog_delete_transmitter_title,
-      R.string.generic_ok,
-      R.string.generic_cancel,
+      R.string.empty,
+      R.string.generic_yes,
+      R.string.generic_no,
+      R.drawable.ic_info_circle,
+      verticalButtonLayout = true,
       dismissAllowed = true
-    )
-
-    dialogController?.show()
+    ).apply { show() }
   }
+
+  override fun onCloseClicked(requestCode: Int) = onNegativeButtonClicked(requestCode)
 
   override fun onPositiveButtonClicked(requestCode: Int) {
-    when (requestCode) {
-      REQUEST_CODE_1000 -> {
-        dialogController?.dismissDialog(true)
-      }
-    }
-  }
-
-  override fun onNeutralButtonClicked(requestCode: Int) {
-    when (requestCode) {
-      REQUEST_CODE_1000 -> {
-        dialogController?.dismissDialog(false)
-      }
-    }
-  }
-
-  override fun onDialogDismissed(requestCode: Int) {
     when (requestCode) {
       REQUEST_CODE_1000 -> {
         transmitterToDelete?.let {
           deleteTransmitterRelay.accept(it.macAddress)
         }
+      }
+    }
+  }
+
+  override fun onNegativeButtonClicked(requestCode: Int) {
+    when (requestCode) {
+      REQUEST_CODE_1000 -> {
+        dialogController?.dismissDialog(false)
       }
     }
   }

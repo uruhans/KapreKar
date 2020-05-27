@@ -18,6 +18,7 @@ import com.coloplast.olympus.R
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
 import com.coloplast.olympus.bluetooth.businesslayer.enums.PowerLevel
+import com.coloplast.olympus.bluetooth.businesslayer.models.Battery
 import com.coloplast.olympus.bluetooth.businesslayer.models.Patch
 import com.coloplast.olympus.databinding.ControllerHomeBinding
 import com.coloplast.olympus.ui.common.BaseController
@@ -61,7 +62,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   
   val updateAnimation = ObservableBoolean(false)
   
-  val powerLevel = ObservableField<PowerLevel>()
+  val battery = ObservableField<Battery>()
   val isConnected = ObservableBoolean(false)
   val lastCheck = ObservableField<LocalDateTime>()
   
@@ -131,7 +132,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
           val updatedStateChange = transmitterManager.stateChangeFromActiveTransmitter(uiModel.stateChange)
           val stateUpdate = transmitterManager.determineTxLayerQuestioning(updatedStateChange)
 
-          powerLevel.set(stateUpdate.bleDevice.peripheral?.powerLevel)
+          stateUpdate.bleDevice.peripheral?.battery?.let { battery.set(it) }
           isConnected.set(stateUpdate.bleDevice.isConnected())
           
           stateUpdate.bleDevice.peripheral?.transmitter?.rawRotationalAngle?.let {

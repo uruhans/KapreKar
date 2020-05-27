@@ -15,7 +15,9 @@ import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import com.coloplast.olympus.R
+import com.coloplast.olympus.bluetooth.businesslayer.enums.BatteryState
 import com.coloplast.olympus.bluetooth.businesslayer.enums.PowerLevel
+import com.coloplast.olympus.bluetooth.businesslayer.models.Battery
 
 @BindingAdapter("resource")
 fun ImageView.setResource(@DrawableRes resource: Int?) {
@@ -24,29 +26,9 @@ fun ImageView.setResource(@DrawableRes resource: Int?) {
   }
 }
 
-@BindingAdapter("powerLevel")
-fun ImageView.setPowerLevel(powerLevel: PowerLevel?) {
-  visibleOrInvisible(powerLevel != null)
-  
-  powerLevel?.let {
-    when (it) {
-      PowerLevel.HIGH -> setImageResource(R.drawable.ic_battery_full_24dp)
-      PowerLevel.MEDIUM -> setImageResource(R.drawable.ic_battery_medium_24dp)
-      PowerLevel.LOW -> setImageResource(R.drawable.ic_battery_low_24dp)
-      PowerLevel.EMPTY -> setImageResource(R.drawable.ic_battery_empty_24dp)
-    }
-    
-    //    if (it == PowerLevel.EMPTY) {
-    //      val anim = AnimationUtils.loadAnimation(context, R.anim.blink)
-    //      animation = anim
-    //      animation.startNow()
-    //    }
-    //    else if (animation != null && animation.hasStarted()) {
-    //      animation.cancel()
-    //      animation.reset()
-    //      animation = null
-    //    }
-  }
+@BindingAdapter("battery")
+fun ImageView.setBattery(battery: Battery?){
+  // TODO: Import charging icon and implement.
 }
 
 @BindingAdapter("tintDrawable")

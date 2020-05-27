@@ -95,7 +95,7 @@
         android:layout_marginBottom="@dimen/spacing_standard"
         app:layout_constraintBottom_toTopOf="@id/progress_animator"
         app:layout_constraintStart_toStartOf="@+id/icon_bluetooth"
-        app:powerLevel="@{controller.powerLevel}"
+        app:battery="@{controller.battery}"
         app:visibleOrInvisibleFade="@{controller.isConnected}" />
 
       <TextView

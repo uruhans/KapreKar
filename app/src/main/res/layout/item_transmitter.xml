@@ -58,7 +58,7 @@
         app:layout_constraintHorizontal_bias="1"
         app:layout_constraintStart_toStartOf="@+id/name"
         app:layout_constraintTop_toTopOf="@+id/name"
-        app:powerLevel="@{item.currentPowerLevel}"
+        app:battery="@{item.battery}"
         tools:src="@drawable/ic_battery_full_24dp" />
 
       <TextView

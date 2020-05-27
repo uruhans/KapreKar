@@ -1,6 +1,6 @@
 package com.coloplast.olympus.bluetooth.businesslayer.enums
 
-enum class Battery(val id: Int) {
+enum class BatteryState(val id: Int) {
   OK(0),
   BATTERY_LOW(1),
   SHUTTING_DOWN(2),
@@ -8,8 +8,8 @@ enum class Battery(val id: Int) {
   UNKNOWN(-1);
   
   companion object {
-    fun fromId(id: UByte): Battery {
-      return values().associateBy { battery: Battery -> battery.id }[id.toInt()]
+    fun fromId(id: UByte): BatteryState {
+      return values().associateBy { batteryState: BatteryState -> batteryState.id }[id.toInt()]
         ?: UNKNOWN
     }
   }

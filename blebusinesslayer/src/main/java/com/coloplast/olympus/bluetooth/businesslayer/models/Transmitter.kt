@@ -11,7 +11,7 @@ data class Transmitter(
   val patchType: PatchType,
   val compromised: Compromised,
   val rawRotationalAngle: Int,
-  val battery: Battery
+  val batteryState: BatteryState
 ) {
   
   /**
@@ -20,7 +20,7 @@ data class Transmitter(
   fun getState(): TransmitterState {
     return when {
       waterIngressDetection == WaterIngressDetection.TRIGGERED -> TransmitterState.WATER_INGRESS_DETECTION
-      battery == Battery.CHARGING -> TransmitterState.BATTERY_CHARGING
+      batteryState == BatteryState.CHARGING -> TransmitterState.BATTERY_CHARGING
       attached == Attached.DETACHED -> TransmitterState.DETACHED
       waterIngressDetection == WaterIngressDetection.OK && (attached == Attached.ATTACHED_ON_PATCH || attached == Attached.ATTACHED_ON_BODY) -> TransmitterState.OK
       else -> TransmitterState.UNKNOWN

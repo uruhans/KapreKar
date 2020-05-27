@@ -61,7 +61,7 @@ object OlympusWirelessProtocol {
         val compromised = Compromised.fromId(it[9].toUByte())
       
         val rawRotationalAngle = it[10].toInt()
-        val battery = Battery.fromId(it[11].toUByte())
+        val battery = BatteryState.fromId(it[11].toUByte())
       
         StatusVector(
           Patch(sensor0, sensor1, sensor2, sensor3, sensor4, sensor5),

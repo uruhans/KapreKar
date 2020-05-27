@@ -11,7 +11,7 @@
       type="com.coloplast.olympus.ui.feature.transmitters.models.TransmitterItem" />
   </data>
 
-  <merge parentTag="FrameLayout">
+  <merge tools:parentTag="FrameLayout">
 
     <TextView
       android:id="@+id/deleteButton"

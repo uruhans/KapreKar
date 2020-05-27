@@ -10,6 +10,7 @@
   <com.coloplast.olympus.ui.common.widgets.TransmitterCardView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginEnd="@dimen/spacing_larger"
     app:transmitterItem="@{transmitterItem}"
     app:editState="@{transmitterItem.onEdit}" />
 </layout>

@@ -11,11 +11,7 @@
       type="com.coloplast.olympus.ui.feature.transmitters.models.TransmitterItem" />
   </data>
 
-  <FrameLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginEnd="@dimen/spacing_larger"
-    android:background="@drawable/shape_deletable_cardview_background">
+  <merge parentTag="FrameLayout">
 
     <TextView
       android:id="@+id/deleteButton"
@@ -96,6 +92,6 @@
 
     </androidx.cardview.widget.CardView>
 
-  </FrameLayout>
+  </merge>
 
 </layout>

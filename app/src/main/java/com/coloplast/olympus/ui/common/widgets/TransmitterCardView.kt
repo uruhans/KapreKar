@@ -1,10 +1,14 @@
 package com.coloplast.olympus.ui.common.widgets
 
+import android.R.attr
 import android.animation.ObjectAnimator
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
+import androidx.core.view.marginEnd
+import androidx.core.view.updateMargins
+import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ViewTransmitterCardBinding
 import com.coloplast.olympus.ui.feature.transmitters.models.TransmitterItem
 
@@ -18,7 +22,9 @@ class TransmitterCardView @JvmOverloads constructor(
 ) : FrameLayout(context, attrs, defStyleAttr){
 
   private val inflater = LayoutInflater.from(context)
-  private val viewBinding = ViewTransmitterCardBinding.inflate(inflater, this, true)
+  private val viewBinding = ViewTransmitterCardBinding.inflate(inflater, this, true).apply {
+    background = context.getDrawable(R.drawable.shape_deletable_cardview_background)
+  }
 
   fun setEditState(state: Boolean){
     // X Axis difference from original position

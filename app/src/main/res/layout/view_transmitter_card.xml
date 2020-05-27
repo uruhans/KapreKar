@@ -44,7 +44,8 @@
         <ImageView
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:src="@{item.connectionState == BleConnectionState.CONNECTED ? @drawable/transmitter_side : @drawable/transmitter_side_2}"
+          android:src="@drawable/transmitter_side"
+          visibleOrGone="@{item.connectionState == BleConnectionState.CONNECTED}"
           app:layout_constraintBottom_toBottomOf="parent"
           app:layout_constraintStart_toStartOf="parent"
           app:layout_constraintTop_toTopOf="parent" />

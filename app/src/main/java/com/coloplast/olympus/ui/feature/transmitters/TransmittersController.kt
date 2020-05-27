@@ -15,6 +15,7 @@ import com.coloplast.olympus.ui.common.CustomToolbarController
 import com.coloplast.olympus.ui.common.DrawerStateDispatcher
 import com.coloplast.olympus.ui.common.dialogs.BaseDialogController
 import com.coloplast.olympus.ui.common.dialogs.DialogController
+import com.coloplast.olympus.ui.common.extensions.toggle
 import com.coloplast.olympus.ui.feature.transmitters.add.AddTransmitterFlowController
 import com.coloplast.olympus.ui.feature.transmitters.models.SectionDivider
 import com.coloplast.olympus.ui.feature.transmitters.models.SmallHeaderItem
@@ -40,12 +41,13 @@ class TransmittersController(args: Bundle? = null) :
   val itemBinding: OnItemBindClass<Any> = OnItemBindClass<Any>()
     .map(SmallHeaderItem::class.java, BR.item, R.layout.item_small_header)
     .map(SectionDivider::class.java, BR.item, R.layout.item_recyclerview_section_divider)
-    .map(TransmitterItem::class.java, BR.item, R.layout.item_transmitter)
+    .map(TransmitterItem::class.java, BR.transmitterItem, R.layout.item_transmitter_cardview_wrapper)
 
   val hasTransmittersAdded = ObservableBoolean(false)
   val canAddMoreTransmitters = ObservableBoolean(true)
   val searchEnabled = ObservableBoolean(true)
   val retryPressed = ObservableBoolean(false)
+  val editEnabled = ObservableBoolean(false)
 
   private var dialogController: DialogController? = null
   private var transmitterToDelete: Transmitter? = null
@@ -73,7 +75,7 @@ class TransmittersController(args: Bundle? = null) :
             SmallHeaderItem(R.string.transmitters_not_attached)
           )
 
-          uiModel.devices.map { TransmitterItem(it, this) }
+          uiModel.devices.map { TransmitterItem(it, editEnabled, this) }
             .also { list.addAll(it) }
 
           list.filterIsInstance(TransmitterItem::class.java).forEach { transmitterItem ->
@@ -135,17 +137,21 @@ class TransmittersController(args: Bundle? = null) :
     }
   }
 
+  fun onEditClicked(){
+    editEnabled.toggle()
+  }
+
   private fun allConnected() : Boolean {
     // no reason to run through each transmitter if the current uiModel state is already *not* connected
     return items.filterIsInstance<TransmitterItem>().all { it.connectionState.get() == BleConnectionState.CONNECTED }
   }
 
-  override fun onTransmitterClicked(transmitter: Transmitter) {
+  override fun onDeleteTransmitter(transmitter: Transmitter) {
     transmitterToDelete = transmitter
 
     dialogController = DialogController.create(
       this,
-      1000,
+      REQUEST_CODE_1000,
       R.string.dialog_delete_transmitter_title,
       R.string.dialog_delete_transmitter_title,
       R.string.generic_ok,
@@ -158,7 +164,7 @@ class TransmittersController(args: Bundle? = null) :
 
   override fun onPositiveButtonClicked(requestCode: Int) {
     when (requestCode) {
-      1000 -> {
+      REQUEST_CODE_1000 -> {
         dialogController?.dismissDialog(true)
       }
     }
@@ -166,7 +172,7 @@ class TransmittersController(args: Bundle? = null) :
 
   override fun onNeutralButtonClicked(requestCode: Int) {
     when (requestCode) {
-      1000 -> {
+      REQUEST_CODE_1000 -> {
         dialogController?.dismissDialog(false)
       }
     }
@@ -174,7 +180,7 @@ class TransmittersController(args: Bundle? = null) :
 
   override fun onDialogDismissed(requestCode: Int) {
     when (requestCode) {
-      1000 -> {
+      REQUEST_CODE_1000 -> {
         transmitterToDelete?.let {
           deleteTransmitterRelay.accept(it.macAddress)
         }
@@ -221,6 +227,7 @@ class TransmittersController(args: Bundle? = null) :
 
   companion object {
     private const val TAG_CONTROLLER = "transmitters_controller"
+    private const val REQUEST_CODE_1000 = 1000
 
     fun routerTransaction(): RouterTransaction {
       return RouterTransaction.with(TransmittersController())

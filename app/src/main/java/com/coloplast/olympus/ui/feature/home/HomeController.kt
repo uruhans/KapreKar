@@ -132,8 +132,8 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
           }
         }
         is HomeUiModel.DeviceUpdate -> {
-          val updatedStateChange = transmitterManager.stateChangeFromActiveTransmitter(uiModel.stateChange)
-          val stateUpdate = transmitterManager.determineTxLayerQuestioning(updatedStateChange)
+          val updatedStateChange = transmitterManager.determineCurrentlyActiveTransmitterAndReturnStateChangeFromIt(uiModel.stateChange)
+          val stateUpdate = transmitterManager.determineTransmitterPatchQuestioning(updatedStateChange)
 
           powerLevel.set(stateUpdate.bleDevice.peripheral?.powerLevel)
           isConnected.set(stateUpdate.bleDevice.isConnected())
@@ -296,7 +296,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   override fun onNegativeButtonClicked(requestCode: Int) {
     when (requestCode) {
       REQUEST_CODE_TRANSMITTERS_CHANGED -> {
-        transmitterManager.getStitchArrayFromOther()?.let {
+        transmitterManager.getStitchBytesFromOtherTransmitter()?.let {
           stitchRelay.accept(it)
         }
         imageDialogController?.dismissDialog(false)

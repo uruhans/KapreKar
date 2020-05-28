@@ -19,6 +19,7 @@ import com.coloplast.olympus.ui.common.extensions.tintDrawable
 import com.coloplast.olympus.ui.common.extensions.visibleOrGoneFade
 import com.coloplast.olympus.ui.common.listeners.AnimatorListenerImpl
 import com.coloplast.olympus.utils.UiUtils
+import com.coloplast.olympus.utils.UiUtils.dpToPx
 
 class PatchView @JvmOverloads constructor(
   context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
@@ -37,6 +38,8 @@ class PatchView @JvmOverloads constructor(
   private var rawRotationalAngle: Int? = null
   private var listener: Listener? = null
   
+  private var patchSize: Int = 0
+  
   private val errorStateChanged = object : Observable.OnPropertyChangedCallback() {
     override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
       if (isInError.get()) {
@@ -52,13 +55,25 @@ class PatchView @JvmOverloads constructor(
   }
   
   init {
+    initialize()
+  }
+
+  private fun initialize(sizeDp: Int = 0) {
+    removeAllViews()
     background.setImageResource(R.drawable.ic_detailed_plate_ok)
+    setSize(background, sizeDp)
+
     addView(background)
     background.visibility = View.VISIBLE
-    
+
     isInError.addOnPropertyChangedCallback(errorStateChanged)
     clipChildren = false
     clipToPadding = false
+  }
+
+  fun setSize(sizeDp: Int) {
+    patchSize = sizeDp
+    initialize(patchSize)
   }
   
   fun isDetailView(isDetailView: Boolean = false) {
@@ -108,13 +123,13 @@ class PatchView @JvmOverloads constructor(
           if (newPatch.innerSensor1 == SensorStatus.BREACH) {
             patchIcons.add(R.drawable.ic_detailed_plate_inner_nw)
           }
-          
+
           if (newPatch.innerSensor2 == SensorStatus.BREACH) {
-            patchIcons.add(R.drawable.ic_detailed_plate_inner_ne)
-          }
-          
-          if (newPatch.innerSensor3 == SensorStatus.BREACH) {
             patchIcons.add(R.drawable.ic_detailed_plate_inner_s)
+          }
+
+          if (newPatch.innerSensor3 == SensorStatus.BREACH) {
+            patchIcons.add(R.drawable.ic_detailed_plate_inner_ne)
           }
         }
         else {
@@ -125,13 +140,13 @@ class PatchView @JvmOverloads constructor(
             if (newPatch.innerSensor1 == SensorStatus.BREACH) {
               patchIcons.add(R.drawable.ic_detailed_plate_outer_inner_nw)
             }
-            
+
             if (newPatch.innerSensor2 == SensorStatus.BREACH) {
-              patchIcons.add(R.drawable.ic_detailed_plate_outer_inner_ne)
-            }
-            
-            if (newPatch.innerSensor3 == SensorStatus.BREACH) {
               patchIcons.add(R.drawable.ic_detailed_plate_outer_inner_s)
+            }
+
+            if (newPatch.innerSensor3 == SensorStatus.BREACH) {
+              patchIcons.add(R.drawable.ic_detailed_plate_outer_inner_ne)
             }
           }
         }
@@ -157,11 +172,22 @@ class PatchView @JvmOverloads constructor(
         imageView.apply {
           setImageResource(it)
           addView(this)
+
+          setSize(this, patchSize)
           visibleOrGoneFade(true)
         }
       }
       
       addPulseAnimation(animatePulse)
+    }
+  }
+  
+  private fun setSize(imageView: ImageView, sizeDp: Int) {
+    if(isDetailView && sizeDp > 0) {
+      val layoutParams = imageView.layoutParams
+      layoutParams.height = sizeDp.dpToPx().toInt()
+      layoutParams.width = sizeDp.dpToPx().toInt()
+      imageView.layoutParams = layoutParams
     }
   }
   

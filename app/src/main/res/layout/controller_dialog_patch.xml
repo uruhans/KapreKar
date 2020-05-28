@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools">
+
+  <data>
+
+    <import type="android.view.View" />
+
+    <variable
+      name="controller"
+      type="com.coloplast.olympus.ui.dialogs.PatchDialogController" />
+  </data>
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/transparent_black"
+    android:onClick="@{() -> controller.onDismissClicked()}">
+
+    <androidx.cardview.widget.CardView
+      android:id="@+id/cardView"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="30dp"
+      android:layout_marginEnd="30dp"
+      app:cardBackgroundColor="@color/cardview_background"
+      app:cardCornerRadius="@dimen/cardview_corner_radius"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent">
+
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <FrameLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content">
+
+          <ImageView
+            android:id="@+id/button_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="@dimen/spacing_standard"
+            android:layout_marginEnd="@dimen/spacing_standard"
+            android:foreground="?attr/actionBarItemBackground"
+            android:onClick="@{() -> controller.onCloseClicked()}"
+            android:src="@drawable/main_sidemenu_close" />
+
+          <com.coloplast.olympus.ui.common.widgets.PatchView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/spacing_triple"
+            android:layout_marginBottom="@dimen/spacing_double"
+            app:isDetailView="@{true}"
+            app:patch="@{controller.currentPatch}"
+            app:rawRotationalAngle="@{controller.rawRotationalAngle}"
+            app:size="@{200}" />
+
+        </FrameLayout>
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/spacing_double"
+          android:orientation="vertical"
+          app:visibleOrGone="@{!controller.breachDetected}">
+
+          <TextView
+            style="@style/TextStyle.Roboto.Regular.ClearGrey.16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="60dp"
+            android:text="@string/overlay_no_breach_title" />
+
+        </LinearLayout>
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/spacing_double"
+          android:orientation="vertical"
+          app:visibleOrGone="@{controller.breachDetected}"
+          tools:visibility="gone">
+
+          <TextView
+            style="@style/TextStyle.Roboto.Regular.ClearGrey.16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/overlay_breach_title" />
+
+          <!-- TODO - get breach times from first and second breach -->
+          <TextView
+            style="@style/TextStyle.Coloplast.Regular.DarkGrey.18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/spacing_standard"
+            android:text="@string/overlay_breach_first" />
+
+          <TextView
+            style="@style/TextStyle.Coloplast.Regular.DarkGrey.18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/spacing_quarter"
+            android:layout_marginBottom="60dp"
+            android:text="@string/overlay_breach_second" />
+        </LinearLayout>
+      </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

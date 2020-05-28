@@ -14,6 +14,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/spacing_standard"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:onClick="@{() -> item.onItemClicked()}"
     app:cardBackgroundColor="@color/white"
     app:cardCornerRadius="8dp"
     app:cardElevation="4dp"
@@ -21,8 +23,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
       android:layout_width="match_parent"
-      android:layout_height="84dp"
-      android:onClick="@{() -> item.onItemClicked()}">
+      android:layout_height="84dp">
 
       <TextView
         android:id="@+id/name"

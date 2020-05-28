@@ -47,6 +47,12 @@
     <item name="android:background">?android:attr/selectableItemBackground</item>
     <item name="android:textColor">@color/colorAccent</item>
   </style>
+
+  <style name="CardViewStyle" parent="CardView">
+    <item name="cardCornerRadius">@dimen/cardview_corner_radius</item>
+    <item name="cardElevation">@dimen/cardview_elevation_default</item>
+    <item name="cardBackgroundColor">@color/cardview_background</item>
+  </style>
   <!--
     <style name="SubmitButton">
       <item name="android:background">@drawable/button_submit</item>
@@ -160,9 +166,17 @@
     <item name="android:fontFamily">@font/coloplast_bold_italic</item>
   </style>
 
+  <style name="TextStyle.Roboto.Medium.Red" parent="TextStyle.Roboto.Medium">
+    <item name="android:textColor">@color/text_red</item>
+  </style>
+
+  <style name="TextStyle.Roboto.Regular.Red" parent="TextStyle.Roboto.Regular">
+    <item name="android:textColor">@color/text_red</item>
+  </style>
+
   <style name="TextStyle.Roboto.Regular.Grey" parent="TextStyle.Roboto.Regular">
-  <item name="android:textColor">@color/text_grey</item>
-</style>
+    <item name="android:textColor">@color/text_grey</item>
+  </style>
 
   <style name="TextStyle.Roboto.Regular.ClearGrey" parent="TextStyle.Roboto.Regular">
     <item name="android:textColor">@color/text_clear_grey</item>
@@ -196,6 +210,10 @@
     <item name="android:textSize">@dimen/text_18</item>
   </style>
 
+  <style name="TextStyle.Roboto.Medium.Red.18" parent="TextStyle.Roboto.Medium.Red">
+    <item name="android:textSize">18sp</item>
+  </style>
+
   <style name="TextStyle.Coloplast.Regular.DarkGrey" parent="TextStyle.Roboto.Regular">
     <item name="android:textColor">@color/text_dark_grey</item>
   </style>
@@ -210,6 +228,10 @@
 
   <style name="TextStyle.Coloplast.Bold.Grey" parent="TextStyle.Coloplast.Bold">
     <item name="android:textColor">@color/text_grey</item>
+  </style>
+
+  <style name="TextStyle.Roboto.Regular.Red.18" parent="TextStyle.Roboto.Regular.Red">
+    <item name="android:textSize">18sp</item>
   </style>
 
   <style name="TextStyle.Coloplast.Bold.DarkGrey.36" parent="TextStyle.Coloplast.Bold.DarkGrey">

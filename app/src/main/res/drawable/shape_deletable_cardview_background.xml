@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+  <item
+    android:left="@dimen/spacing_larger"
+    android:top="@dimen/cardview_elevation_default"
+    android:bottom="@dimen/cardview_elevation_default"
+    android:right="@dimen/cardview_elevation_default">
+    <shape>
+      <solid android:color="@color/five_percent_transparent_black"/>
+      <corners android:radius="@dimen/cardview_corner_radius"/>
+    </shape>
+  </item>
+</layer-list>

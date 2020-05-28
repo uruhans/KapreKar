@@ -43,13 +43,15 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginEnd="@dimen/spacing_standard"
-      android:text="@string/transmitters_edit"
+      android:text="@{controller.editEnabled ? @string/transmitters_done : @string/transmitters_edit}"
+      android:onClick="@{() -> controller.onEditClicked()}"
       app:layout_constraintBottom_toBottomOf="@+id/headline"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintTop_toTopOf="@+id/headline"
       app:visibleOrInvisible="@{controller.hasTransmittersAdded}" />
 
     <include
+      android:id="@+id/state_no_transmitters"
       layout="@layout/state_no_transmitters"
       android:layout_width="0dp"
       android:layout_height="0dp"

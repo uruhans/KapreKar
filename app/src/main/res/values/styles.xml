@@ -182,6 +182,14 @@
     <item name="android:textColor">@color/text_clear_grey</item>
   </style>
 
+  <style name="TextStyle.Roboto.Regular.ClearGrey.16" parent="TextStyle.Roboto.Regular.ClearGrey">
+    <item name="android:textSize">@dimen/text_16</item>
+  </style>
+
+  <style name="TextStyle.Roboto.Regular.ClearGrey.18" parent="TextStyle.Roboto.Regular.ClearGrey">
+    <item name="android:textSize">@dimen/text_18</item>
+  </style>
+
   <style name="TextStyle.Coloplast.Regular.ClearGrey" parent="TextStyle.Coloplast.Regular">
     <item name="android:textColor">@color/text_clear_grey</item>
   </style>
@@ -190,17 +198,7 @@
     <item name="android:textColor">@color/text_clear_grey</item>
     <item name="android:textSize">@dimen/text_16</item>
   </style>
-
-  <style name="TextStyle.Roboto.Regular.ClearGrey.16" parent="TextStyle.Roboto.Regular">
-    <item name="android:textColor">@color/text_clear_grey</item>
-    <item name="android:textSize">@dimen/text_16</item>
-  </style>
-
-  <style name="TextStyle.Roboto.Regular.ClearGrey.18" parent="TextStyle.Roboto.Regular">
-    <item name="android:textColor">@color/text_clear_grey</item>
-    <item name="android:textSize">@dimen/text_18</item>
-  </style>
-
+  
   <style name="TextStyle.Roboto.Medium.Turquoise" parent="TextStyle.Roboto.Medium">
     <item name="android:textColor">@color/text_turquoise</item>
   </style>

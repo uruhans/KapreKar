@@ -3,6 +3,7 @@ package com.coloplast.olympus.bluetooth.businesslayer
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
 import com.coloplast.olympus.bluetooth.businesslayer.models.BleDevice
+import com.coloplast.olympus.bluetooth.businesslayer.models.DeviceInfo
 import com.coloplast.olympus.bluetooth.businesslayer.models.RawDataPackage
 import com.coloplast.olympus.bluetooth.businesslayer.models.ScanResult
 import io.reactivex.Completable
@@ -24,4 +25,6 @@ interface BluetoothManager {
   fun connectedDevicesObservable(): Observable<List<BleDevice>>
   fun resetTransmitter(macAddress: String) : Completable
   fun stitchTransmitter(macAddress: String, data: ByteArray) : Completable
+
+  fun readDeviceInfo(macAddress: String) : Observable<DeviceInfo>
 }

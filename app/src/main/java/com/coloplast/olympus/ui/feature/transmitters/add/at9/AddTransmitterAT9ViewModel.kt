@@ -12,7 +12,9 @@ import com.coloplast.olympus.ui.feature.transmitters.add.at9.model.SearchTransmi
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 class AddTransmitterAT9ViewModel(private val bluetoothManager: BluetoothManager,
@@ -65,17 +67,21 @@ class AddTransmitterAT9ViewModel(private val bluetoothManager: BluetoothManager,
           .flatMap {
             // keep an eye out for the connection state of the transmitter
             bluetoothManager.bleConnectionStateObservable(scanResult.macAddress)
-              // skip the first because it's always disconnected
-              .skip(1)
+              .skipWhile { it == BleConnectionState.DISCONNECTED }
               // we are only interested in fully connected or disconnected
               .filter { it == BleConnectionState.CONNECTED || it == BleConnectionState.DISCONNECTED }
               .flatMap {
                 if(it == BleConnectionState.CONNECTED) {
-                  // connection was successful - return and notify controller
-                  Observable.just(SearchTransmitterUiModel.ConnectionSuccessful(scanResult.macAddress))
-                    // we have a slight delay here, because if bonding actually fails
-                    // we will hit CONNECTED first, followed by DISCONNECTED
-                    .delay(2, TimeUnit.SECONDS)
+                  bluetoothManager.readDeviceInfo(scanResult.macAddress)
+                    .flatMap { deviceInfo ->
+                      // TODO - CPO-415: actually store the device info in database
+                      Timber.d("DeviceInfo: $deviceInfo")
+                      // connection was successful - return and notify controller
+                      Observable.just(SearchTransmitterUiModel.ConnectionSuccessful(scanResult.macAddress))
+                        // we have a slight delay here, because if bonding actually fails
+                        // we will hit CONNECTED first, followed by DISCONNECTED
+                        .delay(2, TimeUnit.SECONDS)
+                    }
                 }
                 else {
                   // connection was unsuccessful, so we remove the transmitter from the database again.
@@ -86,6 +92,10 @@ class AddTransmitterAT9ViewModel(private val bluetoothManager: BluetoothManager,
                     .toObservable()
                 }
               }
+          }
+          .onErrorReturn {
+            Timber.e(it)
+            SearchTransmitterUiModel.ConnectionFailure(scanResult.macAddress)
           }
       }
 

@@ -4,7 +4,7 @@ import com.coloplast.olympus.bluetooth.businesslayer.extensions.asUUID
 
 object DeviceInformation {
   val UUID = "180a".asUUID()
-  
+
   object Characteristics {
     val MANUFACTURER_NAME = "2a29".asUUID()
     val HARDWARE_REVISION = "2a27".asUUID()

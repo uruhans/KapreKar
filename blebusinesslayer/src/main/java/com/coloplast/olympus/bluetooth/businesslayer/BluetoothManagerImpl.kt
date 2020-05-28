@@ -9,6 +9,7 @@ import com.coloplast.olympus.bluetooth.businesslayer.exceptions.GattCallbackTime
 import com.coloplast.olympus.bluetooth.businesslayer.exceptions.GattException
 import com.coloplast.olympus.bluetooth.businesslayer.models.*
 import com.coloplast.olympus.bluetooth.businesslayer.services.BatteryPowerService
+import com.coloplast.olympus.bluetooth.businesslayer.services.DeviceInformation
 import com.coloplast.olympus.bluetooth.businesslayer.services.OlympusWirelessProtocol
 import com.dawn.bluetooth.BluetoothHandler
 import com.jakewharton.rxrelay2.PublishRelay
@@ -21,25 +22,28 @@ import com.polidea.rxandroidble2.exceptions.BleGattCallbackTimeoutException
 import com.polidea.rxandroidble2.exceptions.BleGattException
 import io.reactivex.Completable
 import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.exceptions.UndeliverableException
 import io.reactivex.functions.BiFunction
+import io.reactivex.functions.Function4
 import io.reactivex.plugins.RxJavaPlugins
 import timber.log.Timber
 import java.util.*
 
 class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothManager {
-  
+
   // a reference to the bluetoothHandler
   private val bluetoothHandler = BluetoothHandler(context, isDebugging)
-  
+
   // a cached version of the bleDevices that we are currently connected to
   private val bleDevices = mutableMapOf<String, RxBleDevice>()
-  
+
   // a cached version of the ble connections that we are currently connected to
   private val bleConnections = mutableMapOf<String, RxBleConnection>()
-  
+
   private val bleDeviceRelay = PublishRelay.create<List<BleDevice>>()
-  
+  private val bleConnectionRelay = PublishRelay.create<Map<String, RxBleConnection>>()
+
   init {
     /**
      * We set a custom error handler - first of all to convert rx library exceptions into something our app can handle
@@ -58,7 +62,7 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
       }
     }
   }
-  
+
   /**
    * An observable to listen to the current state of the BlueTooth radio, including PermissionStates and Location Services check
    * - output -> current bluetooth state (ready to SCAN/CONNECT when BluetoothState -> BluetoothState.READY)
@@ -87,15 +91,15 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
       }
       .startWith(BluetoothState.UNDEFINED)
   }
-  
+
   override fun scanBeacons() : Observable<String> {
     return bluetoothHandler.scanBeacons(OlympusWirelessProtocol.UUID)
   }
-  
+
   override fun scanSpecificBeacon(macAddress: String) : Observable<String> {
     return bluetoothHandler.scanBeacons(OlympusWirelessProtocol.UUID, macAddress)
   }
-  
+
   /**
    * get a specific BleDevice based on it's MacAddress
    * if the device has already been connected too, it is stored locally and returned from here if possible, else we get it from the BluetoothHandler
@@ -112,7 +116,7 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
       }
     }
   }
-  
+
   /**
    * Initiate a scan of ble devices filtered by the Olympus Wireless Protocol UUID to limit results only to specific devices
    * - output -> BleDevice containing BleDevice Name, MacAddress and current ConnectionState
@@ -122,7 +126,7 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
       // trimming the name to make sure we dont have whitespaces
       .map { ScanResult(it.bleDevice.name?.trim(), it.bleDevice.macAddress, it.rssi) }
   }
-  
+
   /**
    * gets the current state of a BleDevice
    * - output -> BleDevice containing the BleDevice name, macAddress and current ConnectionState
@@ -134,24 +138,37 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
           .map { BleDevice(rxBleDevice.name, rxBleDevice.macAddress, BleConnectionState.fromRxBleState(it)) }
       }
   }
-  
+
   override fun bleDisconnectedObservable(macAddress: String): Observable<BleConnectionState> {
     return bleConnectionStateObservable(macAddress)
       .filter { it == BleConnectionState.DISCONNECTED || it == BleConnectionState.DISCONNECTING }
       .flatMap { bleConnectionState ->
         getBleDevice(macAddress)
-          .doOnNext { removeDeviceFromConnectedList(it) }
+          .doOnNext {
+            removeDeviceFromConnectedList(it)
+            removeConnectionFromList(it.macAddress)
+          }
           .map { bleConnectionState }
       }
   }
-  
+
   override fun bleConnectionStateObservable(macAddress: String): Observable<BleConnectionState> {
-    return rxBleDeviceConnectionState(macAddress)
-      .map { it.connectionState }
+    return Observable.combineLatest(
+      rxBleDeviceConnectionState(macAddress),
+      bleConnectionObservable(),
+        BiFunction { bleDevice: BleDevice, rxConnections: Map<String, RxBleConnection> ->
+          if (bleDevice.connectionState == BleConnectionState.CONNECTED) {
+            if (rxConnections.none { it.key == macAddress }) {
+              return@BiFunction BleConnectionState.CONNECTING
+            }
+          }
+          return@BiFunction bleDevice.connectionState
+        })
+      .doOnNext { Timber.e("ConnectionState: $it") }
       .publish()
       .refCount()
   }
-  
+
   /**
    * connect to a specific ble device using it's macAddress
    *
@@ -164,14 +181,14 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
     return getBleDevice(macAddress)
       .flatMap { rxBleDevice ->
         bluetoothHandler.connectRxBleDevice(rxBleDevice)
-          .doOnNext { addDeviceToConnectedList(rxBleDevice) }
           .map {
-            bleConnections[macAddress] = it
+            addDeviceToConnectedList(rxBleDevice)
+            addConnectionToList(macAddress, it)
             macAddress
           }
       }
   }
-  
+
   /**
    * subscribe to the PeripheralObservable (which returns the current status of the transmitter)
    * - output -> a BleDevice containing name, macAddress, connectionState and Peripheral Status
@@ -183,7 +200,7 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
         BleDevice(rxBleDevice.name, rxBleDevice.macAddress, BleConnectionState.fromRxBleState(rxBleDevice.connectionState), it)
       }
   }
-  
+
   /**
    * setup notifications to get notified when changes occur with the ble transmitter
    * 1. setup notifications for StatusVector
@@ -202,7 +219,7 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
       })
       .distinctUntilChanged()
   }
-  
+
   /**
    * setup notifications for the BATTERY POWER characteristics on the BatteryPowerService
    *
@@ -215,7 +232,7 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
       .startWith(rxBleConnection.readCharacteristic(BatteryPowerService.Characteristics.POWER).toObservable())
       .compose(BatteryPowerService.transformer)
   }
-  
+
   /**
    * setup notifications for the STATUS VECTOR on the Olympus Wireless Protocol
    *
@@ -232,7 +249,7 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
       .filter { statusVector -> statusVector.copyOfRange(0, 6).none { sensor -> sensor.toInt() == -1 } }
       .compose(OlympusWirelessProtocol.statusTransformer)
   }
-  
+
   /**
    * setup notifications for the RawDataPackage on the Olympus Wireless Protocol (currently set to notify roughly every 10 seconds)
    *
@@ -242,7 +259,7 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
   override fun setupOlympusRawDataPackageNotifications(macAddress: String): Observable<RawDataPackage> {
     // fetch the ongoing connection based on the macAddress
     val rxBleConnection = bleConnections[macAddress]
-    
+
     return if (rxBleConnection == null) {
       Observable.empty()
     }
@@ -253,24 +270,44 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
         .compose(OlympusWirelessProtocol.rawDataPackageTransformer)
     }
   }
-  
+
   override fun connectedDevicesObservable(): Observable<List<BleDevice>> {
     return bleDeviceRelay.publish()
       .refCount()
       // todo - this does not contain the latest peripheral - it probably should
       .startWith(bleDevices.map { BleDevice(it.value.name, it.value.macAddress, BleConnectionState.fromRxBleState(it.value.connectionState)) })
   }
-  
+
   override fun connectedDeviceObservable(macAddress: String): Observable<BleDevice> {
     return getBleDevice(macAddress)
       .map { BleDevice(it.name, it.macAddress, BleConnectionState.fromRxBleState(it.connectionState)) }
   }
-  
+
   private fun addDeviceToConnectedList(rxBleDevice: RxBleDevice) {
     synchronized(bleDevices) {
       bleDevices[rxBleDevice.macAddress] = rxBleDevice
     }
     notifyConnectedDevices()
+  }
+
+  private fun bleConnectionObservable() : Observable<Map<String, RxBleConnection>> {
+    return bleConnectionRelay.publish().refCount().startWith(bleConnections)
+  }
+
+  private fun addConnectionToList(macAddress: String, rxBleConnection: RxBleConnection) {
+    synchronized(bleConnections) {
+      bleConnections[macAddress] = rxBleConnection
+    }
+
+    bleConnectionRelay.accept(bleConnections)
+  }
+
+  private fun removeConnectionFromList(macAddress: String) {
+    synchronized(bleConnections) {
+      bleConnections.remove(macAddress)
+    }
+
+    bleConnectionRelay.accept(bleConnections)
   }
 
   private fun removeDeviceFromConnectedList(rxBleDevice: RxBleDevice) {
@@ -308,6 +345,41 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
     else {
       rxConnection.writeCharacteristic(characteristic, data)
         .ignoreElement()
+    }
+  }
+
+  override fun readDeviceInfo(macAddress: String) : Observable<DeviceInfo> {
+    return Observable.combineLatest(
+      readCharacteristics(macAddress, DeviceInformation.Characteristics.MANUFACTURER_NAME).toObservable(),
+      readCharacteristics(macAddress, DeviceInformation.Characteristics.HARDWARE_REVISION).toObservable(),
+      readCharacteristics(macAddress, DeviceInformation.Characteristics.FIRMWARE_VERSION).toObservable(),
+      readCharacteristics(macAddress, DeviceInformation.Characteristics.SERIAL_NUMBER).toObservable(),
+      Function4 { manufacturer: ByteArray, hardwareRevision: ByteArray, firmwareVersion: ByteArray, serialNumber: ByteArray ->
+        DeviceInfo(
+          macAddress,
+          manufacturer.toString(Charsets.UTF_8),
+          hardwareRevision.toString(Charsets.UTF_8),
+          firmwareVersion.toString(Charsets.UTF_8),
+          serialNumber.toString(Charsets.UTF_8))
+      })
+  }
+
+//  override fun readTransmitterSettings(macAddress: String) : Completable {
+//    return readCharacteristics(macAddress, OlympusWirelessProtocol.Characteristics.SETTINGS)
+//      .compose(OlympusWirelessProtocol.settingsTransformer)
+//
+//  }
+
+
+  private fun readCharacteristics(macAddress: String, characteristic: UUID) : Single<ByteArray> {
+    val rxConnection = bleConnections[macAddress]
+
+    return if(rxConnection == null) {
+      Single.error(NullPointerException("No connection exist to device with address: [$macAddress] - Unable to read characteristic: [$characteristic]"))
+    }
+    else {
+      Timber.d("readCharacteristic: [$characteristic] on [$macAddress]")
+      rxConnection.readCharacteristic(characteristic)
     }
   }
 }

@@ -6,12 +6,13 @@ import com.coloplast.olympus.shared.models.Transmitter
 
 @Entity
 class DbTransmitter(
-  @PrimaryKey val id: String,
-  val customName: String
+  @PrimaryKey val serialNumber: String,
+  val name: String,
+  val userId: String? = null
 ) {
   
   fun toTransmitter(): Transmitter {
-    return Transmitter(id, customName)
+    return Transmitter(serialNumber, name)
   }
   
   companion object {

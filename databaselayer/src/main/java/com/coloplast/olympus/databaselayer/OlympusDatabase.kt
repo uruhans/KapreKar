@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import com.coloplast.olympus.databaselayer.dao.TransmitterDao
 import com.coloplast.olympus.databaselayer.entities.DbTransmitter
 
-@Database(entities = arrayOf(DbTransmitter::class), version = 1)
+@Database(entities = arrayOf(DbTransmitter::class), version = 3)
 abstract class OlympusDatabase : RoomDatabase() {
   
   abstract fun transmitterDao(): TransmitterDao

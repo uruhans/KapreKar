@@ -14,7 +14,6 @@ import com.coloplast.olympus.ui.feature.TransmitterManager
 import com.coloplast.olympus.ui.feature.home.models.StateTransformers
 import com.coloplast.olympus.ui.feature.statemachine.OverlayStateMachineImpl
 import com.coloplast.olympus.ui.feature.statemachine.UiStateMachineImpl
-import com.coloplast.olympus.ui.feature.statemachine.models.UiState
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
@@ -197,7 +196,7 @@ class BluetoothServiceViewModel(
           is DeviceResult.Error -> {
             // notify transmitter manager that this Tx was disconnected
             // if possible it will return the latest state change from the *other* Tx (used to update Ui)
-            val latestStateChangeFromOtherTx = transmitterManager.transmitterDisconnected(macAddress)
+            val latestStateChangeFromOtherTx = transmitterManager.onTransmitterDisconnect(macAddress)
             // return a disconnect to the service
             BluetoothServiceModel.Disconnected(latestStateChangeFromOtherTx)
           }

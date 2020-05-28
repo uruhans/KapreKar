@@ -1,6 +1,7 @@
 package com.coloplast.olympus.bluetooth.businesslayer.models
 
 import com.coloplast.olympus.bluetooth.businesslayer.enums.SensorStatus
+import com.coloplast.olympus.shared.moshi.MoshiSerializable
 
 /**
  * A Patch is a description of the states that the Sensors currently have
@@ -18,7 +19,7 @@ data class Patch(
   val wearSensor: SensorStatus,
   // p5
   val outerSensor: SensorStatus
-) {
+) : MoshiSerializable {
   
   // the list of inner sensors
   private val innerSensors = listOf(innerSensor1, innerSensor2, innerSensor3)

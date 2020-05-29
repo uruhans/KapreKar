@@ -13,6 +13,7 @@ class Preferences(applicationContext: Context) {
   var userToken: String by bindSharedPreference(applicationContext, USER_TOKEN, "")
   var activeTransmitter: String by bindSharedPreference(applicationContext, ACTIVE_TRANSMITTER, "")
   var latestStateFromActiveTx: String by bindSharedPreference(applicationContext, LATEST_STATE_FROM_ACTIVE_TRANSMITTER, "")
+  var leaks: String by bindSharedPreference(applicationContext, LEAKS, "")
 
   private fun clearUserToken() {
     userToken = ""
@@ -26,6 +27,7 @@ class Preferences(applicationContext: Context) {
     private const val USER_TOKEN: String = "USER_TOKEN"
     private const val ACTIVE_TRANSMITTER: String = "ACTIVE_TRANSMITTER"
     private const val LATEST_STATE_FROM_ACTIVE_TRANSMITTER: String = "LATEST_STATE_FROM_ACTIVE_TRANSMITTER"
+    private const val LEAKS: String = "LEAKS"
 
     @SuppressLint("StaticFieldLeak")
     private lateinit var preferences: Preferences

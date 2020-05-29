@@ -171,8 +171,8 @@
   </style>
 
   <style name="TextStyle.Roboto.Regular.Red" parent="TextStyle.Roboto.Regular">
-  <item name="android:textColor">@color/text_red</item>
-</style>
+    <item name="android:textColor">@color/text_red</item>
+  </style>
 
   <style name="TextStyle.Roboto.Regular.Grey" parent="TextStyle.Roboto.Regular">
     <item name="android:textColor">@color/text_grey</item>
@@ -180,6 +180,14 @@
 
   <style name="TextStyle.Roboto.Regular.ClearGrey" parent="TextStyle.Roboto.Regular">
     <item name="android:textColor">@color/text_clear_grey</item>
+  </style>
+
+  <style name="TextStyle.Roboto.Regular.ClearGrey.16" parent="TextStyle.Roboto.Regular.ClearGrey">
+    <item name="android:textSize">@dimen/text_16</item>
+  </style>
+
+  <style name="TextStyle.Roboto.Regular.ClearGrey.18" parent="TextStyle.Roboto.Regular.ClearGrey">
+    <item name="android:textSize">@dimen/text_18</item>
   </style>
 
   <style name="TextStyle.Coloplast.Regular.ClearGrey" parent="TextStyle.Coloplast.Regular">
@@ -190,7 +198,7 @@
     <item name="android:textColor">@color/text_clear_grey</item>
     <item name="android:textSize">@dimen/text_16</item>
   </style>
-
+  
   <style name="TextStyle.Roboto.Medium.Turquoise" parent="TextStyle.Roboto.Medium">
     <item name="android:textColor">@color/text_turquoise</item>
   </style>
@@ -204,6 +212,14 @@
     <item name="android:textSize">18sp</item>
   </style>
 
+  <style name="TextStyle.Coloplast.Regular.DarkGrey" parent="TextStyle.Roboto.Regular">
+    <item name="android:textColor">@color/text_dark_grey</item>
+  </style>
+
+  <style name="TextStyle.Coloplast.Regular.DarkGrey.18" parent="TextStyle.Coloplast.Regular.DarkGrey">
+    <item name="android:textSize">@dimen/text_18</item>
+  </style>
+
   <style name="TextStyle.Coloplast.Bold.DarkGrey" parent="TextStyle.Coloplast.Bold">
     <item name="android:textColor">@color/text_dark_grey</item>
   </style>
@@ -214,11 +230,6 @@
 
   <style name="TextStyle.Roboto.Regular.Red.18" parent="TextStyle.Roboto.Regular.Red">
     <item name="android:textSize">18sp</item>
-  </style>
-
-  <style name="TextStyle.Roboto.Regular.ClearGrey.18" parent="TextStyle.Roboto.Regular">
-    <item name="android:textColor">@color/text_clear_grey</item>
-    <item name="android:textSize">@dimen/text_18</item>
   </style>
 
   <style name="TextStyle.Coloplast.Bold.DarkGrey.36" parent="TextStyle.Coloplast.Bold.DarkGrey">
@@ -243,6 +254,23 @@
 
   <style name="TextStyle.Coloplast.Regular.ClearGrey.30" parent="TextStyle.Coloplast.Regular.ClearGrey">
     <item name="android:textSize">30sp</item>
+  </style>
+
+  <style name="Button">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">@dimen/cardview_button_height_default</item>
+    <item name="android:layout_marginStart">@dimen/spacing_standard</item>
+    <item name="android:layout_marginEnd">@dimen/spacing_standard</item>
+    <item name="android:layout_marginBottom">@dimen/spacing_double</item>
+    <item name="android:textAllCaps">false</item>
+    <item name="android:fontFamily">sans-serif-medium</item>
+    <item name="android:background">@drawable/button_color_accent</item>
+    <item name="android:textColor">@color/white</item>
+    <item name="android:textSize">@dimen/text_18</item>
+  </style>
+
+  <style name="Button.Selectable">
+    <item name="android:background">@drawable/button_selectable</item>
   </style>
 
 </resources>

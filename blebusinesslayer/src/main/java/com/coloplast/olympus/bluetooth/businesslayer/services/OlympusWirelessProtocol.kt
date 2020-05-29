@@ -2,10 +2,7 @@ package com.coloplast.olympus.bluetooth.businesslayer.services
 
 import com.coloplast.olympus.bluetooth.businesslayer.enums.*
 import com.coloplast.olympus.bluetooth.businesslayer.extensions.asUUID
-import com.coloplast.olympus.bluetooth.businesslayer.models.Patch
-import com.coloplast.olympus.bluetooth.businesslayer.models.RawDataPackage
-import com.coloplast.olympus.bluetooth.businesslayer.models.StatusVector
-import com.coloplast.olympus.bluetooth.businesslayer.models.Transmitter
+import com.coloplast.olympus.bluetooth.businesslayer.models.*
 import com.polidea.rxandroidble2.helpers.ValueInterpreter
 import io.reactivex.ObservableTransformer
 import timber.log.Timber
@@ -63,12 +60,20 @@ object OlympusWirelessProtocol {
         val compromised = Compromised.fromId(it[9].toUByte())
       
         val rawRotationalAngle = it[10].toInt()
-        val battery = BatteryState.fromId(it[11].toUByte())
+        val batteryState = BatteryState.fromId(it[11].toUByte())
       
         StatusVector(
           Patch(sensor0, sensor1, sensor2, sensor3, sensor4, sensor5),
-          Transmitter(waterIngressDetection, attached, patchType, compromised, rawRotationalAngle, battery)
+          Transmitter(waterIngressDetection, attached, patchType, compromised, rawRotationalAngle, batteryState)
         )
+      }
+  }
+
+  // TODO - CPO-415: finish this
+  val settingsTransformer = ObservableTransformer<ByteArray, TransmitterSettings> { upstream ->
+    upstream
+      .map {
+        TransmitterSettings()
       }
   }
   

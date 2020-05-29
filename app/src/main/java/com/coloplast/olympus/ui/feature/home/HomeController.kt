@@ -30,6 +30,7 @@ import com.coloplast.olympus.ui.common.dialogs.DialogController
 import com.coloplast.olympus.ui.common.widgets.PatchView
 import com.coloplast.olympus.ui.dialogs.ImageDialogController
 import com.coloplast.olympus.ui.feature.TransmitterManager
+import com.coloplast.olympus.ui.dialogs.PatchDialogController
 import com.coloplast.olympus.ui.feature.guides.GuideController
 import com.coloplast.olympus.ui.feature.guides.models.GuideType
 import com.coloplast.olympus.ui.feature.home.models.HomeUiModel
@@ -54,7 +55,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   
   private val viewModel: HomeViewModel by inject()
   private val transmitterManager: TransmitterManager by inject()
-  
+
   private val requestConnectionStateRelay = PublishRelay.create<String>()
   private val stitchRelay = PublishRelay.create<Stitch>()
   private val resetRelay = PublishRelay.create<String>() // macAddress
@@ -74,9 +75,11 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   val rawRotationAngle = ObservableInt()
   val isPatchVisible = ObservableBoolean(false)
   val patchInErrorState = ObservableBoolean(false)
-  
+
   private var currentUiState = UiState.INITIAL
   private var stateRouter: Router? = null
+
+  private var patchDialog: PatchDialogController? = null
 
   constructor() : super()
   constructor(args: Bundle?) : super(args)
@@ -133,8 +136,8 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
           }
         }
         is HomeUiModel.DeviceUpdate -> {
-          val updatedStateChange = transmitterManager.stateChangeFromActiveTransmitter(uiModel.stateChange)
-          val stateUpdate = transmitterManager.determineTxLayerQuestioning(updatedStateChange)
+          val updatedStateChange = transmitterManager.determineCurrentlyActiveTransmitterAndReturnStateChangeFromIt(uiModel.stateChange)
+          val stateUpdate = transmitterManager.determineTransmitterPatchQuestioning(updatedStateChange)
 
           stateUpdate.bleDevice.peripheral?.battery?.let { battery.set(it) }
           isConnected.set(stateUpdate.bleDevice.isConnected())
@@ -262,7 +265,8 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   
   override fun requestConnectionState(): Observable<String> {
     return requestConnectionStateRelay
-      .publish().refCount()
+      .publish()
+      .refCount()
   }
 
   override fun requestStitching(): Observable<Stitch> {
@@ -275,7 +279,19 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
 
   val patchClickedListener = object : PatchView.Listener {
     override fun onPatchClicked(patch: Patch) {
-      Timber.e("Patch was clicked")
+      val controllerAsPatchVisible = stateRouter?.backstack?.first()?.controller() as? PatchVisible
+
+      // if the current patch is not shown as in error
+      // we show the patch details
+      if(controllerAsPatchVisible?.patchInError() == false) {
+        patchDialog = PatchDialogController.create(
+          this@HomeController,
+          REQUEST_CODE_PATCH_DETAILS,
+          dismissAllowed = false
+        )
+
+        patchDialog?.show()
+      }
     }
   }
   
@@ -297,7 +313,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   override fun onNegativeButtonClicked(requestCode: Int) {
     when (requestCode) {
       REQUEST_CODE_TRANSMITTERS_CHANGED -> {
-        transmitterManager.getStitchArrayFromOther()?.let {
+        transmitterManager.getStitchBytesFromOtherTransmitter()?.let {
           stitchRelay.accept(it)
         }
         imageDialogController?.dismissDialog(false)
@@ -376,7 +392,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
       changeDrawerState(DrawerState.OPENED)
     }
   }
-  
+
   fun changeDrawerState(drawerState: DrawerState) {
     when(drawerState) {
       DrawerState.OPENED -> getBinding().drawerLayout.openDrawer(GravityCompat.END, true)
@@ -428,7 +444,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   override fun getLayout(): Int {
     return R.layout.controller_home
   }
-  
+
   override fun onDestroyView(view: View) {
     connectionStateDisposable.clear()
     super.onDestroyView(view)
@@ -440,6 +456,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
     private const val REQUEST_CODE_PERMISSION_LOCATION = 5001
     private const val REQUEST_CODE_PERMISSION_RATIONALE = 5002
     private const val REQUEST_CODE_TRANSMITTERS_CHANGED = 6001
+    private const val REQUEST_CODE_PATCH_DETAILS = 7001
 
     const val REQUEST_CODE_BLUETOOTH_ENABLE = 5005
     

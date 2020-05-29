@@ -1,6 +1,7 @@
 package com.coloplast.olympus.bluetooth.businesslayer.models
 
 import com.coloplast.olympus.bluetooth.businesslayer.enums.*
+import com.coloplast.olympus.shared.moshi.MoshiSerializable
 
 /**
  * A Transmitter is a description of the states that relates specifically to the transmitter
@@ -12,7 +13,7 @@ data class Transmitter(
   val compromised: Compromised,
   val rawRotationalAngle: Int,
   val batteryState: BatteryState
-) {
+) : MoshiSerializable {
   
   /**
    * convert the transmitter states into a TransmitterState

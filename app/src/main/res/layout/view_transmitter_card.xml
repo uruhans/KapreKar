@@ -32,6 +32,7 @@
       android:layout_height="wrap_content"
       android:focusable="true"
       android:clickable="true"
+      android:foreground="@{!item.detectable ? @drawable/cardview_disabled_foreground : @drawable/empty}"
       android:layout_marginStart="@dimen/spacing_larger"
       android:layout_marginTop="@dimen/cardview_elevation_default"
       android:layout_marginEnd="@dimen/cardview_elevation_default"
@@ -75,7 +76,20 @@
           app:layout_constraintStart_toStartOf="@+id/name"
           app:layout_constraintTop_toTopOf="@+id/name"
           app:battery="@{item.battery}"
+          visibleOrGone="@{item.detectable}"
           tools:src="@drawable/ic_battery_full_24dp" />
+
+        <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginEnd="@dimen/spacing_larger"
+          android:text="@string/transmitters_not_detectable"
+          style="@style/TextStyle.Roboto.Regular.ClearGrey.14"
+          visibleOrGone="@{!item.detectable}"
+          app:layout_constraintBottom_toBottomOf="@+id/name"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintHorizontal_bias="1"
+          app:layout_constraintStart_toStartOf="@+id/name" />
 
         <TextView
           android:id="@+id/address"

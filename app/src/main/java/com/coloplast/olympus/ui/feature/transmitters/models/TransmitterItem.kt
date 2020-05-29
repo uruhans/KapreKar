@@ -18,10 +18,13 @@ class TransmitterItem(val transmitter: Transmitter, val onEdit: ObservableBoolea
   val connectionState = ObservableField<BleConnectionState>()
   var attached: Boolean = false
   private set
+  var detectable = false
 
   fun setStateChange(stateChange: StateChange){
     this.battery.set(stateChange.bleDevice.peripheral?.battery)
     attached = stateChange.bleDevice.isAttached()
+
+    connectionState.get() != BleConnectionState.CONNECTED
   }
 
   fun setConnectionState(connectionState: BleConnectionState){

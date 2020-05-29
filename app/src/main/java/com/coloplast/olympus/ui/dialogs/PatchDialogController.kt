@@ -9,13 +9,19 @@ import com.bluelinelabs.conductor.Controller
 import com.coloplast.olympus.R
 import com.coloplast.olympus.bluetooth.businesslayer.models.Patch
 import com.coloplast.olympus.databinding.ControllerDialogPatchBinding
+import com.coloplast.olympus.shared.AppSettings
 import com.coloplast.olympus.ui.common.dialogs.BaseDialogController
 import com.coloplast.olympus.ui.common.models.Navigation
+import com.coloplast.olympus.ui.feature.home.BreachesOccurred
 import com.coloplast.olympus.ui.feature.home.HomeController
+import com.coloplast.olympus.utils.Strings
+import org.koin.core.inject
 import timber.log.Timber
 
 class PatchDialogController(args: Bundle) : BaseDialogController<ControllerDialogPatchBinding>(args) {
-  
+
+  private val breachesOccurred: BreachesOccurred by inject()
+
   private val dismissAllowed: Boolean
   private val requestCode: Int
   
@@ -23,6 +29,9 @@ class PatchDialogController(args: Bundle) : BaseDialogController<ControllerDialo
   val rawRotationalAngle = ObservableInt()
 
   val breachDetected = ObservableBoolean(false)
+
+  val firstBreach = ObservableField<String>()
+  val secondBreach = ObservableField<String>()
 
   private val controller = Navigation.getContentRouter()!!.getControllerWithInstanceId(
     args.getString(BUNDLE_TARGET_INSTANCE_ID)!!
@@ -55,6 +64,17 @@ class PatchDialogController(args: Bundle) : BaseDialogController<ControllerDialo
   private fun setDataFromHomeController() {
     currentPatch.set(controller?.currentPatch?.get())
     rawRotationalAngle.set(controller?.rawRotationAngle?.get() ?: 0)
+
+    val breaches = breachesOccurred.getBreaches()
+
+    if(breaches.isNotEmpty()) {
+      breachDetected.set(true)
+      firstBreach.set("${getString(R.string.overlay_breach_first)} ${Strings.getTimeString(breaches[0].localDateTime)}")
+
+      if(breaches.size > 1) {
+        secondBreach.set("${getString(R.string.overlay_breach_second)} ${Strings.getTimeString(breaches[1].localDateTime)}")
+      }
+    }
   }
 
   private val currentPatchChangedCallback = object : Observable.OnPropertyChangedCallback() {

@@ -15,6 +15,8 @@ import java.text.DateFormat
 import java.time.DayOfWeek
 import java.time.LocalDateTime
 import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 import java.time.format.TextStyle
 import java.util.*
 
@@ -107,7 +109,7 @@ object Strings {
   }
   
   fun getTimeString(dt: LocalDateTime): String {
-    val formatter = DateFormat.getTimeInstance(DateFormat.SHORT)
+    val formatter = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)
     return formatter.format(dt.atZone(ZoneOffset.UTC))
   }
   

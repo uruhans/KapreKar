@@ -5,6 +5,7 @@ import androidx.databinding.ObservableField
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.bluetooth.businesslayer.enums.PowerLevel
 import com.coloplast.olympus.bluetooth.businesslayer.models.Battery
+import com.coloplast.olympus.bluetooth.model.StateChange
 import com.coloplast.olympus.shared.models.DiffCallback
 import com.coloplast.olympus.shared.models.Transmitter
 
@@ -16,17 +17,15 @@ class TransmitterItem(val transmitter: Transmitter, val onEdit: ObservableBoolea
   val battery = ObservableField<Battery>()
   val connectionState = ObservableField<BleConnectionState>()
   var attached: Boolean = false
+  private set
 
-  fun setBatteryInfo(battery: Battery){
-    this.battery.set(battery)
+  fun setStateChange(stateChange: StateChange){
+    this.battery.set(stateChange.bleDevice.peripheral?.battery)
+    attached = stateChange.bleDevice.isAttached()
   }
-  
-  fun setConnectionState(connectionState: BleConnectionState) {
+
+  fun setConnectionState(connectionState: BleConnectionState){
     this.connectionState.set(connectionState)
-  }
-
-  fun onItemClicked() {
-    listener.onDeleteTransmitter(transmitter)
   }
 
   override fun areItemsTheSame(other: DiffCallback): Boolean {
@@ -35,8 +34,7 @@ class TransmitterItem(val transmitter: Transmitter, val onEdit: ObservableBoolea
 
   override fun areContentsTheSame(other: DiffCallback): Boolean {
     return (other as? TransmitterItem)?.let {
-      this.battery.get() == it.battery.get()
-          && this.connectionState.get() == it.connectionState.get()
+      this.transmitter.macAddress == other.transmitter.macAddress
     } ?: false
   }
 }

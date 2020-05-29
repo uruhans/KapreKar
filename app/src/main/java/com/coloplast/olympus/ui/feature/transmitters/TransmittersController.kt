@@ -9,6 +9,7 @@ import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import com.coloplast.olympus.BR
 import com.coloplast.olympus.R
+import com.coloplast.olympus.bluetooth.businesslayer.enums.BatteryState
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.databinding.ControllerTransmittersBinding
 import com.coloplast.olympus.shared.models.DiffCallback
@@ -51,7 +52,7 @@ class TransmittersController(args: Bundle? = null) :
     override fun areContentsTheSame(oldItem: DiffCallback, newItem: DiffCallback): Boolean =
       oldItem.areContentsTheSame(newItem)
   }
-  val items = DiffObservableList(diffUtil, false)
+  val items = DiffObservableList(diffUtil)
 
   private val transmitterList = ObservableArrayList<TransmitterItem>()
 
@@ -91,12 +92,10 @@ class TransmittersController(args: Bundle? = null) :
         is TransmittersUiModel.StateUpdate -> {
           transmitterList
             .first { uiModel.stateChange.bleDevice.macAddress == it.transmitter.macAddress }
-            .let { transmitterItem ->
-              uiModel.stateChange.bleDevice.peripheral?.battery?.let { transmitterItem.setBatteryInfo(it) }
-              transmitterItem.attached = uiModel.stateChange.bleDevice.isAttached()
-            }
+            .setStateChange(uiModel.stateChange)
 
           val newList = mutableListOf<DiffCallback>()
+
           // Add attached transmitters and Title header
           transmitterList.filter { it.attached }.let {
             if(it.isNotEmpty()){

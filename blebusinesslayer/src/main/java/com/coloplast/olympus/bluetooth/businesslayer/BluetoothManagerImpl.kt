@@ -51,6 +51,8 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
      * check here -> https://github.com/Polidea/RxAndroidBle/wiki/FAQ:-UndeliverableException
      */
     RxJavaPlugins.setErrorHandler {
+      Timber.e(it)
+
       when {
         // ignore if undeliverable (others should have received it first) - Rx issue ->
         // https://github.com/Polidea/RxAndroidBle/wiki/FAQ:-UndeliverableException

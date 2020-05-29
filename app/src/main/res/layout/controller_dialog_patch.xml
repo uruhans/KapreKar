@@ -103,7 +103,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/spacing_standard"
-            android:text="@string/overlay_breach_first" />
+            android:text="@{controller.firstBreach}" />
 
           <TextView
             style="@style/TextStyle.Coloplast.Regular.DarkGrey.18"
@@ -112,7 +112,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/spacing_quarter"
             android:layout_marginBottom="60dp"
-            android:text="@string/overlay_breach_second" />
+            android:text="@{controller.secondBreach}" />
         </LinearLayout>
       </LinearLayout>
     </androidx.cardview.widget.CardView>

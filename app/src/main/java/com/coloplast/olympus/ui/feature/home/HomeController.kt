@@ -28,8 +28,8 @@ import com.coloplast.olympus.ui.common.dialogs.BaseDialogController
 import com.coloplast.olympus.ui.common.dialogs.DialogController
 import com.coloplast.olympus.ui.common.widgets.PatchView
 import com.coloplast.olympus.ui.dialogs.ImageDialogController
-import com.coloplast.olympus.ui.feature.TransmitterManager
 import com.coloplast.olympus.ui.dialogs.PatchDialogController
+import com.coloplast.olympus.ui.feature.TransmitterManager
 import com.coloplast.olympus.ui.feature.guides.GuideController
 import com.coloplast.olympus.ui.feature.guides.models.GuideType
 import com.coloplast.olympus.ui.feature.home.models.HomeUiModel
@@ -54,6 +54,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   
   private val viewModel: HomeViewModel by inject()
   private val transmitterManager: TransmitterManager by inject()
+  private val breachesOccurred: BreachesOccurred by inject()
 
   private val requestConnectionStateRelay = PublishRelay.create<String>()
   private val stitchRelay = PublishRelay.create<Stitch>()
@@ -99,6 +100,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   
   override fun render(): Function<Observable<HomeUiModel>, Disposable> {
     return RxUi.ui { uiModel ->
+
       Timber.d("uiModel: $uiModel")
       
       when (uiModel) {
@@ -136,22 +138,24 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         }
         is HomeUiModel.DeviceUpdate -> {
           val updatedStateChange = transmitterManager.determineCurrentlyActiveTransmitterAndReturnStateChangeFromIt(uiModel.stateChange)
-          val stateUpdate = transmitterManager.determineTransmitterPatchQuestioning(updatedStateChange)
+          val stateChange = transmitterManager.determineTransmitterPatchQuestioning(updatedStateChange)
 
-          powerLevel.set(stateUpdate.bleDevice.peripheral?.powerLevel)
-          isConnected.set(stateUpdate.bleDevice.isConnected())
-          
-          stateUpdate.bleDevice.peripheral?.transmitter?.rawRotationalAngle?.let {
+          powerLevel.set(stateChange.bleDevice.peripheral?.powerLevel)
+          isConnected.set(stateChange.bleDevice.isConnected())
+
+          breachesOccurred.add(stateChange)
+
+          stateChange.bleDevice.peripheral?.transmitter?.rawRotationalAngle?.let {
             rawRotationAngle.set(it)
           }
           
-          stateUpdate.bleDevice.peripheral?.patch?.let {
+          stateChange.bleDevice.peripheral?.patch?.let {
             currentPatch.set(it)
           }
-          
-          changeUiState(stateUpdate.state)
 
-          if(stateUpdate.overlayState == OverlayState.QUESTION) {
+          changeUiState(stateChange.state)
+
+          if(stateChange.overlayState == OverlayState.QUESTION) {
             imageDialogController = ImageDialogController.create(
               this,
               REQUEST_CODE_TRANSMITTERS_CHANGED,
@@ -303,6 +307,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         imageDialogController?.dismissDialog(withCallback = true)
       }
       REQUEST_CODE_TRANSMITTERS_CHANGED -> {
+        breachesOccurred.clear()
         resetRelay.accept(transmitterManager.activeTransmitterMacAddress())
         imageDialogController?.dismissDialog(false)
       }
@@ -312,7 +317,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   override fun onNegativeButtonClicked(requestCode: Int) {
     when (requestCode) {
       REQUEST_CODE_TRANSMITTERS_CHANGED -> {
-        transmitterManager.getStitchBytesFromOtherTransmitter()?.let {
+        transmitterManager.getStitchBytesFromOtherTransmitter().let {
           stitchRelay.accept(it)
         }
         imageDialogController?.dismissDialog(false)

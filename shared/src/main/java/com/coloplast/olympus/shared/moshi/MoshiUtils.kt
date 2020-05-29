@@ -50,7 +50,7 @@ inline fun <reified T : MoshiSerializable> T.serialize(): String {
   return MoshiUtils.convertObjectToJson(T::class.java, this)
 }
 
-inline fun <reified T : List<MoshiSerializable>> List<T>.serialize(): String {
+inline fun <reified T : MoshiSerializable> List<T>.serializeList(): String {
   return MoshiUtils.convertListToJson(T::class.java, this)
 }
 

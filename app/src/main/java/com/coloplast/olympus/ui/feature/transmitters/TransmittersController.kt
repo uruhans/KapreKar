@@ -14,6 +14,7 @@ import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.databinding.ControllerTransmittersBinding
 import com.coloplast.olympus.shared.models.DiffCallback
 import com.coloplast.olympus.shared.models.Transmitter
+import com.coloplast.olympus.shared.utils.DiffUtilsImpl
 import com.coloplast.olympus.ui.common.CustomToolbarController
 import com.coloplast.olympus.ui.common.DrawerStateDispatcher
 import com.coloplast.olympus.ui.common.extensions.toggle
@@ -45,14 +46,7 @@ class TransmittersController(args: Bundle? = null) :
     .map(SmallHeaderItem::class.java, BR.item, R.layout.item_small_header)
     .map(SectionDivider::class.java, BR.item, R.layout.item_recyclerview_section_divider)
 
-  private val diffUtil = object : DiffUtil.ItemCallback<DiffCallback>() {
-    override fun areItemsTheSame(oldItem: DiffCallback, newItem: DiffCallback): Boolean =
-      oldItem.areItemsTheSame(newItem)
-
-    override fun areContentsTheSame(oldItem: DiffCallback, newItem: DiffCallback): Boolean =
-      oldItem.areContentsTheSame(newItem)
-  }
-  val items = DiffObservableList(diffUtil)
+  val items = DiffObservableList(DiffUtilsImpl())
 
   private val transmitterList = ObservableArrayList<TransmitterItem>()
 

@@ -1,6 +1,7 @@
 package com.coloplast.olympus.ui.feature.transmitters
 
 import android.os.Bundle
+import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableBoolean
 import androidx.recyclerview.widget.DiffUtil
 import com.artemzin.rxui.RxUi
@@ -14,12 +15,11 @@ import com.coloplast.olympus.shared.models.DiffCallback
 import com.coloplast.olympus.shared.models.Transmitter
 import com.coloplast.olympus.ui.common.CustomToolbarController
 import com.coloplast.olympus.ui.common.DrawerStateDispatcher
-import com.coloplast.olympus.ui.common.dialogs.BaseDialogController
-import com.coloplast.olympus.ui.common.dialogs.DialogController
 import com.coloplast.olympus.ui.common.extensions.toggle
-import com.coloplast.olympus.ui.common.widgets.TransmitterCardView
 import com.coloplast.olympus.ui.dialogs.ImageDialogController
 import com.coloplast.olympus.ui.feature.transmitters.add.AddTransmitterFlowController
+import com.coloplast.olympus.ui.feature.transmitters.models.SectionDivider
+import com.coloplast.olympus.ui.feature.transmitters.models.SmallHeaderItem
 import com.coloplast.olympus.ui.feature.transmitters.models.TransmitterItem
 import com.coloplast.olympus.ui.feature.transmitters.models.TransmittersUiModel
 import com.jakewharton.rxrelay2.PublishRelay
@@ -41,13 +41,19 @@ class TransmittersController(args: Bundle? = null) :
 
   val itemBinding: OnItemBindClass<DiffCallback> = OnItemBindClass<DiffCallback>()
     .map(TransmitterItem::class.java, BR.transmitterItem, R.layout.item_transmitter_cardview_wrapper)
+    .map(SmallHeaderItem::class.java, BR.item, R.layout.item_small_header)
+    .map(SectionDivider::class.java, BR.item, R.layout.item_recyclerview_section_divider)
 
-  private val diffUtil = object: DiffUtil.ItemCallback<TransmitterItem>(){
-    override fun areItemsTheSame(oldItem: TransmitterItem, newItem: TransmitterItem): Boolean = oldItem.areItemsTheSame(newItem)
-    override fun areContentsTheSame(oldItem: TransmitterItem, newItem: TransmitterItem): Boolean = oldItem.areContentsTheSame(newItem)
+  private val diffUtil = object : DiffUtil.ItemCallback<DiffCallback>() {
+    override fun areItemsTheSame(oldItem: DiffCallback, newItem: DiffCallback): Boolean =
+      oldItem.areItemsTheSame(newItem)
+
+    override fun areContentsTheSame(oldItem: DiffCallback, newItem: DiffCallback): Boolean =
+      oldItem.areContentsTheSame(newItem)
   }
-  val attachedTransmitterList = DiffObservableList(diffUtil)
-  val notAttachedTransmitterList = DiffObservableList(diffUtil)
+  val items = DiffObservableList(diffUtil, false)
+
+  private val transmitterList = ObservableArrayList<TransmitterItem>()
 
   val hasTransmittersAdded = ObservableBoolean(false)
   val canAddMoreTransmitters = ObservableBoolean(true)
@@ -76,45 +82,51 @@ class TransmittersController(args: Bundle? = null) :
         is TransmittersUiModel.ConnectedDevices -> {
           hasTransmittersAdded.set(true)
 
-          notAttachedTransmitterList.update(
+          transmitterList.addAll(
             uiModel.devices.map { TransmitterItem(it, editEnabled, this) }
           )
 
-          canAddMoreTransmitters.set(notAttachedTransmitterList.filterIsInstance(TransmitterItem::class.java).size < 2)
+          canAddMoreTransmitters.set(transmitterList.size < 2)
         }
         is TransmittersUiModel.StateUpdate -> {
-          // state updates are coming from the Service (StateDispatcher)
-          when(uiModel.stateChange.bleDevice.isAttached()){
-            true -> {
-              notAttachedTransmitterList.first { uiModel.stateChange.bleDevice.macAddress == it.transmitter.macAddress }.let { transmitterItem ->
-                uiModel.stateChange.bleDevice.peripheral?.battery?.let { transmitterItem.setBatteryInfo(it) }
-                notAttachedTransmitterList.remove(transmitterItem)
-                attachedTransmitterList.add(transmitterItem)
-              }
+          transmitterList
+            .first { uiModel.stateChange.bleDevice.macAddress == it.transmitter.macAddress }
+            .let { transmitterItem ->
+              uiModel.stateChange.bleDevice.peripheral?.battery?.let { transmitterItem.setBatteryInfo(it) }
+              transmitterItem.attached = uiModel.stateChange.bleDevice.isAttached()
             }
-            false -> {
-              attachedTransmitterList.first { uiModel.stateChange.bleDevice.macAddress == it.transmitter.macAddress }.let { transmitterItem ->
-                uiModel.stateChange.bleDevice.peripheral?.battery?.let { transmitterItem.setBatteryInfo(it) }
-                attachedTransmitterList.remove(transmitterItem)
-                notAttachedTransmitterList.add(transmitterItem)
-              }
+
+          val newList = mutableListOf<DiffCallback>()
+          // Add attached transmitters and Title header
+          transmitterList.filter { it.attached }.let {
+            if(it.isNotEmpty()){
+              newList.add(SmallHeaderItem(R.string.transmitters_attached))
+              newList.addAll(it)
             }
           }
+
+          // Add divider if necessary
+          if (newList.isNotEmpty()  && newList.size != transmitterList.size+1) newList.add(SectionDivider())
+
+          // Add non-attached transmitters and Title header
+          transmitterList.filter { !it.attached }.let {
+            if(it.isNotEmpty()){
+              newList.add(SmallHeaderItem(R.string.transmitters_not_attached))
+              newList.addAll(it)
+            }
+          }
+
+          items.update(newList)
         }
         is TransmittersUiModel.TransmitterConnectionState -> {
-          // find the transmitter and update state
-          mutableListOf<TransmitterItem>().apply {
-            addAll(attachedTransmitterList)
-            addAll(notAttachedTransmitterList)
-          }.find { uiModel.connectionState.macAddress == it.transmitter.macAddress }
+          transmitterList
+            .find { uiModel.connectionState.macAddress == it.transmitter.macAddress }
             ?.setConnectionState(uiModel.connectionState.connectionState)
 
           searchEnabled.set(!allConnected())
 
-          if(retryPressed.get()) {
-            val allConnected = attachedTransmitterList.filterIsInstance<TransmitterItem>()
-              .any { it.connectionState.get() == BleConnectionState.CONNECTED }
-            retryPressed.set(!allConnected)
+          if (retryPressed.get()) {
+            retryPressed.set(!allConnected())
           }
         }
         is TransmittersUiModel.TransmitterDeleted -> {
@@ -135,13 +147,14 @@ class TransmittersController(args: Bundle? = null) :
     }
   }
 
-  fun onEditClicked(){
+  fun onEditClicked() {
     editEnabled.toggle()
   }
 
-  private fun allConnected() : Boolean {
+  private fun allConnected(): Boolean {
     // no reason to run through each transmitter if the current uiModel state is already *not* connected
-    return attachedTransmitterList.filterIsInstance<TransmitterItem>().all { it.connectionState.get() == BleConnectionState.CONNECTED }
+    return items.filterIsInstance<TransmitterItem>()
+      .all { it.connectionState.get() == BleConnectionState.CONNECTED }
   }
 
   override fun onDeleteTransmitter(transmitter: Transmitter) {
@@ -198,7 +211,7 @@ class TransmittersController(args: Bundle? = null) :
       .refCount()
   }
 
-  override fun retryConnection() : Observable<Unit> {
+  override fun retryConnection(): Observable<Unit> {
     return retryConnectionRelay
       .publish()
       .refCount()

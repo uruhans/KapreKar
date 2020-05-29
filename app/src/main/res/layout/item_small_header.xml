@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
 
   <data>
 
@@ -15,7 +16,7 @@
     android:layout_height="wrap_content"
     android:layout_marginStart="@dimen/spacing_standard"
     android:layout_marginTop="@dimen/spacing_standard"
-    android:text="[Attached]"
+    app:safeText="@{item.textResId}"
     android:textColor="@color/darkGrey03" />
 </layout>
 

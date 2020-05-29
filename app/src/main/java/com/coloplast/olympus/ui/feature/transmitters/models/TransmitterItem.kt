@@ -15,6 +15,7 @@ class TransmitterItem(val transmitter: Transmitter, val onEdit: ObservableBoolea
 
   val battery = ObservableField<Battery>()
   val connectionState = ObservableField<BleConnectionState>()
+  var attached: Boolean = false
 
   fun setBatteryInfo(battery: Battery){
     this.battery.set(battery)

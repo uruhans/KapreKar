@@ -16,13 +16,13 @@
     android:layout_margin="@dimen/spacing_standard"
     android:foreground="?android:attr/selectableItemBackground"
     android:onClick="@{() -> item.onItemClicked()}"
-    app:cardBackgroundColor="@color/white"
     app:cardCornerRadius="8dp"
     app:cardElevation="4dp"
     app:cardUseCompatPadding="false">
 
     <androidx.constraintlayout.widget.ConstraintLayout
       android:layout_width="match_parent"
+      android:background="@{item.selected ? @drawable/cardview_selected_with_outline : @drawable/cardview_not_selected}"
       android:layout_height="84dp">
 
       <TextView
@@ -36,21 +36,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="[Name]" />
-
-      <ImageView
-        android:id="@+id/battery"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_marginEnd="@dimen/spacing_larger"
-        app:layout_constraintBottom_toBottomOf="@+id/name"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1"
-        app:layout_constraintStart_toStartOf="@+id/name"
-        app:layout_constraintTop_toTopOf="@+id/name"
-        app:visibleOrGone="@{false}"
-        tools:src="@drawable/ic_battery_full_24dp" />
-
-      <!--      app:powerLevel="@{item.currentPowerLevel}"-->
 
       <TextView
         android:id="@+id/address"

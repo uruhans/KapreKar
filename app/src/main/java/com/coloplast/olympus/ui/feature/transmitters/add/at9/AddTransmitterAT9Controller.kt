@@ -58,6 +58,8 @@ class AddTransmitterAT9Controller(args: Bundle) :
   // connection state actually goes into CONNECTED - and then going to DISCONNECTED
   private var connectionAlreadyFailed = false
 
+  var selectedScanResult = ObservableField<ScanResult>()
+
   private var imageDialogController: ImageDialogController? = null
 
   override fun attachVariables(viewBinding: ControllerAddTransmitterAt9Binding) {
@@ -134,7 +136,17 @@ class AddTransmitterAT9Controller(args: Bundle) :
 
   override fun onScanResultClicked(scanResult: ScanResult) {
     connectionAlreadyFailed = false
-    scanResultRelay.accept(scanResult)
+    selectedScanResult.set(scanResult)
+
+    items.forEach {
+      it.setSelected(scanResult == it.scanResult)
+    }
+  }
+
+  fun onSelectionConfirmed() {
+    selectedScanResult.get()?.let {
+      scanResultRelay.accept(it)
+    }
   }
 
   override fun onPositiveButtonClicked(requestCode: Int) {

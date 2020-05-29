@@ -211,6 +211,7 @@
 <string name="overlay_leak_attactment_title">Have you connected to a new sensor layer or one already in use?</string>
 <string name="overlay_leak_disconnection">Check for leakage now.</string>
 <string name="overlay_leak_disconnection_title">Something happened after losing bluetooth connection.</string>
+<string name="overlay_multiple_transmitters_found_action">Confirm</string>
 <string name="overlay_multiple_transmitters_found_body">Please select</string>
 <string name="overlay_multiple_transmitters_found_title">Multiple transmitters found</string>
 <string name="overlay_network">Check that you are not in flightmode and that wifi and mobile data is turned on. We cannot recieve necessary data for the study.</string>

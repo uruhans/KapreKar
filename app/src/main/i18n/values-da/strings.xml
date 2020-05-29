@@ -213,8 +213,9 @@
 <string name="overlay_leak_attactment_title">Har du forbundet til et nyt sensorlag eller et, du allerede bruger?</string>
 <string name="overlay_leak_disconnection">Tjek for lækage nu.</string>
 <string name="overlay_leak_disconnection_title">Der skete noget efter at Bluetooth blev afbrudt.</string>
-<string name="overlay_multiple_transmitters_found_body">[missing translation]</string>
-<string name="overlay_multiple_transmitters_found_title">[missing translation]</string>
+<string name="overlay_multiple_transmitters_found_action">Confirm</string>
+<string name="overlay_multiple_transmitters_found_body">Please select</string>
+<string name="overlay_multiple_transmitters_found_title">Multiple transmitters found</string>
 <string name="overlay_network">Tjek at du ikke er i flytilstand og at wifi eller mobildata er slået til. Lige nu modtager vi ikke din\ndata til studiet</string>
 <string name="overlay_network_title">Ingen netværksforbindelse</string>
 <string name="overlay_no_breach_title">Ingen lækage opfanget</string>

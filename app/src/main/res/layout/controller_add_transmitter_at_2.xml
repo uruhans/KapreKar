@@ -12,8 +12,8 @@
   <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="@dimen/toolbar_height"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:paddingTop="@dimen/toolbar_height">
 
     <TextView
       android:id="@+id/transmitter_guide_at2_title"
@@ -56,17 +56,9 @@
 
     <Button
       android:id="@+id/accept_button"
-      android:layout_width="match_parent"
-      android:layout_height="@dimen/cardview_button_height_default"
-      android:layout_marginStart="@dimen/spacing_standard"
-      android:layout_marginEnd="@dimen/spacing_standard"
-      android:layout_marginBottom="@dimen/spacing_double"
+      style="@style/Button"
       android:onClick="@{() -> controller.onNextClicked()}"
-      android:background="@drawable/button_color_accent"
       android:text="@string/guide_at2_action"
-      android:textAllCaps="false"
-      android:textColor="@color/white"
-      android:textSize="@dimen/text_18"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent" />

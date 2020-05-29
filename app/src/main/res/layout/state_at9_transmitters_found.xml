@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto">
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools">
 
   <data>
 
@@ -39,6 +40,12 @@
       app:itemBinding="@{controller.itemBinding}"
       app:items="@{controller.items}"
       app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+    <Button
+      style="@style/Button.Selectable"
+      android:enabled="@{controller.selectedScanResult != null}"
+      android:onClick="@{() -> controller.onSelectionConfirmed()}"
+      android:text="@string/overlay_multiple_transmitters_found_action" />
 
   </LinearLayout>
 </layout>

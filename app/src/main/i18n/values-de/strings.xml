@@ -213,8 +213,9 @@
 <string name="overlay_leak_attactment_title">overlay_leak_attactment_title</string>
 <string name="overlay_leak_disconnection">overlay_leak_disconnection</string>
 <string name="overlay_leak_disconnection_title">overlay_leak_disconnection_title</string>
-<string name="overlay_multiple_transmitters_found_body">[missing translation]</string>
-<string name="overlay_multiple_transmitters_found_title">[missing translation]</string>
+<string name="overlay_multiple_transmitters_found_action">Confirm</string>
+<string name="overlay_multiple_transmitters_found_body">Please select</string>
+<string name="overlay_multiple_transmitters_found_title">Multiple transmitters found</string>
 <string name="overlay_network">overlay_network</string>
 <string name="overlay_network_title">overlay_network_title</string>
 <string name="overlay_no_breach_title">overlay_no_breach_title</string>

@@ -18,6 +18,7 @@ import com.coloplast.olympus.ui.common.Stack
 import com.coloplast.olympus.ui.common.flow.FlowFactory
 import com.coloplast.olympus.ui.feature.home.HomeViewModel
 import com.coloplast.olympus.ui.feature.TransmitterManager
+import com.coloplast.olympus.ui.feature.home.BreachesOccurred
 import com.coloplast.olympus.ui.feature.transmitters.TransmittersViewModel
 import com.coloplast.olympus.ui.feature.transmitters.add.AddTransmitterFactoryImpl
 import com.coloplast.olympus.ui.feature.transmitters.add.AddTransmitterViewModel
@@ -40,10 +41,13 @@ val koinModule = module {
 
   single { TransmitterManager() }
   single<Stack<StateChange>> { Stack(5) }
+
+  single { BreachesOccurred() }
+
   /* Components */
   single<TransmitterComponent> { TransmitterComponentImpl() }
 
-  //single { Me() }
+  single { Me() }
 
 
   /* ViewModels */

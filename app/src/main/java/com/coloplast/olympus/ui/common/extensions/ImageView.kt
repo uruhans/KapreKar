@@ -28,7 +28,18 @@ fun ImageView.setResource(@DrawableRes resource: Int?) {
 
 @BindingAdapter("battery")
 fun ImageView.setBattery(battery: Battery?){
-  // TODO: Import charging icon and implement.
+  val drawableId = when(battery?.state){
+    BatteryState.CHARGING -> R.drawable.ic_battery_charging
+    BatteryState.OK -> when (battery.powerLevel) {
+      PowerLevel.HIGH -> R.drawable.ic_battery_full_24dp
+      PowerLevel.MEDIUM -> R.drawable.ic_battery_full_24dp
+      PowerLevel.LOW -> R.drawable.ic_battery_full_24dp
+      PowerLevel.EMPTY -> R.drawable.ic_battery_full_24dp
+      else -> R.drawable.empty
+    }
+    else -> R.drawable.empty
+  }
+  setImageResource(drawableId)
 }
 
 @BindingAdapter("tintDrawable")

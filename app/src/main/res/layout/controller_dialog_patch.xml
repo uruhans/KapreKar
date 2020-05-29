@@ -57,6 +57,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/spacing_triple"
             android:layout_marginBottom="@dimen/spacing_double"
+            app:error="@{controller.patchInError}"
             app:isDetailView="@{true}"
             app:patch="@{controller.currentPatch}"
             app:rawRotationalAngle="@{controller.rawRotationalAngle}"

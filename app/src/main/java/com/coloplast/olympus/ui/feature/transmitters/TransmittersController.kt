@@ -42,7 +42,7 @@ class TransmittersController(args: Bundle? = null) :
   private val retryConnectionRelay = PublishRelay.create<Unit>()
 
   val itemBinding: OnItemBindClass<DiffCallback> = OnItemBindClass<DiffCallback>()
-    .map(TransmitterItem::class.java, BR.transmitterItem, R.layout.item_transmitter_cardview_wrapper)
+    .map(TransmitterItem::class.java, BR.item, R.layout.item_transmitter_cardview_wrapper)
     .map(SmallHeaderItem::class.java, BR.item, R.layout.item_small_header)
     .map(SectionDivider::class.java, BR.item, R.layout.item_recyclerview_section_divider)
 

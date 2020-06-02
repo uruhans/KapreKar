@@ -3,16 +3,14 @@ package com.coloplast.olympus.ui.feature.transmitters
 import android.os.Bundle
 import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableBoolean
-import androidx.recyclerview.widget.DiffUtil
 import com.artemzin.rxui.RxUi
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import com.coloplast.olympus.BR
 import com.coloplast.olympus.R
-import com.coloplast.olympus.bluetooth.businesslayer.enums.BatteryState
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.databinding.ControllerTransmittersBinding
-import com.coloplast.olympus.shared.models.DiffCallback
+import com.coloplast.olympus.shared.models.DiffListItem
 import com.coloplast.olympus.shared.models.Transmitter
 import com.coloplast.olympus.shared.utils.DiffUtilsImpl
 import com.coloplast.olympus.ui.common.CustomToolbarController
@@ -41,7 +39,7 @@ class TransmittersController(args: Bundle? = null) :
   private val deleteTransmitterRelay = PublishRelay.create<String>()
   private val retryConnectionRelay = PublishRelay.create<Unit>()
 
-  val itemBinding: OnItemBindClass<DiffCallback> = OnItemBindClass<DiffCallback>()
+  val itemBinding: OnItemBindClass<DiffListItem> = OnItemBindClass<DiffListItem>()
     .map(TransmitterItem::class.java, BR.item, R.layout.item_transmitter_cardview_wrapper)
     .map(SmallHeaderItem::class.java, BR.item, R.layout.item_small_header)
     .map(SectionDivider::class.java, BR.item, R.layout.item_recyclerview_section_divider)
@@ -204,7 +202,7 @@ class TransmittersController(args: Bundle? = null) :
   }
 
   private fun updateDiffList(){
-    val newList = mutableListOf<DiffCallback>()
+    val newList = mutableListOf<DiffListItem>()
 
     // Add attached transmitters and Title header
     transmitterList.filter { it.attached.get() }.let {

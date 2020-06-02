@@ -1,8 +1,8 @@
 package com.coloplast.olympus.ui.feature.transmitters.models
 
-import com.coloplast.olympus.shared.models.DiffCallback
+import com.coloplast.olympus.shared.models.DiffListItem
 
-class SectionDivider: DiffCallback {
-  override fun areItemsTheSame(other: DiffCallback): Boolean = true
-  override fun areContentsTheSame(other: DiffCallback): Boolean = true
+class SectionDivider: DiffListItem {
+  override fun areItemsTheSame(other: DiffListItem): Boolean = true
+  override fun areContentsTheSame(other: DiffListItem): Boolean = true
 }

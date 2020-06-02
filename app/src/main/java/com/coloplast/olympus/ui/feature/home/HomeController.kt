@@ -181,21 +181,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
 
           changeUiState(stateToChangeTo)
 
-          if(stateChange.overlayState == OverlayState.QUESTION) {
-            imageDialogController = ImageDialogController.create(
-              this,
-              REQUEST_CODE_TRANSMITTERS_CHANGED,
-              R.string.overlay_leak_attactment_title,
-              0,
-              R.string.overlay_leak_attactment_action_new,
-              R.string.overlay_leak_attactment_action_old,
-              R.drawable.ic_info_circle,
-              verticalButtonLayout = true,
-              dismissAllowed = false
-            )
-
-            imageDialogController?.show()
-          }
+          changeOverlayState(stateChange.overlayState)
         }
         is HomeUiModel.RawDataPackageUpdate -> {
           updateAnimation.set(true)
@@ -294,6 +280,41 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
       currentUiState = newState
     }
   }
+
+  private fun changeOverlayState(overlayState: OverlayState) {
+    imageDialogController = null
+
+    when(overlayState) {
+      OverlayState.QUESTION -> {
+        imageDialogController = ImageDialogController.create(
+          this,
+          REQUEST_CODE_TRANSMITTERS_CHANGED,
+          R.string.overlay_leak_attactment_title,
+          0,
+          R.string.overlay_leak_attactment_action_new,
+          R.string.overlay_leak_attactment_action_old,
+          R.drawable.ic_info_circle,
+          verticalButtonLayout = true,
+          dismissAllowed = false
+        )
+      }
+      OverlayState.BATTERY_LOW -> {
+        imageDialogController = ImageDialogController.create(
+          this,
+          REQUEST_CODE_BATTERY_LOW,
+          R.string.status_no_con_battery_title,
+          R.string.status_no_con_battery,
+          R.string.guide_charge,
+          topImage = R.drawable.ic_battery_low_24dp,
+          tintColor = R.color.red,
+          verticalButtonLayout = true,
+          dismissAllowed = true
+        )
+      }
+    }
+
+    imageDialogController?.show()
+  }
   
   override fun requestConnectionState(): Observable<String> {
     return requestConnectionStateRelay
@@ -365,7 +386,9 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   }
 
   override fun onCloseClicked(requestCode: Int) {
-
+    when(requestCode) {
+      REQUEST_CODE_BATTERY_LOW -> imageDialogController?.dismissDialog(false)
+    }
   }
 
   override fun showPermissionRationale(requestCode: Int) {
@@ -488,6 +511,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
     private const val REQUEST_CODE_PERMISSION_LOCATION = 5001
     private const val REQUEST_CODE_PERMISSION_RATIONALE = 5002
     private const val REQUEST_CODE_TRANSMITTERS_CHANGED = 6001
+    private const val REQUEST_CODE_BATTERY_LOW = 6005
     private const val REQUEST_CODE_PATCH_DETAILS = 7001
 
     const val REQUEST_CODE_BLUETOOTH_ENABLE = 5005

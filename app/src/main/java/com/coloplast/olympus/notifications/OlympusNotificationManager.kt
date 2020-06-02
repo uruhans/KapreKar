@@ -58,6 +58,7 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
         NotificationPayload(state.notificationId(), R.string.lock_notification_total_blind)
       }
       UiState.PAY_ATTENTION_F -> { null }
+      UiState.WET_MOUNT_G -> { null }
       UiState.WATER_INGRESS_DETECTION_J -> {
         NotificationPayload(state.notificationId(), R.string.lock_notification_water)
       }

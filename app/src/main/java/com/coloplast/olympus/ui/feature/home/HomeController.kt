@@ -18,6 +18,7 @@ import com.coloplast.olympus.R
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
 import com.coloplast.olympus.bluetooth.businesslayer.enums.PowerLevel
+import com.coloplast.olympus.bluetooth.businesslayer.enums.SensorStatus
 import com.coloplast.olympus.bluetooth.businesslayer.models.Patch
 import com.coloplast.olympus.databinding.ControllerHomeBinding
 import com.coloplast.olympus.ui.common.BaseController
@@ -49,6 +50,7 @@ import io.reactivex.functions.Function
 import org.koin.core.inject
 import timber.log.Timber
 import java.time.LocalDateTime
+import java.time.LocalTime
 
 class HomeController : BaseController<ControllerHomeBinding>, HomeView, PermissionHandler, BaseDialogController.Listener, ImageDialogController.Listener {
   
@@ -80,6 +82,8 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   private var stateRouter: Router? = null
 
   private var patchDialog: PatchDialogController? = null
+
+  private var patchChangeTime: LocalTime? = null
 
   constructor() : super()
   constructor(args: Bundle?) : super(args)
@@ -153,7 +157,21 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
             currentPatch.set(it)
           }
 
-          changeUiState(stateChange.state)
+          var stateToChangeTo = stateChange.state
+
+          // Special case for Wet Mount
+          // if we get a wet mount or outer leak within 4 minutes (240 seconds)
+          // we override the ui state to wet mount
+          val timeBetween = LocalTime.now().minusNanos(patchChangeTime?.toNanoOfDay() ?: 0)
+          if(timeBetween.toSecondOfDay() <= 240) {
+            val outerSensorState = stateChange.bleDevice.peripheral?.patch?.outerSensor
+            if(outerSensorState == SensorStatus.BREACH || outerSensorState == SensorStatus.SOME_SWEAT || outerSensorState == SensorStatus.BLINDED) {
+              stateToChangeTo = UiState.WET_MOUNT_G
+            }
+            patchChangeTime = null
+          }
+
+          changeUiState(stateToChangeTo)
 
           if(stateChange.overlayState == OverlayState.QUESTION) {
             imageDialogController = ImageDialogController.create(
@@ -198,6 +216,9 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         }
         UiState.TOTAL_BLIND_E -> {
           TotalBlindController.routerTransaction()
+        }
+        UiState.WET_MOUNT_G -> {
+          WetMountController.routerTransaction()
         }
         UiState.CUTGUARD_BROKEN_I -> {
           CutGuardController.routerTransaction()
@@ -304,6 +325,8 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         imageDialogController?.dismissDialog(withCallback = true)
       }
       REQUEST_CODE_TRANSMITTERS_CHANGED -> {
+        patchChangeTime = LocalTime.now()
+
         breachesOccurred.clear()
         resetRelay.accept(transmitterManager.activeTransmitterMacAddress())
         imageDialogController?.dismissDialog(false)

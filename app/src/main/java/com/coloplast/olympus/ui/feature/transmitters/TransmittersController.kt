@@ -207,7 +207,7 @@ class TransmittersController(args: Bundle? = null) :
     val newList = mutableListOf<DiffCallback>()
 
     // Add attached transmitters and Title header
-    transmitterList.filter { it.attached }.let {
+    transmitterList.filter { it.attached.get() }.let {
       if(it.isNotEmpty()){
         newList.add(SmallHeaderItem(R.string.transmitters_attached))
         newList.addAll(it)
@@ -218,7 +218,7 @@ class TransmittersController(args: Bundle? = null) :
     if (newList.isNotEmpty()  && newList.size != transmitterList.size+1) newList.add(SectionDivider())
 
     // Add non-attached transmitters and Title header
-    transmitterList.filter { !it.attached }.let {
+    transmitterList.filter { !it.attached.get() }.let {
       if(it.isNotEmpty()){
         newList.add(SmallHeaderItem(R.string.transmitters_not_attached))
         newList.addAll(it)

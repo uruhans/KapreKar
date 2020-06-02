@@ -16,28 +16,29 @@ class TransmitterItem(val transmitter: Transmitter, val onEdit: ObservableBoolea
 
   val battery = ObservableField<Battery>()
   val connectionState = ObservableField<BleConnectionState>()
-  var attached: Boolean = false
-  private set
-  var detectable = false
+  val attached = ObservableBoolean(false)
+  val detectable = ObservableBoolean(false)
 
   fun setStateChange(stateChange: StateChange){
     this.battery.set(stateChange.bleDevice.peripheral?.battery)
-    attached = stateChange.bleDevice.isAttached()
-
-    connectionState.get() != BleConnectionState.CONNECTED
+    attached.set(stateChange.bleDevice.isAttached())
   }
 
   fun setConnectionState(connectionState: BleConnectionState){
     this.connectionState.set(connectionState)
+    detectable.set(connectionState == BleConnectionState.CONNECTED)
   }
 
   override fun areItemsTheSame(other: DiffCallback): Boolean {
-    return areContentsTheSame(other)
+    return equals(other)
   }
 
   override fun areContentsTheSame(other: DiffCallback): Boolean {
     return (other as? TransmitterItem)?.let {
-      this.transmitter.macAddress == other.transmitter.macAddress
+      this.battery.get() == other.battery.get()
+          && this.connectionState.get() == other.connectionState.get()
+          && this.attached.get() == other.attached.get()
+          && this.detectable.get() == other.detectable.get()
     } ?: false
   }
 }

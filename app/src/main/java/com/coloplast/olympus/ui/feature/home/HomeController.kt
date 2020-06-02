@@ -15,11 +15,14 @@ import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.FadeChangeHandler
 import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import com.coloplast.olympus.R
+import com.coloplast.olympus.bluetooth.ServiceDispatcher
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
 import com.coloplast.olympus.bluetooth.businesslayer.enums.PowerLevel
+import com.coloplast.olympus.bluetooth.businesslayer.enums.SensorStatus
 import com.coloplast.olympus.bluetooth.businesslayer.models.Battery
 import com.coloplast.olympus.bluetooth.businesslayer.models.Patch
+import com.coloplast.olympus.bluetooth.model.ServiceEvent
 import com.coloplast.olympus.databinding.ControllerHomeBinding
 import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.common.DrawerState
@@ -50,6 +53,7 @@ import io.reactivex.functions.Function
 import org.koin.core.inject
 import timber.log.Timber
 import java.time.LocalDateTime
+import java.time.LocalTime
 
 class HomeController : BaseController<ControllerHomeBinding>, HomeView, PermissionHandler, BaseDialogController.Listener, ImageDialogController.Listener {
   
@@ -81,6 +85,9 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   private var stateRouter: Router? = null
 
   private var patchDialog: PatchDialogController? = null
+  private var patchChangeTime: LocalTime? = null
+
+  private var previousBleState : BluetoothState = BluetoothState.UNDEFINED
 
   constructor() : super()
   constructor(args: Bundle?) : super(args)
@@ -113,6 +120,8 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
           }
         }
         is HomeUiModel.BluetoothIssue -> {
+          previousBleState = uiModel.bluetoothState
+
           when (uiModel.bluetoothState) {
             BluetoothState.BLUETOOTH_NOT_AVAILABLE -> {
             }
@@ -120,9 +129,8 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
               showPermissionDialog()
             }
             BluetoothState.BLUETOOTH_NOT_ENABLED -> {
-              if (currentUiState == UiState.INITIAL || currentUiState == UiState.READY_TO_SCAN) {
-                changeUiState(UiState.BLUETOOTH_NOT_ENABLED)
-              }
+              isConnected.set(false)
+              changeUiState(UiState.BLUETOOTH_NOT_ENABLED)
             }
             BluetoothState.LOCATION_SERVICES_NOT_ENABLED -> {
             
@@ -131,6 +139,10 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
             
             }
             BluetoothState.READY -> {
+              if(previousBleState == BluetoothState.BLUETOOTH_NOT_ENABLED) {
+                ServiceDispatcher.dispatchEvent(ServiceEvent.RETRY_CONNECTION)
+              }
+
               if (currentUiState == UiState.INITIAL || currentUiState == UiState.BLUETOOTH_NOT_ENABLED) {
                 changeUiState(UiState.READY_TO_SCAN)
               }
@@ -154,23 +166,23 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
             currentPatch.set(it)
           }
 
-          changeUiState(stateChange.state)
+          var stateToChangeTo = stateChange.state
 
-          if(stateChange.overlayState == OverlayState.QUESTION) {
-            imageDialogController = ImageDialogController.create(
-              this,
-              REQUEST_CODE_TRANSMITTERS_CHANGED,
-              R.string.overlay_leak_attactment_title,
-              0,
-              R.string.overlay_leak_attactment_action_new,
-              R.string.overlay_leak_attactment_action_old,
-              R.drawable.ic_info_circle,
-              verticalButtonLayout = true,
-              dismissAllowed = false
-            )
-
-            imageDialogController?.show()
+          // Special case for Wet Mount
+          // if we get a wet mount or outer leak within 4 minutes (240 seconds)
+          // we override the ui state to wet mount
+          val timeBetween = LocalTime.now().minusNanos(patchChangeTime?.toNanoOfDay() ?: 0)
+          if(timeBetween.toSecondOfDay() <= 240) {
+            val outerSensorState = stateChange.bleDevice.peripheral?.patch?.outerSensor
+            if(outerSensorState == SensorStatus.BREACH || outerSensorState == SensorStatus.SOME_SWEAT || outerSensorState == SensorStatus.BLINDED) {
+              stateToChangeTo = UiState.WET_MOUNT_G
+            }
+            patchChangeTime = null
           }
+
+          changeUiState(stateToChangeTo)
+
+          changeOverlayState(stateChange.overlayState)
         }
         is HomeUiModel.RawDataPackageUpdate -> {
           updateAnimation.set(true)
@@ -199,6 +211,9 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         }
         UiState.TOTAL_BLIND_E -> {
           TotalBlindController.routerTransaction()
+        }
+        UiState.WET_MOUNT_G -> {
+          WetMountController.routerTransaction()
         }
         UiState.CUTGUARD_BROKEN_I -> {
           CutGuardController.routerTransaction()
@@ -266,7 +281,42 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
       currentUiState = newState
     }
   }
-  
+
+  private fun changeOverlayState(overlayState: OverlayState) {
+    imageDialogController = null
+
+    when(overlayState) {
+      OverlayState.QUESTION -> {
+        imageDialogController = ImageDialogController.create(
+          this,
+          REQUEST_CODE_TRANSMITTERS_CHANGED,
+          R.string.overlay_leak_attactment_title,
+          0,
+          R.string.overlay_leak_attactment_action_new,
+          R.string.overlay_leak_attactment_action_old,
+          R.drawable.ic_info_circle,
+          verticalButtonLayout = true,
+          dismissAllowed = false
+        )
+      }
+      OverlayState.BATTERY_LOW -> {
+        imageDialogController = ImageDialogController.create(
+          this,
+          REQUEST_CODE_BATTERY_LOW,
+          R.string.status_no_con_battery_title,
+          R.string.status_no_con_battery,
+          R.string.guide_charge,
+          topImage = R.drawable.ic_battery_low_24dp,
+          tintColor = R.color.red,
+          verticalButtonLayout = true,
+          dismissAllowed = true
+        )
+      }
+    }
+
+    imageDialogController?.show()
+  }
+
   override fun requestConnectionState(): Observable<String> {
     return requestConnectionStateRelay
       .publish()
@@ -282,20 +332,17 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   }
 
   val patchClickedListener = object : PatchView.Listener {
-    override fun onPatchClicked(patch: Patch) {
+    override fun onPatchClicked() {
       val controllerAsPatchVisible = stateRouter?.backstack?.first()?.controller() as? PatchVisible
 
-      // if the current patch is not shown as in error
-      // we show the patch details
-      if(controllerAsPatchVisible?.patchInError() == false) {
-        patchDialog = PatchDialogController.create(
-          this@HomeController,
-          REQUEST_CODE_PATCH_DETAILS,
-          dismissAllowed = false
-        )
+      patchDialog = PatchDialogController.create(
+        this@HomeController,
+        REQUEST_CODE_PATCH_DETAILS,
+        controllerAsPatchVisible?.patchInError() ?: false,
+        dismissAllowed = false
+      )
 
-        patchDialog?.show()
-      }
+      patchDialog?.show()
     }
   }
   
@@ -308,6 +355,8 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         imageDialogController?.dismissDialog(withCallback = true)
       }
       REQUEST_CODE_TRANSMITTERS_CHANGED -> {
+        patchChangeTime = LocalTime.now()
+
         breachesOccurred.clear()
         resetRelay.accept(transmitterManager.activeTransmitterMacAddress())
         imageDialogController?.dismissDialog(false)
@@ -338,7 +387,9 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   }
 
   override fun onCloseClicked(requestCode: Int) {
-
+    when(requestCode) {
+      REQUEST_CODE_BATTERY_LOW -> imageDialogController?.dismissDialog(false)
+    }
   }
 
   override fun showPermissionRationale(requestCode: Int) {
@@ -461,6 +512,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
     private const val REQUEST_CODE_PERMISSION_LOCATION = 5001
     private const val REQUEST_CODE_PERMISSION_RATIONALE = 5002
     private const val REQUEST_CODE_TRANSMITTERS_CHANGED = 6001
+    private const val REQUEST_CODE_BATTERY_LOW = 6005
     private const val REQUEST_CODE_PATCH_DETAILS = 7001
 
     const val REQUEST_CODE_BLUETOOTH_ENABLE = 5005

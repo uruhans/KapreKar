@@ -1,6 +1,7 @@
 package com.coloplast.olympus.ui.dialogs
 
 import android.os.Bundle
+import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.databinding.ObservableBoolean
@@ -26,7 +27,8 @@ class ImageDialogController(args: Bundle) : BaseDialogController<ControllerDialo
   val showNegativeButton = ObservableBoolean()
   
   val topImage = ObservableInt(0)
-  
+  val tintColor = ObservableInt(0)
+
   val verticalButtons: Boolean
   val showTopImage: Boolean
   
@@ -41,7 +43,8 @@ class ImageDialogController(args: Bundle) : BaseDialogController<ControllerDialo
     negativeButtonTextResId.set(args.getInt(BUNDLE_NEGATIVE_BUTTON_RES_ID))
     
     topImage.set(args.getInt(BUNDLE_SHOW_IMAGE))
-    
+    tintColor.set(args.getInt(BUNDLE_TINT_COLOR, R.color.darkGrey01))
+
     showNegativeButton.set(negativeButtonTextResId.get() != 0)
     showTopImage = topImage.get() != 0
     verticalButtons = args.getBoolean(BUNDLE_VERTICAL_BUTTONS)
@@ -90,6 +93,7 @@ class ImageDialogController(args: Bundle) : BaseDialogController<ControllerDialo
     private const val BUNDLE_POSITIVE_BUTTON_RES_ID = "bundle_positive_button_res_id"
     private const val BUNDLE_NEGATIVE_BUTTON_RES_ID = "bundle_negative_button_res_id"
     private const val BUNDLE_SHOW_IMAGE = "bundle_show_image"
+    private const val BUNDLE_TINT_COLOR = "bundle_tint_color"
     private const val BUNDLE_VERTICAL_BUTTONS = "bundle_vertical_buttons"
     private const val BUNDLE_DISMISS_ALLOWED = "bundle_dismiss_allowed"
     
@@ -101,6 +105,7 @@ class ImageDialogController(args: Bundle) : BaseDialogController<ControllerDialo
         @StringRes positiveButtonId: Int,
         @StringRes negativeButtonId: Int = 0,
         @DrawableRes topImage: Int = 0,
+        @ColorRes tintColor: Int = 0,
         verticalButtonLayout: Boolean = false,
         dismissAllowed: Boolean = true
     ): ImageDialogController {
@@ -112,6 +117,7 @@ class ImageDialogController(args: Bundle) : BaseDialogController<ControllerDialo
         putInt(BUNDLE_POSITIVE_BUTTON_RES_ID, positiveButtonId)
         putInt(BUNDLE_NEGATIVE_BUTTON_RES_ID, negativeButtonId)
         putInt(BUNDLE_SHOW_IMAGE, topImage)
+        putInt(BUNDLE_TINT_COLOR, tintColor)
         putBoolean(BUNDLE_VERTICAL_BUTTONS, verticalButtonLayout)
         putBoolean(BUNDLE_DISMISS_ALLOWED, dismissAllowed)
       }

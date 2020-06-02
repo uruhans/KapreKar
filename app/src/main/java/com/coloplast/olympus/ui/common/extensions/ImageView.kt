@@ -45,6 +45,10 @@ fun ImageView.setBattery(battery: Battery?){
 @BindingAdapter("tintDrawable")
 fun ImageView.tintDrawable(@ColorRes colorRes: Int?) {
   colorRes?.let {
+    if(colorRes == 0) {
+      return
+    }
+
     val color = ContextCompat.getColor(context, colorRes)
     
     if (Build.VERSION.SDK_INT >= 29) {

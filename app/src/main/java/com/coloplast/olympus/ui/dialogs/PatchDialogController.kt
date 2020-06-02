@@ -9,7 +9,6 @@ import com.bluelinelabs.conductor.Controller
 import com.coloplast.olympus.R
 import com.coloplast.olympus.bluetooth.businesslayer.models.Patch
 import com.coloplast.olympus.databinding.ControllerDialogPatchBinding
-import com.coloplast.olympus.shared.AppSettings
 import com.coloplast.olympus.ui.common.dialogs.BaseDialogController
 import com.coloplast.olympus.ui.common.models.Navigation
 import com.coloplast.olympus.ui.feature.home.BreachesOccurred
@@ -22,9 +21,10 @@ class PatchDialogController(args: Bundle) : BaseDialogController<ControllerDialo
 
   private val breachesOccurred: BreachesOccurred by inject()
 
-  private val dismissAllowed: Boolean
-  private val requestCode: Int
-  
+  private val dismissAllowed = args.getBoolean(BUNDLE_DISMISS_ALLOWED)
+  private val requestCode = args.getInt(BUNDLE_REQUEST_CODE)
+  val patchInError = args.getBoolean(BUNDLE_PATCH_IN_ERROR)
+
   val currentPatch = ObservableField<Patch>()
   val rawRotationalAngle = ObservableInt()
 
@@ -36,11 +36,6 @@ class PatchDialogController(args: Bundle) : BaseDialogController<ControllerDialo
   private val controller = Navigation.getContentRouter()!!.getControllerWithInstanceId(
     args.getString(BUNDLE_TARGET_INSTANCE_ID)!!
   ) as? HomeController
-
-  init {
-    dismissAllowed = args.getBoolean(BUNDLE_DISMISS_ALLOWED)
-    requestCode = args.getInt(BUNDLE_REQUEST_CODE)
-  }
   
   override fun attachVariables(viewBinding: ControllerDialogPatchBinding) {
     viewBinding.controller = this
@@ -62,6 +57,10 @@ class PatchDialogController(args: Bundle) : BaseDialogController<ControllerDialo
   }
 
   private fun setDataFromHomeController() {
+    if(patchInError) {
+      return
+    }
+
     currentPatch.set(controller?.currentPatch?.get())
     rawRotationalAngle.set(controller?.rawRotationAngle?.get() ?: 0)
 
@@ -95,15 +94,18 @@ class PatchDialogController(args: Bundle) : BaseDialogController<ControllerDialo
   companion object {
     private const val BUNDLE_REQUEST_CODE = "bundle_request_code"
     private const val BUNDLE_DISMISS_ALLOWED = "bundle_dismiss_allowed"
-    
+    private const val BUNDLE_PATCH_IN_ERROR = "bundle_patch_in_error"
+
     fun create(
       targetController: Controller,
       requestCode: Int,
+      patchInError: Boolean = false,
       dismissAllowed: Boolean = false
     ): PatchDialogController {
       val args = Bundle().apply {
         putString(BUNDLE_TARGET_INSTANCE_ID, targetController.instanceId)
         putInt(BUNDLE_REQUEST_CODE, requestCode)
+        putBoolean(BUNDLE_PATCH_IN_ERROR, patchInError)
         putBoolean(BUNDLE_DISMISS_ALLOWED, dismissAllowed)
       }
       

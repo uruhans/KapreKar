@@ -46,7 +46,6 @@ class TransmittersController(args: Bundle? = null) :
     .map(TransmitterItem::class.java, BR.transmitterItem, R.layout.item_transmitter_cardview_wrapper)
 
   val hasTransmittersAdded = ObservableBoolean(false)
-  private var canAddMoreTransmitters = true
   val searchEnabled = ObservableBoolean(true)
   val retryPressed = ObservableBoolean(false)
   val editEnabled = ObservableBoolean(false)
@@ -95,8 +94,6 @@ class TransmittersController(args: Bundle? = null) :
               items.remove(transmitterItem)
             }
           }
-
-          canAddMoreTransmitters = items.filterIsInstance(TransmitterItem::class.java).size < 2
         }
         is TransmittersUiModel.StateUpdate -> {
           // state updates are coming from the Service (StateDispatcher)
@@ -197,7 +194,7 @@ class TransmittersController(args: Bundle? = null) :
   }
 
   fun onAddTransmitterClicked() {
-    when(canAddMoreTransmitters){
+    when(canAddMoreTransmitters()){
       true -> addTransmitterFlow()
       false -> {
         dialogController = ImageDialogController.create(
@@ -221,6 +218,8 @@ class TransmittersController(args: Bundle? = null) :
         .popChangeHandler(VerticalChangeHandler())
     )
   }
+
+  private fun canAddMoreTransmitters() = items.filterIsInstance(TransmitterItem::class.java).size < 2
 
   override fun requestDeleteTransmitter(): Observable<String> {
     return deleteTransmitterRelay

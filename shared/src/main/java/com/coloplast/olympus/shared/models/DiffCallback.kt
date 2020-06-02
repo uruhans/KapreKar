@@ -6,7 +6,7 @@ package com.coloplast.olympus.shared.models
  * Copyright by Dawn Health A/S. All rights reserved.
  */
 interface DiffCallback {
-  fun areItemsTheSame(other: DiffCallback): Boolean
+  fun areItemsTheSame(other: DiffCallback): Boolean = equals(other)
 
-  fun areContentsTheSame(other: DiffCallback): Boolean
+  fun areContentsTheSame(other: DiffCallback): Boolean = false
 }

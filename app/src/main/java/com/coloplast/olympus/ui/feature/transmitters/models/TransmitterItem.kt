@@ -29,10 +29,6 @@ class TransmitterItem(val transmitter: Transmitter, val onEdit: ObservableBoolea
     detectable.set(connectionState == BleConnectionState.CONNECTED)
   }
 
-  override fun areItemsTheSame(other: DiffCallback): Boolean {
-    return equals(other)
-  }
-
   override fun areContentsTheSame(other: DiffCallback): Boolean {
     return (other as? TransmitterItem)?.let {
       this.battery.get() == other.battery.get()

@@ -75,6 +75,7 @@ class TransmittersController(args: Bundle? = null) :
         is TransmittersUiModel.ConnectedDevices -> {
           hasTransmittersAdded.set(true)
 
+          transmitterList.clear()
           transmitterList.addAll(
             uiModel.devices.map { TransmitterItem(it, editEnabled, this) }
           )

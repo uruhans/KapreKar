@@ -26,7 +26,7 @@ class PatchView @JvmOverloads constructor(
 ) : FrameLayout(context, attrs, defStyleAttr) {
   
   interface Listener {
-    fun onPatchClicked(patch: Patch);
+    fun onPatchClicked()
   }
   
   private val inflater = LayoutInflater.from(context)
@@ -90,9 +90,7 @@ class PatchView @JvmOverloads constructor(
     this.listener = listener
     
     setOnClickListener {
-      previousPatchState?.let {
-        this.listener?.onPatchClicked(it)
-      }
+      this.listener?.onPatchClicked()
     }
   }
   

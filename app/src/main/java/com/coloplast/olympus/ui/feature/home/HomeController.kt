@@ -281,20 +281,17 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   }
 
   val patchClickedListener = object : PatchView.Listener {
-    override fun onPatchClicked(patch: Patch) {
+    override fun onPatchClicked() {
       val controllerAsPatchVisible = stateRouter?.backstack?.first()?.controller() as? PatchVisible
 
-      // if the current patch is not shown as in error
-      // we show the patch details
-      if(controllerAsPatchVisible?.patchInError() == false) {
-        patchDialog = PatchDialogController.create(
-          this@HomeController,
-          REQUEST_CODE_PATCH_DETAILS,
-          dismissAllowed = false
-        )
+      patchDialog = PatchDialogController.create(
+        this@HomeController,
+        REQUEST_CODE_PATCH_DETAILS,
+        controllerAsPatchVisible?.patchInError() ?: false,
+        dismissAllowed = false
+      )
 
-        patchDialog?.show()
-      }
+      patchDialog?.show()
     }
   }
   

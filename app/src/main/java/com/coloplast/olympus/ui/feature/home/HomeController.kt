@@ -15,11 +15,14 @@ import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.FadeChangeHandler
 import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import com.coloplast.olympus.R
+import com.coloplast.olympus.bluetooth.ServiceDispatcher
+import com.coloplast.olympus.bluetooth.StateDispatcher
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
 import com.coloplast.olympus.bluetooth.businesslayer.enums.PowerLevel
 import com.coloplast.olympus.bluetooth.businesslayer.enums.SensorStatus
 import com.coloplast.olympus.bluetooth.businesslayer.models.Patch
+import com.coloplast.olympus.bluetooth.model.ServiceEvent
 import com.coloplast.olympus.databinding.ControllerHomeBinding
 import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.common.DrawerState
@@ -82,8 +85,9 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   private var stateRouter: Router? = null
 
   private var patchDialog: PatchDialogController? = null
-
   private var patchChangeTime: LocalTime? = null
+
+  private var previousBleState : BluetoothState = BluetoothState.UNDEFINED
 
   constructor() : super()
   constructor(args: Bundle?) : super(args)
@@ -116,6 +120,8 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
           }
         }
         is HomeUiModel.BluetoothIssue -> {
+          previousBleState = uiModel.bluetoothState
+
           when (uiModel.bluetoothState) {
             BluetoothState.BLUETOOTH_NOT_AVAILABLE -> {
             }
@@ -123,9 +129,8 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
               showPermissionDialog()
             }
             BluetoothState.BLUETOOTH_NOT_ENABLED -> {
-              if (currentUiState == UiState.INITIAL || currentUiState == UiState.READY_TO_SCAN) {
-                changeUiState(UiState.BLUETOOTH_NOT_ENABLED)
-              }
+              isConnected.set(false)
+              changeUiState(UiState.BLUETOOTH_NOT_ENABLED)
             }
             BluetoothState.LOCATION_SERVICES_NOT_ENABLED -> {
             
@@ -134,6 +139,10 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
             
             }
             BluetoothState.READY -> {
+              if(previousBleState == BluetoothState.BLUETOOTH_NOT_ENABLED) {
+                ServiceDispatcher.dispatchEvent(ServiceEvent.RETRY_CONNECTION)
+              }
+
               if (currentUiState == UiState.INITIAL || currentUiState == UiState.BLUETOOTH_NOT_ENABLED) {
                 changeUiState(UiState.READY_TO_SCAN)
               }

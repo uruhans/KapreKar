@@ -1,6 +1,7 @@
 package com.coloplast.olympus.ui.feature.home.models
 
 import com.coloplast.olympus.bluetooth.businesslayer.enums.Battery
+import com.coloplast.olympus.bluetooth.businesslayer.enums.PowerLevel
 import com.coloplast.olympus.bluetooth.businesslayer.models.DeviceResult
 import com.coloplast.olympus.bluetooth.businesslayer.models.PatchState
 import com.coloplast.olympus.bluetooth.businesslayer.models.TransmitterState
@@ -50,6 +51,7 @@ object StateTransformers {
         
         val overlayState = when {
           peripheral.transmitter.battery == Battery.BATTERY_LOW -> OverlayState.BATTERY_LOW
+          peripheral.powerLevel == PowerLevel.LOW -> OverlayState.BATTERY_LOW
           else -> OverlayState.NONE
         }
         

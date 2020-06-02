@@ -59,7 +59,7 @@
             android:layout_height="86dp"
             android:layout_gravity="center"
             android:scaleType="centerCrop"
-            android:tint="@color/darkGrey01"
+            app:tintDrawable="@{controller.tintColor}"
             app:resource="@{controller.topImage}"
             app:visibleOrGone="@{controller.showTopImage}"
             tools:src="@drawable/ic_info_circle" />

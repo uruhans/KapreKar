@@ -53,6 +53,7 @@ class BluetoothServiceViewModel(
 
     val bluetoothStateReadyObservable = currentBluetoothStateObservable
       .filter { it == BluetoothState.READY }
+      .delay(5, TimeUnit.SECONDS)
 
     val databaseTransmittersObservable = transmitterComponent.getTransmitters()
       .subscribeOn(Schedulers.io())

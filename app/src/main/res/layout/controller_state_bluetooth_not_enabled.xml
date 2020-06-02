@@ -46,7 +46,7 @@
 
     <androidx.cardview.widget.CardView
       android:layout_width="match_parent"
-      android:layout_height="56dp"
+      android:layout_height="@dimen/cardview_button_height_default"
       android:layout_marginStart="@dimen/spacing_standard"
       android:layout_marginTop="@dimen/spacing_double"
       android:layout_marginEnd="@dimen/spacing_standard"
@@ -70,5 +70,6 @@
         android:textSize="18sp" />
 
     </androidx.cardview.widget.CardView>
+
   </LinearLayout>
 </layout>

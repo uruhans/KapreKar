@@ -6,8 +6,10 @@ import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerStateBluetoothNotEnabledBinding
 import com.coloplast.olympus.ui.feature.home.HomeController
+import com.coloplast.olympus.ui.feature.home.models.PatchVisible
 
-class BluetoothNotEnabledController : BaseHomeUIController<ControllerStateBluetoothNotEnabledBinding>() {
+class BluetoothNotEnabledController : BaseHomeUIController<ControllerStateBluetoothNotEnabledBinding>(),
+  PatchVisible {
   
   override fun attachVariables(viewBinding: ControllerStateBluetoothNotEnabledBinding) {
     super.attachVariables(viewBinding)
@@ -16,6 +18,10 @@ class BluetoothNotEnabledController : BaseHomeUIController<ControllerStateBlueto
   
   override fun onViewBound(viewBinding: ControllerStateBluetoothNotEnabledBinding) {
     // no-op
+  }
+
+  override fun patchVisible(): Boolean {
+    return false
   }
   
   fun enableBluetoothClicked() {

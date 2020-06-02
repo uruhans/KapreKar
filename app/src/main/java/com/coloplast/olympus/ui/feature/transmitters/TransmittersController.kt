@@ -46,7 +46,7 @@ class TransmittersController(args: Bundle? = null) :
     .map(TransmitterItem::class.java, BR.transmitterItem, R.layout.item_transmitter_cardview_wrapper)
 
   val hasTransmittersAdded = ObservableBoolean(false)
-  val canAddMoreTransmitters = ObservableBoolean(true)
+  private var canAddMoreTransmitters = true
   val searchEnabled = ObservableBoolean(true)
   val retryPressed = ObservableBoolean(false)
   val editEnabled = ObservableBoolean(false)
@@ -96,7 +96,7 @@ class TransmittersController(args: Bundle? = null) :
             }
           }
 
-          canAddMoreTransmitters.set(items.filterIsInstance(TransmitterItem::class.java).size < 2)
+          canAddMoreTransmitters = items.filterIsInstance(TransmitterItem::class.java).size < 2
         }
         is TransmittersUiModel.StateUpdate -> {
           // state updates are coming from the Service (StateDispatcher)
@@ -153,7 +153,7 @@ class TransmittersController(args: Bundle? = null) :
 
     dialogController = ImageDialogController.create(
       this,
-      REQUEST_CODE_1000,
+      REQUEST_CODE_DELETE_TRANSMITTER,
       R.string.dialog_delete_transmitter_title,
       R.string.empty,
       R.string.generic_yes,
@@ -164,22 +164,30 @@ class TransmittersController(args: Bundle? = null) :
     ).apply { show() }
   }
 
-  override fun onCloseClicked(requestCode: Int) = onNegativeButtonClicked(requestCode)
+  override fun onCloseClicked(requestCode: Int){
+    dialogController?.dismissDialog(false)
+    dialogController = null
+  }
 
   override fun onPositiveButtonClicked(requestCode: Int) {
     when (requestCode) {
-      REQUEST_CODE_1000 -> {
+      REQUEST_CODE_DELETE_TRANSMITTER -> {
         transmitterToDelete?.let {
           deleteTransmitterRelay.accept(it.macAddress)
         }
+      }
+      REQUEST_CODE_ADD_TRANSMITTER -> {
+        dialogController?.dismissDialog(false)
+        dialogController = null
       }
     }
   }
 
   override fun onNegativeButtonClicked(requestCode: Int) {
     when (requestCode) {
-      REQUEST_CODE_1000 -> {
+      REQUEST_CODE_DELETE_TRANSMITTER -> {
         dialogController?.dismissDialog(false)
+        dialogController = null
       }
     }
   }
@@ -189,6 +197,24 @@ class TransmittersController(args: Bundle? = null) :
   }
 
   fun onAddTransmitterClicked() {
+    when(canAddMoreTransmitters){
+      true -> addTransmitterFlow()
+      false -> {
+        dialogController = ImageDialogController.create(
+          this,
+          REQUEST_CODE_ADD_TRANSMITTER,
+          R.string.dialog_transmitters_cannot_add_more_transmitters_title,
+          R.string.dialog_transmitters_cannot_add_more_transmitters_message,
+          R.string.generic_ok,
+          topImage = R.drawable.ic_info_circle,
+          verticalButtonLayout = true,
+          dismissAllowed = true
+        ).apply { show() }
+      }
+    }
+  }
+
+  private fun addTransmitterFlow(){
     router.pushController(
       AddTransmitterFlowController.routerTransaction(2)
         .pushChangeHandler(VerticalChangeHandler())
@@ -223,7 +249,8 @@ class TransmittersController(args: Bundle? = null) :
 
   companion object {
     private const val TAG_CONTROLLER = "transmitters_controller"
-    private const val REQUEST_CODE_1000 = 1000
+    private const val REQUEST_CODE_DELETE_TRANSMITTER = 1000
+    private const val REQUEST_CODE_ADD_TRANSMITTER = 1001
 
     fun routerTransaction(): RouterTransaction {
       return RouterTransaction.with(TransmittersController())

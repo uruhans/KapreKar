@@ -6,7 +6,7 @@ package com.coloplast.olympus.shared.models
  * Copyright by Dawn Health A/S. All rights reserved.
  */
 interface DiffListItem {
-  fun areItemsTheSame(other: DiffListItem): Boolean = equals(other)
+  fun areItemsTheSame(other: DiffListItem): Boolean
 
-  fun areContentsTheSame(other: DiffListItem): Boolean = false
+  fun areContentsTheSame(other: DiffListItem): Boolean
 }

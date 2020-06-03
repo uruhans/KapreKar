@@ -1,5 +1,6 @@
 package com.coloplast.olympus.ui.feature
 
+import com.coloplast.olympus.bluetooth.businesslayer.BluetoothManager
 import com.coloplast.olympus.bluetooth.businesslayer.services.OlympusWirelessProtocol
 import com.coloplast.olympus.bluetooth.model.StateChange
 import com.coloplast.olympus.shared.moshi.deserialize
@@ -14,7 +15,7 @@ import timber.log.Timber
 /**
  * This manager determines which Tx is currently the *active* one (ie: the one whose state is being displayed on the status screen)
  */
-class TransmitterManager {
+class TransmitterManager(private val bluetoothManager: BluetoothManager) {
 
   private val transmitterStateHistory = mutableMapOf<String, Stack<StateChange>>()
   private var activeTransmitter
@@ -46,7 +47,9 @@ class TransmitterManager {
   fun determineCurrentlyActiveTransmitterAndReturnStateChangeFromIt(stateChange: StateChange): UpdatedStateChange {
     addToHistory(stateChange)
 
-    if(activeTransmitter.isEmpty()) {
+    val isActiveTransmitterConnected = bluetoothManager.isConnected(activeTransmitter)
+
+    if(activeTransmitter.isEmpty() || !isActiveTransmitterConnected) {
       // we have no active transmitters
       return if(isCurrentlyAttached(stateChange)) {
         setActiveTransmitter(stateChange)
@@ -157,18 +160,26 @@ class TransmitterManager {
   private fun isOtherTransmitterAttached(thisTransmitterAddress: String): Boolean {
     val otherTransmitter =
       transmitterStateHistory.entries.firstOrNull { it.key != thisTransmitterAddress }
-    return otherTransmitter?.value?.peek()?.bleDevice?.isAttached() ?: false
+
+    val isConnected = bluetoothManager.isConnected(otherTransmitter?.key ?: "")
+
+    return isConnected && otherTransmitter?.value?.peek()?.bleDevice?.isAttached() ?: false
   }
 
   private fun latestStateFromOtherTransmitter(thisTransmitterAddress: String): StateChange? {
     val otherTransmitter =
       transmitterStateHistory.entries.firstOrNull { it.key != thisTransmitterAddress }
-    return otherTransmitter?.value?.peek()
+
+    val isConnected = bluetoothManager.isConnected(otherTransmitter?.key ?: "")
+    return if(isConnected) otherTransmitter?.value?.peek() else null
   }
 
   private fun attachedPreviously(macAddress: String) : Boolean {
     val transmitter = transmitterStateHistory.entries.firstOrNull { it.key == macAddress }
-    return transmitter?.value?.peekPrevious()?.bleDevice?.isAttached() ?: false
+
+    val isConnected = bluetoothManager.isConnected(transmitter?.key ?: "")
+
+    return isConnected && transmitter?.value?.peekPrevious()?.bleDevice?.isAttached() ?: false
   }
 
   private fun isCurrentlyAttached(stateChange: StateChange) : Boolean {

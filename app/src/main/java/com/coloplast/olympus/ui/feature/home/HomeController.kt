@@ -148,6 +148,20 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
             }
           }
         }
+        is HomeUiModel.Initial -> {
+          /* no-op */
+          // a placeholder for initial scanning state when first launching the app
+        }
+        is HomeUiModel.Scanning -> {
+          if(currentUiState == UiState.INITIAL) {
+            changeUiState(UiState.READY_TO_SCAN)
+          }
+        }
+        is HomeUiModel.ScanningStopped -> {
+          if(currentUiState == UiState.READY_TO_SCAN) {
+            changeUiState(UiState.TRANSMITTER_NOT_FOUND)
+          }
+        }
         is HomeUiModel.DeviceUpdate -> {
           val updatedStateChange = transmitterManager.determineCurrentlyActiveTransmitterAndReturnStateChangeFromIt(uiModel.stateChange)
           val stateChange = transmitterManager.determineTransmitterPatchQuestioning(updatedStateChange)
@@ -234,6 +248,9 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         }
         UiState.MULTIPLE_TRANSMITTERS -> {
           MultipleTransmittersController.routerTransaction()
+        }
+        UiState.TRANSMITTER_NOT_FOUND -> {
+          TransmitterNotFoundController.routerTransaction()
         }
         UiState.DISCONNECTED -> {
           ReadyToScanController.routerTransaction()

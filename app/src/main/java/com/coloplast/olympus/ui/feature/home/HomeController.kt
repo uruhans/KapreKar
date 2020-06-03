@@ -143,7 +143,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
               }
 
               if (currentUiState == UiState.INITIAL || currentUiState == UiState.BLUETOOTH_NOT_ENABLED) {
-                changeUiState(UiState.READY_TO_SCAN)
+                changeUiState(UiState.CONNECTING)
               }
             }
           }
@@ -154,11 +154,11 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         }
         is HomeUiModel.Scanning -> {
           if(currentUiState == UiState.INITIAL) {
-            changeUiState(UiState.READY_TO_SCAN)
+            changeUiState(UiState.CONNECTING)
           }
         }
         is HomeUiModel.ScanningStopped -> {
-          if(currentUiState == UiState.READY_TO_SCAN) {
+          if(currentUiState == UiState.CONNECTING) {
             changeUiState(UiState.TRANSMITTER_NOT_FOUND)
           }
         }
@@ -258,7 +258,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         UiState.INITIAL -> {
           UnknownController.routerTransaction()
         }
-        UiState.READY_TO_SCAN -> {
+        UiState.CONNECTING -> {
           ReadyToScanController.routerTransaction()
         }
         UiState.SCANNING -> {
@@ -323,7 +323,6 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
           R.string.status_no_con_battery,
           R.string.guide_charge,
           topImage = R.drawable.ic_battery_low_24dp,
-          tintColor = R.color.red,
           verticalButtonLayout = true,
           dismissAllowed = true
         )

@@ -253,13 +253,13 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
           TransmitterNotFoundController.routerTransaction()
         }
         UiState.DISCONNECTED -> {
-          ReadyToScanController.routerTransaction()
+          ConnectingController.routerTransaction()
         }
         UiState.INITIAL -> {
           UnknownController.routerTransaction()
         }
         UiState.CONNECTING -> {
-          ReadyToScanController.routerTransaction()
+          ConnectingController.routerTransaction()
         }
         UiState.SCANNING -> {
           ScanningController.routerTransaction()

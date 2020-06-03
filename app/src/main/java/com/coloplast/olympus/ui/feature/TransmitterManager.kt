@@ -47,9 +47,12 @@ class TransmitterManager(private val bluetoothManager: BluetoothManager) {
   fun determineCurrentlyActiveTransmitterAndReturnStateChangeFromIt(stateChange: StateChange): UpdatedStateChange {
     addToHistory(stateChange)
 
+    // we verify that the currently active transmitter is actually connected
+    // there could be an edge case where it may not be connected - but we still have a history of it's states
+    // that may cause false positives
     val isActiveTransmitterConnected = bluetoothManager.isConnected(activeTransmitter)
 
-    if(activeTransmitter.isEmpty() || !isActiveTransmitterConnected) {
+    if(!isActiveTransmitterConnected || activeTransmitter.isEmpty()) {
       // we have no active transmitters
       return if(isCurrentlyAttached(stateChange)) {
         setActiveTransmitter(stateChange)
@@ -161,8 +164,8 @@ class TransmitterManager(private val bluetoothManager: BluetoothManager) {
     val otherTransmitter =
       transmitterStateHistory.entries.firstOrNull { it.key != thisTransmitterAddress }
 
+    // verify that the *other* transmitter is actually connected
     val isConnected = bluetoothManager.isConnected(otherTransmitter?.key ?: "")
-
     return isConnected && otherTransmitter?.value?.peek()?.bleDevice?.isAttached() ?: false
   }
 
@@ -170,6 +173,7 @@ class TransmitterManager(private val bluetoothManager: BluetoothManager) {
     val otherTransmitter =
       transmitterStateHistory.entries.firstOrNull { it.key != thisTransmitterAddress }
 
+    // verify that the *other* transmitter is actually connected
     val isConnected = bluetoothManager.isConnected(otherTransmitter?.key ?: "")
     return if(isConnected) otherTransmitter?.value?.peek() else null
   }
@@ -177,8 +181,8 @@ class TransmitterManager(private val bluetoothManager: BluetoothManager) {
   private fun attachedPreviously(macAddress: String) : Boolean {
     val transmitter = transmitterStateHistory.entries.firstOrNull { it.key == macAddress }
 
+    // verify that the transmitter is actually connected
     val isConnected = bluetoothManager.isConnected(transmitter?.key ?: "")
-
     return isConnected && transmitter?.value?.peekPrevious()?.bleDevice?.isAttached() ?: false
   }
 

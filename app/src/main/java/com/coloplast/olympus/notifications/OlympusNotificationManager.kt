@@ -34,10 +34,11 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
       UiState.NO_CHANGE -> { null }
       UiState.INITIAL -> { null }
       UiState.BLUETOOTH_NOT_ENABLED -> { null }
-      UiState.READY_TO_SCAN -> { null }
+      UiState.CONNECTING -> { null }
       UiState.SCANNING -> { null }
       UiState.DISCONNECTED -> { null }
       UiState.MULTIPLE_TRANSMITTERS -> { null }
+      UiState.TRANSMITTER_NOT_FOUND -> { null }
       UiState.SOMETHING_ELSE,
       UiState.OK_A -> {
         // we will clear all notifications that may be shown - now that everything is OK - we don't need earlier notification warnings

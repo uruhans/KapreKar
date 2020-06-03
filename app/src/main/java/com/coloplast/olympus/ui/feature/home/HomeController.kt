@@ -143,9 +143,23 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
               }
 
               if (currentUiState == UiState.INITIAL || currentUiState == UiState.BLUETOOTH_NOT_ENABLED) {
-                changeUiState(UiState.READY_TO_SCAN)
+                changeUiState(UiState.CONNECTING)
               }
             }
+          }
+        }
+        is HomeUiModel.Initial -> {
+          /* no-op */
+          // a placeholder for initial scanning state when first launching the app
+        }
+        is HomeUiModel.Scanning -> {
+          if(currentUiState == UiState.INITIAL) {
+            changeUiState(UiState.CONNECTING)
+          }
+        }
+        is HomeUiModel.ScanningStopped -> {
+          if(currentUiState == UiState.CONNECTING) {
+            changeUiState(UiState.TRANSMITTER_NOT_FOUND)
           }
         }
         is HomeUiModel.DeviceUpdate -> {
@@ -235,14 +249,17 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         UiState.MULTIPLE_TRANSMITTERS -> {
           MultipleTransmittersController.routerTransaction()
         }
+        UiState.TRANSMITTER_NOT_FOUND -> {
+          TransmitterNotFoundController.routerTransaction()
+        }
         UiState.DISCONNECTED -> {
-          ReadyToScanController.routerTransaction()
+          ConnectingController.routerTransaction()
         }
         UiState.INITIAL -> {
           UnknownController.routerTransaction()
         }
-        UiState.READY_TO_SCAN -> {
-          ReadyToScanController.routerTransaction()
+        UiState.CONNECTING -> {
+          ConnectingController.routerTransaction()
         }
         UiState.SCANNING -> {
           ScanningController.routerTransaction()
@@ -306,7 +323,6 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
           R.string.status_no_con_battery,
           R.string.guide_charge,
           topImage = R.drawable.ic_battery_low_24dp,
-          tintColor = R.color.red,
           verticalButtonLayout = true,
           dismissAllowed = true
         )

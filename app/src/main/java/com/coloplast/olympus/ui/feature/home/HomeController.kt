@@ -23,6 +23,7 @@ import com.coloplast.olympus.bluetooth.businesslayer.enums.SensorStatus
 import com.coloplast.olympus.bluetooth.businesslayer.models.Patch
 import com.coloplast.olympus.bluetooth.model.ServiceEvent
 import com.coloplast.olympus.databinding.ControllerHomeBinding
+import com.coloplast.olympus.notifications.OlympusNotificationManager
 import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.common.DrawerState
 import com.coloplast.olympus.ui.common.PermissionHandler
@@ -59,6 +60,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   private val viewModel: HomeViewModel by inject()
   private val transmitterManager: TransmitterManager by inject()
   private val breachesOccurred: BreachesOccurred by inject()
+  private val olympusNotificationManager: OlympusNotificationManager by inject()
 
   private val requestConnectionStateRelay = PublishRelay.create<String>()
   private val stitchRelay = PublishRelay.create<Stitch>()
@@ -163,8 +165,12 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
           }
         }
         is HomeUiModel.DeviceUpdate -> {
-          val updatedStateChange = transmitterManager.determineCurrentlyActiveTransmitterAndReturnStateChangeFromIt(uiModel.stateChange)
-          val stateChange = transmitterManager.determineTransmitterPatchQuestioning(updatedStateChange)
+          var stateChange = uiModel.stateChange
+
+          if(stateChange.overlayState != OverlayState.BLE_CONNECTION_LOST) {
+            val updatedStateChange = transmitterManager.determineCurrentlyActiveTransmitterAndReturnStateChangeFromIt(uiModel.stateChange)
+            stateChange =transmitterManager.determineTransmitterPatchQuestioning(updatedStateChange)
+          }
 
           powerLevel.set(stateChange.bleDevice.peripheral?.powerLevel)
           isConnected.set(stateChange.bleDevice.isConnected())
@@ -194,7 +200,6 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
           }
 
           changeUiState(stateToChangeTo)
-
           changeOverlayState(stateChange.overlayState)
         }
         is HomeUiModel.RawDataPackageUpdate -> {
@@ -299,6 +304,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   }
 
   private fun changeOverlayState(overlayState: OverlayState) {
+    imageDialogController?.dismissDialog(false)
     imageDialogController = null
 
     when(overlayState) {
@@ -327,9 +333,23 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
           dismissAllowed = true
         )
       }
+      OverlayState.BLE_CONNECTION_LOST -> {
+        imageDialogController = ImageDialogController.create(
+          this,
+          REQUEST_CODE_CONNECTION_LOST,
+          R.string.overlay_ble_disconnected_title,
+          R.string.overlay_ble_disconnected,
+          R.string.guide_ble_connection,
+          topImage = R.drawable.ic_bluetooth,
+          verticalButtonLayout = true,
+          dismissAllowed = true
+        )
+      }
     }
 
     imageDialogController?.show()
+
+    olympusNotificationManager.send(overlayState)
   }
   
   override fun requestConnectionState(): Observable<String> {
@@ -376,6 +396,9 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         resetRelay.accept(transmitterManager.activeTransmitterMacAddress())
         imageDialogController?.dismissDialog(false)
       }
+      REQUEST_CODE_CONNECTION_LOST -> {
+        imageDialogController?.dismissDialog(withCallback = true)
+      }
     }
   }
 
@@ -398,11 +421,17 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
       REQUEST_CODE_PERMISSION_RATIONALE -> {
         requestPermissionAgain(this, REQUEST_CODE_PERMISSION_LOCATION, OSUtils.bleLocationPermission())
       }
+      REQUEST_CODE_CONNECTION_LOST -> {
+        router.pushController(GuideController.routerTransaction(GuideType.CONNECTION)
+          .pushChangeHandler(VerticalChangeHandler())
+          .popChangeHandler(VerticalChangeHandler()))
+      }
     }
   }
 
   override fun onCloseClicked(requestCode: Int) {
     when(requestCode) {
+      REQUEST_CODE_CONNECTION_LOST,
       REQUEST_CODE_BATTERY_LOW -> imageDialogController?.dismissDialog(false)
     }
   }
@@ -528,6 +557,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
     private const val REQUEST_CODE_PERMISSION_RATIONALE = 5002
     private const val REQUEST_CODE_TRANSMITTERS_CHANGED = 6001
     private const val REQUEST_CODE_BATTERY_LOW = 6005
+    private const val REQUEST_CODE_CONNECTION_LOST = 6010
     private const val REQUEST_CODE_PATCH_DETAILS = 7001
 
     const val REQUEST_CODE_BLUETOOTH_ENABLE = 5005

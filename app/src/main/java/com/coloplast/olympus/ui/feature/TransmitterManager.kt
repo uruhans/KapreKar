@@ -213,6 +213,12 @@ class TransmitterManager(private val bluetoothManager: BluetoothManager) {
       if(isOtherTransmitterAttached(disconnectedTransmitterMacAddress)) {
         shouldDispatchOtherTxState = true
       }
+      else {
+        // we need to send back a state where we tell the user that the transmitter has lost connection
+        transmitterStateHistory[disconnectedTransmitterMacAddress]?.peek()?.let {
+          return StateChange(UiState.NO_CHANGE, OverlayState.BLE_CONNECTION_LOST, it.bleDevice)
+        }
+      }
     }
     else {
       val currentTxUpdate = transmitterStateHistory.entries.firstOrNull { it.key == disconnectedTransmitterMacAddress }

@@ -207,6 +207,10 @@ class BluetoothServiceViewModel(
           }
         }
       }
-      .onErrorReturn { BluetoothServiceModel.Disconnected() }
+      .onErrorReturn {
+        val latestStateChangeFromOtherTx = transmitterManager.onTransmitterDisconnect(macAddress)
+        // return a disconnect to the service
+        BluetoothServiceModel.Disconnected(latestStateChangeFromOtherTx)
+      }
   }
 }

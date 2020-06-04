@@ -10,7 +10,8 @@ import com.coloplast.olympus.ui.common.BaseFlowController
  * Created by Kike Bodi (ebp@dawnhealth.com) on 03/06/2020.
  * Copyright by Dawn Health A/S. All rights reserved.
  */
-class SettingsFlowController(args: Bundle? = null): BaseFlowController(args) {
+class SettingsFlowController(args: Bundle? = null): BaseFlowController(args),
+  SettingsController.Listener{
 
 
   override fun startFlow(flowChildRouter: Router) {
@@ -19,6 +20,10 @@ class SettingsFlowController(args: Bundle? = null): BaseFlowController(args) {
 
   private fun getInitialController(): RouterTransaction = SettingsController.routerTransaction().apply{
     controller().targetController = this@SettingsFlowController
+  }
+
+  override fun setBedtimeAlarm() {
+    pushController(BedtimeAlarmController.routerTransaction())
   }
 
   companion object{

@@ -29,7 +29,7 @@
         style="@style/TextStyle.Coloplast.Bold.DarkGrey.24"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:drawableStart="@drawable/ic_info_circle"
+        android:drawableStart="@drawable/ic_clock"
         android:text="@string/settings_bedtime_alerts_header" />
 
       <TextView

@@ -1,12 +1,15 @@
 package com.coloplast.olympus.ui.feature.settings
 
-import android.widget.Toast
 import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerSettingsBinding
 import com.coloplast.olympus.ui.common.BaseController
 
 class SettingsController: BaseController<ControllerSettingsBinding>() {
+
+  interface Listener{
+    fun setBedtimeAlarm()
+  }
 
   override fun attachVariables(viewBinding: ControllerSettingsBinding) {
     viewBinding.controller = this
@@ -16,8 +19,8 @@ class SettingsController: BaseController<ControllerSettingsBinding>() {
     //noop
   }
 
-  fun setBedtimeAlarm(){
-    Toast.makeText(applicationContext!!, "setBedtimeAlarm", Toast.LENGTH_SHORT).show()
+  fun setBedtimeAlarmClicked(){
+    getListener(Listener::class.java)!!.setBedtimeAlarm()
   }
 
   override fun getLayout(): Int = R.layout.controller_settings

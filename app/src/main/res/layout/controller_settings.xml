@@ -36,7 +36,7 @@
         style="@style/TextStyle.Roboto.Regular.ClearGrey.14" />
 
       <include layout="@layout/item_bedtime_alarm_card"
-        app:buttonClickListener="@{() -> controller.setBedtimeAlarm()}"/>
+        app:buttonClickListener="@{() -> controller.setBedtimeAlarmClicked()}"/>
 
     </LinearLayout>
   </ScrollView>

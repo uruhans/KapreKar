@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+  <data>
+
+    <variable
+      name="buttonClickListener"
+      type="android.view.View.OnClickListener" />
+  </data>
+
+  <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/cardview_not_selected"
+    app:cardCornerRadius="@dimen/cardview_corner_radius"
+    app:cardElevation="@dimen/cardview_elevation_default"
+    app:cardUseCompatPadding="true">
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="@dimen/spacing_larger"
+      android:layout_marginTop="@dimen/spacing_larger"
+      android:layout_marginEnd="@dimen/spacing_larger"
+      android:orientation="vertical">
+
+      <TextView
+        style="@style/TextStyle.Coloplast.Bold.DarkGrey.24"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/ic_info_circle"
+        android:text="@string/settings_bedtime_alerts_header" />
+
+      <TextView
+        style="@style/TextStyle.Roboto.Regular.ClearGrey.16"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_small"
+        android:layout_marginBottom="@dimen/spacing_small"
+        android:text="@string/settings_bedtime_alerts_body" />
+
+      <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/Button"
+        android:onClick="@{buttonClickListener}"
+        android:text="@string/settings_bedtime_alerts_schedule_button" />
+
+    </LinearLayout>
+
+  </androidx.cardview.widget.CardView>
+
+</layout>
+
+

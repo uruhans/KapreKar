@@ -182,6 +182,10 @@
     <item name="android:textColor">@color/text_clear_grey</item>
   </style>
 
+  <style name="TextStyle.Roboto.Regular.ClearGrey.14" parent="TextStyle.Roboto.Regular.ClearGrey">
+    <item name="android:textSize">14sp</item>
+  </style>
+
   <style name="TextStyle.Roboto.Regular.ClearGrey.16" parent="TextStyle.Roboto.Regular.ClearGrey">
     <item name="android:textSize">@dimen/text_16</item>
   </style>

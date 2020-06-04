@@ -196,6 +196,11 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
             if(outerSensorState == SensorStatus.BREACH || outerSensorState == SensorStatus.SOME_SWEAT || outerSensorState == SensorStatus.BLINDED) {
               stateToChangeTo = UiState.WET_MOUNT_G
             }
+            // clear the variable so we dont hit this wet mount again the next time
+            patchChangeTime = null
+          }
+          else {
+            // if we are passed 4 minutes we dont need this variable any more
             patchChangeTime = null
           }
 
@@ -341,6 +346,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
           R.string.overlay_ble_disconnected,
           R.string.guide_ble_connection,
           topImage = R.drawable.ic_bluetooth,
+          tintColor = R.color.darkGrey03,
           verticalButtonLayout = true,
           dismissAllowed = true
         )
@@ -349,6 +355,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
 
     imageDialogController?.show()
 
+    // send any notification that is needed for this state
     olympusNotificationManager.send(overlayState)
   }
   

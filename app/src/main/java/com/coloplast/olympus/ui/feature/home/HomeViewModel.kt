@@ -11,6 +11,7 @@ import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import timber.log.Timber
+import java.util.concurrent.TimeUnit
 
 class HomeViewModel(private val bluetoothManager: BluetoothManager) :
     BaseHomeViewModel() {
@@ -46,8 +47,19 @@ class HomeViewModel(private val bluetoothManager: BluetoothManager) :
           .toObservable()
       }
 
+    val scanningObservable = StateDispatcher.scanningObservable()
+      .map<HomeUiModel> { HomeUiModel.Scanning() }
+      .startWith(HomeUiModel.Initial())
+
+    val doUntil = scanningObservable
+      .switchMap {
+        Observable.interval(5, TimeUnit.SECONDS)
+          .map<HomeUiModel> { HomeUiModel.ScanningStopped() }
+          .take(1)
+      }
+
     disposable.add(Observable.merge(stateUpdate, bluetoothStateObservable, rawPackageUpdateObservable).bind(uiView.render()))
-    disposable.add(Observable.merge(resetTransmitterObservable, stitchTransmitterObservable).bind(uiView.render()))
+    disposable.add(Observable.merge(resetTransmitterObservable, stitchTransmitterObservable, scanningObservable, doUntil).bind(uiView.render()))
 
     return disposable
   }

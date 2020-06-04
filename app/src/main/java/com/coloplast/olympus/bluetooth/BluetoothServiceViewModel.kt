@@ -125,9 +125,11 @@ class BluetoothServiceViewModel(
           .map { dbTransmitter.macAddress }
       }
 
+    val retryObservable = ServiceDispatcher.serviceEventObservable()
+    .filter { it == ServiceEvent.RETRY_CONNECTION }
+
     // listen to service events for any retrys
-    val retryConnectionObservable = ServiceDispatcher.serviceEventObservable()
-      .filter { it == ServiceEvent.RETRY_CONNECTION }
+    val retryConnectionObservable = retryObservable
       .switchMap { bleBeaconScanningObservable }
 
     val beaconScanningWithRetryObservable = Observable.merge(retryConnectionObservable, bleBeaconScanningObservable)
@@ -170,6 +172,8 @@ class BluetoothServiceViewModel(
           }
       }
 
+    compositeDisposable.add(retryObservable.map<BluetoothServiceModel> { BluetoothServiceModel.ScanningStarted() }.bind(serviceResult.onResult()))
+
     compositeDisposable.add(connectTransmitterObservable.bind(serviceResult.onResult()))
     return compositeDisposable
   }
@@ -203,6 +207,10 @@ class BluetoothServiceViewModel(
           }
         }
       }
-      .onErrorReturn { BluetoothServiceModel.Disconnected() }
+      .onErrorReturn {
+        val latestStateChangeFromOtherTx = transmitterManager.onTransmitterDisconnect(macAddress)
+        // return a disconnect to the service
+        BluetoothServiceModel.Disconnected(latestStateChangeFromOtherTx)
+      }
   }
 }

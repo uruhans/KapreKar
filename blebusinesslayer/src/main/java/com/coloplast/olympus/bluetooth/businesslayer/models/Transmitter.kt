@@ -21,6 +21,7 @@ data class Transmitter(
   fun getState(): TransmitterState {
     return when {
       waterIngressDetection == WaterIngressDetection.TRIGGERED -> TransmitterState.WATER_INGRESS_DETECTION
+      battery == Battery.SHUTTING_DOWN -> TransmitterState.BATTERY_SHUTTING_DOWN
       battery == Battery.CHARGING -> TransmitterState.BATTERY_CHARGING
       attached == Attached.DETACHED -> TransmitterState.DETACHED
       waterIngressDetection == WaterIngressDetection.OK && (attached == Attached.ATTACHED_ON_PATCH || attached == Attached.ATTACHED_ON_BODY) -> TransmitterState.OK

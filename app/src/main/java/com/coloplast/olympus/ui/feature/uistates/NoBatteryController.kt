@@ -12,10 +12,10 @@ class NoBatteryController : BaseHomeUIController<ControllerStateNoBatteryBinding
     // no-op
   }
 
-  override fun patchVisible(): Boolean {
-    return false
+  override fun patchInError(): Boolean {
+    return true
   }
-  
+
   override fun getLayout(): Int {
     return R.layout.controller_state_no_battery
   }

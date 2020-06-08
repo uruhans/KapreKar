@@ -250,6 +250,9 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         UiState.CUTGUARD_DIRT_IN_TRANSMITTER_K -> {
           DirtInTransmitterController.routerTransaction()
         }
+        UiState.NO_BATTERY_R -> {
+          NoBatteryController.routerTransaction()
+        }
         UiState.TRANSMITTER_DETACHED_V -> {
           TransmitterDetachedController.routerTransaction()
         }

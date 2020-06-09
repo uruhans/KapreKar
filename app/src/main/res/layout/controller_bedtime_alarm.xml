@@ -98,7 +98,7 @@
               android:layout_width="50dp"
               android:layout_height="52dp"
               android:layout_margin="@dimen/spacing_larger"
-              android:src="@drawable/ic_sidemenu_status"
+              android:src="@drawable/ic_outer_sensors_only"
               app:layout_constraintStart_toStartOf="parent"
               app:layout_constraintEnd_toEndOf="parent"
               app:layout_constraintTop_toTopOf="parent"/>
@@ -108,7 +108,7 @@
               android:layout_height="wrap_content"
               android:paddingStart="@dimen/spacing_larger"
               android:paddingEnd="@dimen/spacing_larger"
-              android:text="@string/settings_sensors_all_sensors"
+              android:text="@string/settings_sensors_outer_only"
               style="@style/TextStyle.Coloplast.Bold.DarkGrey.16"
               android:textAlignment="center"
               app:layout_constraintStart_toStartOf="parent"

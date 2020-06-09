@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import com.polidea.rxandroidble2.RxBleDevice
 import io.reactivex.Observable
+import java.nio.charset.Charset
 
 object BleDeviceBondingManager {
   
@@ -43,7 +44,8 @@ object BleDeviceBondingManager {
           }
           
           context.registerReceiver(receiver, IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED))
-          
+
+          rxBleDevice.bluetoothDevice.setPin("123456".toByteArray(Charset.forName("UTF-8")))
           val createBondResult = rxBleDevice.bluetoothDevice.createBond()
           if (!createBondResult) {
             emitter.onError(BondingFailedException())

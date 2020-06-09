@@ -21,6 +21,9 @@
       android:orientation="vertical"
       android:layout_margin="@dimen/spacing_larger">
 
+      <include layout="@layout/item_notification_settings_card"
+        app:buttonClickListener="@{() -> controller.openAppSettings()}"/>
+
       <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

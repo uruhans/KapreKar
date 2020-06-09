@@ -35,7 +35,7 @@ import timber.log.Timber
 class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceResult<BluetoothServiceModel> {
   
   private val notificationManager: NotificationManager by inject()
-  private val olympusNotificationManager: OlympusNotificationManager by inject()
+  private val olympusNotificationManager: OlympusNotificationManager = get()
   private val compositeDisposable = CompositeDisposable()
   
   override fun onBind(intent: Intent?): IBinder? {

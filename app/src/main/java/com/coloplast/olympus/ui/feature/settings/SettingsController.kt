@@ -4,6 +4,8 @@ import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerSettingsBinding
 import com.coloplast.olympus.ui.common.BaseController
+import com.coloplast.olympus.utils.OSUtils
+
 
 class SettingsController: BaseController<ControllerSettingsBinding>() {
 
@@ -23,6 +25,10 @@ class SettingsController: BaseController<ControllerSettingsBinding>() {
     getListener(Listener::class.java)!!.setBedtimeAlarm()
   }
 
+  fun openAppSettings(){
+    val notificationChannel = activity!!.getString(R.string.lock_notification_channel_id)
+    OSUtils.openAppSettings(activity!!, notificationChannel)
+  }
   override fun getLayout(): Int = R.layout.controller_settings
 
   companion object{

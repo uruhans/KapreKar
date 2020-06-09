@@ -37,6 +37,10 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
   private val notificationManager: NotificationManager by inject()
   private val olympusNotificationManager: OlympusNotificationManager = get()
   private val compositeDisposable = CompositeDisposable()
+
+  private val channelId: String = applicationContext.getString(R.string.lock_service_notification_channel_id)
+  private val channelName: String = applicationContext.getString(R.string.lock_service_notification_channel_name)
+  private val channelDescription: String = applicationContext.getString(R.string.lock_service_notification_channel_description)
   
   override fun onBind(intent: Intent?): IBinder? {
     // we are not binding to this service, so just return null
@@ -104,10 +108,9 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
 //    val resetPendingIntent: PendingIntent = Intent(INTENT_FILTER_INITIATE_RESET)
 //      .let { resetIntent -> PendingIntent.getBroadcast(this, 0, resetIntent, 0) }
     
-    // TODO - remove hardcoded text
     val notification = NotificationCompat.Builder(this, "2")
-      .setContentTitle("Olympus Bluetooth Connection")
-      .setContentText("Maintaining transmitter connection")
+      .setContentTitle(channelName)
+      .setContentText(channelDescription)
 //      .addAction(R.drawable.ic_arrow, "Reset", resetPendingIntent)
       .setSmallIcon(R.drawable.ic_detailed_plate_ok)
       .setContentIntent(pendingIntent)
@@ -122,9 +125,9 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
     // only create the notification channel if we are above API 25 and the channel doesn't already exist
     if (Build.VERSION.SDK_INT >= 26 && notificationManager.getNotificationChannel("2") == null) {
       NotificationChannel(
-        "2", "Service Notification", NotificationManager.IMPORTANCE_DEFAULT
+        channelId, channelName, NotificationManager.IMPORTANCE_DEFAULT
       ).apply {
-        description = "Notifies you when the background service is working"
+        description = channelDescription
         enableVibration(false)
         enableLights(false)
         lockscreenVisibility = Notification.VISIBILITY_PRIVATE

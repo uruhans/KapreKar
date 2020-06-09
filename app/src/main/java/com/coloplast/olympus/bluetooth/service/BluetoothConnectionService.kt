@@ -38,9 +38,9 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
   private val olympusNotificationManager: OlympusNotificationManager = get()
   private val compositeDisposable = CompositeDisposable()
 
-  private val channelId: String = applicationContext.getString(R.string.lock_service_notification_channel_id)
-  private val channelName: String = applicationContext.getString(R.string.lock_service_notification_channel_name)
-  private val channelDescription: String = applicationContext.getString(R.string.lock_service_notification_channel_description)
+  private val channelId: String by lazy {  applicationContext.getString(R.string.lock_service_notification_channel_id) }
+  private val channelName: String by lazy { applicationContext.getString(R.string.lock_service_notification_channel_name) }
+  private val channelDescription: String by lazy { applicationContext.getString(R.string.lock_service_notification_channel_description) }
   
   override fun onBind(intent: Intent?): IBinder? {
     // we are not binding to this service, so just return null

@@ -21,9 +21,6 @@
       android:orientation="vertical"
       android:layout_margin="@dimen/spacing_larger">
 
-      <include layout="@layout/item_notification_settings_card"
-        app:buttonClickListener="@{() -> controller.openAppSettings()}"/>
-
       <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -34,7 +31,29 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/spacing_small"
-        android:layout_marginTop="@dimen/spacing_small"
+        android:layout_marginTop="@dimen/spacing_double"
+        android:text="@string/settings_notifications_section_title"
+        style="@style/TextStyle.Roboto.Regular.ClearGrey.14" />
+
+      <include layout="@layout/item_notification_settings_card"
+        app:buttonClickListener="@{() -> controller.openAppSettings()}"/>
+
+      <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/spacing_small"
+        android:layout_marginTop="@dimen/spacing_double"
+        android:text="@string/settings_vibration_section_title"
+        style="@style/TextStyle.Roboto.Regular.ClearGrey.14" />
+
+      <include layout="@layout/item_vibration_settings_card"
+        app:buttonClickListener="@{() -> controller.openAppSettings()}"/>
+
+      <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/spacing_small"
+        android:layout_marginTop="@dimen/spacing_double"
         android:text="@string/settings_bedtime_alerts_section_title"
         style="@style/TextStyle.Roboto.Regular.ClearGrey.14" />
 

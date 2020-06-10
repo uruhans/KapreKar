@@ -108,7 +108,7 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
 //    val resetPendingIntent: PendingIntent = Intent(INTENT_FILTER_INITIATE_RESET)
 //      .let { resetIntent -> PendingIntent.getBroadcast(this, 0, resetIntent, 0) }
     
-    val notification = NotificationCompat.Builder(this, "2")
+    val notification = NotificationCompat.Builder(this, channelId)
       .setContentTitle(channelName)
       .setContentText(channelDescription)
 //      .addAction(R.drawable.ic_arrow, "Reset", resetPendingIntent)
@@ -123,7 +123,7 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
   
   private fun createNotificationChannel() {
     // only create the notification channel if we are above API 25 and the channel doesn't already exist
-    if (Build.VERSION.SDK_INT >= 26 && notificationManager.getNotificationChannel("2") == null) {
+    if (Build.VERSION.SDK_INT >= 26 && notificationManager.getNotificationChannel(channelId) == null) {
       NotificationChannel(
         channelId, channelName, NotificationManager.IMPORTANCE_DEFAULT
       ).apply {

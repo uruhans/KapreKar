@@ -179,6 +179,7 @@
 <string name="lock_notification_inner">lock_notification_inner</string>
 <string name="lock_notification_inner_blind">lock_notification_inner_blind</string>
 <string name="lock_notification_moisture">lock_notification_moisture</string>
+<string name="lock_notification_multiple_transmitters">[Missing translation]</string>
 <string name="lock_notification_outer">lock_notification_outer</string>
 <string name="lock_notification_pay_attention">lock_notification_pay_attention</string>
 <string name="lock_notification_sweat">lock_notification_sweat</string>
@@ -221,6 +222,7 @@
 <string name="overlay_no_breach_title">overlay_no_breach_title</string>
 <string name="settings_allow_notifications_body">[Missing translation]</string>
 <string name="settings_allow_notifications_title">[Missing translation]</string>
+<string name="settings_android_app_settings_link">[Missing translation]</string>
 <string name="settings_footer_app_version">App version</string>
 <string name="settings_footer_company_address">[Missing translation]</string>
 <string name="settings_footer_company_name">[Missing translation]</string>

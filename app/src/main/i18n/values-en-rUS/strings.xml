@@ -177,6 +177,7 @@
 <string name="lock_notification_inner">There\'s a problem.</string>
 <string name="lock_notification_inner_blind">Sensors not working.</string>
 <string name="lock_notification_moisture">Sensors not working.</string>
+<string name="lock_notification_multiple_transmitters">[Missing translation]</string>
 <string name="lock_notification_outer">The problem\'s spreading.</string>
 <string name="lock_notification_pay_attention">Something\'s happening.</string>
 <string name="lock_notification_sweat">Something\'s happening.</string>
@@ -219,6 +220,7 @@
 <string name="overlay_no_breach_title">No breaches registrered</string>
 <string name="settings_allow_notifications_body">[Missing translation]</string>
 <string name="settings_allow_notifications_title">Allow notifications</string>
+<string name="settings_android_app_settings_link">Go to app settings</string>
 <string name="settings_footer_app_version">App version</string>
 <string name="settings_footer_company_address">[Missing translation]</string>
 <string name="settings_footer_company_name">[Missing translation]</string>

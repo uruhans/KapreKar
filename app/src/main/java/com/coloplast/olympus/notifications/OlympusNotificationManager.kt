@@ -34,10 +34,11 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
       UiState.NO_CHANGE -> { null }
       UiState.INITIAL -> { null }
       UiState.BLUETOOTH_NOT_ENABLED -> { null }
-      UiState.READY_TO_SCAN -> { null }
+      UiState.CONNECTING -> { null }
       UiState.SCANNING -> { null }
       UiState.DISCONNECTED -> { null }
       UiState.MULTIPLE_TRANSMITTERS -> { null }
+      UiState.TRANSMITTER_NOT_FOUND -> { null }
       UiState.SOMETHING_ELSE,
       UiState.OK_A -> {
         // we will clear all notifications that may be shown - now that everything is OK - we don't need earlier notification warnings
@@ -65,6 +66,9 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
       UiState.CUTGUARD_DIRT_IN_TRANSMITTER_K -> {
         NotificationPayload(state.notificationId(), R.string.lock_notification_dirt)
       }
+      UiState.NO_BATTERY_R -> {
+        NotificationPayload(state.notificationId(), R.string.lock_notification_disconnection_battery)
+      }
       UiState.TRANSMITTER_DETACHED_V -> { null }
       UiState.TRANSMITTER_BATTERY_CHARGING_W -> { null }
     }
@@ -86,7 +90,10 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
         // TODO - change when we have properly implemented overlay states
         NotificationPayload(state.notificationId(), R.string.lock_notification_battery_critical)
       }
-      OverlayState.QUESTION -> TODO()
+      OverlayState.QUESTION -> { null }
+      OverlayState.BLE_CONNECTION_LOST -> {
+        NotificationPayload(state.notificationId(), R.string.lock_notification_ble_disconnected)
+      }
     }
   
     payload?.let {

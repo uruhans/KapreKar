@@ -4,6 +4,7 @@
   xmlns:tools="http://schemas.android.com/tools">
 
   <data>
+
     <import type="com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState" />
 
     <variable
@@ -30,12 +31,13 @@
       style="@style/CardViewStyle"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:focusable="true"
-      android:clickable="true"
       android:layout_marginStart="@dimen/spacing_larger"
       android:layout_marginTop="@dimen/cardview_elevation_default"
       android:layout_marginEnd="@dimen/cardview_elevation_default"
-      android:layout_marginBottom="@dimen/cardview_elevation_default">
+      android:layout_marginBottom="@dimen/cardview_elevation_default"
+      android:clickable="true"
+      android:focusable="true"
+      android:foreground="@{!item.detectable ? @drawable/cardview_disabled_foreground : @drawable/empty}">
 
       <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -44,10 +46,11 @@
         <ImageView
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:src="@{item.connectionState == BleConnectionState.CONNECTED ? @drawable/transmitter_side : @drawable/transmitter_side_2}"
+          android:src="@drawable/transmitter_side"
           app:layout_constraintBottom_toBottomOf="parent"
           app:layout_constraintStart_toStartOf="parent"
-          app:layout_constraintTop_toTopOf="parent" />
+          app:layout_constraintTop_toTopOf="parent"
+          app:visibleOrGone="@{item.attached}" />
 
         <TextView
           android:id="@+id/name"
@@ -68,13 +71,26 @@
           android:layout_width="32dp"
           android:layout_height="32dp"
           android:layout_marginEnd="@dimen/spacing_larger"
+          app:battery="@{item.battery}"
           app:layout_constraintBottom_toBottomOf="@+id/name"
           app:layout_constraintEnd_toEndOf="parent"
           app:layout_constraintHorizontal_bias="1"
           app:layout_constraintStart_toStartOf="@+id/name"
           app:layout_constraintTop_toTopOf="@+id/name"
-          app:powerLevel="@{item.currentPowerLevel}"
+          app:visibleOrGone="@{item.detectable}"
           tools:src="@drawable/ic_battery_full_24dp" />
+
+        <TextView
+          style="@style/TextStyle.Roboto.Regular.ClearGrey.14"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginEnd="@dimen/spacing_larger"
+          android:text="@string/transmitters_not_detectable"
+          app:layout_constraintBottom_toBottomOf="@+id/name"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintHorizontal_bias="1"
+          app:layout_constraintStart_toStartOf="@+id/name"
+          app:visibleOrGone="@{!item.detectable}" />
 
         <TextView
           android:id="@+id/address"

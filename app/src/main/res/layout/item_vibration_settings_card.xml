@@ -30,7 +30,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:drawableStart="@drawable/ic_icon_guides"
+        android:drawableStart="@drawable/ic_vibration"
+        android:drawablePadding="@dimen/spacing_half"
         android:text="@string/settings_vibration_title" />
 
       <TextView

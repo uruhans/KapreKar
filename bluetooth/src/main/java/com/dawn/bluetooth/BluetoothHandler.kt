@@ -3,6 +3,7 @@ package com.dawn.bluetooth
 import android.bluetooth.BluetoothDevice
 import android.content.Context
 import android.os.ParcelUuid
+import android.util.Log
 import com.polidea.rxandroidble2.*
 import com.polidea.rxandroidble2.scan.ScanFilter
 import com.polidea.rxandroidble2.scan.ScanResult
@@ -67,6 +68,7 @@ class BluetoothHandler(private val context: Context, isDebugging: Boolean) {
           .flatMapSingle { rxBleConnection.requestMtu(185) }
           .flatMapSingle { rxBleConnection.discoverServices() }
           .map { rxBleConnection }
+          .doOnError { throwable -> Log.e("error", throwable.message ?: "error") }
       }
   }
   

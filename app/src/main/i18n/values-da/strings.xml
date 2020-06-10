@@ -179,6 +179,7 @@
 <string name="lock_notification_inner">Tjek snart.</string>
 <string name="lock_notification_inner_blind">Sensorerne virker ikke.</string>
 <string name="lock_notification_moisture">Sensorerne virker ikke.</string>
+<string name="lock_notification_multiple_transmitters">[Missing translation]</string>
 <string name="lock_notification_outer">Tjek nu.</string>
 <string name="lock_notification_pay_attention">Sensorerne virker ikke.</string>
 <string name="lock_notification_sweat">Sensorerne virker ikke.</string>

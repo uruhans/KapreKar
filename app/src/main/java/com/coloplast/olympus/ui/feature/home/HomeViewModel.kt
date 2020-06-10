@@ -27,7 +27,7 @@ class HomeViewModel(private val bluetoothManager: BluetoothManager) :
         HomeUiModel.ConnectionStateUpdate(BleConnectionState.DISCONNECTED)
       }
     
-    val stateUpdate = StateDispatcher.stateChangeObservable()
+    val stateUpdate = StateDispatcher.activeTransmitterStateChangeObservable()
       .map { HomeUiModel.DeviceUpdate(it) }
     
     val rawPackageUpdateObservable = StateDispatcher.rawPackageUpdateObservable()

@@ -31,6 +31,7 @@ class BluetoothServiceViewModel(
 ) : ServiceViewModel<BluetoothServiceModel, BluetoothServiceResult<BluetoothServiceModel>>() {
 
   private val connectedTransmittersRelay = PublishRelay.create<List<String>>()
+  private val connectedBleDevicesList = mutableListOf<String>()
 
   // the repeatIntervalObservable to determine when to repeat something
   private fun repeatIntervalObservable(seconds: Long) = Observable.interval(seconds, TimeUnit.SECONDS)
@@ -40,7 +41,6 @@ class BluetoothServiceViewModel(
 
     val disposables = mutableMapOf<String, Disposable>()
 
-    val connectedBleDevicesList = mutableListOf<String>()
 
     val connectedBleDevicesObservable = connectedTransmittersRelay
       .publish()
@@ -199,6 +199,8 @@ class BluetoothServiceViewModel(
             BluetoothServiceModel.RawDataPackageUpdate(activeTransmitter, deviceResult.macAddress, deviceResult.rawDataPackage)
           }
           is DeviceResult.Error -> {
+            connectedBleDevicesList.remove(macAddress)
+            connectedTransmittersRelay.accept(connectedBleDevicesList)
             // notify transmitter manager that this Tx was disconnected
             // if possible it will return the latest state change from the *other* Tx (used to update Ui)
             val latestStateChangeFromOtherTx = transmitterManager.onTransmitterDisconnect(macAddress)
@@ -208,6 +210,8 @@ class BluetoothServiceViewModel(
         }
       }
       .onErrorReturn {
+        connectedBleDevicesList.remove(macAddress)
+        connectedTransmittersRelay.accept(connectedBleDevicesList)
         val latestStateChangeFromOtherTx = transmitterManager.onTransmitterDisconnect(macAddress)
         // return a disconnect to the service
         BluetoothServiceModel.Disconnected(latestStateChangeFromOtherTx)

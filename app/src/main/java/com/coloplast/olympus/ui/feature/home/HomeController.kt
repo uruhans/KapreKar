@@ -167,13 +167,13 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         is HomeUiModel.DeviceUpdate -> {
           var stateChange = uiModel.stateChange
 
-          // BLE_CONNECTION_LOST overlay state actually comes from the bluetooth service (which receives the disconnect)
-          // if we get such a state, we should skip the "normal" code that determines the currently active transmitter
-          // (and possibly overwrites) it's state
-          if(stateChange.overlayState != OverlayState.BLE_CONNECTION_LOST) {
-            val updatedStateChange = transmitterManager.determineCurrentlyActiveTransmitterAndReturnStateChangeFromIt(uiModel.stateChange)
-            stateChange =transmitterManager.determineTransmitterPatchQuestioning(updatedStateChange)
-          }
+//          // BLE_CONNECTION_LOST overlay state actually comes from the bluetooth service (which receives the disconnect)
+//          // if we get such a state, we should skip the "normal" code that determines the currently active transmitter
+//          // (and possibly overwrites) it's state
+//          if(stateChange.overlayState != OverlayState.BLE_CONNECTION_LOST) {
+//            val updatedStateChange = transmitterManager.determineCurrentlyActiveTransmitterAndReturnStateChangeFromIt(uiModel.stateChange)
+//            stateChange =transmitterManager.determineTransmitterPatchQuestioning(updatedStateChange)
+//          }
 
           powerLevel.set(stateChange.bleDevice.peripheral?.powerLevel)
           isConnected.set(stateChange.bleDevice.isConnected())

@@ -9,12 +9,16 @@ import timber.log.Timber
  * a class that handles the dispatching of transmitter states to any who subscribe
  */
 object StateDispatcher {
-  
+
+  private val activeTxStateChangeRelay = PublishRelay.create<StateChange>()
+
   private val stateChangeRelay = PublishRelay.create<StateChange>()
   private val latestState = mutableMapOf<String, StateChange>()
-  
+
   private val rawDataPackageRelay = PublishRelay.create<String>()
   private val scanningRelay = PublishRelay.create<Unit>()
+
+  private var activeTransmitter: String? = null
 
   fun dispatch(stateChange: StateChange) {
     latestState[stateChange.bleDevice.macAddress] = stateChange
@@ -28,9 +32,19 @@ object StateDispatcher {
   fun dispatchScanning() {
     scanningRelay.accept(Unit)
   }
+
+  fun dispatchStateForActiveTransmitter(stateChange: StateChange) {
+    activeTransmitter = stateChange.getMacAddress()
+    activeTxStateChangeRelay.accept(stateChange)
+  }
   
-  private fun dispatchLatestStateChangesToNewObservers(): Observable<StateChange> {
-    return Observable.fromIterable(latestState.values)
+  private fun dispatchLatestStateChangesToNewObservers(macAddress: String? = null): Observable<StateChange> {
+    return if(macAddress.isNullOrEmpty()) {
+      Observable.fromIterable(latestState.values)
+    }
+    else {
+      Observable.just(latestState[macAddress])
+    }
   }
   
   /**
@@ -51,6 +65,13 @@ object StateDispatcher {
   }
 
   fun scanningObservable(): Observable<Unit> {
-    return scanningRelay.publish().refCount()
+    return scanningRelay.publish()
+      .refCount()
+  }
+
+  fun activeTransmitterStateChangeObservable(): Observable<StateChange> {
+    return activeTxStateChangeRelay.publish()
+      .refCount()
+      .startWith(dispatchLatestStateChangesToNewObservers(activeTransmitter))
   }
 }

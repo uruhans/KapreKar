@@ -384,4 +384,12 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
       rxConnection.readCharacteristic(characteristic)
     }
   }
+
+  override fun isConnected(macAddress: String) : Boolean {
+    if(macAddress.isEmpty()) {
+      return false
+    }
+
+    return bleConnections[macAddress] != null
+  }
 }

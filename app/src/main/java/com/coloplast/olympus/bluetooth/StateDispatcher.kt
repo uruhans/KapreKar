@@ -1,6 +1,5 @@
 package com.coloplast.olympus.bluetooth
 
-import com.coloplast.olympus.bluetooth.businesslayer.models.RawDataPackage
 import com.coloplast.olympus.bluetooth.model.StateChange
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
@@ -15,7 +14,8 @@ object StateDispatcher {
   private val latestState = mutableMapOf<String, StateChange>()
   
   private val rawDataPackageRelay = PublishRelay.create<String>()
-  
+  private val scanningRelay = PublishRelay.create<Unit>()
+
   fun dispatch(stateChange: StateChange) {
     latestState[stateChange.bleDevice.macAddress] = stateChange
     stateChangeRelay.accept(stateChange)
@@ -23,6 +23,10 @@ object StateDispatcher {
   
   fun dispatch(macAddress: String) {
     rawDataPackageRelay.accept(macAddress)
+  }
+
+  fun dispatchScanning() {
+    scanningRelay.accept(Unit)
   }
   
   private fun dispatchLatestStateChangesToNewObservers(): Observable<StateChange> {
@@ -44,5 +48,9 @@ object StateDispatcher {
   fun rawPackageUpdateObservable(): Observable<String> {
     return rawDataPackageRelay.publish()
       .refCount()
+  }
+
+  fun scanningObservable(): Observable<Unit> {
+    return scanningRelay.publish().refCount()
   }
 }

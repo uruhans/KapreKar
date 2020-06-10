@@ -27,4 +27,5 @@ interface BluetoothManager {
   fun stitchTransmitter(macAddress: String, data: ByteArray) : Completable
 
   fun readDeviceInfo(macAddress: String) : Observable<DeviceInfo>
+  fun isConnected(macAddress: String) : Boolean
 }

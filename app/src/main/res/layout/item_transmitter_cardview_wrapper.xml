@@ -3,7 +3,7 @@
   xmlns:app="http://schemas.android.com/apk/res-auto">
   <data>
     <variable
-      name="transmitterItem"
+      name="item"
       type="com.coloplast.olympus.ui.feature.transmitters.models.TransmitterItem" />
   </data>
 
@@ -11,6 +11,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginEnd="@dimen/spacing_larger"
-    app:transmitterItem="@{transmitterItem}"
-    app:editState="@{transmitterItem.onEdit}" />
+    app:transmitterItem="@{item}"
+    app:editState="@{item.onEdit}" />
 </layout>

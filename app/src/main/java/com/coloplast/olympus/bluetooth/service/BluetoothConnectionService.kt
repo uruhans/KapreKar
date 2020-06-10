@@ -94,6 +94,9 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
             StateDispatcher.dispatch(stateChange)
           }
         }
+        is BluetoothServiceModel.ScanningStarted -> {
+          StateDispatcher.dispatchScanning()
+        }
       }
     }
   }

@@ -20,6 +20,7 @@ import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
 import com.coloplast.olympus.bluetooth.businesslayer.enums.PowerLevel
 import com.coloplast.olympus.bluetooth.businesslayer.enums.SensorStatus
+import com.coloplast.olympus.bluetooth.businesslayer.models.Battery
 import com.coloplast.olympus.bluetooth.businesslayer.models.Patch
 import com.coloplast.olympus.bluetooth.model.ServiceEvent
 import com.coloplast.olympus.databinding.ControllerHomeBinding
@@ -73,7 +74,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   
   val updateAnimation = ObservableBoolean(false)
   
-  val powerLevel = ObservableField<PowerLevel>()
+  val battery = ObservableField<Battery>()
   val isConnected = ObservableBoolean(false)
   val lastCheck = ObservableField<LocalDateTime>()
   
@@ -175,7 +176,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
             stateChange =transmitterManager.determineTransmitterPatchQuestioning(updatedStateChange)
           }
 
-          powerLevel.set(stateChange.bleDevice.peripheral?.powerLevel)
+          stateChange.bleDevice.peripheral?.battery?.let { battery.set(it) }
           isConnected.set(stateChange.bleDevice.isConnected())
 
           breachesOccurred.add(stateChange)
@@ -364,7 +365,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
     // send any notification that is needed for this state
     olympusNotificationManager.send(overlayState)
   }
-  
+
   override fun requestConnectionState(): Observable<String> {
     return requestConnectionStateRelay
       .publish()

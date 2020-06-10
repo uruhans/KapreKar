@@ -14,14 +14,14 @@
         <com.coloplast.olympus.ui.common.widgets.VideoPlayer
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            visibleOrGone="@{view.isVideo}"
+            app:visibleOrGone="@{view.isVideo}"
             app:videoSrc="@{view.resId}" />
 
         <ImageView
             android:id="@+id/image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            visibleOrGone="@{!view.isVideo}"
+            app:visibleOrGone="@{!view.isVideo}"
             android:layout_gravity="center"
             android:scaleType="fitXY"
             app:safeResource="@{view.resId}"/>

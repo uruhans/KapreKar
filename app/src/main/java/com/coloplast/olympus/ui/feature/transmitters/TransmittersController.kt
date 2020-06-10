@@ -10,13 +10,12 @@ import com.coloplast.olympus.BR
 import com.coloplast.olympus.R
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.databinding.ControllerTransmittersBinding
+import com.coloplast.olympus.shared.models.DiffListItem
 import com.coloplast.olympus.shared.models.Transmitter
+import com.coloplast.olympus.shared.utils.DiffUtilsImpl
 import com.coloplast.olympus.ui.common.CustomToolbarController
 import com.coloplast.olympus.ui.common.DrawerStateDispatcher
-import com.coloplast.olympus.ui.common.dialogs.BaseDialogController
-import com.coloplast.olympus.ui.common.dialogs.DialogController
 import com.coloplast.olympus.ui.common.extensions.toggle
-import com.coloplast.olympus.ui.common.widgets.TransmitterCardView
 import com.coloplast.olympus.ui.dialogs.ImageDialogController
 import com.coloplast.olympus.ui.feature.transmitters.add.AddTransmitterFlowController
 import com.coloplast.olympus.ui.feature.transmitters.models.SectionDivider
@@ -27,6 +26,7 @@ import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Function
+import me.tatarka.bindingcollectionadapter2.collections.DiffObservableList
 import me.tatarka.bindingcollectionadapter2.itembindings.OnItemBindClass
 import org.koin.core.inject
 import timber.log.Timber
@@ -39,11 +39,14 @@ class TransmittersController(args: Bundle? = null) :
   private val deleteTransmitterRelay = PublishRelay.create<String>()
   private val retryConnectionRelay = PublishRelay.create<Unit>()
 
-  val items = ObservableArrayList<Any>()
-  val itemBinding: OnItemBindClass<Any> = OnItemBindClass<Any>()
+  val itemBinding: OnItemBindClass<DiffListItem> = OnItemBindClass<DiffListItem>()
+    .map(TransmitterItem::class.java, BR.item, R.layout.item_transmitter_cardview_wrapper)
     .map(SmallHeaderItem::class.java, BR.item, R.layout.item_small_header)
     .map(SectionDivider::class.java, BR.item, R.layout.item_recyclerview_section_divider)
-    .map(TransmitterItem::class.java, BR.transmitterItem, R.layout.item_transmitter_cardview_wrapper)
+
+  val items = DiffObservableList(DiffUtilsImpl())
+
+  private val transmitterList = ObservableArrayList<TransmitterItem>()
 
   val hasTransmittersAdded = ObservableBoolean(false)
   val searchEnabled = ObservableBoolean(true)
@@ -71,54 +74,31 @@ class TransmittersController(args: Bundle? = null) :
         is TransmittersUiModel.ConnectedDevices -> {
           hasTransmittersAdded.set(true)
 
-          // TODO - we need to change this into a list of Attached and / not attached list
-          val list = mutableListOf<Any>(
-            SmallHeaderItem(R.string.transmitters_not_attached)
+          transmitterList.clear()
+          transmitterList.addAll(
+            uiModel.devices.map { TransmitterItem(it, editEnabled, this) }
           )
-
-          uiModel.devices.map { TransmitterItem(it, editEnabled, this) }
-            .also { list.addAll(it) }
-
-          list.filterIsInstance(TransmitterItem::class.java).forEach { transmitterItem ->
-            if (items.filterIsInstance(TransmitterItem::class.java)
-                .none { it.transmitter.macAddress == transmitterItem.transmitter.macAddress }
-            ) {
-              items.add(transmitterItem)
-            }
-          }
-
-          items.filterIsInstance(TransmitterItem::class.java).forEach { transmitterItem ->
-            if (list.filterIsInstance(TransmitterItem::class.java)
-                .none { it.transmitter.macAddress == transmitterItem.transmitter.macAddress }
-            ) {
-              items.remove(transmitterItem)
-            }
-          }
         }
         is TransmittersUiModel.StateUpdate -> {
-          // state updates are coming from the Service (StateDispatcher)
-          uiModel.stateChange.bleDevice.peripheral?.powerLevel?.let { powerLevel ->
-            items.filterIsInstance<TransmitterItem>()
-              .first { it.transmitter.macAddress == uiModel.stateChange.bleDevice.macAddress }
-              .setPowerLevel(powerLevel)
-          }
+          transmitterList
+            .first { uiModel.stateChange.bleDevice.macAddress == it.transmitter.macAddress }
+            .setStateChange(uiModel.stateChange)
+
+          updateDiffList()
         }
         is TransmittersUiModel.TransmitterConnectionState -> {
-          // TODO - here we need to update the state of the transmitters - and move them around in the list (put into attached / not attached)
-
-          items.filterIsInstance<TransmitterItem>()
-            .first { it.transmitter.macAddress == uiModel.connectionState.macAddress }
-            .setConnectionState(uiModel.connectionState.connectionState)
+          transmitterList
+            .find { uiModel.connectionState.macAddress == it.transmitter.macAddress }
+            ?.setConnectionState(uiModel.connectionState.connectionState)
 
           searchEnabled.set(!allConnected())
 
-          if(retryPressed.get()) {
-            val allConnected = items.filterIsInstance<TransmitterItem>()
-              .any { it.connectionState.get() == BleConnectionState.CONNECTED }
-            retryPressed.set(!allConnected)
+          if (retryPressed.get()) {
+            retryPressed.set(!allConnected())
           }
         }
         is TransmittersUiModel.TransmitterDeleted -> {
+          transmitterList.clear()
           dialogController?.dismissDialog(false)
         }
         is TransmittersUiModel.Empty -> {
@@ -136,13 +116,14 @@ class TransmittersController(args: Bundle? = null) :
     }
   }
 
-  fun onEditClicked(){
+  fun onEditClicked() {
     editEnabled.toggle()
   }
 
-  private fun allConnected() : Boolean {
+  private fun allConnected(): Boolean {
     // no reason to run through each transmitter if the current uiModel state is already *not* connected
-    return items.filterIsInstance<TransmitterItem>().all { it.connectionState.get() == BleConnectionState.CONNECTED }
+    return items.filterIsInstance<TransmitterItem>()
+      .all { it.connectionState.get() == BleConnectionState.CONNECTED }
   }
 
   override fun onDeleteTransmitter(transmitter: Transmitter) {
@@ -219,7 +200,7 @@ class TransmittersController(args: Bundle? = null) :
     )
   }
 
-  private fun canAddMoreTransmitters() = items.filterIsInstance(TransmitterItem::class.java).size < 2
+  private fun canAddMoreTransmitters() = transmitterList.size < 2
 
   override fun requestDeleteTransmitter(): Observable<String> {
     return deleteTransmitterRelay
@@ -227,7 +208,7 @@ class TransmittersController(args: Bundle? = null) :
       .refCount()
   }
 
-  override fun retryConnection() : Observable<Unit> {
+  override fun retryConnection(): Observable<Unit> {
     return retryConnectionRelay
       .publish()
       .refCount()
@@ -244,6 +225,31 @@ class TransmittersController(args: Bundle? = null) :
 
   override fun getLayout(): Int {
     return R.layout.controller_transmitters
+  }
+
+  private fun updateDiffList(){
+    val newList = mutableListOf<DiffListItem>()
+
+    // Add attached transmitters and Title header
+    transmitterList.filter { it.attached.get() }.let {
+      if(it.isNotEmpty()){
+        newList.add(SmallHeaderItem(R.string.transmitters_attached))
+        newList.addAll(it)
+      }
+    }
+
+    // Add divider if necessary
+    if (newList.isNotEmpty()  && newList.size != transmitterList.size+1) newList.add(SectionDivider())
+
+    // Add non-attached transmitters and Title header
+    transmitterList.filter { !it.attached.get() }.let {
+      if(it.isNotEmpty()){
+        newList.add(SmallHeaderItem(R.string.transmitters_not_attached))
+        newList.addAll(it)
+      }
+    }
+
+    items.update(newList)
   }
 
   companion object {

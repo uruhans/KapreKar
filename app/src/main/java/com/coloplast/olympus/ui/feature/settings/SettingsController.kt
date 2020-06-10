@@ -14,6 +14,7 @@ class SettingsController: BaseController<ControllerSettingsBinding>() {
 
   interface Listener{
     fun setBedtimeAlarm()
+    fun chooseSensors()
   }
 
   val ringingAlertsEnabled = ObservableBoolean(false)
@@ -28,6 +29,10 @@ class SettingsController: BaseController<ControllerSettingsBinding>() {
 
   fun setBedtimeAlarmClicked(){
     getListener(Listener::class.java)!!.setBedtimeAlarm()
+  }
+
+  fun chooseSensors(){
+    getListener(Listener::class.java)!!.chooseSensors()
   }
 
   fun openAppSettings(){

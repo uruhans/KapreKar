@@ -30,6 +30,10 @@ class SettingsFlowController(args: Bundle? = null): BaseFlowController(args),
     pushController(BedtimeAlarmController.routerTransaction())
   }
 
+  override fun chooseSensors() {
+    pushController(ChooseSensorsController.routerTransaction())
+  }
+
   companion object{
 
     private const val TAG_CONTROLLER = "settings_flow_controller"

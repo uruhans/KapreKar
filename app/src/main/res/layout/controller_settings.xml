@@ -62,7 +62,7 @@
 
       <include layout="@layout/item_sound_settings_card"
         app:settingsClickListener="@{() -> controller.openAppSettings()}"
-        app:sensorsClickListener="@{() -> controller.setBedtimeAlarmClicked()}"
+        app:sensorsClickListener="@{() -> controller.chooseSensors()}"
         app:ringingAlertsEnabled="@={controller.ringingAlertsEnabled}"/>
 
       <TextView

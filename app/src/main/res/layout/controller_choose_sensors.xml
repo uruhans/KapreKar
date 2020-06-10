@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools">
+
+  <data>
+
+    <variable
+      name="controller"
+      type="com.coloplast.olympus.ui.feature.settings.ChooseSensorsController" />
+
+  </data>
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginTop="@dimen/toolbar_height"
+    android:layout_marginStart="@dimen/spacing_larger"
+    android:layout_marginEnd="@dimen/spacing_larger"
+    android:layout_marginBottom="@dimen/spacing_larger">
+
+    <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/settings_sensors_header"
+      style="@style/TextStyle.Coloplast.Bold.DarkGrey.36"/>
+
+  </LinearLayout>
+
+</layout>

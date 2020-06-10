@@ -40,7 +40,7 @@ class BedtimeAlarmController: BaseController<ControllerBedtimeAlarmBinding>() {
 
   companion object{
 
-    private const val TAG_CONTROLLER = "bedtime_alarm_contronller"
+    private const val TAG_CONTROLLER = "bedtime_alarm_controller"
 
     fun routerTransaction(): RouterTransaction {
       return RouterTransaction.with(BedtimeAlarmController()).tag(TAG_CONTROLLER)

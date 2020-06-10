@@ -26,6 +26,11 @@
       android:text="@string/settings_sensors_header"
       style="@style/TextStyle.Coloplast.Bold.DarkGrey.36"/>
 
+    <com.coloplast.olympus.ui.common.widgets.SensorSelectorView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      app:allSensorsSelected="@{controller.allSensorsSelected}" />
+
   </LinearLayout>
 
 </layout>

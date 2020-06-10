@@ -1,5 +1,6 @@
 package com.coloplast.olympus.ui.feature.settings
 
+import androidx.databinding.ObservableBoolean
 import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerChooseSensorsBinding
@@ -11,6 +12,9 @@ import com.coloplast.olympus.ui.common.BaseController
  * Copyright by Dawn Health A/S. All rights reserved.
  */
 class ChooseSensorsController: BaseController<ControllerChooseSensorsBinding>() {
+
+  val allSensorsSelected = ObservableBoolean(true)
+
   override fun attachVariables(viewBinding: ControllerChooseSensorsBinding) {
     viewBinding.controller = this
   }

@@ -13,6 +13,10 @@ import com.coloplast.olympus.ui.common.BaseFlowController
 class SettingsFlowController(args: Bundle? = null): BaseFlowController(args),
   SettingsController.Listener{
 
+  init {
+    showToolbar.set(true)
+  }
+
 
   override fun startFlow(flowChildRouter: Router) {
     flowChildRouter.setRoot(getInitialController())

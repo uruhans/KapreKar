@@ -5,6 +5,7 @@ import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerSettingsBinding
 import com.coloplast.olympus.ui.common.BaseController
+import com.coloplast.olympus.ui.common.CustomToolbarController
 import com.coloplast.olympus.utils.OSUtils
 import java.util.*
 

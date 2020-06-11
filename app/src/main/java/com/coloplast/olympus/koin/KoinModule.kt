@@ -14,6 +14,7 @@ import com.coloplast.olympus.businesslayer.interfaces.TransmitterComponent
 import com.coloplast.olympus.notifications.NotificationCenter
 import com.coloplast.olympus.notifications.NotificationScheduler
 import com.coloplast.olympus.notifications.OlympusNotificationManager
+import com.coloplast.olympus.shared.preferences.Preferences
 import com.coloplast.olympus.ui.common.Stack
 import com.coloplast.olympus.ui.common.flow.FlowFactory
 import com.coloplast.olympus.ui.feature.home.HomeViewModel
@@ -46,6 +47,9 @@ val koinModule = module {
 
   /* Components */
   single<TransmitterComponent> { TransmitterComponentImpl() }
+
+  /* Preferences */
+  single { Preferences(androidContext()) }
 
   single { Me() }
 

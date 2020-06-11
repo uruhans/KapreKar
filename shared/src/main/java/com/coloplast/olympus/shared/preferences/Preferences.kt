@@ -14,6 +14,7 @@ class Preferences(applicationContext: Context) {
   var activeTransmitter: String by bindSharedPreference(applicationContext, ACTIVE_TRANSMITTER, "")
   var latestStateFromActiveTx: String by bindSharedPreference(applicationContext, LATEST_STATE_FROM_ACTIVE_TRANSMITTER, "")
   var leaks: String by bindSharedPreference(applicationContext, LEAKS, "")
+  var areRingingAlertsEnabled: Boolean by bindSharedPreference(applicationContext, RINGING_ALERTS_ENABLED, true)
 
   private fun clearUserToken() {
     userToken = ""
@@ -28,6 +29,7 @@ class Preferences(applicationContext: Context) {
     private const val ACTIVE_TRANSMITTER: String = "ACTIVE_TRANSMITTER"
     private const val LATEST_STATE_FROM_ACTIVE_TRANSMITTER: String = "LATEST_STATE_FROM_ACTIVE_TRANSMITTER"
     private const val LEAKS: String = "LEAKS"
+    private const val RINGING_ALERTS_ENABLED: String = "RINGING_ALERTS_ENABLED"
 
     @SuppressLint("StaticFieldLeak")
     private lateinit var preferences: Preferences

@@ -4,9 +4,12 @@ import androidx.databinding.ObservableBoolean
 import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerSettingsBinding
+import com.coloplast.olympus.shared.preferences.Preferences
 import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.common.CustomToolbarController
+import com.coloplast.olympus.ui.common.extensions.onValueChanged
 import com.coloplast.olympus.utils.OSUtils
+import org.koin.core.inject
 import java.util.*
 
 
@@ -17,7 +20,14 @@ class SettingsController: BaseController<ControllerSettingsBinding>() {
     fun chooseSensors()
   }
 
-  val ringingAlertsEnabled = ObservableBoolean(false)
+  private val preferences: Preferences by inject()
+
+  val ringingAlertsEnabled = ObservableBoolean().apply {
+    set(preferences.areRingingAlertsEnabled)
+    compositeDisposable.add(
+      onValueChanged { preferences.areRingingAlertsEnabled = this.get() }
+    )
+  }
 
   override fun attachVariables(viewBinding: ControllerSettingsBinding) {
     viewBinding.controller = this

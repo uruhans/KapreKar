@@ -15,7 +15,7 @@ import com.coloplast.olympus.databinding.ViewSensorSelectorBinding
 class SensorSelectorView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0, defStyleRes: Int = 0
 ) : LinearLayout(context, attrs, defStyle, defStyleRes) {
 
-  val allSensorsSelected = ObservableBoolean(true)
+  val allSensorsEnabled = ObservableBoolean(true)
 
   private val layoutInflater =
     context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -24,7 +24,7 @@ class SensorSelectorView @JvmOverloads constructor(context: Context, attrs: Attr
   }
 
   fun onOptionClicked(bedtimeSensors: BedtimeSensors){
-    allSensorsSelected.set(bedtimeSensors == BedtimeSensors.ALL)
+    allSensorsEnabled.set(bedtimeSensors == BedtimeSensors.ALL)
   }
 
   enum class BedtimeSensors{
@@ -35,19 +35,19 @@ class SensorSelectorView @JvmOverloads constructor(context: Context, attrs: Attr
   object SensorSelectorBindingAdapter{
     @BindingAdapter("allSensorsSelected")
     @JvmStatic fun setAllSensorsSelected(view: SensorSelectorView, newState: Boolean) {
-      if(view.allSensorsSelected.get() != newState){
-        view.allSensorsSelected.set(newState)
+      if(view.allSensorsEnabled.get() != newState){
+        view.allSensorsEnabled.set(newState)
       }
     }
 
     @InverseBindingAdapter(attribute = "allSensorsSelected")
     @JvmStatic fun getAllSensorsSelected(view: SensorSelectorView): Boolean {
-      return view.allSensorsSelected.get()
+      return view.allSensorsEnabled.get()
     }
 
     @BindingAdapter("allSensorsSelectedAttrChanged")
     @JvmStatic fun setListeners(view: SensorSelectorView, attrChange: InverseBindingListener?){
-      view.allSensorsSelected.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback(){
+      view.allSensorsEnabled.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback(){
         override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
           attrChange?.onChange()
         }

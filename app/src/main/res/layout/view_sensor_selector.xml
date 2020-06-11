@@ -26,7 +26,7 @@
       android:elevation="@dimen/cardview_elevation_default"
       app:cardUseCompatPadding="true"
       android:onClick="@{() -> view.onOptionClicked(BedtimeSensors.ALL)}"
-      android:background="@{view.allSensorsSelected ? @drawable/cardview_selected_with_outline : @drawable/cardview_not_selected}" >
+      android:background="@{view.allSensorsEnabled ? @drawable/cardview_selected_with_outline : @drawable/cardview_not_selected}" >
 
       <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -69,7 +69,7 @@
       android:elevation="@dimen/cardview_elevation_default"
       app:cardUseCompatPadding="true"
       android:onClick="@{() -> view.onOptionClicked(BedtimeSensors.OUTER)}"
-      android:background="@{!view.allSensorsSelected ? @drawable/cardview_selected_with_outline : @drawable/cardview_not_selected}" >
+      android:background="@{!view.allSensorsEnabled ? @drawable/cardview_selected_with_outline : @drawable/cardview_not_selected}" >
 
       <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

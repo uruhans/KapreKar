@@ -29,7 +29,15 @@
     <com.coloplast.olympus.ui.common.widgets.SensorSelectorView
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      app:allSensorsSelected="@{controller.allSensorsSelected}" />
+      app:allSensorsSelected="@={controller.allSensorsSelected}"/>
+
+    <TextView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="@dimen/spacing_larger"
+      android:layout_marginEnd="@dimen/spacing_larger"
+      android:text="@{controller.allSensorsSelected ? @string/settings_sensors_all_description : @string/settings_sensors_outer_only_description}"
+      style="@style/TextStyle.Roboto.Regular.ClearGrey.16" />
 
   </LinearLayout>
 

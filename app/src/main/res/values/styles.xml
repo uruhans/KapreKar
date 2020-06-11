@@ -279,6 +279,11 @@
     <item name="android:textSize">@dimen/text_18</item>
   </style>
 
+  <style name="Button.Secondary" parent="Button">
+    <item name="android:background">@drawable/button_submit</item>
+    <item name="android:textColor">@color/black</item>
+  </style>
+
   <style name="Button.Selectable">
     <item name="android:background">@drawable/button_selectable</item>
   </style>

@@ -4,7 +4,7 @@
   xmlns:tools="http://schemas.android.com/tools">
 
   <data>
-    <import type="com.coloplast.olympus.ui.feature.settings.BedtimeAlarmController.BedtimeSensors" />
+    <import type="com.coloplast.olympus.ui.feature.settings.models.BedtimeSensors" />
     <variable
       name="controller"
       type="com.coloplast.olympus.ui.feature.settings.BedtimeAlarmController" />
@@ -14,7 +14,7 @@
   <ScrollView
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="@dimen/spacing_larger"
+    android:layout_marginTop="@dimen/toolbar_height"
     android:layout_marginBottom="@dimen/spacing_larger">
 
     <LinearLayout
@@ -29,96 +29,12 @@
         android:text="Choose bedtime sensors"
         style="@style/TextStyle.Coloplast.Bold.DarkGrey.24"/>
 
-      <LinearLayout
+      <com.coloplast.olympus.ui.common.widgets.SensorSelectorView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/spacing_larger"
-        android:layout_marginBottom="@dimen/spacing_larger"
-        android:orientation="horizontal">
-
-        <androidx.cardview.widget.CardView
-          android:layout_width="0dp"
-          android:layout_height="144dp"
-          android:layout_weight="1"
-          android:layout_marginTop="@dimen/cardview_elevation_default"
-          android:layout_marginBottom="@dimen/cardview_elevation_default"
-          android:layout_marginStart="@dimen/spacing_larger"
-          android:layout_marginEnd="@dimen/spacing_larger"
-          android:elevation="@dimen/cardview_elevation_default"
-          app:cardUseCompatPadding="true"
-          android:onClick="@{() -> controller.onOptionClicked(BedtimeSensors.ALL)}"
-          android:background="@{controller.allSensorsSelected ? @drawable/cardview_selected_with_outline : @drawable/cardview_not_selected}" >
-
-          <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <ImageView
-              android:id="@+id/all_sensors_image"
-              android:layout_width="50dp"
-              android:layout_height="52dp"
-              android:layout_margin="@dimen/spacing_larger"
-              android:src="@drawable/ic_sidemenu_status"
-              app:layout_constraintStart_toStartOf="parent"
-              app:layout_constraintEnd_toEndOf="parent"
-              app:layout_constraintTop_toTopOf="parent"/>
-
-            <TextView
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:paddingStart="@dimen/spacing_larger"
-              android:paddingEnd="@dimen/spacing_larger"
-              android:text="@string/settings_sensors_all_sensors"
-              style="@style/TextStyle.Coloplast.Bold.DarkGrey.16"
-              android:textAlignment="center"
-              app:layout_constraintStart_toStartOf="parent"
-              app:layout_constraintEnd_toEndOf="parent"
-              app:layout_constraintTop_toBottomOf="@id/all_sensors_image"
-              app:layout_constraintBottom_toBottomOf="parent" />
-
-          </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-          android:layout_width="0dp"
-          android:layout_height="144dp"
-          android:layout_weight="1"
-          android:layout_marginEnd="@dimen/spacing_larger"
-          android:elevation="@dimen/cardview_elevation_default"
-          app:cardUseCompatPadding="true"
-          android:onClick="@{() -> controller.onOptionClicked(BedtimeSensors.OUTER)}"
-          android:background="@{!controller.allSensorsSelected ? @drawable/cardview_selected_with_outline : @drawable/cardview_not_selected}" >
-
-          <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <ImageView
-              android:id="@+id/outer_sensors_image"
-              android:layout_width="50dp"
-              android:layout_height="52dp"
-              android:layout_margin="@dimen/spacing_larger"
-              android:src="@drawable/ic_outer_sensors_only"
-              app:layout_constraintStart_toStartOf="parent"
-              app:layout_constraintEnd_toEndOf="parent"
-              app:layout_constraintTop_toTopOf="parent"/>
-
-            <TextView
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:paddingStart="@dimen/spacing_larger"
-              android:paddingEnd="@dimen/spacing_larger"
-              android:text="@string/settings_sensors_outer_only"
-              style="@style/TextStyle.Coloplast.Bold.DarkGrey.16"
-              android:textAlignment="center"
-              app:layout_constraintStart_toStartOf="parent"
-              app:layout_constraintEnd_toEndOf="parent"
-              app:layout_constraintTop_toBottomOf="@id/outer_sensors_image"
-              app:layout_constraintBottom_toBottomOf="parent" />
-
-          </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.cardview.widget.CardView>
-      </LinearLayout>
+        android:layout_marginStart="@dimen/spacing_larger"
+        android:layout_marginEnd="@dimen/spacing_larger"
+        app:allSensorsSelected="@={controller.allSensorsSelected}" />
 
       <TextView
         android:layout_width="match_parent"

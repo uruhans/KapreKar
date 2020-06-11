@@ -5,6 +5,7 @@ import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerBedtimeAlarmBinding
 import com.coloplast.olympus.ui.common.BaseController
+import com.coloplast.olympus.ui.feature.settings.models.BedtimeSensors
 
 
 /**
@@ -12,8 +13,6 @@ import com.coloplast.olympus.ui.common.BaseController
  * Copyright by Dawn Health A/S. All rights reserved.
  */
 class BedtimeAlarmController: BaseController<ControllerBedtimeAlarmBinding>() {
-
-
 
   val allSensorsSelected = ObservableBoolean(true)
 
@@ -33,10 +32,6 @@ class BedtimeAlarmController: BaseController<ControllerBedtimeAlarmBinding>() {
   }
 
   override fun getLayout(): Int = R.layout.controller_bedtime_alarm
-
-  enum class BedtimeSensors{
-    ALL, OUTER
-  }
 
   companion object{
 

@@ -5,6 +5,7 @@ import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerChooseSensorsBinding
 import com.coloplast.olympus.ui.common.BaseController
+import com.coloplast.olympus.ui.feature.settings.models.BedtimeSensors
 
 
 /**
@@ -12,6 +13,10 @@ import com.coloplast.olympus.ui.common.BaseController
  * Copyright by Dawn Health A/S. All rights reserved.
  */
 class ChooseSensorsController: BaseController<ControllerChooseSensorsBinding>() {
+
+  interface Listener{
+    fun onSensorSelected(bedtimeSensors: BedtimeSensors)
+  }
 
   val allSensorsSelected = ObservableBoolean(true)
 
@@ -22,6 +27,16 @@ class ChooseSensorsController: BaseController<ControllerChooseSensorsBinding>() 
   override fun onViewBound(viewBinding: ControllerChooseSensorsBinding) {
     //noop
   }
+
+  fun onSaveChanges(){
+    val selectedSensor = when(allSensorsSelected.get()) {
+      true -> BedtimeSensors.ALL
+      false -> BedtimeSensors.OUTER
+    }
+    getListener(Listener::class.java)!!.onSensorSelected(selectedSensor)
+  }
+
+  fun onDiscard() = parentController?.handleBack()
 
   override fun getLayout(): Int = R.layout.controller_choose_sensors
 

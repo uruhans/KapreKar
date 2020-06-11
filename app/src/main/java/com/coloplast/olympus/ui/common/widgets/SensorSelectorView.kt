@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.widget.LinearLayout
 import androidx.databinding.*
 import com.coloplast.olympus.databinding.ViewSensorSelectorBinding
+import com.coloplast.olympus.ui.feature.settings.models.BedtimeSensors
 
 
 /**
@@ -25,10 +26,6 @@ class SensorSelectorView @JvmOverloads constructor(context: Context, attrs: Attr
 
   fun onOptionClicked(bedtimeSensors: BedtimeSensors){
     allSensorsEnabled.set(bedtimeSensors == BedtimeSensors.ALL)
-  }
-
-  enum class BedtimeSensors{
-    ALL, OUTER
   }
 
   @InverseBindingMethods(InverseBindingMethod(type = SensorSelectorView::class, attribute = "allSensorsSelected", method = "getAllSensorsSelected"))

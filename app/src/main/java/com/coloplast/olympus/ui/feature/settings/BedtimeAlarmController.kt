@@ -5,7 +5,7 @@ import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerBedtimeAlarmBinding
 import com.coloplast.olympus.ui.common.BaseController
-import com.coloplast.olympus.ui.feature.settings.models.BedtimeSensors
+import com.coloplast.olympus.ui.feature.settings.models.Sensors
 
 
 /**
@@ -24,10 +24,10 @@ class BedtimeAlarmController: BaseController<ControllerBedtimeAlarmBinding>() {
     //noop
   }
 
-  fun onOptionClicked(bedtimeSensors: BedtimeSensors){
-    when(bedtimeSensors){
-      BedtimeSensors.ALL -> allSensorsSelected.set(true)
-      BedtimeSensors.OUTER -> allSensorsSelected.set(false)
+  fun onOptionClicked(sensors: Sensors){
+    when(sensors){
+      Sensors.ALL -> allSensorsSelected.set(true)
+      Sensors.OUTER -> allSensorsSelected.set(false)
     }
   }
 

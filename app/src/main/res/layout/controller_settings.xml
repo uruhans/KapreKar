@@ -14,7 +14,8 @@
   <ScrollView
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="@dimen/toolbar_height">
+    android:layout_marginTop="@dimen/toolbar_height"
+    android:layout_marginBottom="@dimen/spacing_larger">
 
     <LinearLayout
       android:layout_width="match_parent"

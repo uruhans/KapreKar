@@ -4,7 +4,7 @@ import android.os.Bundle
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.ui.common.BaseFlowController
-import com.coloplast.olympus.ui.feature.settings.models.BedtimeSensors
+import com.coloplast.olympus.ui.feature.settings.models.Sensors
 
 
 /**
@@ -12,8 +12,7 @@ import com.coloplast.olympus.ui.feature.settings.models.BedtimeSensors
  * Copyright by Dawn Health A/S. All rights reserved.
  */
 class SettingsFlowController(args: Bundle? = null): BaseFlowController(args),
-  SettingsController.Listener,
-  ChooseSensorsController.Listener {
+  SettingsController.Listener {
 
   init {
     showToolbar.set(true)
@@ -34,10 +33,6 @@ class SettingsFlowController(args: Bundle? = null): BaseFlowController(args),
 
   override fun chooseSensors() {
     pushController(ChooseSensorsController.routerTransaction())
-  }
-
-  override fun onSensorSelected(bedtimeSensors: BedtimeSensors) {
-    // TODO: save sensor selection on shared preferences.
   }
 
   companion object{

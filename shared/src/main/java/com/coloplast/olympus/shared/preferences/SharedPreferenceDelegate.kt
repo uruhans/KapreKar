@@ -2,6 +2,7 @@ package com.coloplast.olympus.shared.preferences
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.hardware.Sensor
 import androidx.preference.PreferenceManager
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty

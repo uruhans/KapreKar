@@ -6,7 +6,7 @@ import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerChooseSensorsBinding
 import com.coloplast.olympus.shared.preferences.Preferences
 import com.coloplast.olympus.ui.common.BaseController
-import com.coloplast.olympus.ui.feature.settings.models.BedtimeSensors
+import com.coloplast.olympus.ui.feature.settings.models.Sensors
 import org.koin.core.inject
 
 
@@ -16,11 +16,9 @@ import org.koin.core.inject
  */
 class ChooseSensorsController: BaseController<ControllerChooseSensorsBinding>() {
 
-  interface Listener{
-    fun onSensorSelected(bedtimeSensors: BedtimeSensors)
-  }
-
-  val allSensorsSelected = ObservableBoolean(true)
+  private val preferences: Preferences by inject()
+  private val sensors = Sensors.fromOrdinal(preferences.ringingAlertSensor)
+  val allSensorsSelected = ObservableBoolean(sensors == Sensors.ALL)
 
   override fun attachVariables(viewBinding: ControllerChooseSensorsBinding) {
     viewBinding.controller = this
@@ -32,10 +30,11 @@ class ChooseSensorsController: BaseController<ControllerChooseSensorsBinding>() 
 
   fun onSaveChanges(){
     val selectedSensor = when(allSensorsSelected.get()) {
-      true -> BedtimeSensors.ALL
-      false -> BedtimeSensors.OUTER
+      true -> Sensors.ALL
+      false -> Sensors.OUTER
     }
-    getListener(Listener::class.java)!!.onSensorSelected(selectedSensor)
+    preferences.ringingAlertSensor = selectedSensor.ordinal
+    parentController?.handleBack()
   }
 
   fun onDiscard() = parentController?.handleBack()

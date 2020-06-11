@@ -4,7 +4,7 @@
   xmlns:tools="http://schemas.android.com/tools">
 
   <data>
-    <import type="com.coloplast.olympus.ui.feature.settings.models.BedtimeSensors" />
+    <import type="com.coloplast.olympus.ui.feature.settings.models.Sensors" />
     <variable
       name="controller"
       type="com.coloplast.olympus.ui.feature.settings.BedtimeAlarmController" />

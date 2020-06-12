@@ -108,8 +108,6 @@
         android:focusable="true"
         android:onClick="@{sensorsClickListener}"/>
 
-
-
     </LinearLayout>
 
   </androidx.cardview.widget.CardView>

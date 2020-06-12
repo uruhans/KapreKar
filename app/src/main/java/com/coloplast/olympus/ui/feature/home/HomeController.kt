@@ -307,9 +307,6 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   }
 
   private fun changeOverlayState(overlayState: OverlayState) {
-    imageDialogController?.dismissDialog(false)
-    imageDialogController = null
-
     when(overlayState) {
       OverlayState.QUESTION -> {
         imageDialogController = ImageDialogController.create(
@@ -400,6 +397,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         breachesOccurred.clear()
         resetRelay.accept(transmitterManager.activeTransmitterMacAddress())
         imageDialogController?.dismissDialog(false)
+        imageDialogController = null
       }
       REQUEST_CODE_CONNECTION_LOST -> {
         imageDialogController?.dismissDialog(withCallback = true)
@@ -432,6 +430,8 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
           .popChangeHandler(VerticalChangeHandler()))
       }
     }
+
+    imageDialogController = null
   }
 
   override fun onCloseClicked(requestCode: Int) {

@@ -67,8 +67,14 @@ class TransmitterManager(private val bluetoothManager: BluetoothManager) {
       if(isActiveTransmitter(stateChange.getMacAddress())) {
         // the current tx is already active
         if(isCurrentlyAttached(stateChange)) {
-          // it's also already attached
-          return UpdatedStateChange(stateChange)
+          return if(isOtherTransmitterAttached(stateChange.getMacAddress())) {
+            // if other tx is also attached so we now have multiple transmitters
+            UpdatedStateChange(StateChange(UiState.MULTIPLE_TRANSMITTERS, stateChange.overlayState, stateChange.bleDevice))
+          }
+          else {
+            // this is the only attached tx
+            UpdatedStateChange(stateChange)
+          }
         }
         else {
           // is the other transmitter on patch
@@ -88,7 +94,7 @@ class TransmitterManager(private val bluetoothManager: BluetoothManager) {
         return if(isCurrentlyAttached(stateChange)) {
           // is the other transmitter also attached?
           if(isOtherTransmitterAttached(stateChange.getMacAddress())) {
-            UpdatedStateChange(StateChange( UiState.MULTIPLE_TRANSMITTERS, stateChange.overlayState, stateChange.bleDevice))
+            UpdatedStateChange(StateChange(UiState.MULTIPLE_TRANSMITTERS, stateChange.overlayState, stateChange.bleDevice))
           }
           else {
             setActiveTransmitter(stateChange)

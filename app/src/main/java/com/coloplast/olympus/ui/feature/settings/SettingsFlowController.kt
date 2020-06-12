@@ -4,7 +4,6 @@ import android.os.Bundle
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.ui.common.BaseFlowController
-import com.coloplast.olympus.ui.feature.settings.models.Sensors
 
 
 /**
@@ -17,7 +16,6 @@ class SettingsFlowController(args: Bundle? = null): BaseFlowController(args),
   init {
     showToolbar.set(true)
   }
-
 
   override fun startFlow(flowChildRouter: Router) {
     flowChildRouter.setRoot(getInitialController())

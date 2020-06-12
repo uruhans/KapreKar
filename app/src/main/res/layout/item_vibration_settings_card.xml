@@ -51,6 +51,7 @@
         style="@style/TextStyle.Roboto.Medium.Turquoise.18"
         android:background="?attr/selectableItemBackground"
         android:focusable="true"
+        android:clickable="true"
         android:onClick="@{buttonClickListener}"/>
 
     </LinearLayout>

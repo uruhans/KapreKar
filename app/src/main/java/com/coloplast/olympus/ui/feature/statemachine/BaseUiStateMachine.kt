@@ -21,7 +21,7 @@ abstract class BaseUiStateMachine : UiStateMachine {
     // if we have the same state as before, there is no need to run through the state machine
     if (newState == state) {
       Timber.d("Skipping state - we are already in [$newState]")
-      return UiState.NO_CHANGE
+      return newState
     }
     
     // invoke the current state with the new state as parameter

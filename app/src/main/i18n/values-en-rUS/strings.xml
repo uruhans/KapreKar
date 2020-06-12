@@ -177,6 +177,7 @@
 <string name="lock_notification_inner">There\'s a problem.</string>
 <string name="lock_notification_inner_blind">Sensors not working.</string>
 <string name="lock_notification_moisture">Sensors not working.</string>
+<string name="lock_notification_multiple_transmitters">[Missing translation]</string>
 <string name="lock_notification_outer">The problem\'s spreading.</string>
 <string name="lock_notification_pay_attention">Something\'s happening.</string>
 <string name="lock_notification_sweat">Something\'s happening.</string>

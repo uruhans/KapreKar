@@ -40,8 +40,6 @@ val koinModule = module {
   factory { DeviceConnection(get()) }
 
   single { TransmitterManager(get()) }
-  single<Stack<StateChange>> { Stack(5) }
-
   single { BreachesOccurred() }
 
   /* Components */
@@ -51,7 +49,7 @@ val koinModule = module {
 
 
   /* ViewModels */
-  factory { BluetoothServiceViewModel(get(), get(), get(), get()) }
+  factory { BluetoothServiceViewModel(get(), get(), get()) }
   factory { HomeViewModel(get()) }
   single { AddTransmitterViewModel(get(), get()) }
   single { TransmittersViewModel(get(), get()) }

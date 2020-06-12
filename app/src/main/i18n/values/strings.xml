@@ -36,10 +36,12 @@
 <string name="generic_cancel">Cancel</string>
 <string name="generic_close">Close</string>
 <string name="generic_confirm">Confirm</string>
+<string name="generic_continue">Continue</string>
 <string name="generic_error">An error occurred.</string>
 <string name="generic_error_call_support_action">Call</string>
 <string name="generic_error_call_support_title">Unknown Error</string>
 <string name="generic_error_message">We encountered an error. Please try again later.</string>
+<string name="generic_get_started">Get started</string>
 <string name="generic_menu">Menu</string>
 <string name="generic_no">No</string>
 <string name="generic_ok">OK</string>
@@ -178,6 +180,7 @@
 <string name="lock_notification_inner">There\'s a problem.</string>
 <string name="lock_notification_inner_blind">Sensors not working.</string>
 <string name="lock_notification_moisture">Sensors not working.</string>
+<string name="lock_notification_multiple_transmitters">[Missing translation]</string>
 <string name="lock_notification_outer">The problem\'s spreading.</string>
 <string name="lock_notification_pay_attention">Something\'s happening.</string>
 <string name="lock_notification_sweat">Something\'s happening.</string>
@@ -198,6 +201,8 @@
 <string name="menu_subitem_profile">Profile</string>
 <string name="menu_transmitters">Transmitters</string>
 <string name="missing_translation">Missing translation</string>
+<string name="onboarding_chapter_intro_setup_guide">Setup guide</string>
+<string name="onboarding_chapter_intro_setup_guide_message">This guide will guide you step-by-step through the process of setting up TestProduct and applying in to your body.</string>
 <string name="overlay_battery_critical">Charge now to stay informed.</string>
 <string name="overlay_battery_low_title">Transmitter battery very low.</string>
 <string name="overlay_battery_second_transmitter_charged_title">Back-up transmitter fully charged.</string>
@@ -218,6 +223,14 @@
 <string name="overlay_network">Check that you are not in flightmode and that wifi and mobile data is turned on. We cannot recieve necessary data for the study.</string>
 <string name="overlay_network_title">No network connection</string>
 <string name="overlay_no_breach_title">No breaches registrered</string>
+<string name="settings_alarm_choose_end">Choose end time</string>
+<string name="settings_alarm_choose_sensors">Choose bedtime sensors</string>
+<string name="settings_alarm_choose_start">Choose start time</string>
+<string name="settings_alarm_description">Set a daily time window for your bedtime leakage alarm to turn on and off.</string>
+<string name="settings_alarm_end">End</string>
+<string name="settings_alarm_message">Between the hours of %1$s and %2$s you will receive a continuous alarm if leakage is detected between the ion either inner or outer sensor during the scheduled time or if connection is lost. This will bypass Silent or Do Not Disturb settings.</string>
+<string name="settings_alarm_start">Start</string>
+<string name="settings_alarm_title">Schedule bedtime alarm</string>
 <string name="settings_allow_notifications_body">[Missing translation]</string>
 <string name="settings_allow_notifications_title">Allow notifications</string>
 <string name="settings_bedtime_alerts_body">You’ll receive vibrations with notiications if it is turned on in your iPhone settings.</string>
@@ -249,6 +262,8 @@
 <string name="settings_sensors_outer_only_description">[DESCRIPTION MISSING]</string>
 <string name="settings_show_notification_preview_body">[Missing translation]</string>
 <string name="settings_show_notification_preview_title">Show notification preview</string>
+<string name="settings_sound_alerts_off">Sound alerts off</string>
+<string name="settings_sound_alerts_off_warning">You currently have no sound alerts on. You might want to turn on sound alerts to avoid missing important notifications.</string>
 <string name="settings_sound_body">[Missing translation]</string>
 <string name="settings_sound_title">Sound</string>
 <string name="settings_sounds_alerts_body">Receive short sound alerts with notifications, similar to when you receive a text message</string>

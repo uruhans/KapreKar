@@ -179,6 +179,7 @@
 <string name="lock_notification_inner">lock_notification_inner</string>
 <string name="lock_notification_inner_blind">lock_notification_inner_blind</string>
 <string name="lock_notification_moisture">lock_notification_moisture</string>
+<string name="lock_notification_multiple_transmitters">[Missing translation]</string>
 <string name="lock_notification_outer">lock_notification_outer</string>
 <string name="lock_notification_pay_attention">lock_notification_pay_attention</string>
 <string name="lock_notification_sweat">lock_notification_sweat</string>

@@ -86,7 +86,9 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
           StateDispatcher.dispatchStateForActiveTransmitter(newStateChange)
         }
         is BluetoothServiceModel.RawDataPackageUpdate -> {
-          if(it.fromActiveTx) {
+          val activeTransmitter = transmitterManager.isActiveTransmitter(it.macAddress)
+
+          if(activeTransmitter) {
             StateDispatcher.dispatch(it.macAddress)
           }
         }

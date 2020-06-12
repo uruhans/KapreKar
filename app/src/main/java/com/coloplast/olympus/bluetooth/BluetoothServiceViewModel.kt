@@ -10,7 +10,6 @@ import com.coloplast.olympus.bluetooth.model.*
 import com.coloplast.olympus.businesslayer.interfaces.TransmitterComponent
 import com.coloplast.olympus.shared.models.DataResult
 import com.coloplast.olympus.shared.models.Transmitter
-import com.coloplast.olympus.ui.feature.TransmitterManager
 import com.coloplast.olympus.ui.feature.home.models.StateTransformers
 import com.coloplast.olympus.ui.feature.statemachine.OverlayStateMachineImpl
 import com.coloplast.olympus.ui.feature.statemachine.UiStateMachineImpl
@@ -26,8 +25,7 @@ import java.util.concurrent.TimeUnit
 class BluetoothServiceViewModel(
   private val bluetoothManager: BluetoothManager,
   private val transmitterComponent: TransmitterComponent,
-  private val deviceConnection: DeviceConnection,
-  private val transmitterManager: TransmitterManager
+  private val deviceConnection: DeviceConnection
 ) : ServiceViewModel<BluetoothServiceModel, BluetoothServiceResult<BluetoothServiceModel>>() {
 
   private val connectedTransmittersRelay = PublishRelay.create<List<String>>()
@@ -41,16 +39,8 @@ class BluetoothServiceViewModel(
     connectedTransmittersRelay.accept(connectedBleDevicesList)
   }
 
-  private fun addConnectedDeviceAndNotify(macAddress: String) {
-
-  }
-
-
   override fun bind(serviceResult: BluetoothServiceResult<BluetoothServiceModel>): Disposable {
     val compositeDisposable = CompositeDisposable()
-
-    val disposables = mutableMapOf<String, Disposable>()
-
 
     val connectedBleDevicesObservable = connectedTransmittersRelay
       .publish()
@@ -160,15 +150,6 @@ class BluetoothServiceViewModel(
       .flatMap { macAddress ->
 
         bluetoothManager.bleConnectionStateObservable(macAddress)
-//          .doOnNext {
-//            if (it == BleConnectionState.CONNECTED) {
-//              if (connectedBleDevicesList.none { address -> address == macAddress }) {
-//                connectedTransmittersRelay.accept(connectedBleDevicesList)
-//              }
-//            } else if (it == BleConnectionState.DISCONNECTED) {
-//              connectedTransmittersRelay.accept(connectedBleDevicesList)
-//            }
-//          }
           .filter { it == BleConnectionState.DISCONNECTED }
           .take(1)
           .doOnNext { Timber.d("trying to connect to $macAddress") }
@@ -198,8 +179,7 @@ class BluetoothServiceViewModel(
             BluetoothServiceModel.DeviceUpdate(StateChange(newUiState, newOverlayState, deviceResult.bleDevice))
           }
           is DeviceResult.RawDataPackageResult -> {
-            val activeTransmitter = transmitterManager.isActiveTransmitter(deviceResult.macAddress)
-            BluetoothServiceModel.RawDataPackageUpdate(activeTransmitter, deviceResult.macAddress, deviceResult.rawDataPackage)
+            BluetoothServiceModel.RawDataPackageUpdate(deviceResult.macAddress, deviceResult.rawDataPackage)
           }
           is DeviceResult.Error -> {
             removeConnectedDeviceAndNotify(macAddress)

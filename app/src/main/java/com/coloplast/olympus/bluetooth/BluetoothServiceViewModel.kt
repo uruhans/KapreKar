@@ -36,6 +36,16 @@ class BluetoothServiceViewModel(
   // the repeatIntervalObservable to determine when to repeat something
   private fun repeatIntervalObservable(seconds: Long) = Observable.interval(seconds, TimeUnit.SECONDS)
 
+  private fun removeConnectedDeviceAndNotify(macAddress: String) {
+    connectedBleDevicesList.remove(macAddress)
+    connectedTransmittersRelay.accept(connectedBleDevicesList)
+  }
+
+  private fun addConnectedDeviceAndNotify(macAddress: String) {
+
+  }
+
+
   override fun bind(serviceResult: BluetoothServiceResult<BluetoothServiceModel>): Disposable {
     val compositeDisposable = CompositeDisposable()
 
@@ -150,26 +160,19 @@ class BluetoothServiceViewModel(
       .flatMap { macAddress ->
 
         bluetoothManager.bleConnectionStateObservable(macAddress)
-          .doOnNext {
-            if (it == BleConnectionState.CONNECTED) {
-              if (connectedBleDevicesList.none { address -> address == macAddress }) {
-                connectedTransmittersRelay.accept(connectedBleDevicesList)
-              }
-            } else if (it == BleConnectionState.DISCONNECTED) {
-              connectedTransmittersRelay.accept(connectedBleDevicesList)
-            }
-          }
+//          .doOnNext {
+//            if (it == BleConnectionState.CONNECTED) {
+//              if (connectedBleDevicesList.none { address -> address == macAddress }) {
+//                connectedTransmittersRelay.accept(connectedBleDevicesList)
+//              }
+//            } else if (it == BleConnectionState.DISCONNECTED) {
+//              connectedTransmittersRelay.accept(connectedBleDevicesList)
+//            }
+//          }
           .filter { it == BleConnectionState.DISCONNECTED }
           .take(1)
           .doOnNext { Timber.d("trying to connect to $macAddress") }
-          .flatMap {
-            connectObservable(macAddress)
-              .doOnNext {
-                if(it is BluetoothServiceModel.Disconnected) {
-                  connectedBleDevicesList.remove(macAddress)
-                }
-              }
-          }
+          .flatMap { connectObservable(macAddress) }
       }
 
     compositeDisposable.add(retryObservable.map<BluetoothServiceModel> { BluetoothServiceModel.ScanningStarted() }.bind(serviceResult.onResult()))
@@ -199,22 +202,18 @@ class BluetoothServiceViewModel(
             BluetoothServiceModel.RawDataPackageUpdate(activeTransmitter, deviceResult.macAddress, deviceResult.rawDataPackage)
           }
           is DeviceResult.Error -> {
-            connectedBleDevicesList.remove(macAddress)
-            connectedTransmittersRelay.accept(connectedBleDevicesList)
-            // notify transmitter manager that this Tx was disconnected
-            // if possible it will return the latest state change from the *other* Tx (used to update Ui)
-            val latestStateChangeFromOtherTx = transmitterManager.onTransmitterDisconnect(macAddress)
+            removeConnectedDeviceAndNotify(macAddress)
+
             // return a disconnect to the service
-            BluetoothServiceModel.Disconnected(latestStateChangeFromOtherTx)
+            BluetoothServiceModel.Disconnected(macAddress)
           }
         }
       }
       .onErrorReturn {
-        connectedBleDevicesList.remove(macAddress)
-        connectedTransmittersRelay.accept(connectedBleDevicesList)
-        val latestStateChangeFromOtherTx = transmitterManager.onTransmitterDisconnect(macAddress)
+        removeConnectedDeviceAndNotify(macAddress)
+
         // return a disconnect to the service
-        BluetoothServiceModel.Disconnected(latestStateChangeFromOtherTx)
+        BluetoothServiceModel.Disconnected(macAddress)
       }
   }
 }

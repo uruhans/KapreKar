@@ -17,6 +17,7 @@ import com.coloplast.olympus.bluetooth.StateDispatcher
 import com.coloplast.olympus.bluetooth.model.BluetoothServiceModel
 import com.coloplast.olympus.bluetooth.model.BluetoothServiceResult
 import com.coloplast.olympus.notifications.OlympusNotificationManager
+import com.coloplast.olympus.ui.feature.TransmitterManager
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
@@ -36,12 +37,14 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
   
   private val notificationManager: NotificationManager by inject()
   private val olympusNotificationManager: OlympusNotificationManager = get()
+  private val transmitterManager: TransmitterManager by inject()
+
   private val compositeDisposable = CompositeDisposable()
 
   private val channelId: String by lazy {  applicationContext.getString(R.string.lock_service_notification_channel_id) }
   private val channelName: String by lazy { applicationContext.getString(R.string.lock_service_notification_channel_name) }
   private val channelDescription: String by lazy { applicationContext.getString(R.string.lock_service_notification_channel_description) }
-  
+
   override fun onBind(intent: Intent?): IBinder? {
     // we are not binding to this service, so just return null
     return null
@@ -75,23 +78,31 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
             return@ui
           }
 
-          // this will allow for notifications to be send when app is in the background
-          olympusNotificationManager.send(it.statusChange.state)
-          
           // this will dispatch the state change to any who observes it (none if app is in background)
           StateDispatcher.dispatch(it.statusChange)
+
+          val updatedStateChange = transmitterManager.determineCurrentlyActiveTransmitterAndReturnStateChangeFromIt(it.statusChange)
+          val newStateChange = transmitterManager.determineTransmitterPatchQuestioning(updatedStateChange)
+
+          // TODO - this will result in multiple notifications sent on EVERY statechange on EVERY transmitter
+          // this will allow for notifications to be send when app is in the background
+          olympusNotificationManager.send(newStateChange.state)
+          StateDispatcher.dispatchStateForActiveTransmitter(newStateChange)
         }
         is BluetoothServiceModel.RawDataPackageUpdate -> {
-          // TODO - this may need to change if subscribers want rawpackages?
-          if(it.fromActiveTx) {
+          val activeTransmitter = transmitterManager.isActiveTransmitter(it.macAddress)
+
+          if(activeTransmitter) {
             StateDispatcher.dispatch(it.macAddress)
           }
         }
         is BluetoothServiceModel.Disconnected -> {
-          // check to see if we have a stateChange in the uiModel
+          // we have a disconnect - get the latest statechange from other tx (if needed and if possible)
+          val otherTxStateChange = transmitterManager.onTransmitterDisconnect(it.macAddress)
+
           // this will be used to notify the Ui to change state (so we dont get stuck in multiple tx state or other state based on disconnected tx)
-          it.otherTxStateChange?.let { stateChange ->
-            StateDispatcher.dispatch(stateChange)
+          otherTxStateChange?.let { stateChange ->
+            StateDispatcher.dispatchStateForActiveTransmitter(stateChange)
           }
         }
         is BluetoothServiceModel.ScanningStarted -> {

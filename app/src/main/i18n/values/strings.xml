@@ -203,6 +203,12 @@
 <string name="menu_subitem_profile">Profile</string>
 <string name="menu_transmitters">Transmitters</string>
 <string name="missing_translation">Missing translation</string>
+<string name="onboarding_chapter_intro_checklist_description">The guide includes videos to help you get started with your new product.</string>
+<string name="onboarding_chapter_intro_checklist_item_1">1. Introduction</string>
+<string name="onboarding_chapter_intro_checklist_item_2">2. Connecting</string>
+<string name="onboarding_chapter_intro_checklist_item_3">3. Preparing</string>
+<string name="onboarding_chapter_intro_checklist_item_4">4. Applying</string>
+<string name="onboarding_chapter_intro_checklist_title">Welcome to the Setup guide</string>
 <string name="onboarding_chapter_intro_setup_guide">Setup guide</string>
 <string name="onboarding_chapter_intro_setup_guide_message">This guide will guide you step-by-step through the process of setting up TestProduct and applying in to your body.</string>
 <string name="overlay_battery_critical">Charge now to stay informed.</string>

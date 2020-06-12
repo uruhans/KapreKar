@@ -5,6 +5,7 @@ import com.coloplast.olympus.bluetooth.StateDispatcher
 import com.coloplast.olympus.bluetooth.businesslayer.BluetoothManager
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
+import com.coloplast.olympus.shared.models.DataResult
 import com.coloplast.olympus.ui.feature.home.models.BaseHomeViewModel
 import com.coloplast.olympus.ui.feature.home.models.HomeUiModel
 import io.reactivex.Observable
@@ -27,7 +28,10 @@ class HomeViewModel(private val bluetoothManager: BluetoothManager) :
         HomeUiModel.ConnectionStateUpdate(BleConnectionState.DISCONNECTED)
       }
     
-    val stateUpdate = StateDispatcher.stateChangeObservable()
+    val stateUpdate = StateDispatcher.activeTransmitterStateChangeObservable()
+      .filter { it is DataResult.Success }
+      .map { it as DataResult.Success }
+      .map { it.data }
       .map { HomeUiModel.DeviceUpdate(it) }
     
     val rawPackageUpdateObservable = StateDispatcher.rawPackageUpdateObservable()

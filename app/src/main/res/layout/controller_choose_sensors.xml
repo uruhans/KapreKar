@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools">
+
+  <data>
+
+    <variable
+      name="controller"
+      type="com.coloplast.olympus.ui.feature.settings.ChooseSensorsController" />
+
+  </data>
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="@dimen/toolbar_height">
+
+    <TextView
+      android:id="@+id/title"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="@dimen/spacing_larger"
+      android:layout_marginEnd="@dimen/spacing_larger"
+      android:text="@string/settings_sensors_header"
+      style="@style/TextStyle.Coloplast.Bold.DarkGrey.36"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toTopOf="parent"/>
+
+    <com.coloplast.olympus.ui.common.widgets.SensorSelectorView
+      android:id="@+id/sensor_selector"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="@dimen/spacing_larger"
+      android:layout_marginEnd="@dimen/spacing_larger"
+      app:allSensorsSelected="@={controller.allSensorsSelected}"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/title"/>
+
+    <TextView
+      android:id="@+id/sensor_description"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="@dimen/spacing_larger"
+      android:layout_marginEnd="@dimen/spacing_larger"
+      android:text="@{controller.allSensorsSelected ? @string/settings_sensors_all_description : @string/settings_sensors_outer_only_description}"
+      style="@style/TextStyle.Roboto.Regular.ClearGrey.16"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/sensor_selector" />
+
+    <Button
+      android:id="@+id/button_save"
+      android:layout_width="match_parent"
+      android:layout_height="@dimen/cardview_button_height_default"
+      android:layout_marginBottom="@dimen/spacing_small"
+      android:text="@string/generic_save_changes"
+      style="@style/Button"
+      android:onClick="@{() -> controller.onSaveChanges()}"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintBottom_toTopOf="@id/button_discard"/>
+
+    <Button
+      android:id="@+id/button_discard"
+      android:layout_width="match_parent"
+      android:layout_height="@dimen/cardview_button_height_default"
+      android:text="@string/generic_discard"
+      style="@style/Button.Secondary"
+      android:onClick="@{() -> controller.onDiscard()}"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintBottom_toBottomOf="parent"/>
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools">
+
+  <data>
+    <import type="com.coloplast.olympus.ui.feature.settings.models.Sensors" />
+    <variable
+      name="controller"
+      type="com.coloplast.olympus.ui.feature.settings.BedtimeAlarmController" />
+
+  </data>
+
+  <ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="@dimen/toolbar_height"
+    android:layout_marginBottom="@dimen/spacing_larger">
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical">
+
+      <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_larger"
+        android:text="Choose bedtime sensors"
+        style="@style/TextStyle.Coloplast.Bold.DarkGrey.24"/>
+
+      <com.coloplast.olympus.ui.common.widgets.SensorSelectorView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_larger"
+        android:layout_marginEnd="@dimen/spacing_larger"
+        app:allSensorsSelected="@={controller.allSensorsSelected}" />
+
+      <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_larger"
+        android:layout_marginEnd="@dimen/spacing_larger"
+        android:text="@{controller.allSensorsSelected ? @string/settings_sensors_all_description : @string/settings_sensors_outer_only_description}"
+        style="@style/TextStyle.Roboto.Regular.ClearGrey.16" />
+
+    </LinearLayout>
+  </ScrollView>
+
+</layout>

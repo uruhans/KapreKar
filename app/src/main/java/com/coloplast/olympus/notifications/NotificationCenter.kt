@@ -16,6 +16,7 @@ import com.coloplast.olympus.BuildConfig
 import com.coloplast.olympus.R
 import com.coloplast.olympus.activities.MainActivity
 import com.coloplast.olympus.notifications.models.NotificationPayload
+import timber.log.Timber
 
 /**
  * This notification center will do the heavy lifting of actually creating, displaying and removing notifications.
@@ -25,25 +26,16 @@ class NotificationCenter(
   private val context: Context,
   private val notificationManager: NotificationManager
 ) {
-  
-  @StringRes
-  private fun getChannelId(): Int {
-    return R.string.lock_notification_channel_id
-  }
-  
-  @StringRes
-  private fun getChannelName(): Int {
-    return R.string.lock_notification_channel_name
-  }
-  
-  @StringRes
-  private fun getChannelDescription(): Int {
-    return R.string.lock_notification_channel_description
-  }
-  
-  @DrawableRes
-  private fun getNotificationIcon(): Int {
-    return R.drawable.ic_detailed_plate_ok
+
+  private val channelId: String = context.getString(R.string.lock_notification_channel_id)
+
+  private val channelName: String = context.getString(R.string.lock_notification_channel_name)
+
+  private val channelDescription: String = context.getString(R.string.lock_notification_channel_description)
+
+  init {
+    // make sure we have a notification channel for the notification
+    createNotificationChannel()
   }
   
   /**
@@ -81,9 +73,6 @@ class NotificationCenter(
    * show a notification based on the payload coming in
    */
   fun show(payload: NotificationPayload) {
-    // make sure we have a notification channel for the notification
-    createNotificationChannel()
-    
     // first remove all notifications that are specified in the payload (if any)
     payload.notificationsToRemove.forEach { id ->
       cancel(id)
@@ -106,7 +95,7 @@ class NotificationCenter(
     
     // create the notification
     val notification = NotificationCompat.Builder(context, channelId)
-      .setSmallIcon(getNotificationIcon())
+      .setSmallIcon(R.drawable.ic_detailed_plate_ok)
       .setWhen(System.currentTimeMillis())
       .setColor(ContextCompat.getColor(context, R.color.turquoise))
       .setContentText(context.getString(payload.body))
@@ -128,7 +117,7 @@ class NotificationCenter(
   
   @RequiresApi(26)
   fun deleteNotificationChannel() {
-    notificationManager.deleteNotificationChannel(context.getString(getChannelId()))
+    notificationManager.deleteNotificationChannel(channelId)
   }
   
   /**
@@ -148,25 +137,11 @@ class NotificationCenter(
   private fun createNotificationChannel() {
     // only create the notification channel if we are above API 25 and the channel doesn't already exist
     if (Build.VERSION.SDK_INT >= 26 && notificationManager.getNotificationChannel(channelId) == null) {
-      NotificationChannel(
-        channelId, channelName, getImportance()
-      ).apply {
+      NotificationChannel(channelId, channelName, getImportance()).apply {
         description = channelDescription
         notificationManager.createNotificationChannel(this)
       }
     }
-  }
-  
-  private val channelId: String by lazy {
-    context.getString(getChannelId())
-  }
-  
-  private val channelName: String by lazy {
-    context.getString(getChannelName())
-  }
-  
-  private val channelDescription: String by lazy {
-    context.getString(getChannelDescription())
   }
   
   companion object {

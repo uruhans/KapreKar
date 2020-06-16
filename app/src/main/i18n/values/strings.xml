@@ -37,6 +37,7 @@
 <string name="generic_close">Close</string>
 <string name="generic_confirm">Confirm</string>
 <string name="generic_continue">Continue</string>
+<string name="generic_discard">Discard</string>
 <string name="generic_error">An error occurred.</string>
 <string name="generic_error_call_support_action">Call</string>
 <string name="generic_error_call_support_title">Unknown Error</string>
@@ -47,6 +48,7 @@
 <string name="generic_ok">OK</string>
 <string name="generic_previous">Previous</string>
 <string name="generic_quit">Quit</string>
+<string name="generic_save_changes">Save changes</string>
 <string name="generic_yes">Yes</string>
 <string name="guide_at10_body">Great! Your transmitter is now communicating with your phone.</string>
 <string name="guide_at10_title">Transmitter paired</string>
@@ -201,6 +203,12 @@
 <string name="menu_subitem_profile">Profile</string>
 <string name="menu_transmitters">Transmitters</string>
 <string name="missing_translation">Missing translation</string>
+<string name="onboarding_chapter_intro_checklist_description">The guide includes videos to help you get started with your new product.</string>
+<string name="onboarding_chapter_intro_checklist_item_1">1. Introduction</string>
+<string name="onboarding_chapter_intro_checklist_item_2">2. Connecting</string>
+<string name="onboarding_chapter_intro_checklist_item_3">3. Preparing</string>
+<string name="onboarding_chapter_intro_checklist_item_4">4. Applying</string>
+<string name="onboarding_chapter_intro_checklist_title">Welcome to the Setup guide</string>
 <string name="onboarding_chapter_intro_setup_guide">Setup guide</string>
 <string name="onboarding_chapter_intro_setup_guide_message">This guide will guide you step-by-step through the process of setting up TestProduct and applying in to your body.</string>
 <string name="overlay_battery_critical">Charge now to stay informed.</string>
@@ -233,6 +241,7 @@
 <string name="settings_alarm_title">Schedule bedtime alarm</string>
 <string name="settings_allow_notifications_body">[Missing translation]</string>
 <string name="settings_allow_notifications_title">Allow notifications</string>
+<string name="settings_android_app_settings_link">Go to app settings</string>
 <string name="settings_bedtime_alerts_body">You’ll receive vibrations with notiications if it is turned on in your iPhone settings.</string>
 <string name="settings_bedtime_alerts_header">Bedtime alarm</string>
 <string name="settings_bedtime_alerts_schedule">%1$s, daily.</string>

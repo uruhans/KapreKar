@@ -35,6 +35,7 @@
 <string name="error_peripheral_configuration">error_disconnect_framework_error</string>
 <string name="generic_cancel">Cancel</string>
 <string name="generic_close">Luk</string>
+<string name="generic_discard">Discard</string>
 <string name="generic_error">En fejl opstod.</string>
 <string name="generic_error_call_support_action">Ring op</string>
 <string name="generic_error_call_support_title">Der opstod en ukendt fejl.</string>
@@ -44,6 +45,7 @@
 <string name="generic_ok">OK</string>
 <string name="generic_previous">Previous</string>
 <string name="generic_quit">Quit</string>
+<string name="generic_save_changes">Save changes</string>
 <string name="generic_yes">Ja</string>
 <string name="guide_at10_body">[missing translation]</string>
 <string name="guide_at10_title">[missing translation]</string>
@@ -222,6 +224,7 @@
 <string name="overlay_no_breach_title">Ingen lækage opfanget</string>
 <string name="settings_allow_notifications_body">[Missing translation]</string>
 <string name="settings_allow_notifications_title">Tillad meddelelser</string>
+<string name="settings_android_app_settings_link">[Missing translation]</string>
 <string name="settings_footer_app_version">App version</string>
 <string name="settings_footer_company_address">Holtedam 1-3\nDK-3050 Humlebæk\nDenmark</string>
 <string name="settings_footer_company_name">Coloplast A/S</string>

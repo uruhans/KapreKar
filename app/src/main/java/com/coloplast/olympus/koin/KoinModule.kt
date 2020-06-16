@@ -8,17 +8,16 @@ import com.coloplast.olympus.bluetooth.BluetoothServiceViewModel
 import com.coloplast.olympus.bluetooth.businesslayer.BluetoothManager
 import com.coloplast.olympus.bluetooth.businesslayer.BluetoothManagerImpl
 import com.coloplast.olympus.bluetooth.businesslayer.DeviceConnection
-import com.coloplast.olympus.bluetooth.model.StateChange
 import com.coloplast.olympus.businesslayer.components.TransmitterComponentImpl
 import com.coloplast.olympus.businesslayer.interfaces.TransmitterComponent
 import com.coloplast.olympus.notifications.NotificationCenter
 import com.coloplast.olympus.notifications.NotificationScheduler
 import com.coloplast.olympus.notifications.OlympusNotificationManager
-import com.coloplast.olympus.ui.common.Stack
+import com.coloplast.olympus.shared.preferences.Preferences
 import com.coloplast.olympus.ui.common.flow.FlowFactory
-import com.coloplast.olympus.ui.feature.home.HomeViewModel
 import com.coloplast.olympus.ui.feature.TransmitterManager
 import com.coloplast.olympus.ui.feature.home.BreachesOccurred
+import com.coloplast.olympus.ui.feature.home.HomeViewModel
 import com.coloplast.olympus.ui.feature.transmitters.TransmittersViewModel
 import com.coloplast.olympus.ui.feature.transmitters.add.AddTransmitterFactoryImpl
 import com.coloplast.olympus.ui.feature.transmitters.add.AddTransmitterViewModel
@@ -44,6 +43,9 @@ val koinModule = module {
 
   /* Components */
   single<TransmitterComponent> { TransmitterComponentImpl() }
+
+  /* Preferences */
+  single { Preferences(androidContext()) }
 
   single { Me() }
 

@@ -35,6 +35,7 @@
 <string name="error_peripheral_configuration">error_disconnect_framework_error</string>
 <string name="generic_cancel">Cancel</string>
 <string name="generic_close">Close</string>
+<string name="generic_discard">Discard</string>
 <string name="generic_error">An error occurred.</string>
 <string name="generic_error_call_support_action">Call</string>
 <string name="generic_error_call_support_title">Unknown Error</string>
@@ -44,6 +45,7 @@
 <string name="generic_ok">OK</string>
 <string name="generic_previous">Previous</string>
 <string name="generic_quit">Quit</string>
+<string name="generic_save_changes">Save changes</string>
 <string name="generic_yes">Yes</string>
 <string name="guide_at10_body">Great! Your transmitter is now communicating with your phone.</string>
 <string name="guide_at10_title">Transmitter paired</string>
@@ -220,6 +222,7 @@
 <string name="overlay_no_breach_title">No breaches registrered</string>
 <string name="settings_allow_notifications_body">[Missing translation]</string>
 <string name="settings_allow_notifications_title">Allow notifications</string>
+<string name="settings_android_app_settings_link">Go to app settings</string>
 <string name="settings_footer_app_version">App version</string>
 <string name="settings_footer_company_address">[Missing translation]</string>
 <string name="settings_footer_company_name">[Missing translation]</string>

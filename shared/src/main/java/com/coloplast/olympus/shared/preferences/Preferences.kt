@@ -2,6 +2,7 @@ package com.coloplast.olympus.shared.preferences
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.hardware.Sensor
 
 /**
  * Normally you do not want to store the context in *any* class.
@@ -14,6 +15,8 @@ class Preferences(applicationContext: Context) {
   var activeTransmitter: String by bindSharedPreference(applicationContext, ACTIVE_TRANSMITTER, "")
   var latestStateFromActiveTx: String by bindSharedPreference(applicationContext, LATEST_STATE_FROM_ACTIVE_TRANSMITTER, "")
   var leaks: String by bindSharedPreference(applicationContext, LEAKS, "")
+  var areRingingAlertsEnabled: Boolean by bindSharedPreference(applicationContext, RINGING_ALERTS_ENABLED, true)
+  var ringingAlertSensor: Int by bindSharedPreference(applicationContext, RINGING_ALERT_SENSOR, 0)
 
   private fun clearUserToken() {
     userToken = ""
@@ -28,6 +31,8 @@ class Preferences(applicationContext: Context) {
     private const val ACTIVE_TRANSMITTER: String = "ACTIVE_TRANSMITTER"
     private const val LATEST_STATE_FROM_ACTIVE_TRANSMITTER: String = "LATEST_STATE_FROM_ACTIVE_TRANSMITTER"
     private const val LEAKS: String = "LEAKS"
+    private const val RINGING_ALERTS_ENABLED: String = "RINGING_ALERTS_ENABLED"
+    private const val RINGING_ALERT_SENSOR: String = "RINGING_ALERT_SENSOR"
 
     @SuppressLint("StaticFieldLeak")
     private lateinit var preferences: Preferences

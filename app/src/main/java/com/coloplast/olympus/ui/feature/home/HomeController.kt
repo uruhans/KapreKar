@@ -200,6 +200,10 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
             patchChangeTime = null
           }
 
+          if(stateChange.overlayState == OverlayState.BLE_CONNECTION_LOST) {
+            isConnected.set(false)
+          }
+
           changeUiState(stateToChangeTo)
           changeOverlayState(stateChange.overlayState)
         }
@@ -399,6 +403,8 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         resetRelay.accept(transmitterManager.activeTransmitterMacAddress())
         imageDialogController?.dismissDialog(false)
         imageDialogController = null
+
+        changeUiState(UiState.CONNECTING)
       }
       REQUEST_CODE_CONNECTION_LOST -> {
         imageDialogController?.dismissDialog(withCallback = true)
@@ -413,6 +419,8 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
           stitchRelay.accept(it)
         }
         imageDialogController?.dismissDialog(false)
+
+        changeUiState(UiState.CONNECTING)
       }
     }
   }

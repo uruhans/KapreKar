@@ -199,6 +199,10 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
             patchChangeTime = null
           }
 
+          if(stateChange.overlayState == OverlayState.BLE_CONNECTION_LOST) {
+            isConnected.set(false)
+          }
+
           changeUiState(stateToChangeTo)
           changeOverlayState(stateChange.overlayState)
         }

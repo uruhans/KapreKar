@@ -36,6 +36,7 @@
 <string name="generic_cancel">Cancel</string>
 <string name="generic_close">Luk</string>
 <string name="generic_discard">Discard</string>
+<string name="generic_dismiss">Dismiss</string>
 <string name="generic_error">En fejl opstod.</string>
 <string name="generic_error_call_support_action">Ring op</string>
 <string name="generic_error_call_support_title">Der opstod en ukendt fejl.</string>
@@ -188,6 +189,7 @@
 <string name="lock_notification_total_blind">Sensorerne virker ikke.</string>
 <string name="lock_notification_update">Opdatering er nødvendig.</string>
 <string name="lock_notification_water">Fugt i transmitteren.</string>
+<string name="lock_ringing_alarm_notification_channel_id">3</string>
 <string name="lock_service_notification_channel_description">Maintaining transmitter connection</string>
 <string name="lock_service_notification_channel_id">2</string>
 <string name="lock_service_notification_channel_name">Olympus Bluetooth Connection</string>

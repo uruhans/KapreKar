@@ -4,7 +4,7 @@ import android.os.Bundle
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.ui.common.BaseFlowController
-import com.coloplast.olympus.ui.feature.settings.models.Sensors
+import com.coloplast.olympus.ui.common.DrawerStateDispatcher
 
 
 /**
@@ -25,6 +25,11 @@ class SettingsFlowController(args: Bundle? = null): BaseFlowController(args),
 
   private fun getInitialController(): RouterTransaction = SettingsController.routerTransaction().apply{
     controller().targetController = this@SettingsFlowController
+  }
+
+  override fun onCloseClicked() {
+    DrawerStateDispatcher.closeNavigationDrawerOnHome()
+    super.onCloseClicked()
   }
 
   override fun setBedtimeAlarm() {

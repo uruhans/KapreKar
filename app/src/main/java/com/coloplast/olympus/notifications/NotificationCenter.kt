@@ -96,6 +96,15 @@ class NotificationCenter(
       PendingIntent.FLAG_ONE_SHOT
     )
 
+    when (payload.id) {
+      UiState.OUTER_BREACH_C.notificationId(),
+      UiState.INNER_BREACH_B.notificationId() -> triggerRingingAlarmNotification(payload, snoozePendingIntent)
+      else -> triggerRegularNotification(payload, snoozePendingIntent)
+    }
+
+  }
+
+  private fun triggerRingingAlarmNotification(payload: NotificationPayload, snoozePendingIntent: PendingIntent){
     val dismissIntent = Intent().apply {
       action = INTENT_FILTER_ACTION_DISMISS
       setClass(context, NotificationBroadcastReceiver::class.java)
@@ -109,48 +118,50 @@ class NotificationCenter(
       PendingIntent.FLAG_ONE_SHOT
     )
 
-    val notificationBuilder = when (payload.id) {
-      UiState.OUTER_BREACH_C.notificationId(),
-      UiState.INNER_BREACH_B.notificationId() -> {
-        NotificationCompat.Builder(context, ringingAlertChannelId)
-          .setSmallIcon(R.drawable.ic_detailed_plate_ok)
-          //.setWhen(System.currentTimeMillis())
-          //.setColor(ContextCompat.getColor(context, R.color.turquoise))
-          //.setContentTitle(ringingAlertChannelName)
-          .setContentText(context.getString(payload.body))
-          .setPriority(NotificationCompat.PRIORITY_MAX)
-          //.setDefaults(Notification.DEFAULT_ALL)
-          .setAutoCancel(true)
-          .addAction(
-            R.drawable.ic_baseline_snooze_24,
-            context.getString(R.string.lock_notification_action_snooze),
-            snoozePendingIntent)
-          .addAction(
-            android.R.drawable.ic_menu_close_clear_cancel,
-            context.getString(R.string.generic_dismiss),
-            dismissPendingIntent)
-      }
-      else -> {
-        NotificationCompat.Builder(context, channelId)
-          .setSmallIcon(R.drawable.ic_detailed_plate_ok)
-          .setWhen(System.currentTimeMillis())
-          .setColor(ContextCompat.getColor(context, R.color.turquoise))
-          .setContentText(context.getString(payload.body))
-          .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-          // Set the intent that will fire when the user taps the notification
-          .setContentIntent(getPendingIntent())
-          .setAutoCancel(true)
-          .addAction(
-            R.drawable.ic_baseline_snooze_24,
-            context.getString(R.string.lock_notification_action_snooze),
-            snoozePendingIntent
-          )
-      }
-    }
+    val notification = NotificationCompat.Builder(context, ringingAlertChannelId)
+      .setSmallIcon(R.drawable.ic_detailed_plate_ok)
+      //.setWhen(System.currentTimeMillis())
+      //.setColor(ContextCompat.getColor(context, R.color.turquoise))
+      //.setContentTitle(ringingAlertChannelName)
+      .setContentText(context.getString(payload.body))
+      .setPriority(NotificationCompat.PRIORITY_MAX)
+      //.setDefaults(Notification.DEFAULT_ALL)
+      .setAutoCancel(true)
+      .addAction(
+        R.drawable.ic_baseline_snooze_24,
+        context.getString(R.string.lock_notification_action_snooze),
+        snoozePendingIntent)
+      .addAction(
+        android.R.drawable.ic_menu_close_clear_cancel,
+        context.getString(R.string.generic_dismiss),
+        dismissPendingIntent)
+      .build()
 
     // and display it to the user
     with(NotificationManagerCompat.from(context)) {
-      notify(payload.id, notificationBuilder.build())
+      notify(payload.id, notification)
+    }
+  }
+
+  private fun triggerRegularNotification(payload: NotificationPayload, snoozePendingIntent: PendingIntent){
+    val notification = NotificationCompat.Builder(context, channelId)
+      .setSmallIcon(R.drawable.ic_detailed_plate_ok)
+      .setWhen(System.currentTimeMillis())
+      .setColor(ContextCompat.getColor(context, R.color.turquoise))
+      .setContentText(context.getString(payload.body))
+      .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+      // Set the intent that will fire when the user taps the notification
+      .setContentIntent(getPendingIntent())
+      .setAutoCancel(true)
+      .addAction(
+        R.drawable.ic_baseline_snooze_24,
+        context.getString(R.string.lock_notification_action_snooze),
+        snoozePendingIntent
+      )
+      .build()
+
+    with(NotificationManagerCompat.from(context)) {
+      notify(payload.id, notification)
     }
   }
 

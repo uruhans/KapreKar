@@ -17,9 +17,9 @@ import com.coloplast.olympus.notifications.OlympusNotificationManager
 import com.coloplast.olympus.shared.preferences.Preferences
 import com.coloplast.olympus.ui.common.Stack
 import com.coloplast.olympus.ui.common.flow.FlowFactory
-import com.coloplast.olympus.ui.feature.home.HomeViewModel
 import com.coloplast.olympus.ui.feature.TransmitterManager
 import com.coloplast.olympus.ui.feature.home.BreachesOccurred
+import com.coloplast.olympus.ui.feature.home.HomeViewModel
 import com.coloplast.olympus.ui.feature.transmitters.TransmittersViewModel
 import com.coloplast.olympus.ui.feature.transmitters.add.AddTransmitterFactoryImpl
 import com.coloplast.olympus.ui.feature.transmitters.add.AddTransmitterViewModel
@@ -30,9 +30,12 @@ import org.koin.dsl.module
 
 val koinModule = module {
 
+  /* Preferences */
+  single { Preferences(androidContext()) }
+
   /* Notifications */
   single { androidContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }
-  single { NotificationCenter(androidContext(), get())}
+  single { NotificationCenter(androidContext(), get(), get())}
   single { OlympusNotificationManager(get()) }
   single { NotificationScheduler() }
 
@@ -47,9 +50,6 @@ val koinModule = module {
 
   /* Components */
   single<TransmitterComponent> { TransmitterComponentImpl() }
-
-  /* Preferences */
-  single { Preferences(androidContext()) }
 
   single { Me() }
 

@@ -14,6 +14,8 @@ import com.coloplast.olympus.BuildConfig
 import com.coloplast.olympus.R
 import com.coloplast.olympus.activities.MainActivity
 import com.coloplast.olympus.notifications.models.NotificationPayload
+import com.coloplast.olympus.shared.preferences.Preferences
+import com.coloplast.olympus.ui.feature.settings.models.Sensors
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
 
 /**
@@ -22,7 +24,8 @@ import com.coloplast.olympus.ui.feature.statemachine.models.UiState
  */
 class NotificationCenter(
   private val context: Context,
-  private val notificationManager: NotificationManager
+  private val notificationManager: NotificationManager,
+  private val preferences: Preferences
 ) {
 
   private val channelId: String = context.getString(R.string.lock_notification_channel_id)
@@ -30,8 +33,10 @@ class NotificationCenter(
   private val channelDescription: String =
     context.getString(R.string.lock_notification_channel_description)
 
-  private val ringingAlertChannelId: String = context.getString(R.string.lock_ringing_alarm_notification_channel_id)
-  private val ringingAlertChannelName: String = context.getString(R.string.lock_ringing_alarm_notification_channel_name)
+  private val ringingAlertChannelId: String =
+    context.getString(R.string.lock_ringing_alarm_notification_channel_id)
+  private val ringingAlertChannelName: String =
+    context.getString(R.string.lock_ringing_alarm_notification_channel_name)
   private val ringingAlertChannelDescription: String =
     context.getString(R.string.lock_ringing_alarm_notification_channel_description)
 
@@ -97,14 +102,33 @@ class NotificationCenter(
     )
 
     when (payload.id) {
-      UiState.OUTER_BREACH_C.notificationId(),
-      UiState.INNER_BREACH_B.notificationId() -> triggerRingingAlarmNotification(payload, snoozePendingIntent)
+      UiState.OUTER_BREACH_C.notificationId() -> {
+        if (preferences.areRingingAlertsEnabled) {
+          triggerRingingAlarmNotification(payload, snoozePendingIntent)
+        }
+        else {
+          triggerRegularNotification(payload, snoozePendingIntent)
+        }
+      }
+      UiState.INNER_BREACH_B.notificationId() -> {
+        val ringingAlertSelectedSensors = Sensors.fromOrdinal(preferences.ringingAlertSensor)
+        if (ringingAlertSelectedSensors == Sensors.ALL) {
+          triggerRingingAlarmNotification(payload, snoozePendingIntent)
+        }
+        else {
+          // only outer sensors enabled. Send regular notification.
+          triggerRegularNotification(payload, snoozePendingIntent)
+        }
+      }
       else -> triggerRegularNotification(payload, snoozePendingIntent)
     }
 
   }
 
-  private fun triggerRingingAlarmNotification(payload: NotificationPayload, snoozePendingIntent: PendingIntent){
+  private fun triggerRingingAlarmNotification(
+    payload: NotificationPayload,
+    snoozePendingIntent: PendingIntent
+  ) {
     val dismissIntent = Intent().apply {
       action = INTENT_FILTER_ACTION_DISMISS
       setClass(context, NotificationBroadcastReceiver::class.java)
@@ -130,12 +154,15 @@ class NotificationCenter(
       .addAction(
         R.drawable.ic_baseline_snooze_24,
         context.getString(R.string.lock_notification_action_snooze),
-        snoozePendingIntent)
+        snoozePendingIntent
+      )
       .addAction(
         android.R.drawable.ic_menu_close_clear_cancel,
         context.getString(R.string.generic_dismiss),
-        dismissPendingIntent)
+        dismissPendingIntent
+      )
       .build()
+
 
     // and display it to the user
     with(NotificationManagerCompat.from(context)) {
@@ -143,7 +170,10 @@ class NotificationCenter(
     }
   }
 
-  private fun triggerRegularNotification(payload: NotificationPayload, snoozePendingIntent: PendingIntent){
+  private fun triggerRegularNotification(
+    payload: NotificationPayload,
+    snoozePendingIntent: PendingIntent
+  ) {
     val notification = NotificationCompat.Builder(context, channelId)
       .setSmallIcon(R.drawable.ic_detailed_plate_ok)
       .setWhen(System.currentTimeMillis())
@@ -196,8 +226,10 @@ class NotificationCenter(
 
   companion object {
     // intent filters for the broadcast receiver, so we can reschedule a notification and later show it again
-    const val INTENT_FILTER_ACTION_SNOOZE = "${BuildConfig.APPLICATION_ID}.NOTIFICATION_ACTION_SNOOZE"
-    const val INTENT_FILTER_ACTION_DISMISS = "${BuildConfig.APPLICATION_ID}.NOTIFICATION_ACTION_DISMISS"
+    const val INTENT_FILTER_ACTION_SNOOZE =
+      "${BuildConfig.APPLICATION_ID}.NOTIFICATION_ACTION_SNOOZE"
+    const val INTENT_FILTER_ACTION_DISMISS =
+      "${BuildConfig.APPLICATION_ID}.NOTIFICATION_ACTION_DISMISS"
     const val INTENT_FILTER_SHOW_NOTIFICATION = "${BuildConfig.APPLICATION_ID}.NOTIFICATION_SHOW"
 
     // the notification id that we wish to show

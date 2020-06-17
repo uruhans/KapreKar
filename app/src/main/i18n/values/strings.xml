@@ -223,6 +223,8 @@
 <string name="onboarding_chapter_intro_checklist_item_3">3. Preparing</string>
 <string name="onboarding_chapter_intro_checklist_item_4">4. Applying</string>
 <string name="onboarding_chapter_intro_checklist_title">Welcome to the Setup guide</string>
+<string name="onboarding_chapter_intro_notifications_description">By allowing notifications, you enable TestProduct to notify you when leakage is detected. You can customise notification alerts later in the app\'s settings.</string>
+<string name="onboarding_chapter_intro_notifications_header">Know when to take action by allowing notifications</string>
 <string name="onboarding_chapter_intro_setup_guide">Setup guide</string>
 <string name="onboarding_chapter_intro_setup_guide_message">This guide will guide you step-by-step through the process of setting up TestProduct and applying in to your body.</string>
 <string name="overlay_battery_critical">Charge now to stay informed.</string>

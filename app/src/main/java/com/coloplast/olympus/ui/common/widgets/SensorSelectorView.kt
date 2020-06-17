@@ -18,8 +18,7 @@ class SensorSelectorView @JvmOverloads constructor(context: Context, attrs: Attr
 
   val allSensorsEnabled = ObservableBoolean(true)
 
-  private val layoutInflater =
-    context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+  private val layoutInflater = LayoutInflater.from(context)
   private val viewBinding = ViewSensorSelectorBinding.inflate(layoutInflater, this, true).apply {
     this.view = this@SensorSelectorView
   }

@@ -18,7 +18,6 @@ import com.coloplast.olympus.R
 import com.coloplast.olympus.bluetooth.ServiceDispatcher
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
-import com.coloplast.olympus.bluetooth.businesslayer.enums.PowerLevel
 import com.coloplast.olympus.bluetooth.businesslayer.enums.SensorStatus
 import com.coloplast.olympus.bluetooth.businesslayer.models.Battery
 import com.coloplast.olympus.bluetooth.businesslayer.models.Patch
@@ -167,15 +166,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
           }
         }
         is HomeUiModel.DeviceUpdate -> {
-          var stateChange = uiModel.stateChange
-
-          // BLE_CONNECTION_LOST overlay state actually comes from the bluetooth service (which receives the disconnect)
-          // if we get such a state, we should skip the "normal" code that determines the currently active transmitter
-          // (and possibly overwrites) it's state
-          if(stateChange.overlayState != OverlayState.BLE_CONNECTION_LOST) {
-            val updatedStateChange = transmitterManager.determineCurrentlyActiveTransmitterAndReturnStateChangeFromIt(uiModel.stateChange)
-            stateChange =transmitterManager.determineTransmitterPatchQuestioning(updatedStateChange)
-          }
+          val stateChange = uiModel.stateChange
 
           stateChange.bleDevice.peripheral?.battery?.let { battery.set(it) }
           isConnected.set(stateChange.bleDevice.isConnected())
@@ -207,6 +198,10 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
           else {
             // if we are passed 4 minutes we dont need this variable any more
             patchChangeTime = null
+          }
+
+          if(stateChange.overlayState == OverlayState.BLE_CONNECTION_LOST) {
+            isConnected.set(false)
           }
 
           changeUiState(stateToChangeTo)
@@ -317,9 +312,6 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   }
 
   private fun changeOverlayState(overlayState: OverlayState) {
-    imageDialogController?.dismissDialog(false)
-    imageDialogController = null
-
     when(overlayState) {
       OverlayState.QUESTION -> {
         imageDialogController = ImageDialogController.create(
@@ -410,6 +402,9 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         breachesOccurred.clear()
         resetRelay.accept(transmitterManager.activeTransmitterMacAddress())
         imageDialogController?.dismissDialog(false)
+        imageDialogController = null
+
+        changeUiState(UiState.CONNECTING)
       }
       REQUEST_CODE_CONNECTION_LOST -> {
         imageDialogController?.dismissDialog(withCallback = true)
@@ -424,6 +419,8 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
           stitchRelay.accept(it)
         }
         imageDialogController?.dismissDialog(false)
+
+        changeUiState(UiState.CONNECTING)
       }
     }
   }
@@ -442,6 +439,8 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
           .popChangeHandler(VerticalChangeHandler()))
       }
     }
+
+    imageDialogController = null
   }
 
   override fun onCloseClicked(requestCode: Int) {

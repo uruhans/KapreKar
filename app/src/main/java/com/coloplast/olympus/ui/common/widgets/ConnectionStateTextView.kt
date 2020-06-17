@@ -10,7 +10,6 @@ import androidx.annotation.StringRes
 import androidx.appcompat.widget.AppCompatTextView
 import com.coloplast.olympus.R
 import com.coloplast.olympus.ui.common.listeners.AnimatorListenerImpl
-import timber.log.Timber
 
 class ConnectionStateTextView @JvmOverloads constructor(
   context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
@@ -25,9 +24,10 @@ class ConnectionStateTextView @JvmOverloads constructor(
     if(text != this.text && text?.isNotEmpty() == true) {
       super.setText(text, type)
     }
-    
-    // we have to do this - because not doing it caused weird crashes on *some* devices
-    super.setText("", type)
+    else {
+      // we have to do this - because not doing it caused weird crashes on *some* devices
+      super.setText("", type)
+    }
   }
   
   fun animateText(@StringRes textRes: Int) {

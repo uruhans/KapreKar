@@ -18,7 +18,6 @@ class SettingsFlowController(args: Bundle? = null): BaseFlowController(args),
     showToolbar.set(true)
   }
 
-
   override fun startFlow(flowChildRouter: Router) {
     flowChildRouter.setRoot(getInitialController())
   }

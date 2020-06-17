@@ -3,14 +3,11 @@ package com.coloplast.olympus.bluetooth.businesslayer
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.bluetooth.businesslayer.models.DeviceResult
 import io.reactivex.Observable
-import io.reactivex.functions.BiFunction
-import timber.log.Timber
 import java.util.concurrent.TimeUnit
-import kotlin.math.pow
 
 class DeviceConnection(private val bluetoothManager: BluetoothManager) {
   
-  private val maxConnectionAttempts = 10
+//  private val maxConnectionAttempts = 10
   
   fun subscribeForNotifications(macAddress: String): Observable<DeviceResult> {
     // connect to specific device or use the connection we already have

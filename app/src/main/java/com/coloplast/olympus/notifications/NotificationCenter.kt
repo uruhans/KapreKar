@@ -144,12 +144,8 @@ class NotificationCenter(
 
     val notification = NotificationCompat.Builder(context, ringingAlertChannelId)
       .setSmallIcon(R.drawable.ic_detailed_plate_ok)
-      //.setWhen(System.currentTimeMillis())
-      //.setColor(ContextCompat.getColor(context, R.color.turquoise))
-      //.setContentTitle(ringingAlertChannelName)
       .setContentText(context.getString(payload.body))
       .setPriority(NotificationCompat.PRIORITY_MAX)
-      //.setDefaults(Notification.DEFAULT_ALL)
       .setAutoCancel(true)
       .addAction(
         R.drawable.ic_baseline_snooze_24,
@@ -157,12 +153,11 @@ class NotificationCenter(
         snoozePendingIntent
       )
       .addAction(
-        android.R.drawable.ic_menu_close_clear_cancel,
+        R.drawable.ic_baseline_cancel_24,
         context.getString(R.string.generic_dismiss),
         dismissPendingIntent
       )
       .build()
-
 
     // and display it to the user
     with(NotificationManagerCompat.from(context)) {

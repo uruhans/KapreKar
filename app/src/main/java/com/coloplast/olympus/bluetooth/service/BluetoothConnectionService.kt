@@ -169,12 +169,10 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
           description = ringingAlertChannelDescription
           enableVibration(false)
           enableLights(false)
-          //lockscreenVisibility = Notification.VISIBILITY_PRIVATE
           setSound(ringtoneUri, audioAttributes)
         }
         notificationManager.createNotificationChannel(ringingAlertNotificationChannel)
       }
-
     }
   }
   

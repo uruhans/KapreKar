@@ -94,6 +94,7 @@ class TransmittersViewModel(
           .toSingle { true }
           .toObservable()
           .map {
+            ServiceDispatcher.dispatchEvent(ServiceEvent.DisconnectTransmitter(macAddress))
             StateDispatcher.clear(macAddress)
             bluetoothManager.disconnectTransmitter(macAddress)
             TransmittersUiModel.TransmitterDeleted(it)

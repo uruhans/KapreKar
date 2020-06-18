@@ -137,34 +137,36 @@ class BluetoothServiceViewModel(
 
     val beaconScanningWithRetryObservable = Observable.merge(retryConnectionObservable, bleBeaconScanningObservable)
 
+    val disconnectTransmitterObservable = ServiceDispatcher.serviceEventObservable()
+      .filter { it is ServiceEvent.DisconnectTransmitter }
+      .map { it as ServiceEvent.DisconnectTransmitter }
+      .doOnNext { connectedBleDevicesList.remove(it.macAddress) }
+
     // merging beacon scannings and database transmitters in order to
     // provide a list of transmitters to connect to
     val devicesToConnectToObservable = Observable.merge(
       beaconScanningWithRetryObservable,
       immediateConnectionObservable
     )
-      .filter { connectedBleDevicesList.none { address -> address == it } }
       // add delay to each onNext to allow for device to be connected to not overload the BLE stack
       .zipWith(repeatIntervalObservable(5),
         BiFunction { macAddress: String, _: Long -> macAddress })
+      .flatMap { macAddress ->
+        bluetoothManager.bleConnectionStateObservable(macAddress)
+          .takeUntil(disconnectTransmitterObservable)
+          .filter { it == BleConnectionState.DISCONNECTED }
+          .filter { connectedBleDevicesList.none { address -> address == macAddress } }
+          .take(1)
+          .map { macAddress }
+      }
 
     val connectTransmitterObservable = devicesToConnectToObservable
       .doOnNext { connectedBleDevicesList.add(it) }
-      .flatMap { macAddress ->
-        bluetoothManager.bleConnectionStateObservable(macAddress)
-          .filter { it == BleConnectionState.DISCONNECTED }
-          .take(1)
-          .doOnNext { Timber.d("trying to connect to $macAddress") }
-          .flatMap {
-            transmitterComponent.getTransmitter(macAddress)
-              .filter { it is DataResult.Success }
-          }
-          .doOnNext { Timber.e("CONNECT OBSERVABLE $macAddress") }
-          .flatMap { connectObservable(macAddress) }
-      }
+      .flatMap { connectObservable(it) }
 
     compositeDisposable.add(retryObservable.map<BluetoothServiceModel> { BluetoothServiceModel.ScanningStarted() }.bind(serviceResult.onResult()))
     compositeDisposable.add(connectTransmitterObservable.bind(serviceResult.onResult()))
+    compositeDisposable.add(disconnectTransmitterObservable.subscribe())
     return compositeDisposable
   }
 
@@ -201,5 +203,8 @@ class BluetoothServiceViewModel(
         // return a disconnect to the service
         BluetoothServiceModel.Disconnected(macAddress)
       }
+      .doOnError { Timber.e("subscribeForNotifications error") }
+      .doOnDispose { Timber.e("subscribeForNotifications dispose") }
+      .doOnComplete { Timber.e("subscribeForNotifications complete") }
   }
 }

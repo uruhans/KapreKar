@@ -18,10 +18,8 @@ import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.BiFunction
-import io.reactivex.internal.operators.observable.ObservableNever
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
-import java.util.concurrent.CancellationException
 import java.util.concurrent.TimeUnit
 
 class BluetoothServiceViewModel(
@@ -70,11 +68,13 @@ class BluetoothServiceViewModel(
           emptyList()
         }
       }
+      .doOnNext { Timber.d("dbTransmittersObservable: $it") }
 
     val allTransmittersConnectedObservable = dbTransmittersObservable
       .flatMap { dbTransmitters ->
         connectedBleDevicesObservable
           .map { it.size == dbTransmitters.size }
+          .doOnNext { Timber.d("allConnected: $it") }
       }
 
     // this observable handles scanning for beacons
@@ -149,21 +149,19 @@ class BluetoothServiceViewModel(
         BiFunction { macAddress: String, _: Long -> macAddress })
 
     val connectTransmitterObservable = devicesToConnectToObservable
-      .doOnError { Timber.e("devicesToConnectToObservable $it") }
       .doOnNext { connectedBleDevicesList.add(it) }
       .flatMap { macAddress ->
         bluetoothManager.bleConnectionStateObservable(macAddress)
-          .doOnError { Timber.e("bleConnectionStateObservable $it") }
-//          .filter { it == BleConnectionState.DISCONNECTED }
-          .skipWhile { it != BleConnectionState.DISCONNECTED }
+          .filter { it == BleConnectionState.DISCONNECTED }
           .take(1)
           .doOnNext { Timber.d("trying to connect to $macAddress") }
           .flatMap {
-            connectObservable(macAddress)
-              .doOnError { Timber.e("connectObservable $it") }
+            transmitterComponent.getTransmitter(macAddress)
+              .filter { it is DataResult.Success }
           }
+          .doOnNext { Timber.e("CONNECT OBSERVABLE $macAddress") }
+          .flatMap { connectObservable(macAddress) }
       }
-      .doOnError { Timber.e("connectTransmitterObservable $it") }
 
     compositeDisposable.add(retryObservable.map<BluetoothServiceModel> { BluetoothServiceModel.ScanningStarted() }.bind(serviceResult.onResult()))
     compositeDisposable.add(connectTransmitterObservable.bind(serviceResult.onResult()))

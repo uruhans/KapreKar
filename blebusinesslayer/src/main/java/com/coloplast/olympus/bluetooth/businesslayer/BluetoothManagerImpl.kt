@@ -26,11 +26,9 @@ import io.reactivex.Single
 import io.reactivex.exceptions.UndeliverableException
 import io.reactivex.functions.BiFunction
 import io.reactivex.functions.Function4
-import io.reactivex.internal.operators.observable.ObservableError
 import io.reactivex.plugins.RxJavaPlugins
 import timber.log.Timber
 import java.util.*
-import java.util.concurrent.CancellationException
 
 class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothManager {
 

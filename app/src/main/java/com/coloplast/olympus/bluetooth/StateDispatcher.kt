@@ -45,8 +45,8 @@ object StateDispatcher {
 
     activeTxLatestState?.let {
       if(it.getMacAddress() == macAddress) {
-        // if we have another transmitter attached - lets set that state as active
-        val latestStateFromOther = latestState.entries.firstOrNull { entry -> entry.key == macAddress }
+        // if we have another transmitter connected - lets set that state as active
+        val latestStateFromOther = latestState.entries.firstOrNull { entry -> entry.key != macAddress }
 
         activeTxLatestState = latestStateFromOther?.value ?: it.copy(
           state = UiState.TRANSMITTER_DELETED

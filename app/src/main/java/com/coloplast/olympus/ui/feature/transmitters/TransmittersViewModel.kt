@@ -43,7 +43,6 @@ class TransmittersViewModel(
           emptyList()
         }
       }
-      .cache()
 
     // transforming the stored transmitters into UiModel to be displayed on the screen
     val transformedTransmitters = transmittersOrEmptyObservable

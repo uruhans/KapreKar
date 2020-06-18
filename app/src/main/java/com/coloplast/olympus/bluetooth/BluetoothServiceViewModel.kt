@@ -68,13 +68,11 @@ class BluetoothServiceViewModel(
           emptyList()
         }
       }
-      .doOnNext { Timber.d("dbTransmittersObservable: $it") }
 
     val allTransmittersConnectedObservable = dbTransmittersObservable
       .flatMap { dbTransmitters ->
         connectedBleDevicesObservable
           .map { it.size == dbTransmitters.size }
-          .doOnNext { Timber.d("allConnected: $it") }
       }
 
     // this observable handles scanning for beacons
@@ -203,8 +201,5 @@ class BluetoothServiceViewModel(
         // return a disconnect to the service
         BluetoothServiceModel.Disconnected(macAddress)
       }
-      .doOnError { Timber.e("subscribeForNotifications error") }
-      .doOnDispose { Timber.e("subscribeForNotifications dispose") }
-      .doOnComplete { Timber.e("subscribeForNotifications complete") }
   }
 }

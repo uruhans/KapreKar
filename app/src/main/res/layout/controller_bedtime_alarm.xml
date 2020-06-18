@@ -7,7 +7,6 @@
     <variable
       name="controller"
       type="com.coloplast.olympus.ui.feature.settings.BedtimeAlarmController" />
-
   </data>
 
   <ScrollView
@@ -65,9 +64,10 @@
         android:id="@+id/start_time"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="22:00"
+        android:text="@{controller.start.toString()}"
         style="@style/TimePlaceHolder"
         android:background="@drawable/edittext_code_background"
+        android:onClick="@{() -> controller.pickStartTime()}"
         app:layout_constraintStart_toStartOf="@id/start_time_title"
         app:layout_constraintEnd_toEndOf="@id/start_time_title"
         app:layout_constraintTop_toBottomOf="@id/start_time_title"/>
@@ -76,9 +76,10 @@
         android:id="@+id/end_time"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="8:00"
+        android:text="@{controller.end.toString()}"
         style="@style/TimePlaceHolder"
         android:background="@drawable/edittext_code_background"
+        android:onClick="@{() -> controller.pickEndTime()}"
         app:layout_constraintStart_toStartOf="@id/end_time_title"
         app:layout_constraintEnd_toEndOf="@id/end_time_title"
         app:layout_constraintTop_toBottomOf="@id/end_time_title"/>

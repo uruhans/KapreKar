@@ -3,6 +3,9 @@ package com.coloplast.olympus.shared.preferences
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
+import com.coloplast.olympus.shared.extensions.getLocalTime
+import com.coloplast.olympus.shared.extensions.putLocalTime
+import java.time.LocalTime
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
@@ -13,14 +16,14 @@ private class SharedPreferenceDelegate<T>(
   private val setter: SharedPreferences.Editor.(String, T) -> SharedPreferences.Editor,
   private val key: String
 ) : ReadWriteProperty<Any, T> {
-  
+
   private val sharedPreferences: SharedPreferences by lazy {
     PreferenceManager.getDefaultSharedPreferences(context)
   }
-  
+
   override fun getValue(thisRef: Any, property: KProperty<*>) =
     sharedPreferences.getter(key, defaultValue)
-  
+
   override fun setValue(thisRef: Any, property: KProperty<*>, value: T) {
     sharedPreferences.edit().setter(key, value).commit()
   }
@@ -44,6 +47,9 @@ fun <T> bindSharedPreference(
   )
   is String -> SharedPreferenceDelegate(
     context, defaultValue, SharedPreferences::getString, SharedPreferences.Editor::putString, key
+  )
+  is LocalTime -> SharedPreferenceDelegate(
+    context, defaultValue, SharedPreferences::getLocalTime, SharedPreferences.Editor::putLocalTime, key
   )
   else -> throw IllegalArgumentException()
 } as ReadWriteProperty<Any, T>

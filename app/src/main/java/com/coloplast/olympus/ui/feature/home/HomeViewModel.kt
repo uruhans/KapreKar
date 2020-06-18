@@ -8,6 +8,7 @@ import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
 import com.coloplast.olympus.shared.models.DataResult
 import com.coloplast.olympus.ui.feature.home.models.BaseHomeViewModel
 import com.coloplast.olympus.ui.feature.home.models.HomeUiModel
+import com.coloplast.olympus.ui.feature.statemachine.models.UiState
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -32,7 +33,14 @@ class HomeViewModel(private val bluetoothManager: BluetoothManager) :
       .filter { it is DataResult.Success }
       .map { it as DataResult.Success }
       .map { it.data }
-      .map { HomeUiModel.DeviceUpdate(it) }
+      .map {
+        if(it.state == UiState.TRANSMITTER_DELETED) {
+          HomeUiModel.DeviceDisconnected()
+        }
+        else {
+          HomeUiModel.DeviceUpdate(it)
+        }
+      }
     
     val rawPackageUpdateObservable = StateDispatcher.rawPackageUpdateObservable()
       .map { HomeUiModel.RawDataPackageUpdate(it) }

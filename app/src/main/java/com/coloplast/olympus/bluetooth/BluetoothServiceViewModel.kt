@@ -18,8 +18,10 @@ import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.BiFunction
+import io.reactivex.internal.operators.observable.ObservableNever
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
+import java.util.concurrent.CancellationException
 import java.util.concurrent.TimeUnit
 
 class BluetoothServiceViewModel(
@@ -126,7 +128,8 @@ class BluetoothServiceViewModel(
       }
 
     val retryObservable = ServiceDispatcher.serviceEventObservable()
-    .filter { it == ServiceEvent.RETRY_CONNECTION }
+      .filter { it is ServiceEvent.RetryConnection }
+      .filter { dbTransmittersObservable.blockingFirst().isNotEmpty() }
 
     // listen to service events for any retrys
     val retryConnectionObservable = retryObservable
@@ -146,18 +149,23 @@ class BluetoothServiceViewModel(
         BiFunction { macAddress: String, _: Long -> macAddress })
 
     val connectTransmitterObservable = devicesToConnectToObservable
+      .doOnError { Timber.e("devicesToConnectToObservable $it") }
       .doOnNext { connectedBleDevicesList.add(it) }
       .flatMap { macAddress ->
-
         bluetoothManager.bleConnectionStateObservable(macAddress)
-          .filter { it == BleConnectionState.DISCONNECTED }
+          .doOnError { Timber.e("bleConnectionStateObservable $it") }
+//          .filter { it == BleConnectionState.DISCONNECTED }
+          .skipWhile { it != BleConnectionState.DISCONNECTED }
           .take(1)
           .doOnNext { Timber.d("trying to connect to $macAddress") }
-          .flatMap { connectObservable(macAddress) }
+          .flatMap {
+            connectObservable(macAddress)
+              .doOnError { Timber.e("connectObservable $it") }
+          }
       }
+      .doOnError { Timber.e("connectTransmitterObservable $it") }
 
     compositeDisposable.add(retryObservable.map<BluetoothServiceModel> { BluetoothServiceModel.ScanningStarted() }.bind(serviceResult.onResult()))
-
     compositeDisposable.add(connectTransmitterObservable.bind(serviceResult.onResult()))
     return compositeDisposable
   }

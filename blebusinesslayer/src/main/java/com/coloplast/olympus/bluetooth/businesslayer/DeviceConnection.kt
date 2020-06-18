@@ -2,14 +2,19 @@ package com.coloplast.olympus.bluetooth.businesslayer
 
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.bluetooth.businesslayer.models.DeviceResult
+import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 class DeviceConnection(private val bluetoothManager: BluetoothManager) {
-  
-//  private val maxConnectionAttempts = 10
-  
+
+  val disconnectRelay = PublishRelay.create<String>()
+
   fun subscribeForNotifications(macAddress: String): Observable<DeviceResult> {
+
+    val disconnectObservable = disconnectRelay.publish().refCount().doOnNext { Timber.e("Disconnect relay was hit") }
+
     // connect to specific device or use the connection we already have
     val connectedBleDeviceObservable = bluetoothManager.bleConnectionStateObservable(macAddress)
       .take(1)
@@ -18,6 +23,7 @@ class DeviceConnection(private val bluetoothManager: BluetoothManager) {
         if(bleConnectionState == BleConnectionState.DISCONNECTED) {
           // do actual connection to the new device
           bluetoothManager.connectBleDevice(macAddress)
+            .takeUntil(disconnectObservable)
             .flatMap { bluetoothManager.connectedDeviceObservable(macAddress) }
             .map { it }
         }

@@ -2,6 +2,7 @@ package com.coloplast.olympus.bluetooth
 
 import com.coloplast.olympus.bluetooth.model.StateChange
 import com.coloplast.olympus.shared.models.DataResult
+import com.coloplast.olympus.ui.feature.statemachine.models.UiState
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
 import timber.log.Timber
@@ -31,6 +32,27 @@ object StateDispatcher {
 
   fun dispatchScanning() {
     scanningRelay.accept(Unit)
+  }
+
+  /**
+   * this will clear all states to a macAddress (only to be used when manually deleting a transmitter)
+   *
+   * NOTICE: will set other transmitter latest state as the active transmitters latest state OR make a COPY of latest with a forced CONNECTING UiState
+   * (to prevent lingering state changes that are no longer relevant because transmitter was deleted)
+   */
+  fun clear(macAddress: String) {
+    latestState.remove(macAddress)
+
+    activeTxLatestState?.let {
+      if(it.getMacAddress() == macAddress) {
+        // if we have another transmitter attached - lets set that state as active
+        val latestStateFromOther = latestState.entries.firstOrNull { entry -> entry.key == macAddress }
+
+        activeTxLatestState = latestStateFromOther?.value ?: it.copy(
+          state = UiState.TRANSMITTER_DELETED
+        )
+      }
+    }
   }
 
   private fun dispatchLatestStateChangesToNewObservers(): Observable<StateChange> {

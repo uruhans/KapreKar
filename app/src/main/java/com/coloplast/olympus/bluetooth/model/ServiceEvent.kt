@@ -1,5 +1,6 @@
 package com.coloplast.olympus.bluetooth.model
 
-enum class ServiceEvent {
-  RETRY_CONNECTION
+sealed class ServiceEvent {
+  data class RetryConnection(val retry: Unit = Unit) : ServiceEvent()
+  data class DisconnectTransmitter(val macAddress: String) : ServiceEvent()
 }

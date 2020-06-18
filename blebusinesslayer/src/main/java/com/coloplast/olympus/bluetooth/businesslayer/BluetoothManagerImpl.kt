@@ -26,9 +26,11 @@ import io.reactivex.Single
 import io.reactivex.exceptions.UndeliverableException
 import io.reactivex.functions.BiFunction
 import io.reactivex.functions.Function4
+import io.reactivex.internal.operators.observable.ObservableError
 import io.reactivex.plugins.RxJavaPlugins
 import timber.log.Timber
 import java.util.*
+import java.util.concurrent.CancellationException
 
 class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothManager {
 
@@ -43,6 +45,8 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
 
   private val bleDeviceRelay = PublishRelay.create<List<BleDevice>>()
   private val bleConnectionRelay = PublishRelay.create<Map<String, RxBleConnection>>()
+
+  private val disconnectRelay = PublishRelay.create<String>()
 
   init {
     /**
@@ -183,12 +187,23 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
     return getBleDevice(macAddress)
       .flatMap { rxBleDevice ->
         bluetoothHandler.connectRxBleDevice(rxBleDevice)
+          .takeUntil(
+            disconnectRelay
+              .publish()
+              .refCount()
+              .filter { it == macAddress }
+              .map {
+                removeConnectionFromList(macAddress)
+                removeDeviceFromConnectedList(getBleDevice(macAddress).blockingFirst())
+              }
+          )
           .map {
             addDeviceToConnectedList(rxBleDevice)
             addConnectionToList(macAddress, it)
             macAddress
           }
       }
+      .doOnError { Timber.e(it) }
   }
 
   /**
@@ -391,5 +406,9 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
     }
 
     return bleConnections[macAddress] != null
+  }
+
+  override fun disconnectTransmitter(macAddress: String) {
+    disconnectRelay.accept(macAddress)
   }
 }

@@ -94,13 +94,17 @@ class TransmittersViewModel(
           .subscribeOn(Schedulers.io())
           .toSingle { true }
           .toObservable()
-          .map { TransmittersUiModel.TransmitterDeleted(it) }
+          .map {
+            StateDispatcher.clear(macAddress)
+            bluetoothManager.disconnectTransmitter(macAddress)
+            TransmittersUiModel.TransmitterDeleted(it)
+          }
       }
 
     val retryConnectionObservable: Observable<TransmittersUiModel> = uiView.retryConnection()
       .switchMap {
         // initiate reconnection retry on the service
-        ServiceDispatcher.dispatchEvent(ServiceEvent.RETRY_CONNECTION)
+        ServiceDispatcher.dispatchEvent(ServiceEvent.RetryConnection())
 
         // after 5 seconds send back a completed response
         Observable.just(TransmittersUiModel.RetryConnectComplete() as TransmittersUiModel)

@@ -142,7 +142,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
             }
             BluetoothState.READY -> {
               if(previousBleState == BluetoothState.BLUETOOTH_NOT_ENABLED) {
-                ServiceDispatcher.dispatchEvent(ServiceEvent.RETRY_CONNECTION)
+                ServiceDispatcher.dispatchEvent(ServiceEvent.RetryConnection())
               }
 
               if (currentUiState == UiState.INITIAL || currentUiState == UiState.BLUETOOTH_NOT_ENABLED) {
@@ -164,6 +164,10 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
           if(currentUiState == UiState.CONNECTING) {
             changeUiState(UiState.TRANSMITTER_NOT_FOUND)
           }
+        }
+        is HomeUiModel.DeviceDisconnected -> {
+          isConnected.set(false)
+          changeUiState(UiState.CONNECTING)
         }
         is HomeUiModel.DeviceUpdate -> {
           val stateChange = uiModel.stateChange

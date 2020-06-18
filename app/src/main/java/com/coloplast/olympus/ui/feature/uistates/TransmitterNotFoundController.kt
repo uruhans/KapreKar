@@ -19,7 +19,7 @@ class TransmitterNotFoundController : BaseHomeUIController<ControllerStateTransm
   }
   
   fun onClicked() {
-    ServiceDispatcher.dispatchEvent(ServiceEvent.RETRY_CONNECTION)
+    ServiceDispatcher.dispatchEvent(ServiceEvent.RetryConnection())
   }
   
   override fun patchInError(): Boolean {

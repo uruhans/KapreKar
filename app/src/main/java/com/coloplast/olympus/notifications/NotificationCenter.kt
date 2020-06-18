@@ -1,5 +1,6 @@
 package com.coloplast.olympus.notifications
 
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -157,7 +158,9 @@ class NotificationCenter(
         context.getString(R.string.generic_dismiss),
         dismissPendingIntent
       )
-      .build()
+      .build().apply {
+        flags = Notification.FLAG_INSISTENT
+      }
 
     // and display it to the user
     with(NotificationManagerCompat.from(context)) {

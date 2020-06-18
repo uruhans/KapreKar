@@ -164,8 +164,10 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
         ).apply {
           val ringtoneUri = Settings.System.DEFAULT_RINGTONE_URI
           val audioAttributes =
-            AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-              .setUsage(AudioAttributes.USAGE_NOTIFICATION).build()
+            AudioAttributes.Builder()
+              .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+              .setUsage(AudioAttributes.USAGE_ALARM)
+              .build()
           description = ringingAlertChannelDescription
           enableVibration(false)
           enableLights(false)

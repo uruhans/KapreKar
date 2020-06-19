@@ -100,7 +100,7 @@ class TransmittersController(args: Bundle? = null) :
         is TransmittersUiModel.TransmitterDeleted -> {
           compositeDisposable.clear()
           compositeDisposable.add(viewModel.bind(this))
-          dialogController?.dismissDialog(true)
+          dialogController?.dismissDialog(false)
         }
         is TransmittersUiModel.Empty -> {
           hasTransmittersAdded.set(false)
@@ -167,15 +167,6 @@ class TransmittersController(args: Bundle? = null) :
       REQUEST_CODE_DELETE_TRANSMITTER -> {
         dialogController?.dismissDialog(false)
         dialogController = null
-      }
-    }
-  }
-
-  override fun onDialogDismissed(requestCode: Int) {
-    when(requestCode) {
-      REQUEST_CODE_DELETE_TRANSMITTER -> {
-//        transmitterList.remove(transmitterList.find { it.transmitter.macAddress == transmitterToDelete?.macAddress })
-//        updateDiffList()
       }
     }
   }

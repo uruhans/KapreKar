@@ -326,6 +326,8 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   private fun changeOverlayState(overlayState: OverlayState) {
     when(overlayState) {
       OverlayState.QUESTION -> {
+        imageDialogController = null
+
         imageDialogController = ImageDialogController.create(
           this,
           REQUEST_CODE_TRANSMITTERS_CHANGED,
@@ -431,6 +433,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
           stitchRelay.accept(it)
         }
         imageDialogController?.dismissDialog(false)
+        imageDialogController = null
 
         changeUiState(UiState.CONNECTING)
       }
@@ -458,7 +461,10 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   override fun onCloseClicked(requestCode: Int) {
     when(requestCode) {
       REQUEST_CODE_CONNECTION_LOST,
-      REQUEST_CODE_BATTERY_LOW -> imageDialogController?.dismissDialog(false)
+      REQUEST_CODE_BATTERY_LOW -> {
+        imageDialogController?.dismissDialog(false)
+        imageDialogController = null
+      }
     }
   }
 

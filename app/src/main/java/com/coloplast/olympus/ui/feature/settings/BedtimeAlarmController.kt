@@ -24,7 +24,7 @@ class BedtimeAlarmController: BaseController<ControllerBedtimeAlarmBinding>(),
 
   private var dialog: TimePickerDialogController? = null
 
-  val allSensorsSelected = ObservableBoolean(true)
+  val allSensorsSelected = ObservableBoolean(preferences.bedtimeAlertSensor == Sensors.ALL)
   val start = ObservableField<LocalTime>(preferences.bedtimeStart)
   val end = ObservableField<LocalTime>(preferences.bedtimeEnd)
 
@@ -76,7 +76,7 @@ class BedtimeAlarmController: BaseController<ControllerBedtimeAlarmBinding>(),
     preferences.bedtimeEnd = end.get()!!
 
     // Save selected sensor
-    val selectedSensor = when(allSensorsSelected.get()) {
+    preferences.bedtimeAlertSensor = when(allSensorsSelected.get()) {
       true -> Sensors.ALL
       false -> Sensors.OUTER
     }

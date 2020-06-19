@@ -20,6 +20,7 @@ class Preferences(applicationContext: Context) {
   var ringingAlertSensor: Sensors by bindSharedPreference(applicationContext, RINGING_ALERT_SENSOR, Sensors.ALL)
   var bedtimeStart: LocalTime by bindSharedPreference(applicationContext, BEDTIME_ALERT_START, LocalTime.of(22,0))
   var bedtimeEnd: LocalTime by bindSharedPreference(applicationContext, BEDTIME_ALERT_END, LocalTime.of(8,0))
+  var bedtimeAlertSensor: Sensors by bindSharedPreference(applicationContext, RINGING_ALERT_SENSOR, Sensors.ALL)
 
 
   private fun clearUserToken() {

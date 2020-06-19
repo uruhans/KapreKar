@@ -324,6 +324,10 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   }
 
   private fun changeOverlayState(overlayState: OverlayState) {
+    if(overlayState == OverlayState.NONE) {
+      return
+    }
+
     when(overlayState) {
       OverlayState.QUESTION -> {
         imageDialogController = null

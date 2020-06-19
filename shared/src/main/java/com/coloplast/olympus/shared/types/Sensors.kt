@@ -1,6 +1,4 @@
-package com.coloplast.olympus.ui.feature.settings.models
-
-import com.coloplast.olympus.ui.feature.guides.models.GuideType
+package com.coloplast.olympus.shared.types
 
 
 /**

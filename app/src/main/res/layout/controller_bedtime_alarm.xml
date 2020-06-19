@@ -3,7 +3,7 @@
   xmlns:app="http://schemas.android.com/apk/res-auto">
 
   <data>
-    <import type="com.coloplast.olympus.ui.feature.settings.models.Sensors" />
+    <import type="com.coloplast.olympus.shared.types.Sensors" />
     <variable
       name="controller"
       type="com.coloplast.olympus.ui.feature.settings.BedtimeAlarmController" />

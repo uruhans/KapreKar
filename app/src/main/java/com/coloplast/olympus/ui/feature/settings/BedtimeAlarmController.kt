@@ -6,9 +6,9 @@ import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerBedtimeAlarmBinding
 import com.coloplast.olympus.shared.preferences.Preferences
+import com.coloplast.olympus.shared.types.Sensors
 import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.common.dialogs.TimePickerDialogController
-import com.coloplast.olympus.ui.feature.settings.models.Sensors
 import org.koin.core.inject
 import java.time.LocalTime
 

@@ -4,7 +4,10 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
 import com.coloplast.olympus.shared.extensions.getLocalTime
+import com.coloplast.olympus.shared.extensions.getSensors
 import com.coloplast.olympus.shared.extensions.putLocalTime
+import com.coloplast.olympus.shared.extensions.putSensors
+import com.coloplast.olympus.shared.types.Sensors
 import java.time.LocalTime
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
@@ -50,6 +53,9 @@ fun <T> bindSharedPreference(
   )
   is LocalTime -> SharedPreferenceDelegate(
     context, defaultValue, SharedPreferences::getLocalTime, SharedPreferences.Editor::putLocalTime, key
+  )
+  is Sensors -> SharedPreferenceDelegate(
+    context, defaultValue, SharedPreferences::getSensors, SharedPreferences.Editor::putSensors, key
   )
   else -> throw IllegalArgumentException()
 } as ReadWriteProperty<Any, T>

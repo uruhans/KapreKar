@@ -16,7 +16,7 @@ import com.coloplast.olympus.R
 import com.coloplast.olympus.activities.MainActivity
 import com.coloplast.olympus.notifications.models.NotificationPayload
 import com.coloplast.olympus.shared.preferences.Preferences
-import com.coloplast.olympus.ui.feature.settings.models.Sensors
+import com.coloplast.olympus.shared.types.Sensors
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
 
 /**
@@ -112,8 +112,7 @@ class NotificationCenter(
         }
       }
       UiState.INNER_BREACH_B.notificationId() -> {
-        val ringingAlertSelectedSensors = Sensors.fromOrdinal(preferences.ringingAlertSensor)
-        if (ringingAlertSelectedSensors == Sensors.ALL) {
+        if (preferences.ringingAlertSensor == Sensors.ALL) {
           triggerRingingAlarmNotification(payload, snoozePendingIntent)
         }
         else {

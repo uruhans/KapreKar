@@ -2,6 +2,7 @@ package com.coloplast.olympus.shared.preferences
 
 import android.annotation.SuppressLint
 import android.content.Context
+import com.coloplast.olympus.shared.types.Sensors
 import java.time.LocalTime
 
 /**
@@ -16,7 +17,7 @@ class Preferences(applicationContext: Context) {
   var latestStateFromActiveTx: String by bindSharedPreference(applicationContext, LATEST_STATE_FROM_ACTIVE_TRANSMITTER, "")
   var leaks: String by bindSharedPreference(applicationContext, LEAKS, "")
   var areRingingAlertsEnabled: Boolean by bindSharedPreference(applicationContext, RINGING_ALERTS_ENABLED, true)
-  var ringingAlertSensor: Int by bindSharedPreference(applicationContext, RINGING_ALERT_SENSOR, 0)
+  var ringingAlertSensor: Sensors by bindSharedPreference(applicationContext, RINGING_ALERT_SENSOR, Sensors.ALL)
   var bedtimeStart: LocalTime by bindSharedPreference(applicationContext, BEDTIME_ALERT_START, LocalTime.of(22,0))
   var bedtimeEnd: LocalTime by bindSharedPreference(applicationContext, BEDTIME_ALERT_END, LocalTime.of(8,0))
 

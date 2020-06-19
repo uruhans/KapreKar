@@ -5,10 +5,8 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.media.AudioAttributes
 import android.os.Build
 import android.os.IBinder
-import android.provider.Settings
 import androidx.core.app.NotificationCompat
 import com.artemzin.rxui.RxUi
 import com.coloplast.olympus.BuildConfig
@@ -46,10 +44,6 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
   private val bluetoothConnectionChannelId: String by lazy {  applicationContext.getString(R.string.lock_service_notification_channel_id) }
   private val bluetoothConnectionChannelName: String by lazy { applicationContext.getString(R.string.lock_service_notification_channel_name) }
   private val bluetoothConnectionChannelDescription: String by lazy { applicationContext.getString(R.string.lock_service_notification_channel_description) }
-
-  private val ringingAlertChannelId: String by lazy { applicationContext.getString(R.string.lock_ringing_alarm_notification_channel_id) }
-  private val ringingAlertChannelName: String by lazy { applicationContext.getString(R.string.lock_ringing_alarm_notification_channel_name) }
-  private val ringingAlertChannelDescription: String by lazy { applicationContext.getString(R.string.lock_ringing_alarm_notification_channel_description) }
 
   override fun onBind(intent: Intent?): IBinder? {
     // we are not binding to this service, so just return null
@@ -143,38 +137,16 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
   
   private fun createNotificationChannel() {
     // only create the notification channel if we are above API 25 and the channel doesn't already exist
-    if (Build.VERSION.SDK_INT >= 26) {
-      // Olympus Bluetooth Connection notification channel
-      if(notificationManager.getNotificationChannel(bluetoothConnectionChannelId) == null){
-        val bluetoothConnectionNotificationChannel = NotificationChannel(
-          bluetoothConnectionChannelId, bluetoothConnectionChannelName, NotificationManager.IMPORTANCE_DEFAULT
-        ).apply {
-          description = bluetoothConnectionChannelDescription
-          enableVibration(false)
-          enableLights(false)
-          lockscreenVisibility = Notification.VISIBILITY_PRIVATE
-        }
-        notificationManager.createNotificationChannel(bluetoothConnectionNotificationChannel)
+    if (Build.VERSION.SDK_INT >= 26 && notificationManager.getNotificationChannel(bluetoothConnectionChannelId) == null) {
+      val bluetoothConnectionNotificationChannel = NotificationChannel(
+        bluetoothConnectionChannelId, bluetoothConnectionChannelName, NotificationManager.IMPORTANCE_DEFAULT
+      ).apply {
+        description = bluetoothConnectionChannelDescription
+        enableVibration(false)
+        enableLights(false)
+        lockscreenVisibility = Notification.VISIBILITY_PRIVATE
       }
-
-      // Ringing alert (service) notification channel.
-      if(notificationManager.getNotificationChannel(ringingAlertChannelId) == null){
-        val ringingAlertNotificationChannel = NotificationChannel(
-          ringingAlertChannelId, ringingAlertChannelName, NotificationManager.IMPORTANCE_HIGH
-        ).apply {
-          val ringtoneUri = Settings.System.DEFAULT_RINGTONE_URI
-          val audioAttributes =
-            AudioAttributes.Builder()
-              .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-              .setUsage(AudioAttributes.USAGE_ALARM)
-              .build()
-          description = ringingAlertChannelDescription
-          enableVibration(false)
-          enableLights(false)
-          setSound(ringtoneUri, audioAttributes)
-        }
-        notificationManager.createNotificationChannel(ringingAlertNotificationChannel)
-      }
+      notificationManager.createNotificationChannel(bluetoothConnectionNotificationChannel)
     }
   }
   

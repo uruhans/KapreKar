@@ -144,8 +144,10 @@ class NotificationCenter(
     val notification = NotificationCompat.Builder(context, ringingAlertChannelId)
       .setSmallIcon(R.drawable.ic_detailed_plate_ok)
       .setContentText(context.getString(payload.body))
+      .setCategory(Notification.CATEGORY_MESSAGE)
       .setPriority(NotificationCompat.PRIORITY_MAX)
-      .setAutoCancel(true)
+      .setDefaults(Notification.DEFAULT_ALL)
+      .setAutoCancel(false)
       .addAction(
         R.drawable.ic_baseline_snooze_24,
         context.getString(R.string.lock_notification_action_snooze),
@@ -156,9 +158,8 @@ class NotificationCenter(
         context.getString(R.string.generic_dismiss),
         dismissPendingIntent
       )
-      .build().apply {
-        flags = Notification.FLAG_INSISTENT
-      }
+      .setFullScreenIntent(dismissPendingIntent, true)
+      .build()
 
     // and display it to the user
     with(NotificationManagerCompat.from(context)) {

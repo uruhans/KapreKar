@@ -15,15 +15,6 @@
     android:gravity="bottom"
     android:orientation="vertical">
 
-    <ImageView
-      android:layout_width="54dp"
-      android:layout_height="86dp"
-      android:layout_marginStart="@dimen/spacing_standard"
-      android:layout_marginEnd="@dimen/spacing_standard"
-      android:scaleType="centerCrop"
-      android:src="@drawable/ic_bluetooth"
-      android:tint="@color/icon_disabled" />
-
     <TextView
       style="@style/Headline.Large"
       android:layout_width="wrap_content"
@@ -31,7 +22,7 @@
       android:layout_marginStart="@dimen/spacing_standard"
       android:layout_marginTop="@dimen/spacing_standard"
       android:layout_marginEnd="@dimen/spacing_standard"
-      android:text="Location disabled" />
+      android:text="@string/status_loc" />
 
     <TextView
       style="@style/Headline.Large"

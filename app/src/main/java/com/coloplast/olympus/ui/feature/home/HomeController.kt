@@ -16,6 +16,7 @@ import com.bluelinelabs.conductor.changehandler.FadeChangeHandler
 import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import com.coloplast.olympus.R
 import com.coloplast.olympus.bluetooth.ServiceDispatcher
+import com.coloplast.olympus.bluetooth.StateDispatcher
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
 import com.coloplast.olympus.bluetooth.businesslayer.enums.SensorStatus
@@ -122,8 +123,6 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
           }
         }
         is HomeUiModel.BluetoothIssue -> {
-          previousBleState = uiModel.bluetoothState
-
           when (uiModel.bluetoothState) {
             BluetoothState.BLUETOOTH_NOT_AVAILABLE -> {
             }
@@ -141,15 +140,21 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
             
             }
             BluetoothState.READY -> {
-              if(previousBleState == BluetoothState.BLUETOOTH_NOT_ENABLED) {
+              if(previousBleState == BluetoothState.BLUETOOTH_NOT_ENABLED || previousBleState == BluetoothState.LOCATION_SERVICES_NOT_ENABLED) {
                 ServiceDispatcher.dispatchEvent(ServiceEvent.RetryConnection())
               }
 
-              if (currentUiState == UiState.INITIAL || currentUiState == UiState.BLUETOOTH_NOT_ENABLED) {
+              if (currentUiState == UiState.INITIAL ||
+                currentUiState == UiState.BLUETOOTH_NOT_ENABLED ||
+                currentUiState == UiState.LOCATION_SERVICES_NOT_ENABLED) {
+
+                StateDispatcher.dispatchScanning()
                 changeUiState(UiState.CONNECTING)
               }
             }
           }
+
+          previousBleState = uiModel.bluetoothState
         }
         is HomeUiModel.Initial -> {
           /* no-op */
@@ -262,6 +267,9 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         }
         UiState.BLUETOOTH_NOT_ENABLED -> {
           BluetoothNotEnabledController.routerTransaction()
+        }
+        UiState.LOCATION_SERVICES_NOT_ENABLED -> {
+          LocationNotEnabledController.routerTransaction()
         }
         UiState.MULTIPLE_TRANSMITTERS -> {
           MultipleTransmittersController.routerTransaction()

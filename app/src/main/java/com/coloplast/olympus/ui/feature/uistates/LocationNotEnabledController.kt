@@ -4,7 +4,6 @@ import android.content.Intent
 import android.provider.Settings
 import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.R
-import com.coloplast.olympus.databinding.ControllerStateBluetoothNotEnabledBinding
 import com.coloplast.olympus.databinding.ControllerStateLocationNotEnabledBinding
 import com.coloplast.olympus.ui.feature.home.models.PatchVisible
 
@@ -20,10 +19,10 @@ class LocationNotEnabledController : BaseHomeUIController<ControllerStateLocatio
     // no-op
   }
 
-  override fun patchVisible(): Boolean {
-    return false
+  override fun patchInError(): Boolean {
+    return true
   }
-  
+
   fun enableLocationClicked() {
     Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS).also {
       startActivity(it)

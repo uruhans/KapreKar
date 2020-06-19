@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <data>
+
+    <variable
+      name="controller"
+      type="com.coloplast.olympus.ui.feature.uistates.LocationNotEnabledController" />
+  </data>
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="bottom"
+    android:orientation="vertical">
+
+    <ImageView
+      android:layout_width="54dp"
+      android:layout_height="86dp"
+      android:layout_marginStart="@dimen/spacing_standard"
+      android:layout_marginEnd="@dimen/spacing_standard"
+      android:scaleType="centerCrop"
+      android:src="@drawable/ic_bluetooth"
+      android:tint="@color/icon_disabled" />
+
+    <TextView
+      style="@style/Headline.Large"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="@dimen/spacing_standard"
+      android:layout_marginTop="@dimen/spacing_standard"
+      android:layout_marginEnd="@dimen/spacing_standard"
+      android:text="Location disabled" />
+
+    <TextView
+      style="@style/Headline.Large"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="@dimen/spacing_standard"
+      android:layout_marginTop="@dimen/spacing_half"
+      android:layout_marginEnd="@dimen/spacing_standard"
+      android:fontFamily="@font/coloplast"
+      android:text="Location not enabled"
+      android:textColor="@color/grey" />
+
+    <androidx.cardview.widget.CardView
+      android:layout_width="match_parent"
+      android:layout_height="@dimen/cardview_button_height_default"
+      android:layout_marginStart="@dimen/spacing_standard"
+      android:layout_marginTop="@dimen/spacing_double"
+      android:layout_marginEnd="@dimen/spacing_standard"
+      android:layout_marginBottom="@dimen/spacing_double"
+      android:foreground="?attr/selectableItemBackground"
+      android:onClick="@{() -> controller.enableLocationClicked()}"
+      app:cardBackgroundColor="@color/white"
+      app:cardCornerRadius="28dp"
+      app:cardElevation="4dp"
+      app:cardPreventCornerOverlap="true"
+      app:cardUseCompatPadding="false">
+
+      <TextView
+        style="@style/Text.Medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:fontFamily="sans-serif-medium"
+        android:gravity="center"
+        android:text="Go to settings"
+        android:textSize="18sp" />
+
+    </androidx.cardview.widget.CardView>
+
+  </LinearLayout>
+</layout>

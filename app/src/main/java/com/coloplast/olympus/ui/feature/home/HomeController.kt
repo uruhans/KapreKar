@@ -135,7 +135,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
               changeUiState(UiState.BLUETOOTH_NOT_ENABLED)
             }
             BluetoothState.LOCATION_SERVICES_NOT_ENABLED -> {
-            
+              changeUiState(UiState.LOCATION_SERVICES_NOT_ENABLED)
             }
             BluetoothState.UNDEFINED -> {
             

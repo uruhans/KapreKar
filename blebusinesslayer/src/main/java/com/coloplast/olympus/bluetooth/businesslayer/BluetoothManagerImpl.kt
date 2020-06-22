@@ -232,7 +232,6 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
       BiFunction { statusVector: StatusVector, powerLevel: PowerLevel ->
         Peripheral(statusVector.patch, statusVector.transmitter, powerLevel)
       })
-      .distinctUntilChanged()
   }
 
   /**
@@ -262,6 +261,7 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
       // this occurs right after a reset, where the transmitter takes a little time to figure out it's actual state
       // so filter is added to remove any garbage callbacks
       .filter { statusVector -> statusVector.copyOfRange(0, 6).none { sensor -> sensor.toInt() == -1 } }
+      .doOnNext { Timber.d("statusVector: {${it[0]}, ${it[1]}, ${it[2]}, ${it[3]}, ${it[4]}, ${it[5]}, ${it[6]}, ${it[7]}, ${it[8]}, ${it[9]}, ${it[10]}, ${it[11]}}") }
       .compose(OlympusWirelessProtocol.statusTransformer)
   }
 

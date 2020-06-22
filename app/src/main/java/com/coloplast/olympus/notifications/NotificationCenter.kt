@@ -20,6 +20,7 @@ import com.coloplast.olympus.notifications.models.NotificationPayload
 import com.coloplast.olympus.shared.preferences.Preferences
 import com.coloplast.olympus.shared.types.Sensors
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
+import java.time.LocalTime
 
 /**
  * This notification center will do the heavy lifting of actually creating, displaying and removing notifications.
@@ -102,18 +103,17 @@ class NotificationCenter(
 
     when (payload.id) {
       UiState.OUTER_BREACH_C.notificationId() -> {
-        if (preferences.areRingingAlertsEnabled) {
+        if(isItNightTime() || preferences.areRingingAlertsEnabled){
           triggerRingingAlarmNotification(payload, snoozePendingIntent)
-        }
-        else {
+        } else {
           triggerRegularNotification(payload, snoozePendingIntent)
         }
       }
       UiState.INNER_BREACH_B.notificationId() -> {
-        if (preferences.ringingAlertSensor == Sensors.ALL) {
+        if((isItNightTime() && preferences.bedtimeAlertSensor == Sensors.ALL)
+          || (preferences.areRingingAlertsEnabled && preferences.ringingAlertSensor == Sensors.ALL)){
           triggerRingingAlarmNotification(payload, snoozePendingIntent)
-        }
-        else {
+        } else {
           // only outer sensors enabled. Send regular notification.
           triggerRegularNotification(payload, snoozePendingIntent)
         }
@@ -121,6 +121,11 @@ class NotificationCenter(
       else -> triggerRegularNotification(payload, snoozePendingIntent)
     }
 
+  }
+
+  private fun isItNightTime(): Boolean {
+    val now = LocalTime.now()
+    return (now > preferences.bedtimeStart || now < preferences.bedtimeEnd)
   }
 
   private fun triggerRingingAlarmNotification(
@@ -233,8 +238,6 @@ class NotificationCenter(
               .setUsage(AudioAttributes.USAGE_ALARM)
               .build()
           description = ringingAlertChannelDescription
-          enableVibration(false)
-          enableLights(false)
           setSound(ringtoneUri, audioAttributes)
         }
         notificationManager.createNotificationChannel(ringingAlertNotificationChannel)

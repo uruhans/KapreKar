@@ -44,6 +44,8 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
   private val bleDeviceRelay = PublishRelay.create<List<BleDevice>>()
   private val bleConnectionRelay = PublishRelay.create<Map<String, RxBleConnection>>()
 
+  private val disconnectRelay = PublishRelay.create<String>()
+
   init {
     /**
      * We set a custom error handler - first of all to convert rx library exceptions into something our app can handle
@@ -183,12 +185,23 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
     return getBleDevice(macAddress)
       .flatMap { rxBleDevice ->
         bluetoothHandler.connectRxBleDevice(rxBleDevice)
+          .takeUntil(
+            disconnectRelay
+              .publish()
+              .refCount()
+              .filter { it == macAddress }
+              .map {
+                removeConnectionFromList(macAddress)
+                removeDeviceFromConnectedList(getBleDevice(macAddress).blockingFirst())
+              }
+          )
           .map {
             addDeviceToConnectedList(rxBleDevice)
             addConnectionToList(macAddress, it)
             macAddress
           }
       }
+      .doOnError { Timber.e(it) }
   }
 
   /**
@@ -391,5 +404,9 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
     }
 
     return bleConnections[macAddress] != null
+  }
+
+  override fun disconnectTransmitter(macAddress: String) {
+    disconnectRelay.accept(macAddress)
   }
 }

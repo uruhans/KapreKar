@@ -6,7 +6,9 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.media.AudioAttributes
 import android.os.Build
+import android.provider.Settings
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -29,22 +31,18 @@ class NotificationCenter(
   private val preferences: Preferences
 ) {
 
-  private val channelId: String = context.getString(R.string.lock_notification_channel_id)
-  private val channelName: String = context.getString(R.string.lock_notification_channel_name)
-  private val channelDescription: String =
+  private val statusNotificationsChannelId: String = context.getString(R.string.lock_notification_channel_id)
+  private val statusNotificationsChannelName: String = context.getString(R.string.lock_notification_channel_name)
+  private val statusNotificationsChannelDescription: String =
     context.getString(R.string.lock_notification_channel_description)
 
-  private val ringingAlertChannelId: String =
-    context.getString(R.string.lock_ringing_alarm_notification_channel_id)
-  private val ringingAlertChannelName: String =
-    context.getString(R.string.lock_ringing_alarm_notification_channel_name)
-  private val ringingAlertChannelDescription: String =
-    context.getString(R.string.lock_ringing_alarm_notification_channel_description)
+  private val ringingAlertChannelId = context.getString(R.string.lock_ringing_alarm_notification_channel_id)
+  private val ringingAlertChannelName = context.getString(R.string.lock_ringing_alarm_notification_channel_name)
+  private val ringingAlertChannelDescription = context.getString(R.string.lock_ringing_alarm_notification_channel_description)
 
   init {
     // make sure we have a notification channel for the notification
-    createNotificationChannel()
-    //show(NotificationPayload(UiState.OUTER_BREACH_C.notificationId(), R.string.lock_notification_outer))
+    createNotificationChannels()
   }
 
   /**
@@ -145,8 +143,10 @@ class NotificationCenter(
     val notification = NotificationCompat.Builder(context, ringingAlertChannelId)
       .setSmallIcon(R.drawable.ic_detailed_plate_ok)
       .setContentText(context.getString(payload.body))
+      .setCategory(Notification.CATEGORY_MESSAGE)
       .setPriority(NotificationCompat.PRIORITY_MAX)
-      .setAutoCancel(true)
+      .setDefaults(Notification.DEFAULT_ALL)
+      .setAutoCancel(false)
       .addAction(
         R.drawable.ic_baseline_snooze_24,
         context.getString(R.string.lock_notification_action_snooze),
@@ -157,9 +157,8 @@ class NotificationCenter(
         context.getString(R.string.generic_dismiss),
         dismissPendingIntent
       )
-      .build().apply {
-        flags = Notification.FLAG_INSISTENT
-      }
+      .setFullScreenIntent(dismissPendingIntent, true)
+      .build()
 
     // and display it to the user
     with(NotificationManagerCompat.from(context)) {
@@ -171,7 +170,7 @@ class NotificationCenter(
     payload: NotificationPayload,
     snoozePendingIntent: PendingIntent
   ) {
-    val notification = NotificationCompat.Builder(context, channelId)
+    val notification = NotificationCompat.Builder(context, statusNotificationsChannelId)
       .setSmallIcon(R.drawable.ic_detailed_plate_ok)
       .setWhen(System.currentTimeMillis())
       .setColor(ContextCompat.getColor(context, R.color.turquoise))
@@ -193,7 +192,7 @@ class NotificationCenter(
   }
 
   @RequiresApi(26)
-  fun deleteNotificationChannel() {
+  fun deleteNotificationChannel(channelId: String) {
     notificationManager.deleteNotificationChannel(channelId)
   }
 
@@ -211,22 +210,42 @@ class NotificationCenter(
     notificationManager.cancel(notificationId)
   }
 
-  private fun createNotificationChannel() {
+  private fun createNotificationChannels() {
     // only create the notification channel if we are above API 25 and the channel doesn't already exist
-    if (Build.VERSION.SDK_INT >= 26 && notificationManager.getNotificationChannel(channelId) == null) {
-      NotificationChannel(channelId, channelName, getImportance()).apply {
-        description = channelDescription
-        notificationManager.createNotificationChannel(this)
+    if (Build.VERSION.SDK_INT >= 26){
+      // Status notifications
+      if(notificationManager.getNotificationChannel(statusNotificationsChannelId) == null){
+        NotificationChannel(statusNotificationsChannelId, statusNotificationsChannelName, getImportance()).apply {
+          description = statusNotificationsChannelDescription
+          notificationManager.createNotificationChannel(this)
+        }
+      }
+
+      // Ringing alert notification channel.
+      if(notificationManager.getNotificationChannel(ringingAlertChannelId) == null){
+        val ringingAlertNotificationChannel = NotificationChannel(
+          ringingAlertChannelId, ringingAlertChannelName, NotificationManager.IMPORTANCE_HIGH
+        ).apply {
+          val ringtoneUri = Settings.System.DEFAULT_RINGTONE_URI
+          val audioAttributes =
+            AudioAttributes.Builder()
+              .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+              .setUsage(AudioAttributes.USAGE_ALARM)
+              .build()
+          description = ringingAlertChannelDescription
+          enableVibration(false)
+          enableLights(false)
+          setSound(ringtoneUri, audioAttributes)
+        }
+        notificationManager.createNotificationChannel(ringingAlertNotificationChannel)
       }
     }
   }
 
   companion object {
     // intent filters for the broadcast receiver, so we can reschedule a notification and later show it again
-    const val INTENT_FILTER_ACTION_SNOOZE =
-      "${BuildConfig.APPLICATION_ID}.NOTIFICATION_ACTION_SNOOZE"
-    const val INTENT_FILTER_ACTION_DISMISS =
-      "${BuildConfig.APPLICATION_ID}.NOTIFICATION_ACTION_DISMISS"
+    const val INTENT_FILTER_ACTION_SNOOZE = "${BuildConfig.APPLICATION_ID}.NOTIFICATION_ACTION_SNOOZE"
+    const val INTENT_FILTER_ACTION_DISMISS = "${BuildConfig.APPLICATION_ID}.NOTIFICATION_ACTION_DISMISS"
     const val INTENT_FILTER_SHOW_NOTIFICATION = "${BuildConfig.APPLICATION_ID}.NOTIFICATION_SHOW"
 
     // the notification id that we wish to show

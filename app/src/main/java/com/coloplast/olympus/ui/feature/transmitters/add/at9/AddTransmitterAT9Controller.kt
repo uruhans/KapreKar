@@ -145,6 +145,7 @@ class AddTransmitterAT9Controller(args: Bundle) :
 
   fun onSelectionConfirmed() {
     selectedScanResult.get()?.let {
+      currentState.set(ViewState.SEARCHING)
       scanResultRelay.accept(it)
     }
   }

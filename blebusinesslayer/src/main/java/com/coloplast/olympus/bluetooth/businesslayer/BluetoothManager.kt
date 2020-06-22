@@ -28,4 +28,6 @@ interface BluetoothManager {
 
   fun readDeviceInfo(macAddress: String) : Observable<DeviceInfo>
   fun isConnected(macAddress: String) : Boolean
+
+  fun disconnectTransmitter(macAddress: String)
 }

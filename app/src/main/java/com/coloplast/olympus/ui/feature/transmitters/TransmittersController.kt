@@ -81,8 +81,8 @@ class TransmittersController(args: Bundle? = null) :
         }
         is TransmittersUiModel.StateUpdate -> {
           transmitterList
-            .first { uiModel.stateChange.bleDevice.macAddress == it.transmitter.macAddress }
-            .setStateChange(uiModel.stateChange)
+            .firstOrNull { uiModel.stateChange.bleDevice.macAddress == it.transmitter.macAddress }
+            ?.setStateChange(uiModel.stateChange)
 
           updateDiffList()
         }
@@ -98,7 +98,8 @@ class TransmittersController(args: Bundle? = null) :
           }
         }
         is TransmittersUiModel.TransmitterDeleted -> {
-          transmitterList.clear()
+          compositeDisposable.clear()
+          compositeDisposable.add(viewModel.bind(this))
           dialogController?.dismissDialog(false)
         }
         is TransmittersUiModel.Empty -> {

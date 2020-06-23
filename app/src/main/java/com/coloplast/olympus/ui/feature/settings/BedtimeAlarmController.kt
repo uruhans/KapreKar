@@ -1,5 +1,6 @@
 package com.coloplast.olympus.ui.feature.settings
 
+import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import com.bluelinelabs.conductor.RouterTransaction
@@ -9,6 +10,7 @@ import com.coloplast.olympus.shared.preferences.Preferences
 import com.coloplast.olympus.shared.types.Sensors
 import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.common.dialogs.TimePickerDialogController
+import com.coloplast.olympus.ui.common.extensions.onValueChanged
 import org.koin.core.inject
 import java.time.LocalTime
 
@@ -25,12 +27,24 @@ class BedtimeAlarmController: BaseController<ControllerBedtimeAlarmBinding>(),
   private var dialog: TimePickerDialogController? = null
 
   val allSensorsSelected = ObservableBoolean(preferences.bedtimeAlertSensor == Sensors.ALL)
-  val start = ObservableField<LocalTime>(preferences.bedtimeStart)
-  val end = ObservableField<LocalTime>(preferences.bedtimeEnd)
-
+  val timeStrings = ObservableArrayList<Any>()
+  val start = ObservableField<LocalTime>(preferences.bedtimeStart).apply {
+    compositeDisposable.add(
+      onValueChanged { this@BedtimeAlarmController.timeStrings[0] = get()!!.toString() }
+    )
+  }
+  val end = ObservableField<LocalTime>(preferences.bedtimeEnd).apply {
+      compositeDisposable.add(
+        onValueChanged { this@BedtimeAlarmController.timeStrings[1] = get()!!.toString() }
+      )
+    }
 
   override fun attachVariables(viewBinding: ControllerBedtimeAlarmBinding) {
     viewBinding.controller = this
+
+    // Initialize string arguments.
+    timeStrings.add(start.get()!!.toString())
+    timeStrings.add(end.get()!!.toString())
   }
 
   override fun onViewBound(viewBinding: ControllerBedtimeAlarmBinding) {
@@ -42,7 +56,7 @@ class BedtimeAlarmController: BaseController<ControllerBedtimeAlarmBinding>(),
       TIME_START_REQUEST_CODE -> {
         start.set(LocalTime.of(hour, minute))
       }
-      TIME_END_REQUEST_CODE -> end.set(LocalTime.of(hour,minute))//endString.set(str)
+      TIME_END_REQUEST_CODE -> end.set(LocalTime.of(hour,minute))
     }
     dialog?.onDismiss()
     dialog = null

@@ -4,6 +4,7 @@
 
   <data>
     <import type="com.coloplast.olympus.shared.types.Sensors" />
+    <import type="com.coloplast.olympus.R" />
     <variable
       name="controller"
       type="com.coloplast.olympus.ui.feature.settings.BedtimeAlarmController" />
@@ -114,7 +115,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/spacing_larger"
-        android:text="@{controller.allSensorsSelected ? @string/settings_sensors_all_description : @string/settings_sensors_outer_only_description}"
+        app:stringResource="@{R.string.settings_alarm_message}"
+        app:formatTextWithArgs="@{controller.timeStrings}"
         style="@style/TextStyle.Roboto.Regular.ClearGrey.16"
         app:layout_constraintTop_toBottomOf="@id/sensors_view"
         app:layout_constraintBottom_toTopOf="@id/button_save"/>

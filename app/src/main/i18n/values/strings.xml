@@ -107,9 +107,9 @@
 <string name="guide_charging_title">[English translation is missing]</string>
 <string name="guide_cleaning">Cleaning guide</string>
 <string name="guide_cleaning_1_text">[English translation is missing]</string>
+<string name="guide_cleaning_2_image">guide_cleaning_2_image</string>
 <string name="guide_cleaning_2_text">[English translation is missing]</string>
-<string name="guide_cleaning_2_image">11_20190722_cleaning_picture_transmitter</string>
-<string name="guide_cleaning_3_image">11A_20190722_cleaning_picture_charging_dock</string>
+<string name="guide_cleaning_3_image">guide_cleaning_3_image</string>
 <string name="guide_cleaning_3_text">[English translation is missing]</string>
 <string name="guide_cleaning_4_text">[English translation is missing]</string>
 <string name="guide_cleaning_5_text">[English translation is missing]</string>
@@ -213,6 +213,8 @@
 <string name="onboarding_chapter_intro_bluetooth_header">TestProduct needs Bluetooth to keep you informed</string>
 <string name="onboarding_chapter_intro_bluetooth_settings_alert_message">Go to Settings to turn on Bluetooth. Then, come back to the app to continue setup.</string>
 <string name="onboarding_chapter_intro_bluetooth_settings_alert_title">Turn on Bluetooth to Allow \"TestProduct\" to Connect to Accessories.</string>
+<string name="onboarding_chapter_intro_box_description">Your TestProduct starter kit contains three components. Next, you\'ll take a look at them one by one.</string>
+<string name="onboarding_chapter_intro_box_title">What\'s in the box?</string>
 <string name="onboarding_chapter_intro_bullet_item_1">A flat surface, like a table or worktop</string>
 <string name="onboarding_chapter_intro_bullet_item_2">Access to a power socket</string>
 <string name="onboarding_chapter_intro_bullet_item_3">A USB plug (e.g. iPhone charger plug)</string>
@@ -225,8 +227,16 @@
 <string name="onboarding_chapter_intro_checklist_item_3">3. Preparing</string>
 <string name="onboarding_chapter_intro_checklist_item_4">4. Applying</string>
 <string name="onboarding_chapter_intro_checklist_title">Welcome to the Setup guide</string>
+<string name="onboarding_chapter_intro_connector_flap_description">This is the connector flap. You\'ll use this later to attach your transmitter to the sensor layer.</string>
+<string name="onboarding_chapter_intro_connector_flap_title">Connector flap</string>
+<string name="onboarding_chapter_intro_inner_outer_description">The sensors are arranged in two rings. The inner sensors detect the first signs of leakage. The outer sensors detect leakage spreading.</string>
+<string name="onboarding_chapter_intro_inner_outer_title">Inner and outer sensors</string>
 <string name="onboarding_chapter_intro_notifications_description">By allowing notifications, you enable TestProduct to notify you when leakage is detected. You can customise notification alerts later in the app\'s settings.</string>
 <string name="onboarding_chapter_intro_notifications_header">Know when to take action by allowing notifications</string>
+<string name="onboarding_chapter_intro_sensor_layer_description">This is a TestProduct sensor layer. It is applied to your ostomy appliance to help you detect leakage. You\'ll learn how to apply this later.</string>
+<string name="onboarding_chapter_intro_sensor_layer_title">Sensor layer</string>
+<string name="onboarding_chapter_intro_sensor_technology_description">On the reverse side, you can see the advanced sensor technology. Each layer has 68 leakage sensors, one under each of the small dots.</string>
+<string name="onboarding_chapter_intro_sensor_technology_title">Advanced sensor technology</string>
 <string name="onboarding_chapter_intro_setup_guide">Setup guide</string>
 <string name="onboarding_chapter_intro_setup_guide_message">This guide will guide you step-by-step through the process of setting up TestProduct and applying in to your body.</string>
 <string name="overlay_battery_critical">Charge now to stay informed.</string>
@@ -323,6 +333,8 @@
 <string name="status_inner_breach">Look out for signs of leakage.</string>
 <string name="status_inner_breach_title">There\'s a problem.</string>
 <string name="status_last_check">Last check</string>
+<string name="status_location_turned_off">Turn on location to stay informed.</string>
+<string name="status_location_turned_off_title">Location disabled</string>
 <string name="status_moisture_connector">To stay informed, open the transmitter fully and dry it off. Dry the connector flap, too.</string>
 <string name="status_moisture_connector_title">Moisture in connector and transmitter.</string>
 <string name="status_moisture_detected">It\'s unclear if it\'s a leak, sweat, or something else.</string>

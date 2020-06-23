@@ -587,6 +587,16 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
     return R.layout.controller_home
   }
 
+  override fun handleBack(): Boolean {
+    return if (getBinding().drawerLayout.isDrawerOpen(GravityCompat.END)) {
+      onMenuClicked()
+      true
+    }
+    else {
+      super.handleBack()
+    }
+  }
+
   override fun onDestroyView(view: View) {
     connectionStateDisposable.clear()
     super.onDestroyView(view)

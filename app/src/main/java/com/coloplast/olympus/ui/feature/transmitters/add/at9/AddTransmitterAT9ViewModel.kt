@@ -12,7 +12,6 @@ import com.coloplast.olympus.ui.feature.transmitters.add.at9.model.SearchTransmi
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
-import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
@@ -56,7 +55,7 @@ class AddTransmitterAT9ViewModel(private val bluetoothManager: BluetoothManager,
         }
         .startWith(SearchTransmitterUiModel.PendingUser())
 
-    val addToDatabaseAndObservableConnectionStateObservable = uiView.scanResultToConnect()
+    val addToDatabaseAndConnectionStateObservable = uiView.scanResultToConnect()
       .switchMap { scanResult ->
         // insert the transmitter into the database (this will mean that the bluetoothservice
         // will pick up the change in DB and start connecting to it
@@ -73,14 +72,14 @@ class AddTransmitterAT9ViewModel(private val bluetoothManager: BluetoothManager,
               .flatMap {
                 if(it == BleConnectionState.CONNECTED) {
                   bluetoothManager.readDeviceInfo(scanResult.macAddress)
-                    .flatMap { deviceInfo ->
+                    // we have a slight delay here, because if bonding actually fails
+                    // we will hit CONNECTED first, followed by DISCONNECTED
+                    .delay(3, TimeUnit.SECONDS)
+                    .map { deviceInfo ->
                       // TODO - CPO-415: actually store the device info in database
                       Timber.d("DeviceInfo: $deviceInfo")
                       // connection was successful - return and notify controller
-                      Observable.just(SearchTransmitterUiModel.ConnectionSuccessful(scanResult.macAddress))
-                        // we have a slight delay here, because if bonding actually fails
-                        // we will hit CONNECTED first, followed by DISCONNECTED
-                        .delay(2, TimeUnit.SECONDS)
+                      SearchTransmitterUiModel.ConnectionSuccessful(scanResult.macAddress)
                     }
                 }
                 else {
@@ -105,7 +104,7 @@ class AddTransmitterAT9ViewModel(private val bluetoothManager: BluetoothManager,
     disposable.add(Observable.merge(
       scanResultObservable,
       retryScanningObservable,
-      addToDatabaseAndObservableConnectionStateObservable).bind(uiView.render()))
+      addToDatabaseAndConnectionStateObservable).bind(uiView.render()))
 
     return disposable
   }

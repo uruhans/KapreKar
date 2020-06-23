@@ -22,7 +22,7 @@
       android:layout_marginStart="@dimen/spacing_standard"
       android:layout_marginTop="@dimen/spacing_standard"
       android:layout_marginEnd="@dimen/spacing_standard"
-      android:text="@string/status_loc" />
+      android:text="@string/status_location_turned_off_title" />
 
     <TextView
       style="@style/Headline.Large"
@@ -32,7 +32,7 @@
       android:layout_marginTop="@dimen/spacing_half"
       android:layout_marginEnd="@dimen/spacing_standard"
       android:fontFamily="@font/coloplast"
-      android:text="Location not enabled"
+      android:text="@string/status_location_turned_off"
       android:textColor="@color/grey" />
 
     <androidx.cardview.widget.CardView
@@ -57,7 +57,7 @@
         android:layout_gravity="center"
         android:fontFamily="sans-serif-medium"
         android:gravity="center"
-        android:text="Go to settings"
+        android:text="@string/guide_ble_off"
         android:textSize="18sp" />
 
     </androidx.cardview.widget.CardView>

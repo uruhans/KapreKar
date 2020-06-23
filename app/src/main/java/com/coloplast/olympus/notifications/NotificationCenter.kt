@@ -120,7 +120,6 @@ class NotificationCenter(
       }
       else -> triggerRegularNotification(payload, snoozePendingIntent)
     }
-
   }
 
   private fun isItNightTime(): Boolean {
@@ -148,7 +147,7 @@ class NotificationCenter(
     val notification = NotificationCompat.Builder(context, ringingAlertChannelId)
       .setSmallIcon(R.drawable.ic_detailed_plate_ok)
       .setContentText(context.getString(payload.body))
-      .setCategory(Notification.CATEGORY_MESSAGE)
+      .setCategory(Notification.CATEGORY_ALARM)
       .setPriority(NotificationCompat.PRIORITY_MAX)
       .setDefaults(Notification.DEFAULT_ALL)
       .setAutoCancel(false)

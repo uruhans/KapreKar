@@ -104,7 +104,7 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
           // this will be used to notify the Ui to change state (so we dont get stuck in multiple tx state or other state based on disconnected tx)
           otherTxStateChange?.let { stateChange ->
             if(stateChange.overlayState == OverlayState.BLE_CONNECTION_LOST) {
-              olympusNotificationManager.send(UiState.DISCONNECTED)
+              olympusNotificationManager.send(OverlayState.BLE_CONNECTION_LOST)
             }
 
             StateDispatcher.dispatchStateForActiveTransmitter(stateChange)

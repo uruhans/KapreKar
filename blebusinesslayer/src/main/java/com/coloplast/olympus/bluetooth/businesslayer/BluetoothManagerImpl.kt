@@ -7,11 +7,13 @@ import com.coloplast.olympus.bluetooth.businesslayer.enums.PowerLevel
 import com.coloplast.olympus.bluetooth.businesslayer.exceptions.DisconnectException
 import com.coloplast.olympus.bluetooth.businesslayer.exceptions.GattCallbackTimeoutException
 import com.coloplast.olympus.bluetooth.businesslayer.exceptions.GattException
+import com.coloplast.olympus.bluetooth.businesslayer.exceptions.BondingFailedException
 import com.coloplast.olympus.bluetooth.businesslayer.models.*
 import com.coloplast.olympus.bluetooth.businesslayer.services.BatteryPowerService
 import com.coloplast.olympus.bluetooth.businesslayer.services.DeviceInformation
 import com.coloplast.olympus.bluetooth.businesslayer.services.OlympusWirelessProtocol
 import com.dawn.bluetooth.BluetoothHandler
+import com.dawn.bluetooth.BleBondingFailedException
 import com.jakewharton.rxrelay2.PublishRelay
 import com.polidea.rxandroidble2.RxBleClient
 import com.polidea.rxandroidble2.RxBleConnection
@@ -62,6 +64,7 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
         it is BleDisconnectedException -> throw DisconnectException(it)
         it is BleGattCallbackTimeoutException -> throw GattCallbackTimeoutException(it)
         it is BleGattException -> throw GattException(it)
+        it is BleBondingFailedException -> throw BondingFailedException(it)
         else -> return@setErrorHandler //throw RuntimeException("Unexpected Throwable in RxJavaPlugins error handler", it)
       }
     }
@@ -183,7 +186,7 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
    */
   override fun connectBleDevice(macAddress: String): Observable<String> {
     return getBleDevice(macAddress)
-      .flatMap { rxBleDevice ->
+      .switchMap { rxBleDevice ->
         bluetoothHandler.connectRxBleDevice(rxBleDevice)
           .takeUntil(
             disconnectRelay
@@ -201,7 +204,10 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
             macAddress
           }
       }
-      .doOnError { Timber.e(it) }
+      .doOnError {
+        removeConnectionFromList(macAddress)
+        removeDeviceFromConnectedList(getBleDevice(macAddress).blockingFirst())
+      }
   }
 
   /**

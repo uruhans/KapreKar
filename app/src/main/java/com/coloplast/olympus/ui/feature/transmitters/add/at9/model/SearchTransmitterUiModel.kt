@@ -1,6 +1,5 @@
 package com.coloplast.olympus.ui.feature.transmitters.add.at9.model
 
-import android.net.MacAddress
 import com.coloplast.olympus.bluetooth.businesslayer.models.ScanResult
 import com.coloplast.olympus.ui.common.models.UiModel
 

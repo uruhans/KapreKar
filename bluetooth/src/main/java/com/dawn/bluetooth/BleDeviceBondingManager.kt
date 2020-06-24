@@ -36,7 +36,7 @@ object BleDeviceBondingManager {
                   
                   }
                   state == BluetoothDevice.BOND_NONE && prevState == BluetoothDevice.BOND_BONDING -> {
-                    emitter.onError(BondingFailedException())
+                    emitter.onError(BleBondingFailedException())
                   }
                 }
               }
@@ -48,7 +48,7 @@ object BleDeviceBondingManager {
           rxBleDevice.bluetoothDevice.setPin("123456".toByteArray(Charset.forName("UTF-8")))
           val createBondResult = rxBleDevice.bluetoothDevice.createBond()
           if (!createBondResult) {
-            emitter.onError(BondingFailedException())
+            emitter.onError(BleBondingFailedException())
           }
         }
       }

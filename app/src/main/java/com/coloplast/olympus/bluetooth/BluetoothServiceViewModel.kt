@@ -52,6 +52,17 @@ class BluetoothServiceViewModel(
       .skip(1)
 
     val bluetoothStateReadyObservable = currentBluetoothStateObservable
+      .map {
+        if(it == BluetoothState.BLUETOOTH_NOT_ENABLED) {
+          // if we suddenly get a disconnect (we shouldn't but there you go)
+          // we should disconnect all transmitters
+          connectedBleDevicesList.forEach { macAddress ->
+            ServiceDispatcher.dispatchEvent(ServiceEvent.DisconnectTransmitter(macAddress))
+          }
+        }
+
+        it
+      }
       .filter { it == BluetoothState.READY }
       .delay(5, TimeUnit.SECONDS)
 

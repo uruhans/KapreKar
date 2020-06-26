@@ -35,6 +35,7 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
       UiState.TRANSMITTER_DELETED -> { null }
       UiState.INITIAL -> { null }
       UiState.BLUETOOTH_NOT_ENABLED -> { null }
+      UiState.LOCATION_SERVICES_NOT_ENABLED -> { null }
       UiState.CONNECTING -> { null }
       UiState.SCANNING -> { null }
       UiState.DISCONNECTED -> { null }

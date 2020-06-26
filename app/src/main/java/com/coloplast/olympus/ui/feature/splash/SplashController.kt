@@ -18,9 +18,9 @@ class SplashController : BaseController<ControllerSplashBinding>() {
   }
 
   override fun onViewBound(viewBinding: ControllerSplashBinding) {
-    viewBinding.appTitle.fadeIn(animationDuration = 200, offset = 200)
-    viewBinding.coloplastLogo.fadeIn(animationDuration = 200, offset = 400)
-    viewBinding.appLogo.rotate360(offset = 600)
+    viewBinding.appTitle.fadeIn(animationDuration = 200, offset = 200) //0 - 400ms
+    viewBinding.coloplastLogo.fadeIn(animationDuration = 200, offset = 400) // 400 - 600ms
+    viewBinding.appLogo.rotate360(offset = 600) // 600 - 2600ms
   }
 
   override fun getLayout(): Int = R.layout.controller_splash

@@ -1,0 +1,34 @@
+package com.coloplast.olympus.ui.feature.splash
+
+import com.bluelinelabs.conductor.RouterTransaction
+import com.coloplast.olympus.R
+import com.coloplast.olympus.databinding.ControllerSplashBinding
+import com.coloplast.olympus.ui.common.BaseController
+import com.coloplast.olympus.ui.common.extensions.fadeIn
+import com.coloplast.olympus.ui.common.extensions.rotate360
+
+/**
+ * Created by Kike Bodi (ebp@dawnhealth.com) on 25/06/2020.
+ * Copyright by Dawn Health A/S. All rights reserved.
+ */
+class SplashController : BaseController<ControllerSplashBinding>() {
+
+  override fun attachVariables(viewBinding: ControllerSplashBinding) {
+    //noop
+  }
+
+  override fun onViewBound(viewBinding: ControllerSplashBinding) {
+    viewBinding.appTitle.fadeIn(animationDuration = 200, offset = 200)
+    viewBinding.coloplastLogo.fadeIn(animationDuration = 200, offset = 400)
+    viewBinding.appLogo.rotate360(offset = 600)
+  }
+
+  override fun getLayout(): Int = R.layout.controller_splash
+
+  companion object {
+    const val TAG_CONTROLLER = "splash_controller"
+
+    fun routerTransaction() = RouterTransaction.with(SplashController())
+      .tag(TAG_CONTROLLER)
+  }
+}

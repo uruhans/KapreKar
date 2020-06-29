@@ -83,6 +83,7 @@ class AddTransmitterAT9Controller(args: Bundle) :
             if (it != null && uiModel.scanResults.size == 1) {
               // we found it, so try to connect to it
               onScanResultClicked(it)
+              onSelectionConfirmed()
             } else {
               // we have more than one result, so show result set to the user to allow him to choose
               uiModel.scanResults.forEach { newScanResult ->
@@ -145,6 +146,7 @@ class AddTransmitterAT9Controller(args: Bundle) :
 
   fun onSelectionConfirmed() {
     selectedScanResult.get()?.let {
+      currentState.set(ViewState.SEARCHING)
       scanResultRelay.accept(it)
     }
   }

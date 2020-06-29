@@ -32,8 +32,10 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
   fun send(state: UiState) {
     val payload = when (state) {
       UiState.NO_CHANGE -> { null }
+      UiState.TRANSMITTER_DELETED -> { null }
       UiState.INITIAL -> { null }
       UiState.BLUETOOTH_NOT_ENABLED -> { null }
+      UiState.LOCATION_SERVICES_NOT_ENABLED -> { null }
       UiState.CONNECTING -> { null }
       UiState.SCANNING -> { null }
       UiState.DISCONNECTED -> { null }

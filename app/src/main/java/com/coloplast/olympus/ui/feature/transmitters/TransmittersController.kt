@@ -71,18 +71,20 @@ class TransmittersController(args: Bundle? = null) :
       Timber.d("$uiModel")
 
       when (uiModel) {
-        is TransmittersUiModel.ConnectedDevices -> {
+        is TransmittersUiModel.TransmitterList -> {
           hasTransmittersAdded.set(true)
 
           transmitterList.clear()
-          transmitterList.addAll(
-            uiModel.devices.map { TransmitterItem(it, editEnabled, this) }
-          )
+          transmitterList.addAll(uiModel.devices.map { TransmitterItem(it, editEnabled, this) })
+
+          if(items.isEmpty()) {
+            updateDiffList()
+          }
         }
         is TransmittersUiModel.StateUpdate -> {
           transmitterList
-            .first { uiModel.stateChange.bleDevice.macAddress == it.transmitter.macAddress }
-            .setStateChange(uiModel.stateChange)
+            .firstOrNull { uiModel.stateChange.bleDevice.macAddress == it.transmitter.macAddress }
+            ?.setStateChange(uiModel.stateChange)
 
           updateDiffList()
         }
@@ -98,7 +100,8 @@ class TransmittersController(args: Bundle? = null) :
           }
         }
         is TransmittersUiModel.TransmitterDeleted -> {
-          transmitterList.clear()
+          compositeDisposable.clear()
+          compositeDisposable.add(viewModel.bind(this))
           dialogController?.dismissDialog(false)
         }
         is TransmittersUiModel.Empty -> {

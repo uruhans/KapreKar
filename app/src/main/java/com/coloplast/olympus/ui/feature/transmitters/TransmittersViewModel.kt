@@ -4,7 +4,6 @@ import com.artemzin.rxui.kotlin.bind
 import com.coloplast.olympus.bluetooth.ServiceDispatcher
 import com.coloplast.olympus.bluetooth.StateDispatcher
 import com.coloplast.olympus.bluetooth.businesslayer.BluetoothManager
-import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.bluetooth.model.ConnectionState
 import com.coloplast.olympus.bluetooth.model.ServiceEvent
 import com.coloplast.olympus.businesslayer.interfaces.TransmitterComponent
@@ -22,8 +21,7 @@ import java.util.concurrent.TimeUnit
 class TransmittersViewModel(
   private val bluetoothManager: BluetoothManager,
   private val transmitterComponent: TransmitterComponent
-) :
-  BaseViewModel<TransmittersUiModel, TransmittersView>() {
+) : BaseViewModel<TransmittersUiModel, TransmittersView>() {
 
   override fun bind(uiView: TransmittersView): Disposable {
     val disposable = CompositeDisposable()
@@ -43,7 +41,6 @@ class TransmittersViewModel(
           emptyList()
         }
       }
-      .cache()
 
     // transforming the stored transmitters into UiModel to be displayed on the screen
     val transformedTransmitters = transmittersOrEmptyObservable
@@ -52,16 +49,13 @@ class TransmittersViewModel(
           TransmittersUiModel.Empty()
         }
         else {
-          TransmittersUiModel.ConnectedDevices(it)
+          TransmittersUiModel.TransmitterList(it)
         }
       }
 
     // a delayed subscription (others should only subscribe once transmitters have been returned to the controller)
     val delayedSubscriptionUntilCorrectReturnType =
-      transformedTransmitters.filter { it is TransmittersUiModel.ConnectedDevices }
-
-    // this is to prevent multiple subscriptions on the same transmitter
-    val connectedTransmitters = mutableListOf<String>()
+      transformedTransmitters.filter { it is TransmittersUiModel.TransmitterList }
 
     // get the connectionstate of the transmitters
     val bleConnectionStateObservable = transmittersOrEmptyObservable
@@ -69,17 +63,8 @@ class TransmittersViewModel(
       .filter { it.isNotEmpty() }
       .flatMapIterable { it }
       .map { it.macAddress }
-      .filter { macAddress -> connectedTransmitters.none { it == macAddress } }
       .flatMap { macAddress ->
         bluetoothManager.bleConnectionStateObservable(macAddress)
-          .doOnNext {
-            if (it == BleConnectionState.CONNECTED) {
-              connectedTransmitters.add(macAddress)
-            }
-            else {
-              connectedTransmitters.remove(macAddress)
-            }
-          }
           .map { TransmittersUiModel.TransmitterConnectionState(ConnectionState(macAddress, it)) }
       }
 
@@ -94,13 +79,18 @@ class TransmittersViewModel(
           .subscribeOn(Schedulers.io())
           .toSingle { true }
           .toObservable()
-          .map { TransmittersUiModel.TransmitterDeleted(it) }
+          .map {
+            ServiceDispatcher.dispatchEvent(ServiceEvent.DisconnectTransmitter(macAddress))
+            StateDispatcher.clear(macAddress)
+            bluetoothManager.disconnectTransmitter(macAddress)
+            TransmittersUiModel.TransmitterDeleted(it)
+          }
       }
 
     val retryConnectionObservable: Observable<TransmittersUiModel> = uiView.retryConnection()
       .switchMap {
         // initiate reconnection retry on the service
-        ServiceDispatcher.dispatchEvent(ServiceEvent.RETRY_CONNECTION)
+        ServiceDispatcher.dispatchEvent(ServiceEvent.RetryConnection())
 
         // after 5 seconds send back a completed response
         Observable.just(TransmittersUiModel.RetryConnectComplete() as TransmittersUiModel)
@@ -109,13 +99,18 @@ class TransmittersViewModel(
       }
 
     disposable.add(
-      Observable.merge(transformedTransmitters, bleConnectionStateObservable, latestStateObservable)
-        .bind(uiView.render())
+      Observable.merge(
+        transformedTransmitters,
+        bleConnectionStateObservable,
+        latestStateObservable
+      ).bind(uiView.render())
     )
 
     disposable.add(
-      Observable.merge(deleteTransmitterObservable, retryConnectionObservable)
-        .bind(uiView.render())
+      Observable.merge(
+        deleteTransmitterObservable,
+        retryConnectionObservable
+      ).bind(uiView.render())
     )
 
     return disposable

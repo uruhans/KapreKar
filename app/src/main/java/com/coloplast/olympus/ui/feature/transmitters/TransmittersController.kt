@@ -71,13 +71,15 @@ class TransmittersController(args: Bundle? = null) :
       Timber.d("$uiModel")
 
       when (uiModel) {
-        is TransmittersUiModel.ConnectedDevices -> {
+        is TransmittersUiModel.TransmitterList -> {
           hasTransmittersAdded.set(true)
 
           transmitterList.clear()
-          transmitterList.addAll(
-            uiModel.devices.map { TransmitterItem(it, editEnabled, this) }
-          )
+          transmitterList.addAll(uiModel.devices.map { TransmitterItem(it, editEnabled, this) })
+
+          if(items.isEmpty()) {
+            updateDiffList()
+          }
         }
         is TransmittersUiModel.StateUpdate -> {
           transmitterList

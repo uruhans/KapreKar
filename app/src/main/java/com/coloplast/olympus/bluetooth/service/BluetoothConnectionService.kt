@@ -18,6 +18,7 @@ import com.coloplast.olympus.bluetooth.model.BluetoothServiceModel
 import com.coloplast.olympus.bluetooth.model.BluetoothServiceResult
 import com.coloplast.olympus.notifications.OlympusNotificationManager
 import com.coloplast.olympus.ui.feature.TransmitterManager
+import com.coloplast.olympus.ui.feature.statemachine.models.OverlayState
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
@@ -102,6 +103,10 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
 
           // this will be used to notify the Ui to change state (so we dont get stuck in multiple tx state or other state based on disconnected tx)
           otherTxStateChange?.let { stateChange ->
+            if(stateChange.overlayState == OverlayState.BLE_CONNECTION_LOST) {
+              olympusNotificationManager.send(OverlayState.BLE_CONNECTION_LOST)
+            }
+
             StateDispatcher.dispatchStateForActiveTransmitter(stateChange)
           }
         }

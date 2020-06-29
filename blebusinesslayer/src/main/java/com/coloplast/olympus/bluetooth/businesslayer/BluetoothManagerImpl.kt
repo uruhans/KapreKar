@@ -4,6 +4,7 @@ import android.content.Context
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
 import com.coloplast.olympus.bluetooth.businesslayer.enums.PowerLevel
+import com.coloplast.olympus.bluetooth.businesslayer.exceptions.BondingFailedException
 import com.coloplast.olympus.bluetooth.businesslayer.exceptions.DisconnectException
 import com.coloplast.olympus.bluetooth.businesslayer.exceptions.GattCallbackTimeoutException
 import com.coloplast.olympus.bluetooth.businesslayer.exceptions.GattException
@@ -11,6 +12,7 @@ import com.coloplast.olympus.bluetooth.businesslayer.models.*
 import com.coloplast.olympus.bluetooth.businesslayer.services.BatteryPowerService
 import com.coloplast.olympus.bluetooth.businesslayer.services.DeviceInformation
 import com.coloplast.olympus.bluetooth.businesslayer.services.OlympusWirelessProtocol
+import com.dawn.bluetooth.BleBondingFailedException
 import com.dawn.bluetooth.BluetoothHandler
 import com.jakewharton.rxrelay2.PublishRelay
 import com.polidea.rxandroidble2.RxBleClient
@@ -62,6 +64,7 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
         it is BleDisconnectedException -> throw DisconnectException(it)
         it is BleGattCallbackTimeoutException -> throw GattCallbackTimeoutException(it)
         it is BleGattException -> throw GattException(it)
+        it is BleBondingFailedException -> throw BondingFailedException(it)
         else -> return@setErrorHandler //throw RuntimeException("Unexpected Throwable in RxJavaPlugins error handler", it)
       }
     }
@@ -183,7 +186,7 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
    */
   override fun connectBleDevice(macAddress: String): Observable<String> {
     return getBleDevice(macAddress)
-      .flatMap { rxBleDevice ->
+      .switchMap { rxBleDevice ->
         bluetoothHandler.connectRxBleDevice(rxBleDevice)
           .takeUntil(
             disconnectRelay
@@ -201,7 +204,10 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
             macAddress
           }
       }
-      .doOnError { Timber.e(it) }
+      .doOnError {
+        removeConnectionFromList(macAddress)
+        removeDeviceFromConnectedList(getBleDevice(macAddress).blockingFirst())
+      }
   }
 
   /**
@@ -232,7 +238,6 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
       BiFunction { statusVector: StatusVector, powerLevel: PowerLevel ->
         Peripheral(statusVector.patch, statusVector.transmitter, powerLevel)
       })
-      .distinctUntilChanged()
   }
 
   /**
@@ -261,7 +266,8 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
       // this filter will filter out any status vectors where *all* sensors are returning an invalid value
       // this occurs right after a reset, where the transmitter takes a little time to figure out it's actual state
       // so filter is added to remove any garbage callbacks
-      .filter { statusVector -> statusVector.copyOfRange(0, 6).none { sensor -> sensor.toInt() == -1 } }
+      .filter { statusVector -> statusVector.any { vector -> vector.toInt() != -1 } }
+      .doOnNext { Timber.d("statusVector: {${it[0]}, ${it[1]}, ${it[2]}, ${it[3]}, ${it[4]}, ${it[5]}, ${it[6]}, ${it[7]}, ${it[8]}, ${it[9]}, ${it[10]}, ${it[11]}}") }
       .compose(OlympusWirelessProtocol.statusTransformer)
   }
 

@@ -1,6 +1,5 @@
 package com.coloplast.olympus.ui.common.dialogs
 
-import android.os.Build
 import android.os.Bundle
 import com.bluelinelabs.conductor.Controller
 import com.coloplast.olympus.R
@@ -16,40 +15,24 @@ class TimePickerDialogController(args: Bundle?) :
     fun onTimeSelected(requestCode: Int, hour: Int, minute: Int)
   }
 
-  private val dismissAllowed: Boolean
-  private val requestCode: Int
-  private val use24Hour: Boolean
+  private val dismissAllowed: Boolean = args!!.getBoolean(BUNDLE_DISMISS_ALLOWED)
+  private val requestCode: Int = args!!.getInt(BUNDLE_REQUEST_CODE)
+  private val use24Hour: Boolean = args!!.getBoolean(BUNDLE_24_HOUR_CLOCK)
 
-  private var hour: Int = 0
-  private var minute: Int = 0
-
-  init {
-    args!! // will cause a crash (on purpose)
-
-    dismissAllowed = args.getBoolean(BUNDLE_DISMISS_ALLOWED)
-    requestCode = args.getInt(BUNDLE_REQUEST_CODE)
-
-    hour = args.getInt(BUNDLE_HOUR)
-    minute = args.getInt(BUNDLE_MINUTE)
-    use24Hour = args.getBoolean(BUNDLE_24_HOUR_CLOCK)
-  }
+  private var hour: Int = args!!.getInt(BUNDLE_HOUR, 0)
+  private var minute: Int = args!!.getInt(BUNDLE_MINUTE, 0)
 
   override fun attachVariables(viewBinding: ControllerDialogTimeofdayBinding) {
     viewBinding.controller = this
   }
 
-  @Suppress("DEPRECATION", "SpellCheckingInspection")
+  @Suppress("SpellCheckingInspection")
   override fun onViewBound(viewBinding: ControllerDialogTimeofdayBinding) {
     val timepicker = viewBinding.timepicker
 
-    if (Build.VERSION.SDK_INT >= 23) {
-      timepicker.hour = hour
-      timepicker.minute = minute
-    }
-    else {
-      timepicker.currentHour = hour
-      timepicker.currentMinute = minute
-    }
+    // Not checked but this may give problems if API < 23.
+    timepicker.hour = hour
+    timepicker.minute = minute
 
     timepicker.setIs24HourView(use24Hour)
 

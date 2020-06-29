@@ -52,6 +52,7 @@
 <string name="generic_save_changes">Save changes</string>
 <string name="generic_yes">Yes</string>
 <string name="guide_at10_body">Great! Your transmitter is now communicating with your phone.</string>
+<string name="guide_at10_pairing_error">Pairing failed - Please try again</string>
 <string name="guide_at10_title">Transmitter paired</string>
 <string name="guide_at1_action">Get started</string>
 <string name="guide_at1_body">A step-by-step guide to setting up a new transmitter.</string>
@@ -107,7 +108,9 @@
 <string name="guide_charging_title">[English translation is missing]</string>
 <string name="guide_cleaning">Cleaning guide</string>
 <string name="guide_cleaning_1_text">[English translation is missing]</string>
+<string name="guide_cleaning_2_image">guide_cleaning_2_image</string>
 <string name="guide_cleaning_2_text">[English translation is missing]</string>
+<string name="guide_cleaning_3_image">guide_cleaning_3_image</string>
 <string name="guide_cleaning_3_text">[English translation is missing]</string>
 <string name="guide_cleaning_4_text">[English translation is missing]</string>
 <string name="guide_cleaning_5_text">[English translation is missing]</string>
@@ -219,6 +222,8 @@
 <string name="onboarding_chapter_intro_bullet_item_4">Everything you currently use in your change routine</string>
 <string name="onboarding_chapter_intro_bullet_list_description">As well as the TestProduct starter kit, you will also need:</string>
 <string name="onboarding_chapter_intro_bullet_list_title">Before you get started…</string>
+<string name="onboarding_chapter_intro_charging_description">This is your charger and charger cable. The cable attaches to the charger and the cable can then be plugged in to USB power supply.</string>
+<string name="onboarding_chapter_intro_charging_title">Charger and charger cable</string>
 <string name="onboarding_chapter_intro_checklist_description">The guide includes videos to help you get started with your new product.</string>
 <string name="onboarding_chapter_intro_checklist_item_1">1. Introduction</string>
 <string name="onboarding_chapter_intro_checklist_item_2">2. Connecting</string>
@@ -231,12 +236,18 @@
 <string name="onboarding_chapter_intro_inner_outer_title">Inner and outer sensors</string>
 <string name="onboarding_chapter_intro_notifications_description">By allowing notifications, you enable TestProduct to notify you when leakage is detected. You can customise notification alerts later in the app\'s settings.</string>
 <string name="onboarding_chapter_intro_notifications_header">Know when to take action by allowing notifications</string>
+<string name="onboarding_chapter_intro_pairing_description">A full charge of the transmitter takes two hours, giving it 2-3 days battery life. You\'ll also use the charger shortly to pair your transmitter and phone.</string>
+<string name="onboarding_chapter_intro_pairing_title">Charging and pairing</string>
 <string name="onboarding_chapter_intro_sensor_layer_description">This is a TestProduct sensor layer. It is applied to your ostomy appliance to help you detect leakage. You\'ll learn how to apply this later.</string>
 <string name="onboarding_chapter_intro_sensor_layer_title">Sensor layer</string>
 <string name="onboarding_chapter_intro_sensor_technology_description">On the reverse side, you can see the advanced sensor technology. Each layer has 68 leakage sensors, one under each of the small dots.</string>
 <string name="onboarding_chapter_intro_sensor_technology_title">Advanced sensor technology</string>
 <string name="onboarding_chapter_intro_setup_guide">Setup guide</string>
 <string name="onboarding_chapter_intro_setup_guide_message">This guide will guide you step-by-step through the process of setting up TestProduct and applying in to your body.</string>
+<string name="onboarding_chapter_intro_transmitter_description">This is your transmitter. It communicates with your phone via Bluetooth, to keep you informed of any signs of leakage.</string>
+<string name="onboarding_chapter_intro_transmitter_lid_description">Your transmitter has a lid on the lighter grey front side. The lid opens and closes to allow attachment to a sensor layer (you\'ll attach later).</string>
+<string name="onboarding_chapter_intro_transmitter_lid_title">Opening the transmitter lid</string>
+<string name="onboarding_chapter_intro_transmitter_title">Your transmitter</string>
 <string name="overlay_battery_critical">Charge now to stay informed.</string>
 <string name="overlay_battery_low_title">Transmitter battery very low.</string>
 <string name="overlay_battery_second_transmitter_charged_title">Back-up transmitter fully charged.</string>
@@ -354,7 +365,6 @@
 <string name="status_searching">Searching</string>
 <string name="status_wet_mount">To stay informed, you might want to change your sensor layer.</string>
 <string name="status_wet_mount_title">Your skin is wet.</string>
-<string name="test_string">test_string</string>
 <string name="transmitters_add_transmitter">Add transmitter</string>
 <string name="transmitters_attached">Attached</string>
 <string name="transmitters_delete">Delete</string>

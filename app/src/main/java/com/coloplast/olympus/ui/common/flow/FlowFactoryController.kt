@@ -6,7 +6,7 @@ import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.ui.common.BaseFlowController
 
-abstract class FlowFactoryController<T : FlowFactoryModel>(args: Bundle) : BaseFlowController(args),
+abstract class FlowFactoryController<T : FlowFactoryModel>(args: Bundle? = null) : BaseFlowController(args),
     FlowFactory.Listener<T> {
   
   init {

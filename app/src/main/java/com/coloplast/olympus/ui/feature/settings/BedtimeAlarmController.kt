@@ -31,6 +31,17 @@ class BedtimeAlarmController: BaseController<ControllerBedtimeAlarmBinding>() {
     }
   }
 
+  fun onSaveChanges(){
+    val selectedSensor = when(allSensorsSelected.get()) {
+      true -> Sensors.ALL
+      false -> Sensors.OUTER
+    }
+    //TODO save selection
+    parentController?.handleBack()
+  }
+
+  fun onDiscard() = parentController?.handleBack()
+
   override fun getLayout(): Int = R.layout.controller_bedtime_alarm
 
   companion object{

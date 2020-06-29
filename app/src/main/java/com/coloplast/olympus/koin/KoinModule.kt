@@ -28,9 +28,12 @@ import org.koin.dsl.module
 
 val koinModule = module {
 
+  /* Preferences */
+  single { Preferences(androidContext()) }
+
   /* Notifications */
   single { androidContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }
-  single { NotificationCenter(androidContext(), get())}
+  single { NotificationCenter(androidContext(), get(), get())}
   single { OlympusNotificationManager(get()) }
   single { NotificationScheduler() }
 
@@ -43,9 +46,6 @@ val koinModule = module {
 
   /* Components */
   single<TransmitterComponent> { TransmitterComponentImpl() }
-
-  /* Preferences */
-  single { Preferences(androidContext()) }
 
   single { Me() }
 

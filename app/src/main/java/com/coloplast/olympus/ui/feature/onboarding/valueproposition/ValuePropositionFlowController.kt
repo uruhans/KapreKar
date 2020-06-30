@@ -14,9 +14,8 @@ class ValuePropositionFlowController: FlowFactoryController<ValuePropositionMode
 
   private val model: FlowFactory<ValuePropositionModel> by inject()
 
-  override fun getFlowFactory(): FlowFactory<ValuePropositionModel> {
-    return model
-  }
+  override fun getFlowFactory(): FlowFactory<ValuePropositionModel> =  model
+
 
   companion object{
     private const val CONTROLLER_TAG = "value_proposition_flow_controller"

@@ -1,6 +1,8 @@
 package com.coloplast.olympus.ui.feature.onboarding.valueproposition
 
 import com.bluelinelabs.conductor.RouterTransaction
+import com.coloplast.olympus.R
+import com.coloplast.olympus.ui.common.SimpleInfoPageController
 import com.coloplast.olympus.ui.common.flow.FlowFactory
 
 
@@ -18,9 +20,32 @@ class ValuePropositionFactoryImpl: FlowFactory<ValuePropositionModel>() {
 
   override fun getRouterTransaction(currentIndex: Int): RouterTransaction? {
     return when(ValuePropositionFlow.fromIndex(currentIndex)) {
-      ValuePropositionFlow.ValuePropositionVP1 -> { null }
-      ValuePropositionFlow.ValuePropositionVP2 -> { null }
-      ValuePropositionFlow.ValuePropositionVP3 -> { null }
+      ValuePropositionFlow.ValuePropositionVP1 -> { SimpleInfoPageController.routerTransaction(
+        iconId = R.drawable.ic_sidemenu_status,
+        titleId = R.string.onboarding_value_proposition_screen_1_title,
+        desciptionId = R.string.onboarding_value_proposition_screen_1_description,
+        position = 1,
+        totalCount = 3
+      )
+      }
+      ValuePropositionFlow.ValuePropositionVP2 -> {
+        SimpleInfoPageController.routerTransaction(
+          iconId = R.drawable.ic_bulb,
+          titleId = R.string.onboarding_value_proposition_screen_2_title,
+          desciptionId = R.string.onboarding_value_proposition_screen_2_description,
+          position = 2,
+          totalCount = 3
+        )
+      }
+      ValuePropositionFlow.ValuePropositionVP3 -> {
+        SimpleInfoPageController.routerTransaction(
+          iconId = R.drawable.ic_notifications,
+          titleId = R.string.onboarding_value_proposition_screen_3_title,
+          desciptionId = R.string.onboarding_value_proposition_screen_3_description,
+          position = 3,
+          totalCount = 3
+        )
+      }
       ValuePropositionFlow.Completed -> null
     }
   }

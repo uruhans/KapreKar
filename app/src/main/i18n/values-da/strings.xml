@@ -240,6 +240,12 @@
 <string name="onboarding_chapter_intro_sensor_technology_title">Advanced sensor technology</string>
 <string name="onboarding_chapter_intro_setup_guide">[Missing translation]</string>
 <string name="onboarding_chapter_intro_setup_guide_message">[Missing translation]</string>
+<string name="onboarding_value_proposition_screen_1_description">[Missing translation]</string>
+<string name="onboarding_value_proposition_screen_1_title">[Missing translation]</string>
+<string name="onboarding_value_proposition_screen_2_description">[Missing translation]</string>
+<string name="onboarding_value_proposition_screen_2_title">[Missing translation]</string>
+<string name="onboarding_value_proposition_screen_3_description">[Missing translation]</string>
+<string name="onboarding_value_proposition_screen_3_title">[Missing translation]</string>
 <string name="overlay_battery_critical">Oplad nu for at holde dig opdateret.</string>
 <string name="overlay_battery_low_title">Transmitterens batteri er lavt.</string>
 <string name="overlay_battery_second_transmitter_charged_title">Back-up transmitteren er fuldt opladt.</string>

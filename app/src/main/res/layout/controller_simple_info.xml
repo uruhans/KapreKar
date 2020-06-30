@@ -30,7 +30,10 @@
       <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_detailed_plate_ok" />
+        android:layout_marginStart="@dimen/spacing_standard"
+        android:layout_marginTop="@dimen/spacing_standard"
+        android:layout_marginEnd="@dimen/spacing_standard"
+        app:resource="@{controller.iconId}" />
 
       <TextView
         style="@style/TextStyle.Coloplast.Bold.DarkGrey.24"

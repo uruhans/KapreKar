@@ -240,6 +240,12 @@
 <string name="onboarding_chapter_intro_sensor_technology_title">Advanced sensor technology</string>
 <string name="onboarding_chapter_intro_setup_guide">Setup guide</string>
 <string name="onboarding_chapter_intro_setup_guide_message">This guide will guide you step-by-step through the process of setting up TestProduct and applying in to your body.</string>
+<string name="onboarding_value_proposition_screen_1_description">TestProduct is a digital appliance monitor that detects and notifies you about leakage - giving you the peace of mind to get on with being you</string>
+<string name="onboarding_value_proposition_screen_1_title">Welcome to the TestProduct app</string>
+<string name="onboarding_value_proposition_screen_2_description">To help us provide the best posible product experience, we will gather information such as activity in the app, profile information, leak status, error messages received, product usage and notification settings.</string>
+<string name="onboarding_value_proposition_screen_2_title">Advanced sensor technology</string>
+<string name="onboarding_value_proposition_screen_3_description">TestProduct is connected to your smartphone view Bluetooth, and will notify discreetly when leakage is detected, it also allows you to discreetly check the status of your baseplate directly in the app.</string>
+<string name="onboarding_value_proposition_screen_3_title">Notifications directly to your smartphone</string>
 <string name="overlay_battery_critical">Charge now to stay informed.</string>
 <string name="overlay_battery_low_title">Transmitter battery very low.</string>
 <string name="overlay_battery_second_transmitter_charged_title">Back-up transmitter fully charged.</string>

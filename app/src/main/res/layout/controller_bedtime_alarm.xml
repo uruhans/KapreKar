@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
-  xmlns:tools="http://schemas.android.com/tools">
+  xmlns:app="http://schemas.android.com/apk/res-auto">
 
   <data>
     <import type="com.coloplast.olympus.ui.feature.settings.models.Sensors" />
@@ -14,37 +13,138 @@
   <ScrollView
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="@dimen/toolbar_height"
-    android:layout_marginBottom="@dimen/spacing_larger">
+    android:layout_marginTop="@dimen/toolbar_height">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:orientation="vertical">
+      android:layout_height="0dp"
+      android:layout_marginStart="@dimen/spacing_larger"
+      android:layout_marginEnd="@dimen/spacing_larger">
 
       <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/title"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/spacing_larger"
-        android:text="Choose bedtime sensors"
-        style="@style/TextStyle.Coloplast.Bold.DarkGrey.24"/>
+        android:text="@string/settings_alarm_title"
+        style="@style/TextStyle.Coloplast.Bold.DarkGrey.24"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+      <TextView
+        android:id="@+id/description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_small"
+        android:text="@string/settings_alarm_description"
+        style="@style/TextStyle.Roboto.Regular.ClearGrey.16"
+        app:layout_constraintTop_toBottomOf="@id/title"/>
+
+      <TextView
+        android:id="@+id/start_time_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_larger"
+        android:text="@string/settings_alarm_start"
+        style="@style/TextStyle.Roboto.Regular.ClearGrey.16"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/end_time_title"
+        app:layout_constraintTop_toBottomOf="@id/description" />
+
+      <TextView
+        android:id="@+id/end_time_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_larger"
+        android:layout_marginStart="@dimen/spacing_half"
+        android:text="@string/settings_alarm_end"
+        style="@style/TextStyle.Roboto.Regular.ClearGrey.16"
+        app:layout_constraintStart_toEndOf="@id/start_time_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/description" />
+
+      <TextView
+        android:id="@+id/start_time"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="22:00"
+        style="@style/TimePlaceHolder"
+        android:background="@drawable/edittext_code_background"
+        app:layout_constraintStart_toStartOf="@id/start_time_title"
+        app:layout_constraintEnd_toEndOf="@id/start_time_title"
+        app:layout_constraintTop_toBottomOf="@id/start_time_title"/>
+
+      <TextView
+        android:id="@+id/end_time"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="8:00"
+        style="@style/TimePlaceHolder"
+        android:background="@drawable/edittext_code_background"
+        app:layout_constraintStart_toStartOf="@id/end_time_title"
+        app:layout_constraintEnd_toEndOf="@id/end_time_title"
+        app:layout_constraintTop_toBottomOf="@id/end_time_title"/>
+
+      <include layout="@layout/item_recyclerview_section_divider"
+        android:id="@+id/divider"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_larger"
+        android:layout_marginBottom="@dimen/spacing_larger"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/start_time" />
+
+      <TextView
+        android:id="@+id/sensors_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/settings_alarm_choose_sensors"
+        style="@style/TextStyle.Coloplast.Bold.DarkGrey.20"
+        app:layout_constraintTop_toBottomOf="@id/divider"/>
 
       <com.coloplast.olympus.ui.common.widgets.SensorSelectorView
+        android:id="@+id/sensors_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/spacing_larger"
-        android:layout_marginEnd="@dimen/spacing_larger"
-        app:allSensorsSelected="@={controller.allSensorsSelected}" />
+        app:allSensorsSelected="@={controller.allSensorsSelected}"
+        app:layout_constraintTop_toBottomOf="@id/sensors_title"/>
 
       <TextView
+        android:id="@+id/sensor_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/spacing_larger"
-        android:layout_marginEnd="@dimen/spacing_larger"
+        android:layout_marginBottom="@dimen/spacing_larger"
         android:text="@{controller.allSensorsSelected ? @string/settings_sensors_all_description : @string/settings_sensors_outer_only_description}"
-        style="@style/TextStyle.Roboto.Regular.ClearGrey.16" />
+        style="@style/TextStyle.Roboto.Regular.ClearGrey.16"
+        app:layout_constraintTop_toBottomOf="@id/sensors_view"
+        app:layout_constraintBottom_toTopOf="@id/button_save"/>
 
-    </LinearLayout>
+      <Button
+        android:id="@+id/button_save"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/cardview_button_height_default"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="@dimen/spacing_small"
+        android:text="@string/generic_save_changes"
+        style="@style/Button"
+        android:onClick="@{() -> controller.onSaveChanges()}"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/button_discard"/>
+
+      <Button
+        android:id="@+id/button_discard"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/cardview_button_height_default"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
+        android:text="@string/generic_discard"
+        style="@style/Button.Secondary"
+        android:onClick="@{() -> controller.onDiscard()}"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
   </ScrollView>
 
 </layout>

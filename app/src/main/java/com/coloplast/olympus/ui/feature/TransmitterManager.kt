@@ -139,16 +139,21 @@ class TransmitterManager(private val bluetoothManager: BluetoothManager) {
   }
 
   /**
-   * get stitch bytes from other transmitter (used when changing Tx onto the same patch)
+   * get stitch bytes from transmitter (used when changing Tx onto the same patch)
    *  - the other Tx being the one that is *not* active
+   *  - if we do not have an 'other' transmitter - we return the stitch array from the same transmitter
    *  @return a Stitch object containing the actual stitching or a "Reset" package instead (first time the user is asked both answers do a reset)
    */
-  fun getStitchBytesFromOtherTransmitter() : Stitch {
+  fun getStitchBytes() : Stitch {
+    // see if we have the other transmitter
     val otherTxState = latestStateFromOtherTransmitter(activeTransmitter)
+
+    // if we dont have the other transmitter take the latest from the active
+    val state = otherTxState ?: transmitterStateHistory.entries.firstOrNull { it.key == activeTransmitter }?.value?.peek()
 
     return Stitch(
       activeTransmitter,
-      otherTxState?.bleDevice?.peripheral?.getStitchArray() ?: OlympusWirelessProtocol.Characteristics.RESET_STATUS_DATA)
+      state?.bleDevice?.peripheral?.getStitchArray() ?: OlympusWirelessProtocol.Characteristics.RESET_STATUS_DATA)
   }
 
   private fun setActiveTransmitter(stateChange: StateChange) {

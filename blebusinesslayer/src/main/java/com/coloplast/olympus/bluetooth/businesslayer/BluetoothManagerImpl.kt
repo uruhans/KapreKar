@@ -4,7 +4,6 @@ import android.content.Context
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
 import com.coloplast.olympus.bluetooth.businesslayer.enums.PowerLevel
-import com.coloplast.olympus.bluetooth.businesslayer.exceptions.BondingFailedException
 import com.coloplast.olympus.bluetooth.businesslayer.exceptions.DisconnectException
 import com.coloplast.olympus.bluetooth.businesslayer.exceptions.GattCallbackTimeoutException
 import com.coloplast.olympus.bluetooth.businesslayer.exceptions.GattException
@@ -12,7 +11,6 @@ import com.coloplast.olympus.bluetooth.businesslayer.models.*
 import com.coloplast.olympus.bluetooth.businesslayer.services.BatteryPowerService
 import com.coloplast.olympus.bluetooth.businesslayer.services.DeviceInformation
 import com.coloplast.olympus.bluetooth.businesslayer.services.OlympusWirelessProtocol
-import com.dawn.bluetooth.BleBondingFailedException
 import com.dawn.bluetooth.BluetoothHandler
 import com.jakewharton.rxrelay2.PublishRelay
 import com.polidea.rxandroidble2.RxBleClient
@@ -61,10 +59,9 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
         // ignore if undeliverable (others should have received it first) - Rx issue ->
         // https://github.com/Polidea/RxAndroidBle/wiki/FAQ:-UndeliverableException
         it is UndeliverableException && it.cause is BleException -> return@setErrorHandler
-        it is BleDisconnectedException -> throw DisconnectException(it)
-        it is BleGattCallbackTimeoutException -> throw GattCallbackTimeoutException(it)
-        it is BleGattException -> throw GattException(it)
-        it is BleBondingFailedException -> throw BondingFailedException(it)
+        it is UndeliverableException && it.cause is BleDisconnectedException -> throw DisconnectException(it)
+        it is UndeliverableException && it.cause is BleGattCallbackTimeoutException -> throw GattCallbackTimeoutException(it)
+        it is UndeliverableException && it.cause is BleGattException -> throw GattException(it)
         else -> return@setErrorHandler //throw RuntimeException("Unexpected Throwable in RxJavaPlugins error handler", it)
       }
     }

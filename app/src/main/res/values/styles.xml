@@ -10,7 +10,6 @@
     <!-- this controls (amongst other things) the selectableItemBackground color -->
     <item name="colorControlHighlight">@color/divider</item>
     <item name="android:disabledAlpha">0.4</item>
-    <item name="android:windowBackground">@color/colorAccent</item>
   </style>
 
   <style name="AppTheme" parent="BaseAppTheme">

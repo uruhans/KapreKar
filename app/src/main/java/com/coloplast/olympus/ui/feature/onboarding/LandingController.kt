@@ -1,4 +1,4 @@
-package com.coloplast.olympus.ui.feature
+package com.coloplast.olympus.ui.feature.onboarding
 
 import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.R

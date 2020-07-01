@@ -18,6 +18,8 @@ import com.coloplast.olympus.ui.common.flow.FlowFactory
 import com.coloplast.olympus.ui.feature.TransmitterManager
 import com.coloplast.olympus.ui.feature.home.BreachesOccurred
 import com.coloplast.olympus.ui.feature.home.HomeViewModel
+import com.coloplast.olympus.ui.feature.onboarding.createprofile.CreateUserFactoryImpl
+import com.coloplast.olympus.ui.feature.onboarding.createprofile.CreateUserModel
 import com.coloplast.olympus.ui.feature.transmitters.TransmittersViewModel
 import com.coloplast.olympus.ui.feature.transmitters.add.AddTransmitterFactoryImpl
 import com.coloplast.olympus.ui.feature.transmitters.add.AddTransmitterViewModel
@@ -59,4 +61,5 @@ val koinModule = module {
 
   /* Flows */
   single<FlowFactory<AddTransmitterModel>> { AddTransmitterFactoryImpl() }
+  single<FlowFactory<CreateUserModel>> { CreateUserFactoryImpl() }
 }

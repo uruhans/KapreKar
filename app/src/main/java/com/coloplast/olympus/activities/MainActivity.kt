@@ -10,15 +10,14 @@ import com.coloplast.olympus.Me
 import com.coloplast.olympus.R
 import com.coloplast.olympus.bluetooth.service.BluetoothConnectionService
 import com.coloplast.olympus.shared.models.CurrentUser
-import com.coloplast.olympus.ui.common.DrawerState
 import com.coloplast.olympus.ui.common.DrawerStateDispatcher
 import com.coloplast.olympus.ui.common.models.Navigation
 import com.coloplast.olympus.ui.feature.home.HomeController
+import com.coloplast.olympus.ui.feature.onboarding.LandingController
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
-import io.reactivex.functions.BiFunction
 import org.koin.android.ext.android.inject
 import java.util.concurrent.TimeUnit
 
@@ -44,7 +43,7 @@ class MainActivity : AppCompatActivity() {
     initializeRouters(savedInstanceState)
     
     if (!navigation.getContentRouter()!!.hasRootController()) {
-      navigation.getContentRouter()!!.setRoot(HomeController.routerTransaction())
+      navigation.getContentRouter()!!.setRoot(LandingController.routerTransaction())
     }
     
     // code to verify that the user is logged in, and if not display the LandingPage

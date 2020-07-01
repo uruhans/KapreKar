@@ -177,6 +177,18 @@
     <item name="android:fontFamily">@font/coloplast_bold_italic</item>
   </style>
 
+  <style name="TextStyle.Coloplast.Bold.Italic.White" parent="TextStyle.Coloplast.Bold.Italic">
+    <item name="android:textColor">@color/text_white</item>
+  </style>
+
+  <style name="TextStyle.Coloplast.Bold.Italic.White.34" parent="TextStyle.Coloplast.Bold.Italic.White">
+    <item name="android:textSize">34sp</item>
+  </style>
+
+  <style name="TextStyle.Coloplast.Bold.Italic.White.24" parent="TextStyle.Coloplast.Bold.Italic.White">
+    <item name="android:textSize">24sp</item>
+  </style>
+
   <style name="TextStyle.Roboto.Medium.Red" parent="TextStyle.Roboto.Medium">
     <item name="android:textColor">@color/text_red</item>
   </style>

@@ -32,14 +32,19 @@ class NotificationCenter(
   private val preferences: Preferences
 ) {
 
-  private val statusNotificationsChannelId: String = context.getString(R.string.lock_notification_channel_id)
-  private val statusNotificationsChannelName: String = context.getString(R.string.lock_notification_channel_name)
+  private val statusNotificationsChannelId: String =
+    context.getString(R.string.lock_notification_channel_id)
+  private val statusNotificationsChannelName: String =
+    context.getString(R.string.lock_notification_channel_name)
   private val statusNotificationsChannelDescription: String =
     context.getString(R.string.lock_notification_channel_description)
 
-  private val ringingAlertChannelId = context.getString(R.string.lock_ringing_alarm_notification_channel_id)
-  private val ringingAlertChannelName = context.getString(R.string.lock_ringing_alarm_notification_channel_name)
-  private val ringingAlertChannelDescription = context.getString(R.string.lock_ringing_alarm_notification_channel_description)
+  private val ringingAlertChannelId =
+    context.getString(R.string.lock_ringing_alarm_notification_channel_id)
+  private val ringingAlertChannelName =
+    context.getString(R.string.lock_ringing_alarm_notification_channel_name)
+  private val ringingAlertChannelDescription =
+    context.getString(R.string.lock_ringing_alarm_notification_channel_description)
 
   init {
     // make sure we have a notification channel for the notification
@@ -102,18 +107,28 @@ class NotificationCenter(
     )
 
     when (payload.id) {
+      UiState.DISCONNECTED.notificationId(), //TODO: Find a better way to detect Bluetooth connection lost.
+      UiState.NO_BATTERY_R.notificationId(),
+      UiState.CUTGUARD_BROKEN_I.notificationId(),
+      UiState.WATER_INGRESS_DETECTION_J.notificationId(),
+      UiState.CUTGUARD_DIRT_IN_TRANSMITTER_K.notificationId(),
+      UiState.TOTAL_BLIND_E.notificationId(),
+      UiState.PAY_ATTENTION_F.notificationId(),
       UiState.OUTER_BREACH_C.notificationId() -> {
-        if(isItNightTime() || preferences.areRingingAlertsEnabled){
+        if (isItNightTime() || preferences.areRingingAlertsEnabled) {
           triggerRingingAlarmNotification(payload, snoozePendingIntent)
-        } else {
+        }
+        else {
           triggerRegularNotification(payload, snoozePendingIntent)
         }
       }
       UiState.INNER_BREACH_B.notificationId() -> {
-        if((isItNightTime() && preferences.bedtimeAlertSensor == Sensors.ALL)
-          || (preferences.areRingingAlertsEnabled && preferences.ringingAlertSensor == Sensors.ALL)){
+        if ((isItNightTime() && preferences.bedtimeAlertSensor == Sensors.ALL)
+          || (preferences.areRingingAlertsEnabled && preferences.ringingAlertSensor == Sensors.ALL)
+        ) {
           triggerRingingAlarmNotification(payload, snoozePendingIntent)
-        } else {
+        }
+        else {
           // only outer sensors enabled. Send regular notification.
           triggerRegularNotification(payload, snoozePendingIntent)
         }
@@ -216,17 +231,21 @@ class NotificationCenter(
 
   private fun createNotificationChannels() {
     // only create the notification channel if we are above API 25 and the channel doesn't already exist
-    if (Build.VERSION.SDK_INT >= 26){
+    if (Build.VERSION.SDK_INT >= 26) {
       // Status notifications
-      if(notificationManager.getNotificationChannel(statusNotificationsChannelId) == null){
-        NotificationChannel(statusNotificationsChannelId, statusNotificationsChannelName, getImportance()).apply {
+      if (notificationManager.getNotificationChannel(statusNotificationsChannelId) == null) {
+        NotificationChannel(
+          statusNotificationsChannelId,
+          statusNotificationsChannelName,
+          getImportance()
+        ).apply {
           description = statusNotificationsChannelDescription
           notificationManager.createNotificationChannel(this)
         }
       }
 
       // Ringing alert notification channel.
-      if(notificationManager.getNotificationChannel(ringingAlertChannelId) == null){
+      if (notificationManager.getNotificationChannel(ringingAlertChannelId) == null) {
         val ringingAlertNotificationChannel = NotificationChannel(
           ringingAlertChannelId, ringingAlertChannelName, NotificationManager.IMPORTANCE_HIGH
         ).apply {
@@ -246,8 +265,10 @@ class NotificationCenter(
 
   companion object {
     // intent filters for the broadcast receiver, so we can reschedule a notification and later show it again
-    const val INTENT_FILTER_ACTION_SNOOZE = "${BuildConfig.APPLICATION_ID}.NOTIFICATION_ACTION_SNOOZE"
-    const val INTENT_FILTER_ACTION_DISMISS = "${BuildConfig.APPLICATION_ID}.NOTIFICATION_ACTION_DISMISS"
+    const val INTENT_FILTER_ACTION_SNOOZE =
+      "${BuildConfig.APPLICATION_ID}.NOTIFICATION_ACTION_SNOOZE"
+    const val INTENT_FILTER_ACTION_DISMISS =
+      "${BuildConfig.APPLICATION_ID}.NOTIFICATION_ACTION_DISMISS"
     const val INTENT_FILTER_SHOW_NOTIFICATION = "${BuildConfig.APPLICATION_ID}.NOTIFICATION_SHOW"
 
     // the notification id that we wish to show

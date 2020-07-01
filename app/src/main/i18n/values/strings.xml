@@ -248,6 +248,15 @@
 <string name="onboarding_chapter_intro_transmitter_lid_description">Your transmitter has a lid on the lighter grey front side. The lid opens and closes to allow attachment to a sensor layer (you\'ll attach later).</string>
 <string name="onboarding_chapter_intro_transmitter_lid_title">Opening the transmitter lid</string>
 <string name="onboarding_chapter_intro_transmitter_title">Your transmitter</string>
+<string name="onboarding_landing_create_profile_button">Create profile</string>
+<string name="onboarding_landing_log_in_button">Log in</string>
+<string name="onboarding_landing_title">Create profile or log in</string>
+<string name="onboarding_value_proposition_screen_1_description">TestProduct is a digital appliance monitor that detects and notifies you about leakage - giving you the peace of mind to get on with being you</string>
+<string name="onboarding_value_proposition_screen_1_title">Welcome to the TestProduct app</string>
+<string name="onboarding_value_proposition_screen_2_description">To help us provide the best posible product experience, we will gather information such as activity in the app, profile information, leak status, error messages received, product usage and notification settings.</string>
+<string name="onboarding_value_proposition_screen_2_title">Advanced sensor technology</string>
+<string name="onboarding_value_proposition_screen_3_description">TestProduct is connected to your smartphone view Bluetooth, and will notify discreetly when leakage is detected, it also allows you to discreetly check the status of your baseplate directly in the app.</string>
+<string name="onboarding_value_proposition_screen_3_title">Notifications directly to your smartphone</string>
 <string name="overlay_battery_critical">Charge now to stay informed.</string>
 <string name="overlay_battery_low_title">Transmitter battery very low.</string>
 <string name="overlay_battery_second_transmitter_charged_title">Back-up transmitter fully charged.</string>
@@ -278,7 +287,6 @@
 <string name="settings_alarm_title">Schedule bedtime alarm</string>
 <string name="settings_allow_notifications_body">[Missing translation]</string>
 <string name="settings_allow_notifications_title">Allow notifications</string>
-<string name="settings_android_app_settings_link">Go to app settings</string>
 <string name="settings_bedtime_alerts_body">You’ll receive vibrations with notiications if it is turned on in your iPhone settings.</string>
 <string name="settings_bedtime_alerts_header">Bedtime alarm</string>
 <string name="settings_bedtime_alerts_schedule">%1$s, daily.</string>
@@ -293,6 +301,7 @@
 <string name="settings_inner_ring_alarm_title">Inner ring alarm</string>
 <string name="settings_night_mode_body">Allow Olympus to overwrite the Do not Distrub settings on your device, and alert you if a leak is detected on the outer ring of your sensorplate.</string>
 <string name="settings_night_mode_title">Night mode</string>
+<string name="settings_notifications_link">Go to notification settings</string>
 <string name="settings_notifications_section_title">Notifications</string>
 <string name="settings_notifications_show_preview_body">Preview displays the text of the notification on your phone. Turn off for maximum discretion.</string>
 <string name="settings_notifications_show_preview_header">Show notification preview</string>
@@ -319,6 +328,7 @@
 <string name="settings_sounds_ringing_alerts_link">Choose sensors</string>
 <string name="settings_sounds_ringing_alerts_title">Ringing alerts</string>
 <string name="settings_sounds_section_title">Sounds</string>
+<string name="settings_sounds_settings_link">Go to alert sound settings</string>
 <string name="settings_title">Settings</string>
 <string name="settings_vibration_body">You\'ll receive vibrations with notifications if it is turned on in your iPhone settings</string>
 <string name="settings_vibration_header">Vibration</string>

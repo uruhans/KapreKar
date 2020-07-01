@@ -240,6 +240,15 @@
 <string name="onboarding_chapter_intro_sensor_technology_title">Advanced sensor technology</string>
 <string name="onboarding_chapter_intro_setup_guide">[Missing translation]</string>
 <string name="onboarding_chapter_intro_setup_guide_message">[Missing translation]</string>
+<string name="onboarding_landing_create_profile_button">Create profile</string>
+<string name="onboarding_landing_log_in_button">Log in</string>
+<string name="onboarding_landing_title">Create profile or log in</string>
+<string name="onboarding_value_proposition_screen_1_description">[Missing translation]</string>
+<string name="onboarding_value_proposition_screen_1_title">[Missing translation]</string>
+<string name="onboarding_value_proposition_screen_2_description">[Missing translation]</string>
+<string name="onboarding_value_proposition_screen_2_title">[Missing translation]</string>
+<string name="onboarding_value_proposition_screen_3_description">[Missing translation]</string>
+<string name="onboarding_value_proposition_screen_3_title">[Missing translation]</string>
 <string name="overlay_battery_critical">overlay_battery_critical</string>
 <string name="overlay_battery_low_title">overlay_battery_low_title</string>
 <string name="overlay_battery_second_transmitter_charged_title">overlay_battery_second_transmitter_charged_title</string>
@@ -270,7 +279,6 @@
 <string name="settings_alarm_title">[Missing translation]</string>
 <string name="settings_allow_notifications_body">[Missing translation]</string>
 <string name="settings_allow_notifications_title">[Missing translation]</string>
-<string name="settings_android_app_settings_link">[Missing translation]</string>
 <string name="settings_bedtime_alerts_body">[Missing translation]</string>
 <string name="settings_bedtime_alerts_header">[Missing translation]</string>
 <string name="settings_bedtime_alerts_schedule">%1$s, daily.</string>
@@ -285,6 +293,7 @@
 <string name="settings_inner_ring_alarm_title">[Missing translation]</string>
 <string name="settings_night_mode_body">[Missing translation]</string>
 <string name="settings_night_mode_title">[Missing translation]</string>
+<string name="settings_notifications_link">[Missing translation]</string>
 <string name="settings_notifications_section_title">[Missing translation]</string>
 <string name="settings_notifications_show_preview_body">[Missing translation]</string>
 <string name="settings_notifications_show_preview_header">[Missing translation]</string>
@@ -311,6 +320,7 @@
 <string name="settings_sounds_ringing_alerts_link">[Missing translation]</string>
 <string name="settings_sounds_ringing_alerts_title">[Missing translation]</string>
 <string name="settings_sounds_section_title">[Missing translation]</string>
+<string name="settings_sounds_settings_link">[Missing translation]</string>
 <string name="settings_title">[Missing translation]</string>
 <string name="settings_vibration_body">[Missing translation]</string>
 <string name="settings_vibration_header">[Missing translation]</string>

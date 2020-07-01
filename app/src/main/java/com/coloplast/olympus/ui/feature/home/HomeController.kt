@@ -433,7 +433,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   override fun onNegativeButtonClicked(requestCode: Int) {
     when (requestCode) {
       REQUEST_CODE_TRANSMITTERS_CHANGED -> {
-        transmitterManager.getStitchBytesFromOtherTransmitter().let {
+        transmitterManager.getStitchBytes().let {
           stitchRelay.accept(it)
         }
         imageDialogController?.dismissDialog(false)

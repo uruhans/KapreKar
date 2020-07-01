@@ -10,4 +10,5 @@ sealed class SearchTransmitterUiModel : UiModel {
 
   data class ConnectionSuccessful(val macAddress: String) : SearchTransmitterUiModel()
   data class ConnectionFailure(val macAddress: String) : SearchTransmitterUiModel()
+  data class BondingFailed(val macAddress: String) : SearchTransmitterUiModel()
 }

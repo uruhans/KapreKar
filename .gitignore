@@ -12,3 +12,4 @@
 /captures
 .externalNativeBuild
 .cxx
+/i18n/sheet.*

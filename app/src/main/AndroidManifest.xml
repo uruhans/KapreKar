@@ -28,7 +28,7 @@
 
     <!-- a receiver for local notifications when a user snooze their notification -->
     <receiver
-      android:name=".notifications.SnoozeReceiver"
+      android:name=".notifications.NotificationBroadcastReceiver"
       android:exported="false">
       <intent-filter>
         <action android:name="${applicationId}.NOTIFICATION_ACTION_SNOOZE" />

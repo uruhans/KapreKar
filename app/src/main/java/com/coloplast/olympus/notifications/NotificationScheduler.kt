@@ -44,7 +44,7 @@ class NotificationScheduler {
   private fun createPendingAlarmIntent(context: Context, notificationId: Int): PendingIntent {
     val intent = Intent().apply {
       action = NotificationCenter.INTENT_FILTER_SHOW_NOTIFICATION
-      setClass(context, SnoozeReceiver::class.java)
+      setClass(context, NotificationBroadcastReceiver::class.java)
       putExtra(NotificationCenter.SCHEDULED_NOTIFICATION_ID, notificationId)
     }
     

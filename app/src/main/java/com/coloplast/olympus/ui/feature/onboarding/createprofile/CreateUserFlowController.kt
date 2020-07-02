@@ -14,9 +14,7 @@ class CreateUserFlowController: FlowFactoryController<CreateUserModel>() {
 
   private val createUserFactory: FlowFactory<CreateUserModel> by inject()
 
-  override fun getFlowFactory(): FlowFactory<CreateUserModel> {
-    TODO("Not yet implemented")
-  }
+  override fun getFlowFactory(): FlowFactory<CreateUserModel> = createUserFactory
 
   companion object{
     private const val CONTROLLER_TAG = "create_user_flow_controller"

@@ -59,7 +59,9 @@ val koinModule = module {
   single { TransmittersViewModel(get(), get()) }
   single { AddTransmitterAT9ViewModel(get(), get()) }
 
-  /* Flows */
-  single<FlowFactory<AddTransmitterModel>> { AddTransmitterFactoryImpl() }
-  single<FlowFactory<CreateUserModel>> { CreateUserFactoryImpl() }
+  /* Flows
+  * https://stackoverflow.com/questions/56289929/how-to-use-koin-in-multiple-module/56291710
+  */
+  single<FlowFactory<AddTransmitterModel>>(override = true) { AddTransmitterFactoryImpl() }
+  single<FlowFactory<CreateUserModel>>(override = true) { CreateUserFactoryImpl() }
 }

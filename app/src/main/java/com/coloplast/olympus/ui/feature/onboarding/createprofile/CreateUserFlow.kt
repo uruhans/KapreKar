@@ -1,0 +1,13 @@
+package com.coloplast.olympus.ui.feature.onboarding.createprofile
+
+
+enum class CreateUserFlow {
+  CreateUserSU1,
+  Completed;
+
+  companion object {
+    fun fromIndex(index: Int) : CreateUserFlow {
+      return values().associateBy { flow: CreateUserFlow -> flow.ordinal}[index] ?: Completed
+    }
+  }
+}

@@ -2,7 +2,9 @@ package com.coloplast.olympus.ui.common.extensions
 
 import android.animation.Animator
 import android.animation.ObjectAnimator
+import android.app.Activity
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.databinding.BindingAdapter
 import com.coloplast.olympus.ui.common.listeners.AnimatorListenerImpl
 
@@ -48,4 +50,9 @@ private fun animateFade(target: View, endResult: Int) {
   
   target.visibility = if(visible) View.VISIBLE else endResult
   animator.start()
+}
+
+fun View.hideKeyboard() {
+  val inputMethodManager = context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+  inputMethodManager.hideSoftInputFromWindow(this.windowToken, 0)
 }

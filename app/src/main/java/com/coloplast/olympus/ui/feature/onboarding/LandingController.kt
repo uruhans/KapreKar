@@ -1,9 +1,11 @@
 package com.coloplast.olympus.ui.feature.onboarding
 
 import com.bluelinelabs.conductor.RouterTransaction
+import com.bluelinelabs.conductor.changehandler.HorizontalChangeHandler
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerLandingBinding
 import com.coloplast.olympus.ui.common.BaseController
+import com.coloplast.olympus.ui.feature.onboarding.createprofile.CreateUserFlowController
 
 
 /**
@@ -21,6 +23,11 @@ class LandingController: BaseController<ControllerLandingBinding>() {
 
   fun onCreateProfileClicked(){
     //TODO: Link with CPO-519
+    getContentRouter().pushController(CreateUserFlowController.routerTransaction()
+      .popChangeHandler(HorizontalChangeHandler())
+      .pushChangeHandler(HorizontalChangeHandler())
+    )
+
   }
 
   fun onLogInClicked(){

@@ -123,11 +123,13 @@
           android:layout_height="56dp"
           android:layout_gravity="center"
           app:elevation="4dp"
-          android:enabled="@{controller.searchEnabled}"
+
           android:onClick="@{() -> controller.onSearchClicked()}"
           android:src="@drawable/ic_bluetooth"
           app:backgroundTint="@color/white"
           app:rippleColor="@color/turquoise" />
+
+<!--        android:enabled="@{controller.searchEnabled}"-->
 
       </FrameLayout>
 

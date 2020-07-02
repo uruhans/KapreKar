@@ -71,6 +71,15 @@ class BluetoothHandler(private val context: Context, isDebugging: Boolean) {
           }
       }
   }
+
+  fun connectOtaDevice(rxBleDevice: RxBleDevice) : Observable<RxBleConnection> {
+    return rxBleDevice.establishConnection(false)
+      .flatMap { rxBleConnection ->
+        rxBleDeviceConnectionStateObservable(rxBleDevice)
+          .filter { it == RxBleConnection.RxBleConnectionState.CONNECTED }
+          .map { rxBleConnection }
+      }
+  }
   
   fun scanBeacons(uuidFilter: UUID?, macAddress: String? = null) : Observable<String> {
     val scanSettings = ScanSettings.Builder()

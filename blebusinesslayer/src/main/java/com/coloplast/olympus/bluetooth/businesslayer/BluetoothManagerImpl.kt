@@ -121,6 +121,11 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
     }
   }
 
+  override fun initiateBleScanning(uuidFilter: UUID?): Observable<ScanResult> {
+    return bluetoothHandler.scanBleDevices(uuidFilter)
+      .map { ScanResult(it.bleDevice.name?.trim(), it.bleDevice.macAddress, it.rssi) }
+  }
+
   /**
    * Initiate a scan of ble devices filtered by the Olympus Wireless Protocol UUID to limit results only to specific devices
    * - output -> BleDevice containing BleDevice Name, MacAddress and current ConnectionState
@@ -204,6 +209,13 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
       .doOnError {
         removeConnectionFromList(macAddress)
         removeDeviceFromConnectedList(getBleDevice(macAddress).blockingFirst())
+      }
+  }
+
+  override fun connectOtaDevice(macAddress: String): Observable<RxBleConnection> {
+    return getBleDevice(macAddress)
+      .switchMap { rxBleDevice ->
+        bluetoothHandler.connectOtaDevice(rxBleDevice)
       }
   }
 
@@ -353,7 +365,7 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
     return writeCharacteristic(macAddress, OlympusWirelessProtocol.Characteristics.STATUS, data)
   }
 
-  private fun writeCharacteristic(macAddress: String, characteristic: UUID, data: ByteArray) : Completable {
+  override fun writeCharacteristic(macAddress: String, characteristic: UUID, data: ByteArray) : Completable {
     val rxConnection = bleConnections[macAddress]
 
     return if(rxConnection == null) {

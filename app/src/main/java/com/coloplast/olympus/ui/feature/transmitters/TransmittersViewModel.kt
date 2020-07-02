@@ -4,6 +4,7 @@ import com.artemzin.rxui.kotlin.bind
 import com.coloplast.olympus.bluetooth.ServiceDispatcher
 import com.coloplast.olympus.bluetooth.StateDispatcher
 import com.coloplast.olympus.bluetooth.businesslayer.BluetoothManager
+import com.coloplast.olympus.bluetooth.businesslayer.FirmwareManager
 import com.coloplast.olympus.bluetooth.model.ConnectionState
 import com.coloplast.olympus.bluetooth.model.ServiceEvent
 import com.coloplast.olympus.businesslayer.interfaces.TransmitterComponent
@@ -19,7 +20,8 @@ import java.util.concurrent.TimeUnit
 
 class TransmittersViewModel(
   private val bluetoothManager: BluetoothManager,
-  private val transmitterComponent: TransmitterComponent
+  private val transmitterComponent: TransmitterComponent,
+  private val firmwareManager: FirmwareManager
 ) : BaseViewModel<TransmittersUiModel, TransmittersView>() {
 
   override fun bind(uiView: TransmittersView): Disposable {
@@ -84,13 +86,17 @@ class TransmittersViewModel(
 
     val retryConnectionObservable: Observable<TransmittersUiModel> = uiView.retryConnection()
       .switchMap {
-        // initiate reconnection retry on the service
-        ServiceDispatcher.dispatchEvent(ServiceEvent.RetryConnection())
+        firmwareManager.updateFirmware("C3:40:E1:28:64:E9")
+          .toSingle { TransmittersUiModel.RetryConnectComplete() }
+          .toObservable()
 
-        // after 5 seconds send back a completed response
-        Observable.just(TransmittersUiModel.RetryConnectComplete() as TransmittersUiModel)
-          .delay(5, TimeUnit.SECONDS)
-          .startWith(TransmittersUiModel.RetryConnectToTransmitters())
+//        // initiate reconnection retry on the service
+//        ServiceDispatcher.dispatchEvent(ServiceEvent.RetryConnection())
+//
+//        // after 5 seconds send back a completed response
+//        Observable.just(TransmittersUiModel.RetryConnectComplete() as TransmittersUiModel)
+//          .delay(5, TimeUnit.SECONDS)
+//          .startWith(TransmittersUiModel.RetryConnectToTransmitters())
       }
 
     disposable.add(

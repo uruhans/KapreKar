@@ -29,12 +29,15 @@ abstract class BaseFlowController : BaseController<ControllerFlowBinding>, FlowL
   val progressMax = ObservableInt()
   val showProgress = ObservableBoolean(false)
   val showSubmitButton = ObservableBoolean(false)
-  
+
+  private lateinit var toolbarSupportController : ToolbarSupportController
+
   constructor() : super()
   constructor(args: Bundle?) : super(args)
-  
+
   override fun attachVariables(viewBinding: ControllerFlowBinding) {
-    viewBinding.toolbarSupport = ToolbarSupportController(listener = this)
+    toolbarSupportController = ToolbarSupportController(listener = this)
+    viewBinding.toolbarSupport = toolbarSupportController
     viewBinding.controller = this
   }
   
@@ -52,6 +55,14 @@ abstract class BaseFlowController : BaseController<ControllerFlowBinding>, FlowL
   
   override fun onCloseClicked() {
     closeFlow()
+  }
+
+  protected fun showBackButton(show: Boolean) {
+    toolbarSupportController.showBackButton.set(show)
+  }
+
+  protected fun showCloseButton(show: Boolean) {
+    toolbarSupportController.showCloseButton.set(show)
   }
   
   /**

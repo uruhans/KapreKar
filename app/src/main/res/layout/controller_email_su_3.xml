@@ -64,9 +64,10 @@
           android:id="@+id/email_edittext"
           style="@style/EditTextInputText"
           android:hint="@string/onboarding_email_hint"
+          android:inputType="textEmailAddress"
           app:errorBackground="@{controller.validEmail}"
           android:text="@={controller.email}"
-          android:inputType="textPersonName"/>
+          app:onSubmit="@{() -> controller.onNextClicked()}"/>
       </com.google.android.material.textfield.TextInputLayout>
 
       <TextView

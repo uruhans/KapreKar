@@ -5,6 +5,7 @@ enum class CreateUserFlow {
   CreateUserSU1,
   StomaInfoSU2,
   EmailSU3,
+  PasswordSU4,
   Completed;
 
   companion object {

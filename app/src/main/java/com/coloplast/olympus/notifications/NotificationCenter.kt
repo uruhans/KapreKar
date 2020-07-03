@@ -19,6 +19,7 @@ import com.coloplast.olympus.activities.MainActivity
 import com.coloplast.olympus.notifications.models.NotificationPayload
 import com.coloplast.olympus.shared.preferences.Preferences
 import com.coloplast.olympus.shared.types.Sensors
+import com.coloplast.olympus.ui.feature.statemachine.models.OverlayState
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
 import java.time.LocalTime
 
@@ -107,7 +108,7 @@ class NotificationCenter(
     )
 
     when (payload.id) {
-      UiState.DISCONNECTED.notificationId(), //TODO: Find a better way to detect Bluetooth connection lost.
+      OverlayState.BLE_CONNECTION_LOST.notificationId(),
       UiState.NO_BATTERY_R.notificationId(),
       UiState.CUTGUARD_BROKEN_I.notificationId(),
       UiState.WATER_INGRESS_DETECTION_J.notificationId(),

@@ -3,6 +3,7 @@ package com.coloplast.olympus.ui.feature.onboarding.createprofile
 
 enum class CreateUserFlow {
   CreateUserSU1,
+  StomaInfoSU2,
   Completed;
 
   companion object {

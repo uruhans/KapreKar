@@ -243,6 +243,14 @@
 <string name="onboarding_landing_create_profile_button">Create profile</string>
 <string name="onboarding_landing_log_in_button">Log in</string>
 <string name="onboarding_landing_title">Create profile or log in</string>
+<string name="onboarding_stoma_surgery_date_more_than_six_months">More than 6 months ago</string>
+<string name="onboarding_stoma_surgery_date_na">Don’t know / not sure</string>
+<string name="onboarding_stoma_surgery_date_pre_surgery">Pre-surgery</string>
+<string name="onboarding_stoma_surgery_date_within_six_months">Within last 6 months</string>
+<string name="onboarding_stoma_type_colostomy">Colostomy</string>
+<string name="onboarding_stoma_type_ileostomy">Ileostomy</string>
+<string name="onboarding_stoma_type_na">Don’t know / not sure</string>
+<string name="onboarding_stoma_type_urostomy">Urostomy</string>
 <string name="onboarding_value_proposition_screen_1_description">[Missing translation]</string>
 <string name="onboarding_value_proposition_screen_1_title">[Missing translation]</string>
 <string name="onboarding_value_proposition_screen_2_description">[Missing translation]</string>
@@ -279,7 +287,6 @@
 <string name="settings_alarm_title">[Missing translation]</string>
 <string name="settings_allow_notifications_body">[Missing translation]</string>
 <string name="settings_allow_notifications_title">[Missing translation]</string>
-<string name="settings_android_app_settings_link">[Missing translation]</string>
 <string name="settings_bedtime_alerts_body">[Missing translation]</string>
 <string name="settings_bedtime_alerts_header">[Missing translation]</string>
 <string name="settings_bedtime_alerts_schedule">%1$s, daily.</string>
@@ -294,6 +301,7 @@
 <string name="settings_inner_ring_alarm_title">[Missing translation]</string>
 <string name="settings_night_mode_body">[Missing translation]</string>
 <string name="settings_night_mode_title">[Missing translation]</string>
+<string name="settings_notifications_link">[Missing translation]</string>
 <string name="settings_notifications_section_title">[Missing translation]</string>
 <string name="settings_notifications_show_preview_body">[Missing translation]</string>
 <string name="settings_notifications_show_preview_header">[Missing translation]</string>
@@ -320,6 +328,7 @@
 <string name="settings_sounds_ringing_alerts_link">[Missing translation]</string>
 <string name="settings_sounds_ringing_alerts_title">[Missing translation]</string>
 <string name="settings_sounds_section_title">[Missing translation]</string>
+<string name="settings_sounds_settings_link">[Missing translation]</string>
 <string name="settings_title">[Missing translation]</string>
 <string name="settings_vibration_body">[Missing translation]</string>
 <string name="settings_vibration_header">[Missing translation]</string>

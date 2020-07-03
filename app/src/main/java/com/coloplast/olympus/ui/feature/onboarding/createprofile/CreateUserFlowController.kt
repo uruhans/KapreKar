@@ -3,6 +3,7 @@ package com.coloplast.olympus.ui.feature.onboarding.createprofile
 import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.ui.common.flow.FlowFactory
 import com.coloplast.olympus.ui.common.flow.FlowFactoryController
+import com.coloplast.olympus.ui.feature.onboarding.createprofile.models.CreateUserModel
 import org.koin.core.inject
 
 

@@ -3,9 +3,6 @@
   xmlns:app="http://schemas.android.com/apk/res-auto">
 
   <data>
-    <import type="android.view.View" />
-    <import type="com.coloplast.olympus.R" />
-
     <variable
       name="controller"
       type="com.coloplast.olympus.ui.feature.onboarding.createprofile.su3.EmailSU3Controller" />
@@ -21,7 +18,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_margin="@dimen/spacing_larger"
-      android:text="Create your profile"
+      android:text="@string/onboarding_su3_title"
       style="@style/TextStyle.Coloplast.Bold.DarkGrey.24"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent" />
@@ -30,7 +27,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginTop="@dimen/spacing_larger"
-      android:text="To get started, please enter your name"
+      android:text="@string/onboarding_su3_description"
       style="@style/TextStyle.Roboto.Regular.ClearGrey.18"
       app:layout_constraintStart_toStartOf="@id/title"
       app:layout_constraintTop_toBottomOf="@id/title" />
@@ -49,7 +46,7 @@
       <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Email"
+        android:text="@string/onboarding_email_title"
         style="@style/TextStyle.Roboto.Regular.ClearGrey.14"
         android:layout_marginStart="@dimen/spacing_standard"
         android:layout_marginTop="@dimen/spacing_half"
@@ -66,7 +63,7 @@
         <com.google.android.material.textfield.TextInputEditText
           android:id="@+id/email_edittext"
           style="@style/EditTextInputText"
-          android:hint="Enter email"
+          android:hint="@string/onboarding_email_hint"
           app:errorBackground="@{controller.validEmail}"
           android:text="@={controller.email}"
           android:inputType="textPersonName"/>
@@ -77,9 +74,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/spacing_standard"
         android:layout_marginEnd="@dimen/spacing_standard"
-        android:text="Wrong email"
+        android:text="@string/onboarding_email_error"
         style="@style/TextInputLayoutErrorText"
-        android:visibility="@{controller.validEmail ? View.GONE : View.VISIBLE}"/>
+        visibleOrGone="@{!controller.validEmail}"/>
 
     </LinearLayout>
 

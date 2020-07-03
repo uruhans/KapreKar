@@ -21,7 +21,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_margin="@dimen/spacing_larger"
-      android:text="Create your profile"
+      android:text="@string/onboarding_su1_title"
       style="@style/TextStyle.Coloplast.Bold.DarkGrey.24"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent" />
@@ -30,7 +30,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginTop="@dimen/spacing_larger"
-      android:text="To get started, please enter your name"
+      android:text="@string/onboarding_su1_description"
       style="@style/TextStyle.Roboto.Regular.ClearGrey.18"
       app:layout_constraintStart_toStartOf="@id/title"
       app:layout_constraintTop_toBottomOf="@id/title" />
@@ -49,7 +49,7 @@
       <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="First name"
+        android:text="@string/onboarding_first_name_title"
         style="@style/TextStyle.Roboto.Regular.ClearGrey.14"
         android:layout_marginStart="@dimen/spacing_standard"
         android:layout_marginTop="@dimen/spacing_half"
@@ -66,7 +66,7 @@
         <com.google.android.material.textfield.TextInputEditText
           android:id="@+id/email_edittext"
           style="@style/EditTextInputText"
-          android:hint="Enter first name"
+          android:hint="@string/onboarding_first_name_hint"
           app:errorBackground="@{controller.validName}"
           android:text="@={controller.name}"
           android:inputType="textPersonName"/>
@@ -77,14 +77,14 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/spacing_standard"
         android:layout_marginEnd="@dimen/spacing_standard"
-        android:text="First name input error"
+        android:text="@string/onboarding_first_name_error"
         style="@style/TextInputLayoutErrorText"
         android:visibility="@{controller.validName ? View.GONE : View.VISIBLE}"/>
 
       <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Last name"
+        android:text="@string/onboarding_last_name_title"
         style="@style/TextStyle.Roboto.Regular.ClearGrey.14"
         android:layout_marginStart="@dimen/spacing_standard"
         android:layout_marginTop="@dimen/spacing_large"
@@ -102,7 +102,7 @@
           android:id="@+id/password_edittext"
           style="@style/EditTextInputText"
           android:background="@drawable/edittext_background"
-          android:hint="Enter last name"
+          android:hint="@string/onboarding_last_name_hint"
           app:errorBackground="@{controller.validName}"
           android:text="@={controller.surname}"
           android:inputType="textPersonName"
@@ -114,7 +114,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/spacing_standard"
         android:layout_marginEnd="@dimen/spacing_standard"
-        android:text="Last name input error"
+        android:text="@string/onboarding_last_name_error"
         style="@style/TextInputLayoutErrorText"
         android:visibility="@{controller.validSurname ? View.GONE : View.VISIBLE}"/>
 

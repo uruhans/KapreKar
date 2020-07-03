@@ -3,10 +3,6 @@
   xmlns:app="http://schemas.android.com/apk/res-auto">
 
   <data>
-    <import type="android.view.View" />
-    <import type="com.coloplast.olympus.R" />
-    <import type="com.coloplast.olympus.ui.feature.onboarding.createprofile.types.StomaSurgeryDate" />
-
     <variable
       name="controller"
       type="com.coloplast.olympus.ui.feature.onboarding.createprofile.su2.StomaInfoSU2Controller" />
@@ -22,7 +18,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_margin="@dimen/spacing_larger"
-      android:text="Your stoma"
+      android:text="@string/onboarding_su2_title"
       style="@style/TextStyle.Coloplast.Bold.DarkGrey.24"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent" />
@@ -31,7 +27,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginTop="@dimen/spacing_larger"
-      android:text="Please enter details about your stoma"
+      android:text="@string/onboarding_su2_description"
       style="@style/TextStyle.Roboto.Regular.ClearGrey.18"
       app:layout_constraintStart_toStartOf="@id/title"
       app:layout_constraintTop_toBottomOf="@id/title" />
@@ -50,7 +46,7 @@
       <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Stoma type"
+        android:text="@string/onboarding_stoma_type_title"
         style="@style/TextStyle.Roboto.Regular.ClearGrey.14"
         android:layout_marginStart="@dimen/spacing_standard"
         android:layout_marginTop="@dimen/spacing_half"
@@ -71,7 +67,7 @@
       <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="First stoma surgery date"
+        android:text="@string/onboarding_first_stoma_surgery_title"
         style="@style/TextStyle.Roboto.Regular.ClearGrey.14"
         android:layout_marginStart="@dimen/spacing_standard"
         android:layout_marginTop="@dimen/spacing_large"

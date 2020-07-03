@@ -1,6 +1,7 @@
 package com.coloplast.olympus.ui.feature.transmitters.add.at9
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableField
 import com.artemzin.rxui.RxUi
@@ -121,7 +122,11 @@ class AddTransmitterAT9Controller(args: Bundle) :
         }
         is SearchTransmitterUiModel.ConnectionFailure -> {
           connectionAlreadyFailed = true
-          // TODO - possibly show failure to connect (possibly because bonding issues seems to be automatically shown to the user)
+          getListener(FlowListener::class.java)?.onPreviousClicked()
+        }
+        is SearchTransmitterUiModel.BondingFailed -> {
+          Toast.makeText(applicationContext, R.string.guide_at10_pairing_error, Toast.LENGTH_SHORT).show()
+          getListener(FlowListener::class.java)?.onPreviousClicked()
         }
       }
     }

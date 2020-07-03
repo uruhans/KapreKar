@@ -15,7 +15,6 @@ import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 class TransmittersViewModel(
@@ -27,12 +26,8 @@ class TransmittersViewModel(
     val disposable = CompositeDisposable()
 
     // transmitters stored in database
-    val storedTransmitters = transmitterComponent.getTransmitters()
+    val transmittersOrEmptyObservable = transmitterComponent.getTransmitters()
       .subscribeOn(Schedulers.io())
-      .doOnNext { Timber.d("getTransmitters hit") }
-      .distinctUntilChanged()
-
-    val transmittersOrEmptyObservable = storedTransmitters
       .map {
         if (it is DataResult.Success<*>) {
           it.data as List<Transmitter>

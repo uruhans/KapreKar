@@ -1,11 +1,13 @@
 package com.coloplast.olympus.ui.feature.transmitters.add
 
 import android.os.Bundle
+import com.bluelinelabs.conductor.Controller
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.ui.common.MediaGuideController
 import com.coloplast.olympus.ui.common.flow.FlowFactory
 import com.coloplast.olympus.ui.common.flow.FlowFactoryController
+import com.coloplast.olympus.ui.common.flow.TopMenuVisibilityListener
 import com.coloplast.olympus.ui.feature.transmitters.add.models.AddTransmitterModel
 import org.koin.core.inject
 
@@ -26,7 +28,22 @@ class AddTransmitterFlowController(args: Bundle) : FlowFactoryController<AddTran
   override fun onQuestionClicked(screen: String) {
     //TODO: Guidelines on Questions have not been defined.
   }
-  
+
+  override fun afterControllerPushed(topController: Controller) {
+    topMenuVisibility(topController)
+  }
+
+  override fun afterControllerPopped(topController: Controller?) {
+    topMenuVisibility(topController)
+  }
+
+  private fun topMenuVisibility(topController: Controller?) {
+    (topController as? TopMenuVisibilityListener)?.let {
+      showBackButton(it.showBackButton())
+      showCloseButton(it.showCloseButton())
+    }
+  }
+
   companion object {
     private const val CONTROLLER_TAG = "add_transmitter_flow_controller"
     private const val BUNDLE_START_FLOW_AT = "BUNDLE_START_FLOW_AT"

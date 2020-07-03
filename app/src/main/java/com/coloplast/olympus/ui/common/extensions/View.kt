@@ -3,6 +3,7 @@ package com.coloplast.olympus.ui.common.extensions
 import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.view.View
+import android.view.animation.*
 import androidx.databinding.BindingAdapter
 import com.coloplast.olympus.ui.common.listeners.AnimatorListenerImpl
 
@@ -48,4 +49,27 @@ private fun animateFade(target: View, endResult: Int) {
   
   target.visibility = if(visible) View.VISIBLE else endResult
   animator.start()
+}
+
+fun View.fadeIn(animationDuration: Long = 200, offset: Long = 0){
+  animation = AlphaAnimation(0f, 1f).apply {
+    interpolator = AccelerateInterpolator()
+    startOffset = offset
+    duration = animationDuration
+  }
+}
+
+fun View.rotate360(animationDuration: Long = 2000, offset: Long = 0){
+  animation = RotateAnimation(
+    0f,
+    360f,
+    Animation.RELATIVE_TO_SELF,
+    0.5f,
+    Animation.RELATIVE_TO_SELF,
+    0.5f
+  ).apply {
+    interpolator = LinearInterpolator()
+    startOffset = offset
+    duration = animationDuration
+  }
 }

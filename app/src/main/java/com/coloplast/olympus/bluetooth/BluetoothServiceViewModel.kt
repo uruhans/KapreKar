@@ -206,9 +206,11 @@ class BluetoothServiceViewModel(
           }
         }
       }
-      .onErrorReturn {
+      .doOnError {
         removeConnectedDeviceAndNotify(macAddress)
-
+        ServiceDispatcher.dispatchEvent(ServiceEvent.DisconnectTransmitter(macAddress))
+      }
+      .onErrorReturn {
         // return a disconnect to the service
         BluetoothServiceModel.Disconnected(macAddress)
       }

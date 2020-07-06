@@ -17,7 +17,7 @@ import com.coloplast.olympus.ui.common.listeners.FlowListener
 class PasswordSU4Controller: BaseController<ControllerPasswordSu4Binding>() {
 
   val validPassword = ObservableBoolean(true)
-  val password = ObservableField("").apply {
+  val password = ObservableField("Test1234!.").apply {
     compositeDisposable.add(
       onValueChanged {
         val regex = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[#?!@\$%^&*-]).{8,}\$".toRegex()

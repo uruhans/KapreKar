@@ -257,6 +257,9 @@
 <string name="onboarding_password_error">Password does not match criteria</string>
 <string name="onboarding_password_hint">Create password</string>
 <string name="onboarding_password_title">Password</string>
+<string name="onboarding_phone_error">Incorrect phone number format</string>
+<string name="onboarding_phone_hint">Enter phone number</string>
+<string name="onboarding_phone_title">Country code and phone number</string>
 <string name="onboarding_stoma_surgery_date_more_than_six_months">More than 6 months ago</string>
 <string name="onboarding_stoma_surgery_date_na">Don’t know / not sure</string>
 <string name="onboarding_stoma_surgery_date_pre_surgery">Pre-surgery</string>

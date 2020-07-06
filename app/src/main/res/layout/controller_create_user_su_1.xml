@@ -103,7 +103,7 @@
           style="@style/EditTextInputText"
           android:background="@drawable/edittext_background"
           android:hint="@string/onboarding_last_name_hint"
-          app:errorBackground="@{controller.validName}"
+          app:errorBackground="@{controller.validSurname}"
           android:text="@={controller.surname}"
           android:inputType="textPersonName"
           app:onSubmit="@{() -> controller.onNextClicked()}"/>

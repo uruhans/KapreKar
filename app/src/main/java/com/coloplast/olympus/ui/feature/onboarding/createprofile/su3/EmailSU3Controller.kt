@@ -33,6 +33,7 @@ class EmailSU3Controller: BaseController<ControllerEmailSu3Binding>() {
   }
 
   fun onNextClicked(){
+    email.notifyChange()
     if(validEmail.get()){
       getListener(FlowListener::class.java)!!.onNextClicked(email.get()!!)
     }

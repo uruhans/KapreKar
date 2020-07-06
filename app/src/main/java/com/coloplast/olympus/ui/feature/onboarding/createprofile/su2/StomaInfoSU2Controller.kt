@@ -37,7 +37,6 @@ class StomaInfoSU2Controller: BaseController<ControllerStomaInfoSu2Binding>() {
     //noop
   }
 
-
   fun onNextClicked(){
     if(stomaTypeId.get() > 0 && stomaSurgeryDateId.get() > 0){
       val stomaType = StomaType.fromOrdinal(stomaTypeId.get())

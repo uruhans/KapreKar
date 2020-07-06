@@ -23,7 +23,6 @@ class CreateUserSU1Controller: BaseController<ControllerCreateUserSu1Binding>() 
   private val nameListener = object: Observable.OnPropertyChangedCallback(){
     override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
       validName.set(name.get().isNullOrBlank().not())
-      allowSubmit.set(name.get().isNullOrBlank().not() && surname.get().isNullOrBlank().not())
     }
   }
   val surname = ObservableField<String>()
@@ -31,10 +30,8 @@ class CreateUserSU1Controller: BaseController<ControllerCreateUserSu1Binding>() 
   private val surnameListener = object: Observable.OnPropertyChangedCallback(){
     override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
       validSurname.set(surname.get().isNullOrBlank().not())
-      allowSubmit.set(name.get().isNullOrBlank().not() && surname.get().isNullOrBlank().not())
     }
   }
-  val allowSubmit = ObservableBoolean(false)
 
   override fun attachVariables(viewBinding: ControllerCreateUserSu1Binding) {
     viewBinding.controller = this
@@ -52,12 +49,11 @@ class CreateUserSU1Controller: BaseController<ControllerCreateUserSu1Binding>() 
   }
 
   fun onNextClicked(){
-    if(allowSubmit.get()){
+    name.notifyChange()
+    surname.notifyChange()
+    if(validName.get() && validSurname.get()){
       val data = SU1Model(name.get()!!, surname.get()!!)
       getListener(FlowListener::class.java)!!.onNextClicked(data)
-    } else {
-      validName.set(name.get().isNullOrBlank().not())
-      validSurname.set(surname.get().isNullOrBlank().not())
     }
   }
 

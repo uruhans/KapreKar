@@ -17,10 +17,10 @@ import com.coloplast.olympus.ui.common.listeners.FlowListener
 class PasswordSU4Controller: BaseController<ControllerPasswordSu4Binding>() {
 
   val validPassword = ObservableBoolean(true)
-  val password = ObservableField("Test1234!.").apply {
+  val password = ObservableField("").apply {
     compositeDisposable.add(
       onValueChanged {
-        val regex = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[#?!@\$%^&*-]).{8,}\$".toRegex()
+        val regex = PASSWORD_REGEX.toRegex()
         val isValid = get()!!.matches(regex)
         validPassword.set(isValid)
       }
@@ -36,6 +36,7 @@ class PasswordSU4Controller: BaseController<ControllerPasswordSu4Binding>() {
   }
 
   fun onNextClicked(){
+    password.notifyChange()
     if(validPassword.get()){
       getListener(FlowListener::class.java)!!.onNextClicked(password.get()!!)
     }
@@ -45,6 +46,7 @@ class PasswordSU4Controller: BaseController<ControllerPasswordSu4Binding>() {
 
   companion object{
     const val TAG_CONTROLLER = "password_su_4_controller"
+    const val PASSWORD_REGEX = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[#?!@\$%^&*-]).{8,}\$"
 
     fun getRouterTransaction() = RouterTransaction.with(PasswordSU4Controller())
       .tag(TAG_CONTROLLER)

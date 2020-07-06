@@ -279,7 +279,6 @@
 <string name="settings_alarm_title">[Missing translation]</string>
 <string name="settings_allow_notifications_body">[Missing translation]</string>
 <string name="settings_allow_notifications_title">[Missing translation]</string>
-<string name="settings_android_app_settings_link">[Missing translation]</string>
 <string name="settings_bedtime_alerts_body">[Missing translation]</string>
 <string name="settings_bedtime_alerts_header">[Missing translation]</string>
 <string name="settings_bedtime_alerts_schedule">%1$s, daily.</string>
@@ -294,6 +293,7 @@
 <string name="settings_inner_ring_alarm_title">[Missing translation]</string>
 <string name="settings_night_mode_body">[Missing translation]</string>
 <string name="settings_night_mode_title">[Missing translation]</string>
+<string name="settings_notifications_link">[Missing translation]</string>
 <string name="settings_notifications_section_title">[Missing translation]</string>
 <string name="settings_notifications_show_preview_body">[Missing translation]</string>
 <string name="settings_notifications_show_preview_header">[Missing translation]</string>
@@ -320,6 +320,7 @@
 <string name="settings_sounds_ringing_alerts_link">[Missing translation]</string>
 <string name="settings_sounds_ringing_alerts_title">[Missing translation]</string>
 <string name="settings_sounds_section_title">[Missing translation]</string>
+<string name="settings_sounds_settings_link">[Missing translation]</string>
 <string name="settings_title">[Missing translation]</string>
 <string name="settings_vibration_body">[Missing translation]</string>
 <string name="settings_vibration_header">[Missing translation]</string>

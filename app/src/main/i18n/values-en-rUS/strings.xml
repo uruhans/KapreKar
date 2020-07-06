@@ -279,7 +279,6 @@
 <string name="settings_alarm_title">Schedule bedtime alarm</string>
 <string name="settings_allow_notifications_body">[Missing translation]</string>
 <string name="settings_allow_notifications_title">Allow notifications</string>
-<string name="settings_android_app_settings_link">Go to app settings</string>
 <string name="settings_bedtime_alerts_body">You’ll receive vibrations with notiications if it is turned on in your iPhone settings.</string>
 <string name="settings_bedtime_alerts_header">Bedtime alarm</string>
 <string name="settings_bedtime_alerts_schedule">%1$s, daily.</string>
@@ -294,6 +293,7 @@
 <string name="settings_inner_ring_alarm_title">Inner ring alarm</string>
 <string name="settings_night_mode_body">Allow Olympus to overwrite the Do not Distrub settings on your device, and alert you if a leak is detected on the outer ring of your sensor plate.</string>
 <string name="settings_night_mode_title">Night mode</string>
+<string name="settings_notifications_link">Go to notification settings</string>
 <string name="settings_notifications_section_title">Notifications</string>
 <string name="settings_notifications_show_preview_body">Preview displays the text of the notification on your phone. Turn off for maximum discretion.</string>
 <string name="settings_notifications_show_preview_header">Show notification preview</string>
@@ -320,6 +320,7 @@
 <string name="settings_sounds_ringing_alerts_link">Choose sensors</string>
 <string name="settings_sounds_ringing_alerts_title">Ringing alerts</string>
 <string name="settings_sounds_section_title">Sounds</string>
+<string name="settings_sounds_settings_link">Go to alert sound settings</string>
 <string name="settings_title">Settings</string>
 <string name="settings_vibration_body">You\'ll receive vibrations with notifications if it is turned on in your iPhone settings</string>
 <string name="settings_vibration_header">Vibration</string>

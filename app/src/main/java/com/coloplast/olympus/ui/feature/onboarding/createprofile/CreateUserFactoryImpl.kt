@@ -1,6 +1,8 @@
 package com.coloplast.olympus.ui.feature.onboarding.createprofile
 
 import com.bluelinelabs.conductor.RouterTransaction
+import com.coloplast.olympus.R
+import com.coloplast.olympus.ui.common.GenericConfirmationController
 import com.coloplast.olympus.ui.common.flow.FlowFactory
 import com.coloplast.olympus.ui.feature.onboarding.createprofile.models.CreateUserModel
 import com.coloplast.olympus.ui.feature.onboarding.createprofile.models.SU1Model
@@ -30,6 +32,11 @@ class CreateUserFactoryImpl : FlowFactory<CreateUserModel>() {
       CreateUserFlow.PasswordSU4 -> PasswordSU4Controller.getRouterTransaction()
       CreateUserFlow.PhoneSU6 -> PhoneSU6Controller.getRouterTransaction()
       CreateUserFlow.InsuranceSU7 -> InsuranceSU7Controller.getRouterTransaction()
+      CreateUserFlow.ConfirmationSU8 -> GenericConfirmationController.getRouterTransaction(
+        R.string.onboarding_confirmation_title,
+        R.string.onboarding_confirmation_description,
+        R.string.onboarding_confirmation_button
+      )
       CreateUserFlow.Completed -> null
     }
   }

@@ -8,6 +8,7 @@ enum class CreateUserFlow {
   PasswordSU4,
   PhoneSU6,
   InsuranceSU7,
+  ConfirmationSU8,
   Completed;
 
   companion object {

@@ -127,7 +127,7 @@
   </style>
 
   <style name="GuideHeaderDescription" parent="TextStyle.Coloplast.Regular.ClearGrey">
-    <item name="android:textSize">@dimen/text_30</item>
+    <item name="android:textSize">18sp</item>
     <item name="android:gravity">center</item>
   </style>
 

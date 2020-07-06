@@ -29,7 +29,7 @@ class InsuranceSU7Controller: BaseController<ControllerInsuranceSu7Binding>() {
   }
 
   fun onNextClicked(){
-    if(insuranceId.get() > 0){
+    if(insuranceId.get() >= 0){
       val healthInsurance = HealthInsurance.fromOrdinal(insuranceId.get())
       getListener(FlowListener::class.java)!!.onNextClicked(healthInsurance)
     }

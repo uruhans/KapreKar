@@ -69,6 +69,7 @@
       android:layout_height="wrap_content"
       android:text="@string/onboarding_save_profile"
       style="@style/Button"
+      android:onClick="@{() -> controller.onNextClicked()}"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintBottom_toBottomOf="parent"/>

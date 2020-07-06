@@ -248,6 +248,9 @@
 <string name="onboarding_chapter_intro_transmitter_lid_description">Your transmitter has a lid on the lighter grey front side. The lid opens and closes to allow attachment to a sensor layer (you\'ll attach later).</string>
 <string name="onboarding_chapter_intro_transmitter_lid_title">Opening the transmitter lid</string>
 <string name="onboarding_chapter_intro_transmitter_title">Your transmitter</string>
+<string name="onboarding_confirmation_button">Continue</string>
+<string name="onboarding_confirmation_description">Just a couple more steps to complete your profile before you can setting up TestProduct</string>
+<string name="onboarding_confirmation_title">Profile saved</string>
 <string name="onboarding_email_error">Incorrect email</string>
 <string name="onboarding_email_hint">Enter email</string>
 <string name="onboarding_email_title">Email</string>

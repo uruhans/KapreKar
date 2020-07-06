@@ -1,8 +1,10 @@
 package com.coloplast.olympus.ui.feature.onboarding.valueproposition
 
+import com.bluelinelabs.conductor.Controller
 import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.ui.common.flow.FlowFactory
 import com.coloplast.olympus.ui.common.flow.FlowFactoryController
+import com.coloplast.olympus.ui.common.flow.TopMenuVisibilityListener
 import org.koin.core.inject
 
 
@@ -16,6 +18,20 @@ class ValuePropositionFlowController: FlowFactoryController<ValuePropositionMode
 
   override fun getFlowFactory(): FlowFactory<ValuePropositionModel> =  model
 
+  override fun afterControllerPushed(topController: Controller) {
+    topMenuVisibility(topController)
+  }
+
+  override fun afterControllerPopped(topController: Controller?) {
+    topMenuVisibility(topController)
+  }
+
+  private fun topMenuVisibility(topController: Controller?) {
+    (topController as? TopMenuVisibilityListener)?.let {
+      showBackButton(it.showBackButton())
+      showCloseButton(it.showCloseButton())
+    }
+  }
 
   companion object{
     private const val CONTROLLER_TAG = "value_proposition_flow_controller"

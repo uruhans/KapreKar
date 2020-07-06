@@ -11,6 +11,7 @@ import java.io.InputStream
 import java.util.concurrent.TimeUnit
 import kotlin.experimental.and
 
+
 class FirmwareManagerImpl(
   private val applicationContext: Context,
   private val bluetoothManager: BluetoothManager
@@ -57,6 +58,7 @@ class FirmwareManagerImpl(
               .doOnNext { Timber.d("Firmware OTA - connected") }
               .flatMap { rxBleConnection ->
                 val fileData = getFileFromAssets()
+
                 rxBleConnection.createNewLongWriteBuilder()
                   .setBytes(getData(fileData))
                   .setCharacteristicUuid(OTA_UPDATE_SERVICE)
@@ -71,7 +73,7 @@ class FirmwareManagerImpl(
   }
 
   fun getFileFromAssets() : ByteArray {
-    val inputStream: InputStream = applicationContext.assets.open("OlympusApp_v2.1.1.cyacd")
+    val inputStream: InputStream = applicationContext.assets.open("OlympusApp_v2.1.1m.cyacd")
 
     val buffer = ByteArray(8192)
     var bytesRead: Int

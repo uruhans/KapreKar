@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <data>
+    <variable
+      name="controller"
+      type="com.coloplast.olympus.ui.feature.onboarding.createprofile.su7.InsuranceSU7Controller" />
+  </data>
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="@dimen/toolbar_height">
+
+    <TextView
+      android:id="@+id/title"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_margin="@dimen/spacing_larger"
+      android:text="@string/onboarding_su7_title"
+      style="@style/TextStyle.Coloplast.Bold.DarkGrey.24"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="@dimen/spacing_larger"
+      android:text="@string/onboarding_su7_description"
+      style="@style/TextStyle.Roboto.Regular.ClearGrey.18"
+      app:layout_constraintStart_toStartOf="@id/title"
+      app:layout_constraintTop_toBottomOf="@id/title" />
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical"
+      android:layout_marginTop="@dimen/spacing_half"
+      android:layout_marginBottom="@dimen/spacing_double"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintBottom_toBottomOf="parent">
+
+      <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/onboarding_insurance_title"
+        style="@style/TextStyle.Roboto.Regular.ClearGrey.14"
+        android:layout_marginStart="@dimen/spacing_standard"
+        android:layout_marginTop="@dimen/spacing_half"
+        android:layout_marginEnd="@dimen/spacing_standard" />
+
+      <androidx.appcompat.widget.AppCompatSpinner
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/cardview_button_height_default"
+        android:layout_marginStart="@dimen/spacing_standard"
+        android:layout_marginTop="@dimen/spacing_half"
+        android:layout_marginEnd="@dimen/spacing_standard"
+        android:background="@drawable/spinner_background"
+        android:spinnerMode="dialog"
+        android:entries="@{controller.insuranceValues}"
+        android:selectedItemPosition="@={controller.insuranceId}" />
+    </LinearLayout>
+
+    <Button
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="@string/onboarding_save_profile"
+      style="@style/Button"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintBottom_toBottomOf="parent"/>
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

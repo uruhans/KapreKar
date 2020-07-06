@@ -1,6 +1,7 @@
 package com.coloplast.olympus.ui.feature.onboarding.createprofile.models
 
 import com.coloplast.olympus.ui.common.flow.FlowFactoryModel
+import com.coloplast.olympus.ui.feature.onboarding.createprofile.types.HealthInsurance
 import com.coloplast.olympus.ui.feature.onboarding.createprofile.types.StomaSurgeryDate
 import com.coloplast.olympus.ui.feature.onboarding.createprofile.types.StomaType
 
@@ -11,11 +12,6 @@ class CreateUserModel: FlowFactoryModel {
   lateinit var stomaSurgeryDate: StomaSurgeryDate
   lateinit var email: String
   lateinit var password: String
-  lateinit var address1: String
-  var address2: String? = null
-  lateinit var city: String
-  lateinit var postCode: String
-  lateinit var country: String
   lateinit var phoneNumber: String
-  var healthInsurance: String? = null
+  var healthInsurance: HealthInsurance? = null
 }

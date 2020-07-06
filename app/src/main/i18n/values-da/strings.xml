@@ -248,6 +248,11 @@
 <string name="onboarding_first_name_title">First name</string>
 <string name="onboarding_first_stoma_surgery_hint">Select from list</string>
 <string name="onboarding_first_stoma_surgery_title">First stoma surgery date</string>
+<string name="onboarding_health_insurance_1">onboarding_health_insurance_1</string>
+<string name="onboarding_health_insurance_2">onboarding_health_insurance_2</string>
+<string name="onboarding_health_insurance_3">onboarding_health_insurance_3</string>
+<string name="onboarding_health_insurance_4">onboarding_health_insurance_4</string>
+<string name="onboarding_insurance_title">Your insurance provider</string>
 <string name="onboarding_landing_create_profile_button">Create profile</string>
 <string name="onboarding_landing_log_in_button">Log in</string>
 <string name="onboarding_landing_title">Create profile or log in</string>
@@ -260,6 +265,7 @@
 <string name="onboarding_phone_error">Incorrect phone number format</string>
 <string name="onboarding_phone_hint">Enter phone number</string>
 <string name="onboarding_phone_title">Country code and phone number</string>
+<string name="onboarding_save_profile">Save profile</string>
 <string name="onboarding_stoma_surgery_date_more_than_six_months">More than 6 months ago</string>
 <string name="onboarding_stoma_surgery_date_na">Don’t know / not sure</string>
 <string name="onboarding_stoma_surgery_date_pre_surgery">Pre-surgery</string>

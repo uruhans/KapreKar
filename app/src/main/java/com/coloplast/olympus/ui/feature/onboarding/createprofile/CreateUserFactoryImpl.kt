@@ -10,6 +10,8 @@ import com.coloplast.olympus.ui.feature.onboarding.createprofile.su2.StomaInfoSU
 import com.coloplast.olympus.ui.feature.onboarding.createprofile.su3.EmailSU3Controller
 import com.coloplast.olympus.ui.feature.onboarding.createprofile.su4.PasswordSU4Controller
 import com.coloplast.olympus.ui.feature.onboarding.createprofile.su6.PhoneSU6Controller
+import com.coloplast.olympus.ui.feature.onboarding.createprofile.su7.InsuranceSU7Controller
+import com.coloplast.olympus.ui.feature.onboarding.createprofile.types.HealthInsurance
 
 class CreateUserFactoryImpl : FlowFactory<CreateUserModel>() {
 
@@ -27,6 +29,7 @@ class CreateUserFactoryImpl : FlowFactory<CreateUserModel>() {
       CreateUserFlow.EmailSU3 -> EmailSU3Controller.getRouterTransaction()
       CreateUserFlow.PasswordSU4 -> PasswordSU4Controller.getRouterTransaction()
       CreateUserFlow.PhoneSU6 -> PhoneSU6Controller.getRouterTransaction()
+      CreateUserFlow.InsuranceSU7 -> InsuranceSU7Controller.getRouterTransaction()
       CreateUserFlow.Completed -> null
     }
   }
@@ -58,6 +61,10 @@ class CreateUserFactoryImpl : FlowFactory<CreateUserModel>() {
       CreateUserFlow.PhoneSU6 -> {
         val phoneNumber = result as String
         model.phoneNumber = phoneNumber
+      }
+      CreateUserFlow.InsuranceSU7 -> {
+        val healthInsurance = result as HealthInsurance
+        model.healthInsurance = healthInsurance
       }
       CreateUserFlow.Completed -> {}
     }

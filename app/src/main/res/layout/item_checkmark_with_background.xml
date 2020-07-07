@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+  <data>
+    <variable
+      name="imageId"
+      type="Integer" />
+  </data>
+
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="104dp"
@@ -10,6 +17,8 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:layout_margin="@dimen/spacing_large"
-      android:src="@drawable/ic_checkmark" />
+      app:safeResource="@{imageId}" />
 
 </RelativeLayout>
+
+</layout>

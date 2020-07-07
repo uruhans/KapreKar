@@ -24,7 +24,8 @@
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintTop_toTopOf="parent">
 
-      <include layout="@layout/item_checkmark_with_background" />
+      <include layout="@layout/item_checkmark_with_background"
+        app:imageId="@{controller.imageId}"/>
 
       <TextView
         android:id="@+id/transmitter_guide_at1_title"

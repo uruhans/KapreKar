@@ -9,6 +9,7 @@ import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.common.extensions.fadeIn
 import com.coloplast.olympus.ui.common.extensions.rotate360
 import com.coloplast.olympus.ui.feature.home.HomeController
+import com.coloplast.olympus.ui.feature.onboarding.LandingController
 import org.koin.core.inject
 
 /**
@@ -36,7 +37,7 @@ class SplashController : BaseController<ControllerSplashBinding>() {
       HomeController.routerTransaction()
     } else {
       // TODO: Link with CPO-518
-      HomeController.routerTransaction()
+      LandingController.routerTransaction()
     }
 
     getContentRouter().setRoot(routerTransaction)

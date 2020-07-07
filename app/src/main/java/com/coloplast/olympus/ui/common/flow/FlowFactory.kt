@@ -24,7 +24,7 @@ abstract class FlowFactory<V: FlowFactoryModel> {
      *
      * NOTICE: MUST RETURN TRUE IF OVERRIDDEN (AND YOU MUST MANUALLY CALL NEXT IF YOU DO)
      *
-     * ** this is used to something with the data ie: call the server on a specific step before the end of the flow **
+     * ** this is used to do something with the data in between steps ie: call the server on a specific step before the end of the flow **
      */
     fun onStepCompleted(currentIndex: Int, data: V) : Boolean = false
   }

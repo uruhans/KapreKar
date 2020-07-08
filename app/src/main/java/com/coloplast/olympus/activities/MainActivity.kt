@@ -13,7 +13,7 @@ import com.coloplast.olympus.shared.models.CurrentUser
 import com.coloplast.olympus.ui.common.DrawerStateDispatcher
 import com.coloplast.olympus.ui.common.models.Navigation
 import com.coloplast.olympus.ui.feature.home.HomeController
-import com.coloplast.olympus.ui.feature.onboarding.LandingController
+import com.coloplast.olympus.ui.feature.splash.SplashController
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
     initializeRouters(savedInstanceState)
     
     if (!navigation.getContentRouter()!!.hasRootController()) {
-      navigation.getContentRouter()!!.setRoot(LandingController.routerTransaction())
+      navigation.getContentRouter()!!.setRoot(SplashController.routerTransaction())
     }
     
     // code to verify that the user is logged in, and if not display the LandingPage

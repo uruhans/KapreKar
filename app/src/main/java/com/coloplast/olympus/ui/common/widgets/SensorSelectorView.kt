@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.widget.LinearLayout
 import androidx.databinding.*
 import com.coloplast.olympus.databinding.ViewSensorSelectorBinding
-import com.coloplast.olympus.ui.feature.settings.models.Sensors
+import com.coloplast.olympus.shared.types.Sensors
 
 
 /**

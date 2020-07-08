@@ -251,6 +251,7 @@
 <string name="onboarding_first_name_title">First name</string>
 <string name="onboarding_first_stoma_surgery_hint">Select from list</string>
 <string name="onboarding_first_stoma_surgery_title">First stoma surgery date</string>
+<string name="onboarding_forgot_password">Forgot password?</string>
 <string name="onboarding_health_insurance_1">onboarding_health_insurance_1</string>
 <string name="onboarding_health_insurance_2">onboarding_health_insurance_2</string>
 <string name="onboarding_health_insurance_3">onboarding_health_insurance_3</string>
@@ -262,6 +263,10 @@
 <string name="onboarding_last_name_error">Last name input error</string>
 <string name="onboarding_last_name_hint">Enter last name</string>
 <string name="onboarding_last_name_title">Last name</string>
+<string name="onboarding_login_button">Log in</string>
+<string name="onboarding_login_description">Please log in to your acoount</string>
+<string name="onboarding_login_error">Incorrect credentials</string>
+<string name="onboarding_login_title">welcome.</string>
 <string name="onboarding_password_error">Password does not match criteria</string>
 <string name="onboarding_password_hint">Create password</string>
 <string name="onboarding_password_title">Password</string>

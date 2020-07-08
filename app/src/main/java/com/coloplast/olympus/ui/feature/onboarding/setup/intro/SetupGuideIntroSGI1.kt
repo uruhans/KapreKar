@@ -42,7 +42,7 @@ class SetupGuideIntroSGI1 : BaseController<ControllerStartupGuideIntro1Binding>(
   }
 
   companion object {
-    private const val TAG_CONTROLLER = "setup_guide_into_sgi_1"
+    private const val TAG_CONTROLLER = "setup_guide_intro_sgi_1"
 
     fun routerTransaction(): RouterTransaction {
       return RouterTransaction.with(SetupGuideIntroSGI1())

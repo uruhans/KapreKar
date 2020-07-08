@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <data>
+
+    <variable
+      name="controller"
+      type="com.coloplast.olympus.ui.common.dialogs.TimePickerDialogController" />
+  </data>
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/transparent_black"
+    android:onClick="@{() -> controller.onDismissClicked()}">
+
+    <androidx.cardview.widget.CardView
+      android:id="@+id/cardView"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="40dp"
+      android:layout_marginEnd="40dp"
+      app:cardBackgroundColor="@color/cardview_background"
+      app:cardCornerRadius="@dimen/cardview_corner_radius"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent">
+
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TimePicker
+          android:id="@+id/timepicker"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:background="@color/white"
+          android:timePickerMode="clock" />
+
+        <Button
+          android:id="@+id/next_button"
+          android:layout_width="match_parent"
+          android:layout_height="@dimen/cardview_button_height_default"
+          style="@style/Button"
+          android:onClick="@{() -> controller.onDoneClicked() }"
+          android:text="@string/generic_confirm"/>
+      </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

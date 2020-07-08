@@ -1,7 +1,6 @@
 package com.coloplast.olympus.ui.feature.transmitters.add
 
 import com.bluelinelabs.conductor.RouterTransaction
-import com.coloplast.olympus.ui.feature.transmitters.add.models.AddTransmitterModel
 import com.coloplast.olympus.ui.common.flow.FlowFactory
 import com.coloplast.olympus.ui.feature.transmitters.add.at1.AddTransmitterAT1Controller
 import com.coloplast.olympus.ui.feature.transmitters.add.at10.AddTransmitterAT10Controller
@@ -14,6 +13,7 @@ import com.coloplast.olympus.ui.feature.transmitters.add.at7.AddTransmitterAT7Co
 import com.coloplast.olympus.ui.feature.transmitters.add.at8.AddTransmitterAT8Controller
 import com.coloplast.olympus.ui.feature.transmitters.add.at9.AddTransmitterAT9Controller
 import com.coloplast.olympus.ui.feature.transmitters.add.models.AddTransmitterFlow
+import com.coloplast.olympus.ui.feature.transmitters.add.models.AddTransmitterModel
 
 class AddTransmitterFactoryImpl() : FlowFactory<AddTransmitterModel>() {
   
@@ -40,22 +40,8 @@ class AddTransmitterFactoryImpl() : FlowFactory<AddTransmitterModel>() {
   }
   
   override fun parseResultFromController(currentIndex: Int, result: Any?) {
-    if (result == null) {
-      return
-    }
-    
-    when (AddTransmitterFlow.fromIndex(currentIndex)) {
-      AddTransmitterFlow.AddTransmitterAT1 -> { }
-      AddTransmitterFlow.AddTransmitterAT2 -> { }
-      AddTransmitterFlow.AddTransmitterAT3 -> { }
-      AddTransmitterFlow.AddTransmitterAT4 -> { model.transmitterNameToSearchFor = result as String }
-      AddTransmitterFlow.AddTransmitterAT5 -> { }
-      AddTransmitterFlow.AddTransmitterAT6 -> { }
-      AddTransmitterFlow.AddTransmitterAT7 -> { }
-      AddTransmitterFlow.AddTransmitterAT8 -> { }
-      AddTransmitterFlow.AddTransmitterAT9 -> { }
-      AddTransmitterFlow.AddTransmitterAT10 -> { }
-      AddTransmitterFlow.Completed -> {  }
+    if(AddTransmitterFlow.fromIndex(currentIndex) == AddTransmitterFlow.AddTransmitterAT4) {
+      model.transmitterNameToSearchFor = result as String
     }
   }
   

@@ -22,6 +22,7 @@ abstract class FlowFactory<V: FlowFactoryModel> {
   
   private var initialStartIndex: Int = 0
   private val currentIndex: AtomicInteger = AtomicInteger(initialStartIndex)
+  private val skippedSteps = mutableSetOf<Int>()
   private var listener: Listener<V>? = null
 
   /**
@@ -95,6 +96,18 @@ abstract class FlowFactory<V: FlowFactoryModel> {
    */
   fun previous() {
     currentIndex.decrementAndGet()
+
+    skippedSteps.reversed().forEach { skipped ->
+      // only go back if the current index matches the skipped index
+      // this allows for "holes" in the skipping process (ie: 1,2,3,6,7,8)
+      if (currentIndex.get() == skipped) {
+        currentIndex.decrementAndGet()
+        skippedSteps.remove(skipped)
+      }
+      else {
+        return@forEach
+      }
+    }
   }
   
   /**
@@ -102,6 +115,27 @@ abstract class FlowFactory<V: FlowFactoryModel> {
    */
   fun restart() {
     currentIndex.set(initialStartIndex)
+    skippedSteps.clear()
     next()
+  }
+
+  /**
+   * skip steps that aren't needed
+   * call this after processing the result from the controller @see parseResultFromController()
+   */
+  fun skipUntil(index: Int) {
+    while(currentIndex.get() < index) {
+      skipNext()
+    }
+  }
+
+  /**
+   * skip the next step
+   * call this after processing the result from the controller @see parseResultFromController()
+   */
+  fun skipNext() {
+    // add the current index to the skipped steps and increment
+    skippedSteps.add(currentIndex.get())
+    currentIndex.incrementAndGet()
   }
 }

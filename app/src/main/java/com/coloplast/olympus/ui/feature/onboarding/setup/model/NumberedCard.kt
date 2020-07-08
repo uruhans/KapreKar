@@ -2,7 +2,7 @@ package com.coloplast.olympus.ui.feature.onboarding.setup.model
 
 import com.coloplast.olympus.R
 
-class NumberedCard(order: Order = Order.InBetween, val textRes: Int, val enabled: Boolean = false) {
+class NumberedCard(order: Order = Order.InBetween, val textRes: Int, val enabled: Boolean = false, val showCheckmark: Boolean = false) {
 
   val isFirst = order == Order.First
   val isLast = order == Order.Last

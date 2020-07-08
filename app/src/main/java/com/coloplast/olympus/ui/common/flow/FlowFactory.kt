@@ -18,6 +18,15 @@ abstract class FlowFactory<V: FlowFactoryModel> {
      * Tell the implementer that the flow is completed, and pass back the final result of data
      */
     fun onFlowCompleted(data: V)
+
+    /**
+     * Implement this method to receive all data on every step before moving on to the next step
+     *
+     * NOTICE: MUST RETURN TRUE IF OVERRIDDEN (AND YOU MUST MANUALLY CALL NEXT IF YOU DO)
+     *
+     * ** this is used to do something with the data in between steps ie: call the server on a specific step before the end of the flow **
+     */
+    fun onStepCompleted(currentIndex: Int, data: V) : Boolean = false
   }
   
   private var initialStartIndex: Int = 0
@@ -52,7 +61,7 @@ abstract class FlowFactory<V: FlowFactoryModel> {
   fun setFlowFactoryListener(listener: Listener<V>) {
     this.listener = listener
   }
-  
+
   /**
    * a method used to override the initial starting position of the flow
    * Maybe you want to start from position 3 instead of 0
@@ -88,7 +97,11 @@ abstract class FlowFactory<V: FlowFactoryModel> {
    */
   fun onResult(result: Any?) {
     parseResultFromController(currentIndex.getAndIncrement(), result)
-    next()
+
+    // call onStepCompleted (if implemented) - else go next()
+    if(listener?.onStepCompleted(currentIndex.get(), getData()) == false) {
+      next()
+    }
   }
   
   /**

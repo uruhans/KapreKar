@@ -5,8 +5,8 @@ import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerChooseSensorsBinding
 import com.coloplast.olympus.shared.preferences.Preferences
+import com.coloplast.olympus.shared.types.Sensors
 import com.coloplast.olympus.ui.common.BaseController
-import com.coloplast.olympus.ui.feature.settings.models.Sensors
 import org.koin.core.inject
 
 
@@ -17,8 +17,7 @@ import org.koin.core.inject
 class ChooseSensorsController: BaseController<ControllerChooseSensorsBinding>() {
 
   private val preferences: Preferences by inject()
-  private val sensors = Sensors.fromOrdinal(preferences.ringingAlertSensor)
-  val allSensorsSelected = ObservableBoolean(sensors == Sensors.ALL)
+  val allSensorsSelected = ObservableBoolean(preferences.ringingAlertSensor == Sensors.ALL)
 
   override fun attachVariables(viewBinding: ControllerChooseSensorsBinding) {
     viewBinding.controller = this
@@ -29,11 +28,10 @@ class ChooseSensorsController: BaseController<ControllerChooseSensorsBinding>() 
   }
 
   fun onSaveChanges(){
-    val selectedSensor = when(allSensorsSelected.get()) {
+    preferences.ringingAlertSensor = when(allSensorsSelected.get()) {
       true -> Sensors.ALL
       false -> Sensors.OUTER
     }
-    preferences.ringingAlertSensor = selectedSensor.ordinal
     parentController?.handleBack()
   }
 

@@ -15,14 +15,14 @@ import com.coloplast.olympus.ui.feature.transmitters.add.at9.AddTransmitterAT9Co
 import com.coloplast.olympus.ui.feature.transmitters.add.models.AddTransmitterFlow
 import com.coloplast.olympus.ui.feature.transmitters.add.models.AddTransmitterModel
 
-class AddTransmitterFactoryImpl() : FlowFactory<AddTransmitterModel>() {
-  
+class AddTransmitterFactoryImpl : FlowFactory<AddTransmitterModel>() {
+
   private lateinit var model: AddTransmitterModel
-  
+
   override fun initialize() {
     model = AddTransmitterModel()
   }
-  
+
   override fun getRouterTransaction(currentIndex: Int): RouterTransaction? {
     return when (AddTransmitterFlow.fromIndex(currentIndex)) {
       AddTransmitterFlow.AddTransmitterAT1 -> AddTransmitterAT1Controller.routerTransaction()
@@ -38,13 +38,17 @@ class AddTransmitterFactoryImpl() : FlowFactory<AddTransmitterModel>() {
       AddTransmitterFlow.Completed -> null
     }
   }
-  
+
   override fun parseResultFromController(currentIndex: Int, result: Any?) {
-    if(AddTransmitterFlow.fromIndex(currentIndex) == AddTransmitterFlow.AddTransmitterAT4) {
+    if (result == null) {
+      return
+    }
+
+    if (AddTransmitterFlow.fromIndex(currentIndex) == AddTransmitterFlow.AddTransmitterAT4) {
       model.transmitterNameToSearchFor = result as String
     }
   }
-  
+
   override fun getData(): AddTransmitterModel {
     return model
   }

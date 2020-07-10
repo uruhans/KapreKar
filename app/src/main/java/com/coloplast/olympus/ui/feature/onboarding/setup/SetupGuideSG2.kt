@@ -24,7 +24,7 @@ class SetupGuideSG2 : BaseController<ControllerStartupGuide2Binding>() {
   override fun onViewBound(viewBinding: ControllerStartupGuide2Binding) {
     if (items.isNullOrEmpty()) {
       val list = listOf(
-        NumberedCard(NumberedCard.Order.First, R.string.onboarding_chapter_intro_checklist_item_1, enabled = true, showCheckmark = true),
+        NumberedCard(NumberedCard.Order.First, R.string.onboarding_chapter_intro_checklist_item_1, enabled = true),
         NumberedCard(textRes = R.string.onboarding_chapter_intro_checklist_item_2),
         NumberedCard(textRes = R.string.onboarding_chapter_intro_checklist_item_3),
         NumberedCard(NumberedCard.Order.Last, R.string.onboarding_chapter_intro_checklist_item_4)

@@ -15,8 +15,8 @@ enum class ValuePropositionFlow(override val id: Int):
   Completed(3);
 
   companion object {
-    fun fromId(id: Int): TypeWithId {
-      return values().associateBy { enum: TypeWithId -> enum.id }[id] as? TypeWithId
+    fun fromId(id: Int): ValuePropositionFlow {
+      return values().associateBy { enum: TypeWithId -> enum.id }[id]
         ?: throw NotImplementedError("Id $id was not found")
     }
   }

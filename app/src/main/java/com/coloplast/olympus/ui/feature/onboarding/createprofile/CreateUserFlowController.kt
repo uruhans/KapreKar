@@ -22,7 +22,7 @@ class CreateUserFlowController: FlowFactoryController<CreateUserModel>() {
       CreateUserFlow.PhoneSU6 -> {
         if(data.phoneNumber.contains(UK_COUNTRY_CODE_1) || data.phoneNumber.contains(UK_COUNTRY_CODE_2)){
           //TODO: skip insurance data
-          getFlowFactory().next()
+          getFlowFactory().skipNext()
           true
         }else {
           false // go to next step as usual.

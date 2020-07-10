@@ -20,6 +20,7 @@ import com.coloplast.olympus.ui.feature.home.BreachesOccurred
 import com.coloplast.olympus.ui.feature.home.HomeViewModel
 import com.coloplast.olympus.ui.feature.onboarding.createprofile.CreateUserFactoryImpl
 import com.coloplast.olympus.ui.feature.onboarding.createprofile.models.CreateUserModel
+import com.coloplast.olympus.ui.feature.onboarding.setup.SetupGuideIntroFactoryImpl
 import com.coloplast.olympus.ui.feature.onboarding.valueproposition.ValuePropositionFactoryImpl
 import com.coloplast.olympus.ui.feature.onboarding.valueproposition.ValuePropositionModel
 import com.coloplast.olympus.ui.feature.transmitters.TransmittersViewModel
@@ -66,5 +67,6 @@ val koinModule = module {
   *  */
   single<FlowFactory<AddTransmitterModel>>(override = true) { AddTransmitterFactoryImpl() }
   single<FlowFactory<ValuePropositionModel>>(override = true) { ValuePropositionFactoryImpl() }
+  single { SetupGuideIntroFactoryImpl() }
   single<FlowFactory<CreateUserModel>>(override = true) { CreateUserFactoryImpl() }
 }

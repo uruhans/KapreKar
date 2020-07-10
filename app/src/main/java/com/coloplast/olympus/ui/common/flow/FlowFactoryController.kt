@@ -5,6 +5,7 @@ import androidx.annotation.CallSuper
 import com.bluelinelabs.conductor.Controller
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
+import com.coloplast.olympus.shared.models.flow.FlowFactoryModel
 import com.coloplast.olympus.ui.common.BaseFlowController
 
 abstract class FlowFactoryController<T : FlowFactoryModel>(args: Bundle? = null) : BaseFlowController(args),

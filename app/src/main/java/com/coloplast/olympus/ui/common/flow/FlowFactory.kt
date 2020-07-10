@@ -22,7 +22,7 @@ abstract class FlowFactory<V: FlowFactoryModel> {
     /**
      * Implement this method to receive all data on every step before moving on to the next step
      *
-     * NOTICE: MUST RETURN TRUE IF OVERRIDDEN (AND YOU MUST MANUALLY CALL NEXT IF YOU DO)
+     * NOTICE: MUST RETURN TRUE IF OVERRIDDEN (AND YOU MUST MANUALLY CALL @see FlowFactory.incrementAndNext() IF YOU DO)
      *
      * ** this is used to do something with the data in between steps ie: call the server on a specific step before the end of the flow **
      */
@@ -70,13 +70,21 @@ abstract class FlowFactory<V: FlowFactoryModel> {
     initialStartIndex = index
     currentIndex.set(initialStartIndex)
   }
-  
+
+  /**
+   * Call this if you have implemented @see onStepCompleted()
+   */
+  fun incrementAndNext() {
+    currentIndex.getAndIncrement()
+    next()
+  }
+
   /**
    * Determines where to go next and makes a callback to either
    * listener.onFlowCompleted (if no more steps are found in the flow) or
    * listener.next() - containing the next routerTransaction to display on screen
    */
-  fun next() {
+  private fun next() {
     // if this is the very first step, we call initialize
     if(currentIndex.get() == initialStartIndex) {
       initialize()
@@ -93,14 +101,15 @@ abstract class FlowFactory<V: FlowFactoryModel> {
   }
   
   /**
-   * Whenever a controller in the flow passes on a result, we parse the result and go next()
+   * Whenever a controller in the flow passes on a result, we parse the result
+   * then make a callback to the flow controller with the data collected until now (only if implemented)
    */
   fun onResult(result: Any?) {
-    parseResultFromController(currentIndex.getAndIncrement(), result)
+    parseResultFromController(currentIndex.get(), result)
 
     // call onStepCompleted (if implemented) - else go next()
     if(listener?.onStepCompleted(currentIndex.get(), getData()) == false) {
-      next()
+      incrementAndNext()
     }
   }
   

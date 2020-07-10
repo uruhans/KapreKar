@@ -17,6 +17,16 @@ class CreateUserFlowController: FlowFactoryController<CreateUserModel>() {
 
   override fun getFlowFactory(): FlowFactory<CreateUserModel> = createUserFactory
 
+  override fun onStepCompleted(currentIndex: Int, data: CreateUserModel): Boolean {
+    return when(CreateUserFlow.fromIndex(currentIndex)){
+      CreateUserFlow.InsuranceSU7 -> {
+        //registrationRelay.accept(data)
+        true
+      }
+      else -> super.onStepCompleted(currentIndex, data)
+    }
+  }
+
   companion object{
     private const val CONTROLLER_TAG = "create_user_flow_controller"
 

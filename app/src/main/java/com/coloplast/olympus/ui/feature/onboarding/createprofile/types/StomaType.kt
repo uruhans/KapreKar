@@ -2,22 +2,23 @@ package com.coloplast.olympus.ui.feature.onboarding.createprofile.types
 
 import androidx.annotation.StringRes
 import com.coloplast.olympus.R
+import com.coloplast.olympus.shared.types.TypeWithId
 
 
 /**
  * Created by Kike Bodi (ebp@dawnhealth.com) on 02/07/2020.
  * Copyright by Dawn Health A/S. All rights reserved.
  */
-enum class StomaType(@StringRes val stringId: Int) {
-  COLOSTOMY(R.string.onboarding_stoma_type_colostomy),
-  ILEOSTOMY(R.string.onboarding_stoma_type_ileostomy),
-  UROSTOMY(R.string.onboarding_stoma_type_urostomy),
-  NA(R.string.onboarding_stoma_type_na);
+enum class StomaType(override val id: Int,@StringRes val stringId: Int): TypeWithId {
+  COLOSTOMY(0,R.string.onboarding_stoma_type_colostomy),
+  ILEOSTOMY(1,R.string.onboarding_stoma_type_ileostomy),
+  UROSTOMY(2,R.string.onboarding_stoma_type_urostomy),
+  NA(3,R.string.onboarding_stoma_type_na);
 
   companion object {
-    fun fromOrdinal(ordinal: Int): StomaType {
-      return values()
-        .associateBy { type: StomaType -> type.ordinal }[ordinal] ?: NA
+    fun fromId(id: Int): StomaType {
+      return values().associateBy { enum: TypeWithId -> enum.id }[id]
+        ?: throw NotImplementedError("Id $id was not found")
     }
   }
 }

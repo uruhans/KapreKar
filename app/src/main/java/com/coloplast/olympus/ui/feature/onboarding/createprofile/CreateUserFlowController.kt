@@ -18,11 +18,11 @@ class CreateUserFlowController: FlowFactoryController<CreateUserModel>() {
   override fun getFlowFactory(): FlowFactory<CreateUserModel> = createUserFactory
 
   override fun onStepCompleted(currentIndex: Int, data: CreateUserModel): Boolean {
-    return when(CreateUserFlow.fromIndex(currentIndex-1)){
+    return when(CreateUserFlow.fromIndex(currentIndex)){
       CreateUserFlow.PhoneSU6 -> {
         if(data.phoneNumber.contains(UK_COUNTRY_CODE_1) || data.phoneNumber.contains(UK_COUNTRY_CODE_2)){
-          //TODO: skip insurance data
           getFlowFactory().skipNext()
+          getFlowFactory().incrementAndNext()
           true
         }else {
           false // go to next step as usual.

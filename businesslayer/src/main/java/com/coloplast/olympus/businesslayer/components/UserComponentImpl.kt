@@ -5,6 +5,7 @@ import com.coloplast.olympus.datalayer.ApiService
 import com.coloplast.olympus.datalayer.ApiServiceImpl
 import com.coloplast.olympus.shared.models.CreateUserModel
 import com.coloplast.olympus.shared.models.CurrentUser
+import com.coloplast.olympus.shared.models.User
 import com.coloplast.olympus.shared.preferences.Preferences
 import io.reactivex.Observable
 
@@ -22,7 +23,8 @@ class UserComponentImpl: UserComponent {
       .map {
         Preferences.get().userToken = it.token
         CurrentUser.LoggedIn(
-          it.userDto.toUser()
+          //it.userDto.toUser()
+          User(true)
         )
       }
   }

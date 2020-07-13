@@ -2,7 +2,6 @@ package com.coloplast.olympus.datalayer.models
 
 import com.coloplast.olympus.shared.models.User
 import com.squareup.moshi.JsonClass
-import java.time.Instant
 
 
 /**
@@ -13,14 +12,13 @@ import java.time.Instant
 @JsonClass(generateAdapter = true)
 data class UserDTO(
   val userId: Int,
-  val firstName: String,
-  val lastName: String,
-  val email: String,
-  val password: String,
-  val role: Int,
-  val countryId: Int,
-  val registered: Instant,
-  val isPasswordReset: Boolean
+  //val firstName: String,
+  //val lastName: String,
+  val email: String
+  //val role: Int,
+  //val countryId: Int,
+  //val registered: Instant,
+  //val isPasswordReset: Boolean
 ){
 
   fun toUser(): User{

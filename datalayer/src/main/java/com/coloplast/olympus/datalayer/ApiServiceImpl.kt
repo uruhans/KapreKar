@@ -11,8 +11,6 @@ class ApiServiceImpl : ApiService {
 
   override fun registration(createUserModel: CreateUserModel): Observable<CreateUserResponseDTO> {
     val createUserDTO = CreateUserRequestDTO(
-      firstname = createUserModel.firstName,
-      lastname = createUserModel.lastName,
       email = createUserModel.email,
       password = createUserModel.password
     )

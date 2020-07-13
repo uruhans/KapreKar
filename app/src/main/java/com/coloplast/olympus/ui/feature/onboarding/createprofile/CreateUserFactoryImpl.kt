@@ -25,7 +25,7 @@ class CreateUserFactoryImpl : FlowFactory<CreateUserModel>() {
   }
 
   override fun getRouterTransaction(currentIndex: Int): RouterTransaction? {
-    return when(CreateUserFlow.fromId(currentIndex)){
+    return when(CreateUserFlow.fromIndex(currentIndex)){
       CreateUserFlow.CreateUserSU1 -> CreateUserSU1Controller.getRouterTransaction()
       CreateUserFlow.StomaInfoSU2 -> StomaInfoSU2Controller.getRouterTransaction()
       CreateUserFlow.EmailSU3 -> EmailSU3Controller.getRouterTransaction()
@@ -47,7 +47,7 @@ class CreateUserFactoryImpl : FlowFactory<CreateUserModel>() {
       return
     }
 
-    when (CreateUserFlow.fromId(currentIndex)) {
+    when (CreateUserFlow.fromIndex(currentIndex)) {
       CreateUserFlow.CreateUserSU1 -> {
         val data = result as SU1Model
         model.firstName = data.firstname

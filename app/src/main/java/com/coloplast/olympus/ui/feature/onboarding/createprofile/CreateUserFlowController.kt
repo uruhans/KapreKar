@@ -44,6 +44,10 @@ class CreateUserFlowController: FlowFactoryController<CreateUserModel>(),
           false // go to next step as usual.
         }
       }
+      CreateUserFlow.InsuranceSU7 -> {
+        registrationRelay.accept(data)
+        true
+      }
       else -> super.onStepCompleted(currentIndex, data)
     }
   }
@@ -70,7 +74,7 @@ class CreateUserFlowController: FlowFactoryController<CreateUserModel>(),
       when (uiModel) {
         is GenericUiModel.Success<*> -> {
           // User created - Go to last step
-          getFlowFactory().skipNext()
+          //getFlowFactory().skipNext() //TODO: Only do this if UK number.
           getFlowFactory().incrementAndNext()
         }
         is GenericUiModel.Error -> {

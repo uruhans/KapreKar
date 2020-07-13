@@ -2,7 +2,7 @@ package com.coloplast.olympus.ui.feature.onboarding.createprofile.types
 
 import androidx.annotation.StringRes
 import com.coloplast.olympus.R
-import com.coloplast.olympus.ui.common.TypeWithId
+import com.coloplast.olympus.shared.types.TypeWithId
 
 
 /**

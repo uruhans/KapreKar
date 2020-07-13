@@ -1,7 +1,6 @@
 package com.coloplast.olympus.datalayer.models
 
 import com.squareup.moshi.JsonClass
-import java.time.Instant
 
 
 /**
@@ -11,13 +10,6 @@ import java.time.Instant
 
 @JsonClass(generateAdapter = true)
 data class CreateUserRequestDTO(
-  val firstname: String,
-  val lastname: String,
-  val password: String,
   val email: String,
-  val role: Int = 0,
-  val countryId: Int = 0,
-  val registered: Instant = Instant.now(),
-  val isPasswordReset: Boolean = false
-
+  val password: String
 )

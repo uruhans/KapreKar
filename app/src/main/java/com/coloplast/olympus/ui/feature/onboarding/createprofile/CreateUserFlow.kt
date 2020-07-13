@@ -1,9 +1,10 @@
 package com.coloplast.olympus.ui.feature.onboarding.createprofile
 
-import com.coloplast.olympus.ui.common.TypeWithId
+import com.coloplast.olympus.shared.types.TypeWithId
 
 
-enum class CreateUserFlow(override val id: Int): TypeWithId {
+enum class CreateUserFlow(override val id: Int):
+  TypeWithId {
   CreateUserSU1(0),
   StomaInfoSU2(1),
   EmailSU3(2),
@@ -14,9 +15,8 @@ enum class CreateUserFlow(override val id: Int): TypeWithId {
   Completed(7);
 
   companion object {
-    fun fromId(id: Int): TypeWithId{
-      return values().associateBy { enum: TypeWithId -> enum.id }[id] as? TypeWithId
-        ?: throw NotImplementedError("Id $id was not found")
+    fun fromIndex(index: Int) : CreateUserFlow {
+      return values().associateBy { flow: CreateUserFlow -> flow.ordinal}[index] ?: Completed
     }
   }
 }

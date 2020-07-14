@@ -23,6 +23,7 @@ import com.coloplast.olympus.ui.feature.home.BreachesOccurred
 import com.coloplast.olympus.ui.feature.home.HomeViewModel
 import com.coloplast.olympus.ui.feature.onboarding.createprofile.CreateUserFactoryImpl
 import com.coloplast.olympus.ui.feature.onboarding.createprofile.CreateUserViewModel
+import com.coloplast.olympus.ui.feature.onboarding.login.LoginViewModel
 import com.coloplast.olympus.ui.feature.onboarding.setup.SetupGuideIntroFactoryImpl
 import com.coloplast.olympus.ui.feature.onboarding.valueproposition.ValuePropositionFactoryImpl
 import com.coloplast.olympus.ui.feature.onboarding.valueproposition.ValuePropositionModel
@@ -66,6 +67,7 @@ val koinModule = module {
   single { TransmittersViewModel(get(), get()) }
   single { AddTransmitterAT9ViewModel(get(), get()) }
   single { CreateUserViewModel(get(), get()) }
+  single { LoginViewModel(get(), get()) }
 
   /* Flows
   *  Fixed problem with Generic Type:

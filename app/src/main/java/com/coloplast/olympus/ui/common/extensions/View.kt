@@ -53,11 +53,6 @@ private fun animateFade(target: View, endResult: Int) {
   animator.start()
 }
 
-fun View.hideKeyboard() {
-  val inputMethodManager = context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-  inputMethodManager.hideSoftInputFromWindow(this.windowToken, 0)
-}
-
 fun View.fadeIn(animationDuration: Long = 200, offset: Long = 0){
   animation = AlphaAnimation(0f, 1f).apply {
     interpolator = AccelerateInterpolator()
@@ -79,4 +74,9 @@ fun View.rotate360(animationDuration: Long = 2000, offset: Long = 0){
     startOffset = offset
     duration = animationDuration
   }
+}
+
+fun View.hideKeyboard() {
+  val inputMethodManager = context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+  inputMethodManager.hideSoftInputFromWindow(this.windowToken, 0)
 }

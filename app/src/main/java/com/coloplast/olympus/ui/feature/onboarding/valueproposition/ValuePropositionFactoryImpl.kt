@@ -19,7 +19,7 @@ class ValuePropositionFactoryImpl : FlowFactory<ValuePropositionModel>() {
   }
 
   override fun getRouterTransaction(currentIndex: Int): RouterTransaction? {
-    return when (ValuePropositionFlow.fromIndex(currentIndex)) {
+    return when (ValuePropositionFlow.fromId(currentIndex)) {
       ValuePropositionFlow.ValuePropositionVP1 -> {
         SimpleInfoPageController.routerTransaction(
           iconId = R.drawable.ic_sidemenu_status,
@@ -53,7 +53,7 @@ class ValuePropositionFactoryImpl : FlowFactory<ValuePropositionModel>() {
           showCloseButton = false
         )
       }
-      ValuePropositionFlow.Completed -> null
+      else -> null
     }
   }
 

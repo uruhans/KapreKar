@@ -1,19 +1,23 @@
 package com.coloplast.olympus.ui.feature.onboarding.valueproposition
 
+import com.coloplast.olympus.shared.types.TypeWithId
+
 
 /**
  * Created by Kike Bodi (ebp@dawnhealth.com) on 29/06/2020.
  * Copyright by Dawn Health A/S. All rights reserved.
  */
-enum class ValuePropositionFlow {
-  ValuePropositionVP1,
-  ValuePropositionVP2,
-  ValuePropositionVP3,
-  Completed;
+enum class ValuePropositionFlow(override val id: Int):
+  TypeWithId {
+  ValuePropositionVP1(0),
+  ValuePropositionVP2(1),
+  ValuePropositionVP3(2),
+  Completed(3);
 
   companion object {
-    fun fromIndex(index: Int) : ValuePropositionFlow {
-      return values().associateBy { flow: ValuePropositionFlow -> flow.ordinal}[index] ?: Completed
+    fun fromId(id: Int): ValuePropositionFlow {
+      return values().associateBy { enum: TypeWithId -> enum.id }[id]
+        ?: Completed
     }
   }
 }

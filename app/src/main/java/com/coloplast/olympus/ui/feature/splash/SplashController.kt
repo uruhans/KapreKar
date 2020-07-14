@@ -36,7 +36,6 @@ class SplashController : BaseController<ControllerSplashBinding>() {
     val routerTransaction = if(preferences.userToken.isNotBlank()){
       HomeController.routerTransaction()
     } else {
-      // TODO: Link with CPO-518
       LandingController.routerTransaction()
     }
 

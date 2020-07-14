@@ -29,6 +29,7 @@ class GenericConfirmationController(args: Bundle): BaseController<ControllerGene
   }
 
   fun onFinishButtonClicked(){
+    //This only works if this controller is managed by FlowFactory.
     getListener(FlowListener::class.java)!!.onNextClicked()
   }
 

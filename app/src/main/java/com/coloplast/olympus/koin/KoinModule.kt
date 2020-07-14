@@ -9,17 +9,23 @@ import com.coloplast.olympus.bluetooth.businesslayer.BluetoothManager
 import com.coloplast.olympus.bluetooth.businesslayer.BluetoothManagerImpl
 import com.coloplast.olympus.bluetooth.businesslayer.DeviceConnection
 import com.coloplast.olympus.businesslayer.components.TransmitterComponentImpl
+import com.coloplast.olympus.businesslayer.components.UserComponentImpl
 import com.coloplast.olympus.businesslayer.interfaces.TransmitterComponent
+import com.coloplast.olympus.businesslayer.interfaces.UserComponent
 import com.coloplast.olympus.notifications.NotificationCenter
 import com.coloplast.olympus.notifications.NotificationScheduler
 import com.coloplast.olympus.notifications.OlympusNotificationManager
+import com.coloplast.olympus.shared.models.CreateUserModel
 import com.coloplast.olympus.shared.preferences.Preferences
 import com.coloplast.olympus.ui.common.flow.FlowFactory
 import com.coloplast.olympus.ui.feature.TransmitterManager
 import com.coloplast.olympus.ui.feature.home.BreachesOccurred
 import com.coloplast.olympus.ui.feature.home.HomeViewModel
 import com.coloplast.olympus.ui.feature.onboarding.createprofile.CreateUserFactoryImpl
-import com.coloplast.olympus.ui.feature.onboarding.createprofile.models.CreateUserModel
+import com.coloplast.olympus.ui.feature.onboarding.createprofile.CreateUserViewModel
+import com.coloplast.olympus.ui.feature.onboarding.setup.SetupGuideIntroFactoryImpl
+import com.coloplast.olympus.ui.feature.onboarding.valueproposition.ValuePropositionFactoryImpl
+import com.coloplast.olympus.ui.feature.onboarding.valueproposition.ValuePropositionModel
 import com.coloplast.olympus.ui.feature.transmitters.TransmittersViewModel
 import com.coloplast.olympus.ui.feature.transmitters.add.AddTransmitterFactoryImpl
 import com.coloplast.olympus.ui.feature.transmitters.add.AddTransmitterViewModel
@@ -48,6 +54,7 @@ val koinModule = module {
 
   /* Components */
   single<TransmitterComponent> { TransmitterComponentImpl() }
+  single<UserComponent> { UserComponentImpl() }
 
   single { Me() }
 
@@ -58,10 +65,14 @@ val koinModule = module {
   single { AddTransmitterViewModel(get(), get()) }
   single { TransmittersViewModel(get(), get()) }
   single { AddTransmitterAT9ViewModel(get(), get()) }
+  single { CreateUserViewModel(get(), get()) }
 
   /* Flows
-  * https://stackoverflow.com/questions/56289929/how-to-use-koin-in-multiple-module/56291710
-  */
+  *  Fixed problem with Generic Type:
+  *  https://stackoverflow.com/a/59641397/2145504
+  *  */
   single<FlowFactory<AddTransmitterModel>>(override = true) { AddTransmitterFactoryImpl() }
+  single<FlowFactory<ValuePropositionModel>>(override = true) { ValuePropositionFactoryImpl() }
+  single { SetupGuideIntroFactoryImpl() }
   single<FlowFactory<CreateUserModel>>(override = true) { CreateUserFactoryImpl() }
 }

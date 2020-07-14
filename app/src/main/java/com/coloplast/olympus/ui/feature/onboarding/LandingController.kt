@@ -23,7 +23,6 @@ class LandingController: BaseController<ControllerLandingBinding>() {
   }
 
   fun onCreateProfileClicked(){
-    //TODO: Link with CPO-519
     getContentRouter().pushController(CreateUserFlowController.routerTransaction()
       .popChangeHandler(HorizontalChangeHandler())
       .pushChangeHandler(HorizontalChangeHandler())

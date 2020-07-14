@@ -20,11 +20,6 @@ data class UserDTO(
   //val countryId: Int,
   //val registered: Instant,
   //val isPasswordReset: Boolean
-){
-
-  fun toUser(): User{
-    return User(
-      success = true
-    )
-  }
+) {
+  fun toUser() = User(userId, email)
 }

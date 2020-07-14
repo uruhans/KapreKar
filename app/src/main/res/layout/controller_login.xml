@@ -67,10 +67,19 @@
           android:id="@+id/email_edittext"
           style="@style/EditTextInputText"
           android:hint="@string/onboarding_email_hint"
-          app:errorBackground="@{controller.error}"
+          app:errorBackground="@{controller.validEmail}"
           android:text="@={controller.email}"
           android:inputType="textEmailAddress"/>
       </com.google.android.material.textfield.TextInputLayout>
+
+      <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_standard"
+        android:layout_marginEnd="@dimen/spacing_standard"
+        android:text="@string/onboarding_email_error"
+        style="@style/TextInputLayoutErrorText"
+        app:visibleOrGone="@{!controller.validEmail}"/>
 
       <TextView
         android:layout_width="match_parent"
@@ -94,7 +103,7 @@
           style="@style/EditTextInputText"
           android:background="@drawable/edittext_background"
           android:hint="@string/onboarding_password_hint"
-          app:errorBackground="@{controller.error}"
+          app:errorBackground="@{controller.validPassword}"
           android:text="@={controller.password}"
           android:inputType="textPassword"
           app:onSubmit="@{() -> controller.onNextClicked()}"/>
@@ -105,9 +114,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/spacing_standard"
         android:layout_marginEnd="@dimen/spacing_standard"
-        android:text="@string/onboarding_login_error"
+        android:text="@string/onboarding_password_error"
         style="@style/TextInputLayoutErrorText"
-        android:visibility="@{controller.error ? View.GONE : View.VISIBLE}"/>
+        visibleOrGone="@{!controller.validPassword}" />
 
     </LinearLayout>
 

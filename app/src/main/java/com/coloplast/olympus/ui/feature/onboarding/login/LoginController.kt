@@ -9,13 +9,13 @@ import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerLoginBinding
 import com.coloplast.olympus.shared.extensions.isValidEmail
 import com.coloplast.olympus.shared.models.Credentials
+import com.coloplast.olympus.shared.utils.StringUtils.PASSWORD_REGEX
 import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.common.LoadingController
 import com.coloplast.olympus.ui.common.dialogs.BaseDialogController
 import com.coloplast.olympus.ui.common.dialogs.DialogController
 import com.coloplast.olympus.ui.common.extensions.onValueChanged
 import com.coloplast.olympus.ui.common.models.GenericUiModel
-import com.coloplast.olympus.ui.feature.onboarding.createprofile.su4.PasswordSU4Controller
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
@@ -36,7 +36,6 @@ class LoginController: BaseController<ControllerLoginBinding>(),
 
   private var dialogController: DialogController? = null
 
-  val error = ObservableBoolean(true)
   val validEmail = ObservableBoolean(true)
   val email = ObservableField("").apply {
     compositeDisposable.add(
@@ -47,7 +46,7 @@ class LoginController: BaseController<ControllerLoginBinding>(),
   val password = ObservableField("").apply {
     compositeDisposable.add(
       onValueChanged {
-        val regex = PasswordSU4Controller.PASSWORD_REGEX.toRegex()
+        val regex = PASSWORD_REGEX.toRegex()
         val isValid = get()!!.matches(regex)
         validPassword.set(isValid)
       }

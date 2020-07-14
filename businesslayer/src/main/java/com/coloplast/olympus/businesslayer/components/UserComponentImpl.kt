@@ -4,6 +4,7 @@ import com.coloplast.olympus.businesslayer.interfaces.UserComponent
 import com.coloplast.olympus.datalayer.ApiService
 import com.coloplast.olympus.datalayer.ApiServiceImpl
 import com.coloplast.olympus.shared.models.CreateUserModel
+import com.coloplast.olympus.shared.models.Credentials
 import com.coloplast.olympus.shared.models.CurrentUser
 import com.coloplast.olympus.shared.models.User
 import com.coloplast.olympus.shared.preferences.Preferences
@@ -22,10 +23,23 @@ class UserComponentImpl: UserComponent {
     return apiService.registration(createUserModel)
       .map {
         Preferences.get().userToken = it.token
+        // TODO: Save correct attributes
         CurrentUser.LoggedIn(
           //it.userDto.toUser()
           User(true)
         )
       }
   }
+
+  override fun login(credentials: Credentials): Observable<CurrentUser> {
+    return apiService.login(credentials)
+      .map {
+        Preferences.get().userToken = it.token
+        // TODO: Save correct attributes
+        CurrentUser.LoggedIn(
+          User(true)
+        )
+      }
+  }
+
 }

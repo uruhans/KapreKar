@@ -7,11 +7,15 @@ import com.artemzin.rxui.RxUi
 import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerLoginBinding
+import com.coloplast.olympus.shared.extensions.isValidEmail
 import com.coloplast.olympus.shared.models.Credentials
 import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.common.LoadingController
+import com.coloplast.olympus.ui.common.dialogs.BaseDialogController
 import com.coloplast.olympus.ui.common.dialogs.DialogController
+import com.coloplast.olympus.ui.common.extensions.onValueChanged
 import com.coloplast.olympus.ui.common.models.GenericUiModel
+import com.coloplast.olympus.ui.feature.onboarding.createprofile.su4.PasswordSU4Controller
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
@@ -24,7 +28,8 @@ import org.koin.core.inject
  * Copyright by Dawn Health A/S. All rights reserved.
  */
 class LoginController: BaseController<ControllerLoginBinding>(),
-  LoginView {
+  LoginView,
+  BaseDialogController.Listener {
 
   private val viewModel: LoginViewModel by inject()
   private val loginRelay: PublishRelay<Credentials> = PublishRelay.create()
@@ -32,8 +37,22 @@ class LoginController: BaseController<ControllerLoginBinding>(),
   private var dialogController: DialogController? = null
 
   val error = ObservableBoolean(true)
-  val email = ObservableField("")
-  val password = ObservableField("")
+  val validEmail = ObservableBoolean(true)
+  val email = ObservableField("").apply {
+    compositeDisposable.add(
+      onValueChanged { validEmail.set(this.get()!!.isValidEmail()) }
+    )
+  }
+  val validPassword = ObservableBoolean(true)
+  val password = ObservableField("").apply {
+    compositeDisposable.add(
+      onValueChanged {
+        val regex = PasswordSU4Controller.PASSWORD_REGEX.toRegex()
+        val isValid = get()!!.matches(regex)
+        validPassword.set(isValid)
+      }
+    )
+  }
 
   override fun attachVariables(viewBinding: ControllerLoginBinding) {
     viewBinding.controller = this
@@ -51,7 +70,10 @@ class LoginController: BaseController<ControllerLoginBinding>(),
 
       when (uiModel) {
         is GenericUiModel.Success<*> -> {
-          val user = ""
+          if(uiModel.data as Boolean == true){
+            //Login successful
+            //TODO: Go to next screen.
+          }
         }
         is GenericUiModel.Error -> {
           @StringRes val messageResId = when (uiModel.errorCode) {
@@ -79,7 +101,26 @@ class LoginController: BaseController<ControllerLoginBinding>(),
       .refCount()
   }
 
+  override fun onPositiveButtonClicked(requestCode: Int) {
+    when(requestCode){
+      LOGIN_ERROR_REQUEST_CODE -> {
+        dialogController?.dismissDialog(false)
+        dialogController = null
+      }
+    }
+  }
+
   fun onNextClicked(){
+    email.notifyChange()
+    password.notifyChange()
+    if(validEmail.get() && validPassword.get()){
+      val credentials = Credentials(
+        email.get()!!,
+        password.get()!!
+
+      )
+      loginRelay.accept(credentials)
+    }
 
   }
 
@@ -92,6 +133,4 @@ class LoginController: BaseController<ControllerLoginBinding>(),
     fun getRouterTransaction() = RouterTransaction.with(LoginController())
       .tag(TAG_CONTROLLER)
   }
-
-
 }

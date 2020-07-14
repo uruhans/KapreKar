@@ -123,6 +123,10 @@ class LoginController: BaseController<ControllerLoginBinding>(),
 
   }
 
+  fun onForgotPassword(){
+    //TODO: Link with forgot password flow.
+  }
+
   override fun getLayout(): Int = R.layout.controller_login
 
   companion object{

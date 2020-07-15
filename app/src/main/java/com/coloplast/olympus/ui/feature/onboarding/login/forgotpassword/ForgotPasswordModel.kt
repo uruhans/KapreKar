@@ -9,4 +9,6 @@ import com.coloplast.olympus.shared.models.flow.FlowFactoryModel
  */
 class ForgotPasswordModel: FlowFactoryModel {
   lateinit var email: String
+  lateinit var code: String
+  lateinit var newPassword: String
 }

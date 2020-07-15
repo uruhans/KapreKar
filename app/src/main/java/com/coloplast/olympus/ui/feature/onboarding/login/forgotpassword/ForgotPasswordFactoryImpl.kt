@@ -32,6 +32,10 @@ class ForgotPasswordFactoryImpl: FlowFactory<ForgotPasswordModel>() {
         val email = result as String
         model.email = email
       }
+      ForgotPasswordFlow.ForgotPasswordFP2 -> {
+        val code = result as String
+        model.code = code
+      }
     }
   }
 

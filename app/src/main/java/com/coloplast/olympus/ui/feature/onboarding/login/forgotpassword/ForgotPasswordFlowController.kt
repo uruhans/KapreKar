@@ -1,8 +1,14 @@
 package com.coloplast.olympus.ui.feature.onboarding.login.forgotpassword
 
+import com.artemzin.rxui.RxUi
 import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.ui.common.flow.FlowFactory
 import com.coloplast.olympus.ui.common.flow.TopMenuFlowFactoryController
+import com.coloplast.olympus.ui.common.models.GenericUiModel
+import com.jakewharton.rxrelay2.PublishRelay
+import io.reactivex.Observable
+import io.reactivex.disposables.Disposable
+import io.reactivex.functions.Function
 import org.koin.core.inject
 
 
@@ -10,11 +16,27 @@ import org.koin.core.inject
  * Created by Kike Bodi (ebp@dawnhealth.com) on 15/07/2020.
  * Copyright by Dawn Health A/S. All rights reserved.
  */
-class ForgotPasswordFlowController: TopMenuFlowFactoryController<ForgotPasswordModel>() {
+class ForgotPasswordFlowController: TopMenuFlowFactoryController<ForgotPasswordModel>(),
+  ForgotPasswordView{
 
   private val model: FlowFactory<ForgotPasswordModel> by inject()
+  private val securityCodeRelay: PublishRelay<String> = PublishRelay.create()
 
   override fun getFlowFactory(): FlowFactory<ForgotPasswordModel> = model
+
+  override fun render(): Function<Observable<GenericUiModel>, Disposable> {
+    return RxUi.ui { uiModel ->
+
+    }
+  }
+
+  override fun requestCode(email: String) {
+    securityCodeRelay.accept(email)
+  }
+
+  override fun onCodeRequested(): Observable<String> {
+    return securityCodeRelay.publish().refCount()
+  }
 
   companion object{
     private const val CONTROLLER_TAG = "forgot_password_flow_controller"

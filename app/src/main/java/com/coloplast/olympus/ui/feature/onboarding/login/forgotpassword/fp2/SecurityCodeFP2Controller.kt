@@ -5,7 +5,9 @@ import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerSecurityCodeFp2Binding
 import com.coloplast.olympus.ui.common.BaseController
+import com.coloplast.olympus.ui.common.listeners.FlowListener
 import com.coloplast.olympus.ui.common.widgets.InputCodeEditText
+import com.coloplast.olympus.ui.feature.onboarding.login.forgotpassword.ForgotPasswordView
 
 
 /**
@@ -26,7 +28,11 @@ class SecurityCodeFP2Controller(args: Bundle): BaseController<ControllerSecurity
   }
 
   override fun onCodeInput(code: String) {
-    TODO("Not yet implemented")
+    getListener(FlowListener::class.java)!!.onNextClicked(code)
+  }
+
+  fun onResendCode(){
+    getListener(ForgotPasswordView::class.java)!!.requestCode(email)
   }
 
   override fun getLayout(): Int = R.layout.controller_security_code_fp_2

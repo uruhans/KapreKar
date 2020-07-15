@@ -1,13 +1,9 @@
 package com.coloplast.olympus.ui.feature.onboarding.createprofile.su3
 
-import androidx.databinding.ObservableBoolean
-import androidx.databinding.ObservableField
 import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerEmailSu3Binding
-import com.coloplast.olympus.shared.extensions.isValidEmail
 import com.coloplast.olympus.ui.common.BaseController
-import com.coloplast.olympus.ui.common.extensions.onValueChanged
 import com.coloplast.olympus.ui.common.listeners.FlowListener
 
 
@@ -17,11 +13,15 @@ import com.coloplast.olympus.ui.common.listeners.FlowListener
  */
 class EmailSU3Controller: BaseController<ControllerEmailSu3Binding>() {
 
-  val validEmail = ObservableBoolean(true)
-  val email = ObservableField("").apply {
-    compositeDisposable.add(
-      onValueChanged { validEmail.set(this.get()!!.isValidEmail()) }
-    )
+  private var email: String = ""
+  private var validEmail: Boolean = false
+
+  val onCurrentEmailChanged: ((String) -> Unit) = {
+    email = it
+  }
+
+  val onValidityChanged: ((Boolean) -> Unit) = {
+    validEmail = it
   }
 
   override fun attachVariables(viewBinding: ControllerEmailSu3Binding) {
@@ -33,9 +33,8 @@ class EmailSU3Controller: BaseController<ControllerEmailSu3Binding>() {
   }
 
   fun onNextClicked(){
-    email.notifyChange()
-    if(validEmail.get()){
-      getListener(FlowListener::class.java)!!.onNextClicked(email.get()!!)
+    if(validEmail){
+      getListener(FlowListener::class.java)!!.onNextClicked(email)
     }
   }
 

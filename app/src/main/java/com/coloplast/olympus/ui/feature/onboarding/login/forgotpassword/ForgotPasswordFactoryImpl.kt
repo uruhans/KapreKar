@@ -2,6 +2,7 @@ package com.coloplast.olympus.ui.feature.onboarding.login.forgotpassword
 
 import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.ui.common.flow.FlowFactory
+import com.coloplast.olympus.ui.feature.onboarding.login.forgotpassword.fp1.EmailFP1Controller
 
 
 /**
@@ -18,7 +19,7 @@ class ForgotPasswordFactoryImpl: FlowFactory<ForgotPasswordModel>() {
 
   override fun getRouterTransaction(currentIndex: Int): RouterTransaction? {
     return when(ForgotPasswordFlow.fromId(currentIndex)){
-      //todo
+      ForgotPasswordFlow.ForgotPasswordFP1 -> EmailFP1Controller.getRouterTransaction()
       else -> null
     }
   }

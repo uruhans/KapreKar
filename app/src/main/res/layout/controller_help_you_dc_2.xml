@@ -18,7 +18,7 @@
     <include layout="@layout/item_info_with_banner"
       app:drawableId="@{R.drawable.data_consent_placeholder}"
       app:titleId="@{R.string.onboarding_dc2_title}"
-      app:descriptionId="@{R.string.onboarding_dc3_description}"
+      app:descriptionId="@{R.string.onboarding_dc2_description}"
       app:layout_constraintTop_toTopOf="parent"/>
 
     <com.coloplast.olympus.ui.common.widgets.CustomTabLayout

@@ -8,15 +8,15 @@ import com.coloplast.olympus.ui.common.TypeWithId
  * Copyright by Dawn Health A/S. All rights reserved.
  */
 enum class DataConsentFlow(override val id: Int): TypeWithId {
-  DataConsentDC1(1),
-  DataConsentDC2(2),
-  DataConsentDC3(3),
-  DataConsentDC4(4),
-  DataConsentDC5(5),
-  Completed(6);
+  DataConsentDC1(0),
+  DataConsentDC2(1),
+  DataConsentDC3(2),
+  DataConsentDC4(3),
+  DataConsentDC5(4),
+  Completed(5);
 
   companion object {
-    fun fromId(id: Int): DataConsentFlow{
+    fun fromIndex(id: Int): DataConsentFlow{
       return values().associateBy { enum: TypeWithId -> enum.id }[id]
         ?: Completed
     }

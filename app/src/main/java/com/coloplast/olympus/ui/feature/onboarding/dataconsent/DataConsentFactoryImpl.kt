@@ -3,6 +3,7 @@ package com.coloplast.olympus.ui.feature.onboarding.dataconsent
 import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.ui.common.flow.EmptyFlowFactoryModel
 import com.coloplast.olympus.ui.common.flow.FlowFactory
+import com.coloplast.olympus.ui.feature.onboarding.dataconsent.dc1.DataIntroDC1Controller
 
 
 /**
@@ -18,7 +19,10 @@ class DataConsentFactoryImpl: FlowFactory<EmptyFlowFactoryModel>() {
   }
 
   override fun getRouterTransaction(currentIndex: Int): RouterTransaction? {
-    TODO("Not yet implemented")
+    return when(DataConsentFlow.fromIndex(currentIndex)){
+      DataConsentFlow.DataConsentDC1 -> DataIntroDC1Controller.getRouterTransaction()
+      else -> null
+    }
   }
 
 

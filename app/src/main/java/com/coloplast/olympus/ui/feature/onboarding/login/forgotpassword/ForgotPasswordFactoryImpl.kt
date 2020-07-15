@@ -4,6 +4,7 @@ import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.ui.common.flow.FlowFactory
 import com.coloplast.olympus.ui.feature.onboarding.login.forgotpassword.fp1.EmailFP1Controller
 import com.coloplast.olympus.ui.feature.onboarding.login.forgotpassword.fp2.SecurityCodeFP2Controller
+import com.coloplast.olympus.ui.feature.onboarding.login.forgotpassword.fp3.PasswordFP3Controller
 
 
 /**
@@ -22,6 +23,7 @@ class ForgotPasswordFactoryImpl: FlowFactory<ForgotPasswordModel>() {
     return when(ForgotPasswordFlow.fromId(currentIndex)){
       ForgotPasswordFlow.ForgotPasswordFP1 -> EmailFP1Controller.getRouterTransaction()
       ForgotPasswordFlow.ForgotPasswordFP2 -> SecurityCodeFP2Controller.getRouterTransaction(model.email)
+      ForgotPasswordFlow.ForgotPasswordFP3 -> PasswordFP3Controller.getRouterTransaction()
       else -> null
     }
   }
@@ -35,6 +37,10 @@ class ForgotPasswordFactoryImpl: FlowFactory<ForgotPasswordModel>() {
       ForgotPasswordFlow.ForgotPasswordFP2 -> {
         val code = result as String
         model.code = code
+      }
+      ForgotPasswordFlow.ForgotPasswordFP3 -> {
+        val password = result as String
+        model.newPassword = password
       }
     }
   }

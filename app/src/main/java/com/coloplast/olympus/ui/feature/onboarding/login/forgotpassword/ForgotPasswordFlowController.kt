@@ -1,6 +1,5 @@
 package com.coloplast.olympus.ui.feature.onboarding.login.forgotpassword
 
-import android.widget.Toast
 import com.artemzin.rxui.RxUi
 import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.databinding.ControllerFlowBinding
@@ -34,7 +33,7 @@ class ForgotPasswordFlowController: TopMenuFlowFactoryController<ForgotPasswordM
 
   override fun render(): Function<Observable<GenericUiModel>, Disposable> {
     return RxUi.ui { uiModel ->
-        Toast.makeText(applicationContext, "Code requested", Toast.LENGTH_LONG).show()
+        //Toast.makeText(applicationContext, "Code requested", Toast.LENGTH_LONG).show()
     }
   }
 

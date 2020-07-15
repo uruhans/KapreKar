@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <data>
+    <import type="com.coloplast.olympus.R" />
+    <variable
+      name="controller"
+      type="com.coloplast.olympus.ui.feature.onboarding.login.forgotpassword.fp2.SecurityCodeFP2Controller" />
+  </data>
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/top"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_margin="@dimen/spacing_larger"
+      android:gravity="center"
+      android:orientation="vertical"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintTop_toTopOf="parent">
+
+      <TextView
+        android:id="@+id/transmitter_guide_at1_title"
+        style="@style/GuideHeader.32"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_double"
+        android:layout_marginBottom="@dimen/spacing_standard"
+        android:text="@string/onboarding_fp2_title" />
+
+      <TextView
+        android:id="@+id/application_guide_description"
+        style="@style/GuideHeaderDescription.18"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:stringResource="@{R.string.onboarding_fp2_description}"
+        app:formatTextWithSingleArg="@{controller.email}"/>
+
+      <com.coloplast.olympus.ui.common.widgets.InputCodeEditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_double"
+        app:listener="@{controller}" />
+
+    </LinearLayout>
+
+    <Button
+      style="@style/Button.Secondary"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="@string/onboarding_fp2_button_text"
+      app:layout_constraintBottom_toBottomOf="parent" />
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -8,4 +8,5 @@ import com.coloplast.olympus.shared.models.flow.FlowFactoryModel
  * Copyright by Dawn Health A/S. All rights reserved.
  */
 class ForgotPasswordModel: FlowFactoryModel {
+  lateinit var email: String
 }

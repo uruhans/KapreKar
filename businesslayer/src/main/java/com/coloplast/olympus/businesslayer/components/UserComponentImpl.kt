@@ -38,4 +38,6 @@ class UserComponentImpl: UserComponent {
       }
   }
 
+  override fun requestSecurityCode(email: String) = apiService.requestSecurityCode(email)
+
 }

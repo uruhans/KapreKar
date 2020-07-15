@@ -1,6 +1,8 @@
 package com.coloplast.olympus.ui.feature.onboarding.login.forgotpassword
 
 import com.bluelinelabs.conductor.RouterTransaction
+import com.coloplast.olympus.R
+import com.coloplast.olympus.ui.common.GenericConfirmationController
 import com.coloplast.olympus.ui.common.flow.FlowFactory
 import com.coloplast.olympus.ui.feature.onboarding.login.forgotpassword.fp1.EmailFP1Controller
 import com.coloplast.olympus.ui.feature.onboarding.login.forgotpassword.fp2.SecurityCodeFP2Controller
@@ -24,6 +26,11 @@ class ForgotPasswordFactoryImpl: FlowFactory<ForgotPasswordModel>() {
       ForgotPasswordFlow.ForgotPasswordFP1 -> EmailFP1Controller.getRouterTransaction()
       ForgotPasswordFlow.ForgotPasswordFP2 -> SecurityCodeFP2Controller.getRouterTransaction(model.email)
       ForgotPasswordFlow.ForgotPasswordFP3 -> PasswordFP3Controller.getRouterTransaction()
+      ForgotPasswordFlow.ForgotPasswordFP4 -> GenericConfirmationController.getRouterTransaction(
+        titleId = R.string.onboarding_fp4_title,
+        descriptionId = R.string.onboarding_fp4_description,
+        buttonId = R.string.onboarding_fp4_button_text
+      )
       else -> null
     }
   }

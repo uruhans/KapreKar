@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <data>
+    <import type="com.coloplast.olympus.R" />
+    <variable
+      name="controller"
+      type="com.coloplast.olympus.ui.feature.onboarding.dataconsent.dc5.AcceptTermsDC5Controller" />
+  </data>
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:layout_marginTop="@dimen/toolbar_height">
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical"
+      android:layout_marginEnd="@dimen/spacing_larger"
+      android:layout_marginStart="@dimen/spacing_double"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintBottom_toBottomOf="parent">
+
+      <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_sidemenu_guides" />
+
+      <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_double"
+        android:layout_marginBottom="@dimen/spacing_standard"
+        android:text="@string/onboarding_dc5_title"
+        style="@style/TextStyle.Coloplast.Bold.DarkGrey.24" />
+
+      <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/onboarding_dc5_description"
+        style="@style/TextStyle.Roboto.Regular.ClearGrey.18" />
+
+      <Button
+        android:id="@+id/policy_agreement_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        safeText="@{R.string.onboarding_dc5_link1_text}"
+        style="@style/Button.Borderless"
+        android:textAllCaps="false"
+        android:textSize="@dimen/text_18"
+        android:textAlignment="textStart"
+        app:layout_constraintBottom_toTopOf="@id/terms_use_button"/>
+
+      <Button
+        android:id="@+id/terms_use_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        safeText="@{R.string.onboarding_dc5_link2_text}"
+        style="@style/Button.Borderless"
+        android:textAllCaps="false"
+        android:textSize="@dimen/text_18"
+        android:textAlignment="textStart"
+        app:layout_constraintBottom_toTopOf="@id/primary_button"/>
+    </LinearLayout>
+
+    <Button
+      android:id="@+id/primary_button"
+      android:layout_height="wrap_content"
+      android:layout_width="match_parent"
+      style="@style/Button"
+      app:safeText="@{R.string.onboarding_dc1_primary_button}"
+      android:onClick="@{()-> controller.onAcceptClicked()}"
+      app:layout_constraintBottom_toTopOf="@id/secondary_button" />
+
+    <Button
+      android:id="@+id/secondary_button"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      style="@style/Button.Secondary"
+      android:textAllCaps="false"
+      android:layout_marginStart="@dimen/spacing_larger"
+      android:layout_marginEnd="@dimen/spacing_larger"
+      android:layout_marginBottom="@dimen/spacing_larger"
+      android:textSize="@dimen/text_18"
+      app:safeText="@{R.string.onboarding_dc1_secondary_button}"
+      android:onClick="@{()-> controller.onDeclineClicked()}"
+      app:layout_constraintBottom_toBottomOf="parent" />
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

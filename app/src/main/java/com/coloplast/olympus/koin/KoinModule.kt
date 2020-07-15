@@ -24,6 +24,9 @@ import com.coloplast.olympus.ui.feature.home.HomeViewModel
 import com.coloplast.olympus.ui.feature.onboarding.createprofile.CreateUserFactoryImpl
 import com.coloplast.olympus.ui.feature.onboarding.createprofile.CreateUserViewModel
 import com.coloplast.olympus.ui.feature.onboarding.login.LoginViewModel
+import com.coloplast.olympus.ui.feature.onboarding.login.forgotpassword.ForgotPasswordFactoryImpl
+import com.coloplast.olympus.ui.feature.onboarding.login.forgotpassword.ForgotPasswordModel
+import com.coloplast.olympus.ui.feature.onboarding.login.forgotpassword.ForgotPasswordViewModel
 import com.coloplast.olympus.ui.feature.onboarding.setup.SetupGuideIntroFactoryImpl
 import com.coloplast.olympus.ui.feature.onboarding.valueproposition.ValuePropositionFactoryImpl
 import com.coloplast.olympus.ui.feature.onboarding.valueproposition.ValuePropositionModel
@@ -68,6 +71,7 @@ val koinModule = module {
   single { AddTransmitterAT9ViewModel(get(), get()) }
   single { CreateUserViewModel(get(), get()) }
   single { LoginViewModel(get(), get()) }
+  single { ForgotPasswordViewModel(get()) }
 
   /* Flows
   *  Fixed problem with Generic Type:
@@ -77,4 +81,5 @@ val koinModule = module {
   single<FlowFactory<ValuePropositionModel>>(override = true) { ValuePropositionFactoryImpl() }
   single { SetupGuideIntroFactoryImpl() }
   single<FlowFactory<CreateUserModel>>(override = true) { CreateUserFactoryImpl() }
+  single<FlowFactory<ForgotPasswordModel>>(override = true) { ForgotPasswordFactoryImpl() }
 }

@@ -19,7 +19,7 @@ class ForgotPasswordFlowController: TopMenuFlowFactoryController<ForgotPasswordM
   companion object{
     private const val CONTROLLER_TAG = "forgot_password_flow_controller"
 
-    fun routerTransaction(): RouterTransaction {
+    fun getRouterTransaction(): RouterTransaction {
       return RouterTransaction.with(ForgotPasswordFlowController())
         .tag(CONTROLLER_TAG)
     }

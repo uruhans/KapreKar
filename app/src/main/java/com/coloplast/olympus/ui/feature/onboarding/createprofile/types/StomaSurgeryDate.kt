@@ -20,5 +20,10 @@ enum class StomaSurgeryDate(override val id: Int, @StringRes val stringId: Int):
       return values().associateBy { enum: TypeWithId -> enum.id }[id]
         ?: throw NotImplementedError("Id $id was not found")
     }
+
+    fun fromOrdinal(ordinal: Int): StomaSurgeryDate {
+      return values().associateBy { type: StomaSurgeryDate -> type.ordinal }[ordinal]
+        ?: throw NotImplementedError("Ordinal $ordinal was not found")
+    }
   }
 }

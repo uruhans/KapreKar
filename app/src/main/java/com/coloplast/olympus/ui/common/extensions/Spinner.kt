@@ -6,11 +6,12 @@ import android.widget.Spinner
 import androidx.databinding.BindingAdapter
 import androidx.databinding.InverseBindingAdapter
 import androidx.databinding.InverseBindingListener
+import com.coloplast.olympus.shared.types.TypeWithId
 
 
-@BindingAdapter(value = ["selectedValue", "selectedValueAttrChanged"], requireAll = false)
+@BindingAdapter(value = ["selectedTypeWithId", "selectedValueAttrChanged"], requireAll = false)
 fun Spinner.bindSpinnerData(
-  newSelectedValue: Any?,
+  newSelectedValue: TypeWithId?,
   newTextAttrChanged: InverseBindingListener
 ) {
   onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -32,5 +33,5 @@ fun Spinner.bindSpinnerData(
   }
 }
 
-@InverseBindingAdapter(attribute = "selectedValue", event = "selectedValueAttrChanged")
-fun Spinner.captureSelectedValue(): Any = selectedItem
+@InverseBindingAdapter(attribute = "selectedTypeWithId", event = "selectedValueAttrChanged")
+fun Spinner.getSelectedItem(): Any = selectedItem

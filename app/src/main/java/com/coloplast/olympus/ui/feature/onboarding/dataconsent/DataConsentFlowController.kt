@@ -28,15 +28,6 @@ class DataConsentFlowController: TopMenuFlowFactoryController<DataConsentModel>(
           false // go to next step as usual.
         }
       }
-      /*CreateUserFlow.PhoneSU6 -> {
-        if(data.phoneNumber.contains(UK_COUNTRY_CODE_1) || data.phoneNumber.contains(UK_COUNTRY_CODE_2)){
-          getFlowFactory().skipNext()
-          getFlowFactory().incrementAndNext()
-          true
-        }else {
-          false // go to next step as usual.
-        }
-      }*/
       else -> super.onStepCompleted(currentIndex, data)
     }
   }

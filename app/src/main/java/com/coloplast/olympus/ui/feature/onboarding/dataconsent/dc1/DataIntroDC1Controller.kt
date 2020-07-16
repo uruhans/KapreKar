@@ -22,11 +22,11 @@ class DataIntroDC1Controller: BaseController<ControllerDataIntroDc1Binding>() {
   }
 
   fun onReadMoreClicked(){
-    getListener(FlowListener::class.java)!!.onNextClicked()
+    getListener(FlowListener::class.java)!!.onNextClicked(false) // skip = false
   }
 
   fun onSkipClicked(){
-
+    getListener(FlowListener::class.java)!!.onNextClicked(true) // skip = true
   }
 
   override fun getLayout(): Int= R.layout.controller_data_intro_dc_1

@@ -26,7 +26,7 @@ class DataIntroDC1Controller: BaseController<ControllerDataIntroDc1Binding>() {
   }
 
   fun onSkipClicked(){
-    //TODO go to screen 4
+
   }
 
   override fun getLayout(): Int= R.layout.controller_data_intro_dc_1

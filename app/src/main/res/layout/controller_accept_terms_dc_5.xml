@@ -27,7 +27,7 @@
       <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_sidemenu_guides" />
+        android:src="@drawable/ic_agree_terms" />
 
       <TextView
         android:layout_width="match_parent"
@@ -73,7 +73,7 @@
       android:layout_height="wrap_content"
       android:layout_width="match_parent"
       style="@style/Button"
-      app:safeText="@{R.string.onboarding_dc1_primary_button}"
+      app:safeText="@{R.string.onboarding_dc5_primary_button}"
       android:onClick="@{()-> controller.onAcceptClicked()}"
       app:layout_constraintBottom_toTopOf="@id/secondary_button" />
 
@@ -87,7 +87,7 @@
       android:layout_marginEnd="@dimen/spacing_larger"
       android:layout_marginBottom="@dimen/spacing_larger"
       android:textSize="@dimen/text_18"
-      app:safeText="@{R.string.onboarding_dc1_secondary_button}"
+      app:safeText="@{R.string.onboarding_dc5_secondary_button}"
       android:onClick="@{()-> controller.onDeclineClicked()}"
       app:layout_constraintBottom_toBottomOf="parent" />
 

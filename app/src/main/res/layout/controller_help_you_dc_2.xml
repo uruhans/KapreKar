@@ -16,7 +16,7 @@
     android:layout_marginTop="@dimen/toolbar_height">
 
     <include layout="@layout/item_info_with_banner"
-      app:drawableId="@{R.drawable.data_consent_placeholder}"
+      app:drawableId="@{R.drawable.help_you_img}"
       app:titleId="@{R.string.onboarding_dc2_title}"
       app:descriptionId="@{R.string.onboarding_dc2_description}"
       app:layout_constraintTop_toTopOf="parent"/>

@@ -1,9 +1,12 @@
 package com.coloplast.olympus.ui.feature.onboarding.dataconsent.dc5
 
 import com.bluelinelabs.conductor.RouterTransaction
+import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerAcceptTermsDc5Binding
 import com.coloplast.olympus.ui.common.BaseController
+import com.coloplast.olympus.ui.common.WebViewController
+import com.coloplast.olympus.ui.common.listeners.FlowListener
 
 
 /**
@@ -21,9 +24,31 @@ class AcceptTermsDC5Controller: BaseController<ControllerAcceptTermsDc5Binding>(
     //noop
   }
 
-  fun onAcceptClicked(){}
+  fun onPolicyAgreementClicked(){
+    val url = applicationContext!!.getString(R.string.onboarding_dc5_link1)
+    getContentRouter().pushController(
+      WebViewController.getRouterTransaction(url)
+        .popChangeHandler(VerticalChangeHandler())
+        .pushChangeHandler(VerticalChangeHandler())
+    )
+  }
 
-  fun onDeclineClicked(){}
+  fun onTermsOfUse(){
+    val url = applicationContext!!.getString(R.string.onboarding_dc5_link2)
+    getContentRouter().pushController(
+      WebViewController.getRouterTransaction(url)
+        .popChangeHandler(VerticalChangeHandler())
+        .pushChangeHandler(VerticalChangeHandler())
+    )
+  }
+
+  fun onAcceptClicked(){
+    getListener(FlowListener::class.java)!!.onNextClicked()
+  }
+
+  fun onDeclineClicked(){
+    //TODO
+  }
 
   override fun getLayout(): Int = R.layout.controller_accept_terms_dc_5
 

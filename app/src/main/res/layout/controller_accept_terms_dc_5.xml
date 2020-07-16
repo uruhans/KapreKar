@@ -52,6 +52,7 @@
         android:textAllCaps="false"
         android:textSize="@dimen/text_18"
         android:textAlignment="textStart"
+        android:onClick="@{() -> controller.onPolicyAgreementClicked()}"
         app:layout_constraintBottom_toTopOf="@id/terms_use_button"/>
 
       <Button
@@ -63,6 +64,7 @@
         android:textAllCaps="false"
         android:textSize="@dimen/text_18"
         android:textAlignment="textStart"
+        android:onClick="@{() -> controller.onTermsOfUse()}"
         app:layout_constraintBottom_toTopOf="@id/primary_button"/>
     </LinearLayout>
 

@@ -253,6 +253,7 @@
 <string name="onboarding_chapter_preparing_change_title">It will soon be time to apply your new TestProduct</string>
 <string name="onboarding_chapter_preparing_checklist_description">Next, you\'ll move on to preparing your appliance and sensor layer.</string>
 <string name="onboarding_chapter_preparing_checklist_title">So far, so good</string>
+<string name="onboarding_chapter_preparing_come_back_later_button">I\'m ready now</string>
 <string name="onboarding_chapter_preparing_come_back_later_description">Simply come back to the app when you are ready to change your ostomy appliance. Your progress will be saved and you can pick up where you left off.</string>
 <string name="onboarding_chapter_preparing_come_back_later_title">Take your time. Your setup guide will be waiting for you.</string>
 <string name="onboarding_chapter_preparing_place_sl_description">With the turquoise ring facing up, place the sensor layer on your baseplate. The long sensor layer arm can point in the direction that suits you.</string>

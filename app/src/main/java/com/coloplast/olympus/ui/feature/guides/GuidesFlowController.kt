@@ -16,16 +16,16 @@ class GuidesFlowController: BaseFlowController() {
   }
 
   override fun startFlow(flowChildRouter: Router) {
-    //flowChildRouter.setRoot(getInitialController())
+    flowChildRouter.setRoot(getInitialController())
   }
 
-  /*private fun getInitialController(): RouterTransaction {
+  private fun getInitialController(): RouterTransaction {
     val transaction = GuideMenuController.routerTransaction()
     transaction.controller()
       .targetController = this
 
     return transaction
-  }*/
+  }
 
   companion object{
     private const val CONTROLLER_TAG = "guides_flow_controller"

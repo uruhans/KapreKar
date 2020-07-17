@@ -68,7 +68,8 @@ class ForgotPasswordFlowController : TopMenuFlowFactoryController<ForgotPassword
       when (uiModel) {
         is GenericUiModel.Success<*> -> when (uiModel.data) {
           ForgotPasswordViewModel.Callback.CODE_REQUESTED,
-          ForgotPasswordViewModel.Callback.CODE_VALIDATED -> {
+          ForgotPasswordViewModel.Callback.CODE_VALIDATED,
+          ForgotPasswordViewModel.Callback.PASSWORD_CHANGED -> {
             model.incrementAndNext()
           }
         }

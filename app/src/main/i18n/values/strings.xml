@@ -256,6 +256,7 @@
 <string name="onboarding_chapter_intro_transmitter_lid_description">Your transmitter has a lid on the lighter grey front side. The lid opens and closes to allow attachment to a sensor layer (you\'ll attach later).</string>
 <string name="onboarding_chapter_intro_transmitter_lid_title">Opening the transmitter lid</string>
 <string name="onboarding_chapter_intro_transmitter_title">Your transmitter</string>
+<string name="onboarding_chapter_preparing_change_come_back_later_button">I\'ll return later</string>
 <string name="onboarding_chapter_preparing_change_description">During the next few steps, you will need to change your ostomy appliance. If now isn\'t a good time, you can return and complete the guide later.</string>
 <string name="onboarding_chapter_preparing_change_title">It will soon be time to apply your new TestProduct</string>
 <string name="onboarding_chapter_preparing_checklist_description">Next, you\'ll move on to preparing your appliance and sensor layer.</string>
@@ -331,6 +332,9 @@
 <string name="onboarding_password_error">Password does not match criteria</string>
 <string name="onboarding_password_hint">Create password</string>
 <string name="onboarding_password_title">Password</string>
+<string name="onboarding_pc_button_text">Continue</string>
+<string name="onboarding_pc_description">You\'re now ready to more on to setting up TestProduct. Hit \'Continue\' to move on to the TestProduct Setup Guide.</string>
+<string name="onboarding_pc_title">Profile complete</string>
 <string name="onboarding_phone_error">Incorrect phone number format</string>
 <string name="onboarding_phone_hint">Enter phone number</string>
 <string name="onboarding_phone_title">Country code and phone number</string>

@@ -19,9 +19,7 @@ class DataConsentFlowController: TopMenuFlowFactoryController<DataConsentModel>(
     return when(DataConsentFlow.fromIndex(currentIndex)){
       DataConsentFlow.DataConsentDC1 -> {
         return if(data.skip){
-          getFlowFactory().skipNext()
-          getFlowFactory().skipNext()
-          getFlowFactory().skipNext()
+          getFlowFactory().skipUntil(DataConsentFlow.DataConsentDC4.id)
           getFlowFactory().incrementAndNext()
           true
         } else {

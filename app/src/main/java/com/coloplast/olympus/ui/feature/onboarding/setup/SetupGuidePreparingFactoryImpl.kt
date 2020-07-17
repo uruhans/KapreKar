@@ -2,8 +2,7 @@ package com.coloplast.olympus.ui.feature.onboarding.setup
 
 import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.R
-import com.coloplast.olympus.ui.common.GenericConfirmationController
-import com.coloplast.olympus.ui.common.SimpleInfoPageController
+import com.coloplast.olympus.ui.common.InfoPageController
 import com.coloplast.olympus.ui.common.flow.EmptyModel
 import com.coloplast.olympus.ui.common.flow.FlowFactory
 import com.coloplast.olympus.ui.feature.onboarding.setup.model.SetupGuidePreparingFlow
@@ -24,23 +23,22 @@ class SetupGuidePreparingFactoryImpl : FlowFactory<EmptyModel>() {
     return when(SetupGuidePreparingFlow.fromIndex(currentIndex)) {
       SetupGuidePreparingFlow.SetupGuideSG4 -> SetupGuideSG4.routerTransaction()
       SetupGuidePreparingFlow.SetupGuideChangingSGP1 -> {
-          SimpleInfoPageController.routerTransaction(
-            R.drawable.ic_sidemenu_settings, // TODO - need correct image
+          InfoPageController.routerTransaction(
+            R.drawable.ic_info_circle,
             R.string.onboarding_chapter_preparing_change_title,
             R.string.onboarding_chapter_preparing_change_description,
-            0,
-            0,
+            positiveButtonTextId = R.string.generic_continue,
+            negativeButtonTextId = R.string.onboarding_chapter_preparing_change_come_back_later_button,
             showBackButton = true,
             showCloseButton = false
           )
       }
       SetupGuidePreparingFlow.SetupGuideComeBackLaterSGP1_2 -> {
-        SimpleInfoPageController.routerTransaction(
+        InfoPageController.routerTransaction(
           R.drawable.ic_sidemenu_settings, // TODO - need correct image
           R.string.onboarding_chapter_preparing_come_back_later_title,
           R.string.onboarding_chapter_preparing_come_back_later_description,
-          0,
-          0,
+          R.string.onboarding_chapter_preparing_come_back_later_button,
           showBackButton = true,
           showCloseButton = false
         )
@@ -54,7 +52,11 @@ class SetupGuidePreparingFactoryImpl : FlowFactory<EmptyModel>() {
   }
 
   override fun parseResultFromController(currentIndex: Int, result: Any?) {
-    /* no-op */
+    if(SetupGuidePreparingFlow.fromIndex(currentIndex) == SetupGuidePreparingFlow.SetupGuideChangingSGP1) {
+      if(result == true) {
+        skipNext()
+      }
+    }
   }
 
   override fun getData(): EmptyModel {

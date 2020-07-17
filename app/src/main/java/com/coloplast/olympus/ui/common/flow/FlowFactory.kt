@@ -1,7 +1,7 @@
 package com.coloplast.olympus.ui.common.flow
 
 import com.bluelinelabs.conductor.RouterTransaction
-import com.coloplast.olympus.shared.models.flow.FlowFactoryModel
+import com.coloplast.olympus.ui.common.flow.flow.FlowFactoryModel
 import java.util.concurrent.atomic.AtomicInteger
 
 /**

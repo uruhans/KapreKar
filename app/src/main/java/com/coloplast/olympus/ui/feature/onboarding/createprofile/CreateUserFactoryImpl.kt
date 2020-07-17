@@ -2,9 +2,9 @@ package com.coloplast.olympus.ui.feature.onboarding.createprofile
 
 import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.R
-import com.coloplast.olympus.shared.models.CreateUserModel
 import com.coloplast.olympus.ui.common.GenericConfirmationController
 import com.coloplast.olympus.ui.common.flow.FlowFactory
+import com.coloplast.olympus.ui.feature.onboarding.createprofile.models.CreateUserModel
 import com.coloplast.olympus.ui.feature.onboarding.createprofile.models.SU1Model
 import com.coloplast.olympus.ui.feature.onboarding.createprofile.models.SU2Model
 import com.coloplast.olympus.ui.feature.onboarding.createprofile.su1.CreateUserSU1Controller

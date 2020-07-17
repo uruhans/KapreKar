@@ -3,7 +3,7 @@ package com.coloplast.olympus.businesslayer.components
 import com.coloplast.olympus.businesslayer.interfaces.UserComponent
 import com.coloplast.olympus.datalayer.ApiService
 import com.coloplast.olympus.datalayer.ApiServiceImpl
-import com.coloplast.olympus.shared.models.CreateUserModel
+import com.coloplast.olympus.shared.models.CreateUser
 import com.coloplast.olympus.shared.models.Credentials
 import com.coloplast.olympus.shared.models.CurrentUser
 import com.coloplast.olympus.shared.preferences.Preferences
@@ -18,8 +18,8 @@ class UserComponentImpl: UserComponent {
 
   private val apiService: ApiService = ApiServiceImpl()
 
-  override fun registration(createUserModel: CreateUserModel): Observable<CurrentUser> {
-    return apiService.registration(createUserModel)
+  override fun registration(createUser: CreateUser): Observable<CurrentUser> {
+    return apiService.registration(createUser)
       .map {
         Preferences.get().userToken = it.token
         CurrentUser.LoggedIn(

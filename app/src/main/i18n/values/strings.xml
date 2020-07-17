@@ -316,6 +316,7 @@
 <string name="onboarding_health_insurance_2">onboarding_health_insurance_2</string>
 <string name="onboarding_health_insurance_3">onboarding_health_insurance_3</string>
 <string name="onboarding_health_insurance_4">onboarding_health_insurance_4</string>
+<string name="onboarding_insurance_hint">Select from list</string>
 <string name="onboarding_insurance_title">Your insurance provider</string>
 <string name="onboarding_landing_create_profile_button">Create profile</string>
 <string name="onboarding_landing_log_in_button">Log in</string>
@@ -330,6 +331,9 @@
 <string name="onboarding_password_error">Password does not match criteria</string>
 <string name="onboarding_password_hint">Create password</string>
 <string name="onboarding_password_title">Password</string>
+<string name="onboarding_pc_button_text">Continue</string>
+<string name="onboarding_pc_description">You\'re now ready to more on to setting up TestProduct. Hit \'Continue\' to move on to the TestProduct Setup Guide.</string>
+<string name="onboarding_pc_title">Profile complete</string>
 <string name="onboarding_phone_error">Incorrect phone number format</string>
 <string name="onboarding_phone_hint">Enter phone number</string>
 <string name="onboarding_phone_title">Country code and phone number</string>

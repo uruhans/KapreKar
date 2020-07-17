@@ -157,7 +157,7 @@ abstract class FlowFactory<V: FlowFactoryModel> {
    */
   fun skipNext() {
     // add the current index to the skipped steps and increment
-    skippedSteps.add(currentIndex.get())
     currentIndex.incrementAndGet()
+    skippedSteps.add(currentIndex.get())
   }
 }

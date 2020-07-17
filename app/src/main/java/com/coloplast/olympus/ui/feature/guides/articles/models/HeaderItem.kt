@@ -1,4 +1,4 @@
-package com.coloplast.olympus.ui.feature.guides.models
+package com.coloplast.olympus.ui.feature.guides.articles.models
 
 import androidx.annotation.StringRes
 

@@ -180,6 +180,13 @@
 <string name="guide_wiping_sub_title_5">Aftørring for fugt af konnektor</string>
 <string name="guide_wiping_sub_title_6">I tilfælde af fejlmelding om fugt i systemet</string>
 <string name="guide_wiping_title">Guide til aftørring</string>
+<string name="guides_menu_applying_changing">Applying &amp; changing</string>
+<string name="guides_menu_connection_transmitter">Connection &amp; transmitter</string>
+<string name="guides_menu_description">Everything you need to know to get the most of [Olympus]</string>
+<string name="guides_menu_feq">FAQ</string>
+<string name="guides_menu_getting_started">Getting started</string>
+<string name="guides_menu_maintenance">Maintenance</string>
+<string name="guides_menu_title">Guides</string>
 <string name="launch_screen_title">Olympus</string>
 <string name="lock_notification_action_snooze">Snooze.</string>
 <string name="lock_notification_battery_critical">Transmitterens batteri er meget lavt.</string>

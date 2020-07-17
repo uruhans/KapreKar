@@ -22,7 +22,7 @@ class ForgotPasswordFactoryImpl: FlowFactory<ForgotPasswordModel>() {
   }
 
   override fun getRouterTransaction(currentIndex: Int): RouterTransaction? {
-    return when(ForgotPasswordFlow.fromId(currentIndex)){
+    return when(ForgotPasswordFlow.fromIndex(currentIndex)){
       ForgotPasswordFlow.ForgotPasswordFP1 -> EmailFP1Controller.getRouterTransaction()
       ForgotPasswordFlow.ForgotPasswordFP2 -> SecurityCodeFP2Controller.getRouterTransaction(model.email)
       ForgotPasswordFlow.ForgotPasswordFP3 -> PasswordFP3Controller.getRouterTransaction()
@@ -36,7 +36,7 @@ class ForgotPasswordFactoryImpl: FlowFactory<ForgotPasswordModel>() {
   }
 
   override fun parseResultFromController(currentIndex: Int, result: Any?) {
-    when(ForgotPasswordFlow.fromId(currentIndex)){
+    when(ForgotPasswordFlow.fromIndex(currentIndex)){
       ForgotPasswordFlow.ForgotPasswordFP1 -> {
         val email = result as String
         model.email = email

@@ -1,8 +1,13 @@
 package com.coloplast.olympus.ui.feature.onboarding.login.forgotpassword
 
+import androidx.annotation.StringRes
 import com.artemzin.rxui.RxUi
 import com.bluelinelabs.conductor.RouterTransaction
+import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerFlowBinding
+import com.coloplast.olympus.shared.exceptions.ApiErrorType
+import com.coloplast.olympus.ui.common.LoadingController
+import com.coloplast.olympus.ui.common.dialogs.DialogController
 import com.coloplast.olympus.ui.common.flow.FlowFactory
 import com.coloplast.olympus.ui.common.flow.TopMenuFlowFactoryController
 import com.coloplast.olympus.ui.common.models.GenericUiModel
@@ -17,12 +22,13 @@ import org.koin.core.inject
  * Created by Kike Bodi (ebp@dawnhealth.com) on 15/07/2020.
  * Copyright by Dawn Health A/S. All rights reserved.
  */
-class ForgotPasswordFlowController: TopMenuFlowFactoryController<ForgotPasswordModel>(),
-  ForgotPasswordView{
+class ForgotPasswordFlowController : TopMenuFlowFactoryController<ForgotPasswordModel>(),
+  ForgotPasswordView {
 
   private val viewModel: ForgotPasswordViewModel by inject()
   private val model: FlowFactory<ForgotPasswordModel> by inject()
   private val securityCodeRelay: PublishRelay<String> = PublishRelay.create()
+  private var dialogController: DialogController? = null
 
   override fun getFlowFactory(): FlowFactory<ForgotPasswordModel> = model
 
@@ -31,9 +37,44 @@ class ForgotPasswordFlowController: TopMenuFlowFactoryController<ForgotPasswordM
     compositeDisposable.add(viewModel.bind(this))
   }
 
+  override fun onStepCompleted(currentIndex: Int, data: ForgotPasswordModel): Boolean {
+    return when (ForgotPasswordFlow.fromIndex(currentIndex)) {
+      ForgotPasswordFlow.ForgotPasswordFP1 -> {
+        securityCodeRelay.accept(data.email)
+        true
+      }
+      else -> super.onStepCompleted(currentIndex, data)
+    }
+  }
+
   override fun render(): Function<Observable<GenericUiModel>, Disposable> {
     return RxUi.ui { uiModel ->
-        //Toast.makeText(applicationContext, "Code requested", Toast.LENGTH_LONG).show()
+
+      val isLoading = uiModel is GenericUiModel.Loading
+      LoadingController.toggle(isLoading, router)
+
+      when (uiModel) {
+        is GenericUiModel.Success<*> -> when (uiModel.data) {
+          ForgotPasswordViewModel.Callback.CODE_REQUESTED -> {
+            model.incrementAndNext()
+          }
+        }
+        is GenericUiModel.Error -> {
+          @StringRes val messageResId = when (uiModel.errorCode) {
+            ApiErrorType.AuthInvalidEmail.code -> R.string.onboarding_email_error
+            else -> R.string.generic_error_message
+          }
+
+          dialogController = DialogController.create(
+            targetController = this,
+            requestCode = REQUEST_CODE,
+            titleId = R.string.generic_error,
+            messageId = messageResId,
+            positiveButtonId = R.string.generic_ok,
+            dismissAllowed = true
+          ).apply { show() }
+        }
+      }
     }
   }
 
@@ -45,8 +86,9 @@ class ForgotPasswordFlowController: TopMenuFlowFactoryController<ForgotPasswordM
     return securityCodeRelay.publish().refCount()
   }
 
-  companion object{
+  companion object {
     private const val CONTROLLER_TAG = "forgot_password_flow_controller"
+    private const val REQUEST_CODE = 1001
 
     fun getRouterTransaction(): RouterTransaction {
       return RouterTransaction.with(ForgotPasswordFlowController())

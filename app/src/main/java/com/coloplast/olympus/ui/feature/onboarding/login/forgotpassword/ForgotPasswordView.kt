@@ -10,6 +10,6 @@ import io.reactivex.Observable
  * Copyright by Dawn Health A/S. All rights reserved.
  */
 interface ForgotPasswordView: UiView<GenericUiModel> {
-  fun requestCode(email: String)
   fun onCodeRequested(): Observable<String>
+  fun requestCode(email: String)
 }

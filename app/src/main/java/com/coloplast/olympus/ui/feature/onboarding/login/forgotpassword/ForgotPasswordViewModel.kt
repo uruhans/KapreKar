@@ -28,9 +28,9 @@ class ForgotPasswordViewModel(private val userComponent: UserComponent):
         .switchMap { email ->
           userComponent.requestSecurityCode(email)
             .subscribeOn(Schedulers.io())
-            .toSingle { true }
+            .toSingle { Callback.CODE_REQUESTED }
             .toObservable()
-            .compose(DelayedLoadingTransformer<Boolean>())
+            .compose(DelayedLoadingTransformer<Callback>())
             .compose(GenericUiModelTransformer())
         }.onErrorReturn { throwable: Throwable ->
           return@onErrorReturn when (throwable) {
@@ -53,5 +53,11 @@ class ForgotPasswordViewModel(private val userComponent: UserComponent):
 
     disposable.add(requestCodeCompletable.bind(uiView.render()))
     return disposable
+  }
+
+  enum class Callback{
+    CODE_REQUESTED,
+    CODE_VALIDATED,
+    PASSWORD_CHANGED
   }
 }

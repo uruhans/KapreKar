@@ -15,7 +15,7 @@ enum class ForgotPasswordFlow(override val id: Int): TypeWithId {
   Completed(4);
 
   companion object {
-    fun fromId(id: Int): ForgotPasswordFlow {
+    fun fromIndex(id: Int): ForgotPasswordFlow {
       return values().associateBy { enum: TypeWithId -> enum.id }[id]
         ?: Completed
     }

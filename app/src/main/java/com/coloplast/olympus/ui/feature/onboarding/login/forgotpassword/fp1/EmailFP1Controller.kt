@@ -5,7 +5,6 @@ import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerEmailFp1Binding
 import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.common.listeners.FlowListener
-import com.coloplast.olympus.ui.feature.onboarding.login.forgotpassword.ForgotPasswordView
 
 
 /**
@@ -35,7 +34,6 @@ class EmailFP1Controller: BaseController<ControllerEmailFp1Binding>() {
 
   fun onNextClicked(){
     if(validEmail){
-      getListener(ForgotPasswordView::class.java)!!.requestCode(email)
       getListener(FlowListener::class.java)!!.onNextClicked(email)
     }
   }

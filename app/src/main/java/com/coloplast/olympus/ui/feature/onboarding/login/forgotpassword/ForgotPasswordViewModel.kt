@@ -2,6 +2,8 @@ package com.coloplast.olympus.ui.feature.onboarding.login.forgotpassword
 
 import com.artemzin.rxui.kotlin.bind
 import com.coloplast.olympus.businesslayer.interfaces.UserComponent
+import com.coloplast.olympus.shared.exceptions.ApiErrorType
+import com.coloplast.olympus.shared.models.ServerException
 import com.coloplast.olympus.ui.common.BaseViewModel
 import com.coloplast.olympus.ui.common.models.GenericUiModel
 import com.coloplast.olympus.ui.common.rx.DelayedLoadingTransformer
@@ -9,6 +11,7 @@ import com.coloplast.olympus.ui.common.rx.GenericUiModelTransformer
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import java.io.IOException
 
 
 /**
@@ -29,6 +32,23 @@ class ForgotPasswordViewModel(private val userComponent: UserComponent):
             .toObservable()
             .compose(DelayedLoadingTransformer<Boolean>())
             .compose(GenericUiModelTransformer())
+        }.onErrorReturn { throwable: Throwable ->
+          return@onErrorReturn when (throwable) {
+            is ServerException -> {
+              when (throwable.errorModel?.errorType) {
+                ApiErrorType.AuthInvalidEmail -> GenericUiModel.Error(
+                  GenericUiModel.Error.State.ERROR_NETWORK, ApiErrorType.AuthInvalidEmail.code
+                )
+                else -> GenericUiModel.Error(
+                  GenericUiModel.Error.State.ERROR_NETWORK, 1001
+                )
+              }
+            }
+            is IOException -> GenericUiModel.Error(GenericUiModel.Error.State.ERROR_NETWORK, 1001)
+            else -> GenericUiModel.Error(
+              GenericUiModel.Error.State.ERROR_GENERIC, 1000
+            )
+          }
         }
 
     disposable.add(requestCodeCompletable.bind(uiView.render()))

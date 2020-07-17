@@ -17,7 +17,7 @@ interface ServerApi {
   @POST("/api/v1/Auth/login")
   fun login(@Body loginRequestDTO: LoginRequestDTO): Observable<UserResponseDTO>
 
-  @POST("/api/v1/Auth/resetpw")
+  @POST("/api/v1/SecurityCodes")
   fun requestSecurityCode(@Body securityCodeRequest: SecurityCodeRequest): Completable
 
 

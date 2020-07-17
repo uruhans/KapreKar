@@ -17,4 +17,5 @@ interface UserComponent {
   fun login(credentials: Credentials): Observable<CurrentUser>
 
   fun requestSecurityCode(email: String): Completable
+  fun validateSecurityCode(securityCode: String, email: String): Completable
 }

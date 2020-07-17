@@ -32,7 +32,7 @@ class SecurityCodeFP2Controller(args: Bundle): BaseController<ControllerSecurity
   }
 
   fun onResendCode(){
-    getListener(ForgotPasswordView::class.java)!!.requestCode(email)
+    getListener(ForgotPasswordView::class.java)!!.resendCode()
   }
 
   override fun getLayout(): Int = R.layout.controller_security_code_fp_2

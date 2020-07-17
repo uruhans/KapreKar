@@ -12,5 +12,6 @@ interface ApiService {
   fun login(credentials: Credentials): Observable<UserResponseDTO>
 
   fun requestSecurityCode(email: String): Completable
+  fun validateSecurityCode(securityCode: String, email: String): Completable
 
 }

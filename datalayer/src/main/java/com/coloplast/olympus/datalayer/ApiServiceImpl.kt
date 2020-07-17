@@ -33,4 +33,7 @@ class ApiServiceImpl : ApiService {
     val securityCodeRequest = SecurityCodeRequest(email)
     return api.requestSecurityCode(securityCodeRequest)
   }
+
+  override fun validateSecurityCode(securityCode: String, email: String): Completable =
+    api.confirmCode(securityCode, email)
 }

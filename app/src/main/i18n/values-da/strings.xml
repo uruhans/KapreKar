@@ -180,6 +180,13 @@
 <string name="guide_wiping_sub_title_5">Aftørring for fugt af konnektor</string>
 <string name="guide_wiping_sub_title_6">I tilfælde af fejlmelding om fugt i systemet</string>
 <string name="guide_wiping_title">Guide til aftørring</string>
+<string name="guides_menu_applying_changing">Applying &amp; changing</string>
+<string name="guides_menu_connection_transmitter">Connection &amp; transmitter</string>
+<string name="guides_menu_description">Everything you need to know to get the most of [Olympus]</string>
+<string name="guides_menu_feq">FAQ</string>
+<string name="guides_menu_getting_started">Getting started</string>
+<string name="guides_menu_maintenance">Maintenance</string>
+<string name="guides_menu_title">Guides</string>
 <string name="launch_screen_title">Olympus</string>
 <string name="lock_notification_action_snooze">Snooze.</string>
 <string name="lock_notification_battery_critical">Transmitterens batteri er meget lavt.</string>
@@ -300,6 +307,7 @@
 <string name="onboarding_fp2_button_text">Resend code</string>
 <string name="onboarding_fp2_description">To reset your password, please enter the 4-digit security code sent to %1$s</string>
 <string name="onboarding_fp2_title">Enter security code</string>
+<string name="onboarding_fp2_wrong_code">Wrong security code</string>
 <string name="onboarding_fp3_button_text">Set new passoword</string>
 <string name="onboarding_fp3_description">Please create a new password below</string>
 <string name="onboarding_fp3_title">Choose a new password</string>

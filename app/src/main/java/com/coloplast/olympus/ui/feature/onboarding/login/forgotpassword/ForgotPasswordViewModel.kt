@@ -24,7 +24,7 @@ class ForgotPasswordViewModel(private val userComponent: UserComponent):
   override fun bind(uiView: ForgotPasswordView): Disposable {
     val disposable = CompositeDisposable()
 
-    val requestCodeCompletable =
+    val requestCodeObservable =
       uiView.onCodeRequested()
         .switchMap { forgotPasswordModel ->
           userComponent.requestSecurityCode(forgotPasswordModel.email)
@@ -35,7 +35,7 @@ class ForgotPasswordViewModel(private val userComponent: UserComponent):
             .compose(GenericUiModelTransformer())
         }
 
-    val confirmCodeCompletable =
+    val confirmCodeObservable =
       uiView.onConfirmCode()
         .switchMap { forgotPasswordModel: ForgotPasswordModel ->
           userComponent.validateSecurityCode(forgotPasswordModel.code, forgotPasswordModel.email)
@@ -46,13 +46,28 @@ class ForgotPasswordViewModel(private val userComponent: UserComponent):
             .compose(GenericUiModelTransformer())
         }
 
-    val allCompletables = Observable.merge(requestCodeCompletable, confirmCodeCompletable)
+    val changePasswordObservable =
+      uiView.onChangePassword()
+        .switchMap { forgotPasswordModel: ForgotPasswordModel ->
+          userComponent.changePassword(
+            forgotPasswordModel.code,
+            forgotPasswordModel.email,
+            forgotPasswordModel.newPassword
+          )
+            .subscribeOn(Schedulers.io())
+            .toSingle { Callback.PASSWORD_CHANGED }
+            .toObservable()
+            .compose(DelayedLoadingTransformer<Callback>())
+            .compose(GenericUiModelTransformer())
+        }
+
+    val allObservables = Observable.merge(requestCodeObservable, confirmCodeObservable, changePasswordObservable)
       .onErrorReturn { throwable: Throwable ->
         return@onErrorReturn when (throwable) {
           is ServerException -> {
             when (throwable.errorModel?.errorType) {
-              ApiErrorType.AuthInvalidEmail -> GenericUiModel.Error(
-                GenericUiModel.Error.State.ERROR_NETWORK, ApiErrorType.AuthInvalidEmail.code
+              is ApiErrorType -> GenericUiModel.Error(
+                GenericUiModel.Error.State.ERROR_NETWORK, throwable.errorModel!!.errorType.code
               )
               else -> GenericUiModel.Error(
                 GenericUiModel.Error.State.ERROR_NETWORK, 1001
@@ -66,7 +81,7 @@ class ForgotPasswordViewModel(private val userComponent: UserComponent):
         }
       }
 
-    disposable.add(allCompletables.bind(uiView.render()))
+    disposable.add(allObservables.bind(uiView.render()))
     return disposable
   }
 

@@ -13,5 +13,5 @@ interface ApiService {
 
   fun requestSecurityCode(email: String): Completable
   fun validateSecurityCode(securityCode: String, email: String): Completable
-
+  fun changePassword(securityCode: String, email: String, password: String): Completable
 }

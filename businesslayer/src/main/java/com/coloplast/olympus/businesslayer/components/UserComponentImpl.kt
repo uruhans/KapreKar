@@ -44,4 +44,7 @@ class UserComponentImpl: UserComponent {
   override fun validateSecurityCode(securityCode: String, email: String): Completable =
     apiService.validateSecurityCode(securityCode,email)
 
+  override fun changePassword(securityCode: String, email: String, password: String): Completable =
+    apiService.changePassword(securityCode, email, password)
+
 }

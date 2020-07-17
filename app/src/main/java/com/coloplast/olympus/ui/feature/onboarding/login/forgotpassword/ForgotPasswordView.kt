@@ -12,5 +12,6 @@ import io.reactivex.Observable
 interface ForgotPasswordView: UiView<GenericUiModel> {
   fun onCodeRequested(): Observable<ForgotPasswordModel>
   fun onConfirmCode(): Observable<ForgotPasswordModel>
+  fun onChangePassword(): Observable<ForgotPasswordModel>
   fun resendCode()
 }

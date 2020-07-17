@@ -31,6 +31,7 @@ class ForgotPasswordFlowController : TopMenuFlowFactoryController<ForgotPassword
   private val model: FlowFactory<ForgotPasswordModel> by inject()
   private val securityCodeRelay: PublishRelay<ForgotPasswordModel> = PublishRelay.create()
   private val confirmCodeRelay: PublishRelay<ForgotPasswordModel> = PublishRelay.create()
+  private val changePassword: PublishRelay<ForgotPasswordModel> = PublishRelay.create()
   private var dialogController: DialogController? = null
 
   override fun getFlowFactory(): FlowFactory<ForgotPasswordModel> = model
@@ -48,6 +49,10 @@ class ForgotPasswordFlowController : TopMenuFlowFactoryController<ForgotPassword
       }
       ForgotPasswordFlow.ForgotPasswordFP2 -> {
         confirmCodeRelay.accept(data)
+        true
+      }
+      ForgotPasswordFlow.ForgotPasswordFP3 -> {
+        changePassword.accept(data)
         true
       }
       else -> super.onStepCompleted(currentIndex, data)
@@ -99,8 +104,12 @@ class ForgotPasswordFlowController : TopMenuFlowFactoryController<ForgotPassword
     return confirmCodeRelay.publish().refCount()
   }
 
+  override fun onChangePassword(): Observable<ForgotPasswordModel> {
+    return changePassword.publish().refCount()
+  }
+
   override fun onPositiveButtonClicked(requestCode: Int) {
-    dialogController?.onDismiss()
+    dialogController?.dismissDialog(false)
     dialogController = null
   }
 

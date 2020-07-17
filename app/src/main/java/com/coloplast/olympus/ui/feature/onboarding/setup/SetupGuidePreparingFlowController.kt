@@ -6,11 +6,11 @@ import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.ui.common.MediaGuideController
 import com.coloplast.olympus.ui.common.flow.EmptyModel
 import com.coloplast.olympus.ui.common.flow.FlowFactory
-import com.coloplast.olympus.ui.common.flow.FlowFactoryController
+import com.coloplast.olympus.ui.common.flow.TopMenuFlowFactoryController
 import com.coloplast.olympus.ui.dialogs.CallHelpDialogController
 import org.koin.core.inject
 
-class SetupGuidePreparingFlowController : FlowFactoryController<EmptyModel>(), MediaGuideController.Listener,
+class SetupGuidePreparingFlowController : TopMenuFlowFactoryController<EmptyModel>(), MediaGuideController.Listener,
   CallHelpDialogController.Listener {
 
   private val factory: SetupGuidePreparingFactoryImpl by inject()

@@ -41,6 +41,16 @@
         app:safeText="@{controller.type.listTitleId}"
         style="@style/TextStyle.Roboto.Regular.ClearGrey.16" />
 
+      <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        app:cardUseCompatPadding="true"
+        android:orientation="vertical"
+        app:itemBinding="@{controller.itemBinding}"
+        app:items="@{controller.items}"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
 
     </LinearLayout>
 

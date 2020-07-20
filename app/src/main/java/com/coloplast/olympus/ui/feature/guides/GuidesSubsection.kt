@@ -37,6 +37,20 @@ class GuidesSubsection(args: Bundle): BaseController<ControllerGuidesSubsectionB
           SplashController.routerTransaction() //TODO: Set destination when the screen is ready.
         ))
       }
+      GuidesMenuSubsection.APPLYING_CHANGING -> {
+        add(GuideCard(
+          R.drawable.guide_wiping_2,
+          R.string.guides_ag_card_title,
+          R.string.guides_ag_card_description,
+          SplashController.routerTransaction() //TODO: Set destination when the screen is ready.
+        ))
+        add(GuideCard(
+          R.drawable.guide_wiping_2,
+          R.string.guides_da_card_title,
+          R.string.guides_da_card_description,
+          SplashController.routerTransaction() //TODO: Set destination when the screen is ready.
+        ))
+      }
     }
 
   }

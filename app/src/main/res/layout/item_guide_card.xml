@@ -20,6 +20,8 @@
     android:layout_marginEnd="@dimen/spacing_larger"
     app:cardCornerRadius="@dimen/cardview_corner_radius"
     android:elevation="@dimen/cardview_elevation_default"
+    android:background="@drawable/cardview_not_selected"
+    android:foreground="?attr/selectableItemBackground"
     android:onClick="@{() -> controller.goToDestination(item.destination)}" >
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -55,6 +57,7 @@
         android:layout_marginTop="@dimen/spacing_half"
         app:safeText="@{item.descriptionId}"
         android:textAlignment="textStart"
+        style="@style/TextStyle.Roboto.Regular.ClearGrey.14"
         app:layout_constraintTop_toBottomOf="@id/title"
         app:layout_constraintStart_toStartOf="@id/title"
         app:layout_constraintEnd_toEndOf="parent" />

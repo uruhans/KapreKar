@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+  <data>
+    <variable
+      name="item"
+      type="com.coloplast.olympus.ui.feature.guides.models.MenuItem" />
+
+   <variable
+     name="controller"
+     type="com.coloplast.olympus.ui.feature.guides.GuideMenuController" />
+  </data>
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/spacing_larger"
+    android:paddingBottom="@dimen/spacing_larger"
+    android:background="?attr/selectableItemBackground"
+    android:onClick="@{() -> controller.goToDestination(item.destination)}"
+    android:orientation="horizontal">
+
+    <ImageView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      app:safeResource="@{item.iconId}" />
+
+    <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="@dimen/spacing_half"
+      safeText="@{item.stringId}"
+      style="@style/TextStyle.Coloplast.Bold.DarkGrey.24" />
+  </LinearLayout>
+</layout>

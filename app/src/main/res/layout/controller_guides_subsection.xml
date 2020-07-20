@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+  <data>
+    <variable
+      name="controller"
+      type="com.coloplast.olympus.ui.feature.guides.GuidesSubsection" />
+  </data>
+
+  <ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="@dimen/toolbar_height">
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical">
+
+      <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_larger"
+        app:safeText="@{controller.type.titleId}"
+        style="@style/TextStyle.Coloplast.Bold.DarkGrey.32" />
+
+      <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_larger"
+        android:layout_marginTop="@dimen/spacing_small"
+        app:safeText="@{controller.type.descriptionId}"
+        style="@style/TextStyle.Roboto.Regular.ClearGrey.18" />
+
+      <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_larger"
+        android:layout_marginTop="@dimen/spacing_standard"
+        android:layout_marginBottom="@dimen/spacing_half"
+        app:safeText="@{controller.type.listTitleId}"
+        style="@style/TextStyle.Roboto.Regular.ClearGrey.16" />
+
+
+    </LinearLayout>
+
+  </ScrollView>
+</layout>

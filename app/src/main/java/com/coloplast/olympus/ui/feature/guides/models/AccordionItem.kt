@@ -1,6 +1,7 @@
 package com.coloplast.olympus.ui.feature.guides.models
 
 import androidx.annotation.StringRes
+import androidx.databinding.ObservableBoolean
 
 
 /**
@@ -10,5 +11,8 @@ import androidx.annotation.StringRes
 data class AccordionItem(
   @StringRes val questionId: Int,
   @StringRes val answerId: Int,
-  val showContent: Boolean = false
-)
+  @StringRes val linkTextId: Int = 0,
+  val action: () -> Unit
+){
+  val showContent = ObservableBoolean(false)
+}

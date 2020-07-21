@@ -12,7 +12,7 @@ data class AccordionItem(
   @StringRes val questionId: Int,
   @StringRes val answerId: Int,
   @StringRes val linkTextId: Int = 0,
-  val action: () -> Unit
+  val action: (() -> Unit)? = null
 ){
   val showContent = ObservableBoolean(false)
 }

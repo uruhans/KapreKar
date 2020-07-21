@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
 
   <data>
     <variable
@@ -21,6 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/spacing_larger"
+        android:layout_marginEnd="@dimen/spacing_standard"
         android:text="@string/guides_faq_title"
         style="@style/TextStyle.Coloplast.Bold.DarkGrey.32" />
 
@@ -28,20 +30,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/spacing_larger"
+        android:layout_marginEnd="@dimen/spacing_standard"
         android:layout_marginTop="@dimen/spacing_small"
         android:text="@string/guides_faq_description"
         style="@style/TextStyle.Coloplast.Regular.ClearGrey.30" />
 
-  <!--    <androidx.recyclerview.widget.RecyclerView
+      <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:layout_marginStart="@dimen/spacing_standard"
         app:cardUseCompatPadding="true"
         android:orientation="vertical"
         app:itemBinding="@{controller.itemBinding}"
         app:items="@{controller.items}"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />-->
-
+        app:defaultDecorator="@{true}"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
     </LinearLayout>
 

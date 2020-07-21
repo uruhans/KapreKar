@@ -20,6 +20,7 @@
     android:layout_marginEnd="@dimen/spacing_larger"
     app:cardCornerRadius="@dimen/cardview_corner_radius"
     android:elevation="@dimen/cardview_elevation_default"
+    app:cardUseCompatPadding="true"
     android:foreground="?attr/selectableItemBackground"
     android:onClick="@{listener}">
 

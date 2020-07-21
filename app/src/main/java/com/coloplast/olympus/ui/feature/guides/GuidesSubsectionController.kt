@@ -18,7 +18,7 @@ import me.tatarka.bindingcollectionadapter2.OnItemBind
  * Created by Kike Bodi (ebp@dawnhealth.com) on 20/07/2020.
  * Copyright by Dawn Health A/S. All rights reserved.
  */
-class GuidesSubsection(args: Bundle): BaseController<ControllerGuidesSubsectionBinding>(args) {
+class GuidesSubsectionController(args: Bundle): BaseController<ControllerGuidesSubsectionBinding>(args) {
 
   val type: GuidesMenuSubsection = args.get(GUIDE_TYPE) as GuidesMenuSubsection
 
@@ -69,7 +69,7 @@ class GuidesSubsection(args: Bundle): BaseController<ControllerGuidesSubsectionB
       val args = Bundle().apply {
         putSerializable(GUIDE_TYPE, guidesMenuSubsection)
       }
-      return RouterTransaction.with(GuidesSubsection(args))
+      return RouterTransaction.with(GuidesSubsectionController(args))
         .tag(TAG_CONTROLLER)
     }
   }

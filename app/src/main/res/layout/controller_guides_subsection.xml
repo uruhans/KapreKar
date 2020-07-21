@@ -4,7 +4,7 @@
   <data>
     <variable
       name="controller"
-      type="com.coloplast.olympus.ui.feature.guides.GuidesSubsection" />
+      type="com.coloplast.olympus.ui.feature.guides.GuidesSubsectionController" />
   </data>
 
   <ScrollView

@@ -1,6 +1,7 @@
 package com.coloplast.olympus.ui.feature.guides
 
 import android.os.Bundle
+import android.view.View
 import androidx.databinding.ObservableArrayList
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.HorizontalChangeHandler
@@ -11,7 +12,7 @@ import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.feature.guides.models.GuideCard
 import com.coloplast.olympus.ui.feature.guides.types.GuidesMenuSubsection
 import com.coloplast.olympus.ui.feature.splash.SplashController
-import me.tatarka.bindingcollectionadapter2.ItemBinding
+import me.tatarka.bindingcollectionadapter2.OnItemBind
 
 /**
  * Created by Kike Bodi (ebp@dawnhealth.com) on 20/07/2020.
@@ -24,25 +25,21 @@ class GuidesSubsection(args: Bundle): BaseController<ControllerGuidesSubsectionB
   val items = ObservableArrayList<GuideCard>().apply {
     when(type){
       GuidesMenuSubsection.GETTING_STARTED -> {
-        add(GuideCard(
-          R.drawable.guide_wiping_2,
-          R.string.guides_co_card_title,
-          R.string.guides_co_card_description,
-          SplashController.routerTransaction() //TODO: Set destination when the screen is ready.
-        ))
-        add(GuideCard(
-          R.drawable.guide_wiping_2,
-          R.string.guides_ap_card_title,
-          R.string.guides_ap_card_description,
-          SplashController.routerTransaction() //TODO: Set destination when the screen is ready.
-        ))
+        add(GuideCard.COMPONENT_GUIDE)
+        add(GuideCard.APP_TOUR)
       }
     }
-
   }
 
-  val itemBinding = ItemBinding.of<GuideCard>(BR.item, R.layout.item_guide_card)
-    .bindExtra(BR.controller, this)
+  val itemBinding = OnItemBind<GuideCard> { itemBinding, _, item ->
+    itemBinding.set(BR.item, R.layout.item_guide_card)
+      .bindExtra(BR.listener, object: View.OnClickListener{
+        override fun onClick(p0: View?) {
+          goToFlow(item)
+        }
+      })
+  }
+
 
   override fun attachVariables(viewBinding: ControllerGuidesSubsectionBinding) {
     viewBinding.controller = this
@@ -52,7 +49,11 @@ class GuidesSubsection(args: Bundle): BaseController<ControllerGuidesSubsectionB
     //noop
   }
 
-  fun goToDestination(routerTransaction: RouterTransaction){
+  fun goToFlow(guideCard: GuideCard){
+    val routerTransaction = when(guideCard){
+      GuideCard.COMPONENT_GUIDE -> SplashController.routerTransaction()
+      GuideCard.APP_TOUR -> SplashController.routerTransaction()
+    }
     getContentRouter().pushController(routerTransaction
       .pushChangeHandler(HorizontalChangeHandler())
       .popChangeHandler(HorizontalChangeHandler()))

@@ -7,8 +7,8 @@
       type="com.coloplast.olympus.ui.feature.guides.models.GuideCard" />
 
     <variable
-      name="controller"
-      type="com.coloplast.olympus.ui.feature.guides.GuidesSubsection" />
+      name="listener"
+      type="android.view.View.OnClickListener" />
   </data>
 
   <androidx.cardview.widget.CardView
@@ -20,7 +20,8 @@
     android:layout_marginEnd="@dimen/spacing_larger"
     app:cardCornerRadius="@dimen/cardview_corner_radius"
     android:elevation="@dimen/cardview_elevation_default"
-    android:onClick="@{() -> controller.goToDestination(item.destination)}" >
+    android:foreground="?attr/selectableItemBackground"
+    android:onClick="@{listener}">
 
     <androidx.constraintlayout.widget.ConstraintLayout
       android:layout_width="match_parent"

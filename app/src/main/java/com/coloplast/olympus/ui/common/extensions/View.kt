@@ -6,6 +6,7 @@ import android.view.View
 import android.view.animation.*
 import androidx.databinding.BindingAdapter
 import com.coloplast.olympus.ui.common.listeners.AnimatorListenerImpl
+import com.coloplast.olympus.utils.UiUtils
 
 @BindingAdapter("visibleOrInvisible")
 fun View.visibleOrInvisible(visible: Boolean) {
@@ -71,5 +72,12 @@ fun View.rotate360(animationDuration: Long = 2000, offset: Long = 0){
     interpolator = LinearInterpolator()
     startOffset = offset
     duration = animationDuration
+  }
+}
+
+@BindingAdapter("expandOrCollapse")
+fun View.expandOrCollapse(expand: Boolean){
+  post {
+    if(expand) UiUtils.expand(this@expandOrCollapse) else UiUtils.collapse(this@expandOrCollapse)
   }
 }

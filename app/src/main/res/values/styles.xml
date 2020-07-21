@@ -247,6 +247,10 @@
     <item name="android:textSize">@dimen/text_18</item>
   </style>
 
+  <style name="TextStyle.Coloplast.Regular.DarkGrey.20" parent="TextStyle.Coloplast.Regular.DarkGrey">
+    <item name="android:textSize">20sp</item>
+  </style>
+
   <style name="TextStyle.Coloplast.Bold.DarkGrey" parent="TextStyle.Coloplast.Bold">
     <item name="android:textColor">@color/text_dark_grey</item>
   </style>

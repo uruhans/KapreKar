@@ -130,9 +130,11 @@
 <string name="guide_cleaning_sub_title_5">[English translation is missing]</string>
 <string name="guide_cleaning_title">[English translation is missing]</string>
 <string name="guide_connection">Connection guide</string>
-<string name="guide_dg_description">Everything you need to know about drying your transmitter and sensor layer</string>
-<string name="guide_dg_title">Drying guide</string>
+<string name="guide_dg_card_description">Everything you need to know about drying your transmitter and sensor layer</string>
+<string name="guide_dg_card_title">Drying guide</string>
 <string name="guide_drying">Drying guide</string>
+<string name="guide_faq_answer_1">Autem appetere sit cu, his melius incorrupte et, ei ipsum aperiam vis. In feugait pertinax voluptatum mei, sint ullum option vim ei. Cu dico deserunt sit, sed te soluta recusabo voluptaria. Alienum fierent propriae cu sit, vel an amet saepe maiestatis. Te omnes ancillae torquatos sed. Bonorum albucius usu ex, quaestio voluptaria vim ex.</string>
+<string name="guide_faq_question_1">Lorem ipsum dolor sit amet?</string>
 <string name="guide_get_started">Get started</string>
 <string name="guide_get_started_10_image">[English translation is missing]</string>
 <string name="guide_get_started_10_text">[English translation is missing]</string>

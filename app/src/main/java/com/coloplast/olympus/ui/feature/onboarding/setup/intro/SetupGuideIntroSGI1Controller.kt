@@ -10,7 +10,7 @@ import com.coloplast.olympus.ui.common.listeners.FlowListener
 import com.coloplast.olympus.ui.feature.transmitters.add.models.ChecklistItem
 import me.tatarka.bindingcollectionadapter2.itembindings.OnItemBindClass
 
-class SetupGuideIntroSGI1 : BaseController<ControllerStartupGuideIntro1Binding>() {
+class SetupGuideIntroSGI1Controller : BaseController<ControllerStartupGuideIntro1Binding>() {
 
   val items = ObservableArrayList<Any>()
   val itemBinding: OnItemBindClass<Any> = OnItemBindClass<Any>()
@@ -45,7 +45,7 @@ class SetupGuideIntroSGI1 : BaseController<ControllerStartupGuideIntro1Binding>(
     private const val TAG_CONTROLLER = "setup_guide_intro_sgi_1"
 
     fun routerTransaction(): RouterTransaction {
-      return RouterTransaction.with(SetupGuideIntroSGI1())
+      return RouterTransaction.with(SetupGuideIntroSGI1Controller())
         .tag(TAG_CONTROLLER)
     }
   }

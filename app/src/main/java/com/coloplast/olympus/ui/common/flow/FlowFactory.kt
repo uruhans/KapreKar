@@ -146,7 +146,8 @@ abstract class FlowFactory<V: FlowFactoryModel> {
    * call this after processing the result from the controller @see parseResultFromController()
    */
   fun skipUntil(index: Int) {
-    while(currentIndex.get() < index) {
+    // the incoming index is the one we want to see next time - so minus 1
+    while(currentIndex.get() < index - 1) {
       skipNext()
     }
   }
@@ -156,8 +157,7 @@ abstract class FlowFactory<V: FlowFactoryModel> {
    * call this after processing the result from the controller @see parseResultFromController()
    */
   fun skipNext() {
-    // add the current index to the skipped steps and increment
-    skippedSteps.add(currentIndex.get())
-    currentIndex.incrementAndGet()
+    // increment and add the current index to the skipped steps
+    skippedSteps.add(currentIndex.incrementAndGet())
   }
 }

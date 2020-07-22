@@ -28,7 +28,7 @@ class SetupGuideIntroFactoryImpl : FlowFactory<EmptyModel>() {
         )
       }
       SetupGuideIntroductionFlow.SetupGuideSG2 -> SetupGuideSG2.routerTransaction()
-      SetupGuideIntroductionFlow.SetupGuideSGI1 -> SetupGuideIntroSGI1.routerTransaction()
+      SetupGuideIntroductionFlow.SetupGuideSGI1 -> SetupGuideIntroSGI1Controller.routerTransaction()
       SetupGuideIntroductionFlow.SetupGuideBluetoothSGI2 -> {
         SimpleInfoPageController.routerTransaction(
           iconId = R.drawable.ic_bluetooth,

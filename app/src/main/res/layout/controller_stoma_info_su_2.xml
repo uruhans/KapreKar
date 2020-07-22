@@ -53,17 +53,18 @@
         android:layout_marginTop="@dimen/spacing_half"
         android:layout_marginEnd="@dimen/spacing_standard" />
 
-      <androidx.appcompat.widget.AppCompatSpinner
+      <com.coloplast.olympus.ui.common.widgets.NoDefaultSpinner
         android:layout_width="match_parent"
         android:layout_height="@dimen/cardview_button_height_default"
         android:layout_marginStart="@dimen/spacing_standard"
         android:layout_marginTop="@dimen/spacing_half"
         android:layout_marginEnd="@dimen/spacing_standard"
-        android:background="@drawable/spinner_background"
+        android:background="@{controller.stomaTypeSelected ? @drawable/spinner_background : @drawable/spinner_background_error}"
         android:spinnerMode="dialog"
         android:autofillHints="@string/onboarding_login_title"
+        android:prompt="@string/onboarding_stoma_type_hint"
         android:entries="@{controller.stomaTypeValues}"
-        android:selectedItemPosition="@={controller.stomaTypeId}"
+        android:selectedItemPosition="@={controller.stomaTypeSpinnerPosition}"
         />
 
       <TextView
@@ -75,16 +76,17 @@
         android:layout_marginTop="@dimen/spacing_large"
         android:layout_marginEnd="@dimen/spacing_standard" />
 
-      <androidx.appcompat.widget.AppCompatSpinner
+      <com.coloplast.olympus.ui.common.widgets.NoDefaultSpinner
         android:layout_width="match_parent"
         android:layout_height="@dimen/cardview_button_height_default"
         android:layout_marginStart="@dimen/spacing_standard"
         android:layout_marginTop="@dimen/spacing_half"
         android:layout_marginEnd="@dimen/spacing_standard"
-        android:background="@drawable/spinner_background"
+        android:background="@{controller.stomaSurgeryDateSelected ? @drawable/spinner_background : @drawable/spinner_background_error}"
         android:spinnerMode="dialog"
+        android:prompt="@string/onboarding_first_stoma_surgery_hint"
         android:entries="@{controller.stomaSurgeryDateValues}"
-        android:selectedItemPosition="@={controller.stomaSurgeryDateId}"
+        android:selectedItemPosition="@={controller.stomaSurgeryDateSpinnerPosition}"
         />
 
     </LinearLayout>

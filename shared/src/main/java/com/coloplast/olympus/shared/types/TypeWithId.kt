@@ -1,4 +1,4 @@
-package com.coloplast.olympus.ui.common
+package com.coloplast.olympus.shared.types
 
 /**
  * Created by Kike Bodi (ebp@dawnhealth.com) on 08/07/2020.

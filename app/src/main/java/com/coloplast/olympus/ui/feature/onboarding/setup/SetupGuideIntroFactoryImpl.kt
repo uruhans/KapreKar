@@ -20,7 +20,7 @@ class SetupGuideIntroFactoryImpl : FlowFactory<EmptyModel>() {
   override fun getRouterTransaction(currentIndex: Int): RouterTransaction? {
     return when(SetupGuideIntroductionFlow.fromIndex(currentIndex)) {
       SetupGuideIntroductionFlow.SetupGuideSG1 -> {
-        GenericConfirmationController.routerTransaction(
+        GenericConfirmationController.getRouterTransaction(
           R.string.onboarding_chapter_intro_setup_guide,
           R.string.onboarding_chapter_intro_setup_guide_message,
           R.string.generic_get_started,

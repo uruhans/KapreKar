@@ -7,7 +7,6 @@ import com.artemzin.rxui.RxUi
 import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerLoginBinding
-import com.coloplast.olympus.shared.extensions.isValidEmail
 import com.coloplast.olympus.shared.models.Credentials
 import com.coloplast.olympus.shared.utils.StringUtils.PASSWORD_REGEX
 import com.coloplast.olympus.ui.common.BaseController
@@ -36,12 +35,18 @@ class LoginController: BaseController<ControllerLoginBinding>(),
 
   private var dialogController: DialogController? = null
 
-  val validEmail = ObservableBoolean(true)
-  val email = ObservableField("").apply {
-    compositeDisposable.add(
-      onValueChanged { validEmail.set(this.get()!!.isValidEmail()) }
-    )
+  private var email: String = ""
+  private var validEmail: Boolean = false
+
+  val onCurrentEmailChanged: ((String) -> Unit) = {
+    email = it
   }
+
+  val onValidityChanged: ((Boolean) -> Unit) = {
+    validEmail = it
+  }
+
+
   val validPassword = ObservableBoolean(true)
   val password = ObservableField("").apply {
     compositeDisposable.add(
@@ -110,11 +115,10 @@ class LoginController: BaseController<ControllerLoginBinding>(),
   }
 
   fun onNextClicked(){
-    email.notifyChange()
     password.notifyChange()
-    if(validEmail.get() && validPassword.get()){
+    if(validEmail && validPassword.get()){
       val credentials = Credentials(
-        email.get()!!,
+        email,
         password.get()!!
 
       )

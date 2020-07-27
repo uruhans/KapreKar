@@ -12,8 +12,7 @@ import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.feature.guides.models.*
 import me.tatarka.bindingcollectionadapter2.itembindings.OnItemBindClass
 
-class GuideController(args: Bundle) : BaseController<ControllerGuideBinding>(args),
-  ButtonItem.Listener {
+class GuideController(args: Bundle) : BaseController<ControllerGuideBinding>(args) {
 
   val items = ObservableArrayList<Any>()
   val itemBinding: OnItemBindClass<Any> = OnItemBindClass<Any>()
@@ -23,17 +22,7 @@ class GuideController(args: Bundle) : BaseController<ControllerGuideBinding>(arg
 
   private var guideType = GuideType.fromId(args.getInt(BUNDLE_GUIDE_TYPE))
 
-  override fun attachVariables(viewBinding: ControllerGuideBinding) {
-    viewBinding.controller = this
-  }
-
-  override fun onViewBound(viewBinding: ControllerGuideBinding) {
-    if (items.isNullOrEmpty()) {
-      items.addAll(GuideContent.getGuideContent(guideType, this))
-    }
-  }
-
-  override fun onButtonClicked(buttonType: ButtonType) {
+  private val buttonCallback: (ButtonType) -> Unit = { buttonType ->
     when (buttonType) {
       ButtonType.BACK -> handleBack()
       ButtonType.ACTION,
@@ -46,11 +35,21 @@ class GuideController(args: Bundle) : BaseController<ControllerGuideBinding>(arg
           )
         }
         GuideType.CONNECTION -> {
-          //TODO: Link with Location guide.
+          //TODO: CPO-556 - Link with Location guide.
           Toast.makeText(applicationContext, "Open Location guide", Toast.LENGTH_SHORT).show()
         }
         else -> { /* nothing yet */ }
       }
+    }
+  }
+
+  override fun attachVariables(viewBinding: ControllerGuideBinding) {
+    viewBinding.controller = this
+  }
+
+  override fun onViewBound(viewBinding: ControllerGuideBinding) {
+    if (items.isNullOrEmpty()) {
+      items.addAll(GuideContent.getGuideContent(guideType, buttonCallback))
     }
   }
 

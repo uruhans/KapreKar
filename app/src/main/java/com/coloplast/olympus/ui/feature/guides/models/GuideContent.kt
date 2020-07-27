@@ -4,10 +4,9 @@ import com.coloplast.olympus.R
 
 object GuideContent {
 
-  // these listeners could possible be done in a nicer way - but for now this is how it's done
   fun getGuideContent(
     guideType: GuideType,
-    buttonListener: ButtonItem.Listener
+    buttonCallback: (ButtonType) -> Unit
   ): List<Any> {
     return when (guideType) {
       GuideType.UNKNOWN -> {
@@ -47,21 +46,21 @@ object GuideContent {
             description = R.string.guide_change_plate_body_7_text
           ),
           ArticleItem(image = R.drawable.guide_change_plate_8),
-          ButtonItem(R.string.generic_go_back, ButtonType.BACK, buttonListener)
+          ButtonItem(R.string.generic_go_back, ButtonType.BACK, buttonCallback)
         )
       }
       GuideType.APPLICATION_TIPS -> {
         listOf(
           HeaderItem(R.string.guide_moisture_title, R.string.guide_moisture_body),
-          ButtonItem(R.string.guide_moisture_link, ButtonType.ACTION, buttonListener),
-          ButtonItem(R.string.generic_go_back, ButtonType.BACK, buttonListener)
+          ButtonItem(R.string.guide_moisture_link, ButtonType.ACTION, buttonCallback),
+          ButtonItem(R.string.generic_go_back, ButtonType.BACK, buttonCallback)
         )
       }
       GuideType.CHARGING -> {
         listOf(
           HeaderItem(R.string.guide_moisture_title, R.string.guide_moisture_body),
-          ButtonItem(R.string.guide_moisture_link, ButtonType.ACTION, buttonListener),
-          ButtonItem(R.string.generic_go_back, ButtonType.BACK, buttonListener)
+          ButtonItem(R.string.guide_moisture_link, ButtonType.ACTION, buttonCallback),
+          ButtonItem(R.string.generic_go_back, ButtonType.BACK, buttonCallback)
         )
       }
       GuideType.CLEANING -> {
@@ -112,7 +111,7 @@ object GuideContent {
             R.drawable.guide_wiping_2,
             R.string.guide_wiping_6_text
           ),
-          ButtonItem(R.string.generic_go_back, ButtonType.BACK, buttonListener)
+          ButtonItem(R.string.generic_go_back, ButtonType.BACK, buttonCallback)
         )
       }
       GuideType.CONNECTION -> {
@@ -127,7 +126,7 @@ object GuideContent {
             title = R.string.guide_cg_subsection_2_header,
             description = R.string.guide_cg_subsection_2_body
           ),
-          ButtonItem(R.string.guide_cg_button_text, ButtonType.LINK, buttonListener)
+          ButtonItem(R.string.guide_cg_button_text, ButtonType.LINK, buttonCallback)
         )
       }
       GuideType.GET_STARTED -> {
@@ -182,13 +181,13 @@ object GuideContent {
             title = R.string.guide_get_started_sub_title_12,
             description = R.string.guide_get_started_12_text
           ),
-          ButtonItem(R.string.generic_go_back, ButtonType.BACK, buttonListener)
+          ButtonItem(R.string.generic_go_back, ButtonType.BACK, buttonCallback)
         )
       }
       GuideType.LEARN_MORE -> {
         listOf(
           HeaderItem(R.string.guide_learn_more_title, R.string.guide_learn_more_body),
-          ButtonItem(R.string.generic_go_back, ButtonType.BACK, buttonListener)
+          ButtonItem(R.string.generic_go_back, ButtonType.BACK, buttonCallback)
         )
       }
     }

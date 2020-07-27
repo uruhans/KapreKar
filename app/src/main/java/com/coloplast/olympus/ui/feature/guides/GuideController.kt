@@ -38,6 +38,10 @@ class GuideController(args: Bundle) : BaseController<ControllerGuideBinding>(arg
           //TODO: CPO-556 - Link with Location guide.
           Toast.makeText(applicationContext, "Open Location guide", Toast.LENGTH_SHORT).show()
         }
+        GuideType.CLEANING -> {
+          //TODO: Link with Drying guide.
+          Toast.makeText(applicationContext, "Link with Drying guide.", Toast.LENGTH_SHORT).show()
+        }
         else -> { /* nothing yet */ }
       }
     }

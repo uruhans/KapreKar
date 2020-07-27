@@ -4,7 +4,7 @@ import androidx.annotation.StringRes
 import com.coloplast.olympus.R
 import com.coloplast.olympus.utils.UiUtils
 
-class ButtonItem(@StringRes val title: Int, private val buttonType: ButtonType = ButtonType.BACK, private val listener: Listener) {
+class ButtonItem(@StringRes val text: Int, val buttonType: ButtonType = ButtonType.BACK, private val listener: Listener) {
   
   interface Listener {
     fun onButtonClicked(buttonType: ButtonType)

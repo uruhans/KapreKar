@@ -133,7 +133,7 @@ object GuideContent {
             title = R.string.guide_cg_subsection_2_header,
             description = R.string.guide_cg_subsection_2_body
           ),
-          ButtonItem(R.string.guide_cg_button_text, ButtonType.ACTION, buttonListener)
+          ButtonItem(R.string.guide_cg_button_text, ButtonType.LINK, buttonListener)
         )
       }
       GuideType.GET_STARTED -> {

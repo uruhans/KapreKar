@@ -3,13 +3,47 @@
   xmlns:app="http://schemas.android.com/apk/res-auto">
 
   <data>
-
+    <import type="com.coloplast.olympus.ui.feature.guides.models.ButtonType" />
     <variable
       name="item"
       type="com.coloplast.olympus.ui.feature.guides.models.ButtonItem" />
   </data>
 
-  <androidx.cardview.widget.CardView
+  <FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <Button
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="@dimen/spacing_standard"
+      app:safeText="@{item.text}"
+      android:onClick="@{() -> item.onButtonClicked()}"
+      app:visibleOrGone="@{item.buttonType == ButtonType.ACTION}"
+      style="@style/Button" />
+
+    <Button
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="@dimen/spacing_standard"
+      app:safeText="@{item.text}"
+      android:onClick="@{() -> item.onButtonClicked()}"
+      app:visibleOrGone="@{item.buttonType == ButtonType.BACK}"
+      style="@style/Button.Secondary" />
+
+    <Button
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_margin="@dimen/spacing_standard"
+      app:safeText="@{item.text}"
+      android:onClick="@{() -> item.onButtonClicked()}"
+      app:visibleOrGone="@{item.buttonType == ButtonType.LINK}"
+      style="@style/Button.Borderless"
+      android:textAllCaps="false"
+      android:textAlignment="viewStart" />
+  </FrameLayout>
+
+  <!--<androidx.cardview.widget.CardView
     android:id="@+id/back_button"
     android:layout_width="match_parent"
     android:layout_height="@dimen/cardview_button_height_default"
@@ -36,6 +70,6 @@
       android:textSize="18sp"
       app:safeText="@{item.title}" />
 
-  </androidx.cardview.widget.CardView>
+  </androidx.cardview.widget.CardView>-->
 
 </layout>

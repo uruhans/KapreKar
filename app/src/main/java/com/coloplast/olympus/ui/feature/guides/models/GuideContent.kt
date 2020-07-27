@@ -58,9 +58,12 @@ object GuideContent {
       }
       GuideType.CHARGING -> {
         listOf(
-          HeaderItem(R.string.guide_moisture_title, R.string.guide_moisture_body),
-          ButtonItem(R.string.guide_moisture_link, ButtonType.ACTION, buttonCallback),
-          ButtonItem(R.string.generic_go_back, ButtonType.BACK, buttonCallback)
+          HeaderItem(R.string.guide_ch_title, R.string.guide_ch_subtitle),
+          ArticleItem(
+            image = R.drawable.guide_charging,
+            title = R.string.guide_ch_article_1_header,
+            description = R.string.guide_ch_article_1_body
+          )
         )
       }
       GuideType.CLEANING -> {

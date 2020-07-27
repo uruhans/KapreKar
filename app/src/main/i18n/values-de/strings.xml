@@ -97,6 +97,10 @@
 <string name="guide_cg_subsection_2_header">Allowing location access can help improve your connection</string>
 <string name="guide_cg_subtitle">Tips for keeping [Olympus] connected to stay informed</string>
 <string name="guide_cg_title">Connection guide</string>
+<string name="guide_ch_article_1_body">Place the transmitter into the cradle of the charger. Insert the supplied cable into the charger. Insert the other end of the cable into a USB power plug – for example, like the one you normally use to charge your phone – and connect to power.\n\nWhen the status light is blinking, the transmitter is charging. When the status light is constantly on, the transmitter is fully charged. When the status light is off, the charger is not connected to power.\n\nYou can charge your transmitter fully within 3 hours. A full charge will last about 2 days. </string>
+<string name="guide_ch_article_1_header">How to charge your transmitter</string>
+<string name="guide_ch_subtitle">Everything you need to know about charging your transmitter</string>
+<string name="guide_ch_title">Charging guide</string>
 <string name="guide_change_plate">guide_change_plate</string>
 <string name="guide_change_plate_body_1_image">guide_change_plate_body_1_image</string>
 <string name="guide_change_plate_body_1_text">guide_change_plate_body_1_text</string>
@@ -120,8 +124,16 @@
 <string name="guide_charging_1_image">guide_charging_1_image</string>
 <string name="guide_charging_1_text">guide_charging_1_text</string>
 <string name="guide_charging_title">guide_charging_title</string>
+<string name="guide_cl_article_1_body">It is important to keep your transmitter and charger clean so that they function properly.</string>
+<string name="guide_cl_article_2_body">Disengage your transmitter lid by pulling the lid firmly until it is opened up. You should be able to see the metal connector pins inside the transmitter.\n\nClean the transmitter regularly using a soft cloth. You can clean it using water or cleaning agents like mild soap or alcohol. \n\nWipe the transmitter with a dry cloth after cleaning, making sure the metal connector pins, lid and sides (inside and outside) are completely dry. \n\nRemember to close the disengaged lid fully, before attempting attaching again.\n\nFor more on drying your transmitter, take a look at the Drying guide:</string>
+<string name="guide_cl_article_2_header">Cleaning your transmitter</string>
+<string name="guide_cl_article_3_body">You can clean your charger using a dry cloth. \n\nDo not use water or cleaning agents.</string>
+<string name="guide_cl_article_3_header">Cleaning your charger</string>
+<string name="guide_cl_button_text">Read the Drying Guide</string>
 <string name="guide_cl_card_description">Everything you need to know about cleaning the parts of your [Olympus] system</string>
 <string name="guide_cl_card_title">Cleaning guide</string>
+<string name="guide_cl_subtitle">Everything you need to know about cleaning all the parts of your [Olympus] system </string>
+<string name="guide_cl_title">Cleaning guide</string>
 <string name="guide_cleaning">guide_cleaning</string>
 <string name="guide_cleaning_1_text">guide_cleaning_1_text</string>
 <string name="guide_cleaning_2_image">guide_cleaning_2_image</string>

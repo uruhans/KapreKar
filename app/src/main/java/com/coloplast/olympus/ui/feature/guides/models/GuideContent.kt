@@ -90,6 +90,27 @@ object GuideContent {
           )
         )
       }
+      GuideType.DRYING -> {
+        listOf(
+          HeaderItem(
+            header = R.string.guide_dg_title,
+            subHeader = R.string.guide_dg_subtitle
+          ),
+          ArticleItem(
+            description = R.string.guide_dg_article_1_body
+          ),
+          ArticleItem(
+            image = R.drawable.guide_placeholder,
+            title = R.string.guide_dg_article_2_header,
+            description = R.string.guide_dg_article_2_body
+          ),
+          ArticleItem(
+            image = R.drawable.guide_placeholder,
+            title = R.string.guide_dg_article_3_header,
+            description = R.string.guide_dg_article_3_body
+          )
+        )
+      }
       GuideType.CONNECTION -> {
         listOf(
           HeaderItem(R.string.guide_cg_title, R.string.guide_cg_subtitle),

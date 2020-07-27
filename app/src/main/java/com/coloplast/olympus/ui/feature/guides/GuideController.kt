@@ -39,8 +39,11 @@ class GuideController(args: Bundle) : BaseController<ControllerGuideBinding>(arg
           Toast.makeText(applicationContext, "Open Location guide", Toast.LENGTH_SHORT).show()
         }
         GuideType.CLEANING -> {
-          //TODO: Link with Drying guide.
-          Toast.makeText(applicationContext, "Link with Drying guide.", Toast.LENGTH_SHORT).show()
+          router.pushController(
+            routerTransaction(GuideType.DRYING)
+              .pushChangeHandler(VerticalChangeHandler())
+              .popChangeHandler(VerticalChangeHandler())
+          )
         }
         else -> { /* nothing yet */ }
       }

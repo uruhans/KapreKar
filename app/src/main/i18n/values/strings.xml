@@ -148,8 +148,15 @@
 <string name="guide_cleaning_sub_title_5">[English translation is missing]</string>
 <string name="guide_cleaning_title">[English translation is missing]</string>
 <string name="guide_connection">Connection guide</string>
+<string name="guide_dg_article_1_body">If the connection between your transmitter and sensor layer connector flap becomes wet, [Olympus] may struggle to keep you informed. It is important to dry these parts when needed, for example, after showering.</string>
+<string name="guide_dg_article_2_body">It is recommended to remove your transmitter before swimming. You may leave it on for showering/bathing but you should dry out the transmitter (and sensor layer – see below) afterwards.\n\nTo dry off your transmitter, first disengage the lid by pulling the lid firmly until it is opened up. You should be able to see the metal connector pins inside the transmitter.\n\nDry the transmitter using a soft cloth. Make sure the metal connector pins, lid and sides (inside and outside) are completely dry before attempting to attach to a sensor layer.  Remember to close the disengaged lid fully (so the lid is level with the surface of the transmitter) before proceeding to lift the lid to a fixed, lifted position for attaching.</string>
+<string name="guide_dg_article_2_header">Drying your transmitter</string>
+<string name="guide_dg_article_3_body">After showering, bathing or swimming, thoroughly dry the connector flap on your sensor layer before reattaching your transmitter.   Place a thin cotton cloth or absorbing paper (e.g. toilet paper or kitchen paper towel) between the white flap and the sensor layer and press down. This will ensure that any moisture is removed.</string>
+<string name="guide_dg_article_3_header">Drying your sensor layer</string>
 <string name="guide_dg_card_description">Everything you need to know about drying your transmitter and sensor layer</string>
 <string name="guide_dg_card_title">Drying guide</string>
+<string name="guide_dg_subtitle">Everything you need to know about drying your transmitter and sensor layer</string>
+<string name="guide_dg_title">Drying guide</string>
 <string name="guide_drying">Dying guide</string>
 <string name="guide_faq_answer_1">Autem appetere sit cu, his melius incorrupte et, ei ipsum aperiam vis. In feugait pertinax voluptatum mei, sint ullum option vim ei. Cu dico deserunt sit, sed te soluta recusabo voluptaria. Alienum fierent propriae cu sit, vel an amet saepe maiestatis. Te omnes ancillae torquatos sed. Bonorum albucius usu ex, quaestio voluptaria vim ex.</string>
 <string name="guide_faq_question_1">Lorem ipsum dolor sit amet?</string>

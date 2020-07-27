@@ -1,18 +1,21 @@
 package com.coloplast.olympus.ui.feature.guides.models
 
-enum class GuideType {
-  UNKNOWN,
-  APPLICATION,
-  APPLICATION_TIPS,
-  CHARGING,
-  CLEANING,
-  CONNECTION,
-  GET_STARTED,
-  LEARN_MORE;
+import com.coloplast.olympus.shared.types.TypeWithId
+
+enum class GuideType(override val id: Int): TypeWithId {
+  APPLICATION(0),
+  APPLICATION_TIPS(1),
+  CHARGING(2),
+  CLEANING(3),
+  CONNECTION(4),
+  GET_STARTED(5),
+  LEARN_MORE(6),
+  UNKNOWN(-1);
   
   companion object {
-    fun fromOrdinal(ordinal: Int): GuideType {
-      return values().associateBy { type: GuideType -> type.ordinal }[ordinal] ?: UNKNOWN
+    fun fromId(id: Int): GuideType {
+      return values().associateBy { enum: TypeWithId -> enum.id }[id]
+        ?: UNKNOWN
     }
   }
 }

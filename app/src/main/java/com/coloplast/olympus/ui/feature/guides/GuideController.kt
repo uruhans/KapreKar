@@ -12,7 +12,7 @@ import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.feature.guides.models.*
 import me.tatarka.bindingcollectionadapter2.itembindings.OnItemBindClass
 
-class GuideController : BaseController<ControllerGuideBinding>,
+class GuideController(args: Bundle) : BaseController<ControllerGuideBinding>(args),
   ButtonItem.Listener {
 
   val items = ObservableArrayList<Any>()
@@ -21,12 +21,7 @@ class GuideController : BaseController<ControllerGuideBinding>,
     .map(ArticleItem::class.java, BR.item, R.layout.item_article)
     .map(ButtonItem::class.java, BR.item, R.layout.item_button)
 
-  private var guideType: GuideType = GuideType.UNKNOWN
-
-  constructor() : super()
-  constructor(args: Bundle) : super(args) {
-    guideType = GuideType.fromOrdinal(args.getInt(BUNDLE_GUIDE_TYPE, -1))
-  }
+  private var guideType = GuideType.fromId(args.getInt(BUNDLE_GUIDE_TYPE))
 
   override fun attachVariables(viewBinding: ControllerGuideBinding) {
     viewBinding.controller = this

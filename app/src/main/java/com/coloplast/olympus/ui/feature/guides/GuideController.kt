@@ -15,11 +15,11 @@ class GuideController : BaseController<ControllerGuideBinding>, TopMenuItem.List
   
   val items = ObservableArrayList<Any>()
   val itemBinding: OnItemBindClass<Any> = OnItemBindClass<Any>()
-    .map(TopMenuItem::class.java, BR.item, R.layout.item_top_menu_for_list)
+    .map(TopMenuItem::class.java, BR.item, R.layout.item_top_menu_for_list) //TODO remove
     .map(HeaderItem::class.java, BR.item, R.layout.item_guide_header)
     .map(ArticleItem::class.java, BR.item, R.layout.item_article)
     .map(ButtonItem::class.java, BR.item, R.layout.item_button)
-  
+
   private var guideType: GuideType = GuideType.UNKNOWN
   
   constructor() : super()

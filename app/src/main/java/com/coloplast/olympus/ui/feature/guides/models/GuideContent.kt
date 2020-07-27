@@ -7,7 +7,6 @@ object GuideContent {
   // these listeners could possible be done in a nicer way - but for now this is how it's done
   fun getGuideContent(
     guideType: GuideType,
-    topMenuListener: TopMenuItem.Listener,
     buttonListener: ButtonItem.Listener
   ): List<Any> {
     return when (guideType) {
@@ -16,7 +15,6 @@ object GuideContent {
       }
       GuideType.APPLICATION -> {
         listOf(
-          TopMenuItem(topMenuListener),
           HeaderItem(R.string.guide_change_plate_title),
           ArticleItem(
             R.string.guide_change_plate_sub_title_1,
@@ -54,7 +52,6 @@ object GuideContent {
       }
       GuideType.APPLICATION_TIPS -> {
         listOf(
-          TopMenuItem(topMenuListener),
           HeaderItem(R.string.guide_moisture_title, R.string.guide_moisture_body),
           ButtonItem(R.string.guide_moisture_link, ButtonType.ACTION, buttonListener),
           ButtonItem(R.string.generic_go_back, ButtonType.BACK, buttonListener)
@@ -62,7 +59,6 @@ object GuideContent {
       }
       GuideType.CHARGING -> {
         listOf(
-          TopMenuItem(topMenuListener),
           HeaderItem(R.string.guide_moisture_title, R.string.guide_moisture_body),
           ButtonItem(R.string.guide_moisture_link, ButtonType.ACTION, buttonListener),
           ButtonItem(R.string.generic_go_back, ButtonType.BACK, buttonListener)
@@ -70,7 +66,6 @@ object GuideContent {
       }
       GuideType.CLEANING -> {
         listOf(
-          TopMenuItem(topMenuListener),
           HeaderItem(R.string.guide_cleaning_title),
           ArticleItem(description = R.string.guide_cleaning_1_text),
           ArticleItem(
@@ -122,7 +117,6 @@ object GuideContent {
       }
       GuideType.CONNECTION -> {
         listOf(
-          TopMenuItem(topMenuListener),
           HeaderItem(R.string.guide_cg_title, R.string.guide_cg_subtitle),
           ArticleItem(
             image = R.drawable.guide_connection_1,
@@ -138,7 +132,6 @@ object GuideContent {
       }
       GuideType.GET_STARTED -> {
         listOf(
-          TopMenuItem(topMenuListener),
           HeaderItem(header = R.string.guide_get_started_title),
           ArticleItem(
             R.string.guide_get_started_sub_title_1,
@@ -194,7 +187,6 @@ object GuideContent {
       }
       GuideType.LEARN_MORE -> {
         listOf(
-          TopMenuItem(topMenuListener),
           HeaderItem(R.string.guide_learn_more_title, R.string.guide_learn_more_body),
           ButtonItem(R.string.generic_go_back, ButtonType.BACK, buttonListener)
         )

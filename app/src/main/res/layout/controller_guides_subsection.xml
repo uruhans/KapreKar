@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto">
+
   <data>
+
     <variable
       name="controller"
-      type="com.coloplast.olympus.ui.feature.guides.GuidesSubsection" />
+      type="com.coloplast.olympus.ui.feature.guides.GuidesSubsectionController" />
   </data>
 
   <ScrollView
@@ -18,40 +20,40 @@
       android:orientation="vertical">
 
       <TextView
-        android:layout_width="wrap_content"
+        style="@style/TextStyle.Coloplast.Bold.DarkGrey.32"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/spacing_larger"
-        app:safeText="@{controller.type.titleId}"
-        style="@style/TextStyle.Coloplast.Bold.DarkGrey.32" />
+        android:layout_marginEnd="@dimen/spacing_larger"
+        app:safeText="@{controller.type.titleId}" />
 
       <TextView
-        android:layout_width="wrap_content"
+        style="@style/TextStyle.Roboto.Regular.ClearGrey.18"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/spacing_larger"
         android:layout_marginTop="@dimen/spacing_small"
-        app:safeText="@{controller.type.descriptionId}"
-        style="@style/TextStyle.Roboto.Regular.ClearGrey.18" />
+        android:layout_marginEnd="@dimen/spacing_larger"
+        app:safeText="@{controller.type.descriptionId}" />
 
       <TextView
-        android:layout_width="wrap_content"
+        style="@style/TextStyle.Roboto.Regular.ClearGrey.16"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/spacing_larger"
         android:layout_marginTop="@dimen/spacing_standard"
+        android:layout_marginEnd="@dimen/spacing_larger"
         android:layout_marginBottom="@dimen/spacing_half"
-        app:safeText="@{controller.type.listTitleId}"
-        style="@style/TextStyle.Roboto.Regular.ClearGrey.16" />
+        app:safeText="@{controller.type.listTitleId}" />
 
       <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        app:cardUseCompatPadding="true"
         android:orientation="vertical"
         app:itemBinding="@{controller.itemBinding}"
         app:items="@{controller.items}"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-
-
     </LinearLayout>
 
   </ScrollView>

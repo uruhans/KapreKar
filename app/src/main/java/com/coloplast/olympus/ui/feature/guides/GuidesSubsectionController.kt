@@ -1,6 +1,7 @@
 package com.coloplast.olympus.ui.feature.guides
 
 import android.os.Bundle
+import android.view.View
 import androidx.databinding.ObservableArrayList
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.HorizontalChangeHandler
@@ -11,52 +12,38 @@ import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.feature.guides.models.GuideCard
 import com.coloplast.olympus.ui.feature.guides.types.GuidesMenuSubsection
 import com.coloplast.olympus.ui.feature.splash.SplashController
-import me.tatarka.bindingcollectionadapter2.ItemBinding
+import me.tatarka.bindingcollectionadapter2.OnItemBind
 
 /**
  * Created by Kike Bodi (ebp@dawnhealth.com) on 20/07/2020.
  * Copyright by Dawn Health A/S. All rights reserved.
  */
-class GuidesSubsection(args: Bundle): BaseController<ControllerGuidesSubsectionBinding>(args) {
+class GuidesSubsectionController(args: Bundle): BaseController<ControllerGuidesSubsectionBinding>(args) {
 
   val type: GuidesMenuSubsection = args.get(GUIDE_TYPE) as GuidesMenuSubsection
 
   val items = ObservableArrayList<GuideCard>().apply {
     when(type){
       GuidesMenuSubsection.GETTING_STARTED -> {
-        add(GuideCard(
-          R.drawable.guide_wiping_2,
-          R.string.guides_co_card_title,
-          R.string.guides_co_card_description,
-          SplashController.routerTransaction() //TODO: Set destination when the screen is ready.
-        ))
-        add(GuideCard(
-          R.drawable.guide_wiping_2,
-          R.string.guides_ap_card_title,
-          R.string.guides_ap_card_description,
-          SplashController.routerTransaction() //TODO: Set destination when the screen is ready.
-        ))
+        add(GuideCard.COMPONENT_GUIDE)
+        add(GuideCard.APP_TOUR)
       }
       GuidesMenuSubsection.APPLYING_CHANGING -> {
-        add(GuideCard(
-          R.drawable.guide_wiping_2,
-          R.string.guides_ag_card_title,
-          R.string.guides_ag_card_description,
-          SplashController.routerTransaction() //TODO: Set destination when the screen is ready.
-        ))
-        add(GuideCard(
-          R.drawable.guide_wiping_2,
-          R.string.guides_da_card_title,
-          R.string.guides_da_card_description,
-          SplashController.routerTransaction() //TODO: Set destination when the screen is ready.
-        ))
+        add(GuideCard.APPLYING_GUIDE)
+        add(GuideCard.DRY_APPLYING_TIPS)
       }
     }
-
   }
 
-  val itemBinding = ItemBinding.of<GuideCard>(BR.item, R.layout.item_guide_card)
-    .bindExtra(BR.controller, this)
+  val itemBinding = OnItemBind<GuideCard> { itemBinding, _, item ->
+    itemBinding.set(BR.item, R.layout.item_guide_card)
+      .bindExtra(BR.listener, object: View.OnClickListener{
+        override fun onClick(p0: View?) {
+          goToFlow(item)
+        }
+      })
+  }
+
 
   override fun attachVariables(viewBinding: ControllerGuidesSubsectionBinding) {
     viewBinding.controller = this
@@ -66,7 +53,13 @@ class GuidesSubsection(args: Bundle): BaseController<ControllerGuidesSubsectionB
     //noop
   }
 
-  fun goToDestination(routerTransaction: RouterTransaction){
+  fun goToFlow(guideCard: GuideCard){
+    val routerTransaction = when(guideCard){
+      GuideCard.COMPONENT_GUIDE -> SplashController.routerTransaction()
+      GuideCard.APP_TOUR -> SplashController.routerTransaction()
+      GuideCard.APPLYING_GUIDE -> SplashController.routerTransaction()
+      GuideCard.DRY_APPLYING_TIPS -> SplashController.routerTransaction()
+    }
     getContentRouter().pushController(routerTransaction
       .pushChangeHandler(HorizontalChangeHandler())
       .popChangeHandler(HorizontalChangeHandler()))
@@ -82,7 +75,7 @@ class GuidesSubsection(args: Bundle): BaseController<ControllerGuidesSubsectionB
       val args = Bundle().apply {
         putSerializable(GUIDE_TYPE, guidesMenuSubsection)
       }
-      return RouterTransaction.with(GuidesSubsection(args))
+      return RouterTransaction.with(GuidesSubsectionController(args))
         .tag(TAG_CONTROLLER)
     }
   }

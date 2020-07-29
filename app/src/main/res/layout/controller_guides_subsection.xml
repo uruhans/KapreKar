@@ -53,6 +53,7 @@
         android:orientation="vertical"
         app:itemBinding="@{controller.itemBinding}"
         app:items="@{controller.items}"
+        app:nestedScrollingEnabled="@{false}"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
     </LinearLayout>
 

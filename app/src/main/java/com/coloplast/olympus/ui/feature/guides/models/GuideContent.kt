@@ -20,7 +20,7 @@ object GuideContent {
           ArticleItem(image = R.drawable.guide_change_plate_6, description = R.string.guide_change_plate_body_6_text),
           ArticleItem(image = R.drawable.guide_change_plate_7, description = R.string.guide_change_plate_body_7_text),
           ArticleItem(image = R.drawable.guide_change_plate_8),
-          ButtonItem(R.string.guide_go_back, ButtonType.BACK, buttonListener)
+          ButtonItem(R.string.generic_go_back, ButtonType.BACK, buttonListener)
         )
       }
       GuideType.APPLICATION_TIPS -> {
@@ -28,7 +28,7 @@ object GuideContent {
           TopMenuItem(topMenuListener),
           HeaderItem(R.string.guide_moisture_title, R.string.guide_moisture_body),
           ButtonItem(R.string.guide_moisture_link, ButtonType.ACTION, buttonListener),
-          ButtonItem(R.string.guide_go_back, ButtonType.BACK, buttonListener)
+          ButtonItem(R.string.generic_go_back, ButtonType.BACK, buttonListener)
         )
       }
       GuideType.CHARGING -> {
@@ -36,7 +36,7 @@ object GuideContent {
           TopMenuItem(topMenuListener),
           HeaderItem(R.string.guide_moisture_title, R.string.guide_moisture_body),
           ButtonItem(R.string.guide_moisture_link, ButtonType.ACTION, buttonListener),
-          ButtonItem(R.string.guide_go_back, ButtonType.BACK, buttonListener)
+          ButtonItem(R.string.generic_go_back, ButtonType.BACK, buttonListener)
         )
       }
       GuideType.CLEANING -> {
@@ -54,14 +54,14 @@ object GuideContent {
           ArticleItem(title = R.string.guide_wiping_sub_title_4, description = R.string.guide_wiping_4_text),
           ArticleItem(title = R.string.guide_wiping_sub_title_5, description = R.string.guide_wiping_5_text),
           ArticleItem(R.string.guide_wiping_sub_title_6, R.drawable.guide_wiping_2, R.string.guide_wiping_6_text),
-          ButtonItem(R.string.guide_go_back, ButtonType.BACK, buttonListener)
+          ButtonItem(R.string.generic_go_back, ButtonType.BACK, buttonListener)
         )
       }
       GuideType.CONNECTION -> {
         listOf(
           TopMenuItem(topMenuListener),
-          HeaderItem(R.string.guide_ble_connection_title, R.string.guide_ble_connection_body),
-          ButtonItem(R.string.guide_go_back, ButtonType.BACK, buttonListener)
+          HeaderItem(R.string.guides_cg_title, R.string.guides_cg_description),
+          ButtonItem(R.string.generic_go_back, ButtonType.BACK, buttonListener)
         )
       }
       GuideType.GET_STARTED -> {
@@ -80,14 +80,14 @@ object GuideContent {
           ArticleItem(R.string.guide_get_started_sub_title_10, R.drawable.guide_get_started_10, R.string.guide_get_started_10_text),
           ArticleItem(image = R.drawable.guide_get_started_11, description = R.string.guide_get_started_11_text),
           ArticleItem(title = R.string.guide_get_started_sub_title_12, description = R.string.guide_get_started_12_text),
-          ButtonItem(R.string.guide_go_back, ButtonType.BACK, buttonListener)
+          ButtonItem(R.string.generic_go_back, ButtonType.BACK, buttonListener)
         )
       }
       GuideType.LEARN_MORE -> {
         listOf(
           TopMenuItem(topMenuListener),
           HeaderItem(R.string.guide_learn_more_title, R.string.guide_learn_more_body),
-          ButtonItem(R.string.guide_go_back, ButtonType.BACK, buttonListener)
+          ButtonItem(R.string.generic_go_back, ButtonType.BACK, buttonListener)
         )
       }
     }

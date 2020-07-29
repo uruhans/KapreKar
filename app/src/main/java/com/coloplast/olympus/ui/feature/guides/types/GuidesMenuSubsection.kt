@@ -15,5 +15,6 @@ enum class GuidesMenuSubsection(
   @StringRes val descriptionId: Int,
   @StringRes val listTitleId: Int
 ): TypeWithId {
-  GETTING_STARTED(0, R.string.guides_gs_title, R.string.guides_gs_description, R.string.guides_gs_list_title);
+  GETTING_STARTED(0, R.string.guides_gs_title, R.string.guides_gs_description, R.string.guides_gs_list_title),
+  MAINTENANCE(1, R.string.guides_m_title, R.string.guides_m_description, R.string.guides_m_list_title);
 }

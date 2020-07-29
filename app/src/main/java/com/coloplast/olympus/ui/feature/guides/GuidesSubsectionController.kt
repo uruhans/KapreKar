@@ -28,6 +28,10 @@ class GuidesSubsectionController(args: Bundle): BaseController<ControllerGuidesS
         add(GuideCard.COMPONENT_GUIDE)
         add(GuideCard.APP_TOUR)
       }
+      GuidesMenuSubsection.MAINTENANCE -> {
+        add(GuideCard.CLEANING_GUIDE)
+        add(GuideCard.DRYING_GUIDE)
+      }
     }
   }
 
@@ -53,6 +57,8 @@ class GuidesSubsectionController(args: Bundle): BaseController<ControllerGuidesS
     val routerTransaction = when(guideCard){
       GuideCard.COMPONENT_GUIDE -> SplashController.routerTransaction()
       GuideCard.APP_TOUR -> SplashController.routerTransaction()
+      GuideCard.CLEANING_GUIDE -> SplashController.routerTransaction()
+      GuideCard.DRYING_GUIDE -> SplashController.routerTransaction()
     }
     getContentRouter().pushController(routerTransaction
       .pushChangeHandler(HorizontalChangeHandler())

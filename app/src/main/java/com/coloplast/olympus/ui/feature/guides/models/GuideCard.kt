@@ -16,6 +16,6 @@ enum class GuideCard(
 ){
   COMPONENT_GUIDE(R.drawable.guide_co_thumbnail, R.string.guides_co_card_title, R.string.guides_co_card_description),
   APP_TOUR(R.drawable.guide_ap_thumbnail, R.string.guides_ap_card_title, R.string.guides_ap_card_description),
-  APPLYING_GUIDE(R.drawable.guide_wiping_2, R.string.guides_ag_card_title, R.string.guides_ag_card_description),
-  DRY_APPLYING_TIPS(R.drawable.guide_wiping_2, R.string.guides_da_card_title, R.string.guides_da_card_description);
+  APPLYING_GUIDE(R.drawable.guide_ag_thumbnail, R.string.guides_ag_card_title, R.string.guides_ag_card_description),
+  DRY_APPLYING_TIPS(R.drawable.guide_da_thumbnail, R.string.guides_da_card_title, R.string.guides_da_card_description);
 }

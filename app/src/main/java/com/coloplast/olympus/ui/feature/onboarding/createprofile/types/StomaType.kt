@@ -20,5 +20,10 @@ enum class StomaType(override val id: Int,@StringRes val stringId: Int): TypeWit
       return values().associateBy { enum: TypeWithId -> enum.id }[id]
         ?: throw NotImplementedError("Id $id was not found")
     }
+
+    fun fromOrdinal(ordinal: Int): StomaType {
+      return values().associateBy { type: StomaType -> type.ordinal }[ordinal]
+        ?: throw NotImplementedError("Ordinal $ordinal was not found")
+    }
   }
 }

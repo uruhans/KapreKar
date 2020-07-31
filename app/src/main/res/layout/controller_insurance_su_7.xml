@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--suppress AndroidUnknownAttribute -->
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto">
 
@@ -52,16 +53,17 @@
         android:layout_marginTop="@dimen/spacing_half"
         android:layout_marginEnd="@dimen/spacing_standard" />
 
-      <androidx.appcompat.widget.AppCompatSpinner
+      <com.coloplast.olympus.ui.common.widgets.NoDefaultSpinner
         android:layout_width="match_parent"
         android:layout_height="@dimen/cardview_button_height_default"
         android:layout_marginStart="@dimen/spacing_standard"
         android:layout_marginTop="@dimen/spacing_half"
         android:layout_marginEnd="@dimen/spacing_standard"
-        android:background="@drawable/spinner_background"
+        android:background="@{controller.insuranceSelected ? @drawable/spinner_background : @drawable/spinner_background_error}"
         android:spinnerMode="dialog"
+        android:prompt="@string/onboarding_insurance_hint"
         android:entries="@{controller.insuranceValues}"
-        android:selectedItemPosition="@={controller.insuranceId}" />
+        android:selectedItemPosition="@={controller.insuranceSpinnerPosition}" />
     </LinearLayout>
 
     <Button

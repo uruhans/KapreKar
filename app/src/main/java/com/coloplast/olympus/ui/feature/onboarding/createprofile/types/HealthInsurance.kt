@@ -20,5 +20,10 @@ enum class HealthInsurance(override val id: Int, @StringRes val stringId: Int): 
       return values().associateBy { enum: TypeWithId -> enum.id }[id]
         ?: throw NotImplementedError("Id $id was not found")
     }
+
+    fun fromOrdinal(ordinal: Int): HealthInsurance {
+      return values().associateBy { type: HealthInsurance -> type.ordinal }[ordinal]
+        ?: throw NotImplementedError("Ordinal $ordinal was not found")
+    }
   }
 }

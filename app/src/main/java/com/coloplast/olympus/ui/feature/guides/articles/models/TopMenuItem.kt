@@ -1,4 +1,4 @@
-package com.coloplast.olympus.ui.feature.guides.models
+package com.coloplast.olympus.ui.feature.guides.articles.models
 
 class TopMenuItem(private val listener: Listener) {
   

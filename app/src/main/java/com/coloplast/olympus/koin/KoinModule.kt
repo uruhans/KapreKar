@@ -23,6 +23,8 @@ import com.coloplast.olympus.ui.feature.home.HomeViewModel
 import com.coloplast.olympus.ui.feature.onboarding.createprofile.CreateUserFactoryImpl
 import com.coloplast.olympus.ui.feature.onboarding.createprofile.CreateUserViewModel
 import com.coloplast.olympus.ui.feature.onboarding.createprofile.models.CreateUserFactoryModel
+import com.coloplast.olympus.ui.feature.onboarding.dataconsent.DataConsentFactoryImpl
+import com.coloplast.olympus.ui.feature.onboarding.dataconsent.DataConsentModel
 import com.coloplast.olympus.ui.feature.onboarding.setup.SetupGuideIntroFactoryImpl
 import com.coloplast.olympus.ui.feature.onboarding.setup.SetupGuidePreparingFactoryImpl
 import com.coloplast.olympus.ui.feature.onboarding.valueproposition.ValuePropositionFactoryImpl
@@ -75,5 +77,6 @@ val koinModule = module {
   single<FlowFactory<ValuePropositionModel>>(override = true) { ValuePropositionFactoryImpl() }
   single { SetupGuideIntroFactoryImpl() }
   single { SetupGuidePreparingFactoryImpl() }
+  single<FlowFactory<DataConsentModel>>(override = true) { DataConsentFactoryImpl() }
   single<FlowFactory<CreateUserFactoryModel>>(override = true) { CreateUserFactoryImpl() }
 }

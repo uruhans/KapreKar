@@ -35,8 +35,9 @@ import com.coloplast.olympus.ui.common.widgets.PatchView
 import com.coloplast.olympus.ui.dialogs.ImageDialogController
 import com.coloplast.olympus.ui.dialogs.PatchDialogController
 import com.coloplast.olympus.ui.feature.TransmitterManager
-import com.coloplast.olympus.ui.feature.guides.GuideController
-import com.coloplast.olympus.ui.feature.guides.models.GuideType
+import com.coloplast.olympus.ui.feature.guides.GuidesFlowController
+import com.coloplast.olympus.ui.feature.guides.articles.GuideController
+import com.coloplast.olympus.ui.feature.guides.articles.models.GuideType
 import com.coloplast.olympus.ui.feature.home.models.HomeUiModel
 import com.coloplast.olympus.ui.feature.home.models.PatchVisible
 import com.coloplast.olympus.ui.feature.home.models.SideMenuType
@@ -453,7 +454,8 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         requestPermissionAgain(this, REQUEST_CODE_PERMISSION_LOCATION, OSUtils.bleLocationPermission())
       }
       REQUEST_CODE_CONNECTION_LOST -> {
-        router.pushController(GuideController.routerTransaction(GuideType.CONNECTION)
+        router.pushController(
+          GuideController.routerTransaction(GuideType.CONNECTION)
           .pushChangeHandler(VerticalChangeHandler())
           .popChangeHandler(VerticalChangeHandler()))
       }
@@ -547,7 +549,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
       }
       SideMenuType.GUIDES -> {
         router.pushController(
-          GuideController.routerTransaction(GuideType.CONNECTION)
+          GuidesFlowController.getRouterTransaction()
             .pushChangeHandler(VerticalChangeHandler())
             .popChangeHandler(VerticalChangeHandler())
         )

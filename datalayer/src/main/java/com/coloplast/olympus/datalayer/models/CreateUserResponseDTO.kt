@@ -7,6 +7,5 @@ package com.coloplast.olympus.datalayer.models
  */
 data class CreateUserResponseDTO(
   val token: String,
-  val userId: String
-  //val userDto: UserDTO
+  val user: UserDTO
 )

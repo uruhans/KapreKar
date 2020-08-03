@@ -74,7 +74,8 @@ class CreateUserFlowController: FlowFactoryController<CreateUserModel>(),
       when (uiModel) {
         is GenericUiModel.Success<*> -> {
           // User created - Go to last step
-          //getFlowFactory().skipNext() //TODO: Only do this if UK number.
+          val numberFromUK = uiModel.data as Boolean
+          if(numberFromUK) getFlowFactory().skipNext()
           getFlowFactory().incrementAndNext()
         }
         is GenericUiModel.Error -> {

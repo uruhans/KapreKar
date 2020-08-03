@@ -6,6 +6,6 @@ import io.reactivex.Observable
 
 interface ApiService {
 
-  fun registration(createUserModel: CreateUserModel): Observable<CreateUserResponseDTO>
+  fun createUser(createUserModel: CreateUserModel): Observable<CreateUserResponseDTO>
 
 }

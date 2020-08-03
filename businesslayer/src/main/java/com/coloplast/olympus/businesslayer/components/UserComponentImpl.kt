@@ -18,8 +18,8 @@ class UserComponentImpl: UserComponent {
 
   private val apiService: ApiService = ApiServiceImpl()
 
-  override fun registration(createUserModel: CreateUserModel): Observable<CurrentUser> {
-    return apiService.registration(createUserModel)
+  override fun createUser(createUserModel: CreateUserModel): Observable<CurrentUser> {
+    return apiService.createUser(createUserModel)
       .map {
         Preferences.get().userToken = it.token
         CurrentUser.LoggedIn(

@@ -9,12 +9,12 @@ class ApiServiceImpl : ApiService {
   
   private val api = Retrofit.serverApi
 
-  override fun registration(createUserModel: CreateUserModel): Observable<CreateUserResponseDTO> {
+  override fun createUser(createUserModel: CreateUserModel): Observable<CreateUserResponseDTO> {
     val createUserDTO = CreateUserRequestDTO(
       email = createUserModel.email,
       password = createUserModel.password
     )
-    return api.register(createUserDTO)
+    return api.createUser(createUserDTO)
   }
   
   

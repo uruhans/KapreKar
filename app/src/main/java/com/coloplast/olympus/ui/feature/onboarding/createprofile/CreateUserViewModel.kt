@@ -24,10 +24,10 @@ class CreateUserViewModel(private val userComponent: UserComponent, private val 
   override fun bind(uiView: CreateUserFlowView): Disposable {
     val disposable = CompositeDisposable()
 
-    val createUserObservable: Observable<GenericUiModel> =
+    val onCreateUserClicked: Observable<GenericUiModel> =
       uiView.onCreateUser()
         .switchMap { createUserModel ->
-          userComponent.registration(createUserModel)
+          userComponent.createUser(createUserModel)
             .subscribeOn(Schedulers.io())
             .compose(DelayedLoadingTransformer<CurrentUser>())
             .map { delayedResult: DelayedLoadingModel<CurrentUser> ->
@@ -66,7 +66,7 @@ class CreateUserViewModel(private val userComponent: UserComponent, private val 
           }*/
         }
 
-    disposable.add(createUserObservable.bind(uiView.render()))
+    disposable.add(onCreateUserClicked.bind(uiView.render()))
     return disposable
   }
 

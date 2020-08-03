@@ -11,5 +11,5 @@ import io.reactivex.Observable
  */
 interface UserComponent {
 
-  fun registration(createUserModel: CreateUserModel): Observable<CurrentUser>
+  fun createUser(createUserModel: CreateUserModel): Observable<CurrentUser>
 }

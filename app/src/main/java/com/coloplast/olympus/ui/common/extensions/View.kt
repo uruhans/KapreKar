@@ -2,8 +2,10 @@ package com.coloplast.olympus.ui.common.extensions
 
 import android.animation.Animator
 import android.animation.ObjectAnimator
+import android.app.Activity
 import android.view.View
 import android.view.animation.*
+import android.view.inputmethod.InputMethodManager
 import androidx.databinding.BindingAdapter
 import com.coloplast.olympus.ui.common.listeners.AnimatorListenerImpl
 import com.coloplast.olympus.utils.UiUtils
@@ -73,6 +75,11 @@ fun View.rotate360(animationDuration: Long = 2000, offset: Long = 0){
     startOffset = offset
     duration = animationDuration
   }
+}
+
+fun View.hideKeyboard() {
+  val inputMethodManager = context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+  inputMethodManager.hideSoftInputFromWindow(this.windowToken, 0)
 }
 
 @BindingAdapter("expandOrCollapse")

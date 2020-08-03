@@ -1,13 +1,14 @@
 package com.coloplast.olympus.ui.feature.guides.faq
 
-import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.databinding.ObservableArrayList
 import com.bluelinelabs.conductor.RouterTransaction
+import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import com.coloplast.olympus.BR
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerFaqBinding
 import com.coloplast.olympus.ui.common.BaseController
+import com.coloplast.olympus.ui.common.WebViewController
 import com.coloplast.olympus.ui.feature.guides.models.AccordionItem
 import me.tatarka.bindingcollectionadapter2.ItemBinding
 
@@ -56,8 +57,11 @@ class FaqController: BaseController<ControllerFaqBinding>() {
 
   private fun openUrl(@StringRes urlId: Int){
     applicationContext?.getString(urlId)?.let { url ->
-      //TODO: Complete this call when WebViewController is added to develop. PR#104
-      Toast.makeText(applicationContext, "Url: $url", Toast.LENGTH_SHORT).show()
+      getContentRouter().pushController(
+        WebViewController.getRouterTransaction(url)
+          .pushChangeHandler(VerticalChangeHandler())
+          .popChangeHandler(VerticalChangeHandler())
+      )
     }
   }
 

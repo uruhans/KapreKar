@@ -3,7 +3,6 @@ package com.coloplast.olympus.ui.common.extensions
 import android.view.LayoutInflater
 import android.widget.LinearLayout
 import androidx.databinding.BindingAdapter
-import androidx.databinding.ObservableArrayList
 import com.coloplast.olympus.databinding.ItemConnectedBleDeviceBinding
 import com.coloplast.olympus.ui.feature.home.models.ConnectedBleDevice
 

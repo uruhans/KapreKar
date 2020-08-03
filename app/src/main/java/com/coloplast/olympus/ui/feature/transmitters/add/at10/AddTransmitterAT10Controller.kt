@@ -4,7 +4,6 @@ import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerAddTransmitterAt10Binding
 import com.coloplast.olympus.ui.common.BaseController
-import com.coloplast.olympus.ui.common.CustomToolbarController
 import com.coloplast.olympus.ui.common.listeners.FlowListener
 
 

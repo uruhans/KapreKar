@@ -1,6 +1,6 @@
 package com.coloplast.olympus.ui.feature.onboarding.dataconsent
 
-import com.coloplast.olympus.ui.common.flow.FlowFactoryModel
+import com.coloplast.olympus.ui.common.models.flow.FlowFactoryModel
 
 
 /**

@@ -4,8 +4,8 @@ import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.R
 import com.coloplast.olympus.ui.common.GenericConfirmationController
 import com.coloplast.olympus.ui.common.SimpleInfoPageController
-import com.coloplast.olympus.ui.common.flow.EmptyModel
 import com.coloplast.olympus.ui.common.flow.FlowFactory
+import com.coloplast.olympus.ui.common.models.flow.EmptyModel
 import com.coloplast.olympus.ui.feature.onboarding.setup.intro.*
 import com.coloplast.olympus.ui.feature.onboarding.setup.model.SetupGuideIntroductionFlow
 

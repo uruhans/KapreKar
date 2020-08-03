@@ -15,7 +15,6 @@ import com.coloplast.olympus.businesslayer.interfaces.UserComponent
 import com.coloplast.olympus.notifications.NotificationCenter
 import com.coloplast.olympus.notifications.NotificationScheduler
 import com.coloplast.olympus.notifications.OlympusNotificationManager
-import com.coloplast.olympus.shared.models.CreateUserModel
 import com.coloplast.olympus.shared.preferences.Preferences
 import com.coloplast.olympus.ui.common.flow.FlowFactory
 import com.coloplast.olympus.ui.feature.TransmitterManager
@@ -23,6 +22,9 @@ import com.coloplast.olympus.ui.feature.home.BreachesOccurred
 import com.coloplast.olympus.ui.feature.home.HomeViewModel
 import com.coloplast.olympus.ui.feature.onboarding.createprofile.CreateUserFactoryImpl
 import com.coloplast.olympus.ui.feature.onboarding.createprofile.CreateUserViewModel
+import com.coloplast.olympus.ui.feature.onboarding.createprofile.models.CreateUserFactoryModel
+import com.coloplast.olympus.ui.feature.onboarding.dataconsent.DataConsentFactoryImpl
+import com.coloplast.olympus.ui.feature.onboarding.dataconsent.DataConsentModel
 import com.coloplast.olympus.ui.feature.onboarding.login.LoginViewModel
 import com.coloplast.olympus.ui.feature.onboarding.setup.SetupGuideIntroFactoryImpl
 import com.coloplast.olympus.ui.feature.onboarding.setup.SetupGuidePreparingFactoryImpl
@@ -60,7 +62,6 @@ val koinModule = module {
 
   single { Me() }
 
-
   /* ViewModels */
   factory { BluetoothServiceViewModel(get(), get(), get()) }
   factory { HomeViewModel(get()) }
@@ -78,5 +79,6 @@ val koinModule = module {
   single<FlowFactory<ValuePropositionModel>>(override = true) { ValuePropositionFactoryImpl() }
   single { SetupGuideIntroFactoryImpl() }
   single { SetupGuidePreparingFactoryImpl() }
-  single<FlowFactory<CreateUserModel>>(override = true) { CreateUserFactoryImpl() }
+  single<FlowFactory<DataConsentModel>>(override = true) { DataConsentFactoryImpl() }
+  single<FlowFactory<CreateUserFactoryModel>>(override = true) { CreateUserFactoryImpl() }
 }

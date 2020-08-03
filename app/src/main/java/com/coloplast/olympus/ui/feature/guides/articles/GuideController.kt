@@ -1,4 +1,4 @@
-package com.coloplast.olympus.ui.feature.guides
+package com.coloplast.olympus.ui.feature.guides.articles
 
 import android.os.Bundle
 import androidx.databinding.ObservableArrayList
@@ -8,7 +8,7 @@ import com.coloplast.olympus.BR
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerGuideBinding
 import com.coloplast.olympus.ui.common.BaseController
-import com.coloplast.olympus.ui.feature.guides.models.*
+import com.coloplast.olympus.ui.feature.guides.articles.models.*
 import me.tatarka.bindingcollectionadapter2.itembindings.OnItemBindClass
 
 class GuideController : BaseController<ControllerGuideBinding>, TopMenuItem.Listener, ButtonItem.Listener {
@@ -53,7 +53,9 @@ class GuideController : BaseController<ControllerGuideBinding>, TopMenuItem.List
       when (guideType) {
         GuideType.APPLICATION_TIPS -> {
           router.pushController(
-            routerTransaction(GuideType.APPLICATION)
+            routerTransaction(
+              GuideType.APPLICATION
+            )
               .pushChangeHandler(VerticalChangeHandler())
               .popChangeHandler(VerticalChangeHandler())
           )
@@ -82,7 +84,11 @@ class GuideController : BaseController<ControllerGuideBinding>, TopMenuItem.List
         putInt(BUNDLE_GUIDE_TYPE, guideType.ordinal)
       }
         .also {
-          return RouterTransaction.with(GuideController(it))
+          return RouterTransaction.with(
+            GuideController(
+              it
+            )
+          )
             .tag(TAG_CONTROLLER)
         }
     }

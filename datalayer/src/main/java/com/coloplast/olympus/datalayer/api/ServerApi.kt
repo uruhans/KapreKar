@@ -10,9 +10,8 @@ import retrofit2.http.POST
 interface ServerApi {
 
   @POST("/api/v1/Users/register")
-  fun register(@Body createUserRequestDTO: CreateUserRequestDTO): Observable<UserResponseDTO>
+  fun createUser(@Body createUserRequestDTO: CreateUserRequestDTO): Observable<UserResponseDTO>
 
   @POST("/api/v1/Auth/login")
   fun login(@Body loginRequestDTO: LoginRequestDTO): Observable<UserResponseDTO>
-
 }

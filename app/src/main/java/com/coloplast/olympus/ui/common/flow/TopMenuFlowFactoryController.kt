@@ -2,7 +2,7 @@ package com.coloplast.olympus.ui.common.flow
 
 import android.os.Bundle
 import com.bluelinelabs.conductor.Controller
-import com.coloplast.olympus.shared.models.flow.FlowFactoryModel
+import com.coloplast.olympus.ui.common.models.flow.FlowFactoryModel
 
 abstract class TopMenuFlowFactoryController<T : FlowFactoryModel>(args: Bundle? = null) : FlowFactoryController<T>(args) {
 

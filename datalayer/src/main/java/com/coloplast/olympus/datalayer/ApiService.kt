@@ -7,7 +7,7 @@ import io.reactivex.Observable
 
 interface ApiService {
 
-  fun registration(createUserModel: CreateUserModel): Observable<UserResponseDTO>
+  fun createUser(createUserModel: CreateUserModel): Observable<UserResponseDTO>
   fun login(credentials: Credentials): Observable<UserResponseDTO>
 
 }

@@ -12,6 +12,7 @@ import com.coloplast.olympus.ui.common.dialogs.DialogController
 import com.coloplast.olympus.ui.common.flow.FlowFactory
 import com.coloplast.olympus.ui.common.flow.FlowFactoryController
 import com.coloplast.olympus.ui.common.models.GenericUiModel
+import com.coloplast.olympus.ui.feature.onboarding.createprofile.models.CreateUserFactoryModel
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
@@ -23,18 +24,18 @@ import org.koin.core.inject
  * Created by Kike Bodi (ebp@dawnhealth.com) on 30/06/2020.
  * Copyright by Dawn Health A/S. All rights reserved.
  */
-class CreateUserFlowController: FlowFactoryController<CreateUserModel>(),
+class CreateUserFlowController: FlowFactoryController<CreateUserFactoryModel>(),
   CreateUserFlowView,
   BaseDialogController.Listener {
 
-  private val createUserFactory: FlowFactory<CreateUserModel> by inject()
+  private val createUserFactory: FlowFactory<CreateUserFactoryModel> by inject()
   private val viewModel: CreateUserViewModel by inject()
   private val registrationRelay: PublishRelay<CreateUserModel> = PublishRelay.create()
   private var dialogController: DialogController? = null
 
-  override fun getFlowFactory(): FlowFactory<CreateUserModel> = createUserFactory
+  override fun getFlowFactory(): FlowFactory<CreateUserFactoryModel> = createUserFactory
 
-  override fun onStepCompleted(currentIndex: Int, data: CreateUserModel): Boolean {
+  override fun onStepCompleted(currentIndex: Int, data: CreateUserFactoryModel): Boolean {
     return when(CreateUserFlow.fromIndex(currentIndex)){
       CreateUserFlow.PhoneSU6 -> {
         if(data.phoneNumber.contains(UK_COUNTRY_CODE_1) || data.phoneNumber.contains(UK_COUNTRY_CODE_2)){
@@ -74,7 +75,8 @@ class CreateUserFlowController: FlowFactoryController<CreateUserModel>(),
       when (uiModel) {
         is GenericUiModel.Success<*> -> {
           // User created - Go to last step
-          //getFlowFactory().skipNext() //TODO: Only do this if UK number.
+          val numberFromUK = uiModel.data as Boolean
+          if(numberFromUK) getFlowFactory().skipNext()
           getFlowFactory().incrementAndNext()
         }
         is GenericUiModel.Error -> {

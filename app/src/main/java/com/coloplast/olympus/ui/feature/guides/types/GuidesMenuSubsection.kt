@@ -5,5 +5,6 @@ package com.coloplast.olympus.ui.feature.guides.types
  * Copyright by Dawn Health A/S. All rights reserved.
  */
 enum class GuidesMenuSubsection{
-  GETTING_STARTED;
+  GETTING_STARTED,
+  APPLYING_CHANGING;
 }

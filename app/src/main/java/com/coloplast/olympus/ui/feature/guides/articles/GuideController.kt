@@ -1,6 +1,7 @@
 package com.coloplast.olympus.ui.feature.guides.articles
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.databinding.ObservableArrayList
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
@@ -9,48 +10,24 @@ import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerGuideBinding
 import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.feature.guides.articles.models.*
+import com.coloplast.olympus.ui.feature.guides.models.ButtonType
 import me.tatarka.bindingcollectionadapter2.itembindings.OnItemBindClass
 
-class GuideController : BaseController<ControllerGuideBinding>, TopMenuItem.Listener, ButtonItem.Listener {
-  
+class GuideController(args: Bundle) : BaseController<ControllerGuideBinding>(args) {
+
   val items = ObservableArrayList<Any>()
   val itemBinding: OnItemBindClass<Any> = OnItemBindClass<Any>()
-    .map(TopMenuItem::class.java, BR.item, R.layout.item_top_menu_for_list)
     .map(HeaderItem::class.java, BR.item, R.layout.item_guide_header)
     .map(ArticleItem::class.java, BR.item, R.layout.item_article)
     .map(ButtonItem::class.java, BR.item, R.layout.item_button)
-  
-  private var guideType: GuideType = GuideType.UNKNOWN
-  
-  constructor() : super()
-  constructor(args: Bundle) : super(args) {
-    guideType = GuideType.fromOrdinal(args.getInt(BUNDLE_GUIDE_TYPE, -1))
-  }
-  
-  override fun attachVariables(viewBinding: ControllerGuideBinding) {
-    viewBinding.controller = this
-  }
-  
-  override fun onViewBound(viewBinding: ControllerGuideBinding) {
-    if (items.isNullOrEmpty()) {
-      items.addAll(GuideContent.getGuideContent(guideType, this, this))
-    }
-  }
-  
-  override fun onBackClicked() {
-    handleBack()
-  }
-  
-  override fun onCloseClicked() {
-    handleBack()
-  }
-  
-  override fun onButtonClicked(buttonType: ButtonType) {
-    if (buttonType == ButtonType.BACK) {
-      handleBack()
-    }
-    else if (buttonType == ButtonType.ACTION) {
-      when (guideType) {
+
+  private var guideType = GuideType.fromId(args.getInt(BUNDLE_GUIDE_TYPE))
+
+  private val buttonCallback: (ButtonType) -> Unit = { buttonType ->
+    when (buttonType) {
+      ButtonType.BACK -> handleBack()
+      ButtonType.ACTION,
+      ButtonType.LINK -> when (guideType) {
         GuideType.APPLICATION_TIPS -> {
           router.pushController(
             routerTransaction(
@@ -60,25 +37,31 @@ class GuideController : BaseController<ControllerGuideBinding>, TopMenuItem.List
               .popChangeHandler(VerticalChangeHandler())
           )
         }
-        
-        GuideType.UNKNOWN,
-        GuideType.APPLICATION,
-        GuideType.CHARGING,
-        GuideType.CLEANING,
-        GuideType.CONNECTION,
-        GuideType.GET_STARTED,
-        GuideType.LEARN_MORE -> { /* nothing yet */
+        GuideType.CONNECTION -> {
+          //TODO: CPO-556 - Link with Location guide.
+          Toast.makeText(applicationContext, "Open Location guide", Toast.LENGTH_SHORT).show()
         }
+        else -> { /* nothing yet */ }
       }
     }
   }
-  
+
+  override fun attachVariables(viewBinding: ControllerGuideBinding) {
+    viewBinding.controller = this
+  }
+
+  override fun onViewBound(viewBinding: ControllerGuideBinding) {
+    if (items.isNullOrEmpty()) {
+      items.addAll(GuideContent.getGuideContent(guideType, buttonCallback))
+    }
+  }
+
   override fun getLayout() = R.layout.controller_guide
-  
+
   companion object {
     private const val TAG_CONTROLLER = "controller_guide"
     private const val BUNDLE_GUIDE_TYPE = "bundle_guide_type"
-    
+
     fun routerTransaction(guideType: GuideType): RouterTransaction {
       Bundle().apply {
         putInt(BUNDLE_GUIDE_TYPE, guideType.ordinal)

@@ -1,6 +1,7 @@
 package com.coloplast.olympus.businesslayer.interfaces
 
 import com.coloplast.olympus.shared.models.CreateUserModel
+import com.coloplast.olympus.shared.models.Credentials
 import com.coloplast.olympus.shared.models.CurrentUser
 import io.reactivex.Observable
 
@@ -12,4 +13,5 @@ import io.reactivex.Observable
 interface UserComponent {
 
   fun createUser(createUserModel: CreateUserModel): Observable<CurrentUser>
+  fun login(credentials: Credentials): Observable<CurrentUser>
 }

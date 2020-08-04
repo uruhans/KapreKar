@@ -6,5 +6,6 @@ package com.coloplast.olympus.ui.feature.guides.types
  */
 enum class GuidesMenuSubsection{
   GETTING_STARTED,
+  APPLYING_CHANGING,
   CONNECTION_AND_TRANSMITTER;
 }

@@ -25,6 +25,7 @@ import com.coloplast.olympus.ui.feature.onboarding.createprofile.CreateUserViewM
 import com.coloplast.olympus.ui.feature.onboarding.createprofile.models.CreateUserFactoryModel
 import com.coloplast.olympus.ui.feature.onboarding.dataconsent.DataConsentFactoryImpl
 import com.coloplast.olympus.ui.feature.onboarding.dataconsent.DataConsentModel
+import com.coloplast.olympus.ui.feature.onboarding.login.LoginViewModel
 import com.coloplast.olympus.ui.feature.onboarding.setup.SetupGuideIntroFactoryImpl
 import com.coloplast.olympus.ui.feature.onboarding.setup.SetupGuidePreparingFactoryImpl
 import com.coloplast.olympus.ui.feature.onboarding.valueproposition.ValuePropositionFactoryImpl
@@ -68,6 +69,7 @@ val koinModule = module {
   single { TransmittersViewModel(get(), get()) }
   single { AddTransmitterAT9ViewModel(get(), get()) }
   single { CreateUserViewModel(get(), get()) }
+  single { LoginViewModel(get(), get()) }
 
   /* Flows
   *  Fixed problem with Generic Type:

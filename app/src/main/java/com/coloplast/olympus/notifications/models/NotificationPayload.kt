@@ -1,8 +1,6 @@
 package com.coloplast.olympus.notifications.models
 
 import androidx.annotation.StringRes
-import com.coloplast.olympus.R
-import com.coloplast.olympus.ui.feature.statemachine.models.UiState
 
 /**
  * the payload describes what the notification will write to the user

@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <data>
+
+    <import type="android.view.View" />
+
+    <import type="com.coloplast.olympus.R" />
+
+    <variable
+      name="controller"
+      type="com.coloplast.olympus.ui.feature.onboarding.createprofile.su1.CreateUserSU1Controller" />
+  </data>
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="@dimen/toolbar_height">
+
+    <TextView
+      android:id="@+id/title"
+      style="@style/TextStyle.Coloplast.Bold.DarkGrey.24"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_margin="@dimen/spacing_larger"
+      android:text="@string/onboarding_su1_title"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+      style="@style/TextStyle.Roboto.Regular.ClearGrey.18"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="@dimen/spacing_larger"
+      android:text="@string/onboarding_su1_description"
+      app:layout_constraintStart_toStartOf="@id/title"
+      app:layout_constraintTop_toBottomOf="@id/title" />
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="@dimen/spacing_half"
+      android:layout_marginBottom="@dimen/spacing_double"
+      android:orientation="vertical"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent">
+
+      <TextView
+        style="@style/TextStyle.Roboto.Regular.ClearGrey.14"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_standard"
+        android:layout_marginTop="@dimen/spacing_half"
+        android:layout_marginEnd="@dimen/spacing_standard"
+        android:text="@string/onboarding_first_name_title" />
+
+      <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/email_input_layout"
+        style="@style/TextInputLayoutAppearance"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_standard"
+        android:layout_marginTop="@dimen/spacing_half"
+        android:layout_marginEnd="@dimen/spacing_standard">
+
+        <com.google.android.material.textfield.TextInputEditText
+          android:id="@+id/email_edittext"
+          style="@style/EditTextInputText"
+          android:hint="@string/onboarding_first_name_hint"
+          android:inputType="textPersonName"
+          android:text="@={controller.name}"
+          app:errorBackground="@{controller.validName}" />
+      </com.google.android.material.textfield.TextInputLayout>
+
+      <TextView
+        style="@style/TextInputLayoutErrorText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_standard"
+        android:layout_marginEnd="@dimen/spacing_standard"
+        android:text="@string/onboarding_first_name_error"
+        app:visibleOrGone="@{!controller.validName}" />
+
+      <TextView
+        style="@style/TextStyle.Roboto.Regular.ClearGrey.14"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_standard"
+        android:layout_marginTop="@dimen/spacing_large"
+        android:layout_marginEnd="@dimen/spacing_standard"
+        android:text="@string/onboarding_last_name_title" />
+
+      <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/password_input_layout"
+        style="@style/TextInputLayoutAppearance"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_standard"
+        android:layout_marginTop="@dimen/spacing_half"
+        android:layout_marginEnd="@dimen/spacing_standard">
+
+        <com.google.android.material.textfield.TextInputEditText
+          android:id="@+id/password_edittext"
+          style="@style/EditTextInputText"
+          android:background="@drawable/edittext_background"
+          android:hint="@string/onboarding_last_name_hint"
+          android:inputType="textPersonName"
+          android:text="@={controller.surname}"
+          app:errorBackground="@{controller.validSurname}"
+          app:onSubmit="@{() -> controller.onNextClicked()}" />
+      </com.google.android.material.textfield.TextInputLayout>
+
+      <TextView
+        style="@style/TextInputLayoutErrorText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_standard"
+        android:layout_marginEnd="@dimen/spacing_standard"
+        android:text="@string/onboarding_last_name_error"
+        app:visibleOrGone="@{!controller.validSurname}" />
+
+    </LinearLayout>
+
+    <com.coloplast.olympus.ui.common.widgets.CustomTabLayout
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="@dimen/spacing_double"
+      app:currentIndex="@{1}"
+      app:layout_constraintBottom_toBottomOf="@id/next_button"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="@id/next_button"
+      app:totalCount="@{6}" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+      android:id="@+id/next_button"
+      android:layout_width="56dp"
+      android:layout_height="56dp"
+      android:layout_marginEnd="@dimen/spacing_larger"
+      android:layout_marginBottom="@dimen/spacing_double"
+      android:onClick="@{() -> controller.onNextClicked()}"
+      android:src="@drawable/ic_arrow"
+      android:tint="@color/white"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent" />
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

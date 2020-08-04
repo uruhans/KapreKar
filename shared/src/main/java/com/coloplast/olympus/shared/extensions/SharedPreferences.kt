@@ -25,7 +25,7 @@ fun SharedPreferences.Editor.putLocalTime(key: String, value: LocalTime) = putSt
 fun SharedPreferences.getSensors(key: String, defaultValue: Sensors): Sensors{
   val sensorId = getInt(key, -1)
   return if (sensorId > 0){
-    Sensors.fromOrdinal(sensorId)
+    Sensors.fromId(sensorId)
   } else {
     defaultValue
   }

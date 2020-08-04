@@ -1,27 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
-  xmlns:tools="http://schemas.android.com/tools">
-
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
   <data>
-
     <variable
-      name="controller"
-      type="com.coloplast.olympus.ui.common.GenericConfirmationController" />
+      name="imageId"
+      type="Integer" />
   </data>
 
-  <RelativeLayout
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="104dp"
     android:layout_height="104dp"
     android:background="@drawable/shape_turquoise_circle"
     android:gravity="center">
 
-    <ImageView
+  <ImageView
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:layout_margin="@dimen/spacing_large"
-      app:resource="@{controller.imageId}"
-      tools:src="@drawable/ic_checkmark" />
+      app:safeResource="@{imageId}" />
 
-  </RelativeLayout>
+</FrameLayout>
+
 </layout>

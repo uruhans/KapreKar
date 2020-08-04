@@ -1,11 +1,5 @@
 package com.coloplast.olympus.ui.common.rx
 
-import com.coloplast.olympus.Me
-import com.coloplast.olympus.shared.models.CurrentUser
-import io.reactivex.Observable
-import io.reactivex.schedulers.Schedulers
-import timber.log.Timber
-
 object CommonRx {
   
   /*fun automaticLoginObservable(userService: UserService): Observable<CurrentUser> {

@@ -1,21 +1,12 @@
 package com.coloplast.olympus.ui.feature.guides.models
 
-import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
-import com.coloplast.olympus.R
-
-
 /**
  * Created by Kike Bodi (ebp@dawnhealth.com) on 20/07/2020.
  * Copyright by Dawn Health A/S. All rights reserved.
  */
-enum class GuideCard(
-  @DrawableRes val imageId: Int,
-  @StringRes val titleId: Int,
-  @StringRes val descriptionId: Int
-){
-  COMPONENT_GUIDE(R.drawable.guide_co_thumbnail, R.string.guides_co_card_title, R.string.guides_co_card_description),
-  APP_TOUR(R.drawable.guide_ap_thumbnail, R.string.guides_ap_card_title, R.string.guides_ap_card_description),
-  APPLYING_GUIDE(R.drawable.guide_ag_thumbnail, R.string.guides_ag_card_title, R.string.guides_ag_card_description),
-  DRY_APPLYING_TIPS(R.drawable.guide_da_thumbnail, R.string.guides_da_card_title, R.string.guides_da_card_description);
+enum class GuideCard{
+  COMPONENT_GUIDE,
+  APP_TOUR,
+  APPLYING_GUIDE,
+  DRY_APPLYING_TIPS;
 }

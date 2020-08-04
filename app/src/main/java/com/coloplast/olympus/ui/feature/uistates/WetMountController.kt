@@ -4,8 +4,8 @@ import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerStateWetMountBinding
-import com.coloplast.olympus.ui.feature.guides.GuideController
-import com.coloplast.olympus.ui.feature.guides.models.GuideType
+import com.coloplast.olympus.ui.feature.guides.articles.GuideController
+import com.coloplast.olympus.ui.feature.guides.articles.models.GuideType
 import com.coloplast.olympus.ui.feature.home.models.PatchVisible
 
 class WetMountController : BaseHomeUIController<ControllerStateWetMountBinding>(), PatchVisible {

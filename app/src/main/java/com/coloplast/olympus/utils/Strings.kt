@@ -11,7 +11,6 @@ import com.coloplast.olympus.shared.AppSettings
 import com.coloplast.olympus.ui.common.extensions.LocalDateTimeHelper
 import timber.log.Timber
 import java.io.InputStream
-import java.text.DateFormat
 import java.time.DayOfWeek
 import java.time.LocalDateTime
 import java.time.ZoneOffset

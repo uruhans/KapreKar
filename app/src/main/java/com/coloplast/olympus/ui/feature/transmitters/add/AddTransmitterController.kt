@@ -9,7 +9,6 @@ import com.coloplast.olympus.R
 import com.coloplast.olympus.bluetooth.businesslayer.models.ScanResult
 import com.coloplast.olympus.databinding.ControllerTransmittersAddBinding
 import com.coloplast.olympus.ui.common.CustomToolbarController
-import com.coloplast.olympus.ui.common.dialogs.DialogController
 import com.coloplast.olympus.ui.common.models.GenericUiModel
 import com.coloplast.olympus.ui.feature.home.models.ScanResultItem
 import com.jakewharton.rxrelay2.PublishRelay

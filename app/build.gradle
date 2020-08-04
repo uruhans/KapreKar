@@ -19,7 +19,7 @@ android {
     testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
     buildConfigField("Long", "BuildTime", System.currentTimeMillis() + "L")
-    buildConfigField("String", "ServerUrl", "\"https://novo8devfunc.azurewebsites.net/api/\"")
+    buildConfigField("String", "ServerUrl", "\"https://cp-fc-be-test.azurewebsites.net/api/\"")
   }
 
   sourceSets {

@@ -3,7 +3,7 @@
   xmlns:app="http://schemas.android.com/apk/res-auto">
 
   <data>
-
+    <import type="com.coloplast.olympus.ui.common.extensions.GuidesMenuSubsectionKt" />
     <variable
       name="controller"
       type="com.coloplast.olympus.ui.feature.guides.GuidesSubsectionController" />
@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/spacing_larger"
         android:layout_marginEnd="@dimen/spacing_larger"
-        app:safeText="@{controller.type.titleId}" />
+        app:safeText="@{GuidesMenuSubsectionKt.getTitle(controller.type)}" />
 
       <TextView
         style="@style/TextStyle.Roboto.Regular.ClearGrey.18"
@@ -34,7 +34,7 @@
         android:layout_marginStart="@dimen/spacing_larger"
         android:layout_marginTop="@dimen/spacing_small"
         android:layout_marginEnd="@dimen/spacing_larger"
-        app:safeText="@{controller.type.descriptionId}" />
+        app:safeText="@{GuidesMenuSubsectionKt.getDescription(controller.type)}" />
 
       <TextView
         style="@style/TextStyle.Roboto.Regular.ClearGrey.16"
@@ -44,7 +44,7 @@
         android:layout_marginTop="@dimen/spacing_standard"
         android:layout_marginEnd="@dimen/spacing_larger"
         android:layout_marginBottom="@dimen/spacing_half"
-        app:safeText="@{controller.type.listTitleId}" />
+        app:safeText="@{GuidesMenuSubsectionKt.getListTitle(controller.type)}" />
 
       <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"

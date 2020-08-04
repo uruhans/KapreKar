@@ -2,13 +2,14 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto">
   <data>
+    <import type="com.coloplast.olympus.ui.common.extensions.GuideCardKt" />
     <variable
       name="item"
       type="com.coloplast.olympus.ui.feature.guides.models.GuideCard" />
 
     <variable
-      name="controller"
-      type="com.coloplast.olympus.ui.feature.guides.GuidesSubsection" />
+      name="listener"
+      type="android.view.View.OnClickListener" />
   </data>
 
   <androidx.cardview.widget.CardView
@@ -20,9 +21,9 @@
     android:layout_marginEnd="@dimen/spacing_larger"
     app:cardCornerRadius="@dimen/cardview_corner_radius"
     android:elevation="@dimen/cardview_elevation_default"
-    android:background="@drawable/cardview_not_selected"
+    app:cardUseCompatPadding="true"
     android:foreground="?attr/selectableItemBackground"
-    android:onClick="@{() -> controller.goToDestination(item.destination)}" >
+    android:onClick="@{listener}">
 
     <androidx.constraintlayout.widget.ConstraintLayout
       android:layout_width="match_parent"
@@ -33,7 +34,7 @@
         android:layout_width="104dp"
         android:layout_height="128dp"
         android:scaleType="fitXY"
-        safeResource="@{item.imageId}"
+        safeResource="@{GuideCardKt.getImage(item)}"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" />
@@ -43,7 +44,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/spacing_standard"
-        app:safeText="@{item.titleId}"
+        app:safeText="@{GuideCardKt.getTitle(item)}"
         android:textAlignment="textStart"
         style="@style/TextStyle.Coloplast.Bold.DarkGrey.20"
         app:layout_constraintTop_toTopOf="parent"
@@ -55,9 +56,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/spacing_half"
-        app:safeText="@{item.descriptionId}"
+        app:safeText="@{GuideCardKt.getDescription(item)}"
         android:textAlignment="textStart"
-        style="@style/TextStyle.Roboto.Regular.ClearGrey.14"
         app:layout_constraintTop_toBottomOf="@id/title"
         app:layout_constraintStart_toStartOf="@id/title"
         app:layout_constraintEnd_toEndOf="parent" />

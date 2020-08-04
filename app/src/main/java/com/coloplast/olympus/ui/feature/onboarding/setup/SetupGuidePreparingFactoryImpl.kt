@@ -3,8 +3,8 @@ package com.coloplast.olympus.ui.feature.onboarding.setup
 import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.R
 import com.coloplast.olympus.ui.common.InfoPageController
-import com.coloplast.olympus.ui.common.flow.EmptyModel
 import com.coloplast.olympus.ui.common.flow.FlowFactory
+import com.coloplast.olympus.ui.common.models.flow.EmptyModel
 import com.coloplast.olympus.ui.feature.onboarding.setup.model.SetupGuidePreparingFlow
 import com.coloplast.olympus.ui.feature.onboarding.setup.preparing.SetupGuidePreparingSGP2Controller
 import com.coloplast.olympus.ui.feature.onboarding.setup.preparing.SetupGuidePreparingSGP3Controller

@@ -1,22 +1,14 @@
 package com.coloplast.olympus.ui.common.widgets
 
 import android.content.Context
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.EditText
-import android.widget.FrameLayout
 import android.widget.LinearLayout
-import androidx.core.widget.addTextChangedListener
 import androidx.core.widget.doAfterTextChanged
-import androidx.core.widget.doOnTextChanged
-import androidx.databinding.Bindable
-import androidx.databinding.BindingAdapter
 import com.coloplast.olympus.databinding.ViewCodeInputBinding
 import com.coloplast.olympus.utils.DeviceUtils
-import kotlinx.android.synthetic.main.view_code_input.view.*
 
 
 /**
@@ -69,7 +61,7 @@ class InputCodeEditText @JvmOverloads constructor(
                 "${view.input2.text}" +
                 "${view.input3.text}" +
                 "${view.input4.text}"
-        listener!!.onCodeInput(code)
+        listener.onCodeInput(code)
     }
 
     inner class CustomOnFocusListener: OnFocusChangeListener{

@@ -4,7 +4,7 @@ import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.R
 import com.coloplast.olympus.ui.common.GenericConfirmationController
 import com.coloplast.olympus.ui.common.flow.FlowFactory
-import com.coloplast.olympus.ui.feature.onboarding.createprofile.models.CreateUserModel
+import com.coloplast.olympus.ui.feature.onboarding.createprofile.models.CreateUserFactoryModel
 import com.coloplast.olympus.ui.feature.onboarding.createprofile.models.SU1Model
 import com.coloplast.olympus.ui.feature.onboarding.createprofile.models.SU2Model
 import com.coloplast.olympus.ui.feature.onboarding.createprofile.su1.CreateUserSU1Controller
@@ -15,13 +15,13 @@ import com.coloplast.olympus.ui.feature.onboarding.createprofile.su6.PhoneSU6Con
 import com.coloplast.olympus.ui.feature.onboarding.createprofile.su7.InsuranceSU7Controller
 import com.coloplast.olympus.ui.feature.onboarding.createprofile.types.HealthInsurance
 
-class CreateUserFactoryImpl : FlowFactory<CreateUserModel>() {
+class CreateUserFactoryImpl : FlowFactory<CreateUserFactoryModel>() {
 
-  private lateinit var model: CreateUserModel
+  private lateinit var model: CreateUserFactoryModel
 
   override fun initialize() {
     model =
-      CreateUserModel()
+      CreateUserFactoryModel()
   }
 
   override fun getRouterTransaction(currentIndex: Int): RouterTransaction? {
@@ -38,6 +38,7 @@ class CreateUserFactoryImpl : FlowFactory<CreateUserModel>() {
         R.string.onboarding_confirmation_button
       )
       CreateUserFlow.Completed -> null
+      else -> null
     }
   }
 
@@ -54,8 +55,8 @@ class CreateUserFactoryImpl : FlowFactory<CreateUserModel>() {
       }
       CreateUserFlow.StomaInfoSU2 -> {
         val data = result as SU2Model
-        model.stomaType = data.stomaType
-        model.stomaSurgeryDate = data.stomaSurgeryDate
+        model.stomaTypeId = data.stomaType.id
+        model.stomaSurgeryDateId = data.stomaSurgeryDate.id
       }
       CreateUserFlow.EmailSU3 -> {
         val email = result as String
@@ -71,10 +72,11 @@ class CreateUserFactoryImpl : FlowFactory<CreateUserModel>() {
       }
       CreateUserFlow.InsuranceSU7 -> {
         val healthInsurance = result as HealthInsurance
-        model.healthInsurance = healthInsurance
+        model.healthInsuranceId = healthInsurance.id
       }
       CreateUserFlow.Completed -> {}
     }
   }
-  override fun getData(): CreateUserModel = model
+
+  override fun getData(): CreateUserFactoryModel = model
 }

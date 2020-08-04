@@ -8,6 +8,7 @@ import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerGenericConfirmationBinding
 import com.coloplast.olympus.ui.common.listeners.FlowListener
 
+
 /**
  * Created by Kike Bodi (ebp@dawnhealth.com) on 06/07/2020.
  * Copyright by Dawn Health A/S. All rights reserved.
@@ -28,10 +29,12 @@ class GenericConfirmationController(args: Bundle): BaseController<ControllerGene
   }
 
   fun onFinishButtonClicked(){
+    //This only works if this controller is managed by FlowFactory.
     getListener(FlowListener::class.java)!!.onNextClicked()
   }
 
   override fun getLayout(): Int = R.layout.controller_generic_confirmation
+
 
   companion object{
     private const val TAG_CONTROLLER = "generic_confirmation_controller"
@@ -41,7 +44,7 @@ class GenericConfirmationController(args: Bundle): BaseController<ControllerGene
     private const val BUTTON_TEXT_ID = "BUTTON_TEXT_ID"
     private const val IMAGE_ID = "IMAGE_ID"
 
-    fun routerTransaction(
+    fun getRouterTransaction(
       @StringRes titleId: Int,
       @StringRes descriptionId: Int,
       @StringRes buttonId: Int,
@@ -54,8 +57,8 @@ class GenericConfirmationController(args: Bundle): BaseController<ControllerGene
         putInt(IMAGE_ID, imageId)
       }
 
-      return RouterTransaction.with(GenericConfirmationController(args))
-        .tag(TAG_CONTROLLER)
+    return RouterTransaction.with(GenericConfirmationController(args))
+      .tag(TAG_CONTROLLER)
     }
   }
 }

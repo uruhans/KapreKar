@@ -4,7 +4,7 @@
   <data>
     <variable
       name="controller"
-      type="com.coloplast.olympus.ui.feature.LandingController" />
+      type="com.coloplast.olympus.ui.feature.onboarding.LandingController" />
   </data>
 
   <androidx.constraintlayout.widget.ConstraintLayout

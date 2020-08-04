@@ -8,7 +8,6 @@ import com.coloplast.olympus.databinding.ControllerStartupGuide2Binding
 import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.common.listeners.FlowListener
 import com.coloplast.olympus.ui.feature.onboarding.setup.model.NumberedCard
-import com.coloplast.olympus.ui.feature.transmitters.add.models.ChecklistItem
 import me.tatarka.bindingcollectionadapter2.itembindings.OnItemBindClass
 
 class SetupGuideSG2 : BaseController<ControllerStartupGuide2Binding>() {
@@ -43,7 +42,7 @@ class SetupGuideSG2 : BaseController<ControllerStartupGuide2Binding>() {
   }
 
   companion object {
-    private const val TAG_CONTROLLER = "setup_guide_sg_2"
+    private const val TAG_CONTROLLER = "setup_guide_sg_2_controller"
 
     fun routerTransaction(): RouterTransaction {
       return RouterTransaction.with(SetupGuideSG2())

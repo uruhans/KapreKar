@@ -1,7 +1,7 @@
 package com.coloplast.olympus.ui.feature.home.models
 
-import com.coloplast.olympus.bluetooth.businesslayer.enums.PowerLevel
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BatteryState
+import com.coloplast.olympus.bluetooth.businesslayer.enums.PowerLevel
 import com.coloplast.olympus.bluetooth.businesslayer.models.DeviceResult
 import com.coloplast.olympus.bluetooth.businesslayer.models.PatchState
 import com.coloplast.olympus.bluetooth.businesslayer.models.TransmitterState

@@ -10,7 +10,7 @@ import com.squareup.moshi.JsonClass
  */
 
 @JsonClass(generateAdapter = true)
-data class UserDTO(
+class UserDTO(
   val userId: String,
   //val firstName: String,
   //val lastName: String,

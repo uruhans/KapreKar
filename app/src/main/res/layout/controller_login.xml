@@ -55,31 +55,12 @@
         android:layout_marginTop="@dimen/spacing_half"
         android:layout_marginEnd="@dimen/spacing_standard" />
 
-      <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/email_input_layout"
-        style="@style/TextInputLayoutAppearance"
+      <com.coloplast.olympus.ui.common.widgets.EmailView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/spacing_standard"
-        android:layout_marginTop="@dimen/spacing_half"
-        android:layout_marginEnd="@dimen/spacing_standard">
-        <com.google.android.material.textfield.TextInputEditText
-          android:id="@+id/email_edittext"
-          style="@style/EditTextInputText"
-          android:hint="@string/onboarding_email_hint"
-          app:errorBackground="@{controller.validEmail}"
-          android:text="@={controller.email}"
-          android:inputType="textEmailAddress"/>
-      </com.google.android.material.textfield.TextInputLayout>
-
-      <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/spacing_standard"
-        android:layout_marginEnd="@dimen/spacing_standard"
-        android:text="@string/onboarding_email_error"
-        style="@style/TextInputLayoutErrorText"
-        app:visibleOrGone="@{!controller.validEmail}"/>
+        app:checkValidity="@{true}"
+        app:emailCallback="@{controller.onCurrentEmailChanged}"
+        app:onValidityChanged="@{controller.onEmailValidityChanged}" />
 
       <TextView
         android:layout_width="match_parent"
@@ -90,33 +71,12 @@
         android:layout_marginTop="@dimen/spacing_large"
         android:layout_marginEnd="@dimen/spacing_standard" />
 
-      <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/password_input_layout"
-        style="@style/TextInputLayoutAppearance"
+      <com.coloplast.olympus.ui.common.widgets.PasswordView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/spacing_standard"
-        android:layout_marginTop="@dimen/spacing_half"
-        android:layout_marginEnd="@dimen/spacing_standard">
-        <com.google.android.material.textfield.TextInputEditText
-          android:id="@+id/password_edittext"
-          style="@style/EditTextInputText"
-          android:background="@drawable/edittext_background"
-          android:hint="@string/onboarding_password_hint"
-          app:errorBackground="@{controller.validPassword}"
-          android:text="@={controller.password}"
-          android:inputType="textPassword"
-          app:onSubmit="@{() -> controller.onNextClicked()}"/>
-      </com.google.android.material.textfield.TextInputLayout>
-
-      <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/spacing_standard"
-        android:layout_marginEnd="@dimen/spacing_standard"
-        android:text="@string/onboarding_password_error"
-        style="@style/TextInputLayoutErrorText"
-        visibleOrGone="@{!controller.validPassword}" />
+        app:checkValidity="@{true}"
+        app:passwordCallback="@{controller.onCurrentPasswordChanged}"
+        app:onValidityChanged="@{controller.onPasswordValidityChanged}"/>
 
       <Button
         android:layout_width="match_parent"

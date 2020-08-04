@@ -24,7 +24,7 @@ class LoginViewModel(private val userComponent: UserComponent, private val me: M
   override fun bind(uiView: LoginView): Disposable {
     val disposable = CompositeDisposable()
 
-    val loginObservable: Observable<GenericUiModel> =
+    val onLoginRequested: Observable<GenericUiModel> =
       uiView.onLogin()
         .switchMap { credentials ->
           userComponent.login(credentials)
@@ -40,6 +40,7 @@ class LoginViewModel(private val userComponent: UserComponent, private val me: M
                 else -> GenericUiModel.Loading()
               }
             }
+            //TODO: Backend is not ready. We may have to handle custom errors.
             .onErrorReturn { throwable: Throwable ->
               GenericUiModel.Error(
                 GenericUiModel.Error.State.ERROR_GENERIC, 1000
@@ -47,7 +48,7 @@ class LoginViewModel(private val userComponent: UserComponent, private val me: M
             }
         }
 
-    disposable.add(loginObservable.bind(uiView.render()))
+    disposable.add(onLoginRequested.bind(uiView.render()))
     return disposable
   }
 }

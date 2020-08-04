@@ -1,6 +1,6 @@
 package com.coloplast.olympus.ui.feature.onboarding.login.forgotpassword
 
-import com.coloplast.olympus.ui.common.flow.flow.FlowFactoryModel
+import com.coloplast.olympus.ui.common.models.flow.FlowFactoryModel
 
 
 /**

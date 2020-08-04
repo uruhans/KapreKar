@@ -1,7 +1,7 @@
 package com.coloplast.olympus.datalayer
 
 import com.coloplast.olympus.datalayer.models.*
-import com.coloplast.olympus.shared.models.CreateUser
+import com.coloplast.olympus.shared.models.CreateUserModel
 import com.coloplast.olympus.shared.models.Credentials
 import io.reactivex.Completable
 import io.reactivex.Observable
@@ -10,12 +10,12 @@ class ApiServiceImpl : ApiService {
   
   private val api = Retrofit.serverApi
 
-  override fun registration(createUser: CreateUser): Observable<UserResponseDTO> {
+  override fun createUser(createUserModel: CreateUserModel): Observable<UserResponseDTO> {
     val createUserDTO = CreateUserRequestDTO(
-      email = createUser.email,
-      password = createUser.password
+      email = createUserModel.email,
+      password = createUserModel.password
     )
-    return api.register(createUserDTO)
+    return api.createUser(createUserDTO)
   }
 
   override fun login(credentials: Credentials): Observable<UserResponseDTO> {
@@ -25,6 +25,8 @@ class ApiServiceImpl : ApiService {
     )
     return api.login(loginRequestDTO)
   }
+
+  
 
   override fun requestSecurityCode(email: String): Completable {
     val securityCodeRequest = SecurityCodeRequest(email)

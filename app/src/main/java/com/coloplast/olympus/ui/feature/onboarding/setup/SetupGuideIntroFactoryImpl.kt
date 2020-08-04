@@ -4,9 +4,9 @@ import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.R
 import com.coloplast.olympus.ui.common.GenericConfirmationController
 import com.coloplast.olympus.ui.common.SimpleInfoPageController
-import com.coloplast.olympus.ui.common.flow.EmptyModel
 import com.coloplast.olympus.ui.common.flow.FlowFactory
-import com.coloplast.olympus.ui.feature.onboarding.setup.intro.SetupGuideIntroSGI1
+import com.coloplast.olympus.ui.common.models.flow.EmptyModel
+import com.coloplast.olympus.ui.feature.onboarding.setup.intro.*
 import com.coloplast.olympus.ui.feature.onboarding.setup.model.SetupGuideIntroductionFlow
 
 class SetupGuideIntroFactoryImpl : FlowFactory<EmptyModel>() {
@@ -28,7 +28,7 @@ class SetupGuideIntroFactoryImpl : FlowFactory<EmptyModel>() {
         )
       }
       SetupGuideIntroductionFlow.SetupGuideSG2 -> SetupGuideSG2.routerTransaction()
-      SetupGuideIntroductionFlow.SetupGuideSGI1 -> SetupGuideIntroSGI1.routerTransaction()
+      SetupGuideIntroductionFlow.SetupGuideSGI1 -> SetupGuideIntroSGI1Controller.routerTransaction()
       SetupGuideIntroductionFlow.SetupGuideBluetoothSGI2 -> {
         SimpleInfoPageController.routerTransaction(
           iconId = R.drawable.ic_bluetooth,
@@ -40,6 +40,15 @@ class SetupGuideIntroFactoryImpl : FlowFactory<EmptyModel>() {
           showCloseButton = false
         )
       }
+      SetupGuideIntroductionFlow.SetupGuideInTheBoxSGI6 -> SetupGuideIntroSGI6Controller.routerTransaction()
+      SetupGuideIntroductionFlow.SetupGuideSensorLayerSGI7 -> SetupGuideIntroSGI7Controller.routerTransaction()
+      SetupGuideIntroductionFlow.SetupGuideSensorTechSGI8 -> SetupGuideIntroSGI8Controller.routerTransaction()
+      SetupGuideIntroductionFlow.SetupGuideOuterSensorsSGI9 -> SetupGuideIntroSGI9Controller.routerTransaction()
+      SetupGuideIntroductionFlow.SetupGuideConnectorFlapSGI10 -> SetupGuideIntroSGI10Controller.routerTransaction()
+      SetupGuideIntroductionFlow.SetupGuideTransmitterSGI11 -> SetupGuideIntroSGI11Controller.routerTransaction()
+      SetupGuideIntroductionFlow.SetupGuideOpeningLidSGI12 -> SetupGuideIntroSGI12Controller.routerTransaction()
+      SetupGuideIntroductionFlow.SetupGuideChargerSGI13 -> SetupGuideIntroSGI13Controller.routerTransaction()
+      SetupGuideIntroductionFlow.SetupGuidePairingSGI14 -> SetupGuideIntroSGI14Controller.routerTransaction()
       SetupGuideIntroductionFlow.Completed -> null
     }
   }

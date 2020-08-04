@@ -1,21 +1,16 @@
 package com.coloplast.olympus.ui.feature.onboarding.login
 
 import androidx.annotation.StringRes
-import androidx.databinding.ObservableBoolean
-import androidx.databinding.ObservableField
 import com.artemzin.rxui.RxUi
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.HorizontalChangeHandler
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerLoginBinding
-import com.coloplast.olympus.shared.extensions.isValidEmail
 import com.coloplast.olympus.shared.models.Credentials
-import com.coloplast.olympus.shared.utils.StringUtils.PASSWORD_REGEX
 import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.common.LoadingController
 import com.coloplast.olympus.ui.common.dialogs.BaseDialogController
 import com.coloplast.olympus.ui.common.dialogs.DialogController
-import com.coloplast.olympus.ui.common.extensions.onValueChanged
 import com.coloplast.olympus.ui.common.models.GenericUiModel
 import com.coloplast.olympus.ui.feature.onboarding.login.forgotpassword.ForgotPasswordFlowController
 import com.jakewharton.rxrelay2.PublishRelay
@@ -38,21 +33,25 @@ class LoginController: BaseController<ControllerLoginBinding>(),
 
   private var dialogController: DialogController? = null
 
-  val validEmail = ObservableBoolean(true)
-  val email = ObservableField("").apply {
-    compositeDisposable.add(
-      onValueChanged { validEmail.set(this.get()!!.isValidEmail()) }
-    )
+  private var email: String = ""
+  private var validEmail: Boolean = false
+  private var password: String = ""
+  private var validPassword: Boolean = false
+
+  val onCurrentEmailChanged: ((String) -> Unit) = {
+    email = it
   }
-  val validPassword = ObservableBoolean(true)
-  val password = ObservableField("").apply {
-    compositeDisposable.add(
-      onValueChanged {
-        val regex = PASSWORD_REGEX.toRegex()
-        val isValid = get()!!.matches(regex)
-        validPassword.set(isValid)
-      }
-    )
+
+  val onEmailValidityChanged: ((Boolean) -> Unit) = {
+    validEmail = it
+  }
+
+  val onCurrentPasswordChanged: ((String) -> Unit) = {
+    password = it
+  }
+
+  val onPasswordValidityChanged: ((Boolean) -> Unit) = {
+    validPassword = it
   }
 
   override fun attachVariables(viewBinding: ControllerLoginBinding) {
@@ -112,14 +111,8 @@ class LoginController: BaseController<ControllerLoginBinding>(),
   }
 
   fun onNextClicked(){
-    email.notifyChange()
-    password.notifyChange()
-    if(validEmail.get() && validPassword.get()){
-      val credentials = Credentials(
-        email.get()!!,
-        password.get()!!
-
-      )
+    if(validEmail && validPassword){
+      val credentials = Credentials(email, password)
       loginRelay.accept(credentials)
     }
   }

@@ -1,10 +1,12 @@
 package com.coloplast.olympus.ui.feature.onboarding.createprofile.su7
 
+import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableInt
 import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerInsuranceSu7Binding
 import com.coloplast.olympus.ui.common.BaseController
+import com.coloplast.olympus.ui.common.extensions.onValueChanged
 import com.coloplast.olympus.ui.common.listeners.FlowListener
 import com.coloplast.olympus.ui.feature.onboarding.createprofile.types.HealthInsurance
 
@@ -18,7 +20,12 @@ class InsuranceSU7Controller: BaseController<ControllerInsuranceSu7Binding>() {
     HealthInsurance.values()
       .map { applicationContext!!.getString(it.stringId) }
   }
-  val insuranceId = ObservableInt(-1)
+  val insuranceSelected = ObservableBoolean(true)
+  val insuranceSpinnerPosition = ObservableInt(-1).apply {
+    compositeDisposable.add(
+      onValueChanged { insuranceSelected.set(true) }
+    )
+  }
 
   override fun attachVariables(viewBinding: ControllerInsuranceSu7Binding) {
     viewBinding.controller = this
@@ -29,8 +36,9 @@ class InsuranceSU7Controller: BaseController<ControllerInsuranceSu7Binding>() {
   }
 
   fun onNextClicked(){
-    if(insuranceId.get() >= 0){
-      val healthInsurance = HealthInsurance.fromId(insuranceId.get())
+    insuranceSelected.set(insuranceSpinnerPosition.get() >= 0)
+    if(insuranceSelected.get()){
+      val healthInsurance = HealthInsurance.fromOrdinal(insuranceSpinnerPosition.get())
       getListener(FlowListener::class.java)!!.onNextClicked(healthInsurance)
     }
   }

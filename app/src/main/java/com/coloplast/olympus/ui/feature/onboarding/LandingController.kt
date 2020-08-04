@@ -31,7 +31,6 @@ class LandingController: BaseController<ControllerLandingBinding>() {
   }
 
   fun onLogInClicked(){
-    //TODO: Link with CPO-520
     getContentRouter().pushController(LoginController.getRouterTransaction()
       .popChangeHandler(HorizontalChangeHandler())
       .pushChangeHandler(HorizontalChangeHandler())

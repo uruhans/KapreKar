@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <data>
+
+    <variable
+      name="controller"
+      type="com.coloplast.olympus.ui.dialogs.CallHelpDialogController" />
+  </data>
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/transparent_black"
+    android:onClick="@{() -> controller.onDismissClicked()}">
+
+    <androidx.cardview.widget.CardView
+      android:id="@+id/cardView"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="20dp"
+      android:layout_marginEnd="20dp"
+      app:cardBackgroundColor="@color/cardview_background"
+      app:cardCornerRadius="@dimen/cardview_corner_radius"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent">
+
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <FrameLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="-2dp">
+
+          <TextView
+            android:id="@+id/title"
+            style="@style/TextStyle.Coloplast.Bold.DarkGrey"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_standard"
+            android:layout_marginTop="@dimen/spacing_quadruple"
+            android:layout_marginEnd="@dimen/spacing_standard"
+            android:text="@string/dialog_call_help_title"
+            android:textSize="@dimen/text_24" />
+
+          <ImageView
+            android:id="@+id/button_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="@dimen/spacing_standard"
+            android:layout_marginEnd="@dimen/spacing_standard"
+            android:foreground="?attr/actionBarItemBackground"
+            android:onClick="@{() -> controller.onCloseClicked()}"
+            android:src="@drawable/main_sidemenu_close"
+            app:visibleOrGone="@{controller.dismissAllowed}" />
+
+        </FrameLayout>
+
+        <TextView
+          style="@style/Text.Large"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="@dimen/spacing_standard"
+          android:layout_marginTop="@dimen/spacing_half"
+          android:layout_marginEnd="@dimen/spacing_standard"
+          android:lineSpacingExtra="0dp"
+          android:textColor="@color/grey"
+          android:text="@string/dialog_call_help_message" />
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/spacing_double"
+          android:background="@color/default_background"
+          android:orientation="vertical"
+          android:paddingTop="@dimen/spacing_double"
+          android:paddingBottom="@dimen/spacing_double">
+
+          <TextView
+            style="@style/Text.Large"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_standard"
+            android:layout_marginEnd="@dimen/spacing_standard"
+            android:lineSpacingExtra="0dp"
+            android:textColor="@color/grey"
+            android:text="@string/dialog_call_help_phone_number_title" />
+
+          <TextView
+            style="@style/TextStyle.Coloplast.Bold.DarkGrey"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_standard"
+            android:layout_marginEnd="@dimen/spacing_standard"
+            android:text="@string/dialog_call_help_phone_number"
+            android:textSize="@dimen/text_24" />
+
+          <TextView
+            style="@style/Text.Large"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_double"
+            android:layout_marginStart="@dimen/spacing_standard"
+            android:layout_marginEnd="@dimen/spacing_standard"
+            android:lineSpacingExtra="0dp"
+            android:textColor="@color/grey"
+            android:text="@string/dialog_call_help_opening_hours_title" />
+
+          <TextView
+            style="@style/TextStyle.Coloplast.Regular.DarkGrey"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_standard"
+            android:layout_marginEnd="@dimen/spacing_standard"
+            android:textSize="@dimen/text_20"
+            android:text="@string/dialog_call_help_opening_hours_days" />
+
+          <TextView
+            style="@style/TextStyle.Coloplast.Regular.DarkGrey"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_standard"
+            android:layout_marginEnd="@dimen/spacing_standard"
+            android:text="@string/dialog_call_help_opening_hours"
+            android:textSize="@dimen/text_20" />
+
+        </LinearLayout>
+
+        <Button
+          style="@style/Button"
+          android:layout_marginTop="@dimen/spacing_double"
+          android:onClick="@{() -> controller.onCallClicked()}"
+          android:text="@string/generic_call_support"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintStart_toStartOf="parent" />
+
+      </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

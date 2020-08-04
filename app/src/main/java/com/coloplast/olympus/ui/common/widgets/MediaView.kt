@@ -4,12 +4,10 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
-import androidx.core.content.ContextCompat
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableInt
 import com.coloplast.olympus.databinding.ViewMediaBinding
 import com.coloplast.olympus.utils.ResourceUtils
-import java.lang.Exception
 
 
 /**

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <data>
+    <import type="com.coloplast.olympus.R" />
+    <variable
+      name="controller"
+      type="com.coloplast.olympus.ui.feature.onboarding.dataconsent.dc3.HelpCommunityDC3Controller" />
+  </data>
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:layout_marginTop="@dimen/toolbar_height">
+
+    <include layout="@layout/item_info_with_banner"
+      app:drawableId="@{R.drawable.help_community_img}"
+      app:titleId="@{R.string.onboarding_dc3_title}"
+      app:descriptionId="@{R.string.onboarding_dc3_description}"
+      app:layout_constraintTop_toTopOf="parent"/>
+
+    <com.coloplast.olympus.ui.common.widgets.CustomTabLayout
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="@dimen/spacing_double"
+      app:currentIndex="@{controller.position}"
+      app:layout_constraintBottom_toBottomOf="@id/next_button"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="@id/next_button"
+      app:totalCount="@{controller.totalCount}" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+      android:id="@+id/next_button"
+      android:layout_width="56dp"
+      android:layout_height="56dp"
+      android:layout_marginEnd="@dimen/spacing_larger"
+      android:layout_marginBottom="@dimen/spacing_double"
+      android:onClick="@{() -> controller.onNextClicked()}"
+      android:src="@drawable/ic_arrow"
+      android:tint="@color/white"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent" />
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

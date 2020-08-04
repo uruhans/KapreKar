@@ -1,6 +1,7 @@
-package com.coloplast.olympus.ui.feature.guides.models
+package com.coloplast.olympus.ui.feature.guides.articles.models
 
 import androidx.annotation.StringRes
+import com.coloplast.olympus.ui.feature.guides.models.ButtonType
 
 class ButtonItem(
   @StringRes val text: Int,

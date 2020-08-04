@@ -1,6 +1,7 @@
-package com.coloplast.olympus.ui.feature.guides.models
+package com.coloplast.olympus.ui.feature.guides.articles.models
 
 import com.coloplast.olympus.R
+import com.coloplast.olympus.ui.feature.guides.models.ButtonType
 
 object GuideContent {
 

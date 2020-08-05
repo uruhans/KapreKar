@@ -32,6 +32,14 @@ class GuidesSubsectionController(args: Bundle): BaseController<ControllerGuidesS
         add(GuideCard.APPLYING_GUIDE)
         add(GuideCard.DRY_APPLYING_TIPS)
       }
+      GuidesMenuSubsection.CONNECTION_AND_TRANSMITTER -> {
+        add(GuideCard.CONNECTION_GUIDE)
+        add(GuideCard.CHARGING_GUIDE)
+        add(GuideCard.LOCATION_GUIDE)
+        add(GuideCard.CHECK_BATTERY_LEVEL)
+        add(GuideCard.ADD_TRANSMITTER)
+        add(GuideCard.DELETE_TRANSMITTER)
+      }
     }
   }
 
@@ -59,6 +67,12 @@ class GuidesSubsectionController(args: Bundle): BaseController<ControllerGuidesS
       GuideCard.APP_TOUR -> SplashController.routerTransaction()
       GuideCard.APPLYING_GUIDE -> SplashController.routerTransaction()
       GuideCard.DRY_APPLYING_TIPS -> SplashController.routerTransaction()
+      GuideCard.CONNECTION_GUIDE -> SplashController.routerTransaction()
+      GuideCard.CHARGING_GUIDE -> SplashController.routerTransaction()
+      GuideCard.LOCATION_GUIDE -> SplashController.routerTransaction()
+      GuideCard.CHECK_BATTERY_LEVEL -> SplashController.routerTransaction()
+      GuideCard.ADD_TRANSMITTER -> SplashController.routerTransaction()
+      GuideCard.DELETE_TRANSMITTER -> SplashController.routerTransaction()
     }
     getContentRouter().pushController(routerTransaction
       .pushChangeHandler(HorizontalChangeHandler())

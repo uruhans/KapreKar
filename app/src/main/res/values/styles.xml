@@ -46,6 +46,7 @@
   <style name="Button.Borderless" parent="Widget.AppCompat.Button.Borderless.Colored">
     <item name="android:background">?android:attr/selectableItemBackground</item>
     <item name="android:textColor">@color/colorAccent</item>
+    <item name="android:textSize">@dimen/text_18</item>
   </style>
 
   <style name="CardViewStyle" parent="CardView">

@@ -13,6 +13,19 @@ object GuideContent {
       GuideType.UNKNOWN -> {
         throw NotImplementedError("UNKNOWN is not supported - did you make a mistake?")
       }
+      GuideType.DRY_APPLYING_TIPS -> {
+        listOf(
+          HeaderItem(
+            header = R.string.guide_da_title,
+            subHeader = R.string.guide_da_subtitle
+          ),
+          ArticleItem(
+            image = R.drawable.guide_placeholder,
+            title = R.string.guide_da_article_1_header,
+            description = R.string.guide_da_article_1_body
+          )
+        )
+      }
       GuideType.APPLICATION -> {
         listOf(
           HeaderItem(R.string.guide_change_plate_title),

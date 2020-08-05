@@ -89,4 +89,6 @@ val koinModule = module {
   single<FlowFactory<CreateUserFactoryModel>>(override = true) { CreateUserFactoryImpl() }
   single<FlowFactory<LocationGuideEmptyModel>>(override = true) { LocationGuideFactoryImpl() }
   single<FlowFactory<ForgotPasswordModel>>(override = true) { ForgotPasswordFactoryImpl() }
+  single<FlowFactory<ForgotPasswordModel>>(override = true) { ForgotPasswordFactoryImpl() }
+  single { LocationGuideFactoryImpl() }
 }

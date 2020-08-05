@@ -31,13 +31,7 @@ class AwaitingConnectionController : BaseController<ControllerAwaitingConnection
 
   override fun render(): Function<Observable<AwaitingConnectionUiModel>, Disposable> {
     return RxUi.ui {
-
-      if (it.isAttached) {
-        getListener(FlowListener::class.java)?.onNextClicked(true)
-      }
-      else {
-        getListener(FlowListener::class.java)?.onNextClicked(false)
-      }
+      getListener(FlowListener::class.java)?.onNextClicked(it.isAttached)
     }
   }
 

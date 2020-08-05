@@ -3,6 +3,7 @@ package com.coloplast.olympus.ui.feature.onboarding.login
 import androidx.annotation.StringRes
 import com.artemzin.rxui.RxUi
 import com.bluelinelabs.conductor.RouterTransaction
+import com.bluelinelabs.conductor.changehandler.HorizontalChangeHandler
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerLoginBinding
 import com.coloplast.olympus.shared.models.Credentials
@@ -11,6 +12,7 @@ import com.coloplast.olympus.ui.common.LoadingController
 import com.coloplast.olympus.ui.common.dialogs.BaseDialogController
 import com.coloplast.olympus.ui.common.dialogs.DialogController
 import com.coloplast.olympus.ui.common.models.GenericUiModel
+import com.coloplast.olympus.ui.feature.onboarding.login.forgotpassword.ForgotPasswordFlowController
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
@@ -113,6 +115,13 @@ class LoginController: BaseController<ControllerLoginBinding>(),
       val credentials = Credentials(email, password)
       loginRelay.accept(credentials)
     }
+  }
+
+  fun onForgotPassword(){
+    getContentRouter().pushController(ForgotPasswordFlowController.getRouterTransaction()
+      .popChangeHandler(HorizontalChangeHandler())
+      .pushChangeHandler(HorizontalChangeHandler())
+    )
   }
 
   override fun getLayout(): Int = R.layout.controller_login

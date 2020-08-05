@@ -243,6 +243,10 @@
     <item name="android:textSize">@dimen/text_18</item>
   </style>
 
+  <style name="TextStyle.Roboto.Regular.ClearGrey.30" parent="TextStyle.Roboto.Regular.ClearGrey">
+    <item name="android:textSize">30sp</item>
+  </style>
+
   <style name="TextStyle.Coloplast.Regular.ClearGrey" parent="TextStyle.Coloplast.Regular">
     <item name="android:textColor">@color/text_clear_grey</item>
   </style>
@@ -260,8 +264,11 @@
     <item name="android:textColor">@color/text_turquoise</item>
   </style>
 
-  <style name="TextStyle.Roboto.Medium.Turquoise.18" parent="TextStyle.Roboto.Medium">
-    <item name="android:textColor">@color/text_turquoise</item>
+  <style name="TextStyle.Roboto.Medium.Turquoise.16" parent="TextStyle.Roboto.Medium.Turquoise">
+    <item name="android:textSize">@dimen/text_16</item>
+  </style>
+
+  <style name="TextStyle.Roboto.Medium.Turquoise.18" parent="TextStyle.Roboto.Medium.Turquoise">
     <item name="android:textSize">@dimen/text_18</item>
   </style>
 

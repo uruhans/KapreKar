@@ -7,7 +7,7 @@
 
     <variable
       name="item"
-      type="com.coloplast.olympus.ui.feature.guides.models.ArticleItem" />
+      type="com.coloplast.olympus.ui.feature.guides.articles.models.ArticleItem" />
   </data>
 
   <LinearLayout

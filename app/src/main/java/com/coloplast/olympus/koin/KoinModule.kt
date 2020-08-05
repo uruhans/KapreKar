@@ -21,6 +21,7 @@ import com.coloplast.olympus.ui.feature.home.HomeViewModel
 import com.coloplast.olympus.ui.feature.onboarding.setup.SetupGuideApplyingFactoryImpl
 import com.coloplast.olympus.ui.feature.onboarding.setup.SetupGuideIntroFactoryImpl
 import com.coloplast.olympus.ui.feature.onboarding.setup.SetupGuidePreparingFactoryImpl
+import com.coloplast.olympus.ui.feature.onboarding.setup.applying.AwaitingConnectionViewModel
 import com.coloplast.olympus.ui.feature.onboarding.valueproposition.ValuePropositionFactoryImpl
 import com.coloplast.olympus.ui.feature.onboarding.valueproposition.ValuePropositionModel
 import com.coloplast.olympus.ui.feature.transmitters.TransmittersViewModel
@@ -60,13 +61,11 @@ val koinModule = module {
   single { AddTransmitterViewModel(get(), get()) }
   single { TransmittersViewModel(get(), get()) }
   single { AddTransmitterAT9ViewModel(get(), get()) }
+  single { AwaitingConnectionViewModel(get()) }
 
-  /* Flows
-  *  Fixed problem with Generic Type:
-  *  https://stackoverflow.com/a/59641397/2145504
-  *  */
-  single<FlowFactory<AddTransmitterModel>>(override = true) { AddTransmitterFactoryImpl() }
-  single<FlowFactory<ValuePropositionModel>>(override = true) { ValuePropositionFactoryImpl() }
+  /* Flows */
+  single { AddTransmitterFactoryImpl() }
+  single { ValuePropositionFactoryImpl() }
   single { SetupGuideIntroFactoryImpl() }
   single { SetupGuidePreparingFactoryImpl() }
   single { SetupGuideApplyingFactoryImpl() }

@@ -46,6 +46,7 @@
   <style name="Button.Borderless" parent="Widget.AppCompat.Button.Borderless.Colored">
     <item name="android:background">?android:attr/selectableItemBackground</item>
     <item name="android:textColor">@color/colorAccent</item>
+    <item name="android:textSize">@dimen/text_18</item>
   </style>
 
   <style name="CardViewStyle" parent="CardView">
@@ -260,8 +261,11 @@
     <item name="android:textColor">@color/text_turquoise</item>
   </style>
 
-  <style name="TextStyle.Roboto.Medium.Turquoise.18" parent="TextStyle.Roboto.Medium">
-    <item name="android:textColor">@color/text_turquoise</item>
+  <style name="TextStyle.Roboto.Medium.Turquoise.16" parent="TextStyle.Roboto.Medium.Turquoise">
+    <item name="android:textSize">@dimen/text_16</item>
+  </style>
+
+  <style name="TextStyle.Roboto.Medium.Turquoise.18" parent="TextStyle.Roboto.Medium.Turquoise">
     <item name="android:textSize">@dimen/text_18</item>
   </style>
 

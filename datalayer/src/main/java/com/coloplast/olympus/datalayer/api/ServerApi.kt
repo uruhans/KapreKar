@@ -1,11 +1,9 @@
 package com.coloplast.olympus.datalayer.api
 
-import com.coloplast.olympus.datalayer.models.CreateUserRequestDTO
-import com.coloplast.olympus.datalayer.models.LoginRequestDTO
-import com.coloplast.olympus.datalayer.models.UserResponseDTO
+import com.coloplast.olympus.datalayer.models.*
+import io.reactivex.Completable
 import io.reactivex.Observable
-import retrofit2.http.Body
-import retrofit2.http.POST
+import retrofit2.http.*
 
 interface ServerApi {
 
@@ -14,4 +12,13 @@ interface ServerApi {
 
   @POST("/api/v1/Auth/login")
   fun login(@Body loginRequestDTO: LoginRequestDTO): Observable<UserResponseDTO>
+
+  @POST("/api/v1/SecurityCodes")
+  fun requestSecurityCode(@Body securityCodeRequest: SecurityCodeRequest): Completable
+
+  @GET("/api/v1/SecurityCodes")
+  fun confirmCode(@Query("securityCode") code: String, @Query("email") email: String): Completable
+
+  @PUT("/api/v1/Auth/changepassword")
+  fun changePassword(@Body changePasswordRequest: ChangePasswordRequest): Completable
 }

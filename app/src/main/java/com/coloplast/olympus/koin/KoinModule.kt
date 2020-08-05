@@ -23,6 +23,8 @@ import com.coloplast.olympus.ui.feature.onboarding.createprofile.CreateUserFacto
 import com.coloplast.olympus.ui.feature.onboarding.createprofile.CreateUserViewModel
 import com.coloplast.olympus.ui.feature.onboarding.dataconsent.DataConsentFactoryImpl
 import com.coloplast.olympus.ui.feature.onboarding.login.LoginViewModel
+import com.coloplast.olympus.ui.feature.onboarding.login.forgotpassword.ForgotPasswordFactoryImpl
+import com.coloplast.olympus.ui.feature.onboarding.login.forgotpassword.ForgotPasswordViewModel
 import com.coloplast.olympus.ui.feature.onboarding.setup.SetupGuideApplyingFactoryImpl
 import com.coloplast.olympus.ui.feature.onboarding.setup.SetupGuideIntroFactoryImpl
 import com.coloplast.olympus.ui.feature.onboarding.setup.SetupGuidePreparingFactoryImpl
@@ -68,6 +70,7 @@ val koinModule = module {
   single { AwaitingConnectionViewModel(get()) }
   single { CreateUserViewModel(get(), get()) }
   single { LoginViewModel(get(), get()) }
+  single { ForgotPasswordViewModel(get()) }
 
   /* Flows */
   single { AddTransmitterFactoryImpl() }
@@ -77,4 +80,5 @@ val koinModule = module {
   single { SetupGuideApplyingFactoryImpl() }
   single { DataConsentFactoryImpl() }
   single { CreateUserFactoryImpl() }
+  single { ForgotPasswordFactoryImpl() }
 }

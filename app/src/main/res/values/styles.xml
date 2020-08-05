@@ -242,6 +242,10 @@
     <item name="android:textSize">@dimen/text_18</item>
   </style>
 
+  <style name="TextStyle.Roboto.Regular.ClearGrey.30" parent="TextStyle.Roboto.Regular.ClearGrey">
+    <item name="android:textSize">30sp</item>
+  </style>
+
   <style name="TextStyle.Coloplast.Regular.ClearGrey" parent="TextStyle.Coloplast.Regular">
     <item name="android:textColor">@color/text_clear_grey</item>
   </style>

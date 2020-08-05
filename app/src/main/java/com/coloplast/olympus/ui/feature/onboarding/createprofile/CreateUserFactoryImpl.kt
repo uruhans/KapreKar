@@ -32,7 +32,7 @@ class CreateUserFactoryImpl : FlowFactory<CreateUserFactoryModel>() {
       CreateUserFlow.PasswordSU4 -> PasswordSU4Controller.getRouterTransaction()
       CreateUserFlow.PhoneSU6 -> PhoneSU6Controller.getRouterTransaction()
       CreateUserFlow.InsuranceSU7 -> InsuranceSU7Controller.getRouterTransaction()
-      CreateUserFlow.ConfirmationSU8 -> GenericConfirmationController.getRouterTransaction(
+      CreateUserFlow.ConfirmationSU8 -> GenericConfirmationController.routerTransaction(
         R.string.onboarding_confirmation_title,
         R.string.onboarding_confirmation_description,
         R.string.onboarding_confirmation_button

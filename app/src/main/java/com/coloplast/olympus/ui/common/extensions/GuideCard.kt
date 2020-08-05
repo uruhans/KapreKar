@@ -22,6 +22,8 @@ import com.coloplast.olympus.ui.feature.guides.models.GuideCard
   GuideCard.CHECK_BATTERY_LEVEL -> R.drawable.guide_cb_thumbnail
   GuideCard.ADD_TRANSMITTER -> R.drawable.guide_at_thumbnail
   GuideCard.DELETE_TRANSMITTER -> R.drawable.guide_dt_thumbnail
+  GuideCard.CLEANING_GUIDE -> R.drawable.guide_thumbnail_placeholder
+  GuideCard.DRYING_GUIDE -> R.drawable.guide_thumbnail_placeholder
 }
 
 @StringRes fun GuideCard.getTitle(): Int = when (this) {
@@ -35,10 +37,12 @@ import com.coloplast.olympus.ui.feature.guides.models.GuideCard
   GuideCard.CHECK_BATTERY_LEVEL -> R.string.guides_cb_card_title
   GuideCard.ADD_TRANSMITTER -> R.string.guides_at_card_title
   GuideCard.DELETE_TRANSMITTER -> R.string.guides_dt_card_title
+  GuideCard.CLEANING_GUIDE -> R.string.guide_cl_card_title
+  GuideCard.DRYING_GUIDE -> R.string.guide_dg_card_title
 }
 
 
-@StringRes fun GuideCard.getDescription(): Int = when (this) {
+@StringRes fun GuideCard.getDescription(): Int = when(this){
   GuideCard.COMPONENT_GUIDE -> R.string.guides_co_card_description
   GuideCard.APP_TOUR -> R.string.guides_ap_card_description
   GuideCard.APPLYING_GUIDE -> R.string.guides_ag_card_description
@@ -49,4 +53,6 @@ import com.coloplast.olympus.ui.feature.guides.models.GuideCard
   GuideCard.CHECK_BATTERY_LEVEL -> R.string.guides_cb_card_description
   GuideCard.ADD_TRANSMITTER -> R.string.guides_at_card_description
   GuideCard.DELETE_TRANSMITTER -> R.string.guides_dt_card_description
+  GuideCard.CLEANING_GUIDE -> R.string.guide_cl_card_description
+  GuideCard.DRYING_GUIDE -> R.string.guide_dg_card_description
 }

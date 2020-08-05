@@ -78,6 +78,19 @@
         app:passwordCallback="@{controller.onCurrentPasswordChanged}"
         app:onValidityChanged="@{controller.onPasswordValidityChanged}"/>
 
+      <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/spacing_half"
+        android:layout_marginStart="@dimen/spacing_half"
+        android:layout_marginEnd="@dimen/spacing_half"
+        android:text="@string/onboarding_forgot_password"
+        android:textAlignment="textStart"
+        android:background="?attr/selectableItemBackground"
+        style="@style/TextStyle.Roboto.Medium.Turquoise.16"
+        android:onClick="@{() -> controller.onForgotPassword()}"/>
+
+
     </LinearLayout>
 
     <Button

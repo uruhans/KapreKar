@@ -4,6 +4,8 @@ import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.R
 import com.coloplast.olympus.ui.common.InfoPageController
 import com.coloplast.olympus.ui.common.flow.FlowFactory
+import com.coloplast.olympus.ui.feature.guides.flows.location.lg2.LocationGuideLG2Controller
+import com.coloplast.olympus.ui.feature.guides.flows.location.lg2.LocationGuideLG3Controller
 
 
 /**
@@ -28,6 +30,8 @@ class LocationGuideFactoryImpl: FlowFactory<LocationGuideEmptyModel>(){
         showCloseButton = true,
         showBackButton = true
       )
+      LocationGuideFlow.LocationGuideLG2 -> LocationGuideLG2Controller.routerTransaction()
+      LocationGuideFlow.LocationGuideLG3 -> LocationGuideLG3Controller.routerTransaction()
       else -> null
     }
 

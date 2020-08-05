@@ -2,6 +2,7 @@ package com.coloplast.olympus.ui.feature.guides.flows.location
 
 import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.R
+import com.coloplast.olympus.ui.common.GenericConfirmationController
 import com.coloplast.olympus.ui.common.InfoPageController
 import com.coloplast.olympus.ui.common.flow.FlowFactory
 import com.coloplast.olympus.ui.feature.guides.flows.location.lg2.*
@@ -35,7 +36,12 @@ class LocationGuideFactoryImpl: FlowFactory<LocationGuideEmptyModel>(){
       LocationGuideFlow.LocationGuideLG5 -> LocationGuideLG5Controller.routerTransaction()
       LocationGuideFlow.LocationGuideLG6 -> LocationGuideLG6Controller.routerTransaction()
       LocationGuideFlow.LocationGuideLG7 -> LocationGuideLG7Controller.routerTransaction()
-      else -> null
+      LocationGuideFlow.LocationGuideLG8 -> GenericConfirmationController.getRouterTransaction(
+        titleId = R.string.guide_lg8_title,
+        descriptionId = R.string.guide_lg8_subtitle,
+        buttonId = R.string.generic_close
+      )
+      LocationGuideFlow.Completed -> null
     }
 
 

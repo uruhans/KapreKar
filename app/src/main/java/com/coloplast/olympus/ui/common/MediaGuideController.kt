@@ -21,7 +21,6 @@ abstract class MediaGuideController(args: Bundle) : CustomToolbarController<Cont
     abstract val descriptionId: Int
     abstract val position: Int
     abstract val totalCount: Int
-    open val showQuestionFab: Boolean = true
 
     interface Listener{
         fun onQuestionClicked(screen: String)

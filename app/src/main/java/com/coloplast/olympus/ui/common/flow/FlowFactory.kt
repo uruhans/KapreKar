@@ -11,8 +11,7 @@ abstract class FlowFactory<V: FlowFactoryModel> {
 
   interface Listener<V: FlowFactoryModel> {
     /**
-     * Tell the
-     * implementer that this routerTransaction is the next to be shown on screen
+     * Tell the implementer that this routerTransaction is the next to be shown on screen
      */
     fun next(routerTransaction: RouterTransaction)
   

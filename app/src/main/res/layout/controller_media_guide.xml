@@ -87,7 +87,6 @@
             android:src="@drawable/ic_icon_questionmark"
             app:backgroundTint="@color/white"
             android:onClick="@{() -> controller.onQuestionClicked()}"
-            app:visibleOrGone="@{controller.showQuestionFab}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

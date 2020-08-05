@@ -38,8 +38,7 @@
 
       <TextView
         android:id="@+id/application_guide_description"
-        style="@style/TextStyle.Coloplast.Regular.ClearGrey.18"
-        android:textAlignment="center"
+        style="@style/GuideHeaderDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:safeText="@{controller.descriptionId}" />

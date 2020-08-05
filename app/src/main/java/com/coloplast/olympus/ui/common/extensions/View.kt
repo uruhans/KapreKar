@@ -9,49 +9,49 @@ import com.coloplast.olympus.ui.common.listeners.AnimatorListenerImpl
 
 @BindingAdapter("visibleOrInvisible")
 fun View.visibleOrInvisible(visible: Boolean) {
-  visibility = if(visible) View.VISIBLE else View.INVISIBLE
+  visibility = if (visible) View.VISIBLE else View.INVISIBLE
 }
 
 @BindingAdapter("visibleOrGone")
 fun View.visibleOrGone(visible: Boolean) {
-  visibility = if(visible) View.VISIBLE else View.GONE
+  visibility = if (visible) View.VISIBLE else View.GONE
 }
 
 @BindingAdapter("visibleOrInvisibleFade")
 fun View.visibleOrInvisibleFade(visible: Boolean) {
-  animateFade(this, if(visible) View.VISIBLE else View.INVISIBLE)
+  animateFade(this, if (visible) View.VISIBLE else View.INVISIBLE)
 }
 
 @BindingAdapter("visibleOrGoneFade")
 fun View.visibleOrGoneFade(visible: Boolean) {
-  animateFade(this, if(visible) View.VISIBLE else View.GONE)
+  animateFade(this, if (visible) View.VISIBLE else View.GONE)
 }
 
 private fun animateFade(target: View, endResult: Int) {
   val visible = endResult == View.VISIBLE
-  
-  val animator = ObjectAnimator.ofFloat(target, View.ALPHA, if(visible) 1f else 0f)
+
+  val animator = ObjectAnimator.ofFloat(target, View.ALPHA, if (visible) 1f else 0f)
   animator.duration = 1500
-  
-  animator.addListener(object: AnimatorListenerImpl {
+
+  animator.addListener(object : AnimatorListenerImpl {
     override fun onAnimationEnd(animation: Animator?) {
-      if(visible.not()) {
+      if (visible.not()) {
         target.visibility = endResult
       }
     }
-    
+
     override fun onAnimationStart(animation: Animator?, isReverse: Boolean) {
-      if(visible) {
+      if (visible) {
         target.visibility = View.VISIBLE
       }
     }
   })
-  
-  target.visibility = if(visible) View.VISIBLE else endResult
+
+  target.visibility = if (visible) View.VISIBLE else endResult
   animator.start()
 }
 
-fun View.fadeIn(animationDuration: Long = 200, offset: Long = 0){
+fun View.fadeIn(animationDuration: Long = 200, offset: Long = 0) {
   animation = AlphaAnimation(0f, 1f).apply {
     interpolator = AccelerateInterpolator()
     startOffset = offset
@@ -59,7 +59,11 @@ fun View.fadeIn(animationDuration: Long = 200, offset: Long = 0){
   }
 }
 
-fun View.rotate360(animationDuration: Long = 2000, offset: Long = 0){
+fun View.rotate360(
+  animationDuration: Long = 2000,
+  offset: Long = 0,
+  loopAnimation: Boolean = false
+) {
   animation = RotateAnimation(
     0f,
     360f,
@@ -68,6 +72,11 @@ fun View.rotate360(animationDuration: Long = 2000, offset: Long = 0){
     Animation.RELATIVE_TO_SELF,
     0.5f
   ).apply {
+    if (loopAnimation) {
+      repeatMode = Animation.RESTART
+      repeatCount = Animation.INFINITE
+    }
+
     interpolator = LinearInterpolator()
     startOffset = offset
     duration = animationDuration

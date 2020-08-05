@@ -1,36 +1,63 @@
 package com.coloplast.olympus.ui.feature.transmitters.add
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.ui.common.MediaGuideController
 import com.coloplast.olympus.ui.common.flow.FlowFactory
 import com.coloplast.olympus.ui.common.flow.FlowFactoryController
+import com.coloplast.olympus.ui.dialogs.CallHelpDialogController
 import com.coloplast.olympus.ui.feature.transmitters.add.models.AddTransmitterModel
 import org.koin.core.inject
 
 class AddTransmitterFlowController(args: Bundle) : FlowFactoryController<AddTransmitterModel>(args),
-  MediaGuideController.Listener {
+  MediaGuideController.Listener,  CallHelpDialogController.Listener {
 
   private val startAtIndex = args.getInt(BUNDLE_START_FLOW_AT, 0)
-  private val addTransmitterFactory: FlowFactory<AddTransmitterModel> by inject()
+  private val factory: AddTransmitterFactoryImpl by inject()
+
+  private var callHelpDialogController: CallHelpDialogController? = null
 
   override fun startFlow(flowChildRouter: Router) {
-    addTransmitterFactory.overrideStartingPosition(startAtIndex)
+    factory.overrideStartingPosition(startAtIndex)
     super.startFlow(flowChildRouter)
   }
 
   override fun getFlowFactory(): FlowFactory<AddTransmitterModel> {
-    return addTransmitterFactory
+    return factory
   }
 
   override fun onQuestionClicked(screen: String) {
-    //TODO: Guidelines on Questions have not been defined.
+    callHelpDialogController = CallHelpDialogController.create(
+      this,
+      DIALOG_CALL_HELP,
+      true
+    )
+
+    callHelpDialogController?.show()
+  }
+
+  override fun onCallClicked(requestCode: Int, number: String) {
+    if(requestCode == DIALOG_CALL_HELP) {
+      Intent(Intent.ACTION_DIAL).also {
+        it.data = Uri.parse("tel:$number")
+        startActivity(it)
+      }
+    }
+  }
+
+  override fun onDialogDismissed(requestCode: Int) {
+    if(requestCode == DIALOG_CALL_HELP) {
+      callHelpDialogController = null
+    }
   }
 
   companion object {
     private const val CONTROLLER_TAG = "add_transmitter_flow_controller"
     private const val BUNDLE_START_FLOW_AT = "BUNDLE_START_FLOW_AT"
+    private const val DIALOG_CALL_HELP = 1005
 
     fun routerTransaction(startAtIndex: Int = 0): RouterTransaction {
       with(Bundle()) {

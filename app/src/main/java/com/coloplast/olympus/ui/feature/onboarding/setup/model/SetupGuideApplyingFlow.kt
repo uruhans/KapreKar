@@ -16,15 +16,16 @@ enum class SetupGuideApplyingFlow(override val id: Int) : TypeWithId {
   SetupGuideNoProblemSGATMH2(10),
   SetupGuideEnsureClosedSGATMH3(11),
   SetupGuideLiftLidSGATMH4(12),
-  SetupGuideCheckLidFixedSGATMH5(12),
-  SetupGuideContinueSGATMH6(13),
-  SetupGuideReadyAttachSGA9(14),
-  SetupGuideLocateOpeningSGA10(15),
-  SetupGuideIdentifySGA11(16),
-  SetupGuideAttachTransmitterSGA12(17),
-  SetupGuideAttachedSuccessSGA13(18),
-  SetupGuideAttachedFailedSGA13_2(19),
-  Completed(20);
+  SetupGuideCheckLidFixedSGATMH5(13),
+  SetupGuideContinueSGATMH6(14),
+  SetupGuideReadyAttachSGA9(15),
+  SetupGuideLocateOpeningSGA10(16),
+  SetupGuideIdentifySGA11(17),
+  SetupGuideAttachTransmitterSGA12(18),
+  AwaitingConnection(19),
+  SetupGuideAttachedSuccessSGA13(20),
+  SetupGuideAttachedFailedSGA13_2(21),
+  Completed(22);
 
   companion object {
     fun fromIndex(id: Int): SetupGuideApplyingFlow {

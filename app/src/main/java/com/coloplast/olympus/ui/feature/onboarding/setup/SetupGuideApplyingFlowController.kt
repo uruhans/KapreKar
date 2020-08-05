@@ -3,22 +3,54 @@ package com.coloplast.olympus.ui.feature.onboarding.setup
 import android.content.Intent
 import android.net.Uri
 import com.bluelinelabs.conductor.RouterTransaction
+import com.bluelinelabs.conductor.changehandler.HorizontalChangeHandler
 import com.coloplast.olympus.ui.common.MediaGuideController
-import com.coloplast.olympus.ui.common.flow.EmptyModel
 import com.coloplast.olympus.ui.common.flow.FlowFactory
 import com.coloplast.olympus.ui.common.flow.TopMenuFlowFactoryController
 import com.coloplast.olympus.ui.dialogs.CallHelpDialogController
+import com.coloplast.olympus.ui.feature.onboarding.setup.applying.SetupGuideApplyingSGA6Controller
+import com.coloplast.olympus.ui.feature.onboarding.setup.model.ApplyingFlowModel
+import com.coloplast.olympus.ui.feature.onboarding.setup.model.SetupGuideApplyingFlow
 import org.koin.core.inject
 
-class SetupGuideApplyingFlowController : TopMenuFlowFactoryController<EmptyModel>(), MediaGuideController.Listener,
+class SetupGuideApplyingFlowController : TopMenuFlowFactoryController<ApplyingFlowModel>(), MediaGuideController.Listener,
   CallHelpDialogController.Listener {
 
   private val factory: SetupGuideApplyingFactoryImpl by inject()
 
   private var callHelpDialogController: CallHelpDialogController? = null
 
-  override fun getFlowFactory(): FlowFactory<EmptyModel> {
+  override fun getFlowFactory(): FlowFactory<ApplyingFlowModel> {
     return factory
+  }
+
+  override fun onStepCompleted(currentIndex: Int, data: ApplyingFlowModel): Boolean {
+    if(currentIndex == SetupGuideApplyingFlow.SetupGuideContinueSGATMH6.id) {
+      if(data.SetupGuideContinueSGATMH6_Call_Support) {
+        onQuestionClicked("CallSupport")
+        return true
+      }
+    }
+    else if(currentIndex == SetupGuideApplyingFlow.SetupGuideAttachedSuccessSGA13.id) {
+      factory.skipNext()
+    }
+    else if(currentIndex == SetupGuideApplyingFlow.SetupGuideAttachedFailedSGA13_2.id) {
+      if(data.SetupGuideAttachedFailedSGA13_2_Call_Support) {
+        onQuestionClicked("CallSupport")
+      }
+      else {
+        factory.goto(SetupGuideApplyingFlow.SetupGuideEnsureClosedSGA6.id)
+      }
+      return true
+    }
+
+    return false
+  }
+
+  override fun popUntil(currentIndex: Int) {
+    if(currentIndex == SetupGuideApplyingFlow.SetupGuideEnsureClosedSGA6.id) {
+      getFlowChildRouter().popToTag(SetupGuideApplyingSGA6Controller.TAG_CONTROLLER, HorizontalChangeHandler())
+    }
   }
 
   override fun onQuestionClicked(screen: String) {

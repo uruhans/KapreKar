@@ -40,6 +40,10 @@ class GuidesSubsectionController(args: Bundle): BaseController<ControllerGuidesS
         add(GuideCard.ADD_TRANSMITTER)
         add(GuideCard.DELETE_TRANSMITTER)
       }
+      GuidesMenuSubsection.MAINTENANCE -> {
+        add(GuideCard.CLEANING_GUIDE)
+        add(GuideCard.DRYING_GUIDE)
+      }
     }
   }
 
@@ -73,6 +77,8 @@ class GuidesSubsectionController(args: Bundle): BaseController<ControllerGuidesS
       GuideCard.CHECK_BATTERY_LEVEL -> SplashController.routerTransaction()
       GuideCard.ADD_TRANSMITTER -> SplashController.routerTransaction()
       GuideCard.DELETE_TRANSMITTER -> SplashController.routerTransaction()
+      GuideCard.CLEANING_GUIDE -> SplashController.routerTransaction()
+      GuideCard.DRYING_GUIDE -> SplashController.routerTransaction()
     }
     getContentRouter().pushController(routerTransaction
       .pushChangeHandler(HorizontalChangeHandler())

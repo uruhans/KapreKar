@@ -6,7 +6,7 @@
     <import type="com.coloplast.olympus.ui.feature.guides.models.ButtonType" />
     <variable
       name="item"
-      type="com.coloplast.olympus.ui.feature.guides.models.ButtonItem" />
+      type="com.coloplast.olympus.ui.feature.guides.articles.models.ButtonItem" />
   </data>
 
   <FrameLayout

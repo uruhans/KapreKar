@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <data>
+    <import type="com.coloplast.olympus.R" />
+    <variable
+      name="controller"
+      type="com.coloplast.olympus.ui.feature.onboarding.dataconsent.dc1.DataIntroDC1Controller" />
+  </data>
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:layout_marginTop="@dimen/toolbar_height">
+
+    <include layout="@layout/item_info_with_banner"
+      app:drawableId="@{R.drawable.data_intro_img}"
+      app:titleId="@{R.string.onboarding_dc1_title}"
+      app:descriptionId="@{R.string.onboarding_dc1_description}"
+      app:layout_constraintTop_toTopOf="parent"/>
+
+    <Button
+      android:layout_height="wrap_content"
+      android:layout_width="match_parent"
+      style="@style/Button"
+      app:safeText="@{R.string.onboarding_dc1_primary_button}"
+      android:onClick="@{()-> controller.onReadMoreClicked()}"
+      app:layout_constraintBottom_toTopOf="@id/secondary_button" />
+
+    <Button
+      android:id="@+id/secondary_button"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      style="@style/Button.Borderless"
+      android:textAllCaps="false"
+      android:layout_marginStart="@dimen/spacing_larger"
+      android:layout_marginEnd="@dimen/spacing_larger"
+      android:layout_marginBottom="@dimen/spacing_larger"
+      android:textSize="@dimen/text_18"
+      app:safeText="@{R.string.onboarding_dc1_secondary_button}"
+      android:onClick="@{()-> controller.onSkipClicked()}"
+      app:layout_constraintBottom_toBottomOf="parent" />
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -1,4 +1,4 @@
-package com.coloplast.olympus.ui.feature.guides.models
+package com.coloplast.olympus.ui.feature.guides.articles.models
 
 import com.coloplast.olympus.shared.types.TypeWithId
 
@@ -10,6 +10,7 @@ enum class GuideType(override val id: Int): TypeWithId {
   CONNECTION(4),
   GET_STARTED(5),
   LEARN_MORE(6),
+  DRY_APPLYING_TIPS(7),
   UNKNOWN(-1);
   
   companion object {

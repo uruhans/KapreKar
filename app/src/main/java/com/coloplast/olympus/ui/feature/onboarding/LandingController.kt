@@ -6,6 +6,7 @@ import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerLandingBinding
 import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.feature.onboarding.createprofile.CreateUserFlowController
+import com.coloplast.olympus.ui.feature.onboarding.login.LoginController
 
 
 /**
@@ -30,7 +31,10 @@ class LandingController: BaseController<ControllerLandingBinding>() {
   }
 
   fun onLogInClicked(){
-    //TODO: Link with CPO-520
+    getContentRouter().pushController(LoginController.getRouterTransaction()
+      .popChangeHandler(HorizontalChangeHandler())
+      .pushChangeHandler(HorizontalChangeHandler())
+    )
   }
 
   override fun getLayout(): Int = R.layout.controller_landing

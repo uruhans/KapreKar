@@ -13,6 +13,19 @@ object GuideContent {
       GuideType.UNKNOWN -> {
         throw NotImplementedError("UNKNOWN is not supported - did you make a mistake?")
       }
+      GuideType.DRY_APPLYING_TIPS -> {
+        listOf(
+          HeaderItem(
+            header = R.string.guide_da_title,
+            subHeader = R.string.guide_da_subtitle
+          ),
+          ArticleItem(
+            image = R.drawable.guide_placeholder,
+            title = R.string.guide_da_article_1_header,
+            description = R.string.guide_da_article_1_body
+          )
+        )
+      }
       GuideType.APPLICATION -> {
         listOf(
           HeaderItem(R.string.guide_change_plate_title),
@@ -59,9 +72,12 @@ object GuideContent {
       }
       GuideType.CHARGING -> {
         listOf(
-          HeaderItem(R.string.guide_moisture_title, R.string.guide_moisture_body),
-          ButtonItem(R.string.guide_moisture_link, ButtonType.ACTION, buttonCallback),
-          ButtonItem(R.string.generic_go_back, ButtonType.BACK, buttonCallback)
+          HeaderItem(R.string.guide_ch_title, R.string.guide_ch_subtitle),
+          ArticleItem(
+            image = R.drawable.guide_charging,
+            title = R.string.guide_ch_article_1_header,
+            description = R.string.guide_ch_article_1_body
+          )
         )
       }
       GuideType.CLEANING -> {

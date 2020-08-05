@@ -4,7 +4,8 @@ import com.coloplast.olympus.ui.common.models.flow.FlowFactoryModel
 
 class ApplyingFlowModel : FlowFactoryModel {
 
-  var SetupGuideContinueSGATMH6_Call_Support: Boolean = false
-  var SetupGuideAttachedFailedSGA13_2_Call_Support: Boolean = false
+  var connectionSuccessful = false
+  var SetupGuideContinueSGATMH6_Call_Support = false
+  var SetupGuideAttachedFailedSGA13_2_Call_Support = false
 
 }

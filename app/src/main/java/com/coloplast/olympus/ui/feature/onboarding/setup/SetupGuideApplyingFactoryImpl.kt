@@ -98,7 +98,9 @@ class SetupGuideApplyingFactoryImpl : FlowFactory<ApplyingFlowModel>() {
           R.string.onboarding_chapter_applying_tm_not_attached_button_restart,
           negativeButtonId = R.string.onboarding_chapter_applying_tm_not_attached_button_support,
           imageId = R.drawable.ic_close,
-          showCloseButton = false
+          showCloseButton = false,
+          imageBackgroundDrawable = R.drawable.shape_red_circle,
+          imageTint = R.color.confirmation_icon_red
         )
       }
       SetupGuideApplyingFlow.Completed -> null
@@ -114,21 +116,11 @@ class SetupGuideApplyingFactoryImpl : FlowFactory<ApplyingFlowModel>() {
           TransmitterCheckerSelectionType.NOT_SURE -> skipUntil(SetupGuideApplyingFlow.SetupGuideNoProblemSGATMH2.id)
         }
       }
-      SetupGuideApplyingFlow.SetupGuideWaitSGATMH1 -> {
-        skipUntil(SetupGuideApplyingFlow.SetupGuideEnsureClosedSGATMH3.id)
+      SetupGuideApplyingFlow.AwaitingConnection -> {
+        model.connectionSuccessful = result as Boolean
       }
       SetupGuideApplyingFlow.SetupGuideContinueSGATMH6 -> {
         model.SetupGuideContinueSGATMH6_Call_Support = (result as Boolean).not()
-      }
-      SetupGuideApplyingFlow.AwaitingConnection -> {
-        when (result as Boolean) {
-          true -> {
-            // we just continue to next step
-          }
-          false -> {
-            skipUntil(SetupGuideApplyingFlow.SetupGuideAttachedFailedSGA13_2.id)
-          }
-        }
       }
       SetupGuideApplyingFlow.SetupGuideAttachedFailedSGA13_2 -> {
         model.SetupGuideAttachedFailedSGA13_2_Call_Support = (result as Boolean).not()

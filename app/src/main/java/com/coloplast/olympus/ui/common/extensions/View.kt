@@ -6,6 +6,7 @@ import android.app.Activity
 import android.view.View
 import android.view.animation.*
 import android.view.inputmethod.InputMethodManager
+import androidx.annotation.DrawableRes
 import androidx.databinding.BindingAdapter
 import com.coloplast.olympus.ui.common.listeners.AnimatorListenerImpl
 
@@ -27,6 +28,13 @@ fun View.visibleOrInvisibleFade(visible: Boolean) {
 @BindingAdapter("visibleOrGoneFade")
 fun View.visibleOrGoneFade(visible: Boolean) {
   animateFade(this, if (visible) View.VISIBLE else View.GONE)
+}
+
+@BindingAdapter("backgroundResource")
+fun View.backgroundResource(@DrawableRes backgroundResource: Int) {
+  if(backgroundResource != 0) {
+    setBackgroundResource(backgroundResource)
+  }
 }
 
 private fun animateFade(target: View, endResult: Int) {

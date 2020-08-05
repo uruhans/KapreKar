@@ -1,24 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools">
+
   <data>
+
     <variable
       name="controller"
       type="com.coloplast.olympus.ui.common.GenericConfirmationController" />
   </data>
 
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+  <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="104dp"
     android:layout_height="104dp"
-    android:background="@drawable/shape_turquoise_circle"
-    android:gravity="center">
+    app:backgroundResource="@{controller.imageBackgroundDrawable}"
+    android:gravity="center"
+    tools:background="@drawable/shape_turquoise_circle">
 
-  <ImageView
+    <ImageView
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:layout_margin="@dimen/spacing_large"
-      app:safeResource="@{controller.imageId}" />
+      app:safeResource="@{controller.imageId}"
+      app:tintDrawable="@{controller.imageTint}"
+      tools:src="@drawable/ic_checkmark" />
 
-</FrameLayout>
+  </FrameLayout>
 
 </layout>

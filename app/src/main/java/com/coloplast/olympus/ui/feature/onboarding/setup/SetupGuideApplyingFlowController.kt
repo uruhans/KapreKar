@@ -13,7 +13,8 @@ import com.coloplast.olympus.ui.feature.onboarding.setup.model.ApplyingFlowModel
 import com.coloplast.olympus.ui.feature.onboarding.setup.model.SetupGuideApplyingFlow
 import org.koin.core.inject
 
-class SetupGuideApplyingFlowController : TopMenuFlowFactoryController<ApplyingFlowModel>(), MediaGuideController.Listener,
+class SetupGuideApplyingFlowController : TopMenuFlowFactoryController<ApplyingFlowModel>(),
+  MediaGuideController.Listener,
   CallHelpDialogController.Listener {
 
   private val factory: SetupGuideApplyingFactoryImpl by inject()
@@ -25,31 +26,45 @@ class SetupGuideApplyingFlowController : TopMenuFlowFactoryController<ApplyingFl
   }
 
   override fun onStepCompleted(currentIndex: Int, data: ApplyingFlowModel): Boolean {
-    if(currentIndex == SetupGuideApplyingFlow.SetupGuideContinueSGATMH6.id) {
-      if(data.SetupGuideContinueSGATMH6_Call_Support) {
-        onQuestionClicked("CallSupport")
+    when(SetupGuideApplyingFlow.fromIndex(currentIndex)) {
+      SetupGuideApplyingFlow.SetupGuideContinueSGATMH6 -> {
+        if (data.SetupGuideContinueSGATMH6_Call_Support) {
+          onQuestionClicked("CallSupport")
+          return true
+        }
+      }
+      SetupGuideApplyingFlow.SetupGuideAttachedSuccessSGA13 -> {
+        factory.skipNext()
+      }
+      SetupGuideApplyingFlow.SetupGuideWaitSGATMH1 -> {
+        factory.skipUntil(SetupGuideApplyingFlow.SetupGuideEnsureClosedSGATMH3.id)
+      }
+      SetupGuideApplyingFlow.AwaitingConnection -> {
+        if (!data.connectionSuccessful) {
+          factory.skipUntil(SetupGuideApplyingFlow.SetupGuideAttachedFailedSGA13_2.id)
+        }
+      }
+      SetupGuideApplyingFlow.SetupGuideAttachedFailedSGA13_2 -> {
+        if (data.SetupGuideAttachedFailedSGA13_2_Call_Support) {
+          onQuestionClicked("CallSupport")
+        }
+        else {
+          factory.goto(SetupGuideApplyingFlow.SetupGuideEnsureClosedSGA6.id)
+        }
         return true
       }
-    }
-    else if(currentIndex == SetupGuideApplyingFlow.SetupGuideAttachedSuccessSGA13.id) {
-      factory.skipNext()
-    }
-    else if(currentIndex == SetupGuideApplyingFlow.SetupGuideAttachedFailedSGA13_2.id) {
-      if(data.SetupGuideAttachedFailedSGA13_2_Call_Support) {
-        onQuestionClicked("CallSupport")
-      }
-      else {
-        factory.goto(SetupGuideApplyingFlow.SetupGuideEnsureClosedSGA6.id)
-      }
-      return true
+      else -> return false
     }
 
     return false
   }
 
   override fun popUntil(currentIndex: Int) {
-    if(currentIndex == SetupGuideApplyingFlow.SetupGuideEnsureClosedSGA6.id) {
-      getFlowChildRouter().popToTag(SetupGuideApplyingSGA6Controller.TAG_CONTROLLER, HorizontalChangeHandler())
+    if (currentIndex == SetupGuideApplyingFlow.SetupGuideEnsureClosedSGA6.id) {
+      getFlowChildRouter().popToTag(
+        SetupGuideApplyingSGA6Controller.TAG_CONTROLLER,
+        HorizontalChangeHandler()
+      )
     }
   }
 
@@ -64,7 +79,7 @@ class SetupGuideApplyingFlowController : TopMenuFlowFactoryController<ApplyingFl
   }
 
   override fun onCallClicked(requestCode: Int, number: String) {
-    if(requestCode == DIALOG_CALL_HELP) {
+    if (requestCode == DIALOG_CALL_HELP) {
       Intent(Intent.ACTION_DIAL).also {
         it.data = Uri.parse("tel:$number")
         startActivity(it)
@@ -73,7 +88,7 @@ class SetupGuideApplyingFlowController : TopMenuFlowFactoryController<ApplyingFl
   }
 
   override fun onDialogDismissed(requestCode: Int) {
-    if(requestCode == DIALOG_CALL_HELP) {
+    if (requestCode == DIALOG_CALL_HELP) {
       callHelpDialogController = null
     }
   }
@@ -84,7 +99,7 @@ class SetupGuideApplyingFlowController : TopMenuFlowFactoryController<ApplyingFl
 
     fun routerTransaction(): RouterTransaction {
       return RouterTransaction.with(SetupGuideApplyingFlowController())
-          .tag(CONTROLLER_TAG)
+        .tag(CONTROLLER_TAG)
     }
   }
 }

@@ -1,6 +1,7 @@
 package com.coloplast.olympus.ui.common
 
 import android.os.Bundle
+import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.bluelinelabs.conductor.RouterTransaction
@@ -20,6 +21,8 @@ class GenericConfirmationController(args: Bundle) :
   val descriptionId = args.getInt(DESCRIPTION_TEXT_ID)
   val buttonTextId = args.getInt(BUTTON_TEXT_ID)
   val imageId = args.getInt(IMAGE_ID)
+  val imageBackgroundDrawable = args.getInt(IMAGE_BACKGROUND)
+  val imageTint = args.getInt(IMAGE_TINT)
   val negativeButtonTextId = args.getInt(NEGATIVE_BUTTON_TEXT_ID)
 
   val showNegativeButton = negativeButtonTextId > 0
@@ -58,6 +61,8 @@ class GenericConfirmationController(args: Bundle) :
     private const val IMAGE_ID = "IMAGE_ID"
     private const val INFO_SHOW_BACK_BUTTON = "INFO_SHOW_BACK_BUTTON"
     private const val INFO_SHOW_CLOSE_BUTTON = "INFO_SHOW_CLOSE_BUTTON"
+    private const val IMAGE_BACKGROUND = "IMAGE_BACKGROUND"
+    private const val IMAGE_TINT = "IMAGE_TINT"
 
     fun routerTransaction(
       @StringRes titleId: Int,
@@ -66,7 +71,9 @@ class GenericConfirmationController(args: Bundle) :
       @DrawableRes imageId: Int = R.drawable.ic_checkmark,
       @StringRes negativeButtonId: Int = 0,
       showBackButton: Boolean = true,
-      showCloseButton: Boolean = true
+      showCloseButton: Boolean = true,
+      @DrawableRes imageBackgroundDrawable: Int = R.drawable.shape_turquoise_circle,
+      @ColorRes imageTint: Int = R.color.turquoise
     ): RouterTransaction {
       val args = Bundle().apply {
         putInt(TITLE_TEXT_ID, titleId)
@@ -76,6 +83,9 @@ class GenericConfirmationController(args: Bundle) :
         putInt(IMAGE_ID, imageId)
         putBoolean(INFO_SHOW_BACK_BUTTON, showBackButton)
         putBoolean(INFO_SHOW_CLOSE_BUTTON, showCloseButton)
+        putBoolean(INFO_SHOW_CLOSE_BUTTON, showCloseButton)
+        putInt(IMAGE_BACKGROUND, imageBackgroundDrawable)
+        putInt(IMAGE_TINT, imageTint)
       }
 
       return RouterTransaction.with(GenericConfirmationController(args))

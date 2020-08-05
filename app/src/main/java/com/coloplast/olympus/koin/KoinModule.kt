@@ -18,7 +18,6 @@ import com.coloplast.olympus.notifications.OlympusNotificationManager
 import com.coloplast.olympus.shared.preferences.Preferences
 import com.coloplast.olympus.ui.common.flow.FlowFactory
 import com.coloplast.olympus.ui.feature.TransmitterManager
-import com.coloplast.olympus.ui.feature.guides.flows.location.LocationGuideEmptyModel
 import com.coloplast.olympus.ui.feature.guides.flows.location.LocationGuideFactoryImpl
 import com.coloplast.olympus.ui.feature.home.BreachesOccurred
 import com.coloplast.olympus.ui.feature.home.HomeViewModel
@@ -88,5 +87,5 @@ val koinModule = module {
   single<FlowFactory<DataConsentModel>>(override = true) { DataConsentFactoryImpl() }
   single<FlowFactory<CreateUserFactoryModel>>(override = true) { CreateUserFactoryImpl() }
   single<FlowFactory<ForgotPasswordModel>>(override = true) { ForgotPasswordFactoryImpl() }
-  single<FlowFactory<LocationGuideEmptyModel>>(override = true) { LocationGuideFactoryImpl() }
+  single { LocationGuideFactoryImpl() }
 }

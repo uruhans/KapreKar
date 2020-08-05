@@ -11,6 +11,7 @@ import com.coloplast.olympus.ui.common.extensions.rotate360
 import com.coloplast.olympus.ui.feature.guides.GuideController
 import com.coloplast.olympus.ui.feature.guides.models.GuideType
 import com.coloplast.olympus.ui.feature.home.HomeController
+import com.coloplast.olympus.ui.feature.onboarding.LandingController
 import org.koin.core.inject
 
 /**
@@ -37,8 +38,7 @@ class SplashController : BaseController<ControllerSplashBinding>() {
     val routerTransaction = if(preferences.userToken.isNotBlank()){
       HomeController.routerTransaction()
     } else {
-      //LandingController.routerTransaction()
-      GuideController.routerTransaction(GuideType.DRYING)
+      LandingController.routerTransaction()
     }
 
     getContentRouter().setRoot(routerTransaction)

@@ -5,6 +5,7 @@
   <dimen name="toolbar_margin_with_navigation_icon_2">56dp</dimen>
   <dimen name="toolbar_margin_without_navigation_icon">@dimen/spacing_standard</dimen>
 
+  <dimen name="spacing_none">0dp</dimen>
   <dimen name="spacing_quarter">4dp</dimen>
   <dimen name="spacing_half">8dp</dimen>
   <dimen name="spacing_small">12dp</dimen>

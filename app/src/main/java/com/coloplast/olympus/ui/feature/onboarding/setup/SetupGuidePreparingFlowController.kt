@@ -4,9 +4,9 @@ import android.content.Intent
 import android.net.Uri
 import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.ui.common.MediaGuideController
-import com.coloplast.olympus.ui.common.flow.EmptyModel
 import com.coloplast.olympus.ui.common.flow.FlowFactory
 import com.coloplast.olympus.ui.common.flow.TopMenuFlowFactoryController
+import com.coloplast.olympus.ui.common.models.flow.EmptyModel
 import com.coloplast.olympus.ui.dialogs.CallHelpDialogController
 import org.koin.core.inject
 

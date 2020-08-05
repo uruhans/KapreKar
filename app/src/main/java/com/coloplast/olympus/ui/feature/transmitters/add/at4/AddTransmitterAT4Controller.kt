@@ -1,15 +1,11 @@
 package com.coloplast.olympus.ui.feature.transmitters.add.at4
 
-import android.view.View
 import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerAddTransmitterAt4Binding
 import com.coloplast.olympus.ui.common.BaseController
-import com.coloplast.olympus.ui.common.CustomToolbarController
 import com.coloplast.olympus.ui.common.listeners.FlowListener
 import com.coloplast.olympus.ui.common.widgets.InputCodeEditText
-import com.coloplast.olympus.ui.feature.transmitters.add.at10.AddTransmitterAT10Controller
-import com.coloplast.olympus.utils.DeviceUtils
 
 
 /**

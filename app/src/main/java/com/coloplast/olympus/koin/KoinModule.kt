@@ -9,26 +9,29 @@ import com.coloplast.olympus.bluetooth.businesslayer.BluetoothManager
 import com.coloplast.olympus.bluetooth.businesslayer.BluetoothManagerImpl
 import com.coloplast.olympus.bluetooth.businesslayer.DeviceConnection
 import com.coloplast.olympus.businesslayer.components.TransmitterComponentImpl
+import com.coloplast.olympus.businesslayer.components.UserComponentImpl
 import com.coloplast.olympus.businesslayer.interfaces.TransmitterComponent
+import com.coloplast.olympus.businesslayer.interfaces.UserComponent
 import com.coloplast.olympus.notifications.NotificationCenter
 import com.coloplast.olympus.notifications.NotificationScheduler
 import com.coloplast.olympus.notifications.OlympusNotificationManager
 import com.coloplast.olympus.shared.preferences.Preferences
-import com.coloplast.olympus.ui.common.flow.FlowFactory
 import com.coloplast.olympus.ui.feature.TransmitterManager
 import com.coloplast.olympus.ui.feature.home.BreachesOccurred
 import com.coloplast.olympus.ui.feature.home.HomeViewModel
+import com.coloplast.olympus.ui.feature.onboarding.createprofile.CreateUserFactoryImpl
+import com.coloplast.olympus.ui.feature.onboarding.createprofile.CreateUserViewModel
+import com.coloplast.olympus.ui.feature.onboarding.dataconsent.DataConsentFactoryImpl
+import com.coloplast.olympus.ui.feature.onboarding.login.LoginViewModel
 import com.coloplast.olympus.ui.feature.onboarding.setup.SetupGuideApplyingFactoryImpl
 import com.coloplast.olympus.ui.feature.onboarding.setup.SetupGuideIntroFactoryImpl
 import com.coloplast.olympus.ui.feature.onboarding.setup.SetupGuidePreparingFactoryImpl
 import com.coloplast.olympus.ui.feature.onboarding.setup.applying.AwaitingConnectionViewModel
 import com.coloplast.olympus.ui.feature.onboarding.valueproposition.ValuePropositionFactoryImpl
-import com.coloplast.olympus.ui.feature.onboarding.valueproposition.ValuePropositionModel
 import com.coloplast.olympus.ui.feature.transmitters.TransmittersViewModel
 import com.coloplast.olympus.ui.feature.transmitters.add.AddTransmitterFactoryImpl
 import com.coloplast.olympus.ui.feature.transmitters.add.AddTransmitterViewModel
 import com.coloplast.olympus.ui.feature.transmitters.add.at9.AddTransmitterAT9ViewModel
-import com.coloplast.olympus.ui.feature.transmitters.add.models.AddTransmitterModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
@@ -52,6 +55,7 @@ val koinModule = module {
 
   /* Components */
   single<TransmitterComponent> { TransmitterComponentImpl() }
+  single<UserComponent> { UserComponentImpl() }
 
   single { Me() }
 
@@ -62,6 +66,8 @@ val koinModule = module {
   single { TransmittersViewModel(get(), get()) }
   single { AddTransmitterAT9ViewModel(get(), get()) }
   single { AwaitingConnectionViewModel(get()) }
+  single { CreateUserViewModel(get(), get()) }
+  single { LoginViewModel(get(), get()) }
 
   /* Flows */
   single { AddTransmitterFactoryImpl() }
@@ -69,4 +75,6 @@ val koinModule = module {
   single { SetupGuideIntroFactoryImpl() }
   single { SetupGuidePreparingFactoryImpl() }
   single { SetupGuideApplyingFactoryImpl() }
+  single { DataConsentFactoryImpl() }
+  single { CreateUserFactoryImpl() }
 }

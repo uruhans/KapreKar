@@ -4,8 +4,8 @@ import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.R
 import com.coloplast.olympus.ui.common.GenericConfirmationController
 import com.coloplast.olympus.ui.common.SimpleInfoPageController
-import com.coloplast.olympus.ui.common.flow.EmptyModel
 import com.coloplast.olympus.ui.common.flow.FlowFactory
+import com.coloplast.olympus.ui.common.models.flow.EmptyModel
 import com.coloplast.olympus.ui.feature.onboarding.setup.intro.*
 import com.coloplast.olympus.ui.feature.onboarding.setup.model.SetupGuideIntroductionFlow
 
@@ -20,7 +20,7 @@ class SetupGuideIntroFactoryImpl : FlowFactory<EmptyModel>() {
   override fun getRouterTransaction(currentIndex: Int): RouterTransaction? {
     return when(SetupGuideIntroductionFlow.fromIndex(currentIndex)) {
       SetupGuideIntroductionFlow.SetupGuideSG1 -> {
-        GenericConfirmationController.routerTransaction(
+        GenericConfirmationController.getRouterTransaction(
           R.string.onboarding_chapter_intro_setup_guide,
           R.string.onboarding_chapter_intro_setup_guide_message,
           R.string.generic_get_started,
@@ -28,7 +28,7 @@ class SetupGuideIntroFactoryImpl : FlowFactory<EmptyModel>() {
         )
       }
       SetupGuideIntroductionFlow.SetupGuideSG2 -> SetupGuideSG2.routerTransaction()
-      SetupGuideIntroductionFlow.SetupGuideSGI1 -> SetupGuideIntroSGI1.routerTransaction()
+      SetupGuideIntroductionFlow.SetupGuideSGI1 -> SetupGuideIntroSGI1Controller.routerTransaction()
       SetupGuideIntroductionFlow.SetupGuideBluetoothSGI2 -> {
         SimpleInfoPageController.routerTransaction(
           iconId = R.drawable.ic_bluetooth,

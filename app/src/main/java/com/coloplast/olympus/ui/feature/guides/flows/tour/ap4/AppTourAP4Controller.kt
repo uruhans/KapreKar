@@ -16,7 +16,7 @@ class AppTourAP4Controller(args: Bundle = Bundle()) :
   override val resourceId: Int = R.drawable.guide_placeholder
   override val titleId: Int = R.string.guide_ap4_title
   override val descriptionId: Int = R.string.guide_ap4_subtitle
-  override val position: Int = 2
+  override val position: Int = 3
   override val totalCount: Int = 11
 
   companion object{

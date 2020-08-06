@@ -13,6 +13,7 @@
   <color name="darkGrey01">#2e3233</color>
   <color name="darkGrey03">#969899</color>
   <color name="red">#e21b44</color>
+  <color name="light_red">#fff3f3</color>
 
   <color name="default_background">#fcfaf9</color>
 
@@ -57,6 +58,8 @@
   <color name="patch_grey">#d4d4d4</color>
 
   <color name="transparent_black_20">#33000000</color>
+
+  <color name="confirmation_icon_red">#f19395</color>
 
 
 </resources>

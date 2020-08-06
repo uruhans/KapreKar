@@ -12,32 +12,39 @@ import com.coloplast.olympus.ui.common.listeners.FlowListener
  *
  * Guide base screen. Allows either a @Drawable image or a @Raw video
  */
-abstract class MediaGuideController(args: Bundle) : CustomToolbarController<ControllerMediaGuideBinding>(args) {
+abstract class MediaGuideController(args: Bundle) :
+  CustomToolbarController<ControllerMediaGuideBinding>(args) {
 
-    private val screenName: String = args.getString(SCREEN_NAME)!!
+  private val screenName: String = args.getString(SCREEN_NAME)!!
 
-    abstract val resourceId: Int
-    abstract val titleId: Int
-    abstract val descriptionId: Int
-    abstract val position: Int
-    abstract val totalCount: Int
-    open val showQuestionFab: Boolean = true
+  abstract val resourceId: Int
+  abstract val titleId: Int
+  abstract val descriptionId: Int
+  abstract val position: Int
+  abstract val totalCount: Int
+  open val showQuestionFab: Boolean = true
 
-    interface Listener{
-        fun onQuestionClicked(screen: String)
-    }
-    override fun attachVariables(viewBinding: ControllerMediaGuideBinding) {
-        super.attachVariables(viewBinding)
-       viewBinding.controller = this
-    }
+  var nextEnabled: Boolean = true
 
-    fun onNextClicked() = getListener(FlowListener::class.java)!!.onNextClicked()
+  interface Listener {
+    fun onQuestionClicked(screen: String)
+  }
 
-    fun onQuestionClicked() = getListener(Listener::class.java)!!.onQuestionClicked(screenName)
 
-    override fun getLayout() = R.layout.controller_media_guide
+  override fun attachVariables(viewBinding: ControllerMediaGuideBinding) {
+    super.attachVariables(viewBinding)
+    viewBinding.controller = this
+  }
 
-    companion object{
-        const val SCREEN_NAME = "SCREEN_NAME"
-    }
+  fun onNextClicked() {
+    getListener(FlowListener::class.java)!!.onNextClicked()
+  }
+
+  fun onQuestionClicked() = getListener(Listener::class.java)!!.onQuestionClicked(screenName)
+
+  override fun getLayout() = R.layout.controller_media_guide
+
+  companion object {
+    const val SCREEN_NAME = "SCREEN_NAME"
+  }
 }

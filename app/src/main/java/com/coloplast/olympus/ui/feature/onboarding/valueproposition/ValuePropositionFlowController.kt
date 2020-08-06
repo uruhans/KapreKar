@@ -12,7 +12,7 @@ import org.koin.core.inject
  */
 class ValuePropositionFlowController: TopMenuFlowFactoryController<ValuePropositionModel>() {
 
-  private val model: FlowFactory<ValuePropositionModel> by inject()
+  private val model: ValuePropositionFactoryImpl by inject()
 
   override fun getFlowFactory(): FlowFactory<ValuePropositionModel> =  model
 

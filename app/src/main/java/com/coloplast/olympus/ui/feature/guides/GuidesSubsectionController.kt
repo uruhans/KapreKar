@@ -9,6 +9,8 @@ import com.coloplast.olympus.BR
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerGuidesSubsectionBinding
 import com.coloplast.olympus.ui.common.BaseController
+import com.coloplast.olympus.ui.feature.guides.articles.GuideController
+import com.coloplast.olympus.ui.feature.guides.articles.models.GuideType
 import com.coloplast.olympus.ui.feature.guides.models.GuideCard
 import com.coloplast.olympus.ui.feature.guides.types.GuidesMenuSubsection
 import com.coloplast.olympus.ui.feature.splash.SplashController
@@ -70,17 +72,17 @@ class GuidesSubsectionController(args: Bundle): BaseController<ControllerGuidesS
       GuideCard.COMPONENT_GUIDE -> SplashController.routerTransaction()
       GuideCard.APP_TOUR -> SplashController.routerTransaction()
       GuideCard.APPLYING_GUIDE -> SplashController.routerTransaction()
-      GuideCard.DRY_APPLYING_TIPS -> SplashController.routerTransaction()
-      GuideCard.CONNECTION_GUIDE -> SplashController.routerTransaction()
-      GuideCard.CHARGING_GUIDE -> SplashController.routerTransaction()
+      GuideCard.DRY_APPLYING_TIPS -> GuideController.routerTransaction(GuideType.DRY_APPLYING_TIPS)
+      GuideCard.CONNECTION_GUIDE -> GuideController.routerTransaction(GuideType.CONNECTION)
+      GuideCard.CHARGING_GUIDE -> GuideController.routerTransaction(GuideType.CHARGING)
       GuideCard.LOCATION_GUIDE -> SplashController.routerTransaction()
       GuideCard.CHECK_BATTERY_LEVEL -> SplashController.routerTransaction()
       GuideCard.ADD_TRANSMITTER -> SplashController.routerTransaction()
       GuideCard.DELETE_TRANSMITTER -> SplashController.routerTransaction()
-      GuideCard.CLEANING_GUIDE -> SplashController.routerTransaction()
-      GuideCard.DRYING_GUIDE -> SplashController.routerTransaction()
+      GuideCard.CLEANING_GUIDE -> GuideController.routerTransaction(GuideType.CLEANING)
+      GuideCard.DRYING_GUIDE -> GuideController.routerTransaction(GuideType.DRYING)
     }
-    getContentRouter().pushController(routerTransaction
+    router.pushController(routerTransaction
       .pushChangeHandler(HorizontalChangeHandler())
       .popChangeHandler(HorizontalChangeHandler()))
   }

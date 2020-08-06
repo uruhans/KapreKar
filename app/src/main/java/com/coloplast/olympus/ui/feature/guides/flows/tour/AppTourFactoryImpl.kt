@@ -5,10 +5,17 @@ import com.coloplast.olympus.R
 import com.coloplast.olympus.ui.common.InfoPageController
 import com.coloplast.olympus.ui.common.flow.FlowFactory
 import com.coloplast.olympus.ui.common.models.flow.EmptyModel
+import com.coloplast.olympus.ui.feature.guides.flows.tour.ap10.AppTourAP10Controller
+import com.coloplast.olympus.ui.feature.guides.flows.tour.ap11.AppTourAP11Controller
+import com.coloplast.olympus.ui.feature.guides.flows.tour.ap12.AppTourAP12Controller
 import com.coloplast.olympus.ui.feature.guides.flows.tour.ap2.AppTourAP2Controller
 import com.coloplast.olympus.ui.feature.guides.flows.tour.ap3.AppTourAP3Controller
 import com.coloplast.olympus.ui.feature.guides.flows.tour.ap4.AppTourAP4Controller
 import com.coloplast.olympus.ui.feature.guides.flows.tour.ap5.AppTourAP5Controller
+import com.coloplast.olympus.ui.feature.guides.flows.tour.ap6.AppTourAP6Controller
+import com.coloplast.olympus.ui.feature.guides.flows.tour.ap7.AppTourAP7Controller
+import com.coloplast.olympus.ui.feature.guides.flows.tour.ap8.AppTourAP8Controller
+import com.coloplast.olympus.ui.feature.guides.flows.tour.ap9.AppTourAP9Controller
 
 
 /**
@@ -37,6 +44,13 @@ class AppTourFactoryImpl: FlowFactory<EmptyModel>() {
       AppTourFlow.AppTourAP3 -> AppTourAP3Controller.routerTransaction()
       AppTourFlow.AppTourAP4 -> AppTourAP4Controller.routerTransaction()
       AppTourFlow.AppTourAP5 -> AppTourAP5Controller.routerTransaction()
+      AppTourFlow.AppTourAP6 -> AppTourAP6Controller.routerTransaction()
+      AppTourFlow.AppTourAP7 -> AppTourAP7Controller.routerTransaction()
+      AppTourFlow.AppTourAP8 -> AppTourAP8Controller.routerTransaction()
+      AppTourFlow.AppTourAP9 -> AppTourAP9Controller.routerTransaction()
+      AppTourFlow.AppTourAP10 -> AppTourAP10Controller.routerTransaction()
+      AppTourFlow.AppTourAP11 -> AppTourAP11Controller.routerTransaction()
+      AppTourFlow.AppTourAP12 -> AppTourAP12Controller.routerTransaction()
       else -> null
     }
   }

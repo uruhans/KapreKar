@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools">
+
+  <data>
+
+    <import type="com.coloplast.olympus.ui.feature.onboarding.setup.model.TransmitterCheckerSelectionType" />
+
+    <variable
+      name="controller"
+      type="com.coloplast.olympus.ui.feature.onboarding.setup.applying.SetupGuideApplyingSGA8Controller" />
+  </data>
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:paddingTop="@dimen/toolbar_height">
+
+    <TextView
+      android:id="@+id/transmitter_guide_at2_title"
+      style="@style/Headline.Small"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="@dimen/spacing_standard"
+      android:layout_marginEnd="@dimen/spacing_standard"
+      android:text="@string/onboarding_chapter_applying_transmitter_checker_title"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+      android:id="@+id/transmitter_guide_at2_description"
+      style="@style/Text.Large"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="@dimen/spacing_standard"
+      android:layout_marginTop="@dimen/spacing_larger"
+      android:layout_marginEnd="@dimen/spacing_standard"
+      android:text="@string/onboarding_chapter_applying_transmitter_checker_description"
+      android:textColor="@color/darkGrey03"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/transmitter_guide_at2_title" />
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
+      android:layout_marginTop="@dimen/spacing_larger"
+      android:layout_marginBottom="@dimen/spacing_larger"
+      android:gravity="bottom"
+      android:orientation="vertical"
+      android:paddingBottom="@dimen/spacing_standard"
+      app:layout_constraintBottom_toTopOf="@+id/accept_button"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/transmitter_guide_at2_description">
+
+      <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        style="@style/CardViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_double"
+        android:layout_marginTop="@dimen/spacing_half"
+        android:layout_marginEnd="@dimen/spacing_larger"
+        android:layout_marginBottom="@dimen/spacing_half"
+        android:clickable="true"
+        android:focusable="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+          android:layout_width="match_parent"
+          android:background="?attr/selectableItemBackground"
+          android:onClick="@{() -> controller.onClicked(TransmitterCheckerSelectionType.FIXED)}"
+          android:layout_height="wrap_content">
+
+          <TextView
+            android:id="@+id/name"
+            style="@style/TextStyle.Coloplast.Bold.DarkGrey.20"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/spacing_standard"
+            android:layout_marginTop="@dimen/spacing_standard"
+            android:gravity="center_vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="@string/onboarding_chapter_applying_transmitter_checker_option_1_title" />
+
+          <TextView
+            android:id="@+id/description"
+            style="@style/TextStyle.Roboto.Regular.ClearGrey.18"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/spacing_standard"
+            android:layout_marginEnd="@dimen/spacing_standard"
+            android:gravity="center_vertical"
+            app:layout_constraintEnd_toStartOf="@+id/image1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/name"
+            android:text="@string/onboarding_chapter_applying_transmitter_checker_option_1_description" />
+
+          <ImageView
+            android:id="@+id/image1"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:src="@drawable/guide_change_plate_7"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+          <TextView
+            style="@style/TextStyle.Coloplast.Bold.DarkGrey"
+            android:layout_width="wrap_content"
+            android:layout_height="46dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginStart="@dimen/spacing_standard"
+            android:layout_marginEnd="@dimen/spacing_standard"
+            android:layout_marginBottom="@dimen/spacing_standard"
+            android:gravity="center"
+            android:text="@string/onboarding_chapter_applying_transmitter_checker_option_select"
+            android:textColor="@color/turquoise"
+            android:textSize="@dimen/text_18"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/description" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+      </androidx.cardview.widget.CardView>
+
+      <androidx.cardview.widget.CardView
+        android:id="@+id/cardView2"
+        style="@style/CardViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_double"
+        android:layout_marginTop="@dimen/spacing_half"
+        android:layout_marginEnd="@dimen/spacing_larger"
+        android:layout_marginBottom="@dimen/spacing_half"
+        android:clickable="true"
+        android:focusable="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+          android:layout_width="match_parent"
+          android:background="?attr/selectableItemBackground"
+          android:onClick="@{() -> controller.onClicked(TransmitterCheckerSelectionType.LOOSE)}"
+          android:layout_height="wrap_content">
+
+          <TextView
+            android:id="@+id/name2"
+            style="@style/TextStyle.Coloplast.Bold.DarkGrey.20"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/spacing_standard"
+            android:layout_marginTop="@dimen/spacing_standard"
+            android:gravity="center_vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="@string/onboarding_chapter_applying_transmitter_checker_option_2_title" />
+
+          <TextView
+            android:id="@+id/description2"
+            style="@style/TextStyle.Roboto.Regular.ClearGrey.18"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/spacing_standard"
+            android:layout_marginEnd="@dimen/spacing_standard"
+            android:gravity="center_vertical"
+            app:layout_constraintEnd_toStartOf="@+id/image2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/name2"
+            android:text="@string/onboarding_chapter_applying_transmitter_checker_option_2_description" />
+
+          <ImageView
+            android:id="@+id/image2"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:src="@drawable/guide_change_plate_7"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+          <TextView
+            style="@style/TextStyle.Coloplast.Bold.DarkGrey"
+            android:layout_width="wrap_content"
+            android:layout_height="46dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginStart="@dimen/spacing_standard"
+            android:layout_marginEnd="@dimen/spacing_standard"
+            android:layout_marginBottom="@dimen/spacing_standard"
+            android:gravity="center"
+            android:text="@string/onboarding_chapter_applying_transmitter_checker_option_select"
+            android:textColor="@color/turquoise"
+            android:textSize="@dimen/text_18"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/description2" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+      </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+
+    <TextView
+      android:id="@+id/accept_button"
+      style="@style/TextStyle.Coloplast.Bold.DarkGrey.20"
+      android:layout_width="wrap_content"
+      android:layout_height="46dp"
+      android:layout_gravity="center_horizontal"
+      android:layout_marginBottom="@dimen/spacing_standard"
+      android:gravity="center"
+      android:background="?attr/selectableItemBackground"
+      android:onClick="@{() -> controller.onClicked(TransmitterCheckerSelectionType.NOT_SURE)}"
+      android:text="@string/onboarding_chapter_applying_transmitter_checker_button"
+      android:textColor="@color/turquoise"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent" />
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

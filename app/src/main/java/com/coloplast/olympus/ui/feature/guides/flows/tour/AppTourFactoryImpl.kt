@@ -2,6 +2,7 @@ package com.coloplast.olympus.ui.feature.guides.flows.tour
 
 import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.R
+import com.coloplast.olympus.ui.common.GenericConfirmationController
 import com.coloplast.olympus.ui.common.InfoPageController
 import com.coloplast.olympus.ui.common.flow.FlowFactory
 import com.coloplast.olympus.ui.common.models.flow.EmptyModel
@@ -51,6 +52,11 @@ class AppTourFactoryImpl: FlowFactory<EmptyModel>() {
       AppTourFlow.AppTourAP10 -> AppTourAP10Controller.routerTransaction()
       AppTourFlow.AppTourAP11 -> AppTourAP11Controller.routerTransaction()
       AppTourFlow.AppTourAP12 -> AppTourAP12Controller.routerTransaction()
+      AppTourFlow.AppTourAP13 -> GenericConfirmationController.getRouterTransaction(
+        titleId = R.string.guide_ap13_title,
+        descriptionId = R.string.guide_ap13_subtitle,
+        buttonId = R.string.generic_close
+      )
       else -> null
     }
   }

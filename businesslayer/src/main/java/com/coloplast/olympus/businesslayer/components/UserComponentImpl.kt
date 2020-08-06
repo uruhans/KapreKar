@@ -7,6 +7,7 @@ import com.coloplast.olympus.shared.models.CreateUserModel
 import com.coloplast.olympus.shared.models.Credentials
 import com.coloplast.olympus.shared.models.CurrentUser
 import com.coloplast.olympus.shared.preferences.Preferences
+import io.reactivex.Completable
 import io.reactivex.Observable
 
 
@@ -37,5 +38,13 @@ class UserComponentImpl: UserComponent {
         )
       }
   }
+
+  override fun requestSecurityCode(email: String) = apiService.requestSecurityCode(email)
+
+  override fun validateSecurityCode(securityCode: String, email: String): Completable =
+    apiService.validateSecurityCode(securityCode,email)
+
+  override fun changePassword(securityCode: String, email: String, password: String): Completable =
+    apiService.changePassword(securityCode, email, password)
 
 }

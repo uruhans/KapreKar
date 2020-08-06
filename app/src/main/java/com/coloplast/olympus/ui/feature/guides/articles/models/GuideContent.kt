@@ -13,6 +13,19 @@ object GuideContent {
       GuideType.UNKNOWN -> {
         throw NotImplementedError("UNKNOWN is not supported - did you make a mistake?")
       }
+      GuideType.DRY_APPLYING_TIPS -> {
+        listOf(
+          HeaderItem(
+            header = R.string.guide_da_title,
+            subHeader = R.string.guide_da_subtitle
+          ),
+          ArticleItem(
+            image = R.drawable.guide_placeholder,
+            title = R.string.guide_da_article_1_header,
+            description = R.string.guide_da_article_1_body
+          )
+        )
+      }
       GuideType.APPLICATION -> {
         listOf(
           HeaderItem(R.string.guide_change_plate_title),
@@ -59,60 +72,57 @@ object GuideContent {
       }
       GuideType.CHARGING -> {
         listOf(
-          HeaderItem(R.string.guide_moisture_title, R.string.guide_moisture_body),
-          ButtonItem(R.string.guide_moisture_link, ButtonType.ACTION, buttonCallback),
-          ButtonItem(R.string.generic_go_back, ButtonType.BACK, buttonCallback)
+          HeaderItem(R.string.guide_ch_title, R.string.guide_ch_subtitle),
+          ArticleItem(
+            image = R.drawable.guide_charging,
+            title = R.string.guide_ch_article_1_header,
+            description = R.string.guide_ch_article_1_body
+          )
         )
       }
       GuideType.CLEANING -> {
         listOf(
-          HeaderItem(R.string.guide_cleaning_title),
-          ArticleItem(description = R.string.guide_cleaning_1_text),
+          HeaderItem(
+            header = R.string.guide_cl_title,
+            subHeader = R.string.guide_cl_subtitle
+          ),
+          ArticleItem(description = R.string.guide_cl_article_1_body),
           ArticleItem(
-            R.string.guide_cleaning_sub_title_2,
-            R.drawable.guide_cleaning_2,
-            R.string.guide_cleaning_2_text
+            image = R.drawable.guide_cleaning_2,
+            title = R.string.guide_cl_article_2_header,
+            description = R.string.guide_cl_article_2_body
+          ),
+          ButtonItem(
+            text = R.string.guide_cl_button_text,
+            buttonType = ButtonType.LINK,
+            clickCallback = buttonCallback
           ),
           ArticleItem(
-            R.string.guide_cleaning_sub_title_3,
-            R.drawable.guide_cleaning_3,
-            R.string.guide_cleaning_3_text
+            image = R.drawable.guide_cleaning_3,
+            title = R.string.guide_cl_article_3_header,
+            description = R.string.guide_cl_article_3_body
+          )
+        )
+      }
+      GuideType.DRYING -> {
+        listOf(
+          HeaderItem(
+            header = R.string.guide_dg_title,
+            subHeader = R.string.guide_dg_subtitle
           ),
           ArticleItem(
-            title = R.string.guide_cleaning_sub_title_4,
-            description = R.string.guide_cleaning_4_text
+            description = R.string.guide_dg_article_1_body
           ),
           ArticleItem(
-            title = R.string.guide_cleaning_sub_title_5,
-            description = R.string.guide_cleaning_5_text
+            image = R.drawable.guide_placeholder,
+            title = R.string.guide_dg_article_2_header,
+            description = R.string.guide_dg_article_2_body
           ),
           ArticleItem(
-            title = R.string.guide_wiping_title,
-            description = R.string.guide_wiping_1_text
-          ),
-          ArticleItem(
-            title = R.string.guide_wiping_sub_title_2,
-            description = R.string.guide_wiping_2_text
-          ),
-          ArticleItem(
-            R.string.guide_wiping_sub_title_3,
-            R.drawable.guide_wiping_1,
-            R.string.guide_wiping_3_text
-          ),
-          ArticleItem(
-            title = R.string.guide_wiping_sub_title_4,
-            description = R.string.guide_wiping_4_text
-          ),
-          ArticleItem(
-            title = R.string.guide_wiping_sub_title_5,
-            description = R.string.guide_wiping_5_text
-          ),
-          ArticleItem(
-            R.string.guide_wiping_sub_title_6,
-            R.drawable.guide_wiping_2,
-            R.string.guide_wiping_6_text
-          ),
-          ButtonItem(R.string.generic_go_back, ButtonType.BACK, buttonCallback)
+            image = R.drawable.guide_placeholder,
+            title = R.string.guide_dg_article_3_header,
+            description = R.string.guide_dg_article_3_body
+          )
         )
       }
       GuideType.CONNECTION -> {

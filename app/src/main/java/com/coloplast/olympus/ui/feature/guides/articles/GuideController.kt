@@ -41,6 +41,13 @@ class GuideController(args: Bundle) : BaseController<ControllerGuideBinding>(arg
           //TODO: CPO-556 - Link with Location guide.
           Toast.makeText(applicationContext, "Open Location guide", Toast.LENGTH_SHORT).show()
         }
+        GuideType.CLEANING -> {
+          router.pushController(
+            routerTransaction(GuideType.DRYING)
+              .pushChangeHandler(VerticalChangeHandler())
+              .popChangeHandler(VerticalChangeHandler())
+          )
+        }
         else -> { /* nothing yet */ }
       }
     }

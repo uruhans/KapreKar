@@ -14,6 +14,8 @@ import com.coloplast.olympus.ui.feature.guides.types.GuidesMenuSubsection
 fun GuidesMenuSubsection.getTitle(): Int = when(this){
   GuidesMenuSubsection.GETTING_STARTED -> R.string.guides_gs_title
   GuidesMenuSubsection.APPLYING_CHANGING -> R.string.guides_ac_title
+  GuidesMenuSubsection.CONNECTION_AND_TRANSMITTER -> R.string.guides_ct_title
+  GuidesMenuSubsection.MAINTENANCE -> R.string.guides_m_title
 }
 
 
@@ -21,10 +23,14 @@ fun GuidesMenuSubsection.getTitle(): Int = when(this){
 fun GuidesMenuSubsection.getDescription(): Int = when(this){
   GuidesMenuSubsection.GETTING_STARTED -> R.string.guides_gs_description
   GuidesMenuSubsection.APPLYING_CHANGING -> R.string.guides_ac_description
+  GuidesMenuSubsection.CONNECTION_AND_TRANSMITTER -> R.string.guides_ct_description
+  GuidesMenuSubsection.MAINTENANCE -> R.string.guides_m_description
 }
 
 @StringRes
 fun GuidesMenuSubsection.getListTitle(): Int = when(this){
   GuidesMenuSubsection.GETTING_STARTED -> R.string.guides_gs_list_title
   GuidesMenuSubsection.APPLYING_CHANGING -> R.string.guides_ac_list_title
+  GuidesMenuSubsection.CONNECTION_AND_TRANSMITTER -> R.string.guides_ct_list_title
+  GuidesMenuSubsection.MAINTENANCE -> R.string.guides_m_list_title
 }

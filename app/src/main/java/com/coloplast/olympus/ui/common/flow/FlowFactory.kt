@@ -14,6 +14,14 @@ abstract class FlowFactory<V: FlowFactoryModel> {
      * Tell the implementer that this routerTransaction is the next to be shown on screen
      */
     fun next(routerTransaction: RouterTransaction)
+
+    /**
+     * In order to not add previous controller to the backstack (using a goto to go back in the flow)
+     * we need to popControllers - use this method to do it properly
+     *
+     * @see getFlowChildRouter().popToTag()
+     */
+    fun popUntil(currentIndex: Int) { }
   
     /**
      * Tell the implementer that the flow is completed, and pass back the final result of data
@@ -117,7 +125,7 @@ abstract class FlowFactory<V: FlowFactoryModel> {
   /**
    * we need to call this when we go back
    */
-  fun previous() {
+  fun previous(popControllers: Boolean = false) {
     currentIndex.decrementAndGet()
 
     skippedSteps.reversed().forEach { skipped ->
@@ -130,6 +138,10 @@ abstract class FlowFactory<V: FlowFactoryModel> {
       else {
         return@forEach
       }
+    }
+
+    if(popControllers) {
+      listener?.popUntil(currentIndex.get())
     }
   }
   
@@ -160,5 +172,27 @@ abstract class FlowFactory<V: FlowFactoryModel> {
   fun skipNext() {
     // increment and add the current index to the skipped steps
     skippedSteps.add(currentIndex.incrementAndGet())
+  }
+
+  /**
+   * Go to a specific index in the flow - can go back and forth
+   * (with minor exception - currently cannot move back to a step that has been previously skipped)
+   */
+  fun goto(index: Int) {
+    // if we are behind - skipUntil we reach the wanted index
+    if(currentIndex.get() < index) {
+      skipUntil(index)
+    }
+    else {
+      // if we are ahead - we need to go back until we reach
+      while(currentIndex.get() > index && currentIndex.get() >= 0) {
+        // TODO - this could actually cause an issue, but unsure if we need it (we dont right now)
+        // the case is that if you go 0,1,2,3 skipUntil(10), 11, goto(5)
+        // what would happen is that it would go: 11,10,3,2,1,0 stop (never reach it because 5 was skipped)
+        // in order to fix we should actually check after every previous to see if we are now behind the index,
+        // and if we are we need to move forward again
+        previous(true)
+      }
+    }
   }
 }

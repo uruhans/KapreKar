@@ -5,7 +5,6 @@ import com.artemzin.rxui.RxUi
 import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerFlowBinding
-import com.coloplast.olympus.shared.models.CreateUserModel
 import com.coloplast.olympus.ui.common.LoadingController
 import com.coloplast.olympus.ui.common.dialogs.BaseDialogController
 import com.coloplast.olympus.ui.common.dialogs.DialogController
@@ -30,7 +29,7 @@ class CreateUserFlowController: FlowFactoryController<CreateUserFactoryModel>(),
 
   private val createUserFactory: FlowFactory<CreateUserFactoryModel> by inject()
   private val viewModel: CreateUserViewModel by inject()
-  private val registrationRelay: PublishRelay<CreateUserModel> = PublishRelay.create()
+  private val registrationRelay: PublishRelay<CreateUserFactoryModel> = PublishRelay.create()
   private var dialogController: DialogController? = null
 
   override fun getFlowFactory(): FlowFactory<CreateUserFactoryModel> = createUserFactory
@@ -53,7 +52,7 @@ class CreateUserFlowController: FlowFactoryController<CreateUserFactoryModel>(),
     }
   }
 
-  override fun onCreateUser(): Observable<CreateUserModel> {
+  override fun onCreateUser(): Observable<CreateUserFactoryModel> {
     return registrationRelay
       .publish()
       .refCount()

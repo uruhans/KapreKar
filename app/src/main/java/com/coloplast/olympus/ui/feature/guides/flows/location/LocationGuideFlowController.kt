@@ -3,7 +3,6 @@ package com.coloplast.olympus.ui.feature.guides.flows.location
 import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.ui.common.flow.FlowFactory
 import com.coloplast.olympus.ui.common.flow.TopMenuFlowFactoryController
-import org.koin.core.inject
 
 
 /**
@@ -12,7 +11,7 @@ import org.koin.core.inject
  */
 class LocationGuideFlowController : TopMenuFlowFactoryController<LocationGuideEmptyModel>() {
 
-  private val factory: LocationGuideFactoryImpl by inject()
+  private val factory by lazy { LocationGuideFactoryImpl() }
 
   override fun getFlowFactory(): FlowFactory<LocationGuideEmptyModel> = factory
 

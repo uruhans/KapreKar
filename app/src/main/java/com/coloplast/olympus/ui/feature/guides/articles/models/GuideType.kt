@@ -11,6 +11,7 @@ enum class GuideType(override val id: Int): TypeWithId {
   GET_STARTED(5),
   LEARN_MORE(6),
   DRY_APPLYING_TIPS(7),
+  DRYING(8),
   UNKNOWN(-1);
   
   companion object {

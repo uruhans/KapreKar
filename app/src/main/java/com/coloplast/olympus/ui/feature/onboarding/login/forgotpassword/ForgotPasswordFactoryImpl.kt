@@ -26,7 +26,7 @@ class ForgotPasswordFactoryImpl: FlowFactory<ForgotPasswordModel>() {
       ForgotPasswordFlow.ForgotPasswordFP1 -> EmailFP1Controller.getRouterTransaction()
       ForgotPasswordFlow.ForgotPasswordFP2 -> SecurityCodeFP2Controller.getRouterTransaction(model.email)
       ForgotPasswordFlow.ForgotPasswordFP3 -> PasswordFP3Controller.getRouterTransaction()
-      ForgotPasswordFlow.ForgotPasswordFP4 -> GenericConfirmationController.getRouterTransaction(
+      ForgotPasswordFlow.ForgotPasswordFP4 -> GenericConfirmationController.routerTransaction(
         titleId = R.string.onboarding_fp4_title,
         descriptionId = R.string.onboarding_fp4_description,
         buttonId = R.string.onboarding_fp4_button_text

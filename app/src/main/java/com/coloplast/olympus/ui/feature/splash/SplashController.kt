@@ -8,8 +8,7 @@ import com.coloplast.olympus.shared.preferences.Preferences
 import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.common.extensions.fadeIn
 import com.coloplast.olympus.ui.common.extensions.rotate360
-import com.coloplast.olympus.ui.feature.guides.GuideController
-import com.coloplast.olympus.ui.feature.guides.models.GuideType
+import com.coloplast.olympus.ui.feature.guides.GuidesFlowController
 import com.coloplast.olympus.ui.feature.home.HomeController
 import com.coloplast.olympus.ui.feature.onboarding.LandingController
 import org.koin.core.inject
@@ -41,7 +40,7 @@ class SplashController : BaseController<ControllerSplashBinding>() {
       LandingController.routerTransaction()
     }
 
-    getContentRouter().setRoot(routerTransaction)
+    getContentRouter().setRoot(GuidesFlowController.getRouterTransaction())
   }
 
   override fun getLayout(): Int = R.layout.controller_splash

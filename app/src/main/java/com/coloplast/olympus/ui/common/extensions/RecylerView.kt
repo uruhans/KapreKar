@@ -13,8 +13,8 @@ import androidx.recyclerview.widget.RecyclerView
 @BindingAdapter("defaultDecorator")
 fun RecyclerView.defaultDecorator(enable: Boolean){
   if(enable){
-    for (i in 0..itemDecorationCount){
-      removeItemDecorationAt(i)
+    for (i in 1..itemDecorationCount){
+      removeItemDecorationAt(i-1)
     }
     addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
   }

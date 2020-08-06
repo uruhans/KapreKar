@@ -12,9 +12,9 @@ import org.koin.core.inject
  */
 class LocationGuideFlowController : TopMenuFlowFactoryController<LocationGuideEmptyModel>() {
 
-  private val model: LocationGuideFactoryImpl by inject()
+  private val factory: LocationGuideFactoryImpl by inject()
 
-  override fun getFlowFactory(): FlowFactory<LocationGuideEmptyModel> = model
+  override fun getFlowFactory(): FlowFactory<LocationGuideEmptyModel> = factory
 
   companion object{
     private const val CONTROLLER_TAG = "location_guide_flow_controller"

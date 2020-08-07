@@ -3,7 +3,7 @@ package com.coloplast.olympus.ui.feature.guides.articles
 import android.os.Bundle
 import androidx.databinding.ObservableArrayList
 import com.bluelinelabs.conductor.RouterTransaction
-import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
+import com.bluelinelabs.conductor.changehandler.HorizontalChangeHandler
 import com.coloplast.olympus.BR
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerGuideBinding
@@ -28,38 +28,19 @@ class GuideController(args: Bundle) : BaseController<ControllerGuideBinding>(arg
     when (buttonType) {
       ButtonType.BACK -> handleBack()
       ButtonType.ACTION,
-      ButtonType.LINK -> when (guideType) {
-        GuideType.APPLICATION_TIPS -> {
-          router.pushController(
-            routerTransaction(
-              GuideType.APPLICATION
-            )
-              .pushChangeHandler(VerticalChangeHandler())
-              .popChangeHandler(VerticalChangeHandler())
-          )
+      ButtonType.LINK -> {
+        val routerTransaction = when (guideType) {
+          GuideType.APPLICATION_TIPS -> routerTransaction(GuideType.APPLICATION)
+          GuideType.CONNECTION -> LocationGuideFlowController.routerTransaction()
+          GuideType.CLEANING -> routerTransaction(GuideType.DRYING)
+          GuideType.DELETE_TRANSMITTER -> TransmittersController.routerTransaction()
+          else -> throw IllegalArgumentException("This shouldn't happen")
         }
-        GuideType.CONNECTION -> {
-          router.pushController(
-            LocationGuideFlowController.routerTransaction()
-              .pushChangeHandler(VerticalChangeHandler())
-              .popChangeHandler(VerticalChangeHandler())
-          )
-        }
-        GuideType.CLEANING -> {
-          router.pushController(
-            routerTransaction(GuideType.DRYING)
-              .pushChangeHandler(VerticalChangeHandler())
-              .popChangeHandler(VerticalChangeHandler())
-          )
-        }
-        GuideType.DELETE_TRANSMITTER -> {
-          router.pushController(
-            TransmittersController.routerTransaction()
-              .pushChangeHandler(VerticalChangeHandler())
-              .popChangeHandler(VerticalChangeHandler())
-          )
-        }
-        else -> { /* nothing yet */ }
+        router.pushController(
+          routerTransaction
+            .pushChangeHandler(HorizontalChangeHandler())
+            .popChangeHandler(HorizontalChangeHandler())
+        )
       }
     }
   }

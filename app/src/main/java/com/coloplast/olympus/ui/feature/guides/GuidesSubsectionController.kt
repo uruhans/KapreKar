@@ -11,6 +11,8 @@ import com.coloplast.olympus.databinding.ControllerGuidesSubsectionBinding
 import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.feature.guides.articles.GuideController
 import com.coloplast.olympus.ui.feature.guides.articles.models.GuideType
+import com.coloplast.olympus.ui.feature.guides.flows.location.LocationGuideFlowController
+import com.coloplast.olympus.ui.feature.guides.flows.tour.AppTourFlowController
 import com.coloplast.olympus.ui.feature.guides.models.GuideCard
 import com.coloplast.olympus.ui.feature.guides.types.GuidesMenuSubsection
 import com.coloplast.olympus.ui.feature.splash.SplashController
@@ -70,13 +72,13 @@ class GuidesSubsectionController(args: Bundle): BaseController<ControllerGuidesS
   fun goToFlow(guideCard: GuideCard){
     val routerTransaction = when(guideCard){
       GuideCard.COMPONENT_GUIDE -> SplashController.routerTransaction()
-      GuideCard.APP_TOUR -> SplashController.routerTransaction()
+      GuideCard.APP_TOUR -> AppTourFlowController.routerTransaction()
       GuideCard.APPLYING_GUIDE -> SplashController.routerTransaction()
       GuideCard.DRY_APPLYING_TIPS -> GuideController.routerTransaction(GuideType.DRY_APPLYING_TIPS)
       GuideCard.CONNECTION_GUIDE -> GuideController.routerTransaction(GuideType.CONNECTION)
       GuideCard.CHARGING_GUIDE -> GuideController.routerTransaction(GuideType.CHARGING)
-      GuideCard.LOCATION_GUIDE -> SplashController.routerTransaction()
-      GuideCard.CHECK_BATTERY_LEVEL -> SplashController.routerTransaction()
+      GuideCard.LOCATION_GUIDE -> LocationGuideFlowController.routerTransaction()
+      GuideCard.CHECK_BATTERY_LEVEL -> GuideController.routerTransaction(GuideType.CHECK_BATTERY)
       GuideCard.ADD_TRANSMITTER -> SplashController.routerTransaction()
       GuideCard.DELETE_TRANSMITTER -> SplashController.routerTransaction()
       GuideCard.CLEANING_GUIDE -> GuideController.routerTransaction(GuideType.CLEANING)

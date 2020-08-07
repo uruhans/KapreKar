@@ -4,7 +4,6 @@ import androidx.databinding.ObservableArrayList
 import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.BR
 import com.coloplast.olympus.R
-import com.coloplast.olympus.databinding.ControllerStartupGuide4Binding
 import com.coloplast.olympus.databinding.ControllerStartupGuide5Binding
 import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.common.listeners.FlowListener

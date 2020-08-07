@@ -6,15 +6,15 @@ import androidx.recyclerview.widget.RecyclerView
 
 
 /**
- * Created by Kike Bodi (ebp@dawnhealth.com) on 20/07/2020.
+ * Created by Kike Bodi (ebp@dawnhealth.com) on 21/07/2020.
  * Copyright by Dawn Health A/S. All rights reserved.
  */
 
 @BindingAdapter("defaultDecorator")
 fun RecyclerView.defaultDecorator(enable: Boolean){
   if(enable){
-    for (i in 0..itemDecorationCount){
-      removeItemDecorationAt(i)
+    for (i in 1..itemDecorationCount){
+      removeItemDecorationAt(i-1)
     }
     addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
   }

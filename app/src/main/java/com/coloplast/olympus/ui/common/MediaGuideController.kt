@@ -22,6 +22,7 @@ abstract class MediaGuideController(args: Bundle) :
   abstract val descriptionId: Int
   abstract val position: Int
   abstract val totalCount: Int
+  open val showQuestionFab: Boolean = true
 
   var nextEnabled: Boolean = true
 

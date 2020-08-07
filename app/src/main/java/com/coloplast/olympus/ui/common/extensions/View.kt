@@ -9,6 +9,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.annotation.DrawableRes
 import androidx.databinding.BindingAdapter
 import com.coloplast.olympus.ui.common.listeners.AnimatorListenerImpl
+import com.coloplast.olympus.utils.UiUtils
 
 @BindingAdapter("visibleOrInvisible")
 fun View.visibleOrInvisible(visible: Boolean) {
@@ -96,4 +97,11 @@ fun View.rotate360(
 fun View.hideKeyboard() {
   val inputMethodManager = context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
   inputMethodManager.hideSoftInputFromWindow(this.windowToken, 0)
+}
+
+@BindingAdapter("expandOrCollapse")
+fun View.expandOrCollapse(expand: Boolean){
+  post {
+    if(expand) UiUtils.expand(this@expandOrCollapse) else UiUtils.collapse(this@expandOrCollapse)
+  }
 }

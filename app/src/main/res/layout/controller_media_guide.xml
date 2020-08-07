@@ -86,6 +86,7 @@
       android:layout_height="56dp"
       android:layout_marginEnd="@dimen/spacing_double"
       android:onClick="@{() -> controller.onQuestionClicked()}"
+      app:visibleOrGone="@{controller.showQuestionFab}"
       android:src="@drawable/ic_icon_questionmark"
       app:backgroundTint="@color/white"
       app:layout_constraintBottom_toBottomOf="parent"

@@ -86,7 +86,7 @@ class GuidesSubsectionController(args: Bundle): BaseController<ControllerGuidesS
       GuideCard.CLEANING_GUIDE -> GuideController.routerTransaction(GuideType.CLEANING)
       GuideCard.DRYING_GUIDE -> GuideController.routerTransaction(GuideType.DRYING)
     }
-    router.pushController(routerTransaction
+    getContentRouter().pushController(routerTransaction
       .pushChangeHandler(HorizontalChangeHandler())
       .popChangeHandler(HorizontalChangeHandler()))
   }

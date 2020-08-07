@@ -52,7 +52,7 @@ class AppTourFactoryImpl: FlowFactory<EmptyModel>() {
       AppTourFlow.AppTourAP10 -> AppTourAP10Controller.routerTransaction()
       AppTourFlow.AppTourAP11 -> AppTourAP11Controller.routerTransaction()
       AppTourFlow.AppTourAP12 -> AppTourAP12Controller.routerTransaction()
-      AppTourFlow.AppTourAP13 -> GenericConfirmationController.getRouterTransaction(
+      AppTourFlow.AppTourAP13 -> GenericConfirmationController.routerTransaction(
         titleId = R.string.guide_ap13_title,
         descriptionId = R.string.guide_ap13_subtitle,
         buttonId = R.string.generic_close

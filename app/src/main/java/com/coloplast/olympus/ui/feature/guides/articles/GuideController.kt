@@ -11,6 +11,7 @@ import com.coloplast.olympus.databinding.ControllerGuideBinding
 import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.feature.guides.articles.models.*
 import com.coloplast.olympus.ui.feature.guides.models.ButtonType
+import com.coloplast.olympus.ui.feature.transmitters.TransmittersController
 import me.tatarka.bindingcollectionadapter2.itembindings.OnItemBindClass
 
 class GuideController(args: Bundle) : BaseController<ControllerGuideBinding>(args) {
@@ -44,6 +45,13 @@ class GuideController(args: Bundle) : BaseController<ControllerGuideBinding>(arg
         GuideType.CLEANING -> {
           router.pushController(
             routerTransaction(GuideType.DRYING)
+              .pushChangeHandler(VerticalChangeHandler())
+              .popChangeHandler(VerticalChangeHandler())
+          )
+        }
+        GuideType.DELETE_TRANSMITTER -> {
+          router.pushController(
+            TransmittersController.routerTransaction()
               .pushChangeHandler(VerticalChangeHandler())
               .popChangeHandler(VerticalChangeHandler())
           )

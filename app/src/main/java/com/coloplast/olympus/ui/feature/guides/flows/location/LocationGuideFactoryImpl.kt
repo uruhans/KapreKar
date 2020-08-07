@@ -36,7 +36,7 @@ class LocationGuideFactoryImpl: FlowFactory<LocationGuideEmptyModel>(){
       LocationGuideFlow.LocationGuideLG5 -> LocationGuideLG5Controller.routerTransaction()
       LocationGuideFlow.LocationGuideLG6 -> LocationGuideLG6Controller.routerTransaction()
       LocationGuideFlow.LocationGuideLG7 -> LocationGuideLG7Controller.routerTransaction()
-      LocationGuideFlow.LocationGuideLG8 -> GenericConfirmationController.getRouterTransaction(
+      LocationGuideFlow.LocationGuideLG8 -> GenericConfirmationController.routerTransaction(
         titleId = R.string.guide_lg8_title,
         descriptionId = R.string.guide_lg8_subtitle,
         buttonId = R.string.generic_close

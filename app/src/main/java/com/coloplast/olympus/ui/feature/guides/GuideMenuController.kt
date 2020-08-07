@@ -7,6 +7,7 @@ import com.coloplast.olympus.BR
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerGuidesMenuBinding
 import com.coloplast.olympus.ui.common.BaseController
+import com.coloplast.olympus.ui.feature.guides.faq.FaqController
 import com.coloplast.olympus.ui.feature.guides.types.GuidesMenuSubsection
 import me.tatarka.bindingcollectionadapter2.ItemBinding
 
@@ -33,7 +34,11 @@ class GuideMenuController: BaseController<ControllerGuidesMenuBinding>() {
   }
 
   fun goToDestination(guidesMenuSubsection: GuidesMenuSubsection){
-    val routerTransaction = GuidesSubsectionController.getRouterTransaction(guidesMenuSubsection)
+    val routerTransaction = when(guidesMenuSubsection){
+      GuidesMenuSubsection.FAQ -> FaqController.routerTransaction()
+      else -> GuidesSubsectionController.getRouterTransaction(guidesMenuSubsection)
+    }
+
     router.pushController(routerTransaction
       .pushChangeHandler(HorizontalChangeHandler())
       .popChangeHandler(HorizontalChangeHandler()))

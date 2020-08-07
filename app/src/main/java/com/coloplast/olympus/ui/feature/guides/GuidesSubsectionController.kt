@@ -15,7 +15,9 @@ import com.coloplast.olympus.ui.feature.guides.flows.location.LocationGuideFlowC
 import com.coloplast.olympus.ui.feature.guides.flows.tour.AppTourFlowController
 import com.coloplast.olympus.ui.feature.guides.models.GuideCard
 import com.coloplast.olympus.ui.feature.guides.types.GuidesMenuSubsection
+import com.coloplast.olympus.ui.feature.onboarding.setup.SetupGuideApplyingFlowController
 import com.coloplast.olympus.ui.feature.splash.SplashController
+import com.coloplast.olympus.ui.feature.transmitters.add.AddTransmitterFlowController
 import me.tatarka.bindingcollectionadapter2.OnItemBind
 
 /**
@@ -73,14 +75,14 @@ class GuidesSubsectionController(args: Bundle): BaseController<ControllerGuidesS
     val routerTransaction = when(guideCard){
       GuideCard.COMPONENT_GUIDE -> SplashController.routerTransaction()
       GuideCard.APP_TOUR -> AppTourFlowController.routerTransaction()
-      GuideCard.APPLYING_GUIDE -> SplashController.routerTransaction()
+      GuideCard.APPLYING_GUIDE -> SetupGuideApplyingFlowController.routerTransaction()
       GuideCard.DRY_APPLYING_TIPS -> GuideController.routerTransaction(GuideType.DRY_APPLYING_TIPS)
       GuideCard.CONNECTION_GUIDE -> GuideController.routerTransaction(GuideType.CONNECTION)
       GuideCard.CHARGING_GUIDE -> GuideController.routerTransaction(GuideType.CHARGING)
       GuideCard.LOCATION_GUIDE -> LocationGuideFlowController.routerTransaction()
       GuideCard.CHECK_BATTERY_LEVEL -> GuideController.routerTransaction(GuideType.CHECK_BATTERY)
-      GuideCard.ADD_TRANSMITTER -> SplashController.routerTransaction()
-      GuideCard.DELETE_TRANSMITTER -> SplashController.routerTransaction()
+      GuideCard.ADD_TRANSMITTER -> AddTransmitterFlowController.routerTransaction()
+      GuideCard.DELETE_TRANSMITTER -> GuideController.routerTransaction(GuideType.DELETE_TRANSMITTER)
       GuideCard.CLEANING_GUIDE -> GuideController.routerTransaction(GuideType.CLEANING)
       GuideCard.DRYING_GUIDE -> GuideController.routerTransaction(GuideType.DRYING)
     }

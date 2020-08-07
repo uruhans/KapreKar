@@ -1,7 +1,6 @@
 package com.coloplast.olympus.ui.feature.guides.articles
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.databinding.ObservableArrayList
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
@@ -10,6 +9,7 @@ import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerGuideBinding
 import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.feature.guides.articles.models.*
+import com.coloplast.olympus.ui.feature.guides.flows.location.LocationGuideFlowController
 import com.coloplast.olympus.ui.feature.guides.models.ButtonType
 import com.coloplast.olympus.ui.feature.transmitters.TransmittersController
 import me.tatarka.bindingcollectionadapter2.itembindings.OnItemBindClass
@@ -39,8 +39,11 @@ class GuideController(args: Bundle) : BaseController<ControllerGuideBinding>(arg
           )
         }
         GuideType.CONNECTION -> {
-          //TODO: CPO-556 - Link with Location guide.
-          Toast.makeText(applicationContext, "Open Location guide", Toast.LENGTH_SHORT).show()
+          router.pushController(
+            LocationGuideFlowController.routerTransaction()
+              .pushChangeHandler(VerticalChangeHandler())
+              .popChangeHandler(VerticalChangeHandler())
+          )
         }
         GuideType.CLEANING -> {
           router.pushController(

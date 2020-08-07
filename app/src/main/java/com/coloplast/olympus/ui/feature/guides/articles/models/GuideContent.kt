@@ -201,6 +201,30 @@ object GuideContent {
           ButtonItem(R.string.generic_go_back, ButtonType.BACK, buttonCallback)
         )
       }
+      GuideType.DELETE_TRANSMITTER -> listOf(
+        HeaderItem(
+          header = R.string.guide_dt_title,
+          subHeader = R.string.guide_dt_subtitle
+        ),
+        ArticleItem(
+          description = R.string.guide_dt_article_1_body
+        ),
+        ArticleItem(
+          image = R.drawable.guide_placeholder,
+          title = R.string.guide_dt_article_2_header,
+          description = R.string.guide_dt_article_2_body
+        ),
+        ArticleItem(
+          image = R.drawable.guide_placeholder,
+          title = R.string.guide_dt_article_3_header,
+          description = R.string.guide_dt_article_3_body
+        ),
+        ButtonItem(
+          R.string.guide_dt_button_text,
+          ButtonType.ACTION,
+          buttonCallback
+        )
+      )
     }
   }
 }

@@ -201,6 +201,22 @@ object GuideContent {
           ButtonItem(R.string.generic_go_back, ButtonType.BACK, buttonCallback)
         )
       }
+      GuideType.CHECK_BATTERY -> listOf(
+        HeaderItem(
+          header = R.string.guide_cb_title,
+          subHeader = R.string.guide_cb_subtitle
+        ),
+        ArticleItem(
+          image = R.drawable.guide_placeholder,
+          title = R.string.guide_cb_article_1_header,
+          description = R.string.guide_cb_article_1_body
+        ),
+        ArticleItem(
+          image = R.drawable.guide_placeholder,
+          title = R.string.guide_cb_article_2_header,
+          description = R.string.guide_cb_article_2_body
+        )
+      )
     }
   }
 }

@@ -2,9 +2,12 @@ package com.coloplast.olympus.ui.feature.onboarding.createprofile
 
 import androidx.annotation.StringRes
 import com.artemzin.rxui.RxUi
+import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerFlowBinding
+import com.coloplast.olympus.shared.preferences.OnboardingProgression
+import com.coloplast.olympus.shared.preferences.Preferences
 import com.coloplast.olympus.ui.common.LoadingController
 import com.coloplast.olympus.ui.common.dialogs.BaseDialogController
 import com.coloplast.olympus.ui.common.dialogs.DialogController
@@ -27,12 +30,24 @@ class CreateUserFlowController: FlowFactoryController<CreateUserFactoryModel>(),
   CreateUserFlowView,
   BaseDialogController.Listener {
 
-  private val createUserFactory: FlowFactory<CreateUserFactoryModel> by inject()
+  private val createUserFactory : CreateUserFactoryImpl by inject()
+  private val preferences : Preferences by inject()
+
   private val viewModel: CreateUserViewModel by inject()
   private val registrationRelay: PublishRelay<CreateUserFactoryModel> = PublishRelay.create()
   private var dialogController: DialogController? = null
 
+  override fun startFlow(flowChildRouter: Router) {
+    preferences.setCurrentOnboardingProgression(OnboardingProgression.SIGN_UP)
+    super.startFlow(flowChildRouter)
+  }
+
   override fun getFlowFactory(): FlowFactory<CreateUserFactoryModel> = createUserFactory
+
+  override fun onFlowCompleted(data: CreateUserFactoryModel) {
+    preferences.setCurrentOnboardingProgression(OnboardingProgression.TERMS_AND_CONSENT)
+    super.onFlowCompleted(data)
+  }
 
   override fun onStepCompleted(currentIndex: Int, data: CreateUserFactoryModel): Boolean {
     return when(CreateUserFlow.fromIndex(currentIndex)){

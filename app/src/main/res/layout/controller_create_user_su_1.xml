@@ -16,7 +16,8 @@
   <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="@dimen/toolbar_height">
+    android:layout_marginTop="@dimen/toolbar_height"
+    android:background="@color/default_background">
 
     <TextView
       android:id="@+id/title"

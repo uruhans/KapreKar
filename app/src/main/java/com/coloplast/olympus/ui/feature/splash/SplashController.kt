@@ -4,6 +4,7 @@ import android.os.Handler
 import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerSplashBinding
+import com.coloplast.olympus.shared.preferences.OnboardingProgression
 import com.coloplast.olympus.shared.preferences.Preferences
 import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.common.extensions.fadeIn
@@ -32,14 +33,19 @@ class SplashController : BaseController<ControllerSplashBinding>() {
     Handler().postDelayed({ goToNextScreen() }, 2800)
   }
 
-  private fun goToNextScreen(){
-    val routerTransaction = if(preferences.userToken.isNotBlank()){
-      HomeController.routerTransaction()
-    } else {
-      LandingController.routerTransaction()
+  private fun goToNextScreen() {
+    val routerTransaction = when {
+      preferences.userToken.isNotBlank() && preferences.getCurrentOnboardingProgress() == OnboardingProgression.COMPLETED -> {
+        HomeController.routerTransaction()
+      }
+      else -> {
+        LandingController.routerTransaction()
+      }
     }
 
-    getContentRouter().setRoot(routerTransaction)
+    routerTransaction.let {
+      getContentRouter().setRoot(it)
+    }
   }
 
   override fun getLayout(): Int = R.layout.controller_splash

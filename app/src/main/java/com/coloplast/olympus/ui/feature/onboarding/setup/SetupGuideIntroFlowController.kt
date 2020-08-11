@@ -18,9 +18,7 @@ class SetupGuideIntroFlowController : FlowFactoryController<EmptyModel>(), Media
   CallHelpDialogController.Listener {
 
   private val factory: SetupGuideIntroFactoryImpl by inject()
-
   private var callHelpDialogController: CallHelpDialogController? = null
-
 
   override fun getFlowFactory(): FlowFactory<EmptyModel> {
     return factory

@@ -38,7 +38,6 @@ class CreateUserFactoryImpl : FlowFactory<CreateUserFactoryModel>() {
         R.string.onboarding_confirmation_button
       )
       CreateUserFlow.Completed -> null
-      else -> null
     }
   }
 

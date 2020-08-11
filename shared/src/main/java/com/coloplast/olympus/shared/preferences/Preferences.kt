@@ -21,12 +21,21 @@ class Preferences(applicationContext: Context) {
   var bedtimeStart: LocalTime by bindSharedPreference(applicationContext, BEDTIME_ALERT_START, LocalTime.of(22,0))
   var bedtimeEnd: LocalTime by bindSharedPreference(applicationContext, BEDTIME_ALERT_END, LocalTime.of(8,0))
   var bedtimeAlertSensor: Sensors by bindSharedPreference(applicationContext, RINGING_ALERT_SENSOR, Sensors.ALL)
-
+  var didSeeValueProposition: Boolean by bindSharedPreference(applicationContext, DID_SEE_VALUE_PROPOSITION, false)
+  private var currentOnboardingProgression : Int by bindSharedPreference(applicationContext, CURRENT_ONBOARDING_PROGRESSION, OnboardingProgression.NOT_STARTED.id)
 
   private fun clearUserToken() {
     userToken = ""
   }
-  
+
+  fun setCurrentOnboardingProgression(currentStep: OnboardingProgression) {
+    currentOnboardingProgression = currentStep.id
+  }
+
+  fun getCurrentOnboardingProgress(): OnboardingProgression {
+    return OnboardingProgression.fromId(currentOnboardingProgression)
+  }
+
   fun clear() {
     clearUserToken()
   }
@@ -40,6 +49,8 @@ class Preferences(applicationContext: Context) {
     private const val RINGING_ALERT_SENSOR: String = "RINGING_ALERT_SENSOR"
     private const val BEDTIME_ALERT_START: String = "BEDTIME_ALERT_START"
     private const val BEDTIME_ALERT_END: String = "BEDTIME_ALERT_END"
+    private const val DID_SEE_VALUE_PROPOSITION: String = "DID_SEE_VALUE_PROPOSITION"
+    private const val CURRENT_ONBOARDING_PROGRESSION: String = "CURRENT_ONBOARDING_PROGRESSION"
 
     @SuppressLint("StaticFieldLeak")
     private lateinit var preferences: Preferences

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <data>
+
+    <variable
+      name="controller"
+      type="com.coloplast.olympus.ui.feature.transmitters.add.ble3.AddTransmitterBle3Controller" />
+  </data>
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+      android:id="@+id/linearLayout3"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:gravity="center"
+      android:orientation="vertical">
+
+      <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+          android:id="@+id/imageView"
+          android:layout_width="150dp"
+          android:layout_height="150dp"
+          android:alpha="0.16"
+          android:padding="@dimen/spacing_standard"
+          android:scaleX="0.8"
+          android:scaleY="0.8"
+          app:visibleOrInvisible="@{false}" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+          android:layout_width="90dp"
+          android:layout_height="90dp"
+          android:layout_gravity="center"
+          android:src="@drawable/ic_bluetooth"
+          android:tint="@color/turquoise"
+          app:elevation="4dp"
+          app:fabCustomSize="90dp" />
+
+        <ImageView
+          android:id="@+id/floating_action_button"
+          android:layout_width="56dp"
+          android:layout_height="56dp"
+          android:layout_gravity="center"
+          android:tint="@color/white"
+          android:translationZ="200dp"
+          app:srcCompat="@drawable/ic_bluetooth" />
+
+      </FrameLayout>
+
+      <TextView
+        style="@style/TextStyle.Coloplast.Bold.DarkGrey.24"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_standard"
+        android:text="@string/onboarding_chapter_connecting_ble_activated_title" />
+
+      <TextView
+        style="@style/GuideHeaderDescription.18"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_larger"
+        android:layout_marginTop="@dimen/spacing_standard"
+        android:layout_marginEnd="@dimen/spacing_larger"
+        android:text="@string/onboarding_chapter_connecting_ble_activated_description" />
+    </LinearLayout>
+
+    <Button
+      style="@style/Button.Selectable"
+      android:onClick="@{() -> controller.onNextClicked()}"
+      android:text="@string/generic_continue"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent" />
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

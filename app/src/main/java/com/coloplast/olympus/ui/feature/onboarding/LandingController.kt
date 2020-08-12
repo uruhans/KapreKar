@@ -7,6 +7,7 @@ import com.coloplast.olympus.databinding.ControllerLandingBinding
 import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.feature.onboarding.createprofile.CreateUserFlowController
 import com.coloplast.olympus.ui.feature.onboarding.login.LoginController
+import com.coloplast.olympus.ui.feature.onboarding.setup.SetupGuideConnectionFlowController
 
 
 /**
@@ -23,7 +24,7 @@ class LandingController: BaseController<ControllerLandingBinding>() {
   }
 
   fun onCreateProfileClicked(){
-    getContentRouter().pushController(CreateUserFlowController.routerTransaction()
+    getContentRouter().pushController(SetupGuideConnectionFlowController.routerTransaction()
       .popChangeHandler(HorizontalChangeHandler())
       .pushChangeHandler(HorizontalChangeHandler())
     )

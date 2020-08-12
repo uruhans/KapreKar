@@ -405,6 +405,17 @@
 <string name="onboarding_chapter_applying_transmitter_checker_title">Just checking...</string>
 <string name="onboarding_chapter_applying_wait_description">Trying to attach a transmitter when the lid is disengaged could cause damage. Don\'t worry about not getting it first time round - it\'ll soon be second nature. Have a look at the steps for preparing the transmitter for attaching again. If you\'re still having trouble, you\'ll be able to call our support team.</string>
 <string name="onboarding_chapter_applying_wait_title">Wait. Don\'t let a loose lid break your connection.</string>
+<string name="onboarding_chapter_connecting_allow_location_description">To continue go to your phone\'s settings to turn location \'on\'.</string>
+<string name="onboarding_chapter_connecting_allow_location_title">Turn location on</string>
+<string name="onboarding_chapter_connecting_avoid_leaks_description">Coloplast will not track your location at any time. Non-continuous location should not drain your battery. \n\nYour transmitter broadcasts its location to your phone so they can find each other and reconnect when Bluetooth connection is lost. Bluetooth connection is critical for TestProduct to keep you informed at all times.</string>
+<string name="onboarding_chapter_connecting_avoid_leaks_title">TestProduct needs location so you never miss a leak</string>
+<string name="onboarding_chapter_connecting_ble_activated_description">Your phone is now ready to pair with your transmitter.</string>
+<string name="onboarding_chapter_connecting_ble_activated_title">Bluetooth activated</string>
+<string name="onboarding_chapter_connecting_ble_disabled_button">Turn on Bluetooth</string>
+<string name="onboarding_chapter_connecting_ble_disabled_description">It looks like Bluetooth is not activated on your device. Click the button below to turn on Bluetooth.</string>
+<string name="onboarding_chapter_connecting_ble_disabled_title">Bluetooth deactivated</string>
+<string name="onboarding_chapter_connecting_checklist_description">Now we\'ve covered the basics, let\'s connect to your transmitter.</string>
+<string name="onboarding_chapter_connecting_checklist_title">Let\'s get started</string>
 <string name="onboarding_chapter_intro_bluetooth_description">[Missing translation]</string>
 <string name="onboarding_chapter_intro_bluetooth_header">[Missing translation]</string>
 <string name="onboarding_chapter_intro_bluetooth_settings_alert_message">[Missing translation]</string>
@@ -480,6 +491,7 @@
 <string name="onboarding_dc5_primary_button">Accept and continue</string>
 <string name="onboarding_dc5_secondary_button">Decline</string>
 <string name="onboarding_dc5_title">Agree to Terms of User and Data Policy</string>
+<string name="onboarding_email_address">Email address</string>
 <string name="onboarding_email_error">Incorrect email</string>
 <string name="onboarding_email_hint">Enter email</string>
 <string name="onboarding_email_title">Email</string>
@@ -496,7 +508,7 @@
 <string name="onboarding_fp2_description">To reset your password, please enter the 4-digit security code sent to %1$s</string>
 <string name="onboarding_fp2_title">Enter security code</string>
 <string name="onboarding_fp2_wrong_code">Wrong security code</string>
-<string name="onboarding_fp3_button_text">Set new passoword</string>
+<string name="onboarding_fp3_button_text">Set new password</string>
 <string name="onboarding_fp3_description">Please create a new password below</string>
 <string name="onboarding_fp3_title">Choose a new password</string>
 <string name="onboarding_fp4_button_text">Go to login</string>
@@ -519,6 +531,7 @@
 <string name="onboarding_login_description">Please log in to your acoount</string>
 <string name="onboarding_login_error">Incorrect credentials</string>
 <string name="onboarding_login_title">welcome.</string>
+<string name="onboarding_password_enter_hint">Enter password</string>
 <string name="onboarding_password_error">Password does not match criteria</string>
 <string name="onboarding_password_hint">Create password</string>
 <string name="onboarding_password_title">Password</string>
@@ -547,10 +560,10 @@
 <string name="onboarding_su3_title">Your email</string>
 <string name="onboarding_su4_description">Please choose a password for your profile</string>
 <string name="onboarding_su4_title">Create a password</string>
-<string name="onboarding_su5_description">Please enter your home address</string>
-<string name="onboarding_su5_title">Your address</string>
-<string name="onboarding_su6_description">Please enter your home or mobile phone number</string>
-<string name="onboarding_su6_title">Your phone number</string>
+<string name="onboarding_su5_description">Please enter your home or mobile phone number</string>
+<string name="onboarding_su5_title">Your phone number</string>
+<string name="onboarding_su6_description">To validate your phone number, please enter the 4-digit security code sent to your phone</string>
+<string name="onboarding_su6_title">Enter security code</string>
 <string name="onboarding_su7_description">Please select your insurance provider</string>
 <string name="onboarding_su7_title">Your health insurance</string>
 <string name="onboarding_value_proposition_screen_1_description">[Missing translation]</string>

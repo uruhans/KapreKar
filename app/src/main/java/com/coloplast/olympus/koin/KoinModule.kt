@@ -26,13 +26,16 @@ import com.coloplast.olympus.ui.feature.onboarding.login.LoginViewModel
 import com.coloplast.olympus.ui.feature.onboarding.login.forgotpassword.ForgotPasswordFactoryImpl
 import com.coloplast.olympus.ui.feature.onboarding.login.forgotpassword.ForgotPasswordViewModel
 import com.coloplast.olympus.ui.feature.onboarding.setup.SetupGuideApplyingFactoryImpl
+import com.coloplast.olympus.ui.feature.onboarding.setup.SetupGuideConnectionFactoryImpl
 import com.coloplast.olympus.ui.feature.onboarding.setup.SetupGuideIntroFactoryImpl
 import com.coloplast.olympus.ui.feature.onboarding.setup.SetupGuidePreparingFactoryImpl
 import com.coloplast.olympus.ui.feature.onboarding.setup.applying.AwaitingConnectionViewModel
+import com.coloplast.olympus.ui.feature.onboarding.setup.connection.SetupGuideLocationSGC4ViewModel
 import com.coloplast.olympus.ui.feature.onboarding.valueproposition.ValuePropositionFactoryImpl
 import com.coloplast.olympus.ui.feature.transmitters.TransmittersViewModel
 import com.coloplast.olympus.ui.feature.transmitters.add.AddTransmitterFactoryImpl
 import com.coloplast.olympus.ui.feature.transmitters.add.AddTransmitterViewModel
+import com.coloplast.olympus.ui.feature.transmitters.add.at7.AddTransmitterAT7ViewModel
 import com.coloplast.olympus.ui.feature.transmitters.add.at9.AddTransmitterAT9ViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
@@ -71,11 +74,14 @@ val koinModule = module {
   single { CreateUserViewModel(get(), get()) }
   single { LoginViewModel(get(), get()) }
   single { ForgotPasswordViewModel(get()) }
+  single { SetupGuideLocationSGC4ViewModel(get()) }
+  single { AddTransmitterAT7ViewModel(get()) }
 
   /* Flows */
   single { AddTransmitterFactoryImpl() }
   single { ValuePropositionFactoryImpl() }
   single { SetupGuideIntroFactoryImpl() }
+  single { SetupGuideConnectionFactoryImpl() }
   single { SetupGuidePreparingFactoryImpl() }
   single { SetupGuideApplyingFactoryImpl() }
   single { DataConsentFactoryImpl() }

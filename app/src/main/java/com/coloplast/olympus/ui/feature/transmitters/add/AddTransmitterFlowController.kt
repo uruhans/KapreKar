@@ -9,6 +9,7 @@ import com.coloplast.olympus.ui.common.MediaGuideController
 import com.coloplast.olympus.ui.common.flow.FlowFactory
 import com.coloplast.olympus.ui.common.flow.FlowFactoryController
 import com.coloplast.olympus.ui.dialogs.CallHelpDialogController
+import com.coloplast.olympus.ui.feature.transmitters.add.models.AddTransmitterFlow
 import com.coloplast.olympus.ui.feature.transmitters.add.models.AddTransmitterModel
 import org.koin.core.inject
 
@@ -27,6 +28,16 @@ class AddTransmitterFlowController(args: Bundle) : FlowFactoryController<AddTran
 
   override fun getFlowFactory(): FlowFactory<AddTransmitterModel> {
     return factory
+  }
+
+  override fun onStepCompleted(currentIndex: Int, data: AddTransmitterModel): Boolean {
+    if (AddTransmitterFlow.fromIndex(currentIndex) == AddTransmitterFlow.AddTransmitterAT7) {
+      if(data.bluetoothEnabled) {
+        factory.skipUntil(AddTransmitterFlow.AddTransmitterAT8.index)
+      }
+    }
+
+    return false
   }
 
   override fun onQuestionClicked(screen: String) {

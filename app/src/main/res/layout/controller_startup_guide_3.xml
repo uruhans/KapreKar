@@ -22,7 +22,7 @@
       android:layout_height="wrap_content"
       android:layout_marginStart="@dimen/spacing_standard"
       android:layout_marginEnd="@dimen/spacing_standard"
-      android:text="@string/onboarding_chapter_preparing_checklist_title"
+      android:text="@string/onboarding_chapter_connecting_checklist_title"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent" />
@@ -35,7 +35,7 @@
       android:layout_marginStart="@dimen/spacing_standard"
       android:layout_marginTop="@dimen/spacing_larger"
       android:layout_marginEnd="@dimen/spacing_standard"
-      android:text="@string/onboarding_chapter_preparing_checklist_description"
+      android:text="@string/onboarding_chapter_connecting_checklist_description"
       android:textColor="@color/darkGrey03"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
@@ -58,7 +58,7 @@
       android:id="@+id/accept_button"
       style="@style/Button"
       android:onClick="@{() -> controller.onNextClicked()}"
-      android:text="@string/guide_at2_action"
+      android:text="@string/generic_continue"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent" />

@@ -40,7 +40,7 @@
         tools:src="@drawable/ic_info_circle" />
 
       <TextView
-        style="@style/TextStyle.Coloplast.Bold.DarkGrey.32"
+        style="@style/TextStyle.Coloplast.Bold.DarkGrey.24"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/spacing_standard"
@@ -51,7 +51,7 @@
 
       <TextView
         android:id="@+id/title"
-        style="@style/TextStyle.Roboto.Regular.ClearGrey.30"
+        style="@style/TextStyle.Roboto.Regular.ClearGrey.16"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/spacing_standard"
@@ -81,7 +81,6 @@
         app:safeText="@{controller.negativeButtonTextId}" />
 
     </LinearLayout>
-
 
   </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

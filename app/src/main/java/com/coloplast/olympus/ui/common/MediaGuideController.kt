@@ -36,7 +36,7 @@ abstract class MediaGuideController(args: Bundle) :
     viewBinding.controller = this
   }
 
-  fun onNextClicked() {
+  open fun onNextClicked() {
     getListener(FlowListener::class.java)!!.onNextClicked()
   }
 

@@ -29,17 +29,6 @@ class SetupGuideIntroFactoryImpl : FlowFactory<EmptyModel>() {
       }
       SetupGuideIntroductionFlow.SetupGuideSG2 -> SetupGuideSG2.routerTransaction()
       SetupGuideIntroductionFlow.SetupGuideSGI1 -> SetupGuideIntroSGI1Controller.routerTransaction()
-      SetupGuideIntroductionFlow.SetupGuideBluetoothSGI2 -> {
-        SimpleInfoPageController.routerTransaction(
-          iconId = R.drawable.ic_bluetooth,
-          titleId = R.string.onboarding_chapter_intro_bluetooth_header,
-          desciptionId = R.string.onboarding_chapter_intro_bluetooth_description,
-          position = 1,
-          totalCount = 1,
-          showBackButton = false,
-          showCloseButton = false
-        )
-      }
       SetupGuideIntroductionFlow.SetupGuideInTheBoxSGI6 -> SetupGuideIntroSGI6Controller.routerTransaction()
       SetupGuideIntroductionFlow.SetupGuideSensorLayerSGI7 -> SetupGuideIntroSGI7Controller.routerTransaction()
       SetupGuideIntroductionFlow.SetupGuideSensorTechSGI8 -> SetupGuideIntroSGI8Controller.routerTransaction()

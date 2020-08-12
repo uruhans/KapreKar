@@ -7,6 +7,8 @@ import android.net.Uri
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.HorizontalChangeHandler
 import com.coloplast.olympus.databinding.ControllerFlowBinding
+import com.coloplast.olympus.shared.preferences.OnboardingProgression
+import com.coloplast.olympus.shared.preferences.Preferences
 import com.coloplast.olympus.ui.common.MediaGuideController
 import com.coloplast.olympus.ui.common.PermissionHandler
 import com.coloplast.olympus.ui.common.flow.FlowFactory
@@ -24,6 +26,7 @@ class SetupGuideConnectionFlowController : FlowFactoryController<EmptyModel>(), 
   CallHelpDialogController.Listener {
 
   private val factory: SetupGuideConnectionFactoryImpl by inject()
+  private val preferences: Preferences by inject()
   private var callHelpDialogController: CallHelpDialogController? = null
 
   override fun getFlowFactory(): FlowFactory<EmptyModel> {
@@ -36,6 +39,11 @@ class SetupGuideConnectionFlowController : FlowFactoryController<EmptyModel>(), 
     if(SetupGuideConnectionFlow.fromIndex(factory.getCurrent()) == SetupGuideConnectionFlow.SetupGuideFindTMCodeSGC5) {
       factory.previous()
     }
+  }
+
+  override fun onFlowCompleted(data: EmptyModel) {
+    preferences.setCurrentOnboardingProgression(OnboardingProgression.SETUP_GUIDE_PREPARING)
+    super.onFlowCompleted(data)
   }
 
   override fun onQuestionClicked(screen: String) {
@@ -117,6 +125,8 @@ class SetupGuideConnectionFlowController : FlowFactoryController<EmptyModel>(), 
 
   override fun next(routerTransaction: RouterTransaction) {
     if (routerTransaction.controller() is AddTransmitterFlowController) {
+      routerTransaction.controller().targetController = this
+
       getContentRouter().pushController(
         routerTransaction
           .pushChangeHandler(HorizontalChangeHandler())

@@ -1,22 +1,21 @@
 package com.coloplast.olympus.ui.feature.onboarding
 
 import com.bluelinelabs.conductor.RouterTransaction
+import com.bluelinelabs.conductor.changehandler.FadeChangeHandler
 import com.bluelinelabs.conductor.changehandler.HorizontalChangeHandler
-import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerLandingBinding
 import com.coloplast.olympus.shared.preferences.OnboardingProgression
 import com.coloplast.olympus.shared.preferences.Preferences
 import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.common.GenericConfirmationController
-import com.coloplast.olympus.ui.feature.onboarding.createprofile.CreateUserFlowController
 import com.coloplast.olympus.ui.feature.onboarding.dataconsent.DataConsentFlowController
 import com.coloplast.olympus.ui.feature.onboarding.login.LoginController
 import com.coloplast.olympus.ui.feature.onboarding.setup.SetupGuideApplyingFlowController
+import com.coloplast.olympus.ui.feature.onboarding.setup.SetupGuideConnectionFlowController
 import com.coloplast.olympus.ui.feature.onboarding.setup.SetupGuideIntroFlowController
 import com.coloplast.olympus.ui.feature.onboarding.setup.SetupGuidePreparingFlowController
 import com.coloplast.olympus.ui.feature.onboarding.valueproposition.ValuePropositionFlowController
-import com.coloplast.olympus.ui.feature.transmitters.add.AddTransmitterFlowController
 import org.koin.core.inject
 
 /**
@@ -32,6 +31,8 @@ class LandingController : BaseController<ControllerLandingBinding>() {
   }
 
   override fun onViewBound(viewBinding: ControllerLandingBinding) {
+    var delay = 1000L
+
     val routerTransaction = if (preferences.didSeeValueProposition.not()) {
       ValuePropositionFlowController.routerTransaction()
     }
@@ -39,7 +40,7 @@ class LandingController : BaseController<ControllerLandingBinding>() {
       null
     }
     else if (preferences.getCurrentOnboardingProgress() != OnboardingProgression.COMPLETED) {
-      when (preferences.getCurrentOnboardingProgress()) {
+      val flowTransaction = when (preferences.getCurrentOnboardingProgress()) {
         OnboardingProgression.TERMS_AND_CONSENT -> DataConsentFlowController.routerTransaction()
         OnboardingProgression.SETUP_GUIDE_START -> {
           GenericConfirmationController.routerTransaction(
@@ -52,11 +53,14 @@ class LandingController : BaseController<ControllerLandingBinding>() {
           )
         }
         OnboardingProgression.SETUP_GUIDE_INTRODUCTION -> SetupGuideIntroFlowController.routerTransaction()
-        OnboardingProgression.SETUP_GUIDE_CONNECTING -> AddTransmitterFlowController.routerTransaction()
+        OnboardingProgression.SETUP_GUIDE_CONNECTING -> SetupGuideConnectionFlowController.routerTransaction()
         OnboardingProgression.SETUP_GUIDE_PREPARING -> SetupGuidePreparingFlowController.routerTransaction()
         OnboardingProgression.SETUP_GUIDE_APPLYING -> SetupGuideApplyingFlowController.routerTransaction()
         else -> null
       }
+
+      delay = 100L
+      flowTransaction
     }
     else {
       null
@@ -65,18 +69,18 @@ class LandingController : BaseController<ControllerLandingBinding>() {
     viewBinding.logInButton.postDelayed({
       routerTransaction?.let {
         getContentRouter().pushController(
-          it.popChangeHandler(VerticalChangeHandler())
-            .pushChangeHandler(VerticalChangeHandler())
+          it.popChangeHandler(FadeChangeHandler())
+            .pushChangeHandler(HorizontalChangeHandler())
         )
       }
-    }, 1000)
+    }, delay)
   }
 
   fun onCreateProfileClicked() {
     getContentRouter().pushController(
-      CreateUserFlowController.routerTransaction()
-        .popChangeHandler(VerticalChangeHandler())
-        .pushChangeHandler(VerticalChangeHandler())
+      SetupGuideIntroFlowController.routerTransaction()
+        .popChangeHandler(FadeChangeHandler())
+        .pushChangeHandler(HorizontalChangeHandler())
     )
 
   }

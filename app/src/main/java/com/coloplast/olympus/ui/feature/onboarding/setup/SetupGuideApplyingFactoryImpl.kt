@@ -103,6 +103,16 @@ class SetupGuideApplyingFactoryImpl : FlowFactory<ApplyingFlowModel>() {
           imageTint = R.color.confirmation_icon_red
         )
       }
+      SetupGuideApplyingFlow.SetupGuideCompleted -> {
+        GenericConfirmationController.routerTransaction(
+          R.string.onboarding_complete_title,
+          R.string.onboarding_complete_description,
+          R.string.generic_continue,
+          imageId = R.drawable.ic_checkmark,
+          showCloseButton = false,
+          showBackButton = false
+        )
+      }
       SetupGuideApplyingFlow.Completed -> null
     }
   }

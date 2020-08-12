@@ -470,6 +470,8 @@
 <string name="onboarding_chapter_preparing_removing_title">Remove release liner</string>
 <string name="onboarding_chapter_preparing_secure_description">Circle around the sensor layer firmly several times, especially around the turquoise ring, to ensure secure adhesion to your baseplate.</string>
 <string name="onboarding_chapter_preparing_secure_title">Ensure secure adhesion</string>
+<string name="onboarding_complete_description">TestProduct will now keep you informed of any signs of leakage. You can return to this Setup Guide or learn more about TestProduct in the app\'s Guides, accessed in the app menu.</string>
+<string name="onboarding_complete_title">Setup complete</string>
 <string name="onboarding_confirmation_button">Continue</string>
 <string name="onboarding_confirmation_description">Just a couple more steps to complete your profile before you can setting up TestProduct</string>
 <string name="onboarding_confirmation_title">Profile saved</string>

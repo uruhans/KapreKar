@@ -53,7 +53,7 @@ class AwaitingConnectionViewModel(
       .map { it.bleDevice.isAttached() }
       .filter { it }
 
-    val takeUntilObservable = Observable.interval(10, TimeUnit.SECONDS)
+    val takeUntilObservable = Observable.interval(60, TimeUnit.SECONDS)
       .map { false }
 
     val attachStateObservable = latestStateObservable.mergeWith(takeUntilObservable)

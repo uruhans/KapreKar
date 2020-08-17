@@ -39,7 +39,7 @@ class GenericConfirmationController(args: Bundle) :
   }
 
   fun onFinishButtonClicked() {
-    getListener(FlowListener::class.java)!!.onNextClicked(true)
+    getListener(FlowListener::class.java)?.onNextClicked(true)
   }
 
   fun onNegativeButtonClicked() {

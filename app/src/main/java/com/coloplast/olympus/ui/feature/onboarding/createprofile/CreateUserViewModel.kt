@@ -35,9 +35,8 @@ class CreateUserViewModel(private val userComponent: UserComponent, private val 
                 delayedResult.isLoading -> GenericUiModel.Loading()
                 delayedResult.result != null -> {
                   // registration was successful - set the Me to currentUser
-                  me.setCurrentUser(delayedResult.result!!, true)
-                  //TODO: Check if UK number. Return true if uk number and false otherwise.
-                  GenericUiModel.Success(false)
+                  me.setCurrentUser(delayedResult.result!!)
+                  GenericUiModel.Success(createUserModel.isUKNumber())
                 }
                 else -> GenericUiModel.Loading()
               }

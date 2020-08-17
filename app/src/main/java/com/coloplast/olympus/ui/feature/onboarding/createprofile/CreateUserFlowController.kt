@@ -52,7 +52,7 @@ class CreateUserFlowController: FlowFactoryController<CreateUserFactoryModel>(),
   override fun onStepCompleted(currentIndex: Int, data: CreateUserFactoryModel): Boolean {
     return when(CreateUserFlow.fromIndex(currentIndex)){
       CreateUserFlow.PhoneSU6 -> {
-        if(data.phoneNumber.contains(UK_COUNTRY_CODE_1) || data.phoneNumber.contains(UK_COUNTRY_CODE_2)){
+        if(data.isUKNumber()) {
           registrationRelay.accept(data)
           true
         } else {
@@ -124,8 +124,6 @@ class CreateUserFlowController: FlowFactoryController<CreateUserFactoryModel>(),
 
   companion object{
     private const val CONTROLLER_TAG = "create_user_flow_controller"
-    private const val UK_COUNTRY_CODE_1 = "+44"
-    private const val UK_COUNTRY_CODE_2 = "0044"
     private const val REQUEST_ERROR_REQUEST_CODE = 1001
 
     fun routerTransaction() = RouterTransaction.with(CreateUserFlowController())

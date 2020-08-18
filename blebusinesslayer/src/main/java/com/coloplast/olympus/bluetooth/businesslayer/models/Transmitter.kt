@@ -12,7 +12,9 @@ data class Transmitter(
   val patchType: PatchType,
   val compromised: Compromised,
   val rawRotationalAngle: Int,
-  val batteryState: BatteryState
+  val batteryState: BatteryState,
+  val fwWarning: Int,
+  val fwError: Int
 ) : MoshiSerializable {
   
   /**
@@ -20,7 +22,7 @@ data class Transmitter(
    */
   fun getState(): TransmitterState {
     return when {
-      waterIngressDetection == WaterIngressDetection.TRIGGERED -> TransmitterState.WATER_INGRESS_DETECTION
+      waterIngressDetection == WaterIngressDetection.WATER_INGRESS -> TransmitterState.WATER_INGRESS_DETECTION
       batteryState == BatteryState.SHUTTING_DOWN -> TransmitterState.BATTERY_SHUTTING_DOWN
       batteryState == BatteryState.CHARGING -> TransmitterState.BATTERY_CHARGING
       attached == Attached.DETACHED -> TransmitterState.DETACHED

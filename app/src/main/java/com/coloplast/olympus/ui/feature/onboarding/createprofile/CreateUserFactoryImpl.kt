@@ -20,8 +20,7 @@ class CreateUserFactoryImpl : FlowFactory<CreateUserFactoryModel>() {
   private lateinit var model: CreateUserFactoryModel
 
   override fun initialize() {
-    model =
-      CreateUserFactoryModel()
+    model = CreateUserFactoryModel()
   }
 
   override fun getRouterTransaction(currentIndex: Int): RouterTransaction? {
@@ -38,7 +37,6 @@ class CreateUserFactoryImpl : FlowFactory<CreateUserFactoryModel>() {
         R.string.onboarding_confirmation_button
       )
       CreateUserFlow.Completed -> null
-      else -> null
     }
   }
 
@@ -59,20 +57,16 @@ class CreateUserFactoryImpl : FlowFactory<CreateUserFactoryModel>() {
         model.stomaSurgeryDateId = data.stomaSurgeryDate.id
       }
       CreateUserFlow.EmailSU3 -> {
-        val email = result as String
-        model.email = email
+        model.email = result as String
       }
       CreateUserFlow.PasswordSU4 -> {
-        val password = result as String
-        model.password = password
+        model.password = result as String
       }
       CreateUserFlow.PhoneSU6 -> {
-        val phoneNumber = result as String
-        model.phoneNumber = phoneNumber
+        model.phoneNumber = result as String
       }
       CreateUserFlow.InsuranceSU7 -> {
-        val healthInsurance = result as HealthInsurance
-        model.healthInsuranceId = healthInsurance.id
+        model.healthInsuranceId = (result as HealthInsurance).id
       }
       CreateUserFlow.Completed -> {}
     }

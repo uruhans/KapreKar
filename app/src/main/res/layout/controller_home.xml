@@ -24,7 +24,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
       android:id="@+id/constraintLayout"
       android:layout_width="match_parent"
-      android:layout_height="match_parent">
+      android:layout_height="match_parent"
+      android:background="@color/default_background">
 
       <ImageView
         android:id="@+id/icon_bluetooth"
@@ -93,9 +94,9 @@
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_marginBottom="@dimen/spacing_standard"
+        app:battery="@{controller.battery}"
         app:layout_constraintBottom_toTopOf="@id/progress_animator"
         app:layout_constraintStart_toStartOf="@+id/icon_bluetooth"
-        app:battery="@{controller.battery}"
         app:visibleOrInvisibleFade="@{controller.isConnected}" />
 
       <TextView

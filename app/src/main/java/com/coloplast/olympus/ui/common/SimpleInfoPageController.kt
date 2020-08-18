@@ -35,7 +35,7 @@ class SimpleInfoPageController(args: Bundle) : BaseController<ControllerSimpleIn
   override fun showBackButton(): Boolean = showBackButton
   override fun showCloseButton(): Boolean = showCloseButton
 
-  fun onNextClicked() = getListener(FlowListener::class.java)!!.onNextClicked()
+  fun onNextClicked() = getListener(FlowListener::class.java)!!.onNextClicked(true)
 
   override fun getLayout(): Int = R.layout.controller_simple_info
 

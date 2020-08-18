@@ -24,7 +24,7 @@ class AwaitingConnectionController : BaseController<ControllerAwaitingConnection
   }
 
   override fun onViewBound(viewBinding: ControllerAwaitingConnectionBinding) {
-    viewBinding.appLogo.rotate360(animationDuration = 4000, loopAnimation = true)
+    viewBinding.appLogo.rotate360(animationDuration = 6000, loopAnimation = true)
 
     compositeDisposable.add(viewModel.bind(this))
   }

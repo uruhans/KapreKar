@@ -9,4 +9,5 @@ import com.coloplast.olympus.ui.common.models.flow.FlowFactoryModel
  */
 class DataConsentModel: FlowFactoryModel {
   var skip: Boolean = false
+  var didConsent: Boolean = false
 }

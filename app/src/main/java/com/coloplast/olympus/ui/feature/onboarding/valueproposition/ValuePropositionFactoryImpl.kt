@@ -58,7 +58,7 @@ class ValuePropositionFactoryImpl : FlowFactory<ValuePropositionModel>() {
   }
 
   override fun parseResultFromController(currentIndex: Int, result: Any?) {
-    //noop
+    /* no-op */
   }
 
   override fun getData(): ValuePropositionModel = model

@@ -58,10 +58,13 @@ object OlympusWirelessProtocol {
       
         val rawRotationalAngle = it[10].toInt()
         val batteryState = BatteryState.fromId(it[11].toUByte())
-      
+
+        val fwWarning = it[12].toInt()
+        val fwError = it[13].toInt()
+
         StatusVector(
           Patch(sensor0, sensor1, sensor2, sensor3, sensor4, sensor5),
-          Transmitter(waterIngressDetection, attached, patchType, compromised, rawRotationalAngle, batteryState)
+          Transmitter(waterIngressDetection, attached, patchType, compromised, rawRotationalAngle, batteryState, fwWarning, fwError)
         )
       }
   }
@@ -70,8 +73,49 @@ object OlympusWirelessProtocol {
   val settingsTransformer = ObservableTransformer<ByteArray, TransmitterSettings> { upstream ->
     upstream
       .map {
+
+        val wid_R_threshold = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_UINT16, 0).toUShort()
+        val wid_R_hysteresis = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_UINT16, 2).toUShort()
+        val threshold_cs0 = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_UINT16, 4).toUShort()
+        val threshold_cs1 = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_UINT16, 6).toUShort()
+        val threshold_cs2 = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_UINT16, 8).toUShort()
+        val threshold_cs3 = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_UINT16, 10).toUShort()
+        val threshold_cs4 = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_UINT16, 12).toUShort()
+        val threshold_cs5 = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_UINT16, 14).toUShort()
+        val wid_C_threshold = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_UINT16, 16).toUShort()
+        val csHysteresis = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_UINT16, 18).toUShort()
+        val batterythreshold = it[20].toUByte()
+        val batteryhysteresis = it[21].toUByte()
+        val sampleInterval = it[22].toUByte()
+        val filterType = it[23].toUByte()
+
         TransmitterSettings()
       }
+  }
+
+  // todo - return proper object when needed
+  val classifierSettingsTransformer = ObservableTransformer<ByteArray, ByteArray> { upstream ->
+    upstream.map {
+      val ird_ll = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_UINT16, 0).toUShort()
+      val dv_noise_ll = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_SINT16, 2).toShort()
+      val ird_spike_ll = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_SINT16, 4).toShort()
+      val ird_leak_ul = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_UINT16, 6).toUShort()
+      val ird_pa_ul = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_UINT16, 8).toUShort()
+      val signal_sweat_ll = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_UINT16, 10).toUShort()
+      val signal_blinded_ll = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_UINT16, 12).toUShort()
+      val c_lsl_0 = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_UINT16, 14).toUShort()
+      val c_lsl_1 = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_UINT16, 16).toUShort()
+      val c_lsl_2 = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_UINT16, 18).toUShort()
+      val c_lsl_3 = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_UINT16, 20).toUShort()
+      val c_lsl_4 = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_UINT16, 22).toUShort()
+      val c_lsl_5 = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_UINT16, 24).toUShort()
+      val state_hold = it[26].toUByte()
+      val hist_size = it[27].toUByte()
+      val noise_count_ul = it[28].toUByte()
+      val no_noise_count_ul = it[29].toUByte()
+
+      it
+    }
   }
   
   val rawDataPackageTransformer = ObservableTransformer<ByteArray, RawDataPackage> { upstream ->

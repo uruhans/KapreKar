@@ -16,7 +16,6 @@ class DbUser(
   val firstName: String?,
   val lastName: String?,
   val email: String?,
-  val password: String?,
   @ColumnInfo(typeAffinity = ColumnInfo.INTEGER)
   val stomaType: StomaType?,
   val surgeryDateInterval: Int?,
@@ -33,7 +32,6 @@ class DbUser(
       firstName,
       lastName,
       email,
-      password,
       stomaType,
       surgeryDateInterval,
       phoneNumber,
@@ -50,7 +48,6 @@ class DbUser(
         user.firstName,
         user.lastName,
         user.email,
-        user.password,
         user.stomaType,
         user.surgeryDateInterval,
         user.phoneNumber,

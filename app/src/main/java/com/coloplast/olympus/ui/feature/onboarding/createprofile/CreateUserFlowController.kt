@@ -6,6 +6,8 @@ import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerFlowBinding
+import com.coloplast.olympus.shared.models.CurrentUser
+import com.coloplast.olympus.shared.models.User
 import com.coloplast.olympus.shared.preferences.OnboardingProgression
 import com.coloplast.olympus.shared.preferences.Preferences
 import com.coloplast.olympus.ui.common.LoadingController
@@ -15,6 +17,7 @@ import com.coloplast.olympus.ui.common.flow.FlowFactory
 import com.coloplast.olympus.ui.common.flow.FlowFactoryController
 import com.coloplast.olympus.ui.common.models.GenericUiModel
 import com.coloplast.olympus.ui.feature.onboarding.createprofile.models.CreateUserFactoryModel
+import com.coloplast.olympus.utils.Utils
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
@@ -26,15 +29,15 @@ import org.koin.core.inject
  * Created by Kike Bodi (ebp@dawnhealth.com) on 30/06/2020.
  * Copyright by Dawn Health A/S. All rights reserved.
  */
-class CreateUserFlowController: FlowFactoryController<CreateUserFactoryModel>(),
+class CreateUserFlowController : FlowFactoryController<CreateUserFactoryModel>(),
   CreateUserFlowView,
   BaseDialogController.Listener {
 
-  private val createUserFactory : CreateUserFactoryImpl by inject()
-  private val preferences : Preferences by inject()
+  private val createUserFactory: CreateUserFactoryImpl by inject()
+  private val preferences: Preferences by inject()
 
   private val viewModel: CreateUserViewModel by inject()
-  private val registrationRelay: PublishRelay<CreateUserFactoryModel> = PublishRelay.create()
+  private val registrationRelay: PublishRelay<User> = PublishRelay.create()
   private var dialogController: DialogController? = null
 
   override fun startFlow(flowChildRouter: Router) {
@@ -50,24 +53,25 @@ class CreateUserFlowController: FlowFactoryController<CreateUserFactoryModel>(),
   }
 
   override fun onStepCompleted(currentIndex: Int, data: CreateUserFactoryModel): Boolean {
-    return when(CreateUserFlow.fromIndex(currentIndex)){
+    return when (CreateUserFlow.fromIndex(currentIndex)) {
       CreateUserFlow.PhoneSU6 -> {
-        if(data.isUKNumber()) {
-          registrationRelay.accept(data)
+        if (Utils.isUKNumber(data.user.phoneNumber)) {
+          registrationRelay.accept(data.user)
           true
-        } else {
+        }
+        else {
           false // go to next step as usual.
         }
       }
       CreateUserFlow.InsuranceSU7 -> {
-        registrationRelay.accept(data)
+        registrationRelay.accept(data.user)
         true
       }
       else -> super.onStepCompleted(currentIndex, data)
     }
   }
 
-  override fun onCreateUser(): Observable<CreateUserFactoryModel> {
+  override fun onCreateUser(): Observable<User> {
     return registrationRelay
       .publish()
       .refCount()
@@ -88,10 +92,14 @@ class CreateUserFlowController: FlowFactoryController<CreateUserFactoryModel>(),
 
       when (uiModel) {
         is GenericUiModel.Success<*> -> {
-          // User created - Go to last step
-          val numberFromUK = uiModel.data as Boolean
-          if(numberFromUK) getFlowFactory().skipNext()
-          getFlowFactory().incrementAndNext()
+          val currentUser = uiModel.data as CurrentUser.LoggedIn
+
+          if (Utils.isUKNumber(currentUser.user.phoneNumber)) {
+            getFlowFactory().skipNext()
+          }
+          else {
+            getFlowFactory().incrementAndNext()
+          }
         }
         is GenericUiModel.Error -> {
           @StringRes val messageResId = when (uiModel.errorCode) {
@@ -114,7 +122,7 @@ class CreateUserFlowController: FlowFactoryController<CreateUserFactoryModel>(),
   }
 
   override fun onPositiveButtonClicked(requestCode: Int) {
-    when(requestCode){
+    when (requestCode) {
       REQUEST_ERROR_REQUEST_CODE -> {
         dialogController?.dismissDialog(false)
         dialogController = null
@@ -122,7 +130,7 @@ class CreateUserFlowController: FlowFactoryController<CreateUserFactoryModel>(),
     }
   }
 
-  companion object{
+  companion object {
     private const val CONTROLLER_TAG = "create_user_flow_controller"
     private const val REQUEST_ERROR_REQUEST_CODE = 1001
 

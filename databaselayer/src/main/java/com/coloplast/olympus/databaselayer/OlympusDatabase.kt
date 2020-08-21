@@ -26,6 +26,7 @@ abstract class OlympusDatabase : RoomDatabase() {
     fun getDatabase(applicationContext: Context): OlympusDatabase {
       return INSTANCE ?: synchronized(OlympusDatabase::class) {
         Room.databaseBuilder(applicationContext, OlympusDatabase::class.java, "olympus-database")
+          //.addMigrations(DatabaseMigrations.MIGRATION_1_2)
           .fallbackToDestructiveMigration()
           .build()
           .apply {

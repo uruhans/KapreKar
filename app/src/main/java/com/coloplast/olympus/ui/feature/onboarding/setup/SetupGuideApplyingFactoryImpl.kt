@@ -118,6 +118,7 @@ class SetupGuideApplyingFactoryImpl : FlowFactory<ApplyingFlowModel>() {
   }
 
   override fun parseResultFromController(currentIndex: Int, result: Any?) {
+    @Suppress("NON_EXHAUSTIVE_WHEN")
     when (SetupGuideApplyingFlow.fromIndex(currentIndex)) {
       SetupGuideApplyingFlow.SetupGuideTransmitterCheckerSGA8 -> {
         when (result as TransmitterCheckerSelectionType) {

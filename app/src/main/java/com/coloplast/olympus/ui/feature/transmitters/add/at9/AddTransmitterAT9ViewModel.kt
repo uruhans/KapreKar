@@ -1,6 +1,7 @@
 package com.coloplast.olympus.ui.feature.transmitters.add.at9
 
 import com.artemzin.rxui.kotlin.bind
+import com.coloplast.olympus.Me
 import com.coloplast.olympus.bluetooth.ServiceDispatcher
 import com.coloplast.olympus.bluetooth.businesslayer.BluetoothManager
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
@@ -9,6 +10,7 @@ import com.coloplast.olympus.bluetooth.businesslayer.exceptions.BondingFailedExc
 import com.coloplast.olympus.bluetooth.businesslayer.models.ScanResult
 import com.coloplast.olympus.bluetooth.model.ServiceEvent
 import com.coloplast.olympus.businesslayer.interfaces.TransmitterComponent
+import com.coloplast.olympus.shared.models.CurrentUser
 import com.coloplast.olympus.shared.models.Transmitter
 import com.coloplast.olympus.ui.common.BaseViewModel
 import com.coloplast.olympus.ui.feature.transmitters.add.at9.model.SearchTransmitterUiModel
@@ -16,10 +18,10 @@ import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 class AddTransmitterAT9ViewModel(
+  private val me: Me,
   private val bluetoothManager: BluetoothManager,
   private val transmitterComponent: TransmitterComponent
 ) :
@@ -66,41 +68,65 @@ class AddTransmitterAT9ViewModel(
 
     val addToDatabaseAndConnectionStateObservable = uiView.scanResultToConnect()
       .switchMap { scanResult ->
-        // insert the transmitter into the database (this will mean that the bluetoothservice
-        // will pick up the change in DB and start connecting to it
-        transmitterComponent.insertOrUpdateTransmitter(Transmitter(scanResult.macAddress,scanResult.name!!))
-          .subscribeOn(Schedulers.io())
-          .toSingle { true }
-          .toObservable()
-          .flatMap {
-            // keep an eye out for the connection state of the transmitter
-            bluetoothManager.bleConnectionStateObservable(scanResult.macAddress)
-              .takeUntil(
-                disconnectObservable
-                  .filter { it.macAddress == scanResult.macAddress}
-                  .flatMap {
-                    transmitterComponent.deleteTransmitter(scanResult.macAddress)
-                      .subscribeOn(Schedulers.io())
-                      .toSingle { SearchTransmitterUiModel.BondingFailed(scanResult.macAddress) }
-                      .toObservable()
-                      .map { throw BondingFailedException(RuntimeException()) }
+
+        me.currentUserObservable()
+          .filter { it is CurrentUser.LoggedIn }
+          .map { it as CurrentUser.LoggedIn }
+          .map {
+
+            val transmitterName = it.user.firstName?.let { firstName ->
+              "$firstName's transmitter"
+            }
+
+            Transmitter(
+              scanResult.macAddress,
+              it.user.id!!,
+              scanResult.getNameOrAddress(),
+              transmitterName ?: scanResult.macAddress
+            )
+          }
+          .flatMap { transmitter ->
+            transmitterComponent.insertOrUpdateTransmitter(transmitter)
+              .subscribeOn(Schedulers.io())
+              .toSingle { true }
+              .toObservable()
+              .flatMap {
+                // keep an eye out for the connection state of the transmitter
+                bluetoothManager.bleConnectionStateObservable(scanResult.macAddress)
+                  .takeUntil(
+                    disconnectObservable
+                      .filter { it.macAddress == scanResult.macAddress }
+                      .flatMap {
+                        transmitterComponent.deleteTransmitter(scanResult.macAddress)
+                          .subscribeOn(Schedulers.io())
+                          .toSingle { SearchTransmitterUiModel.BondingFailed(scanResult.macAddress) }
+                          .toObservable()
+                          .map { throw BondingFailedException(RuntimeException()) }
+                      }
+                  )
+                  .skipWhile { it == BleConnectionState.DISCONNECTED }
+                  // we are only interested in fully connected
+                  .filter { it == BleConnectionState.CONNECTED }
+                  .flatMap<SearchTransmitterUiModel> {
+                    bluetoothManager.readAdditionalTransmitterInfo(scanResult.macAddress)
+                      .flatMap { additionalDeviceInfo ->
+
+                        transmitter.firmwareVersion = additionalDeviceInfo.deviceInfo.firmwareVersion
+                        transmitter.hardwareRevision = additionalDeviceInfo.deviceInfo.hardwareRevision
+                        transmitter.manufacturerName = additionalDeviceInfo.deviceInfo.manufacturer
+                        transmitter.serialNumber = additionalDeviceInfo.deviceInfo.serialNumber
+                        
+                        transmitter.settings = additionalDeviceInfo.settings
+                        transmitter.classifierSettings = additionalDeviceInfo.classifierSettings
+
+                        transmitterComponent.insertOrUpdateTransmitter(transmitter)
+                          .subscribeOn(Schedulers.io())
+                          .toSingle { SearchTransmitterUiModel.ConnectionSuccessful(scanResult.macAddress) }
+                          .toObservable()
+                      }
                   }
-              )
-              .skipWhile { it == BleConnectionState.DISCONNECTED }
-              // we are only interested in fully connected
-              .filter { it == BleConnectionState.CONNECTED }
-              .flatMap<SearchTransmitterUiModel> {
-                bluetoothManager.readDeviceInfo(scanResult.macAddress)
-                  // we have a slight delay here, because if bonding actually fails
-                  // we will hit CONNECTED first, followed by DISCONNECTED
-                  .map { deviceInfo ->
-                    // TODO - CPO-415: actually store the device info in database
-                    Timber.d("DeviceInfo: $deviceInfo")
-                    // connection was successful - return and notify controller
-                    SearchTransmitterUiModel.ConnectionSuccessful(scanResult.macAddress)
-                  }
+                  .onErrorReturn { SearchTransmitterUiModel.BondingFailed(scanResult.macAddress) }
               }
-              .onErrorReturn { SearchTransmitterUiModel.BondingFailed(scanResult.macAddress) }
           }
       }
 

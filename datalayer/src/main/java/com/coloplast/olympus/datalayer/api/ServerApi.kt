@@ -7,18 +7,18 @@ import retrofit2.http.*
 
 interface ServerApi {
 
-  @POST("/api/v1/Users/register")
-  fun createUser(@Body createUserRequestDTO: CreateUserRequestDTO): Observable<UserResponseDTO>
+  @POST("users/register")
+  fun createUser(@Body userDTO: UserDTO): Observable<UserResponseDTO>
 
-  @POST("/api/v1/Auth/login")
-  fun login(@Body loginRequestDTO: LoginRequestDTO): Observable<UserResponseDTO>
+  @POST("auth/login")
+  fun login(@Body credentialsDTO: CredentialsDTO): Observable<UserResponseDTO>
 
-  @POST("/api/v1/SecurityCodes")
+  @POST("securitycodes")
   fun requestSecurityCode(@Body securityCodeRequest: SecurityCodeRequest): Completable
 
-  @GET("/api/v1/SecurityCodes")
+  @GET("securitycodes")
   fun confirmCode(@Query("securityCode") code: String, @Query("email") email: String): Completable
 
-  @PUT("/api/v1/Auth/changepassword")
+  @PUT("auth/changepassword")
   fun changePassword(@Body changePasswordRequest: ChangePasswordRequest): Completable
 }

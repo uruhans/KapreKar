@@ -25,6 +25,7 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.exceptions.UndeliverableException
 import io.reactivex.functions.BiFunction
+import io.reactivex.functions.Function3
 import io.reactivex.functions.Function4
 import io.reactivex.plugins.RxJavaPlugins
 import timber.log.Timber
@@ -353,17 +354,15 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
     return writeCharacteristic(macAddress, OlympusWirelessProtocol.Characteristics.STATUS, data)
   }
 
-  private fun writeCharacteristic(macAddress: String, characteristic: UUID, data: ByteArray) : Completable {
-    val rxConnection = bleConnections[macAddress]
-
-    return if(rxConnection == null) {
-      Timber.e("writeCharacteristic: rxConnection was NULL")
-      Completable.complete()
-    }
-    else {
-      rxConnection.writeCharacteristic(characteristic, data)
-        .ignoreElement()
-    }
+  override fun readAdditionalTransmitterInfo(macAddress: String) : Observable<AdditionalDeviceInfo> {
+    return Observable.zip(
+      readDeviceInfo(macAddress),
+      readSettings(macAddress),
+      readClassifierSettings(macAddress),
+      Function3 { deviceInfo: DeviceInfo, settings: ByteArray, classifierSettings: ByteArray ->
+        AdditionalDeviceInfo(deviceInfo, settings, classifierSettings)
+      }
+    )
   }
 
   override fun readDeviceInfo(macAddress: String) : Observable<DeviceInfo> {
@@ -382,12 +381,27 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
       })
   }
 
-//  override fun readTransmitterSettings(macAddress: String) : Completable {
-//    return readCharacteristics(macAddress, OlympusWirelessProtocol.Characteristics.SETTINGS)
-//      .compose(OlympusWirelessProtocol.settingsTransformer)
-//
-//  }
+  override fun isConnected(macAddress: String) : Boolean {
+    if(macAddress.isEmpty()) {
+      return false
+    }
 
+    return bleConnections[macAddress] != null
+  }
+
+  override fun disconnectTransmitter(macAddress: String) {
+    disconnectRelay.accept(macAddress)
+  }
+
+  private fun readSettings(macAddress: String) : Observable<ByteArray> {
+    return readCharacteristics(macAddress, OlympusWirelessProtocol.Characteristics.SETTINGS)
+      .toObservable()
+  }
+
+  private fun readClassifierSettings(macAddress: String) : Observable<ByteArray> {
+    return readCharacteristics(macAddress, OlympusWirelessProtocol.Characteristics.CLASSIFIER_SETTINGS)
+      .toObservable()
+  }
 
   private fun readCharacteristics(macAddress: String, characteristic: UUID) : Single<ByteArray> {
     val rxConnection = bleConnections[macAddress]
@@ -401,15 +415,16 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
     }
   }
 
-  override fun isConnected(macAddress: String) : Boolean {
-    if(macAddress.isEmpty()) {
-      return false
+  private fun writeCharacteristic(macAddress: String, characteristic: UUID, data: ByteArray) : Completable {
+    val rxConnection = bleConnections[macAddress]
+
+    return if(rxConnection == null) {
+      Timber.e("writeCharacteristic: rxConnection was NULL")
+      Completable.complete()
     }
-
-    return bleConnections[macAddress] != null
-  }
-
-  override fun disconnectTransmitter(macAddress: String) {
-    disconnectRelay.accept(macAddress)
+    else {
+      rxConnection.writeCharacteristic(characteristic, data)
+        .ignoreElement()
+    }
   }
 }

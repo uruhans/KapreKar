@@ -1,25 +1,16 @@
 package com.coloplast.olympus.datalayer.models
 
-import com.coloplast.olympus.shared.models.User
-import com.squareup.moshi.JsonClass
+import java.util.*
 
-
-/**
- * Created by Kike Bodi (ebp@dawnhealth.com) on 09/07/2020.
- * Copyright by Dawn Health A/S. All rights reserved.
- */
-
-@JsonClass(generateAdapter = true)
-class UserDTO(
-  val userId: String,
-  //val firstName: String,
-  //val lastName: String,
-  val email: String,
-  val password: String?
-  //val role: Int,
-  //val countryId: Int,
-  //val registered: Instant,
-  //val isPasswordReset: Boolean
-) {
-  fun toUser() = User(userId, email)
-}
+class CreateUserDTO(
+  val id: UUID? = null,
+  val firstName: String? = null,
+  val lastName: String? = null,
+  val email: String? = null,
+  val password: String? = null,
+  val stomaTypeId: Int? = null,
+  val stomaSurgeryDateId: Int? = null,
+  val phoneNumber: String? = null,
+  val healthInsuranceId: Int? = null,
+  val consent: Boolean = false
+)

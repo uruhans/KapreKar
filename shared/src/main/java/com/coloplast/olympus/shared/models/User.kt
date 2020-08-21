@@ -1,10 +1,5 @@
 package com.coloplast.olympus.shared.models
 
-import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
+class User {
 
-@Parcelize
-data class User(
-  val userId: String,
-  val email: String
-) : Parcelable
+}

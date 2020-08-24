@@ -12,6 +12,7 @@ import java.time.LocalTime
  */
 class Preferences(applicationContext: Context) {
   
+  var userLoggedIn: String by bindSharedPreference(applicationContext, USER_LOGGED_IN, "")
   var userToken: String by bindSharedPreference(applicationContext, USER_TOKEN, "")
   var activeTransmitter: String by bindSharedPreference(applicationContext, ACTIVE_TRANSMITTER, "")
   var latestStateFromActiveTx: String by bindSharedPreference(applicationContext, LATEST_STATE_FROM_ACTIVE_TRANSMITTER, "")
@@ -26,6 +27,7 @@ class Preferences(applicationContext: Context) {
 
   private fun clearUserToken() {
     userToken = ""
+    userLoggedIn = ""
   }
 
   fun setCurrentOnboardingProgression(currentStep: OnboardingProgression) {
@@ -41,6 +43,7 @@ class Preferences(applicationContext: Context) {
   }
   
   companion object {
+    private const val USER_LOGGED_IN: String = "USER_LOGGED_IN"
     private const val USER_TOKEN: String = "USER_TOKEN"
     private const val ACTIVE_TRANSMITTER: String = "ACTIVE_TRANSMITTER"
     private const val LATEST_STATE_FROM_ACTIVE_TRANSMITTER: String = "LATEST_STATE_FROM_ACTIVE_TRANSMITTER"

@@ -30,7 +30,7 @@ class TransmitterItem(val transmitter: Transmitter, val onEdit: ObservableBoolea
 
   override fun areItemsTheSame(other: DiffListItem): Boolean {
     return (other as? TransmitterItem)?.let {
-      this.transmitter.macAddress == it.transmitter.macAddress
+      this.transmitter.id == it.transmitter.id
     } ?: false
   }
 

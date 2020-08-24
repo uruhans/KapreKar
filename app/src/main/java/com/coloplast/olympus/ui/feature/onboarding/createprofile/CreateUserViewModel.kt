@@ -13,30 +13,33 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
-
-/**
- * Created by Kike Bodi (ebp@dawnhealth.com) on 08/07/2020.
- * Copyright by Dawn Health A/S. All rights reserved.
- */
-class CreateUserViewModel(private val userComponent: UserComponent, private val me: Me):
-  BaseViewModel<GenericUiModel, CreateUserFlowView>() {
+class CreateUserViewModel(
+  private val me: Me,
+  private val userComponent: UserComponent
+) : BaseViewModel<GenericUiModel, CreateUserFlowView>() {
 
   override fun bind(uiView: CreateUserFlowView): Disposable {
     val disposable = CompositeDisposable()
 
     val onCreateUserClicked: Observable<GenericUiModel> =
       uiView.onCreateUser()
-        .switchMap { createUserModel ->
-          userComponent.createUser(createUserModel)
+        .switchMap { user ->
+          userComponent.createUser(user)
             .subscribeOn(Schedulers.io())
             .compose(DelayedLoadingTransformer<CurrentUser>())
             .map { delayedResult: DelayedLoadingModel<CurrentUser> ->
               return@map when {
                 delayedResult.isLoading -> GenericUiModel.Loading()
                 delayedResult.result != null -> {
-                  // registration was successful - set the Me to currentUser
-                  me.setCurrentUser(delayedResult.result!!)
-                  GenericUiModel.Success(createUserModel.isUKNumber())
+                  val currentUser = delayedResult.result as CurrentUser
+                  me.setCurrentUser(currentUser)
+
+                  if (currentUser is CurrentUser.LoggedIn) {
+                    GenericUiModel.Success(currentUser)
+                  }
+                  else {
+                    GenericUiModel.Error(GenericUiModel.Error.State.ERROR_GENERIC, 404)
+                  }
                 }
                 else -> GenericUiModel.Loading()
               }

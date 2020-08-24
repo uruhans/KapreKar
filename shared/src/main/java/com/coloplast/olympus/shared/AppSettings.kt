@@ -15,9 +15,10 @@ object AppSettings {
   }
   
   private lateinit var SERVER_IP: String
+  private const val API_VERSION = "v1"
   
   val ENVIRONMENT_URL by lazy {
-    SERVER_IP
+    "$SERVER_IP/api/$API_VERSION/"
   }
   
   

@@ -40,25 +40,30 @@ class LandingController : BaseController<ControllerLandingBinding>() {
     else if (preferences.getCurrentOnboardingProgress() == OnboardingProgression.NOT_STARTED) {
       null
     }
-    else if (preferences.getCurrentOnboardingProgress() != OnboardingProgression.COMPLETED) {
-      val flowTransaction = when (preferences.getCurrentOnboardingProgress()) {
-        OnboardingProgression.TERMS_AND_CONSENT -> DataConsentFlowController.routerTransaction()
-        OnboardingProgression.SETUP_GUIDE_START,
-        OnboardingProgression.SETUP_GUIDE_INTRODUCTION -> SetupGuideIntroFlowController.routerTransaction()
-        OnboardingProgression.SETUP_GUIDE_CONNECTING -> SetupGuideConnectionFlowController.routerTransaction()
-        OnboardingProgression.SETUP_GUIDE_PREPARING -> SetupGuidePreparingFlowController.routerTransaction()
-        OnboardingProgression.SETUP_GUIDE_APPLYING -> SetupGuideApplyingFlowController.routerTransaction()
-        else -> null
-      }
+    else if (preferences.userToken.isNotBlank()) {
+      if (preferences.getCurrentOnboardingProgress() != OnboardingProgression.COMPLETED) {
+        val flowTransaction = when (preferences.getCurrentOnboardingProgress()) {
+          OnboardingProgression.TERMS_AND_CONSENT -> DataConsentFlowController.routerTransaction()
+          OnboardingProgression.SETUP_GUIDE_START,
+          OnboardingProgression.SETUP_GUIDE_INTRODUCTION -> SetupGuideIntroFlowController.routerTransaction()
+          OnboardingProgression.SETUP_GUIDE_CONNECTING -> SetupGuideConnectionFlowController.routerTransaction()
+          OnboardingProgression.SETUP_GUIDE_PREPARING -> SetupGuidePreparingFlowController.routerTransaction()
+          OnboardingProgression.SETUP_GUIDE_APPLYING -> SetupGuideApplyingFlowController.routerTransaction()
+          else -> null
+        }
 
-      delay = 50L
-      flowTransaction
-    }
-    else if (preferences.getCurrentOnboardingProgress() == OnboardingProgression.COMPLETED) {
-      router.setPopsLastView(true)
-      router.popCurrentController()
-      router.setPopsLastView(false)
-      HomeController.routerTransaction()
+        delay = 50L
+        flowTransaction
+      }
+      else if (preferences.getCurrentOnboardingProgress() == OnboardingProgression.COMPLETED) {
+        router.setPopsLastView(true)
+        router.popCurrentController()
+        router.setPopsLastView(false)
+        HomeController.routerTransaction()
+      }
+      else {
+        null
+      }
     }
     else {
       null

@@ -117,7 +117,7 @@ class BluetoothServiceViewModel(
                 // now we need to figure out if the found beacon is one of "ours" - meaning, have we added it manually before?
                 dbTransmittersObservable
                   // so our database transmitter *must* contain the found beacon
-                  .filter { dbTransmitters -> dbTransmitters.any { it.macAddress == beaconAddress } }
+                  .filter { dbTransmitters -> dbTransmitters.any { it.id == beaconAddress } }
                   .doOnNext { Timber.d("BEACON Beacon is one of ours - lets try to connect") }
                   // pass through the address in order to start connecting
                   .map { beaconAddress }
@@ -132,8 +132,8 @@ class BluetoothServiceViewModel(
       .flatMap { dbTransmitter ->
         connectedBleDevicesObservable
           // make sure we are not already connected to it
-          .filter { connectedDevices -> connectedDevices.none { it == dbTransmitter.macAddress } }
-          .map { dbTransmitter.macAddress }
+          .filter { connectedDevices -> connectedDevices.none { it == dbTransmitter.id } }
+          .map { dbTransmitter.id }
       }
 
     val retryObservable = ServiceDispatcher.serviceEventObservable()

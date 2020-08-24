@@ -1,32 +1,45 @@
 package com.coloplast.olympus.datalayer
 
 import com.coloplast.olympus.datalayer.models.*
-import com.coloplast.olympus.shared.models.CreateUserModel
 import com.coloplast.olympus.shared.models.Credentials
+import com.coloplast.olympus.shared.models.User
 import io.reactivex.Completable
 import io.reactivex.Observable
 
 class ApiServiceImpl : ApiService {
-  
+
   private val api = Retrofit.serverApi
 
-  override fun createUser(createUserModel: CreateUserModel): Observable<UserResponseDTO> {
-    val createUserDTO = CreateUserRequestDTO(
-      email = createUserModel.email,
-      password = createUserModel.password
+  override fun createUser(user: User): Observable<UserResponseDTO> {
+    return api.createUser(
+      UserDTO(
+        null,
+        user.firstName,
+        user.lastName,
+        user.email,
+        user.password,
+        user.stomaType?.id,
+        user.surgeryDateInterval,
+        user.phoneNumber,
+        user.insuranceType,
+        user.consent ?: false
+      )
     )
-    return api.createUser(createUserDTO)
+  }
+
+  override fun createAnonymousUser(): Observable<UserResponseDTO> {
+    return api.createUser(UserDTO())
+  }
+
+  override fun updateUser(user: User): Observable<UserResponseDTO> {
+    TODO("Not yet implemented")
   }
 
   override fun login(credentials: Credentials): Observable<UserResponseDTO> {
-    val loginRequestDTO = LoginRequestDTO(
-      credentials.email,
-      credentials.password
+    return api.login(
+      CredentialsDTO(credentials.email, credentials.password)
     )
-    return api.login(loginRequestDTO)
   }
-
-  
 
   override fun requestSecurityCode(email: String): Completable {
     val securityCodeRequest = SecurityCodeRequest(email)

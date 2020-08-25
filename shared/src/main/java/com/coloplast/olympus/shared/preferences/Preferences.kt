@@ -1,9 +1,9 @@
 package com.coloplast.olympus.shared.preferences
 
-import android.annotation.SuppressLint
 import android.content.Context
 import com.coloplast.olympus.shared.types.Sensors
 import java.time.LocalTime
+import java.util.*
 
 /**
  * Normally you do not want to store the context in *any* class.
@@ -11,7 +11,7 @@ import java.time.LocalTime
  * and will be killed off once the application dies
  */
 class Preferences(applicationContext: Context) {
-  
+
   var userLoggedIn: String by bindSharedPreference(applicationContext, USER_LOGGED_IN, "")
   var userToken: String by bindSharedPreference(applicationContext, USER_TOKEN, "")
   var activeTransmitter: String by bindSharedPreference(applicationContext, ACTIVE_TRANSMITTER, "")
@@ -25,6 +25,15 @@ class Preferences(applicationContext: Context) {
   var didSeeValueProposition: Boolean by bindSharedPreference(applicationContext, DID_SEE_VALUE_PROPOSITION, false)
   private var currentOnboardingProgression : Int by bindSharedPreference(applicationContext, CURRENT_ONBOARDING_PROGRESSION, OnboardingProgression.NOT_STARTED.id)
 
+  private var patchId: Int by bindSharedPreference(applicationContext, CURRENT_PATCH_ID, 0)
+  private var deviceId: String by bindSharedPreference(applicationContext, CURRENT_DEVICE_ID, "")
+
+  init {
+    if(deviceId.isEmpty()) {
+      deviceId = UUID.randomUUID().toString()
+    }
+  }
+
   private fun clearUserToken() {
     userToken = ""
     userLoggedIn = ""
@@ -36,6 +45,18 @@ class Preferences(applicationContext: Context) {
 
   fun getCurrentOnboardingProgress(): OnboardingProgression {
     return OnboardingProgression.fromId(currentOnboardingProgression)
+  }
+
+  fun updatePatchId() {
+    patchId++
+  }
+
+  fun getCurrentPatchId() : Int {
+    return patchId
+  }
+
+  fun getUniqueDeviceId() : UUID {
+    return UUID.fromString(deviceId)
   }
 
   fun clear() {
@@ -54,16 +75,18 @@ class Preferences(applicationContext: Context) {
     private const val BEDTIME_ALERT_END: String = "BEDTIME_ALERT_END"
     private const val DID_SEE_VALUE_PROPOSITION: String = "DID_SEE_VALUE_PROPOSITION"
     private const val CURRENT_ONBOARDING_PROGRESSION: String = "CURRENT_ONBOARDING_PROGRESSION"
+    private const val CURRENT_PATCH_ID: String = "CURRENT_PATCH_ID"
+    private const val CURRENT_DEVICE_ID: String = "CURRENT_DEVICE_ID"
 
-    @SuppressLint("StaticFieldLeak")
-    private lateinit var preferences: Preferences
-    
-    fun initialize(applicationContext: Context) {
-      preferences = Preferences(applicationContext)
-    }
-    
-    fun get(): Preferences {
-      return preferences
-    }
+//    @SuppressLint("StaticFieldLeak")
+//    private lateinit var preferences: Preferences
+
+//    fun initialize(applicationContext: Context) {
+//      preferences = Preferences(applicationContext)
+//    }
+//
+//    fun get(): Preferences {
+//      return preferences
+//    }
   }
 }

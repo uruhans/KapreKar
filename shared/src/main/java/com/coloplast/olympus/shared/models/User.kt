@@ -9,6 +9,7 @@ class User(
   var firstName: String? = null,
   var lastName: String? = null,
   var email: String? = null,
+  var password: String? = null,
   var stomaType: StomaType? = null,
   var surgeryDateInterval: Int? = null,
   var phoneNumber: String? = null,

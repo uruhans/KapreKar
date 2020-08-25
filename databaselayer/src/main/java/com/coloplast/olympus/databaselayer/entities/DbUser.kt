@@ -32,6 +32,7 @@ class DbUser(
       firstName,
       lastName,
       email,
+      null,
       stomaType,
       surgeryDateInterval,
       phoneNumber,

@@ -9,8 +9,6 @@ object AppSettings {
   
   fun initialize(applicationContext: Context, serverUrl: String) {
     SERVER_IP = serverUrl
-    
-    Preferences.initialize(applicationContext)
     AppSettings.applicationContext = applicationContext
   }
   

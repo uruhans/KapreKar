@@ -136,6 +136,11 @@ dependencies {
   implementation 'me.tatarka.bindingcollectionadapter2:bindingcollectionadapter-recyclerview:4.0.0'
 
   implementation 'com.amitshekhar.android:debug-db:1.0.6'
+
+  testImplementation 'junit:junit:4.13'
+  testImplementation "org.koin:koin-test:$koin_version"
+  androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+  androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 }
 
 static def gitVersionCode() {

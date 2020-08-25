@@ -33,7 +33,6 @@ class SplashController : BaseController<ControllerSplashBinding>(), SplashView {
 
   override fun attachVariables(viewBinding: ControllerSplashBinding) {
     //noop
-    preferences.userLoggedIn = "fb562cc4-b4a1-4a1c-29d5-08d844fce1f1"
   }
 
   override fun onViewBound(viewBinding: ControllerSplashBinding) {

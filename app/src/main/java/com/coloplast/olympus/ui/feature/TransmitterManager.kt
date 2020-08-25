@@ -15,18 +15,21 @@ import timber.log.Timber
 /**
  * This manager determines which Tx is currently the *active* one (ie: the one whose state is being displayed on the status screen)
  */
-class TransmitterManager(private val bluetoothManager: BluetoothManager) {
+class TransmitterManager(
+  private val preferences: Preferences,
+  private val bluetoothManager: BluetoothManager
+) {
 
   private val transmitterStateHistory = mutableMapOf<String, Stack<StateChange>>()
   private var activeTransmitter
-    get() = Preferences.get().activeTransmitter
+    get() = preferences.activeTransmitter
     set(value) {
-      Preferences.get().activeTransmitter = value
+      preferences.activeTransmitter = value
     }
 
   init {
     // TODO - this may need to change at a later stage to come from DB instead
-    Preferences.get().latestStateFromActiveTx.let { latestStateFromActiveTx ->
+    preferences.latestStateFromActiveTx.let { latestStateFromActiveTx ->
       if(latestStateFromActiveTx.isEmpty()) {
         return@let
       }
@@ -162,7 +165,7 @@ class TransmitterManager(private val bluetoothManager: BluetoothManager) {
 
     // TODO - this may need to change at a later stage - should possibly be stored in Local DB
     // We store it here, because the current active TX may have changed from beginning to this place
-    Preferences.get().latestStateFromActiveTx = stateChange.serialize()
+    preferences.latestStateFromActiveTx = stateChange.serialize()
   }
 
   private fun addToHistory(stateChange: StateChange) {

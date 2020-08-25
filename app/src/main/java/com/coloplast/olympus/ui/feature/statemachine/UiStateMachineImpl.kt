@@ -10,7 +10,7 @@ import com.coloplast.olympus.ui.feature.statemachine.models.UiState
  *  - add or remove states to *when* statements to either support or remote state transitions from a given state
  */
 class UiStateMachineImpl : BaseUiStateMachine() {
-  
+
   override fun initial(newState: UiState): Boolean {
     return when (newState) {
       UiState.BLUETOOTH_NOT_ENABLED,
@@ -31,7 +31,7 @@ class UiStateMachineImpl : BaseUiStateMachine() {
       else -> false
     }
   }
-  
+
   override fun somethingElse(newState: UiState): Boolean {
     return when (newState) {
       UiState.BLUETOOTH_NOT_ENABLED,
@@ -51,7 +51,7 @@ class UiStateMachineImpl : BaseUiStateMachine() {
       else -> false
     }
   }
-  
+
   override fun ok_A(newState: UiState): Boolean {
     return when (newState) {
       UiState.BLUETOOTH_NOT_ENABLED,
@@ -72,7 +72,7 @@ class UiStateMachineImpl : BaseUiStateMachine() {
       else -> false
     }
   }
-  
+
   override fun innerBreach_B(newState: UiState): Boolean {
     return when (newState) {
       UiState.BLUETOOTH_NOT_ENABLED,
@@ -88,7 +88,7 @@ class UiStateMachineImpl : BaseUiStateMachine() {
       else -> false
     }
   }
-  
+
   override fun outerBreach_C(newState: UiState): Boolean {
     return when (newState) {
       UiState.BLUETOOTH_NOT_ENABLED,
@@ -103,7 +103,7 @@ class UiStateMachineImpl : BaseUiStateMachine() {
       else -> false
     }
   }
-  
+
   override fun innerBlind_D(newState: UiState): Boolean {
     return when (newState) {
       UiState.BLUETOOTH_NOT_ENABLED,
@@ -120,7 +120,7 @@ class UiStateMachineImpl : BaseUiStateMachine() {
       else -> false
     }
   }
-  
+
   override fun totalBlind_E(newState: UiState): Boolean {
     return when (newState) {
       UiState.BLUETOOTH_NOT_ENABLED,
@@ -136,7 +136,7 @@ class UiStateMachineImpl : BaseUiStateMachine() {
       else -> false
     }
   }
-  
+
   override fun payAttention_F(newState: UiState): Boolean {
     return when (newState) {
       UiState.BLUETOOTH_NOT_ENABLED,
@@ -150,7 +150,7 @@ class UiStateMachineImpl : BaseUiStateMachine() {
       else -> false
     }
   }
-  
+
   override fun cutguardBroken_I(newState: UiState): Boolean {
     return when (newState) {
       UiState.BLUETOOTH_NOT_ENABLED,
@@ -162,11 +162,13 @@ class UiStateMachineImpl : BaseUiStateMachine() {
       else -> false
     }
   }
-  
+
   override fun waterIngressDetection_J(newState: UiState): Boolean {
     return when (newState) {
       UiState.BLUETOOTH_NOT_ENABLED,
       UiState.SOMETHING_ELSE,
+      UiState.TRANSMITTER_BATTERY_CHARGING_W,
+      UiState.TRANSMITTER_DETACHED_V,
       UiState.OK_A,
       UiState.DISCONNECTED -> {
         true
@@ -174,7 +176,7 @@ class UiStateMachineImpl : BaseUiStateMachine() {
       else -> false
     }
   }
-  
+
   override fun cutguardDirtInTransmitter_K(newState: UiState): Boolean {
     return when (newState) {
       UiState.BLUETOOTH_NOT_ENABLED,
@@ -186,7 +188,7 @@ class UiStateMachineImpl : BaseUiStateMachine() {
       else -> false
     }
   }
-  
+
   override fun transmitterDetached_V(newState: UiState): Boolean {
     return when (newState) {
       UiState.BLUETOOTH_NOT_ENABLED,
@@ -204,7 +206,7 @@ class UiStateMachineImpl : BaseUiStateMachine() {
       else -> false
     }
   }
-  
+
   override fun transmitterBatteryCharging_W(newState: UiState): Boolean {
     return when (newState) {
       UiState.BLUETOOTH_NOT_ENABLED,

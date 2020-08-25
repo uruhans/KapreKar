@@ -1,6 +1,7 @@
 package com.coloplast.olympus.databaselayer
 
 import com.coloplast.olympus.databaselayer.entities.DbTransmitter
+import com.coloplast.olympus.databaselayer.entities.DbTransmitterPackage
 import com.coloplast.olympus.databaselayer.entities.DbUser
 import com.coloplast.olympus.databaselayer.exceptions.DeleteFailedException
 import com.coloplast.olympus.databaselayer.exceptions.InsertOrUpdateFailedException
@@ -8,7 +9,9 @@ import com.coloplast.olympus.databaselayer.rx.RxHelper
 import com.coloplast.olympus.shared.AppSettings
 import com.coloplast.olympus.shared.models.DataResult
 import com.coloplast.olympus.shared.models.Transmitter
+import com.coloplast.olympus.shared.models.TransmitterPackage
 import com.coloplast.olympus.shared.models.User
+import com.coloplast.olympus.shared.types.PackageType
 import io.reactivex.Completable
 import io.reactivex.Observable
 import java.util.*
@@ -73,5 +76,11 @@ class DbServiceImpl : DbService {
     return db.transmitterDao()
       .deleteAll()
       .flatMapCompletable { RxHelper.completeOrError(it, DeleteFailedException()) }
+  }
+
+  override fun insertTransmitterPackage(transmitterPackage: TransmitterPackage): Completable {
+    return db.transmitterPackageDao()
+      .insertTransmitterPackage(DbTransmitterPackage.fromTransmitterPackage(transmitterPackage))
+      .flatMapCompletable { RxHelper.completeOrError(it.toInt(), InsertOrUpdateFailedException()) }
   }
 }

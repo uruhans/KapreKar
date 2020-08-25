@@ -42,6 +42,7 @@ class DataConsentFactoryImpl : FlowFactory<DataConsentModel>() {
   }
 
   override fun parseResultFromController(currentIndex: Int, result: Any?) {
+    @Suppress("NON_EXHAUSTIVE_WHEN")
     when (DataConsentFlow.fromIndex(currentIndex)) {
       DataConsentFlow.DataConsentDC1 -> {
         val skip = result as Boolean

@@ -52,14 +52,14 @@ val koinModule = module {
   single { NotificationScheduler() }
 
   /* Bluetooth */
-  single<BluetoothManager> { BluetoothManagerImpl(androidContext(), BuildConfig.DEBUG) }
+  single<BluetoothManager> { BluetoothManagerImpl(get(), androidContext(), BuildConfig.DEBUG) }
   factory { DeviceConnection(get()) }
 
-  single { TransmitterManager(get()) }
-  single { BreachesOccurred() }
+  single { TransmitterManager(get(), get()) }
+  single { BreachesOccurred(get()) }
 
   /* Components */
-  single<TransmitterComponent> { TransmitterComponentImpl() }
+  single<TransmitterComponent> { TransmitterComponentImpl(get()) }
   single<UserComponent> { UserComponentImpl(get()) }
 
   /* ViewModels */

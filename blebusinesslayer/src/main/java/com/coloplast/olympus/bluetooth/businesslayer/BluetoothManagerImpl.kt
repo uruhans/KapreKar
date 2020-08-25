@@ -11,6 +11,7 @@ import com.coloplast.olympus.bluetooth.businesslayer.models.*
 import com.coloplast.olympus.bluetooth.businesslayer.services.BatteryPowerService
 import com.coloplast.olympus.bluetooth.businesslayer.services.DeviceInformation
 import com.coloplast.olympus.bluetooth.businesslayer.services.OlympusWirelessProtocol
+import com.coloplast.olympus.businesslayer.interfaces.TransmitterComponent
 import com.dawn.bluetooth.BluetoothHandler
 import com.jakewharton.rxrelay2.PublishRelay
 import com.polidea.rxandroidble2.RxBleClient
@@ -28,10 +29,14 @@ import io.reactivex.functions.BiFunction
 import io.reactivex.functions.Function3
 import io.reactivex.functions.Function4
 import io.reactivex.plugins.RxJavaPlugins
+import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import java.util.*
 
-class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothManager {
+class BluetoothManagerImpl(
+  private val transmitterComponent: TransmitterComponent,
+  context: Context,
+  isDebugging: Boolean) : BluetoothManager {
 
   // a reference to the bluetoothHandler
   private val bluetoothHandler = BluetoothHandler(context, isDebugging)
@@ -213,7 +218,7 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
    * - output -> a BleDevice containing name, macAddress, connectionState and Peripheral Status
    */
   override fun bleDeviceResultObservable(macAddress: String): Observable<BleDevice> {
-    return peripheralObservable(bleConnections[macAddress]!!)
+    return peripheralObservable(macAddress)
       .map {
         val rxBleDevice = bleDevices[macAddress]!!
         BleDevice(rxBleDevice.name, rxBleDevice.macAddress, BleConnectionState.fromRxBleState(rxBleDevice.connectionState), it)
@@ -229,10 +234,10 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
    * note: even though only one of the the subscriptions are notifying we are returning the latest result from the others,
    * meaning we *always* get a full object containing the latest data sent from the transmitteræ
    */
-  private fun peripheralObservable(rxBleConnection: RxBleConnection): Observable<Peripheral> {
+  private fun peripheralObservable(macAddress: String): Observable<Peripheral> {
     return Observable.combineLatest(
-      setupOlympusStatusVectorNotifications(rxBleConnection),
-      setupBatteryPowerNotifications(rxBleConnection),
+      setupOlympusStatusVectorNotifications(macAddress),
+      setupBatteryPowerNotifications(macAddress),
       BiFunction { statusVector: StatusVector, powerLevel: PowerLevel ->
         Peripheral(statusVector.patch, statusVector.transmitter, powerLevel)
       })
@@ -244,10 +249,19 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
    * - upon subscription this observable with do a READ CHARACTERISTIC in order to get the initial state of the characteristics
    * - output -> PowerLevel describing the current powerlevel of the transmitter (0-100% is converted into NEAR_EMPTY, LOW, MEDIUM and HIGH)
    */
-  private fun setupBatteryPowerNotifications(rxBleConnection: RxBleConnection): Observable<PowerLevel> {
+  private fun setupBatteryPowerNotifications(macAddress: String): Observable<PowerLevel> {
+    val rxBleConnection = bleConnections[macAddress]!!
+
     return rxBleConnection.setupNotification(BatteryPowerService.Characteristics.POWER)
       .flatMap { it }
       .startWith(rxBleConnection.readCharacteristic(BatteryPowerService.Characteristics.POWER).toObservable())
+      // store in local database
+      .doOnNext {
+        transmitterComponent.insertPowerPackage(macAddress, it)
+          .subscribeOn(Schedulers.io())
+          .doOnError { throwable -> Timber.e(throwable) }
+          .subscribe()
+      }
       .compose(BatteryPowerService.transformer)
   }
 
@@ -257,7 +271,9 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
    * - upon subscription this observable with do a READ CHARACTERISTIC in order to get the initial state of the characteristics
    * - output -> StatusVector describing the current state of the patch and transmitter
    */
-  private fun setupOlympusStatusVectorNotifications(rxBleConnection: RxBleConnection): Observable<StatusVector> {
+  private fun setupOlympusStatusVectorNotifications(macAddress: String): Observable<StatusVector> {
+    val rxBleConnection = bleConnections[macAddress]!!
+
     return rxBleConnection.setupNotification(OlympusWirelessProtocol.Characteristics.STATUS)
       .flatMap { it }
       .startWith(rxBleConnection.readCharacteristic(OlympusWirelessProtocol.Characteristics.STATUS).toObservable())
@@ -265,6 +281,13 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
       // this occurs right after a reset, where the transmitter takes a little time to figure out it's actual state
       // so filter is added to remove any garbage callbacks
       .filter { statusVector -> statusVector.any { vector -> vector.toInt() != -1 } }
+      // store in local database
+      .doOnNext {
+        transmitterComponent.insertStatusPackage(macAddress, it)
+          .subscribeOn(Schedulers.io())
+          .doOnError { throwable -> Timber.e(throwable) }
+          .subscribe()
+      }
       .doOnNext { Timber.d("statusVector: {${it[0]}, ${it[1]}, ${it[2]}, ${it[3]}, ${it[4]}, ${it[5]}, ${it[6]}, ${it[7]}, ${it[8]}, ${it[9]}, ${it[10]}, ${it[11]}}") }
       .compose(OlympusWirelessProtocol.statusTransformer)
   }
@@ -286,6 +309,13 @@ class BluetoothManagerImpl(context: Context, isDebugging: Boolean) : BluetoothMa
       rxBleConnection.setupNotification(OlympusWirelessProtocol.Characteristics.RAW_SENSOR_DATA)
         .flatMap { it }
         .startWith(rxBleConnection.readCharacteristic(OlympusWirelessProtocol.Characteristics.RAW_SENSOR_DATA).toObservable())
+        // store in local database
+        .doOnNext {
+          transmitterComponent.insertRawPackage(macAddress, it)
+            .subscribeOn(Schedulers.io())
+            .doOnError { throwable -> Timber.e(throwable) }
+            .subscribe()
+        }
         .compose(OlympusWirelessProtocol.rawDataPackageTransformer)
     }
   }

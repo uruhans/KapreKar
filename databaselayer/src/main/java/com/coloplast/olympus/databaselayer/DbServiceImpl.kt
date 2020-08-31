@@ -12,6 +12,7 @@ import com.coloplast.olympus.shared.models.Transmitter
 import com.coloplast.olympus.shared.models.TransmitterPackage
 import com.coloplast.olympus.shared.models.User
 import com.coloplast.olympus.shared.types.PackageType
+import com.coloplast.olympus.shared.types.SyncState
 import io.reactivex.Completable
 import io.reactivex.Observable
 import java.util.*
@@ -82,5 +83,30 @@ class DbServiceImpl : DbService {
     return db.transmitterPackageDao()
       .insertTransmitterPackage(DbTransmitterPackage.fromTransmitterPackage(transmitterPackage))
       .flatMapCompletable { RxHelper.completeOrError(it.toInt(), InsertOrUpdateFailedException()) }
+  }
+
+  override fun getPendingTransmitterPackages(packageType: PackageType): Observable<DataResult<List<TransmitterPackage>>> {
+    return db.transmitterPackageDao()
+      .getPendingPackagesOfType(packageType)
+      .flatMap { packages ->
+        // packages.forEach { it.syncState = SyncState.Sending }
+        val ids = packages.mapNotNull { it.id }
+
+        db.transmitterPackageDao()
+          .updatePackages(ids, SyncState.Sending)
+          .map { packages }
+          .toObservable()
+      }
+      .map { packages -> packages.map { it.toTransmitterPackage() } }
+      .map { DataResult.Success(it) as DataResult<List<TransmitterPackage>> }
+      .onErrorReturn { DataResult.Empty<List<TransmitterPackage>>() }
+  }
+
+  fun updateSyncStateForPackages(packages: List<TransmitterPackage>, syncState: SyncState) : Completable {
+    val ids = packages.mapNotNull { it.id }
+
+    return db.transmitterPackageDao()
+      .updatePackages(ids, syncState)
+      .ignoreElement()
   }
 }

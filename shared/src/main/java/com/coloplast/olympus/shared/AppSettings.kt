@@ -18,7 +18,14 @@ object AppSettings {
   val ENVIRONMENT_URL by lazy {
     "$SERVER_IP/api/$API_VERSION/"
   }
-  
+
+  val AZURE_ENVIRONMENT_URL by lazy {
+    "https://cp-fc-dev.azurefd.net/api/"
+  }
+
+  val code by lazy {
+    "1aiab34Rsqn2jSVcyXevoG9rvS0HjS9lqf5g8XsUV8BnzRVk3a9u1g=="
+  }
   
   /**
    * usually you dont want to have a static reference to a context

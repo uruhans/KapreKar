@@ -3,6 +3,7 @@ package com.coloplast.olympus.businesslayer.interfaces
 import com.coloplast.olympus.shared.models.DataResult
 import com.coloplast.olympus.shared.models.Transmitter
 import com.coloplast.olympus.shared.models.TransmitterPackage
+import com.coloplast.olympus.shared.types.PackageType
 import io.reactivex.Completable
 import io.reactivex.Observable
 
@@ -17,4 +18,7 @@ interface TransmitterComponent {
   fun insertPowerPackage(macAddress: String, byteArray: ByteArray): Completable
   fun insertRawPackage(macAddress: String, byteArray: ByteArray): Completable
   fun insertStatusPackage(macAddress: String, byteArray: ByteArray): Completable
+
+  /** Syncing with future cloud **/
+  fun syncPackagesWithCloud(packageType: PackageType) : Observable<Boolean>
 }

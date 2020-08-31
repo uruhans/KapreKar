@@ -24,7 +24,7 @@ class DataConsentFlowController: TopMenuFlowFactoryController<DataConsentModel>(
       DataConsentFlow.DataConsentDC1 -> {
         return if(data.skip){
           with(factory){
-            skipUntil(DataConsentFlow.DataConsentDC4.id)
+            skipUntil(DataConsentFlow.DataConsentDC5.id)
             incrementAndNext()
           }
           true

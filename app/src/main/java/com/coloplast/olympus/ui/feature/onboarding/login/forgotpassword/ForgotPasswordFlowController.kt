@@ -28,7 +28,7 @@ class ForgotPasswordFlowController : TopMenuFlowFactoryController<ForgotPassword
   BaseDialogController.Listener{
 
   private val viewModel: ForgotPasswordViewModel by inject()
-  private val model: FlowFactory<ForgotPasswordModel> by inject()
+  private val model: ForgotPasswordFactoryImpl by inject()
   private val securityCodeRelay: PublishRelay<ForgotPasswordModel> = PublishRelay.create()
   private val confirmCodeRelay: PublishRelay<ForgotPasswordModel> = PublishRelay.create()
   private val changePassword: PublishRelay<ForgotPasswordModel> = PublishRelay.create()

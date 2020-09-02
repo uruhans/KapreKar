@@ -4,6 +4,7 @@ import androidx.annotation.StringRes
 import com.artemzin.rxui.RxUi
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.HorizontalChangeHandler
+import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerLoginBinding
 import com.coloplast.olympus.shared.models.Credentials
@@ -12,6 +13,7 @@ import com.coloplast.olympus.ui.common.LoadingController
 import com.coloplast.olympus.ui.common.dialogs.BaseDialogController
 import com.coloplast.olympus.ui.common.dialogs.DialogController
 import com.coloplast.olympus.ui.common.models.GenericUiModel
+import com.coloplast.olympus.ui.feature.home.HomeController
 import com.coloplast.olympus.ui.feature.onboarding.login.forgotpassword.ForgotPasswordFlowController
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
@@ -72,7 +74,9 @@ class LoginController: BaseController<ControllerLoginBinding>(),
         is GenericUiModel.Success<*> -> {
           if(uiModel.data as Boolean == true){
             //Login successful
-            //TODO: Go to next screen.
+            getContentRouter().setRoot(HomeController.routerTransaction()
+              .popChangeHandler(VerticalChangeHandler())
+              .pushChangeHandler(VerticalChangeHandler()))
           }
         }
         is GenericUiModel.Error -> {

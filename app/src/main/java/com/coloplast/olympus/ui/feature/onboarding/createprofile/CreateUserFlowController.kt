@@ -94,11 +94,11 @@ class CreateUserFlowController : FlowFactoryController<CreateUserFactoryModel>()
         is GenericUiModel.Success<*> -> {
           val currentUser = uiModel.data as CurrentUser.LoggedIn
 
-          if (Utils.isUKNumber(currentUser.user.phoneNumber)) {
-            getFlowFactory().skipNext()
-          }
-          else {
-            getFlowFactory().incrementAndNext()
+          with(createUserFactory){
+            if (Utils.isUKNumber(currentUser.user.phoneNumber)) {
+              skipUntil(CreateUserFlow.ConfirmationSU8.id)
+            }
+            incrementAndNext()
           }
         }
         is GenericUiModel.Error -> {

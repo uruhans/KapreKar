@@ -6,8 +6,8 @@ import com.coloplast.olympus.businesslayer.interfaces.UserComponent
 import com.coloplast.olympus.shared.models.CurrentUser
 import com.coloplast.olympus.ui.common.BaseViewModel
 import com.coloplast.olympus.ui.common.models.GenericUiModel
-import com.coloplast.olympus.ui.common.rx.DelayedLoadingModel
 import com.coloplast.olympus.ui.common.rx.DelayedLoadingTransformer
+import com.coloplast.olympus.ui.common.rx.GenericUiModelTransformer
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -29,23 +29,12 @@ class LoginViewModel(private val userComponent: UserComponent, private val me: M
         .switchMap { credentials ->
           userComponent.login(credentials)
             .subscribeOn(Schedulers.io())
-            .compose(DelayedLoadingTransformer<CurrentUser>())
-            .map { delayedResult: DelayedLoadingModel<CurrentUser> ->
-              return@map when {
-                delayedResult.isLoading -> GenericUiModel.Loading()
-                delayedResult.result != null -> {
-                  me.setCurrentUser(delayedResult.result!!, true)
-                  GenericUiModel.Success(true)
-                }
-                else -> GenericUiModel.Loading()
-              }
+            .map {
+              me.setCurrentUser(it, true)
+              return@map it is CurrentUser.LoggedIn
             }
-            //TODO: Backend is not ready. We may have to handle custom errors.
-            .onErrorReturn { throwable: Throwable ->
-              GenericUiModel.Error(
-                GenericUiModel.Error.State.ERROR_GENERIC, 1000
-              )
-            }
+            .compose(DelayedLoadingTransformer<Boolean>())
+            .compose(GenericUiModelTransformer())
         }
 
     disposable.add(onLoginRequested.bind(uiView.render()))

@@ -26,7 +26,7 @@ class EmailView @JvmOverloads constructor(context: Context,
     private var errorAlreadyShown = false
 
     //Validates the email. It invokes the validity callback and changes the background based on its state.
-    private val callback = { email: String ->
+    internal val callback = { email: String ->
         validate(email).also { isValid ->
             if (shouldCheckValidity) {
                 setEmailFieldBackground(isValid)

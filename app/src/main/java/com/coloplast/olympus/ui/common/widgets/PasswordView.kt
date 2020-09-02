@@ -26,7 +26,7 @@ class PasswordView @JvmOverloads constructor(context: Context,
     private var errorAlreadyShown = false
 
     //Validates the password. It invokes the validity callback and changes the background based on its state.
-    private val callback = { password: String ->
+    internal val callback = { password: String ->
         validate(password).also { isValid ->
             if (shouldCheckValidity) {
                 setPasswordFieldBackground(isValid)

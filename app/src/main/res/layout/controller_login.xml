@@ -60,7 +60,8 @@
         android:layout_height="wrap_content"
         app:checkValidity="@{true}"
         app:emailCallback="@{controller.onCurrentEmailChanged}"
-        app:onValidityChanged="@{controller.onEmailValidityChanged}" />
+        app:onValidityChanged="@{controller.onEmailValidityChanged}"
+        app:forceValidation="@{controller.fieldsValidationTrigger}"/>
 
       <TextView
         android:layout_width="match_parent"
@@ -76,7 +77,8 @@
         android:layout_height="wrap_content"
         app:checkValidity="@{true}"
         app:passwordCallback="@{controller.onCurrentPasswordChanged}"
-        app:onValidityChanged="@{controller.onPasswordValidityChanged}"/>
+        app:onValidityChanged="@{controller.onPasswordValidityChanged}"
+        app:forceValidation="@{controller.fieldsValidationTrigger}"/>
 
       <Button
         android:layout_width="match_parent"

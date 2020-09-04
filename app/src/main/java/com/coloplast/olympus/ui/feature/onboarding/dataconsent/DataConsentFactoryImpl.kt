@@ -34,7 +34,7 @@ class DataConsentFactoryImpl : FlowFactory<DataConsentModel>() {
           R.string.onboarding_pc_title,
           R.string.onboarding_pc_description,
           R.string.onboarding_pc_button_text,
-          R.drawable.ic_profile
+          R.drawable.ic_checkmark
         )
       }
       else -> null

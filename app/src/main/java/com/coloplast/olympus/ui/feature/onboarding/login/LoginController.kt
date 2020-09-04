@@ -1,6 +1,6 @@
 package com.coloplast.olympus.ui.feature.onboarding.login
 
-import androidx.annotation.StringRes
+import androidx.databinding.ObservableBoolean
 import com.artemzin.rxui.RxUi
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.HorizontalChangeHandler
@@ -56,6 +56,8 @@ class LoginController: BaseController<ControllerLoginBinding>(),
     validPassword = it
   }
 
+  val fieldsValidationTrigger = ObservableBoolean(false)
+
   override fun attachVariables(viewBinding: ControllerLoginBinding) {
     viewBinding.controller = this
   }
@@ -72,25 +74,28 @@ class LoginController: BaseController<ControllerLoginBinding>(),
 
       when (uiModel) {
         is GenericUiModel.Success<*> -> {
-          if(uiModel.data as Boolean == true){
+          if(uiModel.data == true){
             //Login successful
             getContentRouter().setRoot(HomeController.routerTransaction()
               .popChangeHandler(VerticalChangeHandler())
               .pushChangeHandler(VerticalChangeHandler()))
+          } else {
+            dialogController = DialogController.create(
+              targetController = this,
+              requestCode = LOGIN_ERROR_REQUEST_CODE,
+              titleId = R.string.generic_error,
+              messageId = R.string.onboarding_login_error,
+              positiveButtonId = R.string.generic_ok,
+              dismissAllowed = true
+            ).apply { show() }
           }
         }
         is GenericUiModel.Error -> {
-          @StringRes val messageResId = when (uiModel.errorCode) {
-            //22 -> R.string.textfield_error_email_taken // email taken
-            //23 -> R.string.textfield_error_invalid_password_missing_uppercase // password too weak
-            else -> R.string.generic_error_message
-          }
-
           dialogController = DialogController.create(
             targetController = this,
             requestCode = LOGIN_ERROR_REQUEST_CODE,
             titleId = R.string.generic_error,
-            messageId = messageResId,
+            messageId = R.string.generic_error_message,
             positiveButtonId = R.string.generic_ok,
             dismissAllowed = true
           ).apply { show() }
@@ -115,6 +120,10 @@ class LoginController: BaseController<ControllerLoginBinding>(),
   }
 
   fun onNextClicked(){
+    with(fieldsValidationTrigger){
+      set(true)
+      notifyChange()
+    }
     if(validEmail && validPassword){
       val credentials = Credentials(email, password)
       loginRelay.accept(credentials)

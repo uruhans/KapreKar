@@ -61,7 +61,6 @@
         android:layout_marginEnd="@dimen/spacing_standard"
         android:background="@{controller.stomaTypeSelected ? @drawable/spinner_background : @drawable/spinner_background_error}"
         android:spinnerMode="dialog"
-        android:autofillHints="@string/onboarding_login_title"
         android:prompt="@string/onboarding_stoma_type_hint"
         android:entries="@{controller.stomaTypeValues}"
         android:selectedItemPosition="@={controller.stomaTypeSpinnerPosition}"

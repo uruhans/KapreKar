@@ -22,4 +22,13 @@ object PasswordViewAdapters {
     fun shouldCheckValidity(passwordView: PasswordView, shouldCheckValidity: Boolean) {
         passwordView.shouldCheckValidity = shouldCheckValidity
     }
+
+    @BindingAdapter("forceValidation")
+    @JvmStatic
+    fun forceValidation(passwordView: PasswordView, forceValidation: Boolean){
+        if(forceValidation)
+            with(passwordView){
+                callback.invoke(password)
+            }
+    }
 }

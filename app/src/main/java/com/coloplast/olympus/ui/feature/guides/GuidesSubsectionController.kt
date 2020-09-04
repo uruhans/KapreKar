@@ -11,12 +11,12 @@ import com.coloplast.olympus.databinding.ControllerGuidesSubsectionBinding
 import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.feature.guides.articles.GuideController
 import com.coloplast.olympus.ui.feature.guides.articles.models.GuideType
+import com.coloplast.olympus.ui.feature.guides.flows.component.ComponentGuideFlowController
 import com.coloplast.olympus.ui.feature.guides.flows.location.LocationGuideFlowController
 import com.coloplast.olympus.ui.feature.guides.flows.tour.AppTourFlowController
 import com.coloplast.olympus.ui.feature.guides.models.GuideCard
 import com.coloplast.olympus.ui.feature.guides.types.GuidesMenuSubsection
 import com.coloplast.olympus.ui.feature.onboarding.setup.SetupGuideApplyingFlowController
-import com.coloplast.olympus.ui.feature.splash.SplashController
 import com.coloplast.olympus.ui.feature.transmitters.add.AddTransmitterFlowController
 import me.tatarka.bindingcollectionadapter2.OnItemBind
 
@@ -73,7 +73,7 @@ class GuidesSubsectionController(args: Bundle): BaseController<ControllerGuidesS
 
   fun goToFlow(guideCard: GuideCard){
     val routerTransaction = when(guideCard){
-      GuideCard.COMPONENT_GUIDE -> SplashController.routerTransaction()
+      GuideCard.COMPONENT_GUIDE -> ComponentGuideFlowController.routerTransaction()
       GuideCard.APP_TOUR -> AppTourFlowController.routerTransaction()
       GuideCard.APPLYING_GUIDE -> SetupGuideApplyingFlowController.routerTransaction()
       GuideCard.DRY_APPLYING_TIPS -> GuideController.routerTransaction(GuideType.DRY_APPLYING_TIPS)

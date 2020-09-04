@@ -11,7 +11,6 @@ import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.common.extensions.fadeIn
 import com.coloplast.olympus.ui.common.extensions.rotate360
 import com.coloplast.olympus.ui.common.models.GenericUiModel
-import com.coloplast.olympus.ui.feature.guides.GuidesFlowController
 import com.coloplast.olympus.ui.feature.home.HomeController
 import com.coloplast.olympus.ui.feature.onboarding.LandingController
 import com.jakewharton.rxrelay2.PublishRelay
@@ -75,7 +74,7 @@ class SplashController : BaseController<ControllerSplashBinding>(), SplashView {
     }
 
     routerTransaction.let {
-      getContentRouter().setRoot(GuidesFlowController.getRouterTransaction())
+      getContentRouter().setRoot(it)
     }
   }
 

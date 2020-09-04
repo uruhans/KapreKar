@@ -8,7 +8,10 @@ import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.ui.common.MediaGuideController
 import com.coloplast.olympus.ui.common.flow.FlowFactory
 import com.coloplast.olympus.ui.common.flow.FlowFactoryController
+import com.coloplast.olympus.ui.common.models.flow.EmptyModel
 import com.coloplast.olympus.ui.dialogs.CallHelpDialogController
+import com.coloplast.olympus.ui.feature.onboarding.setup.SetupGuideConnectionFlowController
+import com.coloplast.olympus.ui.feature.transmitters.add.models.AddTransmitterFlow
 import com.coloplast.olympus.ui.feature.transmitters.add.models.AddTransmitterModel
 import org.koin.core.inject
 
@@ -27,6 +30,16 @@ class AddTransmitterFlowController(args: Bundle) : FlowFactoryController<AddTran
 
   override fun getFlowFactory(): FlowFactory<AddTransmitterModel> {
     return factory
+  }
+
+  override fun onStepCompleted(currentIndex: Int, data: AddTransmitterModel): Boolean {
+    if (AddTransmitterFlow.fromIndex(currentIndex) == AddTransmitterFlow.AddTransmitterAT7) {
+      if(data.bluetoothEnabled) {
+        factory.skipUntil(AddTransmitterFlow.AddTransmitterAT8.index)
+      }
+    }
+
+    return false
   }
 
   override fun onQuestionClicked(screen: String) {
@@ -51,6 +64,15 @@ class AddTransmitterFlowController(args: Bundle) : FlowFactoryController<AddTran
   override fun onDialogDismissed(requestCode: Int) {
     if(requestCode == DIALOG_CALL_HELP) {
       callHelpDialogController = null
+    }
+  }
+
+  override fun onFlowCompleted(data: AddTransmitterModel) {
+    val closeFlow = targetController is SetupGuideConnectionFlowController
+    super.onFlowCompleted(data)
+
+    if(closeFlow) {
+      (targetController as SetupGuideConnectionFlowController).onFlowCompleted(EmptyModel())
     }
   }
 

@@ -5,7 +5,7 @@ import com.coloplast.olympus.shared.preferences.Preferences
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
 
-class Me {
+class Me(private val preferences: Preferences) {
   
   private var currentUser: CurrentUser = CurrentUser.Empty()
   private val userRelay: PublishRelay<CurrentUser> = PublishRelay.create()
@@ -27,7 +27,7 @@ class Me {
   }
   
   fun logout(notifySubscribers: Boolean = true) {
-    Preferences.get().clear()
+    preferences.clear()
     setCurrentUser(CurrentUser.LoggedOut(), notifySubscribers)
   }
 }

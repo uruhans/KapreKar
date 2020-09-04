@@ -26,21 +26,24 @@ import com.coloplast.olympus.ui.feature.onboarding.login.LoginViewModel
 import com.coloplast.olympus.ui.feature.onboarding.login.forgotpassword.ForgotPasswordFactoryImpl
 import com.coloplast.olympus.ui.feature.onboarding.login.forgotpassword.ForgotPasswordViewModel
 import com.coloplast.olympus.ui.feature.onboarding.setup.SetupGuideApplyingFactoryImpl
+import com.coloplast.olympus.ui.feature.onboarding.setup.SetupGuideConnectionFactoryImpl
 import com.coloplast.olympus.ui.feature.onboarding.setup.SetupGuideIntroFactoryImpl
 import com.coloplast.olympus.ui.feature.onboarding.setup.SetupGuidePreparingFactoryImpl
 import com.coloplast.olympus.ui.feature.onboarding.setup.applying.AwaitingConnectionViewModel
+import com.coloplast.olympus.ui.feature.onboarding.setup.connection.SetupGuideLocationSGC4ViewModel
 import com.coloplast.olympus.ui.feature.onboarding.valueproposition.ValuePropositionFactoryImpl
+import com.coloplast.olympus.ui.feature.splash.SplashViewModel
 import com.coloplast.olympus.ui.feature.transmitters.TransmittersViewModel
 import com.coloplast.olympus.ui.feature.transmitters.add.AddTransmitterFactoryImpl
-import com.coloplast.olympus.ui.feature.transmitters.add.AddTransmitterViewModel
+import com.coloplast.olympus.ui.feature.transmitters.add.at7.AddTransmitterAT7ViewModel
 import com.coloplast.olympus.ui.feature.transmitters.add.at9.AddTransmitterAT9ViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
 val koinModule = module {
-
   /* Preferences */
   single { Preferences(androidContext()) }
+  single { Me(get()) }
 
   /* Notifications */
   single { androidContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }
@@ -49,33 +52,34 @@ val koinModule = module {
   single { NotificationScheduler() }
 
   /* Bluetooth */
-  single<BluetoothManager> { BluetoothManagerImpl(androidContext(), BuildConfig.DEBUG) }
+  single<BluetoothManager> { BluetoothManagerImpl(get(), androidContext(), BuildConfig.DEBUG) }
   factory { DeviceConnection(get()) }
 
-  single { TransmitterManager(get()) }
-  single { BreachesOccurred() }
+  single { TransmitterManager(get(), get()) }
+  single { BreachesOccurred(get()) }
 
   /* Components */
-  single<TransmitterComponent> { TransmitterComponentImpl() }
-  single<UserComponent> { UserComponentImpl() }
-
-  single { Me() }
+  single<TransmitterComponent> { TransmitterComponentImpl(get()) }
+  single<UserComponent> { UserComponentImpl(get()) }
 
   /* ViewModels */
   factory { BluetoothServiceViewModel(get(), get(), get()) }
-  factory { HomeViewModel(get()) }
-  single { AddTransmitterViewModel(get(), get()) }
+  single { SplashViewModel(get(), get()) }
+  single { HomeViewModel(get()) }
   single { TransmittersViewModel(get(), get()) }
-  single { AddTransmitterAT9ViewModel(get(), get()) }
+  single { AddTransmitterAT9ViewModel(get(), get(), get()) }
   single { AwaitingConnectionViewModel(get()) }
   single { CreateUserViewModel(get(), get()) }
   single { LoginViewModel(get(), get()) }
   single { ForgotPasswordViewModel(get()) }
+  single { SetupGuideLocationSGC4ViewModel(get()) }
+  single { AddTransmitterAT7ViewModel(get()) }
 
   /* Flows */
   single { AddTransmitterFactoryImpl() }
   single { ValuePropositionFactoryImpl() }
   single { SetupGuideIntroFactoryImpl() }
+  single { SetupGuideConnectionFactoryImpl() }
   single { SetupGuidePreparingFactoryImpl() }
   single { SetupGuideApplyingFactoryImpl() }
   single { DataConsentFactoryImpl() }

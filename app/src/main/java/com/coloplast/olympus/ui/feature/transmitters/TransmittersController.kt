@@ -83,14 +83,14 @@ class TransmittersController(args: Bundle? = null) :
         }
         is TransmittersUiModel.StateUpdate -> {
           transmitterList
-            .firstOrNull { uiModel.stateChange.bleDevice.macAddress == it.transmitter.macAddress }
+            .firstOrNull { uiModel.stateChange.bleDevice.macAddress == it.transmitter.id }
             ?.setStateChange(uiModel.stateChange)
 
           updateDiffList()
         }
         is TransmittersUiModel.TransmitterConnectionState -> {
           transmitterList
-            .find { uiModel.connectionState.macAddress == it.transmitter.macAddress }
+            .find { uiModel.connectionState.macAddress == it.transmitter.id }
             ?.setConnectionState(uiModel.connectionState.connectionState)
 
           searchEnabled.set(!allConnected())
@@ -154,7 +154,7 @@ class TransmittersController(args: Bundle? = null) :
     when (requestCode) {
       REQUEST_CODE_DELETE_TRANSMITTER -> {
         transmitterToDelete?.let {
-          deleteTransmitterRelay.accept(it.macAddress)
+          deleteTransmitterRelay.accept(it.id)
         }
       }
       REQUEST_CODE_ADD_TRANSMITTER -> {

@@ -8,13 +8,11 @@ import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.common.WebViewController
 import com.coloplast.olympus.ui.common.listeners.FlowListener
 
-
 /**
  * Created by Kike Bodi (ebp@dawnhealth.com) on 15/07/2020.
  * Copyright by Dawn Health A/S. All rights reserved.
  */
 class AcceptTermsDC5Controller: BaseController<ControllerAcceptTermsDc5Binding>() {
-
 
   override fun attachVariables(viewBinding: ControllerAcceptTermsDc5Binding) {
     viewBinding.controller = this
@@ -43,11 +41,11 @@ class AcceptTermsDC5Controller: BaseController<ControllerAcceptTermsDc5Binding>(
   }
 
   fun onAcceptClicked(){
-    getListener(FlowListener::class.java)!!.onNextClicked()
+    getListener(FlowListener::class.java)?.onNextClicked(true)
   }
 
   fun onDeclineClicked(){
-    //TODO
+    getListener(FlowListener::class.java)?.onNextClicked(false)
   }
 
   override fun getLayout(): Int = R.layout.controller_accept_terms_dc_5

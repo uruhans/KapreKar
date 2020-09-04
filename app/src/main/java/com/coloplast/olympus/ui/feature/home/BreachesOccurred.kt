@@ -10,12 +10,12 @@ import com.coloplast.olympus.ui.common.extensions.toMillis
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
 import java.time.LocalDateTime
 
-class BreachesOccurred {
+class BreachesOccurred(private val preferences: Preferences) {
 
   private val breaches = mutableListOf<Breach>()
 
   init {
-    Preferences.get().leaks.let { leaks ->
+    preferences.leaks.let { leaks ->
       if(leaks.isEmpty()) {
         return@let
       }
@@ -48,7 +48,7 @@ class BreachesOccurred {
 
   fun clear() {
     breaches.clear()
-    Preferences.get().leaks = ""
+    preferences.leaks = ""
   }
 
   private fun isBreach(stateChange: StateChange) : Boolean {
@@ -59,7 +59,7 @@ class BreachesOccurred {
   }
 
   private fun updateStore() {
-    Preferences.get().leaks = getBreaches().serializeList()
+    preferences.leaks = getBreaches().serializeList()
   }
 }
 

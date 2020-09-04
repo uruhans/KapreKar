@@ -42,7 +42,8 @@ abstract class FlowFactoryController<T : FlowFactoryModel>(args: Bundle? = null)
 
     afterControllerPushed(routerTransaction.controller())
   }
-  
+
+  @CallSuper
   override fun onFlowCompleted(data: T) {
     closeFlow()
   }

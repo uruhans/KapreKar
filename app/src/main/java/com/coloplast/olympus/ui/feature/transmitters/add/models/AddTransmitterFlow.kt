@@ -8,10 +8,12 @@ enum class AddTransmitterFlow(val index: Int) {
   AddTransmitterAT5(4),
   AddTransmitterAT6(5),
   AddTransmitterAT7(6),
-  AddTransmitterAT8(7),
-  AddTransmitterAT9(8),
-  AddTransmitterAT10(9),
-  Completed(10);
+  AddTransmitterBle1Disabled(7),
+  AddTransmitterBle3Activated(8),
+  AddTransmitterAT8(9),
+  AddTransmitterAT9(10),
+  AddTransmitterAT10(11),
+  Completed(12);
   
   companion object {
     fun fromIndex(id: Int) : AddTransmitterFlow {

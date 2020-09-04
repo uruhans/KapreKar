@@ -4,6 +4,8 @@ import android.content.Intent
 import android.net.Uri
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.HorizontalChangeHandler
+import com.coloplast.olympus.shared.preferences.OnboardingProgression
+import com.coloplast.olympus.shared.preferences.Preferences
 import com.coloplast.olympus.ui.common.MediaGuideController
 import com.coloplast.olympus.ui.common.flow.FlowFactory
 import com.coloplast.olympus.ui.common.flow.TopMenuFlowFactoryController
@@ -18,7 +20,7 @@ class SetupGuideApplyingFlowController : TopMenuFlowFactoryController<ApplyingFl
   CallHelpDialogController.Listener {
 
   private val factory: SetupGuideApplyingFactoryImpl by inject()
-
+  private val preferences: Preferences by inject()
   private var callHelpDialogController: CallHelpDialogController? = null
 
   override fun getFlowFactory(): FlowFactory<ApplyingFlowModel> {
@@ -57,6 +59,11 @@ class SetupGuideApplyingFlowController : TopMenuFlowFactoryController<ApplyingFl
     }
 
     return false
+  }
+
+  override fun onFlowCompleted(data: ApplyingFlowModel) {
+    preferences.setCurrentOnboardingProgression(OnboardingProgression.COMPLETED)
+    super.onFlowCompleted(data)
   }
 
   override fun popUntil(currentIndex: Int) {

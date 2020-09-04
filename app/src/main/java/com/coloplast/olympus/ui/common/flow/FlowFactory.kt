@@ -81,6 +81,10 @@ abstract class FlowFactory<V: FlowFactoryModel> {
     currentIndex.set(initialStartIndex)
   }
 
+  fun getCurrent() : Int {
+    return currentIndex.get()
+  }
+
   /**
    * Call this if you have implemented @see onStepCompleted()
    */

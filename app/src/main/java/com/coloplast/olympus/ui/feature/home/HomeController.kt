@@ -25,6 +25,7 @@ import com.coloplast.olympus.bluetooth.businesslayer.models.Patch
 import com.coloplast.olympus.bluetooth.model.ServiceEvent
 import com.coloplast.olympus.databinding.ControllerHomeBinding
 import com.coloplast.olympus.notifications.OlympusNotificationManager
+import com.coloplast.olympus.shared.preferences.Preferences
 import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.common.DrawerState
 import com.coloplast.olympus.ui.common.PermissionHandler
@@ -62,6 +63,7 @@ import java.time.LocalTime
 class HomeController : BaseController<ControllerHomeBinding>, HomeView, PermissionHandler, BaseDialogController.Listener, ImageDialogController.Listener {
   
   private val viewModel: HomeViewModel by inject()
+  private val preferences: Preferences by inject()
   private val transmitterManager: TransmitterManager by inject()
   private val breachesOccurred: BreachesOccurred by inject()
   private val olympusNotificationManager: OlympusNotificationManager by inject()
@@ -417,6 +419,9 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         imageDialogController?.dismissDialog(withCallback = true)
       }
       REQUEST_CODE_TRANSMITTERS_CHANGED -> {
+        // new patch is being used
+        preferences.updatePatchId()
+
         patchChangeTime = LocalTime.now()
 
         breachesOccurred.clear()

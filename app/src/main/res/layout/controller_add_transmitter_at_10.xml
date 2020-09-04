@@ -24,7 +24,19 @@
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintTop_toTopOf="parent">
 
-      <include layout="@layout/item_checkmark_with_background" />
+      <FrameLayout
+        android:layout_width="104dp"
+        android:layout_height="104dp"
+        android:background="@drawable/shape_turquoise_circle"
+        android:gravity="center">
+
+        <ImageView
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:layout_margin="@dimen/spacing_large"
+          android:src="@drawable/ic_checkmark" />
+
+      </FrameLayout>
 
       <TextView
         android:id="@+id/transmitter_guide_at1_title"
@@ -47,7 +59,7 @@
     <Button
       style="@style/Button"
       android:onClick="@{() -> controller.onCloseButtonClicked()}"
-      android:text="@string/generic_close"
+      android:text="@string/generic_continue"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent" />

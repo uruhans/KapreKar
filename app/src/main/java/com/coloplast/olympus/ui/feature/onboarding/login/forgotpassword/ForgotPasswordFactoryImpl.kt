@@ -36,6 +36,7 @@ class ForgotPasswordFactoryImpl: FlowFactory<ForgotPasswordModel>() {
   }
 
   override fun parseResultFromController(currentIndex: Int, result: Any?) {
+    @Suppress("NON_EXHAUSTIVE_WHEN")
     when(ForgotPasswordFlow.fromIndex(currentIndex)){
       ForgotPasswordFlow.ForgotPasswordFP1 -> {
         val email = result as String

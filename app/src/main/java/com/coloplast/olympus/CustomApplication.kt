@@ -7,6 +7,7 @@ import com.coloplast.olympus.shared.AppSettings
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
+import org.koin.core.logger.Level
 import timber.log.Timber
 
 class CustomApplication : Application() {
@@ -20,7 +21,9 @@ class CustomApplication : Application() {
     Timber.d(DebugDB.getAddressLog())
     
     startKoin {
-      androidLogger()
+      // currently a workaround for koin as not having Level.ERROR causes a runtime crash
+      // TODO - remove when koin has fixed, but until then, not really an issue
+      androidLogger(Level.ERROR)
       androidContext(this@CustomApplication)
       modules(koinModule)
     }

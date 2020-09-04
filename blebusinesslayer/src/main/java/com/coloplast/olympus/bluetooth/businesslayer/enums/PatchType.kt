@@ -6,6 +6,7 @@ enum class PatchType(val id: Int) {
   PATCH_2(2),
   PATCH_3(3),
   PATCH_4(4),
+  PATCH_5(5),
   UNKNOWN(-1);
   
   companion object {

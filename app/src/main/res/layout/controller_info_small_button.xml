@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools">
+
+  <data>
+
+    <import type="com.coloplast.olympus.R" />
+
+    <variable
+      name="controller"
+      type="com.coloplast.olympus.ui.common.InfoPageSmallButtonController" />
+  </data>
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <LinearLayout
+      android:id="@+id/linearLayout"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="@dimen/spacing_standard"
+      android:layout_marginEnd="@dimen/spacing_standard"
+      android:orientation="vertical"
+      android:layout_marginBottom="@dimen/spacing_triple"
+      app:layout_constraintBottom_toTopOf="@+id/next_button"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintVertical_bias="1">
+
+      <ImageView
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="@dimen/spacing_standard"
+        android:layout_marginEnd="@dimen/spacing_standard"
+        app:resource="@{controller.iconId}"
+        app:tintDrawable="@{R.color.turquoise}"
+        tools:src="@drawable/ic_info_circle" />
+
+      <TextView
+        style="@style/TextStyle.Coloplast.Bold.DarkGrey.24"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_standard"
+        android:layout_marginTop="@dimen/spacing_large"
+        android:layout_marginEnd="@dimen/spacing_standard"
+        android:text="@{controller.titleId}"
+        tools:text="@string/onboarding_chapter_preparing_change_title" />
+
+      <TextView
+        android:id="@+id/title"
+        style="@style/TextStyle.Roboto.Regular.ClearGrey.16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_standard"
+        android:layout_marginTop="@dimen/spacing_standard"
+        android:layout_marginEnd="@dimen/spacing_standard"
+        android:lineSpacingMultiplier="1.2"
+        android:text="@{controller.descriptionId}"
+        tools:text="@string/onboarding_chapter_preparing_change_description" />
+
+    </LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+      android:id="@+id/next_button"
+      android:layout_width="56dp"
+      android:layout_height="56dp"
+      android:layout_marginEnd="@dimen/spacing_larger"
+      android:layout_marginBottom="@dimen/spacing_double"
+      android:onClick="@{() -> controller.onNextClicked()}"
+      android:src="@drawable/ic_arrow"
+      android:tint="@color/white"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent" />
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

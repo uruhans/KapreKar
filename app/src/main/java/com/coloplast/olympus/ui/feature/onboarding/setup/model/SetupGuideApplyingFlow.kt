@@ -25,7 +25,8 @@ enum class SetupGuideApplyingFlow(override val id: Int) : TypeWithId {
   AwaitingConnection(19),
   SetupGuideAttachedSuccessSGA13(20),
   SetupGuideAttachedFailedSGA13_2(21),
-  Completed(22);
+  SetupGuideCompleted(22),
+  Completed(23);
 
   companion object {
     fun fromIndex(id: Int): SetupGuideApplyingFlow {

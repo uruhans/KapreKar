@@ -1,8 +1,11 @@
 package com.coloplast.olympus.ui.feature.onboarding.dataconsent
 
 import com.bluelinelabs.conductor.RouterTransaction
+import com.coloplast.olympus.shared.preferences.OnboardingProgression
+import com.coloplast.olympus.shared.preferences.Preferences
 import com.coloplast.olympus.ui.common.flow.FlowFactory
 import com.coloplast.olympus.ui.common.flow.TopMenuFlowFactoryController
+import org.koin.core.inject
 
 
 /**
@@ -11,16 +14,17 @@ import com.coloplast.olympus.ui.common.flow.TopMenuFlowFactoryController
  */
 class DataConsentFlowController: TopMenuFlowFactoryController<DataConsentModel>() {
 
-  private val model by lazy { DataConsentFactoryImpl() }
+  private val factory by lazy { DataConsentFactoryImpl() }
+  private val preferences: Preferences by inject()
 
-  override fun getFlowFactory(): FlowFactory<DataConsentModel> = model
+  override fun getFlowFactory(): FlowFactory<DataConsentModel> = factory
 
   override fun onStepCompleted(currentIndex: Int, data: DataConsentModel): Boolean {
     return when(DataConsentFlow.fromIndex(currentIndex)){
       DataConsentFlow.DataConsentDC1 -> {
         return if(data.skip){
-          with(model){
-            skipUntil(DataConsentFlow.DataConsentDC4.id)
+          with(factory){
+            skipUntil(DataConsentFlow.DataConsentDC5.id)
             incrementAndNext()
           }
           true
@@ -28,8 +32,20 @@ class DataConsentFlowController: TopMenuFlowFactoryController<DataConsentModel>(
           false // go to next step as usual.
         }
       }
+      DataConsentFlow.DataConsentDC5 -> {
+        if(!data.didConsent) {
+          activity?.finish()
+          return true
+        }
+        false
+      }
       else -> super.onStepCompleted(currentIndex, data)
     }
+  }
+
+  override fun onFlowCompleted(data: DataConsentModel) {
+    preferences.setCurrentOnboardingProgression(OnboardingProgression.SETUP_GUIDE_INTRODUCTION)
+    super.onFlowCompleted(data)
   }
 
   companion object{

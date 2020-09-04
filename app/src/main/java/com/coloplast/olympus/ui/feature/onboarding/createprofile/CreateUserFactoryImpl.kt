@@ -2,6 +2,7 @@ package com.coloplast.olympus.ui.feature.onboarding.createprofile
 
 import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.R
+import com.coloplast.olympus.shared.types.StomaType
 import com.coloplast.olympus.ui.common.GenericConfirmationController
 import com.coloplast.olympus.ui.common.flow.FlowFactory
 import com.coloplast.olympus.ui.feature.onboarding.createprofile.models.CreateUserFactoryModel
@@ -20,12 +21,11 @@ class CreateUserFactoryImpl : FlowFactory<CreateUserFactoryModel>() {
   private lateinit var model: CreateUserFactoryModel
 
   override fun initialize() {
-    model =
-      CreateUserFactoryModel()
+    model = CreateUserFactoryModel()
   }
 
   override fun getRouterTransaction(currentIndex: Int): RouterTransaction? {
-    return when(CreateUserFlow.fromIndex(currentIndex)){
+    return when (CreateUserFlow.fromIndex(currentIndex)) {
       CreateUserFlow.CreateUserSU1 -> CreateUserSU1Controller.getRouterTransaction()
       CreateUserFlow.StomaInfoSU2 -> StomaInfoSU2Controller.getRouterTransaction()
       CreateUserFlow.EmailSU3 -> EmailSU3Controller.getRouterTransaction()
@@ -38,7 +38,6 @@ class CreateUserFactoryImpl : FlowFactory<CreateUserFactoryModel>() {
         R.string.onboarding_confirmation_button
       )
       CreateUserFlow.Completed -> null
-      else -> null
     }
   }
 
@@ -47,34 +46,30 @@ class CreateUserFactoryImpl : FlowFactory<CreateUserFactoryModel>() {
       return
     }
 
+    @Suppress("NON_EXHAUSTIVE_WHEN")
     when (CreateUserFlow.fromIndex(currentIndex)) {
       CreateUserFlow.CreateUserSU1 -> {
         val data = result as SU1Model
-        model.firstName = data.firstname
-        model.lastName = data.lastname
+        model.user.firstName = data.firstname
+        model.user.lastName = data.lastname
       }
       CreateUserFlow.StomaInfoSU2 -> {
         val data = result as SU2Model
-        model.stomaTypeId = data.stomaType.id
-        model.stomaSurgeryDateId = data.stomaSurgeryDate.id
+        model.user.stomaType = StomaType.fromId(data.stomaType.id)
+        model.user.surgeryDateInterval = data.stomaSurgeryDate.id
       }
       CreateUserFlow.EmailSU3 -> {
-        val email = result as String
-        model.email = email
+        model.user.email = result as String
       }
       CreateUserFlow.PasswordSU4 -> {
-        val password = result as String
-        model.password = password
+        model.user.password = result as String
       }
       CreateUserFlow.PhoneSU6 -> {
-        val phoneNumber = result as String
-        model.phoneNumber = phoneNumber
+        model.user.phoneNumber = result as String
       }
       CreateUserFlow.InsuranceSU7 -> {
-        val healthInsurance = result as HealthInsurance
-        model.healthInsuranceId = healthInsurance.id
+        model.user.insuranceType = (result as HealthInsurance).id
       }
-      CreateUserFlow.Completed -> {}
     }
   }
 

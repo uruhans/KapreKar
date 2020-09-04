@@ -6,10 +6,14 @@ import io.reactivex.Completable
 import io.reactivex.Observable
 
 interface TransmitterComponent {
-  
+
   fun getTransmitters(): Observable<DataResult<List<Transmitter>>>
   fun getTransmitter(macAddress: String): Observable<DataResult<Transmitter>>
   fun insertOrUpdateTransmitter(transmitter: Transmitter): Completable
   fun deleteTransmitter(macAddress: String): Completable
   fun deleteAllTransmitters(): Completable
+
+  fun insertPowerPackage(macAddress: String, byteArray: ByteArray): Completable
+  fun insertRawPackage(macAddress: String, byteArray: ByteArray): Completable
+  fun insertStatusPackage(macAddress: String, byteArray: ByteArray): Completable
 }

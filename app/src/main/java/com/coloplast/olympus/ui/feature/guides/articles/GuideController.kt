@@ -7,14 +7,14 @@ import com.bluelinelabs.conductor.changehandler.HorizontalChangeHandler
 import com.coloplast.olympus.BR
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerGuideBinding
-import com.coloplast.olympus.ui.common.CustomToolbarController
+import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.feature.guides.articles.models.*
 import com.coloplast.olympus.ui.feature.guides.flows.location.LocationGuideFlowController
 import com.coloplast.olympus.ui.feature.guides.models.ButtonType
 import com.coloplast.olympus.ui.feature.transmitters.TransmittersController
 import me.tatarka.bindingcollectionadapter2.itembindings.OnItemBindClass
 
-class GuideController(args: Bundle) : CustomToolbarController<ControllerGuideBinding>(args) {
+class GuideController(args: Bundle) : BaseController<ControllerGuideBinding>(args) {
 
   val items = ObservableArrayList<Any>()
   val itemBinding: OnItemBindClass<Any> = OnItemBindClass<Any>()
@@ -46,7 +46,6 @@ class GuideController(args: Bundle) : CustomToolbarController<ControllerGuideBin
   }
 
   override fun attachVariables(viewBinding: ControllerGuideBinding) {
-    super.attachVariables(viewBinding)
     viewBinding.controller = this
   }
 
@@ -54,7 +53,6 @@ class GuideController(args: Bundle) : CustomToolbarController<ControllerGuideBin
     if (items.isNullOrEmpty()) {
       items.addAll(GuideContent.getGuideContent(guideType, buttonCallback))
     }
-    super.onViewBound(viewBinding)
   }
 
   override fun getLayout() = R.layout.controller_guide

@@ -72,21 +72,24 @@ class GuidesSubsectionController(args: Bundle): BaseController<ControllerGuidesS
   }
 
   fun goToFlow(guideCard: GuideCard){
-    val routerTransaction = when(guideCard){
-      GuideCard.COMPONENT_GUIDE -> ComponentGuideFlowController.routerTransaction()
-      GuideCard.APP_TOUR -> AppTourFlowController.routerTransaction()
-      GuideCard.APPLYING_GUIDE -> SetupGuideApplyingFlowController.routerTransaction()
-      GuideCard.DRY_APPLYING_TIPS -> GuideController.routerTransaction(GuideType.DRY_APPLYING_TIPS)
-      GuideCard.CONNECTION_GUIDE -> GuideController.routerTransaction(GuideType.CONNECTION)
-      GuideCard.CHARGING_GUIDE -> GuideController.routerTransaction(GuideType.CHARGING)
-      GuideCard.LOCATION_GUIDE -> LocationGuideFlowController.routerTransaction()
-      GuideCard.CHECK_BATTERY_LEVEL -> GuideController.routerTransaction(GuideType.CHECK_BATTERY)
-      GuideCard.ADD_TRANSMITTER -> AddTransmitterFlowController.routerTransaction()
-      GuideCard.DELETE_TRANSMITTER -> GuideController.routerTransaction(GuideType.DELETE_TRANSMITTER)
-      GuideCard.CLEANING_GUIDE -> GuideController.routerTransaction(GuideType.CLEANING)
-      GuideCard.DRYING_GUIDE -> GuideController.routerTransaction(GuideType.DRYING)
+    // Here we make a distinction between the type of guide.
+    // If it is a single-screen controller, we add it on the parent router (so it is attached as a regular screen)
+    // If it is a flow we add it on the content router.
+    val (selectedRouter, routerTransaction) = when(guideCard){
+      GuideCard.COMPONENT_GUIDE -> Pair(getContentRouter(), ComponentGuideFlowController.routerTransaction())
+      GuideCard.APP_TOUR -> Pair(getContentRouter(), AppTourFlowController.routerTransaction())
+      GuideCard.APPLYING_GUIDE -> Pair(getContentRouter(), SetupGuideApplyingFlowController.routerTransaction())
+      GuideCard.DRY_APPLYING_TIPS -> Pair(router, GuideController.routerTransaction(GuideType.DRY_APPLYING_TIPS))
+      GuideCard.CONNECTION_GUIDE -> Pair(router, GuideController.routerTransaction(GuideType.CONNECTION))
+      GuideCard.CHARGING_GUIDE -> Pair(router, GuideController.routerTransaction(GuideType.CHARGING))
+      GuideCard.LOCATION_GUIDE -> Pair(getContentRouter(), LocationGuideFlowController.routerTransaction())
+      GuideCard.CHECK_BATTERY_LEVEL -> Pair(router, GuideController.routerTransaction(GuideType.CHECK_BATTERY))
+      GuideCard.ADD_TRANSMITTER -> Pair(getContentRouter(), AddTransmitterFlowController.routerTransaction())
+      GuideCard.DELETE_TRANSMITTER -> Pair(router, GuideController.routerTransaction(GuideType.DELETE_TRANSMITTER))
+      GuideCard.CLEANING_GUIDE -> Pair(router, GuideController.routerTransaction(GuideType.CLEANING))
+      GuideCard.DRYING_GUIDE -> Pair(router, GuideController.routerTransaction(GuideType.DRYING))
     }
-    getContentRouter().pushController(routerTransaction
+    selectedRouter.pushController(routerTransaction
       .pushChangeHandler(HorizontalChangeHandler())
       .popChangeHandler(HorizontalChangeHandler()))
   }

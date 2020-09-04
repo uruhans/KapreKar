@@ -9,6 +9,7 @@ import com.coloplast.olympus.BR
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerGuidesSubsectionBinding
 import com.coloplast.olympus.ui.common.BaseController
+import com.coloplast.olympus.ui.feature.guides.flows.component.ComponentGuideFlowController
 import com.coloplast.olympus.ui.feature.guides.models.GuideCard
 import com.coloplast.olympus.ui.feature.guides.types.GuidesMenuSubsection
 import com.coloplast.olympus.ui.feature.splash.SplashController
@@ -67,7 +68,7 @@ class GuidesSubsectionController(args: Bundle): BaseController<ControllerGuidesS
 
   fun goToFlow(guideCard: GuideCard){
     val routerTransaction = when(guideCard){
-      GuideCard.COMPONENT_GUIDE -> SplashController.routerTransaction()
+      GuideCard.COMPONENT_GUIDE -> ComponentGuideFlowController.routerTransaction()
       GuideCard.APP_TOUR -> SplashController.routerTransaction()
       GuideCard.APPLYING_GUIDE -> SplashController.routerTransaction()
       GuideCard.DRY_APPLYING_TIPS -> SplashController.routerTransaction()

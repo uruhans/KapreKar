@@ -1,10 +1,11 @@
 package com.coloplast.olympus.businesslayer.interfaces
 
+import com.coloplast.olympus.businesslayer.models.SyncResult
 import com.coloplast.olympus.shared.models.DataResult
 import com.coloplast.olympus.shared.models.Transmitter
-import com.coloplast.olympus.shared.models.TransmitterPackage
 import com.coloplast.olympus.shared.types.PackageType
 import io.reactivex.Completable
+import io.reactivex.Flowable
 import io.reactivex.Observable
 
 interface TransmitterComponent {
@@ -20,5 +21,7 @@ interface TransmitterComponent {
   fun insertStatusPackage(macAddress: String, byteArray: ByteArray): Completable
 
   /** Syncing with future cloud **/
-  fun syncPackagesWithCloud(packageType: PackageType) : Observable<Boolean>
+  fun deletePackagesAlreadySynced(packageType: PackageType): Observable<SyncResult>
+  fun syncPackagesWithCloud(packageType: PackageType): Observable<SyncResult>
+  fun pendingPackagesRemaining(packageType: PackageType) : Flowable<Int>
 }

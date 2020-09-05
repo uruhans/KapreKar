@@ -20,11 +20,11 @@ object AppSettings {
   }
 
   val AZURE_ENVIRONMENT_URL by lazy {
-    "https://cp-fc-dev.azurefd.net/api/"
+    "https://cp-fc-test.azurefd.net/api/"
   }
 
   val code by lazy {
-    "1aiab34Rsqn2jSVcyXevoG9rvS0HjS9lqf5g8XsUV8BnzRVk3a9u1g=="
+    "yBcdDaPPWKYaL160/7aXnd55ehvzukND6ng3oawFaApU1xd891QtwQ=="
   }
   
   /**

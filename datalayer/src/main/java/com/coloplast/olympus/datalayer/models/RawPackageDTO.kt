@@ -8,6 +8,9 @@ import java.time.ZoneOffset
 
 class RawPackageDTO(
 
+  @Json(name = "packageId")
+  val id: String, // local storage id (tuple id in sqlite db)
+
   /**
    * this represents the date that the phone received the raw package from the transmitter
    */
@@ -112,11 +115,12 @@ class RawPackageDTO(
 
   @Json(name = "batt_pwr")
   val battPower : Int
-) : TransmitterValue {
+)  {
 
   companion object {
-    fun fromRawDataPackage(dataReceived: Instant, rawDataPackage: RawDataPackage) : TransmitterValue {
+    fun fromRawDataPackage(id: Int, dataReceived: Instant, rawDataPackage: RawDataPackage) : RawPackageDTO {
       return RawPackageDTO(
+        id.toString(),
         dataReceived,
         LocalDateTime.of(
           rawDataPackage.year.toInt(),

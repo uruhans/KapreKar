@@ -2,24 +2,22 @@ package com.coloplast.olympus.datalayer
 
 import com.coloplast.olympus.datalayer.models.PatchDTO
 import com.coloplast.olympus.datalayer.models.RawPackageDTO
-import com.coloplast.olympus.datalayer.models.RawStreamDTO
-import com.coloplast.olympus.datalayer.models.TransmitterValue
+import com.coloplast.olympus.datalayer.models.TransmitterStreamDTO
 import com.coloplast.olympus.shared.models.TransmitterPackage
 import com.coloplast.olympus.shared.transformers.OlympusWirelessProtocol
 import com.coloplast.olympus.shared.types.PackageType
 import io.reactivex.Completable
-import java.util.*
 
 class AzurePackageApiImpl : AzurePackageApi {
 
   private val packageApi = AzureRetrofit.packageApi
 
-  override fun sendPackages(userId: UUID, packageType: PackageType, packages: List<TransmitterPackage>): Completable {
+  override fun sendPackages(userId: String, packageType: PackageType, packages: List<TransmitterPackage>): Completable {
     // first group the list into a map of transmitterId, list of packages
     val packagesByTransmitterId: Map<String, List<TransmitterPackage>> =
       packages.groupBy { it.transmitterId }
 
-    val rawDTOs = mutableListOf<RawStreamDTO>()
+    val rawStreamDTO = mutableListOf<TransmitterStreamDTO>()
 
     // run through each of the transmitterIds
     packagesByTransmitterId.forEach {
@@ -34,39 +32,56 @@ class AzurePackageApiImpl : AzurePackageApi {
       // run through each patch
       packagesByPatchId.forEach { patchEntry ->
         // create a patchDTO and convert the value of the package to
-        val patchDTO = PatchDTO("$deviceId-${patchEntry.key}",convertValueToEntities(packageType, patchEntry.value))
+        val patchDTO = PatchDTO("$deviceId-${patchEntry.key}", convertValueToEntities(packageType, patchEntry.value))
         patchDTOs.add(patchDTO)
       }
 
       // final list containing transmitters, patches and packages
-      val rawStreamDtos = RawStreamDTO(it.key, patchDTOs)
-      rawDTOs.add(rawStreamDtos)
+      val transmitterStreamDTOs = TransmitterStreamDTO(it.key, patchDTOs)
+      rawStreamDTO.add(transmitterStreamDTOs)
     }
+
+    //val rawDto = RawStreamDTO(transmitterDTOs)
 
     return when (packageType) {
       PackageType.Status -> TODO()
-      PackageType.Raw -> sendRawPackages(userId, rawDTOs)
+      PackageType.Raw -> sendRawPackages(userId, rawStreamDTO)
       PackageType.Power -> TODO()
     }
   }
 
-  private fun convertValueToEntities(packageType: PackageType, packages: List<TransmitterPackage>): List<TransmitterValue?> {
+  private fun convertValueToEntities(packageType: PackageType, packages: List<TransmitterPackage>): List<RawPackageDTO> {
     return packages.map { tPackage ->
       when (packageType) {
-        PackageType.Status -> null
-        PackageType.Raw -> {
+        PackageType.Status -> {
+          // TODO - change to STATUS package conversion
           RawPackageDTO.fromRawDataPackage(
+            tPackage.id!!,
             tPackage.timestamp,
             OlympusWirelessProtocol.rawDataPackageTransformer(tPackage.value)
           )
         }
-        PackageType.Power -> null
+        PackageType.Raw -> {
+          RawPackageDTO.fromRawDataPackage(
+            tPackage.id!!,
+            tPackage.timestamp,
+            OlympusWirelessProtocol.rawDataPackageTransformer(tPackage.value)
+          )
+        }
+        PackageType.Power -> {
+          // TODO - change to POWER package conversion
+          RawPackageDTO.fromRawDataPackage(
+            tPackage.id!!,
+            tPackage.timestamp,
+            OlympusWirelessProtocol.rawDataPackageTransformer(tPackage.value)
+          )
+        }
       }
     }
   }
 
-  private fun sendRawPackages(userId: UUID, streamDtos: List<RawStreamDTO>): Completable {
-    return packageApi.syncRawPackages(userId.toString(), streamDtos)
+  private fun sendRawPackages(userId: String, rawStream: List<TransmitterStreamDTO>): Completable {
+    return packageApi.syncRawPackages(userId, rawStream)
   }
 
 }

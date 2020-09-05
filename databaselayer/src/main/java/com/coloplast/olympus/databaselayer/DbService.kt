@@ -5,8 +5,11 @@ import com.coloplast.olympus.shared.models.Transmitter
 import com.coloplast.olympus.shared.models.TransmitterPackage
 import com.coloplast.olympus.shared.models.User
 import com.coloplast.olympus.shared.types.PackageType
+import com.coloplast.olympus.shared.types.SyncState
 import io.reactivex.Completable
+import io.reactivex.Flowable
 import io.reactivex.Observable
+import io.reactivex.Single
 import java.util.*
 
 interface DbService {
@@ -22,5 +25,7 @@ interface DbService {
   /** Transmitter Packages **/
   fun insertTransmitterPackage(transmitterPackage: TransmitterPackage): Completable
   fun getPendingTransmitterPackages(packageType: PackageType) : Observable<DataResult<List<TransmitterPackage>>>
-
+  fun deleteTransmitterPackages(packageType: PackageType) : Completable
+  fun updateSyncStateForPackages(packages: List<TransmitterPackage>, syncState: SyncState) : Completable
+  fun pendingPackagesRemaining(packageType: PackageType) : Flowable<Int>
 }

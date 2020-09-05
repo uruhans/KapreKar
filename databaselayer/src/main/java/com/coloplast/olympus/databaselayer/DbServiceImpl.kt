@@ -14,7 +14,10 @@ import com.coloplast.olympus.shared.models.User
 import com.coloplast.olympus.shared.types.PackageType
 import com.coloplast.olympus.shared.types.SyncState
 import io.reactivex.Completable
+import io.reactivex.Flowable
 import io.reactivex.Observable
+import io.reactivex.Single
+import timber.log.Timber
 import java.util.*
 
 class DbServiceImpl : DbService {
@@ -88,25 +91,63 @@ class DbServiceImpl : DbService {
   override fun getPendingTransmitterPackages(packageType: PackageType): Observable<DataResult<List<TransmitterPackage>>> {
     return db.transmitterPackageDao()
       .getPendingPackagesOfType(packageType)
+      .toObservable()
+      .doOnNext { Timber.d("Number of pending [$packageType] packages in database: ${it.size}") }
+      .filter { it.isNotEmpty() }
       .flatMap { packages ->
-        // packages.forEach { it.syncState = SyncState.Sending }
-        val ids = packages.mapNotNull { it.id }
+        packages.forEach { it.syncState = SyncState.Sending }
 
         db.transmitterPackageDao()
-          .updatePackages(ids, SyncState.Sending)
-          .map { packages }
+          .updatePackages(packages)
           .toObservable()
+          .doOnNext { Timber.d("Number of [$packageType] packages Updated from Pending -> Sending: $it") }
+          .map { packages.map { it.toTransmitterPackage() } }
+          .map { DataResult.Success(it) as DataResult<List<TransmitterPackage>> }
       }
-      .map { packages -> packages.map { it.toTransmitterPackage() } }
-      .map { DataResult.Success(it) as DataResult<List<TransmitterPackage>> }
-      .onErrorReturn { DataResult.Empty<List<TransmitterPackage>>() }
+      .onErrorReturn {
+        Timber.e(it)
+        DataResult.Empty<List<TransmitterPackage>>()
+      }
+
+//        val ids = packages.mapNotNull { it.id }
+//
+//        db.transmitterPackageDao()
+//          .updatePackages(ids, SyncState.Sending)
+//          .toObservable()
+//          .doOnNext { Timber.d("Number of [$packageType] packages Updated from Pending -> Sending: $it") }
+//          .map { packages }
+
   }
 
-  fun updateSyncStateForPackages(packages: List<TransmitterPackage>, syncState: SyncState) : Completable {
-    val ids = packages.mapNotNull { it.id }
+  override fun deleteTransmitterPackages(packageType: PackageType): Completable {
+    return db.transmitterPackageDao()
+      .deletePackagesAlreadySynced(packageType)
+      .toObservable()
+      .doOnNext { Timber.d("Number of [$packageType] packages deleted: $it") }
+      .ignoreElements()
+  }
+
+  override fun updateSyncStateForPackages(packages: List<TransmitterPackage>, syncState: SyncState) : Completable {
+    val dbList = packages.map { DbTransmitterPackage.fromTransmitterPackage(it) }
+    dbList.forEach { it.syncState = syncState }
 
     return db.transmitterPackageDao()
-      .updatePackages(ids, syncState)
-      .ignoreElement()
+      .updatePackages(dbList)
+      .toObservable()
+      .doOnNext { Timber.d("Number of packages updated to [$syncState]: $it") }
+      .ignoreElements()
+
+//    val ids = packages.mapNotNull { it.id }
+//
+//    return db.transmitterPackageDao()
+//      .updatePackages(ids, syncState)
+//      .toObservable()
+//      .doOnNext { Timber.d("Number of packages updated to [$syncState]: $it") }
+//      .ignoreElements()
+  }
+
+  override fun pendingPackagesRemaining(packageType: PackageType): Flowable<Int> {
+    return db.transmitterPackageDao()
+      .pendingPackagesRemaining(packageType)
   }
 }

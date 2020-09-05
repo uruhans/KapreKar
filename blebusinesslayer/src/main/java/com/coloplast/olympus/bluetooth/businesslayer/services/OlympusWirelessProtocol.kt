@@ -2,9 +2,11 @@ package com.coloplast.olympus.bluetooth.businesslayer.services
 
 import com.coloplast.olympus.bluetooth.businesslayer.enums.*
 import com.coloplast.olympus.bluetooth.businesslayer.extensions.asUUID
-import com.coloplast.olympus.bluetooth.businesslayer.models.*
+import com.coloplast.olympus.bluetooth.businesslayer.models.Patch
+import com.coloplast.olympus.bluetooth.businesslayer.models.StatusVector
+import com.coloplast.olympus.bluetooth.businesslayer.models.Transmitter
 import com.coloplast.olympus.shared.models.RawDataPackage
-import com.polidea.rxandroidble2.helpers.ValueInterpreter
+import com.coloplast.olympus.shared.transformers.OlympusWirelessProtocol
 import io.reactivex.ObservableTransformer
 
 object OlympusWirelessProtocol {
@@ -120,9 +122,10 @@ object OlympusWirelessProtocol {
 //    }
 //  }
   
-//  val rawDataPackageTransformer = ObservableTransformer<ByteArray, RawDataPackage> { upstream ->
-//    upstream
-//      .map {
+  val rawDataPackageTransformer = ObservableTransformer<ByteArray, RawDataPackage> { upstream ->
+    upstream
+      .map { OlympusWirelessProtocol.rawDataPackageTransformer(it) }
+  }
 //        val year = ValueInterpreter.getIntValue(it, ValueInterpreter.FORMAT_UINT16, 0).toUShort()
 //        val month = it[2].toUByte()
 //        val day = it[3].toUByte()

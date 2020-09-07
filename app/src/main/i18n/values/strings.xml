@@ -647,6 +647,17 @@
 <string name="overlay_network">Check that you are not in flightmode and that wifi and mobile data is turned on. We cannot recieve necessary data for the study.</string>
 <string name="overlay_network_title">No network connection</string>
 <string name="overlay_no_breach_title">No breaches registrered</string>
+<string name="profile_pp_email">Email address</string>
+<string name="profile_pp_first_name">First name</string>
+<string name="profile_pp_header_1">My info</string>
+<string name="profile_pp_header_2">Health information</string>
+<string name="profile_pp_health_insurance">Health insurance provider</string>
+<string name="profile_pp_last_name">Last name</string>
+<string name="profile_pp_log_out_button">Log out</string>
+<string name="profile_pp_stoma_surgery_date">First stoma surgery data</string>
+<string name="profile_pp_stoma_type">Stoma type</string>
+<string name="profile_pp_telephone">Telephone</string>
+<string name="profile_pp_title">Profile</string>
 <string name="settings_alarm_choose_end">Choose end time</string>
 <string name="settings_alarm_choose_sensors">Choose bedtime sensors</string>
 <string name="settings_alarm_choose_start">Choose start time</string>

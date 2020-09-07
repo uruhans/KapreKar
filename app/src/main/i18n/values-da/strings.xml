@@ -647,6 +647,17 @@
 <string name="overlay_network">Tjek at du ikke er i flytilstand og at wifi eller mobildata er slået til. Lige nu modtager vi ikke din\ndata til studiet</string>
 <string name="overlay_network_title">Ingen netværksforbindelse</string>
 <string name="overlay_no_breach_title">Ingen lækage opfanget</string>
+<string name="profile_pp_email">Email address</string>
+<string name="profile_pp_first_name">First name</string>
+<string name="profile_pp_header_1">My info</string>
+<string name="profile_pp_header_2">Health information</string>
+<string name="profile_pp_health_insurance">Health insurance provider</string>
+<string name="profile_pp_last_name">Last name</string>
+<string name="profile_pp_log_out_button">Log out</string>
+<string name="profile_pp_stoma_surgery_date">First stoma surgery data</string>
+<string name="profile_pp_stoma_type">Stoma type</string>
+<string name="profile_pp_telephone">Telephone</string>
+<string name="profile_pp_title">Profile</string>
 <string name="settings_alarm_choose_end">[Missing translation]</string>
 <string name="settings_alarm_choose_sensors">[Missing translation]</string>
 <string name="settings_alarm_choose_start">[Missing translation]</string>

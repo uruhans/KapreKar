@@ -44,6 +44,7 @@ import com.coloplast.olympus.ui.feature.home.models.PatchVisible
 import com.coloplast.olympus.ui.feature.home.models.SideMenuType
 import com.coloplast.olympus.ui.feature.home.models.Stitch
 import com.coloplast.olympus.ui.feature.onboarding.setup.SetupGuideApplyingFlowController
+import com.coloplast.olympus.ui.feature.profile.ProfileController
 import com.coloplast.olympus.ui.feature.settings.SettingsFlowController
 import com.coloplast.olympus.ui.feature.statemachine.models.OverlayState
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
@@ -574,7 +575,12 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
             .popChangeHandler(VerticalChangeHandler())
         )
       }
-      SideMenuType.PROFILE,
+      SideMenuType.PROFILE -> {
+        router.pushController(
+          ProfileController.routerTransaction()
+            .pushChangeHandler(VerticalChangeHandler())
+            .popChangeHandler(VerticalChangeHandler()))
+      }
       SideMenuType.ABOUT,
       SideMenuType.CONTACT -> {
         getContentRouter().pushController(

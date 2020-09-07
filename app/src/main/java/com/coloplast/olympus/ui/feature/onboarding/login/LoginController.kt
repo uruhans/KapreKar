@@ -1,10 +1,10 @@
 package com.coloplast.olympus.ui.feature.onboarding.login
 
-import android.widget.Toast
 import androidx.databinding.ObservableBoolean
 import com.artemzin.rxui.RxUi
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.HorizontalChangeHandler
+import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerLoginBinding
 import com.coloplast.olympus.shared.models.Credentials
@@ -13,6 +13,7 @@ import com.coloplast.olympus.ui.common.LoadingController
 import com.coloplast.olympus.ui.common.dialogs.BaseDialogController
 import com.coloplast.olympus.ui.common.dialogs.DialogController
 import com.coloplast.olympus.ui.common.models.GenericUiModel
+import com.coloplast.olympus.ui.feature.home.HomeController
 import com.coloplast.olympus.ui.feature.onboarding.login.forgotpassword.ForgotPasswordFlowController
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
@@ -74,8 +75,10 @@ class LoginController: BaseController<ControllerLoginBinding>(),
       when (uiModel) {
         is GenericUiModel.Success<*> -> {
           if(uiModel.data == true){
-            //TODO: Go to next screen.
-            Toast.makeText(applicationContext,"Go to home screen",Toast.LENGTH_SHORT).show()
+            //Login successful
+            getContentRouter().setRoot(HomeController.routerTransaction()
+              .popChangeHandler(VerticalChangeHandler())
+              .pushChangeHandler(VerticalChangeHandler()))
           } else {
             dialogController = DialogController.create(
               targetController = this,

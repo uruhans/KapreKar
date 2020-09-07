@@ -75,7 +75,7 @@ val koinModule = module {
   single { ForgotPasswordViewModel(get()) }
   single { SetupGuideLocationSGC4ViewModel(get()) }
   single { AddTransmitterAT7ViewModel(get()) }
-  single { SyncViewModel(get()) }
+  single { SyncViewModel(get(), get(), get()) }
 
   /* Flows */
   single { AddTransmitterFactoryImpl() }

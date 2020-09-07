@@ -9,7 +9,7 @@ class NumberedCard(order: Order = Order.InBetween, val textRes: Int, val enabled
 
   val firstLineColor = if(enabled) R.color.turquoise else R.color.statusBarV21
   val dotColor = if(enabled) R.color.turquoise else R.color.statusBarV21
-  val secondLineColor = if(enabled && !isFirst) R.color.turquoise else R.color.statusBarV21
+  val secondLineColor = if(enabled && showCheckmark) R.color.turquoise else R.color.statusBarV21
 
   enum class Order {
     First,

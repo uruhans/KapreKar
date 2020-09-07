@@ -46,7 +46,7 @@ val koinModule = module {
   /* Preferences */
   single { Preferences(androidContext()) }
   single { Me(get()) }
-  factory { SyncWorker() }
+  factory { SyncWorker(get(), get()) }
 
   /* Notifications */
   single { androidContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }

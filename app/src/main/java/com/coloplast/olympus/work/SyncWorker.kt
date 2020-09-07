@@ -14,10 +14,8 @@ import timber.log.Timber
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-class SyncWorker : KoinComponent {
-
-  private val userComponent: UserComponent by inject()
-  private val transmitterComponent: TransmitterComponent by inject()
+class SyncWorker(private val userComponent: UserComponent,
+                 private val transmitterComponent: TransmitterComponent) {
 
   fun doSyncWork(forUserId: UUID, packageType: PackageType) : ListenableWorker.Result {
     Timber.d("[SyncWorker] Beginning Synchronization of [$packageType] packages")
@@ -26,7 +24,7 @@ class SyncWorker : KoinComponent {
 
     userComponent.getLocalUser(forUserId)
       .doOnNext { Timber.d("[SyncWorker] User has given consent [${it.consent ?: false}]") }
-      // .filter { it.consent ?: false } // TODO - enable this once clarification has been done
+      .filter { it.consent ?: false }
       .map { it.id }
       .flatMap { userId ->
         deletePackages(packageType)
@@ -56,7 +54,7 @@ class SyncWorker : KoinComponent {
             }
             else {
               Timber.d("[SyncWorker] - ${(deleteResult as SyncResult.Error).state}")
-              Observable.just(ListenableWorker.Result.failure())
+              Observable.just(ListenableWorker.Result.success())
             }
           }
       }

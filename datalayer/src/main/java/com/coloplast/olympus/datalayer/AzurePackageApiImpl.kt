@@ -7,12 +7,13 @@ import com.coloplast.olympus.shared.models.TransmitterPackage
 import com.coloplast.olympus.shared.transformers.OlympusWirelessProtocol
 import com.coloplast.olympus.shared.types.PackageType
 import io.reactivex.Completable
+import java.util.*
 
 class AzurePackageApiImpl : AzurePackageApi {
 
   private val packageApi = AzureRetrofit.packageApi
 
-  override fun sendPackages(userId: String, packageType: PackageType, packages: List<TransmitterPackage>): Completable {
+  override fun sendPackages(userId: UUID, packageType: PackageType, packages: List<TransmitterPackage>): Completable {
     // first group the list into a map of transmitterId, list of packages
     val packagesByTransmitterId: Map<String, List<TransmitterPackage>> =
       packages.groupBy { it.transmitterId }
@@ -41,13 +42,11 @@ class AzurePackageApiImpl : AzurePackageApi {
       rawStreamDTO.add(transmitterStreamDTOs)
     }
 
-    //val rawDto = RawStreamDTO(transmitterDTOs)
+    return sendRawPackages(userId, packageType, rawStreamDTO)
+  }
 
-    return when (packageType) {
-      PackageType.Status -> TODO()
-      PackageType.Raw -> sendRawPackages(userId, rawStreamDTO)
-      PackageType.Power -> TODO()
-    }
+  private fun sendRawPackages(userId: UUID, packageType: PackageType, rawStream: List<TransmitterStreamDTO>): Completable {
+    return packageApi.syncRawPackages(userId.toString(), packageType.toString(), rawStream)
   }
 
   private fun convertValueToEntities(packageType: PackageType, packages: List<TransmitterPackage>): List<RawPackageDTO> {
@@ -78,10 +77,6 @@ class AzurePackageApiImpl : AzurePackageApi {
         }
       }
     }
-  }
-
-  private fun sendRawPackages(userId: String, rawStream: List<TransmitterStreamDTO>): Completable {
-    return packageApi.syncRawPackages(userId, rawStream)
   }
 
 }

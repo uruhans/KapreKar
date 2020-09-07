@@ -7,6 +7,7 @@ import com.coloplast.olympus.shared.types.PackageType
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Observable
+import java.util.*
 
 interface TransmitterComponent {
 
@@ -22,6 +23,6 @@ interface TransmitterComponent {
 
   /** Syncing with future cloud **/
   fun deletePackagesAlreadySynced(packageType: PackageType): Observable<SyncResult>
-  fun syncPackagesWithCloud(packageType: PackageType): Observable<SyncResult>
-  fun pendingPackagesRemaining(packageType: PackageType) : Flowable<Int>
+  fun syncPackagesWithCloud(userId: UUID, packageType: PackageType): Observable<SyncResult>
+  fun pendingPackagesRemaining(userId: UUID, packageType: PackageType) : Flowable<Int>
 }

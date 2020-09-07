@@ -14,6 +14,7 @@ import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import timber.log.Timber
+import java.util.*
 
 class TransmitterComponentImpl(private val preferences: Preferences) : TransmitterComponent {
 
@@ -75,12 +76,12 @@ class TransmitterComponentImpl(private val preferences: Preferences) : Transmitt
       .onErrorReturn { SyncResult.Error(SyncResult.Error.State.DELETE_FAILED) }
   }
 
-  override fun syncPackagesWithCloud(packageType: PackageType): Observable<SyncResult> {
-    return getPendingPackages(packageType)
+  override fun syncPackagesWithCloud(userId: UUID, packageType: PackageType): Observable<SyncResult> {
+    return getPendingPackages(userId, packageType)
       .filter { it.isNotEmpty() }
       .doOnNext { Timber.d("Number of [$packageType] packages to sync: ${it.size}") }
       .flatMap { packages ->
-        azureService.sendPackages(preferences.userLoggedIn, packageType, packages)
+        azureService.sendPackages(userId, packageType, packages)
           .toSingle { true }
           .toObservable()
           .flatMap {
@@ -89,7 +90,7 @@ class TransmitterComponentImpl(private val preferences: Preferences) : Transmitt
               .toObservable()
               .flatMap {
                 if(it is SyncResult.Completed) {
-                  dbService.pendingPackagesRemaining(packageType)
+                  dbService.pendingPackagesRemaining(userId, packageType)
                     .toObservable()
                     .map<SyncResult> { count -> SyncResult.Completed(count) }
                 }
@@ -107,8 +108,8 @@ class TransmitterComponentImpl(private val preferences: Preferences) : Transmitt
       }
   }
 
-  private fun getPendingPackages(packageType: PackageType): Observable<List<TransmitterPackage>> {
-    return dbService.getPendingTransmitterPackages(packageType)
+  private fun getPendingPackages(userId: UUID, packageType: PackageType): Observable<List<TransmitterPackage>> {
+    return dbService.getPendingTransmitterPackages(userId, packageType)
       .map {
         if (it is DataResult.Success<*>) {
           it.data as List<TransmitterPackage>
@@ -119,7 +120,7 @@ class TransmitterComponentImpl(private val preferences: Preferences) : Transmitt
       }
   }
 
-  override fun pendingPackagesRemaining(packageType: PackageType): Flowable<Int> {
-    return dbService.pendingPackagesRemaining(packageType)
+  override fun pendingPackagesRemaining(userId: UUID, packageType: PackageType): Flowable<Int> {
+    return dbService.pendingPackagesRemaining(userId, packageType)
   }
 }

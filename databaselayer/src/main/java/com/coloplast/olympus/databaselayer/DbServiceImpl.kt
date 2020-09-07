@@ -16,7 +16,6 @@ import com.coloplast.olympus.shared.types.SyncState
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Observable
-import io.reactivex.Single
 import timber.log.Timber
 import java.util.*
 
@@ -88,9 +87,9 @@ class DbServiceImpl : DbService {
       .flatMapCompletable { RxHelper.completeOrError(it.toInt(), InsertOrUpdateFailedException()) }
   }
 
-  override fun getPendingTransmitterPackages(packageType: PackageType): Observable<DataResult<List<TransmitterPackage>>> {
+  override fun getPendingTransmitterPackages(userId: UUID, packageType: PackageType): Observable<DataResult<List<TransmitterPackage>>> {
     return db.transmitterPackageDao()
-      .getPendingPackagesOfType(packageType)
+      .getPendingPackagesOfType(userId.toString(), packageType)
       .toObservable()
       .doOnNext { Timber.d("Number of pending [$packageType] packages in database: ${it.size}") }
       .filter { it.isNotEmpty() }
@@ -108,15 +107,6 @@ class DbServiceImpl : DbService {
         Timber.e(it)
         DataResult.Empty<List<TransmitterPackage>>()
       }
-
-//        val ids = packages.mapNotNull { it.id }
-//
-//        db.transmitterPackageDao()
-//          .updatePackages(ids, SyncState.Sending)
-//          .toObservable()
-//          .doOnNext { Timber.d("Number of [$packageType] packages Updated from Pending -> Sending: $it") }
-//          .map { packages }
-
   }
 
   override fun deleteTransmitterPackages(packageType: PackageType): Completable {
@@ -136,18 +126,10 @@ class DbServiceImpl : DbService {
       .toObservable()
       .doOnNext { Timber.d("Number of packages updated to [$syncState]: $it") }
       .ignoreElements()
-
-//    val ids = packages.mapNotNull { it.id }
-//
-//    return db.transmitterPackageDao()
-//      .updatePackages(ids, syncState)
-//      .toObservable()
-//      .doOnNext { Timber.d("Number of packages updated to [$syncState]: $it") }
-//      .ignoreElements()
   }
 
-  override fun pendingPackagesRemaining(packageType: PackageType): Flowable<Int> {
+  override fun pendingPackagesRemaining(userId: UUID, packageType: PackageType): Flowable<Int> {
     return db.transmitterPackageDao()
-      .pendingPackagesRemaining(packageType)
+      .pendingPackagesRemaining(userId.toString(), packageType)
   }
 }

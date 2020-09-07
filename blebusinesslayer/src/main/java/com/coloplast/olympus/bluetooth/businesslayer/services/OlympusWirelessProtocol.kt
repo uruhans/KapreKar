@@ -48,23 +48,25 @@ object OlympusWirelessProtocol {
   val statusTransformer = ObservableTransformer<ByteArray, StatusVector> { upstream ->
     upstream
       .map {
-        val sensor0 = SensorStatus.fromId(it[0].toUByte())
-        val sensor1 = SensorStatus.fromId(it[1].toUByte())
-        val sensor2 = SensorStatus.fromId(it[2].toUByte())
-        val sensor3 = SensorStatus.fromId(it[3].toUByte())
-        val sensor4 = SensorStatus.fromId(it[4].toUByte())
-        val sensor5 = SensorStatus.fromId(it[5].toUByte())
-      
-        val waterIngressDetection = WaterIngressDetection.fromId(it[6].toUByte())
-        val attached = Attached.fromId(it[7].toUByte())
-        val patchType = PatchType.fromId(it[8].toUByte())
-        val compromised = Compromised.fromId(it[9].toUByte())
-      
-        val rawRotationalAngle = it[10].toInt()
-        val batteryState = BatteryState.fromId(it[11].toUByte())
+        val statusPackage = OlympusWirelessProtocol.statusPackageTransformer(it)
 
-        val fwWarning = it[12].toInt()
-        val fwError = it[13].toInt()
+        val sensor0 = SensorStatus.fromId(statusPackage.sensor0)
+        val sensor1 = SensorStatus.fromId(statusPackage.sensor1)
+        val sensor2 = SensorStatus.fromId(statusPackage.sensor2)
+        val sensor3 = SensorStatus.fromId(statusPackage.sensor3)
+        val sensor4 = SensorStatus.fromId(statusPackage.sensor4)
+        val sensor5 = SensorStatus.fromId(statusPackage.sensor5)
+
+        val waterIngressDetection = WaterIngressDetection.fromId(statusPackage.wid)
+        val attached = Attached.fromId(statusPackage.attached)
+        val patchType = PatchType.fromId(statusPackage.patchType)
+        val compromised = Compromised.fromId(statusPackage.compromised)
+
+        val rawRotationalAngle = statusPackage.angle
+        val batteryState = BatteryState.fromId(statusPackage.batteryState)
+
+        val fwWarning = statusPackage.fwWarning
+        val fwError = statusPackage.fwError
 
         StatusVector(
           Patch(sensor0, sensor1, sensor2, sensor3, sensor4, sensor5),

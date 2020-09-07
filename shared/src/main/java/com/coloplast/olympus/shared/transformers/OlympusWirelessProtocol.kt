@@ -1,10 +1,12 @@
 package com.coloplast.olympus.shared.transformers
 
 import com.coloplast.olympus.shared.models.RawDataPackage
+import com.coloplast.olympus.shared.models.StatusPackage
 import com.coloplast.olympus.shared.models.TransmitterSettings
 import io.reactivex.ObservableTransformer
 
 object OlympusWirelessProtocol {
+
 
   // TODO - CPO-415: finish this
   val settingsTransformer = ObservableTransformer<ByteArray, TransmitterSettings> { upstream ->
@@ -68,6 +70,30 @@ object OlympusWirelessProtocol {
 
       it
     }
+  }
+
+  fun statusPackageTransformer(value: ByteArray) : StatusPackage {
+    val sensor0 = value[0].toUByte()
+    val sensor1 = value[1].toUByte()
+    val sensor2 = value[2].toUByte()
+    val sensor3 = value[3].toUByte()
+    val sensor4 = value[4].toUByte()
+    val sensor5 = value[5].toUByte()
+
+    val waterIngressDetection = value[6].toUByte()
+    val attached = value[7].toUByte()
+    val patchType = value[8].toUByte()
+    val compromised = value[9].toUByte()
+
+    val rawRotationalAngle = value[10].toInt()
+    val batteryState = value[11].toUByte()
+
+    val fwWarning = value[12].toInt()
+    val fwError = value[13].toInt()
+
+    return StatusPackage(sensor0, sensor1, sensor2, sensor3, sensor4, sensor5,
+      waterIngressDetection, attached, patchType, compromised,
+      rawRotationalAngle, batteryState, fwWarning, fwError)
   }
 
   fun rawDataPackageTransformer(value: ByteArray): RawDataPackage {

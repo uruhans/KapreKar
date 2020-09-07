@@ -9,6 +9,6 @@ import retrofit2.http.Path
 interface PackageApi {
 
   @POST("{packageType}/compressed/user/{userId}")
-  fun syncRawPackages(@Path("userId") userId: String, @Path("packageType") packageType: String, @Body rawStreamDTO: List<TransmitterStreamDTO>): Completable
+  fun syncRawPackages(@Path("userId") userId: String, @Path("packageType") packageType: String, @Body streamDTO: List<TransmitterStreamDTO>): Completable
 
 }

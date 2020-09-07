@@ -115,7 +115,7 @@ class RawPackageDTO(
 
   @Json(name = "batt_pwr")
   val battPower : Int
-)  {
+) : TransmitterValue {
 
   companion object {
     fun fromRawDataPackage(id: Int, dataReceived: Instant, rawDataPackage: RawDataPackage) : RawPackageDTO {

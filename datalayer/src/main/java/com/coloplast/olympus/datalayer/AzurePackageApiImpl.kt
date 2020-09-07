@@ -1,8 +1,6 @@
 package com.coloplast.olympus.datalayer
 
-import com.coloplast.olympus.datalayer.models.PatchDTO
-import com.coloplast.olympus.datalayer.models.RawPackageDTO
-import com.coloplast.olympus.datalayer.models.TransmitterStreamDTO
+import com.coloplast.olympus.datalayer.models.*
 import com.coloplast.olympus.shared.models.TransmitterPackage
 import com.coloplast.olympus.shared.transformers.OlympusWirelessProtocol
 import com.coloplast.olympus.shared.types.PackageType
@@ -18,7 +16,7 @@ class AzurePackageApiImpl : AzurePackageApi {
     val packagesByTransmitterId: Map<String, List<TransmitterPackage>> =
       packages.groupBy { it.transmitterId }
 
-    val rawStreamDTO = mutableListOf<TransmitterStreamDTO>()
+    val streamDTO = mutableListOf<TransmitterStreamDTO>()
 
     // run through each of the transmitterIds
     packagesByTransmitterId.forEach {
@@ -39,25 +37,24 @@ class AzurePackageApiImpl : AzurePackageApi {
 
       // final list containing transmitters, patches and packages
       val transmitterStreamDTOs = TransmitterStreamDTO(it.key, patchDTOs)
-      rawStreamDTO.add(transmitterStreamDTOs)
+      streamDTO.add(transmitterStreamDTOs)
     }
 
-    return sendRawPackages(userId, packageType, rawStreamDTO)
+    return sendRawPackages(userId, packageType, streamDTO)
   }
 
-  private fun sendRawPackages(userId: UUID, packageType: PackageType, rawStream: List<TransmitterStreamDTO>): Completable {
-    return packageApi.syncRawPackages(userId.toString(), packageType.toString(), rawStream)
+  private fun sendRawPackages(userId: UUID, packageType: PackageType, streamDTO: List<TransmitterStreamDTO>): Completable {
+    return packageApi.syncRawPackages(userId.toString(), packageType.toString(), streamDTO)
   }
 
-  private fun convertValueToEntities(packageType: PackageType, packages: List<TransmitterPackage>): List<RawPackageDTO> {
+  private fun convertValueToEntities(packageType: PackageType, packages: List<TransmitterPackage>): List<TransmitterValue> {
     return packages.map { tPackage ->
       when (packageType) {
         PackageType.Status -> {
-          // TODO - change to STATUS package conversion
-          RawPackageDTO.fromRawDataPackage(
+          StatusPackageDTO.fromStatusPackage(
             tPackage.id!!,
             tPackage.timestamp,
-            OlympusWirelessProtocol.rawDataPackageTransformer(tPackage.value)
+            OlympusWirelessProtocol.statusPackageTransformer(tPackage.value)
           )
         }
         PackageType.Raw -> {
@@ -68,12 +65,7 @@ class AzurePackageApiImpl : AzurePackageApi {
           )
         }
         PackageType.Power -> {
-          // TODO - change to POWER package conversion
-          RawPackageDTO.fromRawDataPackage(
-            tPackage.id!!,
-            tPackage.timestamp,
-            OlympusWirelessProtocol.rawDataPackageTransformer(tPackage.value)
-          )
+          PowerPackageDTO.fromPowerPackage(tPackage.id!!, tPackage.timestamp, tPackage.value.first().toInt())
         }
       }
     }

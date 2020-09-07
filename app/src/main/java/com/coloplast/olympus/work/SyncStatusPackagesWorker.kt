@@ -1,19 +1,11 @@
 package com.coloplast.olympus.work
 
 import android.content.Context
-import androidx.work.Worker
-import androidx.work.WorkerParameters
-import com.coloplast.olympus.businesslayer.interfaces.TransmitterComponent
-import com.coloplast.olympus.businesslayer.interfaces.UserComponent
-import com.coloplast.olympus.businesslayer.models.SyncResult
+import androidx.work.*
 import com.coloplast.olympus.shared.preferences.Preferences
 import com.coloplast.olympus.shared.types.PackageType
-import com.coloplast.olympus.work.exceptions.RetryException
-import io.reactivex.Observable
-import io.reactivex.schedulers.Schedulers
 import org.koin.core.KoinComponent
 import org.koin.core.inject
-import timber.log.Timber
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -26,5 +18,20 @@ class SyncStatusPackagesWorker(applicationContext: Context, workerParams: Worker
   override fun doWork(): Result {
     val userId = UUID.fromString(preferences.userLoggedIn)
     return syncWorker.doSyncWork(userId, PackageType.Status)
+  }
+
+  companion object {
+    const val workName = "syncStatusPackages"
+
+    fun createPeriodicWorker(): PeriodicWorkRequest {
+      return PeriodicWorkRequestBuilder<SyncStatusPackagesWorker>(15, TimeUnit.MINUTES)
+//      .setConstraints(
+//        Constraints.Builder()
+//        .setRequiresCharging(true)
+//        .build()
+//      )
+        .setBackoffCriteria(BackoffPolicy.LINEAR, 10, TimeUnit.SECONDS)
+        .build()
+    }
   }
 }

@@ -1,20 +1,18 @@
 package com.coloplast.olympus
 
 import android.app.Application
-import androidx.work.BackoffPolicy
-import androidx.work.ExistingPeriodicWorkPolicy
-import androidx.work.PeriodicWorkRequestBuilder
-import androidx.work.WorkManager
 import com.amitshekhar.DebugDB
 import com.coloplast.olympus.koin.koinModule
 import com.coloplast.olympus.shared.AppSettings
+import com.coloplast.olympus.work.SyncPowerPackagesWorker
 import com.coloplast.olympus.work.SyncRawPackagesWorker
+import com.coloplast.olympus.work.SyncStatusPackagesWorker
+import com.coloplast.olympus.work.WorkScheduler
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 import org.koin.core.logger.Level
 import timber.log.Timber
-import java.util.concurrent.TimeUnit
 
 class CustomApplication : Application() {
 
@@ -36,31 +34,30 @@ class CustomApplication : Application() {
 
 
     if (BuildConfig.DEBUG) {
-      scheduleWorkers(true)
+      scheduleWorkers()
     }
   }
 
   private fun scheduleWorkers(cancelWork: Boolean = false) {
-    if (cancelWork) {
-      WorkManager.getInstance(this)
-        .cancelUniqueWork("syncRawPackages")
-    }
+    WorkScheduler.schedulePeriodicWork(
+      this,
+      SyncRawPackagesWorker.workName,
+      SyncRawPackagesWorker.createPeriodicWorker(),
+      cancelWork
+    )
 
-    val syncRawPackagesWorker =
-      PeriodicWorkRequestBuilder<SyncRawPackagesWorker>(15, TimeUnit.MINUTES)
-//      .setConstraints(
-//        Constraints.Builder()
-//        .setRequiresCharging(true)
-//        .build()
-//      )
-        .setBackoffCriteria(BackoffPolicy.LINEAR, 10, TimeUnit.SECONDS)
-        .build()
+    WorkScheduler.schedulePeriodicWork(
+      this,
+      SyncStatusPackagesWorker.workName,
+      SyncStatusPackagesWorker.createPeriodicWorker(),
+      cancelWork
+    )
 
-    WorkManager.getInstance(this)
-      .enqueueUniquePeriodicWork(
-        "syncRawPackages",
-        ExistingPeriodicWorkPolicy.KEEP,
-        syncRawPackagesWorker
-      )
+    WorkScheduler.schedulePeriodicWork(
+      this,
+      SyncPowerPackagesWorker.workName,
+      SyncPowerPackagesWorker.createPeriodicWorker(),
+      cancelWork
+    )
   }
 }

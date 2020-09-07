@@ -38,6 +38,7 @@ import com.coloplast.olympus.ui.feature.transmitters.add.AddTransmitterFactoryIm
 import com.coloplast.olympus.ui.feature.transmitters.add.at7.AddTransmitterAT7ViewModel
 import com.coloplast.olympus.ui.feature.transmitters.add.at9.AddTransmitterAT9ViewModel
 import com.coloplast.olympus.work.SyncViewModel
+import com.coloplast.olympus.work.SyncWorker
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
@@ -45,6 +46,7 @@ val koinModule = module {
   /* Preferences */
   single { Preferences(androidContext()) }
   single { Me(get()) }
+  factory { SyncWorker() }
 
   /* Notifications */
   single { androidContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }

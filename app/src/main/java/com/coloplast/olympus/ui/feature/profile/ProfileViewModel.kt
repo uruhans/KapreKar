@@ -5,7 +5,6 @@ import com.coloplast.olympus.Me
 import com.coloplast.olympus.shared.models.CurrentUser
 import com.coloplast.olympus.ui.common.BaseViewModel
 import com.coloplast.olympus.ui.common.models.GenericUiModel
-import com.coloplast.olympus.ui.common.models.UiView
 import com.coloplast.olympus.ui.common.rx.DelayedLoadingTransformer
 import com.coloplast.olympus.ui.common.rx.GenericUiModelTransformer
 import io.reactivex.Observable
@@ -18,9 +17,9 @@ import io.reactivex.disposables.Disposable
  * Copyright by Dawn Health A/S. All rights reserved.
  */
 class ProfileViewModel(private val me: Me) :
-  BaseViewModel<GenericUiModel, UiView<GenericUiModel>>() {
+  BaseViewModel<GenericUiModel, ProfileView>() {
 
-  override fun bind(uiView: UiView<GenericUiModel>): Disposable {
+  override fun bind(uiView: ProfileView): Disposable {
     val disposable = CompositeDisposable()
 
     val onUserDataRequested: Observable<GenericUiModel> =
@@ -28,7 +27,16 @@ class ProfileViewModel(private val me: Me) :
         .compose(DelayedLoadingTransformer<CurrentUser>())
         .compose(GenericUiModelTransformer())
 
-    disposable.add(onUserDataRequested.bind(uiView.render()))
+    val onLogoutRequested: Observable<GenericUiModel> =
+      uiView.onLogoutRequested()
+        .switchMap {
+          me.logout(true)
+          Observable.just(GenericUiModel.Success(Unit)) // this result will be ignored
+        }
+
+    disposable.add(
+      Observable.merge(onUserDataRequested, onLogoutRequested).bind(uiView.render())
+    )
     return disposable
   }
 }

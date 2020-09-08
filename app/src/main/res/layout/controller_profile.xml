@@ -201,7 +201,8 @@
           android:layout_marginStart="@dimen/spacing_none"
           android:layout_marginTop="@dimen/spacing_double"
           android:layout_marginEnd="@dimen/spacing_none"
-          android:text="@string/profile_pp_log_out_button" />
+          android:text="@string/profile_pp_log_out_button"
+          android:onClick="@{() -> controller.onLogoutClicked()}"/>
 
       </LinearLayout>
 

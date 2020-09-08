@@ -5,15 +5,17 @@ import androidx.databinding.ObservableField
 import androidx.databinding.ObservableInt
 import com.artemzin.rxui.RxUi
 import com.bluelinelabs.conductor.RouterTransaction
+import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerProfileBinding
 import com.coloplast.olympus.shared.models.CurrentUser
 import com.coloplast.olympus.ui.common.CustomToolbarController
 import com.coloplast.olympus.ui.common.models.GenericUiModel
-import com.coloplast.olympus.ui.common.models.UiView
 import com.coloplast.olympus.ui.feature.home.HomeController
+import com.coloplast.olympus.ui.feature.onboarding.LandingController
 import com.coloplast.olympus.ui.feature.onboarding.createprofile.types.HealthInsurance
 import com.coloplast.olympus.ui.feature.onboarding.createprofile.types.StomaSurgeryDate
+import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Function
@@ -25,9 +27,10 @@ import org.koin.core.inject
  * Copyright by Dawn Health A/S. All rights reserved.
  */
 class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
-  UiView<GenericUiModel> {
+  ProfileView {
 
   private val viewModel: ProfileViewModel by inject()
+  private val logoutRelay: PublishRelay<Unit> = PublishRelay.create()
 
   val firstName = ObservableField("")
   val lastName = ObservableField("")
@@ -51,26 +54,42 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
 
   override fun render(): Function<Observable<GenericUiModel>, Disposable> {
     return RxUi.ui { uiModel ->
-      when (uiModel) {
-        is GenericUiModel.Success<*> -> {
-          (uiModel.data as? CurrentUser.LoggedIn)?.user?.let {
-            firstName.set(it.firstName)
-            lastName.set(it.lastName)
-            phoneNumber.set(it.phoneNumber)
-            email.set(it.email)
+
+      if(uiModel is GenericUiModel.Success<*> && uiModel.data is CurrentUser){
+        when(uiModel.data){
+          is CurrentUser.LoggedIn -> {
+            val user = uiModel.data.user
+            firstName.set(user.firstName)
+            lastName.set(user.lastName)
+            phoneNumber.set(user.phoneNumber)
+            email.set(user.email)
 
             //TODO: Remove one of the two StomaType enums.
-            it.stomaType?.let { stomaType.set(com.coloplast.olympus.ui.feature.onboarding.createprofile.types.StomaType.fromId(it.id).stringId) }
-            it.surgeryDateInterval?.let { stomaSurgeryDate.set(StomaSurgeryDate.fromId(it).stringId) }
-            it.insuranceType?.let {
+            user.stomaType?.let { stomaType.set(com.coloplast.olympus.ui.feature.onboarding.createprofile.types.StomaType.fromId(it.id).stringId) }
+            user.surgeryDateInterval?.let { stomaSurgeryDate.set(StomaSurgeryDate.fromId(it).stringId) }
+            user.insuranceType?.let {
               showHealthInsurance.set(true)
               healthInsurance.set(HealthInsurance.fromId(it).stringId)
             }
+          }
+          is CurrentUser.LoggedOut -> {
+            router.setRoot(LandingController.routerTransaction()
+              .pushChangeHandler(VerticalChangeHandler())
+              .popChangeHandler(VerticalChangeHandler()))
           }
         }
       }
     }
   }
+
+  fun onLogoutClicked(){
+    logoutRelay.accept(Unit)
+  }
+
+  override fun onLogoutRequested(): Observable<Unit> =
+    logoutRelay
+      .publish()
+      .refCount()
 
   override fun getLayout(): Int = R.layout.controller_profile
 

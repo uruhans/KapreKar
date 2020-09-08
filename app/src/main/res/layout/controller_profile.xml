@@ -39,6 +39,168 @@
           android:layout_height="wrap_content"
           android:text="@string/profile_pp_title"
           style="@style/TextStyle.Coloplast.Bold.DarkGrey.32" />
+
+        <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/spacing_triple"
+          android:text="@string/profile_pp_header_1"
+          style="@style/TextStyle.Coloplast.Bold.DarkGrey.20" />
+
+        <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/spacing_standard"
+          android:text="@string/profile_pp_first_name"
+          style="@style/TextStyle.Roboto.Regular.ClearGrey.14" />
+
+        <TextView
+          android:layout_height="56dp"
+          android:layout_width="match_parent"
+          android:layout_marginTop="@dimen/spacing_quarter"
+          android:paddingStart="@dimen/spacing_standard"
+          android:paddingEnd="@dimen/spacing_standard"
+          android:gravity="center_vertical"
+          android:text="Anne-Sofie"
+          style="@style/TextStyle.Roboto.Regular.Grey"
+          android:background="@drawable/edittext_background"/>
+
+        <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/spacing_standard"
+          android:text="@string/profile_pp_last_name"
+          style="@style/TextStyle.Roboto.Regular.ClearGrey.14" />
+
+        <TextView
+          android:layout_height="56dp"
+          android:layout_width="match_parent"
+          android:layout_marginTop="@dimen/spacing_quarter"
+          android:paddingStart="@dimen/spacing_standard"
+          android:paddingEnd="@dimen/spacing_standard"
+          android:gravity="center_vertical"
+          android:text="Engell"
+          style="@style/TextStyle.Roboto.Regular.Grey"
+          android:background="@drawable/edittext_background"/>
+
+        <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/spacing_standard"
+          android:text="@string/profile_pp_telephone"
+          style="@style/TextStyle.Roboto.Regular.ClearGrey.14" />
+
+        <TextView
+          android:layout_height="56dp"
+          android:layout_width="match_parent"
+          android:layout_marginTop="@dimen/spacing_quarter"
+          android:paddingStart="@dimen/spacing_standard"
+          android:paddingEnd="@dimen/spacing_standard"
+          android:gravity="center_vertical"
+          android:text="+45 23548245"
+          style="@style/TextStyle.Roboto.Regular.Grey"
+          android:background="@drawable/edittext_background"/>
+
+        <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/spacing_standard"
+          android:text="@string/profile_pp_email"
+          style="@style/TextStyle.Roboto.Regular.ClearGrey.14" />
+
+        <TextView
+          android:layout_height="56dp"
+          android:layout_width="match_parent"
+          android:layout_marginTop="@dimen/spacing_quarter"
+          android:paddingStart="@dimen/spacing_standard"
+          android:paddingEnd="@dimen/spacing_standard"
+          android:gravity="center_vertical"
+          android:text="aso@charlietango.dk"
+          style="@style/TextStyle.Roboto.Regular.Grey"
+          android:background="@drawable/edittext_background"/>
+
+        <View
+          android:layout_width="match_parent"
+          android:layout_height="1dp"
+          android:layout_marginTop="@dimen/spacing_double"
+          android:background="@color/ten_percent_transparent_black" />
+
+        <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/spacing_triple"
+          android:text="@string/profile_pp_header_2"
+          style="@style/TextStyle.Coloplast.Bold.DarkGrey.20" />
+
+        <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/spacing_standard"
+          android:text="@string/profile_pp_stoma_type"
+          style="@style/TextStyle.Roboto.Regular.ClearGrey.14" />
+
+        <TextView
+          android:layout_height="56dp"
+          android:layout_width="match_parent"
+          android:layout_marginTop="@dimen/spacing_quarter"
+          android:paddingStart="@dimen/spacing_standard"
+          android:paddingEnd="@dimen/spacing_standard"
+          android:gravity="center_vertical"
+          android:text="Colostomy"
+          style="@style/TextStyle.Roboto.Regular.Grey"
+          android:background="@drawable/edittext_background"/>
+
+        <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/spacing_standard"
+          android:text="@string/profile_pp_stoma_surgery_date"
+          style="@style/TextStyle.Roboto.Regular.ClearGrey.14" />
+
+        <TextView
+          android:layout_height="56dp"
+          android:layout_width="match_parent"
+          android:layout_marginTop="@dimen/spacing_quarter"
+          android:paddingStart="@dimen/spacing_standard"
+          android:paddingEnd="@dimen/spacing_standard"
+          android:gravity="center_vertical"
+          android:text="Within last 6 menths"
+          style="@style/TextStyle.Roboto.Regular.Grey"
+          android:background="@drawable/edittext_background"/>
+
+        <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/spacing_standard"
+          android:text="@string/profile_pp_health_insurance"
+          style="@style/TextStyle.Roboto.Regular.ClearGrey.14" />
+
+        <TextView
+          android:layout_height="56dp"
+          android:layout_width="match_parent"
+          android:layout_marginTop="@dimen/spacing_quarter"
+          android:paddingStart="@dimen/spacing_standard"
+          android:paddingEnd="@dimen/spacing_standard"
+          android:gravity="center_vertical"
+          android:text="Tryg"
+          style="@style/TextStyle.Roboto.Regular.Grey"
+          android:background="@drawable/edittext_background"/>
+
+        <View
+          android:layout_width="match_parent"
+          android:layout_height="1dp"
+          android:layout_marginTop="@dimen/spacing_double"
+          android:background="@color/ten_percent_transparent_black" />
+        
+        <Button
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="@dimen/spacing_none"
+          android:layout_marginEnd="@dimen/spacing_none"
+          android:layout_marginTop="@dimen/spacing_double"
+          style="@style/Button.Secondary"
+          android:text="@string/profile_pp_log_out_button" />
+
       </LinearLayout>
 
     </ScrollView>

@@ -14,7 +14,6 @@ import com.coloplast.olympus.shared.models.User
 import com.coloplast.olympus.shared.types.PackageType
 import com.coloplast.olympus.shared.types.SyncState
 import io.reactivex.Completable
-import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single
 import timber.log.Timber

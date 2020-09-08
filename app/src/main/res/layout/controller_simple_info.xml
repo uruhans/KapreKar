@@ -43,7 +43,6 @@
         android:layout_marginTop="@dimen/spacing_standard"
         android:layout_marginEnd="@dimen/spacing_standard"
         android:text="@{controller.titleId}"
-        android:textColor="@color/darkGrey03"
         tools:text="@string/guide_at3_title" />
 
       <TextView

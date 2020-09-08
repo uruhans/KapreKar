@@ -22,4 +22,13 @@ object EmailViewAdapters {
     fun shouldCheckValidity(emailView: EmailView, shouldCheckValidity: Boolean) {
         emailView.shouldCheckValidity = shouldCheckValidity
     }
+
+    @BindingAdapter("forceValidation")
+    @JvmStatic
+    fun forceValidation(emailView: EmailView, forceValidation: Boolean){
+        if(forceValidation)
+            with(emailView){
+                callback.invoke(email)
+            }
+    }
 }

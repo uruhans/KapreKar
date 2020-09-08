@@ -6,6 +6,6 @@ class PatchDTO(
   @Json(name = "Id")
   val id: String, // combined deviceId + patchId
 
-  @Json(name = "RawPackages")
+  @Json(name = "packages")
   val packages: List<TransmitterValue>
 )

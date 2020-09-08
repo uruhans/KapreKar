@@ -13,6 +13,7 @@ import com.coloplast.olympus.shared.types.SyncState
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Observable
+import io.reactivex.Single
 import timber.log.Timber
 import java.util.*
 
@@ -120,7 +121,7 @@ class TransmitterComponentImpl(private val preferences: Preferences) : Transmitt
       }
   }
 
-  override fun pendingPackagesRemaining(userId: UUID, packageType: PackageType): Flowable<Int> {
+  override fun pendingPackagesRemaining(userId: UUID, packageType: PackageType): Single<Int> {
     return dbService.pendingPackagesRemaining(userId, packageType)
   }
 }

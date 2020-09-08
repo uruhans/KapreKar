@@ -41,5 +41,5 @@ interface TransmitterPackageDao {
       "TP.syncState = :syncState " +
       "ORDER BY TP.id ASC " +
       "LIMIT :limitCount")
-  fun pendingPackagesRemaining(userId: String, packageType: PackageType, syncState: SyncState = SyncState.Pending, limitCount: Int = 1000) : Flowable<Int>
+  fun pendingPackagesRemaining(userId: String, packageType: PackageType, syncState: SyncState = SyncState.Pending, limitCount: Int = 1000) : Single<Int>
 }

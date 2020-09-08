@@ -27,5 +27,5 @@ interface DbService {
   fun getPendingTransmitterPackages(userId: UUID, packageType: PackageType) : Observable<DataResult<List<TransmitterPackage>>>
   fun deleteTransmitterPackages(packageType: PackageType) : Completable
   fun updateSyncStateForPackages(packages: List<TransmitterPackage>, syncState: SyncState) : Completable
-  fun pendingPackagesRemaining(userId: UUID, packageType: PackageType) : Flowable<Int>
+  fun pendingPackagesRemaining(userId: UUID, packageType: PackageType) : Single<Int>
 }

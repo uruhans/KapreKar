@@ -8,8 +8,6 @@ import com.coloplast.olympus.shared.types.PackageType
 import com.coloplast.olympus.work.exceptions.RetryException
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
-import org.koin.core.KoinComponent
-import org.koin.core.inject
 import timber.log.Timber
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -24,7 +22,7 @@ class SyncWorker(private val userComponent: UserComponent,
 
     userComponent.getLocalUser(forUserId)
       .subscribeOn(Schedulers.io())
-      .doOnNext { Timber.d("[SyncWorker] User has given consent [${it.consent ?: false}]") }
+      .doOnNext { Timber.d("[SyncWorker] [$packageType] User has given consent [${it.consent ?: false}]") }
       .filter { it.consent ?: false }
       .map { it.id }
       .flatMap { userId ->
@@ -41,19 +39,19 @@ class SyncWorker(private val userComponent: UserComponent,
                       }
                       else {
                         // we are successful
-                        Timber.d("[SyncWorker] - we are successful")
+                        Timber.d("[SyncWorker] [$packageType] - we are successful")
                         ListenableWorker.Result.success()
                       }
                     }
                     is SyncResult.Error -> {
-                      Timber.d("[SyncWorker] - we failed")
+                      Timber.d("[SyncWorker] [$packageType] - we failed")
                       ListenableWorker.Result.failure()
                     }
                   }
                 }
             }
             else {
-              Timber.d("[SyncWorker] - ${(deleteResult as SyncResult.Error).state}")
+              Timber.d("[SyncWorker] [$packageType] - ${(deleteResult as SyncResult.Error).state}")
               Observable.just(ListenableWorker.Result.success())
             }
           }
@@ -61,8 +59,8 @@ class SyncWorker(private val userComponent: UserComponent,
       .retryWhen {
         it.flatMap { throwable ->
           if (throwable is RetryException) {
-            Timber.d("[SyncWorker] - We still have pending packages [${throwable.tuplesRemaining}] - RETRYING")
-            Observable.timer(10, TimeUnit.SECONDS)
+            Timber.d("[SyncWorker] [$packageType] - We still have pending packages [${throwable.tuplesRemaining}] - RETRYING")
+            Observable.timer(1, TimeUnit.SECONDS)
           }
           else {
             Observable.error(throwable)
@@ -80,6 +78,5 @@ class SyncWorker(private val userComponent: UserComponent,
     return Observable.just(SyncResult.Completed(0))
 
 //    return transmitterComponent.deletePackagesAlreadySynced(packageType)
-//      .subscribeOn(Schedulers.io())
   }
 }

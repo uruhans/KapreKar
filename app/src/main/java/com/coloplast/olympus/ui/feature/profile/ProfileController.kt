@@ -15,6 +15,7 @@ import com.coloplast.olympus.ui.feature.home.HomeController
 import com.coloplast.olympus.ui.feature.onboarding.LandingController
 import com.coloplast.olympus.ui.feature.onboarding.createprofile.types.HealthInsurance
 import com.coloplast.olympus.ui.feature.onboarding.createprofile.types.StomaSurgeryDate
+import com.coloplast.olympus.ui.feature.onboarding.createprofile.types.StomaType
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
@@ -64,8 +65,7 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
             phoneNumber.set(user.phoneNumber)
             email.set(user.email)
 
-            //TODO: Remove one of the two StomaType enums.
-            user.stomaType?.let { stomaType.set(com.coloplast.olympus.ui.feature.onboarding.createprofile.types.StomaType.fromId(it.id).stringId) }
+            user.stomaType?.let { stomaType.set(StomaType.fromId(it).stringId) }
             user.surgeryDateInterval?.let { stomaSurgeryDate.set(StomaSurgeryDate.fromId(it).stringId) }
             user.insuranceType?.let {
               showHealthInsurance.set(true)

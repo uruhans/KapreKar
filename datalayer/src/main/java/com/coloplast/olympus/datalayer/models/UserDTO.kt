@@ -1,7 +1,6 @@
 package com.coloplast.olympus.datalayer.models
 
 import com.coloplast.olympus.shared.models.User
-import com.coloplast.olympus.shared.types.StomaType
 import com.coloplast.olympus.shared.types.SyncState
 import com.squareup.moshi.JsonClass
 import java.util.*
@@ -33,7 +32,7 @@ data class UserDTO(
       lastName,
       email,
       password,
-      StomaType.fromId(stomaTypeId),
+      stomaTypeId,
       stomaSurgeryDateId,
       phoneNumber,
       healthInsuranceId,

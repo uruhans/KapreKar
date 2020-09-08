@@ -23,6 +23,7 @@ class SyncWorker(private val userComponent: UserComponent,
     var result = ListenableWorker.Result.success()
 
     userComponent.getLocalUser(forUserId)
+      .subscribeOn(Schedulers.io())
       .doOnNext { Timber.d("[SyncWorker] User has given consent [${it.consent ?: false}]") }
       .filter { it.consent ?: false }
       .map { it.id }
@@ -31,7 +32,6 @@ class SyncWorker(private val userComponent: UserComponent,
           .flatMap { deleteResult ->
             if (deleteResult is SyncResult.Completed) {
               transmitterComponent.syncPackagesWithCloud(userId, packageType)
-                .subscribeOn(Schedulers.io())
                 .map { syncResult ->
                   when (syncResult) {
                     is SyncResult.Completed -> {

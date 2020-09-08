@@ -2,7 +2,6 @@ package com.coloplast.olympus.businesslayer.interfaces
 
 import com.coloplast.olympus.shared.models.DataResult
 import com.coloplast.olympus.shared.models.Transmitter
-import com.coloplast.olympus.shared.models.TransmitterPackage
 import io.reactivex.Completable
 import io.reactivex.Observable
 

@@ -7,10 +7,8 @@ import com.coloplast.olympus.shared.models.Transmitter
 import com.coloplast.olympus.shared.models.TransmitterPackage
 import com.coloplast.olympus.shared.preferences.Preferences
 import com.coloplast.olympus.shared.types.PackageType
-import com.coloplast.olympus.shared.types.SyncState
 import io.reactivex.Completable
 import io.reactivex.Observable
-import java.time.Instant
 
 class TransmitterComponentImpl(private val preferences: Preferences) : TransmitterComponent {
 

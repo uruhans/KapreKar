@@ -61,7 +61,7 @@
         android:background="?attr/actionBarItemBackground"
         android:onClick="@{() -> controller.onMenuClicked()}"
         android:src="@drawable/ic_menu_24dp"
-        android:tint="@color/darkgrey"
+        app:tint="@color/darkgrey"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

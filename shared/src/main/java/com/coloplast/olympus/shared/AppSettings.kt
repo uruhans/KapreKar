@@ -2,7 +2,6 @@ package com.coloplast.olympus.shared
 
 import android.annotation.SuppressLint
 import android.content.Context
-import com.coloplast.olympus.shared.preferences.Preferences
 
 @SuppressLint("StaticFieldLeak")
 object AppSettings {

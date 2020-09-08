@@ -11,7 +11,6 @@ import com.coloplast.olympus.shared.models.DataResult
 import com.coloplast.olympus.shared.models.Transmitter
 import com.coloplast.olympus.shared.models.TransmitterPackage
 import com.coloplast.olympus.shared.models.User
-import com.coloplast.olympus.shared.types.PackageType
 import io.reactivex.Completable
 import io.reactivex.Observable
 import java.util.*

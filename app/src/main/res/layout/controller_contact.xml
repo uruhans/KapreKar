@@ -34,25 +34,90 @@
       <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_marginStart="@dimen/spacing_larger"
         android:layout_marginEnd="@dimen/spacing_larger"
         android:layout_marginBottom="@dimen/spacing_larger"
+        android:orientation="vertical"
         android:paddingBottom="@dimen/spacing_larger">
 
         <TextView
+          style="@style/TextStyle.Coloplast.Bold.DarkGrey.36"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:text="@string/contact_cp_title"
-          style="@style/TextStyle.Coloplast.Bold.DarkGrey.36"/>
+          android:text="@string/contact_cp_title" />
+
+        <TextView
+          style="@style/TextStyle.Roboto.Regular.ClearGrey.14"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/spacing_standard"
+          android:text="@string/contact_cp_subtitle" />
+
+        <TextView
+          style="@style/Text.Large"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/spacing_double"
+          android:lineSpacingExtra="0dp"
+          android:text="@string/contact_cp_phone_header"
+          android:textColor="@color/grey" />
+
+        <TextView
+          style="@style/TextStyle.Coloplast.Bold.DarkGrey.24"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/contact_cp_phone_number" />
+
+        <TextView
+          style="@style/Text.Large"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/spacing_larger"
+          android:lineSpacingExtra="0dp"
+          android:text="@string/contact_cp_hours_header"
+          android:textColor="@color/grey" />
+
+        <TextView
+          style="@style/TextStyle.Coloplast.Regular.DarkGrey"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/contact_cp_hours_text"
+          android:textSize="@dimen/text_20" />
+
+        <Button
+          style="@style/Button"
+          android:layout_marginStart="@dimen/spacing_none"
+          android:layout_marginTop="@dimen/spacing_double"
+          android:layout_marginEnd="@dimen/spacing_none"
+          android:drawableStart="@drawable/ic_call"
+          android:onClick="@{() -> controller.onCallClicked()}"
+          android:paddingStart="@dimen/spacing_larger"
+          android:paddingEnd="@dimen/spacing_larger"
+          android:text="@string/generic_call_support" />
 
         <TextView
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_marginBottom="@dimen/spacing_small"
           android:layout_marginTop="@dimen/spacing_double"
-          android:text="@string/contact_cp_subtitle"
-          style="@style/TextStyle.Roboto.Regular.ClearGrey.14" />
+          android:text="@string/contact_cp_write_us_title"
+          style="@style/TextStyle.Coloplast.Bold.DarkGrey.24" />
+
+        <TextView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/spacing_half"
+          android:text="@string/contact_cp_write_us_subtitle"
+          style="@style/TextStyle.Coloplast.Regular.DarkGrey.18" />
+
+        <Button
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/spacing_standard"
+          android:text="@string/contact_cp_support_email"
+          style="@style/Button.Borderless"
+          android:textAllCaps="false"
+          android:gravity="center_vertical|start"/>
+
       </LinearLayout>
     </ScrollView>
 

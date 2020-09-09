@@ -5,9 +5,9 @@
 <string name="bluetooth_start_scanning">Start</string>
 <string name="contact_cp_call_button_text">Call support</string>
 <string name="contact_cp_hours_header">Opening hours:</string>
-<string name="contact_cp_hours_text">Monday - Friday\n09.00 - 17.03</string>
+<string name="contact_cp_hours_text">Monday - Friday\n09.00 - 17.00</string>
 <string name="contact_cp_phone_header">Phone number:</string>
-<string name="contact_cp_phone_number">803 783 1434</string>
+<string name="contact_cp_phone_number">0800 783 1434</string>
 <string name="contact_cp_subtitle">Please don’t hesitate to contact us about any product related issues.</string>
 <string name="contact_cp_support_email">beststartoc@coloplastcharter.co.uk</string>
 <string name="contact_cp_title">Contact</string>

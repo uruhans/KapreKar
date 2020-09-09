@@ -27,16 +27,13 @@ class ProfileViewModel(private val me: Me) :
         .compose(DelayedLoadingTransformer<CurrentUser>())
         .compose(GenericUiModelTransformer())
 
-    val onLogoutRequested: Observable<GenericUiModel> =
+    val onLogoutRequested =
       uiView.onLogoutRequested()
-        .switchMap {
-          me.logout(true)
-          Observable.just(GenericUiModel.Success(Unit)) // this result will be ignored
-        }
+        .map { me.logout(true) }
+        .subscribe()
 
-    disposable.add(
-      Observable.merge(onUserDataRequested, onLogoutRequested).bind(uiView.render())
-    )
+    disposable.add(onLogoutRequested)
+    disposable.add(onUserDataRequested.bind(uiView.render()))
     return disposable
   }
 }

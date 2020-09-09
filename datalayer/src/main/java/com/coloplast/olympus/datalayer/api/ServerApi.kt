@@ -10,6 +10,9 @@ interface ServerApi {
   @POST("users/register")
   fun createUser(@Body userDTO: UserDTO): Observable<UserResponseDTO>
 
+  @PUT("users/{userId}")
+  fun updateUser(@Path("userId") userId: String, @Body userDTO: UserDTO) : Observable<UserResponseDTO>
+
   @POST("auth/login")
   fun login(@Body credentialsDTO: CredentialsDTO): Observable<UserResponseDTO>
 

@@ -34,7 +34,7 @@ class ApiServiceImpl : ApiService {
   }
 
   override fun updateUser(user: User): Observable<UserResponseDTO> {
-    TODO("Not yet implemented")
+    return api.updateUser(user.id.toString(), UserDTO.fromUser(user))
   }
 
   override fun login(credentials: Credentials): Observable<UserResponseDTO> {

@@ -1,5 +1,7 @@
 package com.coloplast.olympus.ui.feature.contact
 
+import android.content.Intent
+import android.net.Uri
 import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerContactBinding
@@ -15,6 +17,24 @@ class ContactController: CustomToolbarController<ControllerContactBinding>() {
   override fun attachVariables(viewBinding: ControllerContactBinding) {
     super.attachVariables(viewBinding)
     viewBinding.controller = this
+  }
+
+  fun onCallClicked(){
+    val callIntent = Intent().apply {
+      action = Intent.ACTION_DIAL
+      data = Uri.parse("tel:${getString(R.string.contact_cp_phone_number)}")
+    }
+    startActivity(callIntent)
+  }
+
+  fun onEmailClicked(){
+    val emailIntent = Intent().apply {
+      action = Intent.ACTION_SENDTO
+      data = Uri.fromParts(
+        "mailto", getString(R.string.contact_cp_support_email).toString(), null
+      )
+    }
+    startActivity(emailIntent)
   }
 
   override fun getLayout(): Int = R.layout.controller_contact

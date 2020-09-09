@@ -6,12 +6,16 @@ import android.content.Context
 @SuppressLint("StaticFieldLeak")
 object AppSettings {
   
-  fun initialize(applicationContext: Context, serverUrl: String) {
+  fun initialize(applicationContext: Context, serverUrl: String, azureUrl: String, azureCode: String) {
     SERVER_IP = serverUrl
+    AZURE_URL = azureUrl
+    AZURE_CODE = azureCode
     AppSettings.applicationContext = applicationContext
   }
   
   private lateinit var SERVER_IP: String
+  private lateinit var AZURE_URL: String
+  private lateinit var AZURE_CODE: String
   private const val API_VERSION = "v1"
   
   val ENVIRONMENT_URL by lazy {
@@ -19,11 +23,11 @@ object AppSettings {
   }
 
   val AZURE_ENVIRONMENT_URL by lazy {
-    "https://cp-fc-test.azurefd.net/api/"
+    AZURE_URL
   }
 
   val code by lazy {
-    "yBcdDaPPWKYaL160/7aXnd55ehvzukND6ng3oawFaApU1xd891QtwQ=="
+    AZURE_CODE
   }
   
   /**

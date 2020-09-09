@@ -19,7 +19,6 @@ android {
     testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
     buildConfigField("Long", "BuildTime", System.currentTimeMillis() + "L")
-    buildConfigField("String", "ServerUrl", "\"https://cp-fc-be-test.azurewebsites.net\"")
   }
 
   sourceSets {
@@ -33,13 +32,26 @@ android {
     dev {
       applicationIdSuffix ".dev"
       buildConfigField("String", "Suffix", "\" - DEV\"")
+
+      buildConfigField("String", "ServerUrl", "\"https://cp-fc-be-dev.azurewebsites.net\"")
+      buildConfigField("String", "AzureUrl", "\"https://cp-fc-dev.azurefd.net/api/\"")
+      buildConfigField("String", "AzureCode", "\"1aiab34Rsqn2jSVcyXevoG9rvS0HjS9lqf5g8XsUV8BnzRVk3a9u1g==\"")
+
     }
     tpa {
       applicationIdSuffix ".tpa"
       buildConfigField("String", "Suffix", "\" - TPA\"")
+
+      buildConfigField("String", "ServerUrl", "\"https://cp-fc-be-test.azurewebsites.net\"")
+      buildConfigField("String", "AzureUrl", "\"https://cp-fc-test.azurefd.net/api/\"")
+      buildConfigField("String", "AzureCode", "\"yBcdDaPPWKYaL160/7aXnd55ehvzukND6ng3oawFaApU1xd891QtwQ==\"")
     }
     googlePlay {
       buildConfigField("String", "Suffix", "\"\"")
+
+      buildConfigField("String", "ServerUrl", "\"https://cp-fc-be-prod.azurewebsites.net\"")
+      buildConfigField("String", "AzureUrl", "\"https://cp-fc-prod.azurefd.net/api/\"")
+      buildConfigField("String", "AzureCode", "\"irAejdDg5M3Tq53GX5FM5m0aM0AU0KD3BdtYBQaMhB9IYDudHWcbgw==\"")
     }
   }
 

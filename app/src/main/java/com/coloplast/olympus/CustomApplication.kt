@@ -19,7 +19,7 @@ class CustomApplication : Application() {
   override fun onCreate() {
     super.onCreate()
 
-    AppSettings.initialize(this, BuildConfig.ServerUrl)
+    AppSettings.initialize(this, BuildConfig.ServerUrl, BuildConfig.AzureUrl, BuildConfig.AzureCode)
 
     Timber.plant(Timber.DebugTree())
     Timber.d(DebugDB.getAddressLog())

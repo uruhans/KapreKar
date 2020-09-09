@@ -1,6 +1,7 @@
 package com.coloplast.olympus.shared.preferences
 
 import android.content.Context
+import com.coloplast.olympus.shared.AppSettings
 import com.coloplast.olympus.shared.types.Sensors
 import java.time.LocalTime
 import java.util.*
@@ -31,6 +32,14 @@ class Preferences(applicationContext: Context) {
   init {
     if(deviceId.isEmpty()) {
       deviceId = UUID.randomUUID().toString()
+    }
+
+    /**
+     * There is no way to get the userToken (used in the DataLayer)
+     * through this object - this is why its passed to the appsettings (not pretty no)
+     */
+    if(userToken.isNotBlank()) {
+      AppSettings.userToken = userToken
     }
   }
 

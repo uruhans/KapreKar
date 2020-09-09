@@ -15,6 +15,8 @@ import java.util.*
 interface DbService {
   fun insertOrUpdateUser(user: User): Observable<User>
   fun getUser(userId: UUID): Observable<User>
+  fun getSingleUser(userId: UUID): Single<User>
+  fun updateUserSyncState(userId: UUID, syncState: SyncState) : Completable
 
   fun getTransmitters(): Observable<DataResult<List<Transmitter>>>
   fun getTransmitter(macAddress: String): Observable<DataResult<Transmitter>>

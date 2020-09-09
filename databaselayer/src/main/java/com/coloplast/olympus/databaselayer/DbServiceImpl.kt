@@ -31,9 +31,29 @@ class DbServiceImpl : DbService {
       .toObservable()
   }
 
+  override fun updateUserSyncState(userId: UUID, syncState: SyncState): Completable {
+    return db.userDao()
+      .getSingleUserById(userId)
+      .map {
+        it.syncState = syncState
+        it
+      }
+      .flatMapCompletable {
+        db.userDao()
+          .insertOrUpdate(it)
+          .ignoreElement()
+      }
+  }
+
   override fun getUser(userId: UUID): Observable<User> {
     return db.userDao()
       .getById(userId)
+      .map<User> { it.toUser() }
+  }
+
+  override fun getSingleUser(userId: UUID): Single<User> {
+    return db.userDao()
+      .getSingleUserById(userId)
       .map<User> { it.toUser() }
   }
 

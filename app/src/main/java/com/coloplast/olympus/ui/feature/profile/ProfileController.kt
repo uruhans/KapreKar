@@ -5,14 +5,12 @@ import androidx.databinding.ObservableField
 import androidx.databinding.ObservableInt
 import com.artemzin.rxui.RxUi
 import com.bluelinelabs.conductor.RouterTransaction
-import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerProfileBinding
 import com.coloplast.olympus.shared.models.CurrentUser
 import com.coloplast.olympus.ui.common.CustomToolbarController
 import com.coloplast.olympus.ui.common.models.GenericUiModel
 import com.coloplast.olympus.ui.feature.home.HomeController
-import com.coloplast.olympus.ui.feature.onboarding.LandingController
 import com.coloplast.olympus.ui.feature.onboarding.createprofile.types.HealthInsurance
 import com.coloplast.olympus.ui.feature.onboarding.createprofile.types.StomaSurgeryDate
 import com.coloplast.olympus.ui.feature.onboarding.createprofile.types.StomaType
@@ -71,11 +69,6 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
               showHealthInsurance.set(true)
               healthInsurance.set(HealthInsurance.fromId(it).stringId)
             }
-          }
-          is CurrentUser.LoggedOut -> {
-            router.setRoot(LandingController.routerTransaction()
-              .pushChangeHandler(VerticalChangeHandler())
-              .popChangeHandler(VerticalChangeHandler()))
           }
         }
       }

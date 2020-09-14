@@ -45,6 +45,13 @@ class CustomApplication : Application() {
 
     WorkScheduler.schedulePeriodicWork(
       this,
+      SyncTransmittersWorker.workName,
+      SyncTransmittersWorker.createPeriodicWorker(),
+      cancelWork
+    )
+
+    WorkScheduler.schedulePeriodicWork(
+      this,
       SyncRawPackagesWorker.workName,
       SyncRawPackagesWorker.createPeriodicWorker(),
       cancelWork

@@ -76,7 +76,10 @@ class TransmitterComponentImpl(private val preferences: Preferences) : Transmitt
       .onErrorReturn { SyncResult.Error(SyncResult.Error.State.DELETE_FAILED) }
   }
 
-  override fun syncPackagesWithCloud(userId: UUID, packageType: PackageType): Observable<SyncResult> {
+  override fun syncPackagesWithCloud(
+    userId: UUID,
+    packageType: PackageType
+  ): Observable<SyncResult> {
     return getPendingPackages(userId, packageType)
       .filter { it.isNotEmpty() }
       .doOnNext { Timber.d("Number of [$packageType] packages to sync: ${it.size}") }
@@ -89,7 +92,7 @@ class TransmitterComponentImpl(private val preferences: Preferences) : Transmitt
               .toSingle<SyncResult> { SyncResult.Completed() }
               .toObservable()
               .flatMap {
-                if(it is SyncResult.Completed) {
+                if (it is SyncResult.Completed) {
                   dbService.pendingPackagesRemaining(userId, packageType)
                     .toObservable()
                     .map<SyncResult> { count -> SyncResult.Completed(count) }
@@ -108,7 +111,10 @@ class TransmitterComponentImpl(private val preferences: Preferences) : Transmitt
       }
   }
 
-  private fun getPendingPackages(userId: UUID, packageType: PackageType): Observable<List<TransmitterPackage>> {
+  private fun getPendingPackages(
+    userId: UUID,
+    packageType: PackageType
+  ): Observable<List<TransmitterPackage>> {
     return dbService.getPendingTransmitterPackages(userId, packageType)
       .map {
         if (it is DataResult.Success<*>) {
@@ -122,5 +128,25 @@ class TransmitterComponentImpl(private val preferences: Preferences) : Transmitt
 
   override fun pendingPackagesRemaining(userId: UUID, packageType: PackageType): Single<Int> {
     return dbService.pendingPackagesRemaining(userId, packageType)
+  }
+
+  override fun syncTransmitters(userId: UUID): Observable<SyncResult> {
+    return dbService.getPendingTransmitters(userId)
+      .toObservable()
+      .flatMap { transmitters ->
+        azureService.sendTransmitter(userId, transmitters)
+          .toSingle { true }
+          .toObservable()
+          .flatMap {
+            dbService.updateSyncStateForTransmitters(transmitters, SyncState.Uploaded)
+              .toSingle<SyncResult> { SyncResult.Completed() }
+              .toObservable()
+          }
+          .onErrorResumeNext(
+            dbService.updateSyncStateForTransmitters(transmitters, SyncState.Pending)
+              .toSingle<SyncResult> { SyncResult.Error() }
+              .toObservable()
+          )
+      }
   }
 }

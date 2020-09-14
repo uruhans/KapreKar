@@ -152,4 +152,26 @@ class DbServiceImpl : DbService {
     return db.transmitterPackageDao()
       .pendingPackagesRemaining(userId.toString(), packageType)
   }
+
+  override fun getPendingTransmitters(userId: UUID): Single<List<Transmitter>> {
+    return db.transmitterDao()
+      .getPendingTransmittersAsSingle()
+      .map { list ->
+        list.forEach { dbTransmitter -> dbTransmitter.syncState = SyncState.Sending }
+        list
+      }
+      .flatMap { list ->
+        db.transmitterDao()
+          .updateTransmitters(list)
+          .map { list.map { dbTransmitter -> dbTransmitter.toTransmitter() } }
+      }
+  }
+
+  override fun updateSyncStateForTransmitters(transmitters: List<Transmitter>, syncState: SyncState) : Completable {
+    val dbTransmitters: List<DbTransmitter> = transmitters.map { DbTransmitter.fromTransmitter(it) }
+    dbTransmitters.forEach { it.syncState = syncState }
+
+    return db.transmitterDao().updateTransmitters(dbTransmitters)
+      .ignoreElement()
+  }
 }

@@ -36,6 +36,7 @@ import com.coloplast.olympus.ui.common.widgets.PatchView
 import com.coloplast.olympus.ui.dialogs.ImageDialogController
 import com.coloplast.olympus.ui.dialogs.PatchDialogController
 import com.coloplast.olympus.ui.feature.TransmitterManager
+import com.coloplast.olympus.ui.feature.contact.ContactController
 import com.coloplast.olympus.ui.feature.guides.GuidesFlowController
 import com.coloplast.olympus.ui.feature.guides.articles.GuideController
 import com.coloplast.olympus.ui.feature.guides.articles.models.GuideType
@@ -50,7 +51,6 @@ import com.coloplast.olympus.ui.feature.statemachine.models.UiState
 import com.coloplast.olympus.ui.feature.transmitters.TransmittersController
 import com.coloplast.olympus.ui.feature.uistates.*
 import com.coloplast.olympus.utils.OSUtils
-import com.coloplast.olympus.work.SyncController
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
@@ -578,14 +578,14 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
       SideMenuType.PROFILE,
       SideMenuType.ABOUT -> {
         getContentRouter().pushController(
-          SyncController.routerTransaction()
-            .popChangeHandler(VerticalChangeHandler())
+          SetupGuideApplyingFlowController.routerTransaction()
             .pushChangeHandler(VerticalChangeHandler())
+            .popChangeHandler(VerticalChangeHandler())
         )
       }
       SideMenuType.CONTACT -> {
-        getContentRouter().pushController(
-          SetupGuideApplyingFlowController.routerTransaction()
+        router.pushController(
+          ContactController.routerTransaction()
             .pushChangeHandler(VerticalChangeHandler())
             .popChangeHandler(VerticalChangeHandler())
         )

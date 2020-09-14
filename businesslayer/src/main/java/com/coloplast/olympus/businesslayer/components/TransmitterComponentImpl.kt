@@ -134,19 +134,25 @@ class TransmitterComponentImpl(private val preferences: Preferences) : Transmitt
     return dbService.getPendingTransmitters(userId)
       .toObservable()
       .flatMap { transmitters ->
-        azureService.sendTransmitter(userId, transmitters)
-          .toSingle { true }
-          .toObservable()
-          .flatMap {
-            dbService.updateSyncStateForTransmitters(transmitters, SyncState.Uploaded)
-              .toSingle<SyncResult> { SyncResult.Completed() }
-              .toObservable()
-          }
-          .onErrorResumeNext(
-            dbService.updateSyncStateForTransmitters(transmitters, SyncState.Pending)
-              .toSingle<SyncResult> { SyncResult.Error() }
-              .toObservable()
-          )
+        if (transmitters.isEmpty()) {
+          Observable.just(SyncResult.Completed())
+        }
+        else {
+          azureService.sendTransmitter(userId, transmitters)
+            .toSingle { true }
+            .toObservable()
+            .flatMap {
+              dbService.updateSyncStateForTransmitters(transmitters, SyncState.Uploaded)
+                .toSingle<SyncResult> { SyncResult.Completed() }
+                .toObservable()
+            }
+            .doOnError { Timber.e(it) }
+            .onErrorResumeNext(
+              dbService.updateSyncStateForTransmitters(transmitters, SyncState.Pending)
+                .toSingle<SyncResult> { SyncResult.Error() }
+                .toObservable()
+            )
+        }
       }
   }
 }

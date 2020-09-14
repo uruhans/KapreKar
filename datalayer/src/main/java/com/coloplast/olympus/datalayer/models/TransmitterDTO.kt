@@ -2,6 +2,7 @@ package com.coloplast.olympus.datalayer.models
 
 import com.coloplast.olympus.shared.models.Transmitter
 import com.coloplast.olympus.shared.transformers.OlympusWirelessProtocol
+import com.squareup.moshi.Json
 import java.time.Instant
 import java.util.*
 
@@ -10,7 +11,9 @@ class TransmitterDTO(
   val id: String,
   val name: String,
   val deviceInfo: DeviceInfoDTO,
+  @Json(name = "settingsPackage")
   val settings: SettingsDTO,
+  @Json(name = "classifierPackage")
   val classifierSettings: ClassifierSettingsDTO
 ) {
 
@@ -37,5 +40,4 @@ class TransmitterDTO(
       )
     }
   }
-
 }

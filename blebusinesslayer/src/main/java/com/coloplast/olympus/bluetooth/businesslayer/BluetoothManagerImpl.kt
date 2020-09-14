@@ -12,6 +12,7 @@ import com.coloplast.olympus.bluetooth.businesslayer.services.BatteryPowerServic
 import com.coloplast.olympus.bluetooth.businesslayer.services.DeviceInformation
 import com.coloplast.olympus.bluetooth.businesslayer.services.OlympusWirelessProtocol
 import com.coloplast.olympus.businesslayer.interfaces.TransmitterComponent
+import com.coloplast.olympus.shared.models.RawDataPackage
 import com.dawn.bluetooth.BluetoothHandler
 import com.jakewharton.rxrelay2.PublishRelay
 import com.polidea.rxandroidble2.RxBleClient

@@ -1,4 +1,4 @@
-package com.coloplast.olympus.bluetooth.businesslayer.models
+package com.coloplast.olympus.shared.models
 
 import java.time.LocalDateTime
 

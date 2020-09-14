@@ -10,6 +10,7 @@ buildscript {
   ext.timber_version = '4.7.1'
   ext.okhttp_logging_version = '4.4.1'
   ext.room_version = '2.2.5'
+  ext.work_version = '2.4.0'
 
   repositories {
     google()

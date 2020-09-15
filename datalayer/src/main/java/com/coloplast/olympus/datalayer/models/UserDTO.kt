@@ -41,4 +41,21 @@ data class UserDTO(
       SyncState.Uploaded
     )
   }
+
+  companion object {
+    fun fromUser(user: User) : UserDTO {
+      return UserDTO(
+        user.id.toString(),
+        user.firstName,
+        user.lastName,
+        user.email,
+        user.password,
+        user.stomaType?.id,
+        user.surgeryDateInterval,
+        user.phoneNumber,
+        user.insuranceType,
+        user.consent ?: false
+      )
+    }
+  }
 }

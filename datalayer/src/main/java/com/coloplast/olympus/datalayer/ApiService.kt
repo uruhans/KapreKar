@@ -11,7 +11,7 @@ interface ApiService {
   fun createUser(user: User): Observable<UserResponseDTO>
   fun createAnonymousUser() : Observable<UserResponseDTO>
 
-  fun updateUser(user: User) : Observable<UserResponseDTO>
+  fun updateUser(user: User) : Completable
 
   fun login(credentials: Credentials): Observable<UserResponseDTO>
 

@@ -36,7 +36,7 @@ dependencies {
   api project(':datalayer')
   implementation project(':databaselayer')
 
-  coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.0.10'
+  coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:$desuger_lib"
 
   implementation "androidx.room:room-runtime:$room_version"
 

@@ -16,6 +16,10 @@ class SyncStatusPackagesWorker(applicationContext: Context, workerParams: Worker
   private val preferences: Preferences by inject()
 
   override fun doWork(): Result {
+    if(preferences.userLoggedIn.isEmpty()) {
+      return Result.success()
+    }
+
     val userId = UUID.fromString(preferences.userLoggedIn)
     return syncWorker.doSyncWork(userId, PackageType.Status)
   }

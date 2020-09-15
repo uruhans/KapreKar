@@ -16,6 +16,10 @@ class SyncPowerPackagesWorker(applicationContext: Context, workerParams: WorkerP
   private val preferences: Preferences by inject()
 
   override fun doWork(): Result {
+    if(preferences.userLoggedIn.isEmpty()) {
+      return Result.success()
+    }
+
     val userId = UUID.fromString(preferences.userLoggedIn)
     return syncWorker.doSyncWork(userId, PackageType.Power)
   }

@@ -20,12 +20,18 @@ class SyncWorker(private val userComponent: UserComponent,
 
     var result = ListenableWorker.Result.success()
 
-    userComponent.getLocalUser(forUserId)
+    userComponent.getSingleLocalUser(forUserId)
       .subscribeOn(Schedulers.io())
-      .doOnNext { Timber.d("[SyncWorker] [$packageType] User has given consent [${it.consent ?: false}]") }
-      .filter { it.consent ?: false }
+      .map {
+        if (it.consent == false) {
+          throw RuntimeException("[SyncWorker] [$packageType] - User has not provided consent")
+        }
+        else {
+          it
+        }
+      }
       .map { it.id }
-      .flatMap { userId ->
+      .flatMapObservable { userId ->
         deletePackages(packageType)
           .flatMap { deleteResult ->
             if (deleteResult is SyncResult.Completed) {

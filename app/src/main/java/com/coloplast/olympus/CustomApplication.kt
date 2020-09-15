@@ -4,10 +4,7 @@ import android.app.Application
 import com.amitshekhar.DebugDB
 import com.coloplast.olympus.koin.koinModule
 import com.coloplast.olympus.shared.AppSettings
-import com.coloplast.olympus.work.SyncPowerPackagesWorker
-import com.coloplast.olympus.work.SyncRawPackagesWorker
-import com.coloplast.olympus.work.SyncStatusPackagesWorker
-import com.coloplast.olympus.work.WorkScheduler
+import com.coloplast.olympus.work.*
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -39,6 +36,20 @@ class CustomApplication : Application() {
   }
 
   private fun scheduleWorkers(cancelWork: Boolean = false) {
+    WorkScheduler.schedulePeriodicWork(
+      this,
+      SyncUserWorker.workName,
+      SyncUserWorker.createPeriodicWorker(),
+      cancelWork
+    )
+
+    WorkScheduler.schedulePeriodicWork(
+      this,
+      SyncTransmittersWorker.workName,
+      SyncTransmittersWorker.createPeriodicWorker(),
+      cancelWork
+    )
+
     WorkScheduler.schedulePeriodicWork(
       this,
       SyncRawPackagesWorker.workName,

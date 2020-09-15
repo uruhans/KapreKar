@@ -29,6 +29,8 @@ object AppSettings {
   val code by lazy {
     AZURE_CODE
   }
+
+  var userToken: String = ""
   
   /**
    * usually you dont want to have a static reference to a context

@@ -1,6 +1,7 @@
 package com.coloplast.olympus.datalayer
 
 import com.coloplast.olympus.datalayer.models.*
+import com.coloplast.olympus.shared.models.Transmitter
 import com.coloplast.olympus.shared.models.TransmitterPackage
 import com.coloplast.olympus.shared.transformers.OlympusWirelessProtocol
 import com.coloplast.olympus.shared.types.PackageType
@@ -71,4 +72,9 @@ class AzurePackageApiImpl : AzurePackageApi {
     }
   }
 
+  override fun sendTransmitter(userId: UUID, transmitters: List<Transmitter>): Completable {
+    return packageApi.syncTransmitter(
+      transmitters.map { TransmitterDTO.fromTransmitter(userId, it) }
+    )
+  }
 }

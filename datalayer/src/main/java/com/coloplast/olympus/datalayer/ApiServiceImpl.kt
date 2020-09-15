@@ -2,9 +2,7 @@ package com.coloplast.olympus.datalayer
 
 import com.coloplast.olympus.datalayer.models.*
 import com.coloplast.olympus.shared.models.Credentials
-import com.coloplast.olympus.shared.models.TransmitterPackage
 import com.coloplast.olympus.shared.models.User
-import com.coloplast.olympus.shared.types.PackageType
 import io.reactivex.Completable
 import io.reactivex.Observable
 
@@ -33,8 +31,8 @@ class ApiServiceImpl : ApiService {
     return api.createUser(UserDTO())
   }
 
-  override fun updateUser(user: User): Observable<UserResponseDTO> {
-    TODO("Not yet implemented")
+  override fun updateUser(user: User): Completable {
+    return api.updateUser(user.id.toString(), UserDTO.fromUser(user)).ignoreElements()
   }
 
   override fun login(credentials: Credentials): Observable<UserResponseDTO> {

@@ -48,14 +48,14 @@ val koinModule = module {
 
   /* Notifications */
   single { androidContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }
-  single { NotificationCenter(androidContext(), get(), get())}
+  single { NotificationCenter(androidContext(), get(), get()) }
   single { OlympusNotificationManager(get()) }
   single { NotificationScheduler() }
 
   /* Bluetooth */
   single<BluetoothManager> { BluetoothManagerImpl(get(), androidContext(), BuildConfig.DEBUG) }
   factory { DeviceConnection(get()) }
-  single<FirmwareManager> { FirmwareManagerImpl(androidContext(), get())}
+  single<FirmwareManager> { FirmwareManagerImpl(androidContext(), get()) }
 
   single { TransmitterManager(get(), get()) }
   single { BreachesOccurred(get()) }
@@ -77,9 +77,6 @@ val koinModule = module {
   single { SetupGuideLocationSGC4ViewModel(get()) }
   single { AddTransmitterAT7ViewModel(get()) }
   single { SyncViewModel(get(), get(), get()) }
-  factory { HomeViewModel(get()) }
-  single { TransmittersViewModel(get(), get(), get()) }
-  single { AddTransmitterAT9ViewModel(get(), get(), get()) }
 
   /* Flows */
   single { AddTransmitterFactoryImpl() }

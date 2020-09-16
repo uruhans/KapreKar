@@ -46,6 +46,7 @@
   <style name="Button.Borderless" parent="Widget.AppCompat.Button.Borderless.Colored">
     <item name="android:background">?android:attr/selectableItemBackground</item>
     <item name="android:textColor">@color/colorAccent</item>
+    <item name="android:textSize">@dimen/text_18</item>
   </style>
 
   <style name="CardViewStyle" parent="CardView">
@@ -53,6 +54,33 @@
     <item name="cardElevation">@dimen/cardview_elevation_default</item>
     <item name="cardBackgroundColor">@color/cardview_background</item>
   </style>
+
+  <!-- TextInputLayout style -->
+  <style name="TextInputLayoutAppearance" parent="Widget.Design.TextInputLayout">
+    <item name="errorTextAppearance">@style/TextInputLayoutErrorText</item>
+    <item name="helperTextTextAppearance">@style/TextInputHelper</item>
+    <item name="hintAnimationEnabled">false</item>
+    <item name="hintEnabled">false</item>
+    <item name="android:layout_marginTop">@dimen/spacing_standard</item>
+    <item name="counterTextAppearance">@style/TextInputHelper</item>
+    <item name="errorEnabled">true</item>
+  </style>
+
+  <style name="EditTextInputText">
+    <item name="android:layout_height">56dp</item>
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:paddingStart">@dimen/spacing_standard</item>
+    <item name="android:paddingEnd">@dimen/spacing_standard</item>
+    <item name="android:textAppearance">@style/TextInputTextAppearance</item>
+  </style>
+
+  <!-- EditText input text style -->
+  <style name="TextInputTextAppearance" parent="TextStyle.Coloplast.Regular.DarkGrey.18" />
+  <style name="TextInputHelper" parent="TextStyle.Coloplast.Regular.ClearGrey.18" />
+
+  <!-- EditText error text style -->
+  <style name="TextInputLayoutErrorText" parent="TextStyle.Roboto.Medium.Red.16" />
+
   <!--
     <style name="SubmitButton">
       <item name="android:background">@drawable/button_submit</item>
@@ -100,7 +128,7 @@
   </style>
 
   <style name="GuideHeaderDescription" parent="TextStyle.Coloplast.Regular.ClearGrey">
-    <item name="android:textSize">@dimen/text_30</item>
+    <item name="android:textSize">@dimen/text_18</item>
     <item name="android:gravity">center</item>
   </style>
 
@@ -110,7 +138,6 @@
 
   <style name="GuideSubTitle" parent="TextStyle.Roboto.Regular.ClearGrey">
     <item name="android:textSize">@dimen/text_18</item>
-    <item name="android:gravity">center</item>
   </style>
 
   <style name="Headline" parent="TextStyle.Coloplast.Bold.Grey" />
@@ -177,6 +204,18 @@
     <item name="android:fontFamily">@font/coloplast_bold_italic</item>
   </style>
 
+  <style name="TextStyle.Coloplast.Bold.Italic.White" parent="TextStyle.Coloplast.Bold.Italic">
+    <item name="android:textColor">@color/text_white</item>
+  </style>
+
+  <style name="TextStyle.Coloplast.Bold.Italic.White.34" parent="TextStyle.Coloplast.Bold.Italic.White">
+    <item name="android:textSize">34sp</item>
+  </style>
+
+  <style name="TextStyle.Coloplast.Bold.Italic.White.24" parent="TextStyle.Coloplast.Bold.Italic.White">
+    <item name="android:textSize">24sp</item>
+  </style>
+
   <style name="TextStyle.Roboto.Medium.Red" parent="TextStyle.Roboto.Medium">
     <item name="android:textColor">@color/text_red</item>
   </style>
@@ -205,6 +244,10 @@
     <item name="android:textSize">@dimen/text_18</item>
   </style>
 
+  <style name="TextStyle.Roboto.Regular.ClearGrey.30" parent="TextStyle.Roboto.Regular.ClearGrey">
+    <item name="android:textSize">30sp</item>
+  </style>
+
   <style name="TextStyle.Coloplast.Regular.ClearGrey" parent="TextStyle.Coloplast.Regular">
     <item name="android:textColor">@color/text_clear_grey</item>
   </style>
@@ -214,17 +257,28 @@
     <item name="android:textSize">@dimen/text_16</item>
   </style>
 
+  <style name="TextStyle.Coloplast.Regular.ClearGrey.18" parent="TextStyle.Coloplast.Regular.ClearGrey">
+    <item name="android:textSize">18sp</item>
+  </style>
+
   <style name="TextStyle.Roboto.Medium.Turquoise" parent="TextStyle.Roboto.Medium">
     <item name="android:textColor">@color/text_turquoise</item>
   </style>
 
-  <style name="TextStyle.Roboto.Medium.Turquoise.18" parent="TextStyle.Roboto.Medium">
-    <item name="android:textColor">@color/text_turquoise</item>
+  <style name="TextStyle.Roboto.Medium.Turquoise.16" parent="TextStyle.Roboto.Medium.Turquoise">
+    <item name="android:textSize">@dimen/text_16</item>
+  </style>
+
+  <style name="TextStyle.Roboto.Medium.Turquoise.18" parent="TextStyle.Roboto.Medium.Turquoise">
     <item name="android:textSize">@dimen/text_18</item>
   </style>
 
   <style name="TextStyle.Roboto.Medium.Red.18" parent="TextStyle.Roboto.Medium.Red">
     <item name="android:textSize">18sp</item>
+  </style>
+
+  <style name="TextStyle.Roboto.Medium.Red.16" parent="TextStyle.Roboto.Medium.Red">
+    <item name="android:textSize">16sp</item>
   </style>
 
   <style name="TextStyle.Coloplast.Regular.DarkGrey" parent="TextStyle.Roboto.Regular">
@@ -233,6 +287,10 @@
 
   <style name="TextStyle.Coloplast.Regular.DarkGrey.18" parent="TextStyle.Coloplast.Regular.DarkGrey">
     <item name="android:textSize">@dimen/text_18</item>
+  </style>
+
+  <style name="TextStyle.Coloplast.Regular.DarkGrey.20" parent="TextStyle.Coloplast.Regular.DarkGrey">
+    <item name="android:textSize">20sp</item>
   </style>
 
   <style name="TextStyle.Coloplast.Bold.DarkGrey" parent="TextStyle.Coloplast.Bold">

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools">
+
+  <data>
+
+    <variable
+      name="controller"
+      type="com.coloplast.olympus.ui.common.GenericConfirmationController" />
+  </data>
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/top"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_margin="@dimen/spacing_larger"
+      android:gravity="center"
+      android:orientation="vertical"
+      app:layout_constraintBottom_toTopOf="@+id/confirmation_button"
+      app:layout_constraintTop_toTopOf="parent">
+
+      <include
+        layout="@layout/item_checkmark_with_background"
+        app:controller="@{controller}" />
+
+      <TextView
+        android:id="@+id/transmitter_guide_at1_title"
+        style="@style/GuideHeader.32"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_double"
+        android:layout_marginBottom="@dimen/spacing_standard"
+        app:safeText="@{controller.titleId}" />
+
+      <TextView
+        android:id="@+id/application_guide_description"
+        style="@style/TextStyle.Coloplast.Regular.ClearGrey.18"
+        android:textAlignment="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:safeText="@{controller.descriptionId}"
+        android:lineSpacingExtra="@dimen/spacing_half" />
+
+    </LinearLayout>
+
+    <Button
+      android:id="@+id/confirmation_button"
+      style="@style/Button"
+      android:layout_marginBottom="@dimen/spacing_standard"
+      android:onClick="@{() -> controller.onFinishButtonClicked()}"
+      app:layout_constraintBottom_toTopOf="@+id/button_negative"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:safeText="@{controller.buttonTextId}" />
+
+    <TextView
+      android:id="@+id/button_negative"
+      style="@style/TextStyle.Roboto.Medium.Turquoise"
+      android:layout_width="wrap_content"
+      android:layout_height="46dp"
+      android:layout_gravity="center_horizontal"
+      android:layout_marginBottom="@dimen/spacing_standard"
+      android:gravity="center"
+      android:onClick="@{() -> controller.onNegativeButtonClicked()}"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:safeText="@{controller.negativeButtonTextId}"
+      app:visibleOrGone="@{controller.showNegativeButton}"
+      tools:text="Call to support" />
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

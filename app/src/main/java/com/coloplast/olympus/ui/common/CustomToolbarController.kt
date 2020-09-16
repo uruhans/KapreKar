@@ -65,7 +65,7 @@ abstract class CustomToolbarController<T : ViewDataBinding> : BaseController<T>,
    */
   @DrawableRes
   open fun getNavigationIconResId(): Int {
-    return R.drawable.ic_arrow_back_black_24dp
+    return R.drawable.ic_arrow
   }
   
   /**

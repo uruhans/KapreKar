@@ -25,6 +25,7 @@ import com.coloplast.olympus.bluetooth.businesslayer.models.Patch
 import com.coloplast.olympus.bluetooth.model.ServiceEvent
 import com.coloplast.olympus.databinding.ControllerHomeBinding
 import com.coloplast.olympus.notifications.OlympusNotificationManager
+import com.coloplast.olympus.shared.preferences.Preferences
 import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.common.DrawerState
 import com.coloplast.olympus.ui.common.PermissionHandler
@@ -35,12 +36,15 @@ import com.coloplast.olympus.ui.common.widgets.PatchView
 import com.coloplast.olympus.ui.dialogs.ImageDialogController
 import com.coloplast.olympus.ui.dialogs.PatchDialogController
 import com.coloplast.olympus.ui.feature.TransmitterManager
-import com.coloplast.olympus.ui.feature.guides.GuideController
-import com.coloplast.olympus.ui.feature.guides.models.GuideType
+import com.coloplast.olympus.ui.feature.contact.ContactController
+import com.coloplast.olympus.ui.feature.guides.GuidesFlowController
+import com.coloplast.olympus.ui.feature.guides.articles.GuideController
+import com.coloplast.olympus.ui.feature.guides.articles.models.GuideType
 import com.coloplast.olympus.ui.feature.home.models.HomeUiModel
 import com.coloplast.olympus.ui.feature.home.models.PatchVisible
 import com.coloplast.olympus.ui.feature.home.models.SideMenuType
 import com.coloplast.olympus.ui.feature.home.models.Stitch
+import com.coloplast.olympus.ui.feature.onboarding.setup.SetupGuideApplyingFlowController
 import com.coloplast.olympus.ui.feature.settings.SettingsFlowController
 import com.coloplast.olympus.ui.feature.statemachine.models.OverlayState
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
@@ -60,6 +64,7 @@ import java.time.LocalTime
 class HomeController : BaseController<ControllerHomeBinding>, HomeView, PermissionHandler, BaseDialogController.Listener, ImageDialogController.Listener {
   
   private val viewModel: HomeViewModel by inject()
+  private val preferences: Preferences by inject()
   private val transmitterManager: TransmitterManager by inject()
   private val breachesOccurred: BreachesOccurred by inject()
   private val olympusNotificationManager: OlympusNotificationManager by inject()
@@ -415,6 +420,9 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         imageDialogController?.dismissDialog(withCallback = true)
       }
       REQUEST_CODE_TRANSMITTERS_CHANGED -> {
+        // new patch is being used
+        preferences.updatePatchId()
+
         patchChangeTime = LocalTime.now()
 
         breachesOccurred.clear()
@@ -453,7 +461,8 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         requestPermissionAgain(this, REQUEST_CODE_PERMISSION_LOCATION, OSUtils.bleLocationPermission())
       }
       REQUEST_CODE_CONNECTION_LOST -> {
-        router.pushController(GuideController.routerTransaction(GuideType.CONNECTION)
+        router.pushController(
+          GuideController.routerTransaction(GuideType.CONNECTION)
           .pushChangeHandler(VerticalChangeHandler())
           .popChangeHandler(VerticalChangeHandler()))
       }
@@ -547,7 +556,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
       }
       SideMenuType.GUIDES -> {
         router.pushController(
-          GuideController.routerTransaction(GuideType.CONNECTION)
+          GuidesFlowController.getRouterTransaction()
             .pushChangeHandler(VerticalChangeHandler())
             .popChangeHandler(VerticalChangeHandler())
         )
@@ -567,8 +576,20 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         )
       }
       SideMenuType.PROFILE,
-      SideMenuType.ABOUT,
-      SideMenuType.CONTACT -> { /* TODO - fix this */ }
+      SideMenuType.ABOUT -> {
+        getContentRouter().pushController(
+          SetupGuideApplyingFlowController.routerTransaction()
+            .pushChangeHandler(VerticalChangeHandler())
+            .popChangeHandler(VerticalChangeHandler())
+        )
+      }
+      SideMenuType.CONTACT -> {
+        router.pushController(
+          ContactController.routerTransaction()
+            .pushChangeHandler(VerticalChangeHandler())
+            .popChangeHandler(VerticalChangeHandler())
+        )
+      }
     }
   }
   

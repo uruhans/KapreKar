@@ -30,12 +30,13 @@
         android:layout_height="40dp"
         android:foreground="?attr/actionBarItemBackground"
         android:onClick="@{() -> support.onBackClicked()}"
-        android:scaleX="-1"
         android:paddingEnd="2dp"
+        android:scaleX="-1"
         android:src="@drawable/ic_arrow"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:visibleOrGone="@{support.showBackButton}" />
 
       <ImageView
         android:id="@+id/button_close"
@@ -48,7 +49,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:visibleOrGone="@{support.showCloseButton}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

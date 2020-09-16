@@ -59,7 +59,7 @@ class TransmittersViewModel(
       .delaySubscription(delayedSubscriptionUntilCorrectReturnType)
       .filter { it.isNotEmpty() }
       .flatMapIterable { it }
-      .map { it.macAddress }
+      .map { it.id }
       .flatMap { macAddress ->
         bluetoothManager.bleConnectionStateObservable(macAddress)
           .map { TransmittersUiModel.TransmitterConnectionState(ConnectionState(macAddress, it)) }

@@ -1,5 +1,7 @@
 package com.coloplast.olympus.bluetooth.businesslayer.models
 
+import com.coloplast.olympus.shared.models.RawDataPackage
+
 sealed class DeviceResult {
   
   data class DeviceUpdateResult(val bleDevice: BleDevice) : DeviceResult()

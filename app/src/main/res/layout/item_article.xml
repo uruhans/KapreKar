@@ -7,44 +7,50 @@
 
     <variable
       name="item"
-      type="com.coloplast.olympus.ui.feature.guides.models.ArticleItem" />
+      type="com.coloplast.olympus.ui.feature.guides.articles.models.ArticleItem" />
   </data>
 
   <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:paddingStart="@dimen/spacing_standard"
-    android:paddingEnd="@dimen/spacing_standard">
+    android:orientation="vertical">
+
+    <ImageView
+      android:id="@+id/article_image"
+      android:layout_width="match_parent"
+      android:layout_height="250dp"
+      android:layout_marginTop="@dimen/spacing_larger"
+      android:layout_marginStart="@dimen/spacing_standard"
+      android:layout_marginBottom="@dimen/spacing_half"
+      android:scaleType="fitXY"
+      app:resource="@{item.image}"
+      app:visibleOrGone="@{item.showImage}"
+      tools:src="@drawable/guide_get_started_1" />
 
     <TextView
       android:id="@+id/article_title"
       style="@style/GuideHeader.20"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
+      android:layout_marginStart="@dimen/spacing_standard"
+      android:layout_marginEnd="@dimen/spacing_standard"
       android:layout_marginTop="@dimen/spacing_standard"
       android:layout_marginBottom="@dimen/spacing_half"
       app:safeText="@{item.title}"
       app:visibleOrGone="@{item.showTitle}"
+      android:textAlignment="viewStart"
       tools:text="@string/guide_get_started_1_text" />
-
-    <ImageView
-      android:id="@+id/article_image"
-      android:layout_width="match_parent"
-      android:layout_height="250dp"
-      android:layout_marginBottom="@dimen/spacing_small"
-      android:scaleType="centerInside"
-      app:resource="@{item.image}"
-      app:visibleOrGone="@{item.showImage}"
-      tools:src="@drawable/guide_get_started_1" />
 
     <TextView
       style="@style/GuideSubTitle"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
+      android:layout_marginStart="@dimen/spacing_standard"
+      android:layout_marginEnd="@dimen/spacing_standard"
       android:layout_marginBottom="@dimen/spacing_half"
       app:safeText="@{item.description}"
       app:visibleOrGone="@{item.showDescription}"
+      android:textAlignment="viewStart"
       tools:text="@string/guide_get_started_sub_title_1" />
 
   </LinearLayout>

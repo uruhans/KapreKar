@@ -4,9 +4,10 @@ import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
 import com.coloplast.olympus.bluetooth.businesslayer.models.BleDevice
 import com.coloplast.olympus.bluetooth.businesslayer.models.DeviceInfo
-import com.coloplast.olympus.bluetooth.businesslayer.models.RawDataPackage
 import com.coloplast.olympus.bluetooth.businesslayer.models.ScanResult
 import com.polidea.rxandroidble2.RxBleConnection
+import com.coloplast.olympus.bluetooth.businesslayer.models.*
+import com.coloplast.olympus.shared.models.RawDataPackage
 import io.reactivex.Completable
 import io.reactivex.Observable
 import java.util.*
@@ -32,6 +33,7 @@ interface BluetoothManager {
   fun writeCharacteristic(macAddress: String, characteristic: UUID, data: ByteArray) : Completable
 
   fun readDeviceInfo(macAddress: String) : Observable<DeviceInfo>
+  fun readAdditionalTransmitterInfo(macAddress: String) : Observable<AdditionalDeviceInfo>
   fun isConnected(macAddress: String) : Boolean
 
   fun disconnectTransmitter(macAddress: String)

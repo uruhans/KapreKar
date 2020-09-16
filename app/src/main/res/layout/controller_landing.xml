@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+  <data>
+    <variable
+      name="controller"
+      type="com.coloplast.olympus.ui.feature.onboarding.LandingController" />
+  </data>
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:orientation="vertical"
+      android:gravity="center"
+      android:paddingStart="@dimen/spacing_triple"
+      android:paddingEnd="@dimen/spacing_triple"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintBottom_toBottomOf="parent">
+
+      <ImageView
+        android:layout_width="104dp"
+        android:layout_height="104dp"
+        android:src="@drawable/ic_profile"
+        android:padding="@dimen/spacing_larger"
+        android:background="@drawable/shape_turquoise_circle" />
+
+      <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/spacing_triple"
+        android:paddingEnd="@dimen/spacing_triple"
+        android:paddingTop="@dimen/spacing_triple"
+        android:text="@string/onboarding_landing_title"
+        android:textAlignment="center"
+        style="@style/TextStyle.Coloplast.Bold.DarkGrey.32" />
+
+    </LinearLayout>
+
+    <Button
+      android:id="@+id/create_profile_button"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="@string/onboarding_landing_create_profile_button"
+      style="@style/Button"
+      android:onClick="@{() -> controller.onCreateProfileClicked()}"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintBottom_toTopOf="@id/log_in_button" />
+
+    <Button
+      android:id="@+id/log_in_button"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="@string/onboarding_landing_log_in_button"
+      style="@style/Button.Secondary"
+      android:onClick="@{() -> controller.onLogInClicked()}"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintBottom_toBottomOf="parent" />
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

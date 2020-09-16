@@ -1,19 +1,13 @@
 package com.coloplast.olympus.ui.common.widgets
 
 import android.content.Context
-import android.media.MediaPlayer.OnCompletionListener
-import android.media.MediaPlayer.OnPreparedListener
 import android.net.Uri
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.FrameLayout
-import android.widget.VideoView
 import androidx.annotation.RawRes
 import androidx.databinding.ObservableBoolean
-import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ViewVideoPlayerBinding
-import kotlinx.android.synthetic.main.view_video_player.view.*
 
 
 /**

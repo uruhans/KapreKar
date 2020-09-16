@@ -9,6 +9,6 @@ data class ScanResult(val name: String?, val macAddress: String, val rssi: Int) 
    * return a string representation of the BleDevice name presented as 'Name (macAddress)'
    */
   fun getNameOrAddress(): String {
-    return "$name ($macAddress)"
+    return name ?: macAddress
   }
 }

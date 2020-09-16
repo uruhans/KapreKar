@@ -44,7 +44,7 @@
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/spacing_small"
         android:paddingBottom="@dimen/spacing_small"
-        android:text="@string/settings_android_app_settings_link"
+        android:text="@string/settings_notifications_link"
         style="@style/TextStyle.Roboto.Medium.Turquoise.18"
         android:background="?attr/selectableItemBackground"
         android:focusable="true"

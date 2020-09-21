@@ -1,8 +1,8 @@
 package com.coloplast.olympus.datalayer
 
 import com.coloplast.olympus.datalayer.api.ServerApi
+import com.coloplast.olympus.datalayer.interceptors.AuthInterceptor
 import com.coloplast.olympus.datalayer.interceptors.ServerResponseInterceptor
-import com.coloplast.olympus.datalayer.models.adapters.InstantAdapter
 import com.coloplast.olympus.shared.AppSettings
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -28,7 +28,7 @@ object Retrofit {
 
   private fun getOkHttpClient(): OkHttpClient {
     return OkHttpClient.Builder()
-      //.addInterceptor(AuthRequestInterceptor())
+      .addInterceptor(AuthInterceptor())
       .addInterceptor(ServerResponseInterceptor())
       .addInterceptor(getHttpLoggingInterceptor())
       .connectTimeout(20, TimeUnit.SECONDS)

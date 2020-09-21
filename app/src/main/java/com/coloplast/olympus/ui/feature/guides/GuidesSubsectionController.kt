@@ -9,10 +9,15 @@ import com.coloplast.olympus.BR
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerGuidesSubsectionBinding
 import com.coloplast.olympus.ui.common.BaseController
+import com.coloplast.olympus.ui.feature.guides.articles.GuideController
+import com.coloplast.olympus.ui.feature.guides.articles.models.GuideType
 import com.coloplast.olympus.ui.feature.guides.flows.component.ComponentGuideFlowController
+import com.coloplast.olympus.ui.feature.guides.flows.location.LocationGuideFlowController
+import com.coloplast.olympus.ui.feature.guides.flows.tour.AppTourFlowController
 import com.coloplast.olympus.ui.feature.guides.models.GuideCard
 import com.coloplast.olympus.ui.feature.guides.types.GuidesMenuSubsection
-import com.coloplast.olympus.ui.feature.splash.SplashController
+import com.coloplast.olympus.ui.feature.onboarding.setup.SetupGuideApplyingFlowController
+import com.coloplast.olympus.ui.feature.transmitters.add.AddTransmitterFlowController
 import me.tatarka.bindingcollectionadapter2.OnItemBind
 
 /**
@@ -67,21 +72,24 @@ class GuidesSubsectionController(args: Bundle): BaseController<ControllerGuidesS
   }
 
   fun goToFlow(guideCard: GuideCard){
-    val routerTransaction = when(guideCard){
-      GuideCard.COMPONENT_GUIDE -> ComponentGuideFlowController.routerTransaction()
-      GuideCard.APP_TOUR -> SplashController.routerTransaction()
-      GuideCard.APPLYING_GUIDE -> SplashController.routerTransaction()
-      GuideCard.DRY_APPLYING_TIPS -> SplashController.routerTransaction()
-      GuideCard.CONNECTION_GUIDE -> SplashController.routerTransaction()
-      GuideCard.CHARGING_GUIDE -> SplashController.routerTransaction()
-      GuideCard.LOCATION_GUIDE -> SplashController.routerTransaction()
-      GuideCard.CHECK_BATTERY_LEVEL -> SplashController.routerTransaction()
-      GuideCard.ADD_TRANSMITTER -> SplashController.routerTransaction()
-      GuideCard.DELETE_TRANSMITTER -> SplashController.routerTransaction()
-      GuideCard.CLEANING_GUIDE -> SplashController.routerTransaction()
-      GuideCard.DRYING_GUIDE -> SplashController.routerTransaction()
+    // Here we make a distinction between the type of guide.
+    // If it is a single-screen controller, we add it on the parent router (so it is attached as a regular screen)
+    // If it is a flow we add it on the content router.
+    val (selectedRouter, routerTransaction) = when(guideCard){
+      GuideCard.COMPONENT_GUIDE -> Pair(getContentRouter(), ComponentGuideFlowController.routerTransaction())
+      GuideCard.APP_TOUR -> Pair(getContentRouter(), AppTourFlowController.routerTransaction())
+      GuideCard.APPLYING_GUIDE -> Pair(getContentRouter(), SetupGuideApplyingFlowController.routerTransaction())
+      GuideCard.DRY_APPLYING_TIPS -> Pair(router, GuideController.routerTransaction(GuideType.DRY_APPLYING_TIPS))
+      GuideCard.CONNECTION_GUIDE -> Pair(router, GuideController.routerTransaction(GuideType.CONNECTION))
+      GuideCard.CHARGING_GUIDE -> Pair(router, GuideController.routerTransaction(GuideType.CHARGING))
+      GuideCard.LOCATION_GUIDE -> Pair(getContentRouter(), LocationGuideFlowController.routerTransaction())
+      GuideCard.CHECK_BATTERY_LEVEL -> Pair(router, GuideController.routerTransaction(GuideType.CHECK_BATTERY))
+      GuideCard.ADD_TRANSMITTER -> Pair(getContentRouter(), AddTransmitterFlowController.routerTransaction())
+      GuideCard.DELETE_TRANSMITTER -> Pair(router, GuideController.routerTransaction(GuideType.DELETE_TRANSMITTER))
+      GuideCard.CLEANING_GUIDE -> Pair(router, GuideController.routerTransaction(GuideType.CLEANING))
+      GuideCard.DRYING_GUIDE -> Pair(router, GuideController.routerTransaction(GuideType.DRYING))
     }
-    getContentRouter().pushController(routerTransaction
+    selectedRouter.pushController(routerTransaction
       .pushChangeHandler(HorizontalChangeHandler())
       .popChangeHandler(HorizontalChangeHandler()))
   }

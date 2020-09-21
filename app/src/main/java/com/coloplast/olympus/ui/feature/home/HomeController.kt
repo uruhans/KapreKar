@@ -37,6 +37,7 @@ import com.coloplast.olympus.ui.dialogs.ImageDialogController
 import com.coloplast.olympus.ui.dialogs.PatchDialogController
 import com.coloplast.olympus.ui.feature.TransmitterManager
 import com.coloplast.olympus.ui.feature.about.AboutController
+import com.coloplast.olympus.ui.feature.contact.ContactController
 import com.coloplast.olympus.ui.feature.guides.GuidesFlowController
 import com.coloplast.olympus.ui.feature.guides.articles.GuideController
 import com.coloplast.olympus.ui.feature.guides.articles.models.GuideType
@@ -575,10 +576,16 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
             .popChangeHandler(VerticalChangeHandler())
         )
       }
-      SideMenuType.PROFILE,
-      SideMenuType.CONTACT -> {
+      SideMenuType.PROFILE -> {
         getContentRouter().pushController(
           SetupGuideApplyingFlowController.routerTransaction()
+            .pushChangeHandler(VerticalChangeHandler())
+            .popChangeHandler(VerticalChangeHandler())
+        )
+      }
+      SideMenuType.CONTACT -> {
+        router.pushController(
+          ContactController.routerTransaction()
             .pushChangeHandler(VerticalChangeHandler())
             .popChangeHandler(VerticalChangeHandler())
         )

@@ -18,4 +18,7 @@ interface UserDao {
   @Query("SELECT * FROM DbUser WHERE id = :userId")
   fun getById(userId: UUID) : Observable<DbUser>
 
+  @Query("SELECT * FROM DbUser WHERE id = :userId")
+  fun getSingleUserById(userId: UUID) : Single<DbUser>
+
 }

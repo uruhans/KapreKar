@@ -74,7 +74,7 @@ class SplashController : BaseController<ControllerSplashBinding>(), SplashView {
     }
 
     routerTransaction.let {
-      getContentRouter().setRoot(HomeController.routerTransaction())
+      getContentRouter().setRoot(it)
     }
   }
 

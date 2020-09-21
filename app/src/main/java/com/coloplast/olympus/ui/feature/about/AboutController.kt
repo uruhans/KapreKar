@@ -1,9 +1,11 @@
 package com.coloplast.olympus.ui.feature.about
 
 import com.bluelinelabs.conductor.RouterTransaction
+import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerAboutBinding
 import com.coloplast.olympus.ui.common.CustomToolbarController
+import com.coloplast.olympus.ui.common.WebViewController
 
 
 /**
@@ -15,6 +17,25 @@ class AboutController: CustomToolbarController<ControllerAboutBinding>() {
   override fun attachVariables(viewBinding: ControllerAboutBinding) {
     super.attachVariables(viewBinding)
     viewBinding.controller = this
+  }
+
+  //TODO: Give these methods a better naming.
+  fun onLinkOneClicked(){
+    val url = getString(R.string.about_ap_section1_link).toString()
+    getContentRouter().pushController(
+      WebViewController.getRouterTransaction(url)
+        .pushChangeHandler(VerticalChangeHandler())
+        .popChangeHandler(VerticalChangeHandler())
+    )
+  }
+
+  fun onLinkTwoClicked(){
+    val url = getString(R.string.about_ap_section2_link).toString()
+    getContentRouter().pushController(
+      WebViewController.getRouterTransaction(url)
+        .pushChangeHandler(VerticalChangeHandler())
+        .popChangeHandler(VerticalChangeHandler())
+    )
   }
 
   override fun getLayout(): Int = R.layout.controller_about

@@ -62,7 +62,8 @@
           android:text="@string/about_ap_section1_link_text"
           style="@style/Button.Borderless"
           android:textAlignment="textStart"
-          android:textAllCaps="false" />
+          android:textAllCaps="false"
+          android:onClick="@{() -> controller.onLinkOneClicked()}"/>
 
         <View
           android:layout_width="match_parent"
@@ -118,7 +119,8 @@
           android:text="@string/about_ap_section2_link_text"
           style="@style/Button.Borderless"
           android:textAlignment="textStart"
-          android:textAllCaps="false" />
+          android:textAllCaps="false"
+          android:onClick="@{() -> controller.onLinkTwoClicked()}"/>
 
       </LinearLayout>
 

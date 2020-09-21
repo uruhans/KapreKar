@@ -4,7 +4,6 @@ import com.coloplast.olympus.datalayer.api.ServerApi
 import com.coloplast.olympus.datalayer.interceptors.AuthInterceptor
 import com.coloplast.olympus.datalayer.interceptors.ServerResponseInterceptor
 import com.coloplast.olympus.shared.AppSettings
-import com.coloplast.olympus.shared.preferences.Preferences
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.OkHttpClient

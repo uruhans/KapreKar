@@ -2,20 +2,21 @@ package com.coloplast.olympus
 
 import android.content.Context
 import android.util.Log
-import androidx.test.InstrumentationRegistry.getTargetContext
-import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.work.*
+import androidx.test.platform.app.InstrumentationRegistry
+import androidx.work.Configuration
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkInfo
+import androidx.work.WorkManager
 import androidx.work.testing.SynchronousExecutor
 import androidx.work.testing.WorkManagerTestInitHelper
 import com.coloplast.olympus.work.SyncRawPackagesWorker
 import org.hamcrest.CoreMatchers.`is`
-
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertThat
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-
-import org.junit.Assert.*
-import org.junit.Before
 import java.util.concurrent.TimeUnit
 
 /**

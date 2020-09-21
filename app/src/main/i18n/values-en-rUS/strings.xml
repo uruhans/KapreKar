@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+<string name="about_ap_section1_description">Nori grape silver beet broccoli kombu beet greens fava bean potato quandong celery. Bunya nuts black  yed pea prairie turnip leek lentil turnip greens parsnip. Sea lettuce lettuce water chestnut eggplant winter purslane fennel azuki bean earthnut pea sierra leone bologi leek soko chicory celtuce parsley jícama salsify.</string>
+<string name="about_ap_section1_header">[IFU]</string>
+<string name="about_ap_section1_link">https://www.coloplast.com/about-coloplast/</string>
+<string name="about_ap_section1_link_text">Coloplast® IFU</string>
+<string name="about_ap_section2_description">Nori grape silver beet broccoli kombu beet greens fava bean potato quandong celery. Bunya nuts black  yed pea prairie turnip leek lentil turnip greens parsnip. Sea lettuce lettuce water chestnut eggplant winter purslane fennel azuki bean earthnut pea sierra leone bologi leek soko chicory celtuce parsley jícama salsify.</string>
+<string name="about_ap_section2_header">About Olympus</string>
+<string name="about_ap_section2_link">https://www.coloplast.co.uk/global/terms-and-conditions/</string>
+<string name="about_ap_section2_link_text">Coloplast® Terms of Use</string>
+<string name="about_ap_section2_subsection1_description">Nori grape silver beet broccoli kombu beet greens fava bean potato quandong celery. Bunya nuts black  yed pea prairie turnip leek lentil turnip greens parsnip. Sea lettuce lettuce water chestnut eggplant winter purslane fennel azuki bean earthnut pea sierra leone bologi leek soko chicory celtuce parsley jícama salsify.</string>
+<string name="about_ap_section2_subsection1_header">[The benefits of Olympus]</string>
+<string name="about_ap_title">About</string>
 <string name="bluetooth_enable">Enable bluetooth</string>
 <string name="bluetooth_scanning">Scanning</string>
 <string name="bluetooth_start_scanning">Start</string>

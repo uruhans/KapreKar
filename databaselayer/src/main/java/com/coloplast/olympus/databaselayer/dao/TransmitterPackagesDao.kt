@@ -4,7 +4,6 @@ import androidx.room.*
 import com.coloplast.olympus.databaselayer.entities.DbTransmitterPackage
 import com.coloplast.olympus.shared.types.PackageType
 import com.coloplast.olympus.shared.types.SyncState
-import io.reactivex.Flowable
 import io.reactivex.Single
 
 @Dao

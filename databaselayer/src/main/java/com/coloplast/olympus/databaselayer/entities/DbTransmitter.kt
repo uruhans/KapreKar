@@ -23,7 +23,7 @@ class DbTransmitter(
   @ColumnInfo(typeAffinity = ColumnInfo.BLOB)
   val classifierSettings: ByteArray?,
   @ColumnInfo(typeAffinity = ColumnInfo.INTEGER)
-  val syncState: SyncState
+  var syncState: SyncState
 ) {
 
   fun toTransmitter(): Transmitter {

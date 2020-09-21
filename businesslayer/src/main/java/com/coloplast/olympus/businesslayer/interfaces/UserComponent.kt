@@ -1,10 +1,12 @@
 package com.coloplast.olympus.businesslayer.interfaces
 
+import com.coloplast.olympus.businesslayer.models.SyncResult
 import com.coloplast.olympus.shared.models.Credentials
 import com.coloplast.olympus.shared.models.CurrentUser
 import com.coloplast.olympus.shared.models.User
 import io.reactivex.Completable
 import io.reactivex.Observable
+import io.reactivex.Single
 import java.util.*
 
 interface UserComponent {
@@ -17,5 +19,10 @@ interface UserComponent {
   fun validateSecurityCode(securityCode: String, email: String): Completable
   fun changePassword(securityCode: String, email: String, password: String): Completable
 
+  fun getSingleLocalUser(userId: UUID): Single<User>
   fun getLocalUser(userId: UUID): Observable<User>
+  fun updateUserConsent(userId: UUID, consent: Boolean) : Observable<User>
+  fun updateUser(user: User) : Observable<User>
+
+  fun syncUser(userId: UUID) : Observable<SyncResult>
 }

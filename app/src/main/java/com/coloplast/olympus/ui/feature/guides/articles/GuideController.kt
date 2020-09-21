@@ -1,15 +1,15 @@
 package com.coloplast.olympus.ui.feature.guides.articles
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.databinding.ObservableArrayList
 import com.bluelinelabs.conductor.RouterTransaction
-import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
+import com.bluelinelabs.conductor.changehandler.HorizontalChangeHandler
 import com.coloplast.olympus.BR
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerGuideBinding
 import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.feature.guides.articles.models.*
+import com.coloplast.olympus.ui.feature.guides.flows.location.LocationGuideFlowController
 import com.coloplast.olympus.ui.feature.guides.models.ButtonType
 import com.coloplast.olympus.ui.feature.transmitters.TransmittersController
 import me.tatarka.bindingcollectionadapter2.itembindings.OnItemBindClass
@@ -28,35 +28,19 @@ class GuideController(args: Bundle) : BaseController<ControllerGuideBinding>(arg
     when (buttonType) {
       ButtonType.BACK -> handleBack()
       ButtonType.ACTION,
-      ButtonType.LINK -> when (guideType) {
-        GuideType.APPLICATION_TIPS -> {
-          router.pushController(
-            routerTransaction(
-              GuideType.APPLICATION
-            )
-              .pushChangeHandler(VerticalChangeHandler())
-              .popChangeHandler(VerticalChangeHandler())
-          )
+      ButtonType.LINK -> {
+        val routerTransaction = when (guideType) {
+          GuideType.APPLICATION_TIPS -> routerTransaction(GuideType.APPLICATION)
+          GuideType.CONNECTION -> LocationGuideFlowController.routerTransaction()
+          GuideType.CLEANING -> routerTransaction(GuideType.DRYING)
+          GuideType.DELETE_TRANSMITTER -> TransmittersController.routerTransaction()
+          else -> throw IllegalArgumentException("This shouldn't happen")
         }
-        GuideType.CONNECTION -> {
-          //TODO: CPO-556 - Link with Location guide.
-          Toast.makeText(applicationContext, "Open Location guide", Toast.LENGTH_SHORT).show()
-        }
-        GuideType.CLEANING -> {
-          router.pushController(
-            routerTransaction(GuideType.DRYING)
-              .pushChangeHandler(VerticalChangeHandler())
-              .popChangeHandler(VerticalChangeHandler())
-          )
-        }
-        GuideType.DELETE_TRANSMITTER -> {
-          router.pushController(
-            TransmittersController.routerTransaction()
-              .pushChangeHandler(VerticalChangeHandler())
-              .popChangeHandler(VerticalChangeHandler())
-          )
-        }
-        else -> { /* nothing yet */ }
+        getContentRouter().pushController(
+          routerTransaction
+            .pushChangeHandler(HorizontalChangeHandler())
+            .popChangeHandler(HorizontalChangeHandler())
+        )
       }
     }
   }

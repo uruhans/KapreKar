@@ -22,7 +22,7 @@ class DbUser(
   val insuranceType: Int?,
   val consent: Boolean?,
   @ColumnInfo(typeAffinity = ColumnInfo.INTEGER)
-  val syncState: SyncState
+  var syncState: SyncState
 ) {
 
   fun toUser(): User {

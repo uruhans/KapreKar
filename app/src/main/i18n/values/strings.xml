@@ -1,8 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+<string name="about_ap_section1_description">Nori grape silver beet broccoli kombu beet greens fava bean potato quandong celery. Bunya nuts black  yed pea prairie turnip leek lentil turnip greens parsnip. Sea lettuce lettuce water chestnut eggplant winter purslane fennel azuki bean earthnut pea sierra leone bologi leek soko chicory celtuce parsley jícama salsify.</string>
+<string name="about_ap_section1_header">[IFU]</string>
+<string name="about_ap_section1_link">https://www.coloplast.com/about-coloplast/</string>
+<string name="about_ap_section1_link_text">Coloplast® IFU</string>
+<string name="about_ap_section2_description">Nori grape silver beet broccoli kombu beet greens fava bean potato quandong celery. Bunya nuts black  yed pea prairie turnip leek lentil turnip greens parsnip. Sea lettuce lettuce water chestnut eggplant winter purslane fennel azuki bean earthnut pea sierra leone bologi leek soko chicory celtuce parsley jícama salsify.</string>
+<string name="about_ap_section2_header">About Olympus</string>
+<string name="about_ap_section2_link">https://www.coloplast.co.uk/global/terms-and-conditions/</string>
+<string name="about_ap_section2_link_text">Coloplast® Terms of Use</string>
+<string name="about_ap_section2_subsection1_description">Nori grape silver beet broccoli kombu beet greens fava bean potato quandong celery. Bunya nuts black  yed pea prairie turnip leek lentil turnip greens parsnip. Sea lettuce lettuce water chestnut eggplant winter purslane fennel azuki bean earthnut pea sierra leone bologi leek soko chicory celtuce parsley jícama salsify.</string>
+<string name="about_ap_section2_subsection1_header">[The benefits of Olympus]</string>
+<string name="about_ap_title">About</string>
 <string name="bluetooth_enable">Enable bluetooth</string>
 <string name="bluetooth_scanning">Scanning</string>
 <string name="bluetooth_start_scanning">Start</string>
+<string name="contact_cp_call_button_text">Call support</string>
+<string name="contact_cp_hours_header">Opening hours:</string>
+<string name="contact_cp_hours_text">Monday - Friday\n09.00 - 17.00</string>
+<string name="contact_cp_phone_header">Phone number:</string>
+<string name="contact_cp_phone_number">0800 783 1434</string>
+<string name="contact_cp_subtitle">Please don’t hesitate to contact us about any product related issues.</string>
+<string name="contact_cp_support_email">beststartoc@coloplastcharter.co.uk</string>
+<string name="contact_cp_title">Contact</string>
+<string name="contact_cp_write_us_subtitle">Lorem ipsum dolor sit amet, duo te ponderum constituto.</string>
+<string name="contact_cp_write_us_title">Write us</string>
 <string name="dialog_call_help_message">Please don\'t hesitate to contact us if you\'re having difficulty.</string>
 <string name="dialog_call_help_opening_hours">09.00 - 17.00</string>
 <string name="dialog_call_help_opening_hours_days">Monday - Friday</string>
@@ -567,10 +588,10 @@
 <string name="onboarding_l6_button2">Done &amp; ready to continue</string>
 <string name="onboarding_l6_button3">I\'ll do it later</string>
 <string name="onboarding_l6_title">Location settings</string>
-<string name="onboarding_l6_warning_button1">Allow \'Always\' in Settings</string>
-<string name="onboarding_l6_warning_button2">I\'ll take the risk</string>
-<string name="onboarding_l6_warning_description">Without setting TestProducts location access to \'Always\' you risk not receiving leakage notifications should your phone and transmitter lose connection. Avoid this risk by going to your phone\'s Settings and granting TestProduct\'s location access \'Always\'.</string>
-<string name="onboarding_l6_warning_title">Are you sure you want to risk missing leaks?</string>
+<string name="onboarding_l7_warning_button1">Allow \'Always\' in Settings</string>
+<string name="onboarding_l7_warning_button2">I\'ll take the risk</string>
+<string name="onboarding_l7_warning_description">Without setting TestProducts location access to \'Always\' you risk not receiving leakage notifications should your phone and transmitter lose connection. Avoid this risk by going to your phone\'s Settings and granting TestProduct\'s location access \'Always\'.</string>
+<string name="onboarding_l7_warning_title">Are you sure you want to risk missing leaks?</string>
 <string name="onboarding_landing_create_profile_button">Create profile</string>
 <string name="onboarding_landing_log_in_button">Log in</string>
 <string name="onboarding_landing_subtitle">Create a profile to get started with TestProduct. If you\'ve already got a profile, log in to continue.</string>

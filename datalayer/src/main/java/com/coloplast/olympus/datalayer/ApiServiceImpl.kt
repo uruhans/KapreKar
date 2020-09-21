@@ -31,8 +31,8 @@ class ApiServiceImpl : ApiService {
     return api.createUser(UserDTO())
   }
 
-  override fun updateUser(user: User): Observable<UserResponseDTO> {
-    TODO("Not yet implemented")
+  override fun updateUser(user: User): Completable {
+    return api.updateUser(user.id.toString(), UserDTO.fromUser(user)).ignoreElements()
   }
 
   override fun login(credentials: Credentials): Observable<UserResponseDTO> {
@@ -53,4 +53,5 @@ class ApiServiceImpl : ApiService {
     val changePasswordRequest = ChangePasswordRequest(securityCode, email, password)
     return api.changePassword(changePasswordRequest)
   }
+
 }

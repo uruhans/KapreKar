@@ -38,6 +38,8 @@ import com.coloplast.olympus.ui.feature.transmitters.TransmittersViewModel
 import com.coloplast.olympus.ui.feature.transmitters.add.AddTransmitterFactoryImpl
 import com.coloplast.olympus.ui.feature.transmitters.add.at7.AddTransmitterAT7ViewModel
 import com.coloplast.olympus.ui.feature.transmitters.add.at9.AddTransmitterAT9ViewModel
+import com.coloplast.olympus.work.SyncViewModel
+import com.coloplast.olympus.work.SyncWorker
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
@@ -45,6 +47,7 @@ val koinModule = module {
   /* Preferences */
   single { Preferences(androidContext()) }
   single { Me(get()) }
+  factory { SyncWorker(get(), get()) }
 
   /* Notifications */
   single { androidContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }
@@ -75,6 +78,7 @@ val koinModule = module {
   single { ForgotPasswordViewModel(get()) }
   single { SetupGuideLocationSGC4ViewModel(get()) }
   single { AddTransmitterAT7ViewModel(get()) }
+  single { SyncViewModel(get(), get(), get()) }
   single { ProfileViewModel(get()) }
 
   /* Flows */

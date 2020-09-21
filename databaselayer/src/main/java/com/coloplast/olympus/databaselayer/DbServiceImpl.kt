@@ -12,8 +12,11 @@ import com.coloplast.olympus.shared.models.Transmitter
 import com.coloplast.olympus.shared.models.TransmitterPackage
 import com.coloplast.olympus.shared.models.User
 import com.coloplast.olympus.shared.types.PackageType
+import com.coloplast.olympus.shared.types.SyncState
 import io.reactivex.Completable
 import io.reactivex.Observable
+import io.reactivex.Single
+import timber.log.Timber
 import java.util.*
 
 class DbServiceImpl : DbService {
@@ -28,9 +31,29 @@ class DbServiceImpl : DbService {
       .toObservable()
   }
 
+  override fun updateUserSyncState(userId: UUID, syncState: SyncState): Completable {
+    return db.userDao()
+      .getSingleUserById(userId)
+      .map {
+        it.syncState = syncState
+        it
+      }
+      .flatMapCompletable {
+        db.userDao()
+          .insertOrUpdate(it)
+          .ignoreElement()
+      }
+  }
+
   override fun getUser(userId: UUID): Observable<User> {
     return db.userDao()
       .getById(userId)
+      .map<User> { it.toUser() }
+  }
+
+  override fun getSingleUser(userId: UUID): Single<User> {
+    return db.userDao()
+      .getSingleUserById(userId)
       .map<User> { it.toUser() }
   }
 
@@ -82,5 +105,73 @@ class DbServiceImpl : DbService {
     return db.transmitterPackageDao()
       .insertTransmitterPackage(DbTransmitterPackage.fromTransmitterPackage(transmitterPackage))
       .flatMapCompletable { RxHelper.completeOrError(it.toInt(), InsertOrUpdateFailedException()) }
+  }
+
+  override fun getPendingTransmitterPackages(userId: UUID, packageType: PackageType): Observable<DataResult<List<TransmitterPackage>>> {
+    return db.transmitterPackageDao()
+      .getPendingPackagesOfType(userId.toString(), packageType)
+      .toObservable()
+      .doOnNext { Timber.d("Number of pending [$packageType] packages in database: ${it.size}") }
+      .filter { it.isNotEmpty() }
+      .flatMap { packages ->
+        packages.forEach { it.syncState = SyncState.Sending }
+
+        db.transmitterPackageDao()
+          .updatePackages(packages)
+          .toObservable()
+          .doOnNext { Timber.d("Number of [$packageType] packages Updated from Pending -> Sending: $it") }
+          .map { packages.map { it.toTransmitterPackage() } }
+          .map { DataResult.Success(it) as DataResult<List<TransmitterPackage>> }
+      }
+      .onErrorReturn {
+        Timber.e(it)
+        DataResult.Empty<List<TransmitterPackage>>()
+      }
+  }
+
+  override fun deleteTransmitterPackages(packageType: PackageType): Completable {
+    return db.transmitterPackageDao()
+      .deletePackagesAlreadySynced(packageType)
+      .toObservable()
+      .doOnNext { Timber.d("Number of [$packageType] packages deleted: $it") }
+      .ignoreElements()
+  }
+
+  override fun updateSyncStateForPackages(packages: List<TransmitterPackage>, syncState: SyncState) : Completable {
+    val dbList = packages.map { DbTransmitterPackage.fromTransmitterPackage(it) }
+    dbList.forEach { it.syncState = syncState }
+
+    return db.transmitterPackageDao()
+      .updatePackages(dbList)
+      .toObservable()
+      .doOnNext { Timber.d("Number of packages updated to [$syncState]: $it") }
+      .ignoreElements()
+  }
+
+  override fun pendingPackagesRemaining(userId: UUID, packageType: PackageType): Single<Int> {
+    return db.transmitterPackageDao()
+      .pendingPackagesRemaining(userId.toString(), packageType)
+  }
+
+  override fun getPendingTransmitters(userId: UUID): Single<List<Transmitter>> {
+    return db.transmitterDao()
+      .getPendingTransmittersAsSingle()
+      .map { list ->
+        list.forEach { dbTransmitter -> dbTransmitter.syncState = SyncState.Sending }
+        list
+      }
+      .flatMap { list ->
+        db.transmitterDao()
+          .updateTransmitters(list)
+          .map { list.map { dbTransmitter -> dbTransmitter.toTransmitter() } }
+      }
+  }
+
+  override fun updateSyncStateForTransmitters(transmitters: List<Transmitter>, syncState: SyncState) : Completable {
+    val dbTransmitters: List<DbTransmitter> = transmitters.map { DbTransmitter.fromTransmitter(it) }
+    dbTransmitters.forEach { it.syncState = syncState }
+
+    return db.transmitterDao().updateTransmitters(dbTransmitters)
+      .ignoreElement()
   }
 }

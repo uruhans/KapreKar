@@ -1,104 +1,45 @@
 package com.coloplast.olympus.bluetooth.businesslayer.firmware
 
-fun parseHeader(line: String): CypressFirmware.Header {
-  //val fileVersionLength = 2 //2 hex digits (1 byte)
-  val siliconIdLength = 8 //4 bytes
-  val siliconRevLength = 2 //1 byte
-  val checkSumTypeLength = 2 //1 byte
-  //val appIdLength = 2 //1 byte
-  //val productIdLength = 8 //4 byte
+fun readHeader(header: String): CypressFirmware.Header {
+  val msbString: String = getMSB(header)
+  val siliconId = msbString.substring(4, 12)
+  val siliconRev = msbString.substring(2, 4)
+  val checkSumType = msbString.substring(0, 2)
 
-  if (line.length == siliconIdLength + siliconRevLength + checkSumTypeLength) {
-    var offset = 0
-//    val fileVersion: Byte = hexStringToByteArrayLittleEndian(line, offset, fileVersionLength)!![0]
-//    offset += fileVersionLength
-    val siliconId: ByteArray = hexStringToByteArrayLittleEndian(line, offset, siliconIdLength)!!
-    offset += siliconIdLength
-    val siliconRev: Byte = hexStringToByteArrayLittleEndian(line, offset, siliconRevLength)!![0]
-    offset += siliconRevLength
-    val checkSumType: Byte = hexStringToByteArrayLittleEndian(line, offset, checkSumTypeLength)!![0]
-    offset += checkSumTypeLength
-//    val appId: Byte = hexStringToByteArrayLittleEndian(line, offset, appIdLength)!![0]
-//    offset += appIdLength
-//    val productId: ByteArray = hexStringToByteArrayLittleEndian(line, offset, productIdLength)!!
-    return CypressFirmware.Header(siliconId, siliconRev, checkSumType)
-  }
-  throw IllegalArgumentException("Invalid Header line")
+  return CypressFirmware.Header(siliconId, siliconRev.toInt(), checkSumType)
 }
 
-fun hexStringToByteArrayLittleEndian(string: String, offset: Int, length: Int): ByteArray? {
-  return hexStringToByteArray(string, offset, length, length, true)
-}
+fun readDataLine(dataLine: String): CypressFirmware.DataRow {
+  val sb = StringBuilder(dataLine)
+  sb.deleteCharAt(0)
+  val arrayId = sb.substring(0, 2).toInt(16)
+  val rowNo = getMSB(sb.substring(2, 6))
+  val dataLength = sb.substring(6, 10).toInt(16)
+  val rowCheckSum = sb.substring(dataLine.length - 3, dataLine.length - 1).toInt(16)
+  val dataString = sb.substring(10, dataLine.length - 2)
 
-private fun hexStringToByteArray(string: String, aoffset: Int, length: Int, expectedLength: Int, isLittleEndian: Boolean): ByteArray? {
-  var offset = aoffset
-  val isOddNumChars = length % 2 == 1
-  val numBytes = length / 2 + length % 2
-  val expectedNumBytes = expectedLength / 2 + expectedLength % 2
-  val maxNumBytes = Math.max(numBytes, expectedNumBytes)
-  var bytes = ByteArray(maxNumBytes)
+  val data = ByteArray(dataLength)
   var i = 0
-  while (i < numBytes) {
-    val idx: Int = if (isLittleEndian) {
-      i
-    }
-    else {
-      numBytes - 1 - i
-    }
-    val isHalfByte: Boolean = if (isLittleEndian) {
-      i == numBytes - 1 && isOddNumChars
-    }
-    else {
-      i == 0 && isOddNumChars
-    }
-    var b: Byte = hexStringToByte(string, offset, isHalfByte)
-    if (isLittleEndian && isHalfByte) {
-      b = (b.toInt() shl 4).toByte()
-    }
-    bytes[idx] = b
-    if (isHalfByte) {
-      offset++
-    }
-    else {
-      offset += 2
-    }
+  var j = 0
+
+  while (i < dataLength) {
+    data[i] = dataString.substring(j, j + 2).toInt(16).toByte()
     i++
+    j += 2
   }
-  if (expectedNumBytes < numBytes) {
-    val tmp = ByteArray(expectedNumBytes)
-    System.arraycopy(bytes, 0, tmp, 0, tmp.size)
-    bytes = tmp
-  }
-  return bytes
+
+  val actualRowNo = "${rowNo.subSequence(2, 4)}${rowNo.subSequence(0, 2)}".toInt(16)
+
+  return CypressFirmware.DataRow(arrayId, actualRowNo, dataLength, data, rowCheckSum)
 }
 
-fun hexStringToByte(string: String, offset: Int, isHalfByte: Boolean): Byte {
-  val s = string.substring(offset, offset + if (isHalfByte) 1 else 2)
-  var value: Int = 0
-  for (element in s) {
-    value = (value shl 4)
-    value += charToByte(element)
+fun getMSB(string: String): String {
+  val msbString = StringBuilder()
+  var i = string.length
+  while (i > 0) {
+    val str = string.substring(i - 2, i)
+    msbString.append(str)
+    i -= 2
   }
-  return value.toByte()
-}
-
-fun charToByte(value: Char): Byte {
-  if (value in '0'..'9') return (value - '0').toByte()
-  if (value in 'a'..'f') return (10 + value.toInt() - 'a'.toInt()).toByte()
-  return if (value in 'A'..'F') (10 + value.toInt() - 'A'.toInt()).toByte() else 0
-}
-
-const val DISCRIMINATOR = ":"
-
-fun parseData(line: String): CypressFirmware.DataRow {
-  var offset: Int = DISCRIMINATOR.length
-  val addressLength = 8 //4 bytes
-  if (offset + addressLength <= line.length) { //Address is required, data is optional
-    val address: ByteArray = hexStringToByteArrayLittleEndian(line, offset, addressLength)!!
-    offset += addressLength
-    val dataLength = line.length - offset //Remaining bytes for data
-    val data: ByteArray = hexStringToByteArrayLittleEndian(line, offset, dataLength)!!
-    return CypressFirmware.DataRow(address, data)
-  }
-  throw java.lang.IllegalArgumentException("Invalid Data line")
+  return msbString.toString()
 }

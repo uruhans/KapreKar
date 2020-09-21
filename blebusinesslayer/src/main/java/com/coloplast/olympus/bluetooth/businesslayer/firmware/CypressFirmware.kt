@@ -1,18 +1,18 @@
 package com.coloplast.olympus.bluetooth.businesslayer.firmware
 
-class CypressFirmware(
-  headerValue: String,
-  dataValue: Array<String>
+data class CypressFirmware(
+  private val headerValue: String,
+  private val dataValue: List<String>
 ) {
-  val header = parseHeader(headerValue)
-  val dataRows = dataValue.map { parseData(it) }
+  val header = readHeader(headerValue)
+  val dataRows = dataValue.map { readDataLine(it) }
 
-  class Header(val siliconId: ByteArray, val siliconRev: Byte, checkSumType: Byte) {
+  data class Header(
+    val siliconId: String,
+    val siliconRev: Int,
+    private val checkSumType: String
+  ) {
     val checkSum = Checksum.fromId(checkSumType.toInt())
-
-    override fun toString(): String {
-      return "siliconId: ${String(siliconId)}\r\nsiliconRev: $siliconRev\r\ncheckSum: $checkSum"
-    }
 
     enum class Checksum(val id: Int) {
       checksum(0),
@@ -27,11 +27,17 @@ class CypressFirmware(
     }
   }
 
-  class DataRow(val address: ByteArray, val data: ByteArray) {
-    val dataLength = data.size
+  data class DataRow(
+    val arrayId: Int,
+    val rowNo: Int,
+    val dataLength: Int,
+    val data: ByteArray,
+    val rowCheckSum: Int
+    //val rowEnd: Boolean = false
+  ) {
 
     override fun toString(): String {
-      return "\r\nAddress: ${String(address)}\r\nLength: $dataLength\r\nData: ${String(data)}"
+      return "DataRow(arrayId=$arrayId, rowNo=$rowNo, dataLength=$dataLength, rowChecksum=$rowCheckSum)"
     }
   }
 }

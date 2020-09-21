@@ -27,11 +27,7 @@ class FirmwareManagerImpl(
 
   override fun updateFirmware(macAddress: String): Completable {
     return Completable.create {
-
       val firmware = getCypressFirmware()
-
-      Timber.d(firmware.toString())
-
       Timber.d(firmware.header.toString())
 
       firmware.dataRows.forEach {
@@ -106,10 +102,13 @@ class FirmwareManagerImpl(
 
   fun getCypressFirmware(): CypressFirmware {
     val lines = getFileFromAssets()
-    return CypressFirmware(lines.first(), lines.copyOfRange(1, lines.size - 1))
+
+    val header = lines.first()
+    val dataLines = lines.filter { it.isNotBlank() }.drop(1)
+    return CypressFirmware(header, dataLines)
   }
 
-  fun getFileFromAssets(): Array<String> {
+  fun getFileFromAssets(): List<String> {
     val inputStream: InputStream = applicationContext.assets.open("olympusapp_v2.1.3f.cyacd")
 
     val buffer = ByteArray(8192)
@@ -119,7 +118,7 @@ class FirmwareManagerImpl(
       output.write(buffer, 0, bytesRead)
     }
 
-    return String(output.toByteArray()).split("\r\n").toTypedArray()
+    return String(output.toByteArray()).split("\r\n")
   }
 
   val CRC_CHECKSUM = 0x01.toByte()

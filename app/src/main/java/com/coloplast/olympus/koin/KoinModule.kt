@@ -79,7 +79,7 @@ val koinModule = module {
   single { SetupGuideLocationSGC4ViewModel(get()) }
   single { AddTransmitterAT7ViewModel(get()) }
   single { SyncViewModel(get(), get(), get()) }
-  single { ProfileViewModel(get()) }
+  single { ProfileViewModel(get(), get(), get()) }
 
   /* Flows */
   single { AddTransmitterFactoryImpl() }

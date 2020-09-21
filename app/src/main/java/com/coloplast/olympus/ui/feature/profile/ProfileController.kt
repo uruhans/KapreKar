@@ -7,7 +7,7 @@ import com.artemzin.rxui.RxUi
 import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerProfileBinding
-import com.coloplast.olympus.shared.models.CurrentUser
+import com.coloplast.olympus.shared.models.User
 import com.coloplast.olympus.ui.common.CustomToolbarController
 import com.coloplast.olympus.ui.common.models.GenericUiModel
 import com.coloplast.olympus.ui.feature.home.HomeController
@@ -54,22 +54,18 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
   override fun render(): Function<Observable<GenericUiModel>, Disposable> {
     return RxUi.ui { uiModel ->
 
-      if(uiModel is GenericUiModel.Success<*> && uiModel.data is CurrentUser){
-        when(uiModel.data){
-          is CurrentUser.LoggedIn -> {
-            val user = uiModel.data.user
-            firstName.set(user.firstName)
-            lastName.set(user.lastName)
-            phoneNumber.set(user.phoneNumber)
-            email.set(user.email)
+      if(uiModel is GenericUiModel.Success<*> && uiModel.data is User){
+        val user = uiModel.data
+        firstName.set(user.firstName)
+        lastName.set(user.lastName)
+        phoneNumber.set(user.phoneNumber)
+        email.set(user.email)
 
-            user.stomaType?.let { stomaType.set(StomaType.fromId(it).stringId) }
-            user.surgeryDateInterval?.let { stomaSurgeryDate.set(StomaSurgeryDate.fromId(it).stringId) }
-            user.insuranceType?.let {
-              showHealthInsurance.set(true)
-              healthInsurance.set(HealthInsurance.fromId(it).stringId)
-            }
-          }
+        user.stomaType?.let { stomaType.set(StomaType.fromId(it).stringId) }
+        user.surgeryDateInterval?.let { stomaSurgeryDate.set(StomaSurgeryDate.fromId(it).stringId) }
+        user.insuranceType?.let {
+          showHealthInsurance.set(true)
+          healthInsurance.set(HealthInsurance.fromId(it).stringId)
         }
       }
     }

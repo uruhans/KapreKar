@@ -1,29 +1,23 @@
 package com.coloplast.olympus.bluetooth.businesslayer.firmware
 
-import com.coloplast.olympus.shared.transformers.ValueInterpreter
-import timber.log.Timber
-
-data class CypressFirmware(
-  private val headerValue: String,
-  private val dataValue: Array<String>
+class CypressFirmware(
+  headerValue: String,
+  dataValue: Array<String>
 ) {
-  val header = Header(headerValue.toByteArray())
-  val dataRows = dataValue.map { DataRow(it.toByteArray()) }
+  val header = parseHeader(headerValue)
+  val dataRows = dataValue.map { parseData(it) }
 
-  init {
-    Timber.d(headerValue)
-    Timber.d(dataValue[0])
-  }
+  class Header(val siliconId: ByteArray, val siliconRev: Byte, checkSumType: Byte) {
+    val checkSum = Checksum.fromId(checkSumType.toInt())
 
-  data class Header(private val headerValue: ByteArray) {
-    val siliconId = ValueInterpreter.getIntValue(headerValue, ValueInterpreter.FORMAT_UINT32, 0).toULong()
-    val siliconRev = headerValue[4].toInt()
-    val checkSum = Checksum.fromId(headerValue[5].toInt())
+    override fun toString(): String {
+      return "siliconId: ${String(siliconId)}\r\nsiliconRev: $siliconRev\r\ncheckSum: $checkSum"
+    }
 
     enum class Checksum(val id: Int) {
       checksum(0),
       crc16(1),
-      UNKNOWN(3);
+      UNKNOWN(2);
 
       companion object {
         fun fromId(value: Int): Checksum {
@@ -33,11 +27,11 @@ data class CypressFirmware(
     }
   }
 
-  data class DataRow(private val dataValue: ByteArray) {
-    val arrayId = dataValue[0].toUByte()
-    val rowNumber = ValueInterpreter.getIntValue(dataValue, ValueInterpreter.FORMAT_UINT16, 1).toUShort()
-    val dataLength = ValueInterpreter.getIntValue(dataValue, ValueInterpreter.FORMAT_UINT16, 3).toUShort()
-    //val data = dataValue.copyOfRange(5, dataLength.toInt() + 5)
-    //val checkSum = ValueInterpreter.getIntValue(dataValue, ValueInterpreter.FORMAT_UINT16, data.size - 2).toUShort()
+  class DataRow(val address: ByteArray, val data: ByteArray) {
+    val dataLength = data.size
+
+    override fun toString(): String {
+      return "\r\nAddress: ${String(address)}\r\nLength: $dataLength\r\nData: ${String(data)}"
+    }
   }
 }

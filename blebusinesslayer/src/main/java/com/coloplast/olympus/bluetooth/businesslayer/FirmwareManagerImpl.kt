@@ -5,10 +5,12 @@ import com.coloplast.olympus.bluetooth.businesslayer.extensions.asUUID
 import com.coloplast.olympus.bluetooth.businesslayer.firmware.CypressFirmware
 import io.reactivex.Completable
 import io.reactivex.Observable
+import okio.ByteString.Companion.toByteString
 import timber.log.Timber
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
 import java.nio.ByteBuffer
+import java.nio.ByteOrder
 import kotlin.experimental.and
 
 class FirmwareManagerImpl(
@@ -29,6 +31,8 @@ class FirmwareManagerImpl(
       val firmware = getCypressFirmware()
 
       Timber.d(firmware.toString())
+
+      Timber.d(firmware.header.toString())
 
       firmware.dataRows.forEach {
         Timber.d("$it")
@@ -114,8 +118,6 @@ class FirmwareManagerImpl(
     while (inputStream.read(buffer).also { bytesRead = it } != -1) {
       output.write(buffer, 0, bytesRead)
     }
-
-    Timber.d("${ByteBuffer.wrap(output.toByteArray())}")
 
     return String(output.toByteArray()).split("\r\n").toTypedArray()
   }

@@ -86,7 +86,7 @@ class TransmittersViewModel(
 
     val retryConnectionObservable: Observable<TransmittersUiModel> = uiView.retryConnection()
       .switchMap {
-        firmwareManager.updateFirmware("C3:40:E1:28:64:E9")
+        firmwareManager.updateFirmware("E3:34:08:30:D7:65")
           .toSingle { TransmittersUiModel.RetryConnectComplete() }
           .toObservable()
 

@@ -2,78 +2,111 @@ package com.coloplast.olympus.bluetooth.businesslayer
 
 import android.content.Context
 import com.coloplast.olympus.bluetooth.businesslayer.extensions.asUUID
-import com.coloplast.olympus.bluetooth.businesslayer.services.CommandService
+import com.coloplast.olympus.bluetooth.businesslayer.firmware.CypressFirmware
 import io.reactivex.Completable
 import io.reactivex.Observable
 import timber.log.Timber
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
-import java.util.concurrent.TimeUnit
+import java.nio.ByteBuffer
 import kotlin.experimental.and
-
 
 class FirmwareManagerImpl(
   private val applicationContext: Context,
   private val bluetoothManager: BluetoothManager
 ) : FirmwareManager {
+
   override fun checkFirmwareVersion(currentFirmwareVersion: String): Observable<Unit> {
     TODO("Not yet implemented")
   }
-  val OTA_UPDATE_SERVICE = "00060001-f8ce-11e4-abf4-0002a5d5c51b".asUUID()
+
+  private val OTA_UPDATE_SERVICE = "00060000-f8ce-11e4-abf4-0002a5d5c51b".asUUID()
+  private val OTA_UPDATE_CHARACTERISTIC = "00060001-f8ce-11e4-abf4-0002a5d5c51b".asUUID()
 
   override fun updateFirmware(macAddress: String): Completable {
-    return bluetoothManager.writeCharacteristic(macAddress, CommandService.Characteristics.UART_RX, "P".toByteArray(Charsets.UTF_8))
-      .toSingle { true }
-      .toObservable()
-      .doOnNext { Timber.d("FIRMWARE AFTER P COMMAND") }
-      .flatMap {
-        bluetoothManager.initiateBleScanning(null)
-          .takeUntil(Observable.interval(5, TimeUnit.SECONDS))
-          .filter { it.getNameOrAddress().toLowerCase().contains("ota") }
-          .distinctUntilChanged()
-          .buffer(5000, TimeUnit.SECONDS)
-          .flatMapIterable { it }
-          .take(1)
-          .doOnNext { Timber.d("FIRMWARE Found OTA Bootloader") }
-          .flatMap { scanResult ->
-            bluetoothManager.connectOtaDevice(scanResult.macAddress)
-              .delay(5, TimeUnit.SECONDS)
-              .flatMap { rxBleConnection ->
-                rxBleConnection.requestMtu(250)
-                  .toObservable()
-                  .map { rxBleConnection }
-              }
-              .flatMap { rxBleConnection ->
-                rxBleConnection.discoverServices().toObservable()
-                  .doOnNext {services ->
-                    services.bluetoothGattServices.forEach { service ->
-                      Timber.d("service: ${service.uuid}")
-                      service.characteristics.forEach { char ->
-                        Timber.e("char ${char.uuid}")
-                      }
-                    }
-                  }
-                  .map { rxBleConnection }
-              }
-              .doOnNext { Timber.d("Firmware OTA - connected") }
-              .flatMap { rxBleConnection ->
-                val fileData = getFileFromAssets()
+    return Completable.create {
 
-                rxBleConnection.createNewLongWriteBuilder()
-                  .setBytes(getData(fileData))
-                  .setCharacteristicUuid(OTA_UPDATE_SERVICE)
-                  .build()
-              }
-              .doOnError { throwable -> Timber.e(throwable) }
-          }
-          .doOnError { throwable -> Timber.e(throwable) }
+      val firmware = getCypressFirmware()
+
+      Timber.d(firmware.toString())
+
+      firmware.dataRows.forEach {
+        Timber.d("$it")
       }
-      .doOnError { throwable -> Timber.e(throwable) }
-      .ignoreElements()
+    }
   }
 
-  fun getFileFromAssets() : ByteArray {
-    val inputStream: InputStream = applicationContext.assets.open("OlympusApp_v2.1.1m.cyacd")
+//    return bluetoothManager.writeCharacteristic(macAddress, CommandService.Characteristics.UART_RX, "P".toByteArray(Charsets.UTF_8))
+//      .toSingle { true }
+//      .toObservable()
+//      .doOnNext { bluetoothManager.disconnectTransmitter(macAddress) }
+//      .doOnNext { Timber.d("FIRMWARE AFTER P COMMAND") }
+//      .flatMap { bluetoothManager.connectOtaDevice(macAddress) }
+//      .ignoreElements()
+//  }
+//        bluetoothManager.initiateBleScanning(null)
+//          .takeUntil(Observable.interval(5, TimeUnit.SECONDS))
+//          .filter { it.macAddress == macAddress }
+//          .distinctUntilChanged()
+//          .buffer(5000, TimeUnit.SECONDS)
+//          .flatMapIterable { it }
+//          .take(1)
+//          .doOnNext { Timber.d("FIRMWARE Found OTA Bootloader") }
+//          .flatMap { scanResult ->
+
+//              .flatMap { rxBleConnection ->
+//                rxBleConnection.requestMtu(250)
+//                  .toObservable()
+//                  .doOnNext {
+//                  }
+//                  .delay(5, TimeUnit.SECONDS)
+//                  .flatMap {rxBleConnection ->
+//                    rxBleConnection.discoverServices()
+//                      .toObservable()
+//                      .doOnNext { services ->
+//                        services.bluetoothGattServices.forEach { service ->
+//                          Timber.d("service: ${service.uuid}")
+//                          service.characteristics.forEach { char ->
+//                            Timber.e("char ${char.uuid}")
+//                          }
+//                        }
+//                      }
+//                      .flatMap { services ->
+//                        services.getService(OTA_UPDATE_SERVICE)
+//                          .toObservable()
+//                          .map { it.getCharacteristic(OTA_UPDATE_CHARACTERISTIC) }
+//                          .doOnNext { Timber.d("${it.uuid}") }
+//                          .doOnError { Timber.e("OTA UPDATE SERVICE FAILED") }
+//                      }
+//                      .map { rxBleConnection }
+//                  }
+//              }
+//              .doOnNext { Timber.d("Firmware OTA - connected") }
+//              .flatMap { rxBleConnection ->
+//                val fileData = getFileFromAssets()
+//
+//                rxBleConnection.createNewLongWriteBuilder()
+//                  .setBytes(getData(fileData))
+//                  .setCharacteristicUuid(OTA_UPDATE_SERVICE)
+//                  .build()
+//              }
+//              .doOnError { throwable -> Timber.e(throwable) }
+//          }
+//          .doOnError { throwable -> Timber.e(throwable) }
+//      }
+//      .doOnError { throwable -> Timber.e(throwable) }
+//      .ignoreElements()
+//  }
+
+
+
+  fun getCypressFirmware(): CypressFirmware {
+    val lines = getFileFromAssets()
+    return CypressFirmware(lines.first(), lines.copyOfRange(1, lines.size - 1))
+  }
+
+  fun getFileFromAssets(): Array<String> {
+    val inputStream: InputStream = applicationContext.assets.open("olympusapp_v2.1.3f.cyacd")
 
     val buffer = ByteArray(8192)
     var bytesRead: Int
@@ -82,7 +115,9 @@ class FirmwareManagerImpl(
       output.write(buffer, 0, bytesRead)
     }
 
-    return output.toByteArray()
+    Timber.d("${ByteBuffer.wrap(output.toByteArray())}")
+
+    return String(output.toByteArray()).split("\r\n").toTypedArray()
   }
 
   val CRC_CHECKSUM = 0x01.toByte()
@@ -90,7 +125,7 @@ class FirmwareManagerImpl(
   val SEND_DATA = 0x37
   val PACKET_END = 0x17
 
-  private fun getData(data: ByteArray) : ByteArray {
+  private fun getData(data: ByteArray): ByteArray {
     var idx = 0
     val dataLength = data.size
     val commandSize = 7 + dataLength //BASE_CMD_SIZE
@@ -111,10 +146,9 @@ class FirmwareManagerImpl(
     commandBytes[idx++] = checksum.shr(8).toByte() //Checksum
     commandBytes[idx++] = PACKET_END.toByte() //End of packet
 
-  //  val checksum =
+    //  val checksum =
     return commandBytes
   }
-
 
 
   fun calculateCheckSum2(checkSumType: Byte, data: ByteArray, dataSize: Int): Int {
@@ -168,7 +202,6 @@ class FirmwareManagerImpl(
   }
 
 }
-
 
 
 /*

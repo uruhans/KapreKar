@@ -8,6 +8,7 @@ import com.coloplast.olympus.bluetooth.businesslayer.models.ScanResult
 import com.polidea.rxandroidble2.RxBleConnection
 import com.coloplast.olympus.bluetooth.businesslayer.models.*
 import com.coloplast.olympus.shared.models.RawDataPackage
+import com.polidea.rxandroidble2.RxBleDevice
 import io.reactivex.Completable
 import io.reactivex.Observable
 import java.util.*

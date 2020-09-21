@@ -27,8 +27,6 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.exceptions.UndeliverableException
 import io.reactivex.functions.BiFunction
-import io.reactivex.functions.Function3
-import io.reactivex.functions.Function4
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
@@ -221,9 +219,7 @@ class BluetoothManagerImpl(
 
   override fun connectOtaDevice(macAddress: String): Observable<RxBleConnection> {
     return getBleDevice(macAddress)
-      .switchMap { rxBleDevice ->
-        bluetoothHandler.connectOtaDevice(rxBleDevice)
-      }
+      .switchMap { bluetoothHandler.connectRxBleDevice(it, 250) }
   }
 
   /**
@@ -251,7 +247,7 @@ class BluetoothManagerImpl(
     return Observable.combineLatest(
       setupOlympusStatusVectorNotifications(macAddress),
       setupBatteryPowerNotifications(macAddress),
-      BiFunction { statusVector: StatusVector, powerLevel: PowerLevel ->
+      { statusVector: StatusVector, powerLevel: PowerLevel ->
         Peripheral(statusVector.patch, statusVector.transmitter, powerLevel)
       })
   }
@@ -301,7 +297,6 @@ class BluetoothManagerImpl(
           .doOnError { throwable -> Timber.e(throwable) }
           .subscribe()
       }
-      .doOnNext { Timber.d("statusVector: {${it[0]}, ${it[1]}, ${it[2]}, ${it[3]}, ${it[4]}, ${it[5]}, ${it[6]}, ${it[7]}, ${it[8]}, ${it[9]}, ${it[10]}, ${it[11]}}") }
       .compose(OlympusWirelessProtocol.statusTransformer)
   }
 
@@ -402,7 +397,7 @@ class BluetoothManagerImpl(
       readDeviceInfo(macAddress),
       readSettings(macAddress),
       readClassifierSettings(macAddress),
-      Function3 { deviceInfo: DeviceInfo, settings: ByteArray, classifierSettings: ByteArray ->
+      { deviceInfo: DeviceInfo, settings: ByteArray, classifierSettings: ByteArray ->
         AdditionalDeviceInfo(deviceInfo, settings, classifierSettings)
       }
     )
@@ -414,7 +409,7 @@ class BluetoothManagerImpl(
       readCharacteristics(macAddress, DeviceInformation.Characteristics.HARDWARE_REVISION).toObservable(),
       readCharacteristics(macAddress, DeviceInformation.Characteristics.FIRMWARE_VERSION).toObservable(),
       readCharacteristics(macAddress, DeviceInformation.Characteristics.SERIAL_NUMBER).toObservable(),
-      Function4 { manufacturer: ByteArray, hardwareRevision: ByteArray, firmwareVersion: ByteArray, serialNumber: ByteArray ->
+      { manufacturer: ByteArray, hardwareRevision: ByteArray, firmwareVersion: ByteArray, serialNumber: ByteArray ->
         DeviceInfo(
           macAddress,
           manufacturer.toString(Charsets.UTF_8),

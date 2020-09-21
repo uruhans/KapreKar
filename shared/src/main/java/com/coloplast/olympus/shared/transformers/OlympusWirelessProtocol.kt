@@ -4,67 +4,45 @@ import com.coloplast.olympus.shared.models.ClassifierSettings
 import com.coloplast.olympus.shared.models.RawDataPackage
 import com.coloplast.olympus.shared.models.StatusPackage
 import com.coloplast.olympus.shared.models.TransmitterSettings
+import timber.log.Timber
 
+@ExperimentalUnsignedTypes
+@Suppress("LocalVariableName", "SpellCheckingInspection")
 object OlympusWirelessProtocol {
 
   fun settingsTransformer(value: ByteArray): TransmitterSettings {
-    val wid_R_threshold =
-      ValueInterpreter.getIntValue(value, ValueInterpreter.FORMAT_UINT16, 0).toUShort()
-    val wid_R_hysteresis =
-      ValueInterpreter.getIntValue(value, ValueInterpreter.FORMAT_UINT16, 2).toUShort()
-    val threshold_cs0 =
-      ValueInterpreter.getIntValue(value, ValueInterpreter.FORMAT_UINT16, 4).toUShort()
-    val threshold_cs1 =
-      ValueInterpreter.getIntValue(value, ValueInterpreter.FORMAT_UINT16, 6).toUShort()
-    val threshold_cs2 =
-      ValueInterpreter.getIntValue(value, ValueInterpreter.FORMAT_UINT16, 8).toUShort()
-    val threshold_cs3 =
-      ValueInterpreter.getIntValue(value, ValueInterpreter.FORMAT_UINT16, 10).toUShort()
-    val threshold_cs4 =
-      ValueInterpreter.getIntValue(value, ValueInterpreter.FORMAT_UINT16, 12).toUShort()
-    val threshold_cs5 =
-      ValueInterpreter.getIntValue(value, ValueInterpreter.FORMAT_UINT16, 14).toUShort()
-    val wid_C_threshold =
-      ValueInterpreter.getIntValue(value, ValueInterpreter.FORMAT_UINT16, 16).toUShort()
-    val csHysteresis =
-      ValueInterpreter.getIntValue(value, ValueInterpreter.FORMAT_UINT16, 18).toUShort()
+    Timber.d("Settings: ${value.joinToString { it.toInt().toString() }}")
+
+    val wid_R_threshold = ValueInterpreter.getIntValue(value, ValueInterpreter.FORMAT_UINT16, 0).toUShort()
+    val wid_R_hysteresis = ValueInterpreter.getIntValue(value, ValueInterpreter.FORMAT_UINT16, 2).toUShort()
+    val threshold_cs0 = ValueInterpreter.getIntValue(value, ValueInterpreter.FORMAT_UINT16, 4).toUShort()
+    val threshold_cs1 = ValueInterpreter.getIntValue(value, ValueInterpreter.FORMAT_UINT16, 6).toUShort()
+    val threshold_cs2 = ValueInterpreter.getIntValue(value, ValueInterpreter.FORMAT_UINT16, 8).toUShort()
+    val threshold_cs3 = ValueInterpreter.getIntValue(value, ValueInterpreter.FORMAT_UINT16, 10).toUShort()
+    val threshold_cs4 = ValueInterpreter.getIntValue(value, ValueInterpreter.FORMAT_UINT16, 12).toUShort()
+    val threshold_cs5 = ValueInterpreter.getIntValue(value, ValueInterpreter.FORMAT_UINT16, 14).toUShort()
+    val wid_C_threshold = ValueInterpreter.getIntValue(value, ValueInterpreter.FORMAT_UINT16, 16).toUShort()
+    val csHysteresis = ValueInterpreter.getIntValue(value, ValueInterpreter.FORMAT_UINT16, 18).toUShort()
     val batterythreshold = value[20].toUByte()
     val batteryhysteresis = value[21].toUByte()
     val sampleInterval = value[22].toUByte()
     val filterType = value[23].toUByte()
 
-    return TransmitterSettings(
-      wid_R_threshold,
-      wid_R_hysteresis,
-      threshold_cs0,
-      threshold_cs1,
-      threshold_cs2,
-      threshold_cs3,
-      threshold_cs4,
-      threshold_cs5,
-      wid_C_threshold,
-      csHysteresis,
-      batterythreshold,
-      batteryhysteresis,
-      sampleInterval,
-      filterType
-    )
+    return TransmitterSettings(wid_R_threshold, wid_R_hysteresis, threshold_cs0, threshold_cs1,
+      threshold_cs2, threshold_cs3, threshold_cs4, threshold_cs5, wid_C_threshold, csHysteresis,
+      batterythreshold, batteryhysteresis, sampleInterval, filterType)
   }
 
   fun classifierSettingsTransformer(value: ByteArray): ClassifierSettings {
+    Timber.d("ClassifierSettings: ${value.joinToString { it.toInt().toString() }}")
+
     val ird_ll = ValueInterpreter.getIntValue(value, ValueInterpreter.FORMAT_UINT16, 0).toUShort()
-    val dv_noise_ll =
-      ValueInterpreter.getIntValue(value, ValueInterpreter.FORMAT_SINT16, 2).toShort()
-    val ird_spike_ll =
-      ValueInterpreter.getIntValue(value, ValueInterpreter.FORMAT_SINT16, 4).toShort()
-    val ird_leak_ul =
-      ValueInterpreter.getIntValue(value, ValueInterpreter.FORMAT_UINT16, 6).toUShort()
-    val ird_pa_ul =
-      ValueInterpreter.getIntValue(value, ValueInterpreter.FORMAT_UINT16, 8).toUShort()
-    val signal_sweat_ll =
-      ValueInterpreter.getIntValue(value, ValueInterpreter.FORMAT_UINT16, 10).toUShort()
-    val signal_blinded_ll =
-      ValueInterpreter.getIntValue(value, ValueInterpreter.FORMAT_UINT16, 12).toUShort()
+    val dv_noise_ll = ValueInterpreter.getIntValue(value, ValueInterpreter.FORMAT_SINT16, 2).toShort()
+    val ird_spike_ll = ValueInterpreter.getIntValue(value, ValueInterpreter.FORMAT_SINT16, 4).toShort()
+    val ird_leak_ul = ValueInterpreter.getIntValue(value, ValueInterpreter.FORMAT_UINT16, 6).toUShort()
+    val ird_pa_ul = ValueInterpreter.getIntValue(value, ValueInterpreter.FORMAT_UINT16, 8).toUShort()
+    val signal_sweat_ll = ValueInterpreter.getIntValue(value, ValueInterpreter.FORMAT_UINT16, 10).toUShort()
+    val signal_blinded_ll = ValueInterpreter.getIntValue(value, ValueInterpreter.FORMAT_UINT16, 12).toUShort()
     val c_lsl_0 = ValueInterpreter.getIntValue(value, ValueInterpreter.FORMAT_UINT16, 14).toUShort()
     val c_lsl_1 = ValueInterpreter.getIntValue(value, ValueInterpreter.FORMAT_UINT16, 16).toUShort()
     val c_lsl_2 = ValueInterpreter.getIntValue(value, ValueInterpreter.FORMAT_UINT16, 18).toUShort()
@@ -76,28 +54,14 @@ object OlympusWirelessProtocol {
     val noise_count_ul = value[28].toUByte()
     val no_noise_count_ul = value[29].toUByte()
 
-    return ClassifierSettings(
-      ird_ll,
-      dv_noise_ll,
-      ird_spike_ll,
-      ird_leak_ul,
-      ird_pa_ul,
-      signal_sweat_ll,
-      signal_blinded_ll,
-      c_lsl_0,
-      c_lsl_1,
-      c_lsl_2,
-      c_lsl_3,
-      c_lsl_4,
-      c_lsl_5,
-      state_hold,
-      hist_size,
-      noise_count_ul,
-      no_noise_count_ul
-    )
+    return ClassifierSettings(ird_ll, dv_noise_ll, ird_spike_ll, ird_leak_ul, ird_pa_ul,
+      signal_sweat_ll, signal_blinded_ll, c_lsl_0, c_lsl_1, c_lsl_2, c_lsl_3, c_lsl_4, c_lsl_5,
+      state_hold, hist_size, noise_count_ul, no_noise_count_ul)
   }
 
   fun statusPackageTransformer(value: ByteArray): StatusPackage {
+    Timber.d("StatusPackage: ${value.joinToString { it.toInt().toString() }}")
+
     val sensor0 = value[0].toUByte()
     val sensor1 = value[1].toUByte()
     val sensor2 = value[2].toUByte()
@@ -116,16 +80,15 @@ object OlympusWirelessProtocol {
     val fwWarning = value[12].toInt()
     val fwError = value[13].toInt()
 
-    return StatusPackage(
-      sensor0, sensor1, sensor2, sensor3, sensor4, sensor5,
-      waterIngressDetection, attached, patchType, compromised,
-      rawRotationalAngle, batteryState, fwWarning, fwError
-    )
+    return StatusPackage(sensor0, sensor1, sensor2, sensor3, sensor4, sensor5, waterIngressDetection,
+      attached, patchType, compromised, rawRotationalAngle, batteryState, fwWarning, fwError)
   }
 
   fun rawDataPackageTransformer(value: ByteArray): RawDataPackage {
+    Timber.d("RawPackage: ${value.joinToString { it.toInt().toString() }}")
+
     val year = ValueInterpreter.getIntValue(value, ValueInterpreter.FORMAT_UINT16, 0).toUShort()
-    val month = value[2].toUByte()
+    val month = (value[2] + 1).toUByte()
     val day = value[3].toUByte()
     val hour = value[4].toUByte()
     val minute = value[5].toUByte()
@@ -133,18 +96,12 @@ object OlympusWirelessProtocol {
     val seconds256 = value[7].toUByte()
 
     val widR = ValueInterpreter.getIntValue(value, ValueInterpreter.FORMAT_UINT16, 8).toUShort()
-    val s0SensorData =
-      ValueInterpreter.getIntValue(value, ValueInterpreter.FORMAT_UINT16, 10).toUShort()
-    val s1SensorData =
-      ValueInterpreter.getIntValue(value, ValueInterpreter.FORMAT_UINT16, 12).toUShort()
-    val s2SensorData =
-      ValueInterpreter.getIntValue(value, ValueInterpreter.FORMAT_UINT16, 14).toUShort()
-    val s3SensorData =
-      ValueInterpreter.getIntValue(value, ValueInterpreter.FORMAT_UINT16, 16).toUShort()
-    val s4SensorData =
-      ValueInterpreter.getIntValue(value, ValueInterpreter.FORMAT_UINT16, 18).toUShort()
-    val s5SensorData =
-      ValueInterpreter.getIntValue(value, ValueInterpreter.FORMAT_UINT16, 20).toUShort()
+    val s0SensorData = ValueInterpreter.getIntValue(value, ValueInterpreter.FORMAT_UINT16, 10).toUShort()
+    val s1SensorData = ValueInterpreter.getIntValue(value, ValueInterpreter.FORMAT_UINT16, 12).toUShort()
+    val s2SensorData = ValueInterpreter.getIntValue(value, ValueInterpreter.FORMAT_UINT16, 14).toUShort()
+    val s3SensorData = ValueInterpreter.getIntValue(value, ValueInterpreter.FORMAT_UINT16, 16).toUShort()
+    val s4SensorData = ValueInterpreter.getIntValue(value, ValueInterpreter.FORMAT_UINT16, 18).toUShort()
+    val s5SensorData = ValueInterpreter.getIntValue(value, ValueInterpreter.FORMAT_UINT16, 20).toUShort()
     val cs0Data = ValueInterpreter.getIntValue(value, ValueInterpreter.FORMAT_UINT16, 22).toUShort()
     val cs1Data = ValueInterpreter.getIntValue(value, ValueInterpreter.FORMAT_UINT16, 24).toUShort()
     val cs2Data = ValueInterpreter.getIntValue(value, ValueInterpreter.FORMAT_UINT16, 26).toUShort()
@@ -172,13 +129,10 @@ object OlympusWirelessProtocol {
     val angleRaw = value[49].toInt()
     val battPower = value[50].toInt()
 
-    return RawDataPackage(
-      year, month, day, hour, minute, seconds, seconds256,
-      widR, s0SensorData, s1SensorData, s2SensorData, s3SensorData, s4SensorData, s5SensorData,
-      cs0Data, cs1Data, cs2Data, cs3Data, cs4Data, cs5Data, widC,
-      battMv, battLevel, bleDisconnected, classifierReset, accX, accY, accZ,
-      activity, wid, attach, patchId, compromised, angleRaw, battPower
-    )
+    return RawDataPackage(year, month, day, hour, minute, seconds, seconds256, widR, s0SensorData,
+      s1SensorData, s2SensorData, s3SensorData, s4SensorData, s5SensorData, cs0Data, cs1Data,
+      cs2Data, cs3Data, cs4Data, cs5Data, widC, battMv, battLevel, bleDisconnected, classifierReset,
+      accX, accY, accZ, activity, wid, attach, patchId, compromised, angleRaw, battPower)
   }
 
 }

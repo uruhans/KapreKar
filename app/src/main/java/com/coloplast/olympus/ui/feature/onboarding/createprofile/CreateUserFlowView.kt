@@ -7,4 +7,5 @@ import io.reactivex.Observable
 
 interface CreateUserFlowView: UiView<GenericUiModel> {
   fun onCreateUser(): Observable<User>
+  fun sendCode(): Observable<String>
 }

@@ -13,6 +13,7 @@ import com.coloplast.olympus.ui.feature.onboarding.createprofile.su2.StomaInfoSU
 import com.coloplast.olympus.ui.feature.onboarding.createprofile.su3.EmailSU3Controller
 import com.coloplast.olympus.ui.feature.onboarding.createprofile.su4.PasswordSU4Controller
 import com.coloplast.olympus.ui.feature.onboarding.createprofile.su5.PhoneSU5Controller
+import com.coloplast.olympus.ui.feature.onboarding.createprofile.su6.PhoneValidationSU6
 import com.coloplast.olympus.ui.feature.onboarding.createprofile.su7.InsuranceSU7Controller
 import com.coloplast.olympus.ui.feature.onboarding.createprofile.types.HealthInsurance
 
@@ -31,6 +32,7 @@ class CreateUserFactoryImpl : FlowFactory<CreateUserFactoryModel>() {
       CreateUserFlow.EmailSU3 -> EmailSU3Controller.getRouterTransaction()
       CreateUserFlow.PasswordSU4 -> PasswordSU4Controller.getRouterTransaction()
       CreateUserFlow.PhoneSU5 -> PhoneSU5Controller.getRouterTransaction()
+      CreateUserFlow.PhoneValidationSU6 -> PhoneValidationSU6.getRouterTransaction()
       CreateUserFlow.InsuranceSU7 -> InsuranceSU7Controller.getRouterTransaction()
       CreateUserFlow.ConfirmationSU8 -> GenericConfirmationController.routerTransaction(
         R.string.onboarding_confirmation_title,
@@ -66,6 +68,10 @@ class CreateUserFactoryImpl : FlowFactory<CreateUserFactoryModel>() {
       }
       CreateUserFlow.PhoneSU5 -> {
         model.user.phoneNumber = result as String
+      }
+      CreateUserFlow.PhoneValidationSU6 -> {
+        //TODO: either save the code or trigger api call.
+        //model.user.code = result as String
       }
       CreateUserFlow.InsuranceSU7 -> {
         model.user.insuranceType = (result as HealthInsurance).id

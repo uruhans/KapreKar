@@ -38,6 +38,7 @@ class CreateUserFlowController : FlowFactoryController<CreateUserFactoryModel>()
 
   private val viewModel: CreateUserViewModel by inject()
   private val registrationRelay: PublishRelay<User> = PublishRelay.create()
+  private val sendCodeRelay: PublishRelay<String> = PublishRelay.create()
   private var dialogController: DialogController? = null
 
   override fun startFlow(flowChildRouter: Router) {
@@ -55,6 +56,10 @@ class CreateUserFlowController : FlowFactoryController<CreateUserFactoryModel>()
   override fun onStepCompleted(currentIndex: Int, data: CreateUserFactoryModel): Boolean {
     return when (CreateUserFlow.fromIndex(currentIndex)) {
       CreateUserFlow.PhoneSU5 -> {
+        sendCodeRelay.accept(data.user.phoneNumber!!)
+        false
+      }
+      CreateUserFlow.PhoneValidationSU6 -> {
         if (Utils.isUKNumber(data.user.phoneNumber)) {
           registrationRelay.accept(data.user)
           true
@@ -73,6 +78,12 @@ class CreateUserFlowController : FlowFactoryController<CreateUserFactoryModel>()
 
   override fun onCreateUser(): Observable<User> {
     return registrationRelay
+      .publish()
+      .refCount()
+  }
+
+  override fun sendCode(): Observable<String> {
+    return sendCodeRelay
       .publish()
       .refCount()
   }

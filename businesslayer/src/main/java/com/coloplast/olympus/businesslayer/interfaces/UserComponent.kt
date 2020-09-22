@@ -24,5 +24,8 @@ interface UserComponent {
   fun updateUserConsent(userId: UUID, consent: Boolean) : Observable<User>
   fun updateUser(user: User) : Observable<User>
 
+  fun requestPhoneValidationSMS(phoneNumber: String): Completable
+  fun validatePhoneCode(phoneNumber: String, code: Int): Completable
+
   fun syncUser(userId: UUID) : Observable<SyncResult>
 }

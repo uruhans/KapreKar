@@ -17,6 +17,7 @@ import com.coloplast.olympus.ui.common.flow.FlowFactory
 import com.coloplast.olympus.ui.common.flow.FlowFactoryController
 import com.coloplast.olympus.ui.common.models.GenericUiModel
 import com.coloplast.olympus.ui.feature.onboarding.createprofile.models.CreateUserFactoryModel
+import com.coloplast.olympus.ui.feature.onboarding.createprofile.models.PhoneValidationModel
 import com.coloplast.olympus.utils.Utils
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
@@ -39,6 +40,7 @@ class CreateUserFlowController : FlowFactoryController<CreateUserFactoryModel>()
   private val viewModel: CreateUserViewModel by inject()
   private val registrationRelay: PublishRelay<User> = PublishRelay.create()
   private val sendCodeRelay: PublishRelay<String> = PublishRelay.create()
+  private val validateCodeRelay: PublishRelay<PhoneValidationModel> = PublishRelay.create()
   private var dialogController: DialogController? = null
 
   override fun startFlow(flowChildRouter: Router) {
@@ -84,6 +86,12 @@ class CreateUserFlowController : FlowFactoryController<CreateUserFactoryModel>()
 
   override fun sendCode(): Observable<String> {
     return sendCodeRelay
+      .publish()
+      .refCount()
+  }
+
+  override fun validateCode(): Observable<PhoneValidationModel> {
+    return validateCodeRelay
       .publish()
       .refCount()
   }

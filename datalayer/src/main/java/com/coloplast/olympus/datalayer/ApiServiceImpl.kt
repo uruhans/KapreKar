@@ -51,7 +51,7 @@ class ApiServiceImpl : ApiService {
     return api.requestSecurityCode(securityCodeRequest)
   }
 
-  override fun validateSecurityCode(securityCode: String, email: String): Completable{
+  override fun validateSecurityCode(securityCode: Int, email: String): Completable{
     val validateCodeRequest = ChangePasswordRequest(
       email = email,
       securityCode = securityCode
@@ -59,7 +59,7 @@ class ApiServiceImpl : ApiService {
     return api.confirmCode(validateCodeRequest)
   }
 
-  override fun changePassword(securityCode: String, email: String, password: String): Completable {
+  override fun changePassword(securityCode: Int, email: String, password: String): Completable {
     val changePasswordRequest = ChangePasswordRequest(
       securityCode = securityCode,
       email = email,

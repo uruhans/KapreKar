@@ -24,4 +24,10 @@ interface ServerApi {
 
   @PUT("auth/changepassword")
   fun changePassword(@Body changePasswordRequest: ChangePasswordRequest): Completable
+
+  @POST("/PhoneValidation")
+  fun requestPhoneValidationSMS(@Body phoneValidationRequestDTO: PhoneValidationRequestDTO): Completable
+
+  @POST("/PhoneValidation/validate")
+  fun validatePhoneCode(@Body phoneValidationRequestDTO: PhoneValidationRequestDTO): Completable
 }

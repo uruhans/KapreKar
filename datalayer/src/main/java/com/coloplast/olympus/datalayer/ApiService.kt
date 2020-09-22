@@ -18,4 +18,7 @@ interface ApiService {
   fun requestSecurityCode(email: String): Completable
   fun validateSecurityCode(securityCode: String, email: String): Completable
   fun changePassword(securityCode: String, email: String, password: String): Completable
+
+  fun requestPhoneValidationSMS(phoneNumber: String): Completable
+  fun validatePhoneCode(phoneNumber: String, code: Int): Completable
 }

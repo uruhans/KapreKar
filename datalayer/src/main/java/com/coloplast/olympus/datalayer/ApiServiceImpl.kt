@@ -54,4 +54,19 @@ class ApiServiceImpl : ApiService {
     return api.changePassword(changePasswordRequest)
   }
 
+  override fun requestPhoneValidationSMS(phoneNumber: String): Completable {
+    val phoneValidationRequestDTO = PhoneValidationRequestDTO(
+        phoneNumber = phoneNumber
+    )
+    return api.requestPhoneValidationSMS(phoneValidationRequestDTO)
+  }
+
+  override fun validatePhoneCode(phoneNumber: String, code: Int): Completable {
+    val phoneValidationRequestDTO = PhoneValidationRequestDTO(
+      phoneNumber = phoneNumber,
+      securityCode = code
+    )
+    return api.validatePhoneCode(phoneValidationRequestDTO)
+  }
+
 }

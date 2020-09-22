@@ -5,7 +5,7 @@
   <data>
     <variable
       name="controller"
-      type="com.coloplast.olympus.ui.feature.onboarding.createprofile.su6.PhoneSU6Controller" />
+      type="com.coloplast.olympus.ui.feature.onboarding.createprofile.su5.PhoneSU5Controller" />
   </data>
 
   <androidx.constraintlayout.widget.ConstraintLayout
@@ -18,7 +18,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_margin="@dimen/spacing_larger"
-      android:text="@string/onboarding_su6_title"
+      android:text="@string/onboarding_su5_title"
       style="@style/TextStyle.Coloplast.Bold.DarkGrey.24"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent" />
@@ -27,7 +27,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginTop="@dimen/spacing_larger"
-      android:text="@string/onboarding_su6_description"
+      android:text="@string/onboarding_su5_description"
       style="@style/TextStyle.Roboto.Regular.ClearGrey.18"
       app:layout_constraintStart_toStartOf="@id/title"
       app:layout_constraintTop_toBottomOf="@id/title" />

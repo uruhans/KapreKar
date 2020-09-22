@@ -9,7 +9,7 @@ enum class CreateUserFlow(override val id: Int):
   StomaInfoSU2(1),
   EmailSU3(2),
   PasswordSU4(3),
-  PhoneSU6(4),
+  PhoneSU5(4),
   InsuranceSU7(5),
   ConfirmationSU8(6),
   Completed(7);

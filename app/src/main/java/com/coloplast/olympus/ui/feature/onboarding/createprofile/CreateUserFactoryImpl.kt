@@ -12,7 +12,7 @@ import com.coloplast.olympus.ui.feature.onboarding.createprofile.su1.CreateUserS
 import com.coloplast.olympus.ui.feature.onboarding.createprofile.su2.StomaInfoSU2Controller
 import com.coloplast.olympus.ui.feature.onboarding.createprofile.su3.EmailSU3Controller
 import com.coloplast.olympus.ui.feature.onboarding.createprofile.su4.PasswordSU4Controller
-import com.coloplast.olympus.ui.feature.onboarding.createprofile.su6.PhoneSU6Controller
+import com.coloplast.olympus.ui.feature.onboarding.createprofile.su5.PhoneSU5Controller
 import com.coloplast.olympus.ui.feature.onboarding.createprofile.su7.InsuranceSU7Controller
 import com.coloplast.olympus.ui.feature.onboarding.createprofile.types.HealthInsurance
 
@@ -30,7 +30,7 @@ class CreateUserFactoryImpl : FlowFactory<CreateUserFactoryModel>() {
       CreateUserFlow.StomaInfoSU2 -> StomaInfoSU2Controller.getRouterTransaction()
       CreateUserFlow.EmailSU3 -> EmailSU3Controller.getRouterTransaction()
       CreateUserFlow.PasswordSU4 -> PasswordSU4Controller.getRouterTransaction()
-      CreateUserFlow.PhoneSU6 -> PhoneSU6Controller.getRouterTransaction()
+      CreateUserFlow.PhoneSU5 -> PhoneSU5Controller.getRouterTransaction()
       CreateUserFlow.InsuranceSU7 -> InsuranceSU7Controller.getRouterTransaction()
       CreateUserFlow.ConfirmationSU8 -> GenericConfirmationController.routerTransaction(
         R.string.onboarding_confirmation_title,
@@ -64,7 +64,7 @@ class CreateUserFactoryImpl : FlowFactory<CreateUserFactoryModel>() {
       CreateUserFlow.PasswordSU4 -> {
         model.user.password = result as String
       }
-      CreateUserFlow.PhoneSU6 -> {
+      CreateUserFlow.PhoneSU5 -> {
         model.user.phoneNumber = result as String
       }
       CreateUserFlow.InsuranceSU7 -> {

@@ -54,7 +54,7 @@ class CreateUserFlowController : FlowFactoryController<CreateUserFactoryModel>()
 
   override fun onStepCompleted(currentIndex: Int, data: CreateUserFactoryModel): Boolean {
     return when (CreateUserFlow.fromIndex(currentIndex)) {
-      CreateUserFlow.PhoneSU6 -> {
+      CreateUserFlow.PhoneSU5 -> {
         if (Utils.isUKNumber(data.user.phoneNumber)) {
           registrationRelay.accept(data.user)
           true

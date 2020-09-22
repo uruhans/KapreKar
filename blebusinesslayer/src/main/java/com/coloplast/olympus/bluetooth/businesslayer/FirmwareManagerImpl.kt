@@ -3,14 +3,13 @@ package com.coloplast.olympus.bluetooth.businesslayer
 import android.content.Context
 import com.coloplast.olympus.bluetooth.businesslayer.extensions.asUUID
 import com.coloplast.olympus.bluetooth.businesslayer.firmware.CypressFirmware
+import com.coloplast.olympus.bluetooth.businesslayer.firmware.readDataLine
+import com.coloplast.olympus.bluetooth.businesslayer.firmware.readHeader
 import io.reactivex.Completable
 import io.reactivex.Observable
-import okio.ByteString.Companion.toByteString
 import timber.log.Timber
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
-import java.nio.ByteBuffer
-import java.nio.ByteOrder
 import kotlin.experimental.and
 
 class FirmwareManagerImpl(
@@ -104,8 +103,9 @@ class FirmwareManagerImpl(
     val lines = getFileFromAssets()
 
     val header = lines.first()
-    val dataLines = lines.filter { it.isNotBlank() }.drop(1)
-    return CypressFirmware(header, dataLines)
+    val dataLines = lines.filter { it.isNotBlank() }.drop(1).map { readDataLine(it) }
+
+    return CypressFirmware(readHeader(header), dataLines)
   }
 
   fun getFileFromAssets(): List<String> {

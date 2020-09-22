@@ -1,43 +1,40 @@
 package com.coloplast.olympus.bluetooth.businesslayer.firmware
 
-data class CypressFirmware(
-  private val headerValue: String,
-  private val dataValue: List<String>
+class CypressFirmware(
+  val header: Header,
+  val dataRows: List<DataRow>
 ) {
-  val header = readHeader(headerValue)
-  val dataRows = dataValue.map { readDataLine(it) }
 
-  data class Header(
+  class Header(
     val siliconId: String,
     val siliconRev: Int,
-    private val checkSumType: String
+    checkSumType: String
   ) {
     val checkSum = Checksum.fromId(checkSumType.toInt())
 
     enum class Checksum(val id: Int) {
       checksum(0),
-      crc16(1),
-      UNKNOWN(2);
+      crc16(1);
 
       companion object {
         fun fromId(value: Int): Checksum {
-          return values().firstOrNull { it.id == value } ?: UNKNOWN
+          return values().firstOrNull { it.id == value }
+            ?: throw NullPointerException("Checksum with id=$value does not exist")
         }
       }
     }
   }
 
-  data class DataRow(
+  class DataRow(
     val arrayId: Int,
     val rowNo: Int,
     val dataLength: Int,
     val data: ByteArray,
     val rowCheckSum: Int
-    //val rowEnd: Boolean = false
   ) {
 
     override fun toString(): String {
-      return "DataRow(arrayId=$arrayId, rowNo=$rowNo, dataLength=$dataLength, rowChecksum=$rowCheckSum)"
+      return "DataRow(arrayId=$arrayId, rowNo=$rowNo, dataLength=$dataLength, actualLength=${data.size}, rowChecksum=$rowCheckSum)"
     }
   }
 }

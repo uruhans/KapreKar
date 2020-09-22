@@ -62,6 +62,7 @@ class SyncTransmittersWorker(applicationContext: Context, workerParams: WorkerPa
             Observable.timer(10, TimeUnit.SECONDS)
           }
           else {
+            Timber.e("[SyncTransmittersWorker] - throwing the error")
             Observable.error(throwable)
           }
         }

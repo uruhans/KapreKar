@@ -66,7 +66,7 @@ class CreateUserViewModel(
               // Check if it's a UK phone number.
               // If so, continue with the flow, otherwise we can create the user already.
               .flatMap { isUkNumber ->
-                if (true) {
+                if (isUkNumber) {
                   Observable.just(Callback.CODE_VALIDATED)
                 } else {
                   userComponent.createUser(model.user)

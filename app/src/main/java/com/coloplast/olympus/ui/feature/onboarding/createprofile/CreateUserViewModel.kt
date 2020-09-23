@@ -30,13 +30,13 @@ class CreateUserViewModel(
         .switchMap { user ->
           userComponent.createUser(user)
             .subscribeOn(Schedulers.io())
-            .compose(DelayedLoadingTransformer<CurrentUser>())
             .map {
-              it.result?.let { currentUser ->
-                me.setCurrentUser(currentUser)
-              }
-              return@map it
+              me.setCurrentUser(it)
+              if(it is CurrentUser.LoggedIn){
+                Callback.USER_CREATED
+              } else it
             }
+            .compose(DelayedLoadingTransformer<Any>())
             .compose(GenericUiModelTransformer())
         }
 
@@ -66,7 +66,7 @@ class CreateUserViewModel(
               // Check if it's a UK phone number.
               // If so, continue with the flow, otherwise we can create the user already.
               .flatMap { isUkNumber ->
-                if (isUkNumber) {
+                if (true) {
                   Observable.just(Callback.CODE_VALIDATED)
                 } else {
                   userComponent.createUser(model.user)

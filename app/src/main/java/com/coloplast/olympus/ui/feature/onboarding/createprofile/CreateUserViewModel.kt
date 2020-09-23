@@ -8,9 +8,9 @@ import com.coloplast.olympus.shared.models.CurrentUser
 import com.coloplast.olympus.shared.models.ServerException
 import com.coloplast.olympus.ui.common.BaseViewModel
 import com.coloplast.olympus.ui.common.models.GenericUiModel
-import com.coloplast.olympus.ui.common.rx.DelayedLoadingModel
 import com.coloplast.olympus.ui.common.rx.DelayedLoadingTransformer
 import com.coloplast.olympus.ui.common.rx.GenericUiModelTransformer
+import com.coloplast.olympus.utils.Utils
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -25,31 +25,21 @@ class CreateUserViewModel(
   override fun bind(uiView: CreateUserFlowView): Disposable {
     val disposable = CompositeDisposable()
 
-    val onCreateUserClicked: Observable<GenericUiModel> =
+    val onCreateUser: Observable<GenericUiModel> =
       uiView.onCreateUser()
         .switchMap { user ->
           userComponent.createUser(user)
             .subscribeOn(Schedulers.io())
             .compose(DelayedLoadingTransformer<CurrentUser>())
-            .map { delayedResult: DelayedLoadingModel<CurrentUser> ->
-              return@map when {
-                delayedResult.isLoading -> GenericUiModel.Loading()
-                delayedResult.result != null -> {
-                  val currentUser = delayedResult.result as CurrentUser
-                  me.setCurrentUser(currentUser)
-
-                  if (currentUser is CurrentUser.LoggedIn) {
-                    GenericUiModel.Success(currentUser)
-                  }
-                  else {
-                    GenericUiModel.Error(GenericUiModel.Error.State.ERROR_GENERIC, 404)
-                  }
-                }
-                else -> GenericUiModel.Loading()
+            .map {
+              it.result?.let { currentUser ->
+                me.setCurrentUser(currentUser)
               }
+              return@map it
             }
+            .compose(GenericUiModelTransformer())
         }
-    
+
     val onSendCode: Observable<GenericUiModel> =
       uiView.sendCode()
         .switchMap { phoneNumber ->
@@ -63,32 +53,59 @@ class CreateUserViewModel(
 
     val confirmCode: Observable<GenericUiModel> =
       uiView.validateCode()
-        .switchMap { phoneValidationModel ->
-          userComponent.validatePhoneCode(
-            phoneValidationModel.phoneNumber,
-            phoneValidationModel.code
-          )
-            .subscribeOn(Schedulers.io())
-            .toSingle { Callback.CODE_VALIDATED }
-            .toObservable()
-            .compose(DelayedLoadingTransformer<Callback>())
-            .compose(GenericUiModelTransformer())
+        .switchMap { model ->
+          // check if code is Integer and return Error otherwise.
+          if(model.phoneValidationCode.toIntOrNull() != null){
+            userComponent.validatePhoneCode(
+              model.user.phoneNumber!!,
+              model.phoneValidationCode.toInt()
+            )
+              .subscribeOn(Schedulers.io())
+              .toSingle { Utils.isUKNumber(model.user.phoneNumber) }
+              .toObservable()
+              // Check if it's a UK phone number.
+              // If so, continue with the flow, otherwise we can create the user already.
+              .flatMap { isUkNumber ->
+                if (isUkNumber) {
+                  Observable.just(Callback.CODE_VALIDATED)
+                } else {
+                  userComponent.createUser(model.user)
+                    .map {
+                      me.setCurrentUser(it)
+                      Callback.USER_CREATED
+                    }
+                }
+              }
+              .compose(DelayedLoadingTransformer<Callback>())
+              .compose(GenericUiModelTransformer())
+          } else {
+            Observable.just(
+              GenericUiModel.Error(
+                GenericUiModel.Error.State.ERROR_GENERIC,
+                -1
+              )
+            )
+          }
         }
 
-    val allObservables = Observable.merge(onCreateUserClicked, onSendCode, confirmCode)
+    val allObservables = Observable.merge(onCreateUser, onSendCode, confirmCode)
       .onErrorReturn { throwable: Throwable ->
         return@onErrorReturn when (throwable) {
           is ServerException -> {
             when (throwable.errorModel?.errorType) {
               is ApiErrorType -> GenericUiModel.Error(
-                GenericUiModel.Error.State.ERROR_NETWORK, throwable.errorModel!!.errorType.code
+                GenericUiModel.Error.State.ERROR_NETWORK,
+                throwable.errorModel!!.errorType.code
               )
               else -> GenericUiModel.Error(
                 GenericUiModel.Error.State.ERROR_NETWORK, 1001
               )
             }
           }
-          is IOException -> GenericUiModel.Error(GenericUiModel.Error.State.ERROR_NETWORK, 1001)
+          is IOException -> GenericUiModel.Error(
+            GenericUiModel.Error.State.ERROR_NETWORK,
+            1001
+          )
           else -> GenericUiModel.Error(
             GenericUiModel.Error.State.ERROR_GENERIC, 1000
           )
@@ -99,10 +116,11 @@ class CreateUserViewModel(
     return disposable
   }
 
-  enum class Callback{
+  enum class Callback {
     CODE_REQUESTED,
     CODE_VALIDATED,
     USER_CREATED
   }
-
 }
+
+

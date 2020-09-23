@@ -6,6 +6,6 @@ package com.coloplast.olympus.datalayer.models
  * Copyright by Dawn Health A/S. All rights reserved.
  */
 class PhoneValidationRequestDTO(
-  phoneNumber: String,
-  securityCode: Int = -1
+  val phoneNumber: String,
+  val securityCode: Int = -1
 )

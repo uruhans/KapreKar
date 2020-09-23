@@ -70,8 +70,7 @@ class CreateUserFactoryImpl : FlowFactory<CreateUserFactoryModel>() {
         model.user.phoneNumber = result as String
       }
       CreateUserFlow.PhoneValidationSU6 -> {
-        //TODO: either save the code or trigger api call.
-        //model.user.code = result as String
+        model.phoneValidationCode = result as String
       }
       CreateUserFlow.InsuranceSU7 -> {
         model.user.insuranceType = (result as HealthInsurance).id

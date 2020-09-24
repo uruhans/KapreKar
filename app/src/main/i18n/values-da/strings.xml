@@ -229,6 +229,7 @@
 <string name="guide_co9_description">The rectangular opening on your transmitter is where it attaches to a sensor layer.</string>
 <string name="guide_co9_title">Transmitter opening</string>
 <string name="guide_connection">Guide til at genskabe forbindelsen</string>
+<string name="guide_critical_app_update_title">guide_critical_app_update_title</string>
 <string name="guide_da_article_1_body">If your baseplate and/or sensor layer adhesive becomes wet during application you may experience poor adhesion to the skin, and [Olympus] may not be able to detect leakage effectively.\n\nMake sure you carefully wipe both your ostomy and surrounding skin dry immediately before applying a new baseplate/adhesive with sensor layer attached. \n\nMake sure your supporting products are completely dry before attaching your baseplate/adhesive.\n\nTry not to touch the ostomy with the centre hole of the baseplate/adhesive whilst applying to the body.</string>
 <string name="guide_da_article_1_header">Dry application of [Olympus] is essential to enable leak detection.</string>
 <string name="guide_da_subtitle">Keeping skin and product dry will give you the best [Olympus] experience</string>
@@ -534,6 +535,8 @@
 <string name="onboarding_dc3_title">Helps us help the community.</string>
 <string name="onboarding_dc4_description">We store all personal data information securely and in accordance with the best intrustry practices. Your personal data can only be accesses by Coloplast and relevant healthcare providers. We won\'t share your data or personal information with third parties without your consent.</string>
 <string name="onboarding_dc4_title">Your data is safe with us.</string>
+<string name="onboarding_dc5_card_description">By toggling this switch on, I hereby accept the [Olympus] Data Policy Agreement</string>
+<string name="onboarding_dc5_card_title">Accept Data Policy</string>
 <string name="onboarding_dc5_description">Follow the links below to read full terms and policy details:</string>
 <string name="onboarding_dc5_link1">https://www.coloplast.com/about-coloplast/compliance/data-privacy-and-security/</string>
 <string name="onboarding_dc5_link1_text">Read full Data Policy agreement</string>
@@ -541,7 +544,7 @@
 <string name="onboarding_dc5_link2_text">Read full Terms of Use</string>
 <string name="onboarding_dc5_primary_button">Accept and continue</string>
 <string name="onboarding_dc5_secondary_button">Decline</string>
-<string name="onboarding_dc5_title">Agree to Terms of User and Data Policy</string>
+<string name="onboarding_dc5_title">Happy to share your data with Coloplast?</string>
 <string name="onboarding_email_address">Email address</string>
 <string name="onboarding_email_error">Incorrect email</string>
 <string name="onboarding_email_exists_error">User with this email address is already registered.</string>
@@ -746,6 +749,8 @@
 <string name="status_charging_title">Transmitteren oplader.</string>
 <string name="status_connected">Forbundet</string>
 <string name="status_connecting">Forbinder…</string>
+<string name="status_critical_update">status_critical_update</string>
+<string name="status_critical_update_title">status_critical_update_title</string>
 <string name="status_dirt_connector">Åbn transmitteren helt og rengør den. Der er muligvis snavs indeni.</string>
 <string name="status_dirt_connector_title">Blokeret transmitterforbindelse.</string>
 <string name="status_disconnected">Ikke forbundet</string>

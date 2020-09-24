@@ -33,11 +33,15 @@ class DataConsentFlowController: TopMenuFlowFactoryController<DataConsentModel>(
         }
       }
       DataConsentFlow.DataConsentDC5 -> {
-        if(!data.didConsent) {
-          activity?.finish()
-          return true
+        if(data.didConsent) {
+          with(factory){
+            skipUntil(DataConsentFlow.ProfileComplete.id)
+            incrementAndNext()
+          }
+          true
+        } else {
+          false
         }
-        false
       }
       else -> super.onStepCompleted(currentIndex, data)
     }

@@ -9,6 +9,7 @@ import com.coloplast.olympus.ui.feature.onboarding.dataconsent.dc2.HelpYouDC2Con
 import com.coloplast.olympus.ui.feature.onboarding.dataconsent.dc3.HelpCommunityDC3Controller
 import com.coloplast.olympus.ui.feature.onboarding.dataconsent.dc4.SafeWithUsDC4Controller
 import com.coloplast.olympus.ui.feature.onboarding.dataconsent.dc5.AcceptTermsDC5Controller
+import com.coloplast.olympus.ui.feature.onboarding.dataconsent.dc6.AcceptDataPromptDC6Controller
 
 /**
  * Created by Kike Bodi (ebp@dawnhealth.com) on 10/07/2020.
@@ -29,6 +30,7 @@ class DataConsentFactoryImpl : FlowFactory<DataConsentModel>() {
       DataConsentFlow.DataConsentDC3 -> HelpCommunityDC3Controller.getRouterTransaction()
       DataConsentFlow.DataConsentDC4 -> SafeWithUsDC4Controller.getRouterTransaction()
       DataConsentFlow.DataConsentDC5 -> AcceptTermsDC5Controller.getRouterTransaction()
+      DataConsentFlow.DataConsentDC6 -> AcceptDataPromptDC6Controller.getRouterTransaction()
       DataConsentFlow.ProfileComplete -> {
         GenericConfirmationController.routerTransaction(
           R.string.onboarding_pc_title,
@@ -48,7 +50,8 @@ class DataConsentFactoryImpl : FlowFactory<DataConsentModel>() {
         val skip = result as Boolean
         model.skip = skip
       }
-      DataConsentFlow.DataConsentDC5 -> {
+      DataConsentFlow.DataConsentDC5,
+      DataConsentFlow.DataConsentDC6-> {
         model.didConsent = result as Boolean
       }
     }

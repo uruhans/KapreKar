@@ -3,6 +3,7 @@ package com.coloplast.olympus.bluetooth.businesslayer
 import android.content.Context
 import com.coloplast.olympus.bluetooth.businesslayer.extensions.asUUID
 import com.coloplast.olympus.bluetooth.businesslayer.firmware.CypressFirmware
+import com.coloplast.olympus.bluetooth.businesslayer.firmware.Signing
 import com.coloplast.olympus.bluetooth.businesslayer.firmware.readDataLine
 import com.coloplast.olympus.bluetooth.businesslayer.firmware.readHeader
 import io.reactivex.Completable
@@ -26,12 +27,14 @@ class FirmwareManagerImpl(
 
   override fun updateFirmware(macAddress: String): Completable {
     return Completable.create {
-      val firmware = getCypressFirmware()
-      Timber.d(firmware.header.toString())
+      Timber.d("Signature valid=${Signing.verifySignature(getFirmwareData())}")
 
-      firmware.dataRows.forEach {
-        Timber.d("$it")
-      }
+//      val firmware = getCypressFirmware()
+//      Timber.d(firmware.header.toString())
+//
+//      firmware.dataRows.forEach {
+//        Timber.d("$it")
+//      }
     }
   }
 
@@ -97,7 +100,18 @@ class FirmwareManagerImpl(
 //      .ignoreElements()
 //  }
 
+  fun getFirmwareData(): ByteArray {
+    val inputStream: InputStream = applicationContext.assets.open("Firmware.cyacd")
 
+    val buffer = ByteArray(8192)
+    var bytesRead: Int
+    val output = ByteArrayOutputStream()
+    while (inputStream.read(buffer).also { bytesRead = it } != -1) {
+      output.write(buffer, 0, bytesRead)
+    }
+
+    return output.toByteArray()
+  }
 
   fun getCypressFirmware(): CypressFirmware {
     val lines = getFileFromAssets()

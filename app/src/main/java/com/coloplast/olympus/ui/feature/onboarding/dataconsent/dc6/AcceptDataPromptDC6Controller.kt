@@ -21,12 +21,12 @@ class AcceptDataPromptDC6Controller: BaseController<ControllerAcceptDataPromptDc
     //noop
   }
 
-  fun onReadMoreClicked(){
-    getListener(FlowListener::class.java)!!.onNextClicked(false) // skip = false
+  fun onGoBack(){
+    getListener(FlowListener::class.java)!!.onPreviousClicked()
   }
 
-  fun onSkipClicked(){
-    getListener(FlowListener::class.java)!!.onNextClicked(true) // skip = true
+  fun onContinue(){
+    getListener(FlowListener::class.java)!!.onNextClicked()
   }
 
   override fun getLayout(): Int= R.layout.controller_accept_data_prompt_dc6

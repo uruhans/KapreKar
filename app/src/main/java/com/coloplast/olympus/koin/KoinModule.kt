@@ -22,6 +22,7 @@ import com.coloplast.olympus.ui.feature.home.HomeViewModel
 import com.coloplast.olympus.ui.feature.onboarding.createprofile.CreateUserFactoryImpl
 import com.coloplast.olympus.ui.feature.onboarding.createprofile.CreateUserViewModel
 import com.coloplast.olympus.ui.feature.onboarding.dataconsent.DataConsentFactoryImpl
+import com.coloplast.olympus.ui.feature.onboarding.dataconsent.DataConsentViewModel
 import com.coloplast.olympus.ui.feature.onboarding.login.LoginViewModel
 import com.coloplast.olympus.ui.feature.onboarding.login.forgotpassword.ForgotPasswordFactoryImpl
 import com.coloplast.olympus.ui.feature.onboarding.login.forgotpassword.ForgotPasswordViewModel
@@ -78,6 +79,7 @@ val koinModule = module {
   single { SetupGuideLocationSGC4ViewModel(get()) }
   single { AddTransmitterAT7ViewModel(get()) }
   single { SyncViewModel(get(), get(), get()) }
+  single { DataConsentViewModel(get(), get(), get()) }
 
   /* Flows */
   single { AddTransmitterFactoryImpl() }

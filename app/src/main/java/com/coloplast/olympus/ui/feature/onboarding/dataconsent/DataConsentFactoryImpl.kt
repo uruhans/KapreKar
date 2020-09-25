@@ -50,8 +50,7 @@ class DataConsentFactoryImpl : FlowFactory<DataConsentModel>() {
         val skip = result as Boolean
         model.skip = skip
       }
-      DataConsentFlow.DataConsentDC5,
-      DataConsentFlow.DataConsentDC6-> {
+      DataConsentFlow.DataConsentDC5 -> {
         model.didConsent = result as Boolean
       }
     }

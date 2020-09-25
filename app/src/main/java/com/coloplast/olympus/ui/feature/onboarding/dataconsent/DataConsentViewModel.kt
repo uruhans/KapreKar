@@ -12,6 +12,7 @@ import com.coloplast.olympus.ui.common.rx.GenericUiModelTransformer
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 
 
 /**
@@ -39,7 +40,8 @@ class DataConsentViewModel(
               }
               return@flatMap userComponent.updateUser(user)
             }
-            .map { true }
+            .subscribeOn(Schedulers.io()) // due to the DB call.
+            .map { dataConsent }
             .compose(DelayedLoadingTransformer<Boolean>())
             .compose(GenericUiModelTransformer())
         }

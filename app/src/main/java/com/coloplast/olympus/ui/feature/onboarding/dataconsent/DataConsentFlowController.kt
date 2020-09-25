@@ -45,13 +45,12 @@ class DataConsentFlowController : TopMenuFlowFactoryController<DataConsentModel>
         }
       }
       DataConsentFlow.DataConsentDC5 -> {
-        if (data.didConsent) {
-          dataConsentRelay.accept(true)
-          true
-        }
-        else {
-          false
-        }
+        dataConsentRelay.accept(data.didConsent)
+        true
+      }
+      DataConsentFlow.DataConsentDC6 -> {
+        factory.skipNext()
+        false
       }
       else -> super.onStepCompleted(currentIndex, data)
     }
@@ -72,7 +71,12 @@ class DataConsentFlowController : TopMenuFlowFactoryController<DataConsentModel>
       when (uiModel) {
         is GenericUiModel.Success<*> -> {
           with(factory) {
-            skipUntil(DataConsentFlow.ProfileComplete.id)
+            skipUntil(
+              when(uiModel.data as Boolean){
+                true -> DataConsentFlow.ProfileComplete.id
+                false -> DataConsentFlow.DataConsentDC6.id
+              }
+            )
             incrementAndNext()
           }
         }

@@ -13,6 +13,7 @@ import com.coloplast.olympus.ui.common.extensions.rotate360
 import com.coloplast.olympus.ui.common.models.GenericUiModel
 import com.coloplast.olympus.ui.feature.home.HomeController
 import com.coloplast.olympus.ui.feature.onboarding.LandingController
+import com.coloplast.olympus.ui.feature.onboarding.termsofuse.TermsOfUseTUController
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
@@ -74,7 +75,7 @@ class SplashController : BaseController<ControllerSplashBinding>(), SplashView {
     }
 
     routerTransaction.let {
-      getContentRouter().setRoot(it)
+      getContentRouter().setRoot(TermsOfUseTUController.routerTransaction())
     }
   }
 

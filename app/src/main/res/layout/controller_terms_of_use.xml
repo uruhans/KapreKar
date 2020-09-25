@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools">
+
+  <data>
+
+    <variable
+      name="toolbarSupport"
+      type="com.coloplast.olympus.ui.common.ToolbarSupportController" />
+
+    <variable
+      name="controller"
+      type="com.coloplast.olympus.ui.feature.onboarding.termsofuse.TermsOfUseTUController" />
+  </data>
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <include
+      android:id="@+id/toolbar"
+      layout="@layout/view_toolbar"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:support="@{toolbarSupport}" />
+
+    <LinearLayout
+      android:id="@+id/linearLayout"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="@dimen/spacing_standard"
+      android:layout_marginEnd="@dimen/spacing_standard"
+      android:orientation="vertical"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent">
+
+      <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_standard"
+        android:layout_marginTop="@dimen/spacing_standard"
+        android:layout_marginEnd="@dimen/spacing_standard"
+        android:src="@drawable/ic_agree_terms" />
+
+      <TextView
+        style="@style/TextStyle.Coloplast.Bold.DarkGrey.24"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_standard"
+        android:layout_marginTop="@dimen/spacing_standard"
+        android:layout_marginEnd="@dimen/spacing_standard"
+        android:text="@string/terms_of_use_tu_title"
+        tools:text="@string/guide_at3_title" />
+
+      <TextView
+        android:id="@+id/title"
+        style="@style/TextStyle.Roboto.Regular.ClearGrey.18"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_standard"
+        android:layout_marginTop="@dimen/spacing_standard"
+        android:layout_marginEnd="@dimen/spacing_standard"
+        android:text="@string/terms_of_use_tu_description"
+        tools:text="@string/guide_at3_body" />
+
+      <Button
+        style="@style/Button.Borderless"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_standard"
+        android:layout_marginTop="@dimen/spacing_standard"
+        android:layout_marginEnd="@dimen/spacing_standard"
+        android:onClick="@{() -> controller.onLinkCLicked()}"
+        android:text="@string/about_ap_section1_link_text"
+        android:textAlignment="textStart"
+        android:textAllCaps="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    </LinearLayout>
+
+    <Button
+      style="@style/Button"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:onClick="@{() -> controller.onContinueClicked()}"
+      android:text="@string/generic_continue"
+      android:textAllCaps="false"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent" />
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

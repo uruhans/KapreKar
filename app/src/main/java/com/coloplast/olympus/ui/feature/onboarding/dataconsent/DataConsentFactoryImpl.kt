@@ -9,6 +9,7 @@ import com.coloplast.olympus.ui.feature.onboarding.dataconsent.dc2.HelpYouDC2Con
 import com.coloplast.olympus.ui.feature.onboarding.dataconsent.dc3.HelpCommunityDC3Controller
 import com.coloplast.olympus.ui.feature.onboarding.dataconsent.dc4.SafeWithUsDC4Controller
 import com.coloplast.olympus.ui.feature.onboarding.dataconsent.dc5.AcceptTermsDC5Controller
+import com.coloplast.olympus.ui.feature.onboarding.termsofuse.TermsOfUseTUController
 
 /**
  * Created by Kike Bodi (ebp@dawnhealth.com) on 10/07/2020.
@@ -24,6 +25,7 @@ class DataConsentFactoryImpl : FlowFactory<DataConsentModel>() {
 
   override fun getRouterTransaction(currentIndex: Int): RouterTransaction? {
     return when (DataConsentFlow.fromIndex(currentIndex)) {
+      DataConsentFlow.TermsOfUseTU -> TermsOfUseTUController.routerTransaction()
       DataConsentFlow.DataConsentDC1 -> DataIntroDC1Controller.getRouterTransaction()
       DataConsentFlow.DataConsentDC2 -> HelpYouDC2Controller.getRouterTransaction()
       DataConsentFlow.DataConsentDC3 -> HelpCommunityDC3Controller.getRouterTransaction()

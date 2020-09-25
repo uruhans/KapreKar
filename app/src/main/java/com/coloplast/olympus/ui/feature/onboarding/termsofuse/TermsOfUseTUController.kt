@@ -4,18 +4,22 @@ import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerTermsOfUseBinding
-import com.coloplast.olympus.ui.common.CustomToolbarController
+import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.common.WebViewController
+import com.coloplast.olympus.ui.common.listeners.FlowListener
 
 /**
  * Created by Kike Bodi (ebp@dawnhealth.com) on 25/09/2020.
  * Copyright by Dawn Health A/S. All rights reserved.
  */
-class TermsOfUseTUController: CustomToolbarController<ControllerTermsOfUseBinding>() {
+class TermsOfUseTUController: BaseController<ControllerTermsOfUseBinding>() {
 
   override fun attachVariables(viewBinding: ControllerTermsOfUseBinding) {
-    super.attachVariables(viewBinding)
     viewBinding.controller = this
+  }
+
+  override fun onViewBound(viewBinding: ControllerTermsOfUseBinding) {
+    //noop
   }
 
   fun onLinkCLicked(){
@@ -28,12 +32,10 @@ class TermsOfUseTUController: CustomToolbarController<ControllerTermsOfUseBindin
   }
 
   fun onContinueClicked(){
-    //getListener(Flow)
+    getListener(FlowListener::class.java)!!.onNextClicked()
   }
 
   override fun getLayout(): Int = R.layout.controller_terms_of_use
-
-  override fun getNavigationIconResId(): Int = R.drawable.ic_arrow
 
   companion object{
 

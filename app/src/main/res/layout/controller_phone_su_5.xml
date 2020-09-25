@@ -24,12 +24,14 @@
       app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-      android:layout_width="wrap_content"
+      android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_marginTop="@dimen/spacing_larger"
+      android:layout_marginEnd="@dimen/spacing_larger"
       android:text="@string/onboarding_su5_description"
       style="@style/TextStyle.Roboto.Regular.ClearGrey.18"
       app:layout_constraintStart_toStartOf="@id/title"
+      app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintTop_toBottomOf="@id/title" />
 
     <LinearLayout
@@ -48,18 +50,18 @@
         android:layout_height="wrap_content"
         android:text="@string/onboarding_phone_title"
         style="@style/TextStyle.Roboto.Regular.ClearGrey.14"
-        android:layout_marginStart="@dimen/spacing_standard"
+        android:layout_marginStart="@dimen/spacing_larger"
         android:layout_marginTop="@dimen/spacing_half"
-        android:layout_marginEnd="@dimen/spacing_standard" />
+        android:layout_marginEnd="@dimen/spacing_larger" />
 
       <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/email_input_layout"
         style="@style/TextInputLayoutAppearance"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/spacing_standard"
+        android:layout_marginStart="@dimen/spacing_larger"
         android:layout_marginTop="@dimen/spacing_half"
-        android:layout_marginEnd="@dimen/spacing_standard">
+        android:layout_marginEnd="@dimen/spacing_larger">
         <com.google.android.material.textfield.TextInputEditText
           android:id="@+id/email_edittext"
           style="@style/EditTextInputText"
@@ -73,8 +75,8 @@
       <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/spacing_standard"
-        android:layout_marginEnd="@dimen/spacing_standard"
+        android:layout_marginStart="@dimen/spacing_larger"
+        android:layout_marginEnd="@dimen/spacing_larger"
         android:text="@string/onboarding_phone_error"
         style="@style/TextInputLayoutErrorText"
         visibleOrGone="@{!controller.validPhone}"/>

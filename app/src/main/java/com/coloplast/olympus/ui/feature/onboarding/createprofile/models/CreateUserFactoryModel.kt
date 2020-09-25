@@ -6,5 +6,5 @@ import com.coloplast.olympus.ui.common.models.flow.FlowFactoryModel
 class CreateUserFactoryModel : FlowFactoryModel {
 
   val user = User()
-
+  lateinit var phoneValidationCode: String
 }

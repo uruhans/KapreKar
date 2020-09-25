@@ -10,6 +10,7 @@ import com.coloplast.olympus.bluetooth.businesslayer.exceptions.GattException
 import com.coloplast.olympus.bluetooth.businesslayer.models.*
 import com.coloplast.olympus.bluetooth.businesslayer.services.BatteryPowerService
 import com.coloplast.olympus.bluetooth.businesslayer.services.DeviceInformation
+import com.coloplast.olympus.bluetooth.businesslayer.services.GenericAttribute
 import com.coloplast.olympus.bluetooth.businesslayer.services.OlympusWirelessProtocol
 import com.coloplast.olympus.businesslayer.interfaces.TransmitterComponent
 import com.coloplast.olympus.shared.models.RawDataPackage
@@ -194,7 +195,7 @@ class BluetoothManagerImpl(
   override fun connectBleDevice(macAddress: String): Observable<String> {
     return getBleDevice(macAddress)
       .switchMap { rxBleDevice ->
-        bluetoothHandler.connectRxBleDevice(rxBleDevice)
+        bluetoothHandler.connectRxBleDevice(rxBleDevice, GenericAttribute.Characteristics.SERVICE_CHANGED)
           .takeUntil(
             disconnectRelay
               .publish()
@@ -219,7 +220,7 @@ class BluetoothManagerImpl(
 
   override fun connectOtaDevice(macAddress: String): Observable<RxBleConnection> {
     return getBleDevice(macAddress)
-      .switchMap { bluetoothHandler.connectRxBleDevice(it, 250) }
+      .switchMap { bluetoothHandler.connectRxBleDevice(it, GenericAttribute.Characteristics.SERVICE_CHANGED) }
   }
 
   /**

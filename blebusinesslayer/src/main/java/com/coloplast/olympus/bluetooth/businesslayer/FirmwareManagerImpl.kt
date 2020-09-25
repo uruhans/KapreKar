@@ -3,14 +3,15 @@ package com.coloplast.olympus.bluetooth.businesslayer
 import android.content.Context
 import com.coloplast.olympus.bluetooth.businesslayer.extensions.asUUID
 import com.coloplast.olympus.bluetooth.businesslayer.firmware.CypressFirmware
-import com.coloplast.olympus.bluetooth.businesslayer.firmware.Signing
 import com.coloplast.olympus.bluetooth.businesslayer.firmware.readDataLine
 import com.coloplast.olympus.bluetooth.businesslayer.firmware.readHeader
+import com.coloplast.olympus.bluetooth.businesslayer.services.CommandService
 import io.reactivex.Completable
 import io.reactivex.Observable
 import timber.log.Timber
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
+import java.util.concurrent.TimeUnit
 import kotlin.experimental.and
 
 class FirmwareManagerImpl(
@@ -26,26 +27,29 @@ class FirmwareManagerImpl(
   private val OTA_UPDATE_CHARACTERISTIC = "00060001-f8ce-11e4-abf4-0002a5d5c51b".asUUID()
 
   override fun updateFirmware(macAddress: String): Completable {
-    return Completable.create {
-      Timber.d("Signature valid=${Signing.verifySignature(getFirmwareData())}")
-
+//    return Completable.create {
+//      Timber.d("Signature valid=${Signing.verifySignature(getFirmwareData())}")
+//
 //      val firmware = getCypressFirmware()
 //      Timber.d(firmware.header.toString())
 //
 //      firmware.dataRows.forEach {
 //        Timber.d("$it")
 //      }
-    }
+//    }
+//  }
+
+    return bluetoothManager.writeCharacteristic(macAddress, CommandService.Characteristics.UART_RX, "P".toByteArray(Charsets.UTF_8))
+      .toSingle { true }
+      .toObservable()
+      .doOnNext { bluetoothManager.disconnectTransmitter(macAddress) }
+      .doOnNext { Timber.d("FIRMWARE AFTER P COMMAND") }
+      .flatMap { bluetoothManager.connectOtaDevice(macAddress) }
+      .delay(10, TimeUnit.SECONDS)
+      .map { bluetoothManager.disconnectTransmitter(macAddress) }
+      .ignoreElements()
   }
 
-//    return bluetoothManager.writeCharacteristic(macAddress, CommandService.Characteristics.UART_RX, "P".toByteArray(Charsets.UTF_8))
-//      .toSingle { true }
-//      .toObservable()
-//      .doOnNext { bluetoothManager.disconnectTransmitter(macAddress) }
-//      .doOnNext { Timber.d("FIRMWARE AFTER P COMMAND") }
-//      .flatMap { bluetoothManager.connectOtaDevice(macAddress) }
-//      .ignoreElements()
-//  }
 //        bluetoothManager.initiateBleScanning(null)
 //          .takeUntil(Observable.interval(5, TimeUnit.SECONDS))
 //          .filter { it.macAddress == macAddress }
@@ -55,7 +59,7 @@ class FirmwareManagerImpl(
 //          .take(1)
 //          .doOnNext { Timber.d("FIRMWARE Found OTA Bootloader") }
 //          .flatMap { scanResult ->
-
+//
 //              .flatMap { rxBleConnection ->
 //                rxBleConnection.requestMtu(250)
 //                  .toObservable()

@@ -1,6 +1,7 @@
 package com.coloplast.olympus.work
 
 import androidx.work.ListenableWorker
+import com.coloplast.olympus.BuildConfig
 import com.coloplast.olympus.businesslayer.interfaces.TransmitterComponent
 import com.coloplast.olympus.businesslayer.interfaces.UserComponent
 import com.coloplast.olympus.businesslayer.models.SyncResult
@@ -80,9 +81,11 @@ class SyncWorker(private val userComponent: UserComponent,
   }
 
   private fun deletePackages(packageType: PackageType): Observable<SyncResult> {
-    // TODO - remove this when finished testing
-    return Observable.just(SyncResult.Completed(0))
-
-//    return transmitterComponent.deletePackagesAlreadySynced(packageType)
+    return if(BuildConfig.DEBUG) {
+      Observable.just(SyncResult.Completed())
+    }
+    else {
+      transmitterComponent.deletePackagesAlreadySynced(packageType)
+    }
   }
 }

@@ -83,6 +83,12 @@ class DbServiceImpl : DbService {
       }
   }
 
+  override fun getSingleTransmitter(macAddress: String): Single<Transmitter> {
+    return db.transmitterDao()
+      .getSingleTransmitter(macAddress)
+      .map { it.toTransmitter() }
+  }
+
   override fun insertOrUpdateTransmitter(transmitter: Transmitter): Completable {
     return db.transmitterDao()
       .insertOrUpdate(DbTransmitter.fromTransmitter(transmitter))

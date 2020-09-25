@@ -59,8 +59,10 @@ class BluetoothHandler(private val context: Context, isDebugging: Boolean) {
       .distinctUntilChanged()
   }
 
-  fun connectRxBleDevice(rxBleDevice: RxBleDevice, mtuSize: Int = 185): Observable<RxBleConnection> {
+  fun connectRxBleDevice(rxBleDevice: RxBleDevice, serviceChangedUUID: UUID, mtuSize: Int = 185): Observable<RxBleConnection> {
     return rxBleDevice.establishConnection(false)
+      // this delay is added in order to get the system to properly connect and update services properly (will not work without this delay)
+      .delay(2, TimeUnit.SECONDS)
       .flatMap { rxBleConnection ->
         rxBleDeviceConnectionStateObservable(rxBleDevice)
           .filter { it == RxBleConnection.RxBleConnectionState.CONNECTED }
@@ -72,14 +74,18 @@ class BluetoothHandler(private val context: Context, isDebugging: Boolean) {
                 rxBleConnection.discoverServices()
                   .toObservable()
                   .doOnNext { services ->
-                    services.bluetoothGattServices.forEach { service ->
-                      Log.d("BluetoothHandler", "service: ${service.uuid}")
-                      service.characteristics.forEach { char ->
-                        Log.d("BluetoothHandler", "char ${char.uuid}")
+                    if(BuildConfig.DEBUG) {
+                      services.bluetoothGattServices.forEach { service ->
+                        Log.d("BluetoothHandler", "Gatt Service: ${service.uuid}")
+                        service.characteristics.forEach { char ->
+                          Log.d("BluetoothHandler", "Characteristic ${char.uuid}")
+                        }
                       }
                     }
                   }
               }
+              // setup indication on the ServiceChanged characteristic
+              .flatMap { rxBleConnection.setupIndication(serviceChangedUUID, NotificationSetupMode.DEFAULT) }
               .map { rxBleConnection }
           }
       }

@@ -29,6 +29,66 @@ class TransmitterComponentImpl(private val preferences: Preferences) : Transmitt
     return dbService.getTransmitter(macAddress)
   }
 
+  override fun updateAdditionalInfoForTransmitter(
+    macAddress: String,
+    firmwareVersion: String,
+    hardwareRevision: String,
+    manufacturerName: String,
+    serialNumber: String,
+    settings: ByteArray,
+    classifierSettings: ByteArray
+  ) : Completable {
+
+    return dbService.getSingleTransmitter(macAddress)
+      .flatMapCompletable {
+
+        var transmitterChanged = false
+
+        with(it) {
+          if(this.firmwareVersion != firmwareVersion) {
+            this.firmwareVersion = firmwareVersion
+            transmitterChanged = true
+          }
+
+          if(this.hardwareRevision != hardwareRevision) {
+            this.hardwareRevision = hardwareRevision
+            transmitterChanged = true
+          }
+
+          if(this.manufacturerName != manufacturerName) {
+            this.manufacturerName = manufacturerName
+            transmitterChanged = true
+          }
+
+          if(this.serialNumber != serialNumber) {
+            this.serialNumber = serialNumber
+            transmitterChanged = true
+          }
+
+          if(!this.settings.contentEquals(settings)) {
+            this.settings = settings
+            transmitterChanged = true
+          }
+
+          if(!this.classifierSettings.contentEquals(classifierSettings)) {
+            this.classifierSettings = classifierSettings
+            transmitterChanged = true
+          }
+
+          if(transmitterChanged) {
+            this.syncState = SyncState.Pending
+          }
+        }
+
+        if(transmitterChanged) {
+          dbService.insertOrUpdateTransmitter(it)
+        }
+        else {
+          Completable.complete()
+        }
+      }
+  }
+
   override fun insertOrUpdateTransmitter(transmitter: Transmitter): Completable {
     return dbService.insertOrUpdateTransmitter(transmitter)
   }
@@ -70,10 +130,15 @@ class TransmitterComponentImpl(private val preferences: Preferences) : Transmitt
   }
 
   override fun deletePackagesAlreadySynced(packageType: PackageType): Observable<SyncResult> {
-    return dbService.deleteTransmitterPackages(packageType)
-      .toSingle<SyncResult> { SyncResult.Completed() }
-      .toObservable()
-      .onErrorReturn { SyncResult.Error(SyncResult.Error.State.DELETE_FAILED) }
+    return if(packageType == PackageType.Raw) {
+      dbService.deleteTransmitterPackages(packageType)
+        .toSingle<SyncResult> { SyncResult.Completed() }
+        .toObservable()
+        .onErrorReturn { SyncResult.Error(SyncResult.Error.State.DELETE_FAILED) }
+    }
+    else {
+      Observable.just(SyncResult.Completed())
+    }
   }
 
   override fun syncPackagesWithCloud(

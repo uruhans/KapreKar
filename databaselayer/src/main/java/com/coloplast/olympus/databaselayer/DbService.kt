@@ -19,6 +19,7 @@ interface DbService {
 
   fun getTransmitters(): Observable<DataResult<List<Transmitter>>>
   fun getTransmitter(macAddress: String): Observable<DataResult<Transmitter>>
+  fun getSingleTransmitter(macAddress: String) : Single<Transmitter>
   fun insertOrUpdateTransmitter(transmitter: Transmitter): Completable
   fun deleteTransmitter(macAddress: String): Completable
   fun deleteAllTransmitters(): Completable

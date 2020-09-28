@@ -38,27 +38,45 @@ class ForgotPasswordViewModel(private val userComponent: UserComponent):
     val confirmCodeObservable =
       uiView.onConfirmCode()
         .switchMap { forgotPasswordModel: ForgotPasswordModel ->
-          userComponent.validateSecurityCode(forgotPasswordModel.code, forgotPasswordModel.email)
-            .subscribeOn(Schedulers.io())
-            .toSingle { Callback.CODE_VALIDATED }
-            .toObservable()
-            .compose(DelayedLoadingTransformer<Callback>())
-            .compose(GenericUiModelTransformer())
+          if(forgotPasswordModel.code.toIntOrNull() != null){
+            userComponent.validateSecurityCode(forgotPasswordModel.code.toInt(), forgotPasswordModel.email)
+              .subscribeOn(Schedulers.io())
+              .toSingle { Callback.CODE_VALIDATED }
+              .toObservable()
+              .compose(DelayedLoadingTransformer<Callback>())
+              .compose(GenericUiModelTransformer())
+          } else {
+            Observable.just(
+              GenericUiModel.Error(
+                GenericUiModel.Error.State.ERROR_GENERIC,
+                -1
+              )
+            )
+          }
         }
 
     val changePasswordObservable =
       uiView.onChangePassword()
         .switchMap { forgotPasswordModel: ForgotPasswordModel ->
-          userComponent.changePassword(
-            forgotPasswordModel.code,
-            forgotPasswordModel.email,
-            forgotPasswordModel.newPassword
-          )
-            .subscribeOn(Schedulers.io())
-            .toSingle { Callback.PASSWORD_CHANGED }
-            .toObservable()
-            .compose(DelayedLoadingTransformer<Callback>())
-            .compose(GenericUiModelTransformer())
+          if(forgotPasswordModel.code.toIntOrNull() != null){
+            userComponent.changePassword(
+              forgotPasswordModel.code.toInt(),
+              forgotPasswordModel.email,
+              forgotPasswordModel.newPassword
+            )
+              .subscribeOn(Schedulers.io())
+              .toSingle { Callback.PASSWORD_CHANGED }
+              .toObservable()
+              .compose(DelayedLoadingTransformer<Callback>())
+              .compose(GenericUiModelTransformer())
+          } else {
+            Observable.just(
+              GenericUiModel.Error(
+                GenericUiModel.Error.State.ERROR_GENERIC,
+                -1
+              )
+            )
+          }
         }
 
     val allObservables = Observable.merge(requestCodeObservable, confirmCodeObservable, changePasswordObservable)

@@ -1,6 +1,9 @@
 package com.coloplast.olympus.datalayer
 
-import com.coloplast.olympus.datalayer.models.*
+import com.coloplast.olympus.datalayer.models.ChangePasswordRequest
+import com.coloplast.olympus.datalayer.models.CredentialsDTO
+import com.coloplast.olympus.datalayer.models.UserDTO
+import com.coloplast.olympus.datalayer.models.UserResponseDTO
 import com.coloplast.olympus.shared.models.Credentials
 import com.coloplast.olympus.shared.models.User
 import io.reactivex.Completable
@@ -42,15 +45,25 @@ class ApiServiceImpl : ApiService {
   }
 
   override fun requestSecurityCode(email: String): Completable {
-    val securityCodeRequest = SecurityCodeRequest(email)
+    val securityCodeRequest = ChangePasswordRequest(
+      email = email
+    )
     return api.requestSecurityCode(securityCodeRequest)
   }
 
-  override fun validateSecurityCode(securityCode: String, email: String): Completable =
-    api.confirmCode(securityCode, email)
+  override fun validateSecurityCode(securityCode: Int, email: String): Completable{
+    val validateCodeRequest = ChangePasswordRequest(
+      email = email,
+      securityCode = securityCode
+    )
+    return api.confirmCode(validateCodeRequest)
+  }
 
-  override fun changePassword(securityCode: String, email: String, password: String): Completable {
-    val changePasswordRequest = ChangePasswordRequest(securityCode, email, password)
+  override fun changePassword(securityCode: Int, email: String, password: String): Completable {
+    val changePasswordRequest = ChangePasswordRequest(
+      securityCode = securityCode,
+      email = email,
+      newPassword = password)
     return api.changePassword(changePasswordRequest)
   }
 

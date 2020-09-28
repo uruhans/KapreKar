@@ -6,7 +6,7 @@ package com.coloplast.olympus.datalayer.models
  * Copyright by Dawn Health A/S. All rights reserved.
  */
 class ChangePasswordRequest(
-  val securityCode: String,
+  val securityCode: Int = -1,
   val email: String,
-  val newPassword: String
+  val newPassword: String = ""
 )

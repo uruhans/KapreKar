@@ -32,6 +32,7 @@ import com.coloplast.olympus.ui.feature.onboarding.setup.SetupGuidePreparingFact
 import com.coloplast.olympus.ui.feature.onboarding.setup.applying.AwaitingConnectionViewModel
 import com.coloplast.olympus.ui.feature.onboarding.setup.connection.SetupGuideLocationSGC4ViewModel
 import com.coloplast.olympus.ui.feature.onboarding.valueproposition.ValuePropositionFactoryImpl
+import com.coloplast.olympus.ui.feature.profile.ProfileViewModel
 import com.coloplast.olympus.ui.feature.splash.SplashViewModel
 import com.coloplast.olympus.ui.feature.transmitters.TransmittersViewModel
 import com.coloplast.olympus.ui.feature.transmitters.add.AddTransmitterFactoryImpl
@@ -78,6 +79,7 @@ val koinModule = module {
   single { SetupGuideLocationSGC4ViewModel(get()) }
   single { AddTransmitterAT7ViewModel(get()) }
   single { SyncViewModel(get(), get(), get()) }
+  single { ProfileViewModel(get(), get(), get()) }
 
   /* Flows */
   single { AddTransmitterFactoryImpl() }

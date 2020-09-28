@@ -9,7 +9,6 @@ import com.coloplast.olympus.shared.preferences.OnboardingProgression
 import com.coloplast.olympus.shared.preferences.Preferences
 import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.feature.home.HomeController
-import com.coloplast.olympus.ui.feature.onboarding.createprofile.CreateUserFlowController
 import com.coloplast.olympus.ui.feature.onboarding.dataconsent.DataConsentFlowController
 import com.coloplast.olympus.ui.feature.onboarding.login.LoginController
 import com.coloplast.olympus.ui.feature.onboarding.setup.SetupGuideApplyingFlowController
@@ -81,7 +80,7 @@ class LandingController : BaseController<ControllerLandingBinding>() {
 
   fun onCreateProfileClicked() {
     getContentRouter().pushController(
-      CreateUserFlowController.routerTransaction()
+      DataConsentFlowController.routerTransaction()
         .popChangeHandler(VerticalChangeHandler())
         .pushChangeHandler(VerticalChangeHandler())
     )

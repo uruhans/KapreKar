@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <data>
+    <variable
+      name="toolbarSupport"
+      type="com.coloplast.olympus.ui.common.ToolbarSupportController" />
+
+    <variable
+      name="controller"
+      type="com.coloplast.olympus.ui.feature.profile.ProfileController" />
+  </data>
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+      android:id="@+id/toolbar"
+      layout="@layout/view_toolbar"
+      app:support="@{toolbarSupport}" />
+
+    <ScrollView
+      android:layout_width="match_parent"
+      android:layout_height="match_parent">
+
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_larger"
+        android:layout_marginEnd="@dimen/spacing_larger"
+        android:layout_marginBottom="@dimen/spacing_double"
+        android:orientation="vertical">
+
+        <TextView
+          style="@style/TextStyle.Coloplast.Bold.DarkGrey.32"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/profile_pp_title" />
+
+        <TextView
+          style="@style/TextStyle.Coloplast.Bold.DarkGrey.20"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/spacing_triple"
+          android:text="@string/profile_pp_header_1" />
+
+        <TextView
+          style="@style/TextStyle.Roboto.Regular.ClearGrey.14"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/spacing_standard"
+          android:text="@string/profile_pp_first_name" />
+
+        <TextView
+          style="@style/TextStyle.Roboto.Regular.Grey"
+          android:layout_width="match_parent"
+          android:layout_height="56dp"
+          android:layout_marginTop="@dimen/spacing_quarter"
+          android:background="@drawable/edittext_background"
+          android:gravity="center_vertical"
+          android:paddingStart="@dimen/spacing_standard"
+          android:paddingEnd="@dimen/spacing_standard"
+          app:safeText="@{controller.firstName}" />
+
+        <TextView
+          style="@style/TextStyle.Roboto.Regular.ClearGrey.14"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/spacing_standard"
+          android:text="@string/profile_pp_last_name" />
+
+        <TextView
+          style="@style/TextStyle.Roboto.Regular.Grey"
+          android:layout_width="match_parent"
+          android:layout_height="56dp"
+          android:layout_marginTop="@dimen/spacing_quarter"
+          android:background="@drawable/edittext_background"
+          android:gravity="center_vertical"
+          android:paddingStart="@dimen/spacing_standard"
+          android:paddingEnd="@dimen/spacing_standard"
+          app:safeText="@{controller.lastName}" />
+
+        <TextView
+          style="@style/TextStyle.Roboto.Regular.ClearGrey.14"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/spacing_standard"
+          android:text="@string/profile_pp_telephone" />
+
+        <TextView
+          style="@style/TextStyle.Roboto.Regular.Grey"
+          android:layout_width="match_parent"
+          android:layout_height="56dp"
+          android:layout_marginTop="@dimen/spacing_quarter"
+          android:background="@drawable/edittext_background"
+          android:gravity="center_vertical"
+          android:paddingStart="@dimen/spacing_standard"
+          android:paddingEnd="@dimen/spacing_standard"
+          app:safeText="@{controller.phoneNumber}" />
+
+        <TextView
+          style="@style/TextStyle.Roboto.Regular.ClearGrey.14"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/spacing_standard"
+          android:text="@string/profile_pp_email" />
+
+        <TextView
+          style="@style/TextStyle.Roboto.Regular.Grey"
+          android:layout_width="match_parent"
+          android:layout_height="56dp"
+          android:layout_marginTop="@dimen/spacing_quarter"
+          android:background="@drawable/edittext_background"
+          android:gravity="center_vertical"
+          android:paddingStart="@dimen/spacing_standard"
+          android:paddingEnd="@dimen/spacing_standard"
+          app:safeText="@{controller.email}" />
+
+        <View
+          android:layout_width="match_parent"
+          android:layout_height="1dp"
+          android:layout_marginTop="@dimen/spacing_double"
+          android:background="@color/ten_percent_transparent_black" />
+
+        <TextView
+          style="@style/TextStyle.Coloplast.Bold.DarkGrey.20"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/spacing_triple"
+          android:text="@string/profile_pp_header_2" />
+
+        <TextView
+          style="@style/TextStyle.Roboto.Regular.ClearGrey.14"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/spacing_standard"
+          android:text="@string/profile_pp_stoma_type" />
+
+        <TextView
+          style="@style/TextStyle.Roboto.Regular.Grey"
+          android:layout_width="match_parent"
+          android:layout_height="56dp"
+          android:layout_marginTop="@dimen/spacing_quarter"
+          android:background="@drawable/edittext_background"
+          android:gravity="center_vertical"
+          android:paddingStart="@dimen/spacing_standard"
+          android:paddingEnd="@dimen/spacing_standard"
+          app:safeText="@{controller.stomaType}" />
+
+        <TextView
+          style="@style/TextStyle.Roboto.Regular.ClearGrey.14"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/spacing_standard"
+          android:text="@string/profile_pp_stoma_surgery_date" />
+
+        <TextView
+          style="@style/TextStyle.Roboto.Regular.Grey"
+          android:layout_width="match_parent"
+          android:layout_height="56dp"
+          android:layout_marginTop="@dimen/spacing_quarter"
+          android:background="@drawable/edittext_background"
+          android:gravity="center_vertical"
+          android:paddingStart="@dimen/spacing_standard"
+          android:paddingEnd="@dimen/spacing_standard"
+          app:safeText="@{controller.stomaSurgeryDate}" />
+
+        <TextView
+          style="@style/TextStyle.Roboto.Regular.ClearGrey.14"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/spacing_standard"
+          android:text="@string/profile_pp_health_insurance"
+          app:visibleOrGone="@{controller.showHealthInsurance}"/>
+
+        <TextView
+          style="@style/TextStyle.Roboto.Regular.Grey"
+          android:layout_width="match_parent"
+          android:layout_height="56dp"
+          android:layout_marginTop="@dimen/spacing_quarter"
+          android:background="@drawable/edittext_background"
+          android:gravity="center_vertical"
+          android:paddingStart="@dimen/spacing_standard"
+          android:paddingEnd="@dimen/spacing_standard"
+          app:safeText="@{controller.healthInsurance}"
+          app:visibleOrGone="@{controller.showHealthInsurance}"/>
+
+        <View
+          android:layout_width="match_parent"
+          android:layout_height="1dp"
+          android:layout_marginTop="@dimen/spacing_double"
+          android:background="@color/ten_percent_transparent_black" />
+
+        <Button
+          style="@style/Button.Secondary"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="@dimen/spacing_none"
+          android:layout_marginTop="@dimen/spacing_double"
+          android:layout_marginEnd="@dimen/spacing_none"
+          android:text="@string/profile_pp_log_out_button"
+          android:onClick="@{() -> controller.onLogoutClicked()}"/>
+
+      </LinearLayout>
+
+    </ScrollView>
+
+  </LinearLayout>
+</layout>

@@ -9,11 +9,14 @@ import com.coloplast.olympus.shared.types.TypeWithId
  * Created by Kike Bodi (ebp@dawnhealth.com) on 02/07/2020.
  * Copyright by Dawn Health A/S. All rights reserved.
  */
-enum class StomaType(override val id: Int,@StringRes val stringId: Int): TypeWithId {
+enum class StomaType(override val id: Int, @StringRes val stringId: Int): TypeWithId {
   COLOSTOMY(0,R.string.onboarding_stoma_type_colostomy),
   ILEOSTOMY(1,R.string.onboarding_stoma_type_ileostomy),
   UROSTOMY(2,R.string.onboarding_stoma_type_urostomy),
   NA(3,R.string.onboarding_stoma_type_na);
+
+  @StringRes
+  fun getTextId() = stringId
 
   companion object {
     fun fromId(id: Int): StomaType {

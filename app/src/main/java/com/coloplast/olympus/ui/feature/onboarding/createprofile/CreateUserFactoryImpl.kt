@@ -2,7 +2,6 @@ package com.coloplast.olympus.ui.feature.onboarding.createprofile
 
 import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.R
-import com.coloplast.olympus.shared.types.StomaType
 import com.coloplast.olympus.ui.common.GenericConfirmationController
 import com.coloplast.olympus.ui.common.flow.FlowFactory
 import com.coloplast.olympus.ui.feature.onboarding.createprofile.models.CreateUserFactoryModel
@@ -57,7 +56,7 @@ class CreateUserFactoryImpl : FlowFactory<CreateUserFactoryModel>() {
       }
       CreateUserFlow.StomaInfoSU2 -> {
         val data = result as SU2Model
-        model.user.stomaType = StomaType.fromId(data.stomaType.id)
+        model.user.stomaType = data.stomaType.id
         model.user.surgeryDateInterval = data.stomaSurgeryDate.id
       }
       CreateUserFlow.EmailSU3 -> {

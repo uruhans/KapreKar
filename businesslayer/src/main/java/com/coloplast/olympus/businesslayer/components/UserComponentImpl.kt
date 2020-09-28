@@ -68,11 +68,11 @@ class UserComponentImpl(private val preferences: Preferences) : UserComponent {
     return apiService.requestSecurityCode(email)
   }
 
-  override fun validateSecurityCode(securityCode: String, email: String) : Completable {
+  override fun validateSecurityCode(securityCode: Int, email: String) : Completable {
     return apiService.validateSecurityCode(securityCode, email)
   }
 
-  override fun changePassword(securityCode: String, email: String, password: String): Completable {
+  override fun changePassword(securityCode: Int, email: String, password: String): Completable {
     return apiService.changePassword(securityCode, email, password)
   }
 

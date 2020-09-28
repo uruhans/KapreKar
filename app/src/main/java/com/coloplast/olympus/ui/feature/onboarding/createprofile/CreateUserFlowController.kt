@@ -47,7 +47,7 @@ class CreateUserFlowController : FlowFactoryController<CreateUserFactoryModel>()
   override fun getFlowFactory(): FlowFactory<CreateUserFactoryModel> = createUserFactory
 
   override fun onFlowCompleted(data: CreateUserFactoryModel) {
-    preferences.setCurrentOnboardingProgression(OnboardingProgression.TERMS_AND_CONSENT)
+    preferences.setCurrentOnboardingProgression(OnboardingProgression.SETUP_GUIDE_START)
     super.onFlowCompleted(data)
   }
 

@@ -44,7 +44,7 @@ class DataConsentFlowController: TopMenuFlowFactoryController<DataConsentModel>(
   }
 
   override fun onFlowCompleted(data: DataConsentModel) {
-    preferences.setCurrentOnboardingProgression(OnboardingProgression.SETUP_GUIDE_INTRODUCTION)
+    preferences.setCurrentOnboardingProgression(OnboardingProgression.SIGN_UP)
     super.onFlowCompleted(data)
   }
 

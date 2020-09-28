@@ -42,7 +42,6 @@ class LandingController : BaseController<ControllerLandingBinding>() {
     else if (preferences.userToken.isNotBlank()) {
       if (preferences.getCurrentOnboardingProgress() != OnboardingProgression.COMPLETED) {
         val flowTransaction = when (preferences.getCurrentOnboardingProgress()) {
-          OnboardingProgression.TERMS_AND_CONSENT -> DataConsentFlowController.routerTransaction()
           OnboardingProgression.SETUP_GUIDE_START,
           OnboardingProgression.SETUP_GUIDE_INTRODUCTION -> SetupGuideIntroFlowController.routerTransaction()
           OnboardingProgression.SETUP_GUIDE_CONNECTING -> SetupGuideConnectionFlowController.routerTransaction()

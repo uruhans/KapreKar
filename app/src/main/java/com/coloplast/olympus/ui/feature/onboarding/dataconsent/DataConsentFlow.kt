@@ -14,8 +14,7 @@ enum class DataConsentFlow(override val id: Int): TypeWithId {
   DataConsentDC3(3),
   DataConsentDC4(4),
   DataConsentDC5(5),
-  ProfileComplete(6),
-  Completed(7);
+  Completed(6);
 
   companion object {
     fun fromIndex(id: Int): DataConsentFlow{

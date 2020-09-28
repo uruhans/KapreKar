@@ -34,9 +34,10 @@ class CreateUserFactoryImpl : FlowFactory<CreateUserFactoryModel>() {
       CreateUserFlow.PhoneValidationSU6 -> PhoneValidationSU6.getRouterTransaction()
       CreateUserFlow.InsuranceSU7 -> InsuranceSU7Controller.getRouterTransaction()
       CreateUserFlow.ConfirmationSU8 -> GenericConfirmationController.routerTransaction(
-        R.string.onboarding_confirmation_title,
-        R.string.onboarding_confirmation_description,
-        R.string.onboarding_confirmation_button
+        R.string.onboarding_pc_title,
+        R.string.onboarding_pc_description,
+        R.string.onboarding_pc_button_text,
+        R.drawable.ic_checkmark
       )
       CreateUserFlow.Completed -> null
     }

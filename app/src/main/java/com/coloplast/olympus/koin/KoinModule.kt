@@ -28,6 +28,7 @@ import com.coloplast.olympus.ui.feature.onboarding.setup.SetupGuideIntroFactoryI
 import com.coloplast.olympus.ui.feature.onboarding.setup.SetupGuidePreparingFactoryImpl
 import com.coloplast.olympus.ui.feature.onboarding.setup.applying.AwaitingConnectionViewModel
 import com.coloplast.olympus.ui.feature.onboarding.setup.connection.SetupGuideLocationSGC4ViewModel
+import com.coloplast.olympus.ui.feature.onboarding.signup.SignupViewModel
 import com.coloplast.olympus.ui.feature.onboarding.signup.createprofile.CreateUserFactoryImpl
 import com.coloplast.olympus.ui.feature.onboarding.signup.createprofile.CreateUserViewModel
 import com.coloplast.olympus.ui.feature.onboarding.signup.dataconsent.DataConsentFactoryImpl
@@ -80,6 +81,7 @@ val koinModule = module {
   single { AddTransmitterAT7ViewModel(get()) }
   single { SyncViewModel(get(), get(), get()) }
   single { ProfileViewModel(get(), get(), get()) }
+  single { SignupViewModel(get(), get()) }
 
   /* Flows */
   single { AddTransmitterFactoryImpl() }

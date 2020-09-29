@@ -14,7 +14,7 @@ import com.coloplast.olympus.ui.feature.onboarding.setup.SetupGuideApplyingFlowC
 import com.coloplast.olympus.ui.feature.onboarding.setup.SetupGuideConnectionFlowController
 import com.coloplast.olympus.ui.feature.onboarding.setup.SetupGuideIntroFlowController
 import com.coloplast.olympus.ui.feature.onboarding.setup.SetupGuidePreparingFlowController
-import com.coloplast.olympus.ui.feature.onboarding.signup.dataconsent.DataConsentFlowController
+import com.coloplast.olympus.ui.feature.onboarding.signup.SignupFlowController
 import com.coloplast.olympus.ui.feature.onboarding.valueproposition.ValuePropositionFlowController
 import org.koin.core.inject
 
@@ -79,7 +79,7 @@ class LandingController : BaseController<ControllerLandingBinding>() {
 
   fun onCreateProfileClicked() {
     getContentRouter().pushController(
-      DataConsentFlowController.routerTransaction()
+      SignupFlowController.routerTransaction()
         .popChangeHandler(VerticalChangeHandler())
         .pushChangeHandler(VerticalChangeHandler())
     )

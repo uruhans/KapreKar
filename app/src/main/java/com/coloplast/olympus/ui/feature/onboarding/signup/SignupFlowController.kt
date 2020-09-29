@@ -65,15 +65,24 @@ class SignupFlowController : TopMenuFlowFactoryController<SignupFactoryModel>(),
         }
       }
       SignupFlow.DataConsentDC5 -> {
-        if(data.user.consent.not()) {
+        if(data.user.consent) {
           with(factory){
-            skipUntil(SignupFlow.Completed.id)
+            skipUntil(SignupFlow.CreateUserSU1.id)
             incrementAndNext()
           }
           true
         } else {
           false // go to next step as usual.
         }
+      }
+      SignupFlow.DataConsentDC6 -> {
+        // The user choose not to accept data consent.
+        preferences.setCurrentOnboardingProgression(OnboardingProgression.SETUP_GUIDE_START)
+        with(factory){
+          skipUntil(SignupFlow.Completed.id)
+          incrementAndNext()
+        }
+        true
       }
       SignupFlow.PhoneSU5 -> {
         sendCodeRelay.accept(data.user.phoneNumber!!)

@@ -75,7 +75,7 @@
       android:layout_marginEnd="@dimen/spacing_larger"
       android:layout_marginBottom="@dimen/spacing_larger"
       android:textSize="@dimen/text_18"
-      android:text="@string/onboarding_dc6_button_1"
+      android:text="@string/onboarding_dc6_button_2"
       android:onClick="@{()-> controller.onContinue()}"
       app:layout_constraintBottom_toBottomOf="parent" />
 

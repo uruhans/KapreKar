@@ -6,7 +6,7 @@ import com.coloplast.olympus.databinding.ControllerSecurityCodeSu6Binding
 import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.common.listeners.FlowListener
 import com.coloplast.olympus.ui.common.widgets.InputCodeEditText
-import com.coloplast.olympus.ui.feature.onboarding.signup.createprofile.CreateUserFlowView
+import com.coloplast.olympus.ui.feature.onboarding.signup.SignupFlowView
 
 
 /**
@@ -30,7 +30,7 @@ class PhoneValidationSU6: BaseController<ControllerSecurityCodeSu6Binding>(),
   }
 
   fun onResendCode(){
-    getListener(CreateUserFlowView::class.java)!!.sendCode()
+    getListener(SignupFlowView::class.java)!!.sendCode()
   }
 
   override fun getLayout(): Int = R.layout.controller_security_code_su6

@@ -14,7 +14,6 @@ import com.coloplast.olympus.ui.common.dialogs.DialogController
 import com.coloplast.olympus.ui.common.flow.FlowFactory
 import com.coloplast.olympus.ui.common.flow.TopMenuFlowFactoryController
 import com.coloplast.olympus.ui.common.models.GenericUiModel
-import com.coloplast.olympus.ui.feature.onboarding.signup.dataconsent.DataConsentFlow
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
@@ -57,7 +56,7 @@ class SignupFlowController : TopMenuFlowFactoryController<SignupFactoryModel>(),
       SignupFlow.DataConsentDC1 -> {
         return if(data.skip){
           with(factory){
-            skipUntil(DataConsentFlow.DataConsentDC5.id)
+            skipUntil(SignupFlow.DataConsentDC5.id)
             incrementAndNext()
           }
           true

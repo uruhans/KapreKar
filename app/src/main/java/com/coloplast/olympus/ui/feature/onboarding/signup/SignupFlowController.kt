@@ -126,7 +126,7 @@ class SignupFlowController : TopMenuFlowFactoryController<SignupFactoryModel>(),
               // no required action
             }
             SignupViewModel.Callback.CODE_VALIDATED -> {
-              // go to health insurance screen. If not UK number it will automatically create the user.
+              // go to health insurance screen. If UK number it will automatically create the user.
               factory.incrementAndNext()
             }
             SignupViewModel.Callback.USER_CREATED -> {

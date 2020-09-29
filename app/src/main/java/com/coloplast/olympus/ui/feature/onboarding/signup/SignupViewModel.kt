@@ -64,16 +64,16 @@ class SignupViewModel(
               .toSingle { Utils.isUKNumber(model.user.phoneNumber) }
               .toObservable()
               // Check if it's a UK phone number.
-              // If so, continue with the flow, otherwise we can create the user already.
+              // If not, continue with the flow, otherwise we can create the user already.
               .flatMap { isUkNumber ->
                 if (isUkNumber) {
-                  Observable.just(Callback.CODE_VALIDATED)
-                } else {
                   userComponent.createUser(model.user)
                     .map {
                       me.setCurrentUser(it)
                       Callback.USER_CREATED
                     }
+                } else {
+                  Observable.just(Callback.CODE_VALIDATED)
                 }
               }
               .compose(DelayedLoadingTransformer<Callback>())

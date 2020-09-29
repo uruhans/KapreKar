@@ -2,6 +2,7 @@ package com.coloplast.olympus.ui.feature.onboarding.createprofile.su5
 
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
+import androidx.databinding.ObservableInt
 import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerPhoneSu5Binding
@@ -17,6 +18,7 @@ import com.coloplast.olympus.ui.common.listeners.FlowListener
  */
 class PhoneSU5Controller: BaseController<ControllerPhoneSu5Binding>() {
 
+  val prefixSpinnerPosition = ObservableInt(0)
   val validPhone = ObservableBoolean(true)
   val phone = ObservableField("").apply {
     compositeDisposable.add(
@@ -35,7 +37,9 @@ class PhoneSU5Controller: BaseController<ControllerPhoneSu5Binding>() {
   fun onNextClicked(){
     phone.notifyChange()
     if(validPhone.get()){
-      getListener(FlowListener::class.java)!!.onNextClicked(phone.get()!!)
+      val prefix = applicationContext!!.resources.getStringArray(R.array.prefixes)[prefixSpinnerPosition.get()]
+      val phoneWithPrefix = prefix + phone.get()
+      getListener(FlowListener::class.java)!!.onNextClicked(phoneWithPrefix)
     }
   }
 

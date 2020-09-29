@@ -48,6 +48,7 @@
         android:layout_marginStart="@dimen/spacing_standard"
         android:layout_marginTop="@dimen/spacing_standard"
         android:layout_marginEnd="@dimen/spacing_standard"
+        android:textAlignment="center"
         android:text="@string/onboarding_landing_subtitle" />
 
     </LinearLayout>

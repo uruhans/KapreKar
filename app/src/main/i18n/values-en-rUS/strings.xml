@@ -654,6 +654,9 @@
 <string name="onboarding_su6_title">Enter security code</string>
 <string name="onboarding_su7_description">Please select your insurance provider</string>
 <string name="onboarding_su7_title">Your health insurance</string>
+<string name="onboarding_su_5_de_prefix">+49</string>
+<string name="onboarding_su_5_dk_prefix">+45</string>
+<string name="onboarding_su_5_uk_prefix">+44</string>
 <string name="onboarding_value_proposition_screen_1_description">TestProduct is a digital appliance monitor that detects and notifies you about leakage - giving you the peace of mind to get on with being you</string>
 <string name="onboarding_value_proposition_screen_1_title">Welcome to the TestProduct app</string>
 <string name="onboarding_value_proposition_screen_2_description">To help us provide the best posible product experience, we will gather information such as activity in the app, profile information, leak status, error messages received, product usage and notification settings.</string>

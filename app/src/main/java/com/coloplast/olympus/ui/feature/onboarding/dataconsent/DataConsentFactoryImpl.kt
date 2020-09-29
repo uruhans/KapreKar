@@ -2,6 +2,7 @@ package com.coloplast.olympus.ui.feature.onboarding.dataconsent
 
 import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.ui.common.flow.FlowFactory
+import com.coloplast.olympus.ui.feature.onboarding.createprofile.CreateUserFlowController
 import com.coloplast.olympus.ui.feature.onboarding.dataconsent.dc1.DataIntroDC1Controller
 import com.coloplast.olympus.ui.feature.onboarding.dataconsent.dc2.HelpYouDC2Controller
 import com.coloplast.olympus.ui.feature.onboarding.dataconsent.dc3.HelpCommunityDC3Controller
@@ -29,7 +30,7 @@ class DataConsentFactoryImpl : FlowFactory<DataConsentModel>() {
       DataConsentFlow.DataConsentDC3 -> HelpCommunityDC3Controller.getRouterTransaction()
       DataConsentFlow.DataConsentDC4 -> SafeWithUsDC4Controller.getRouterTransaction()
       DataConsentFlow.DataConsentDC5 -> AcceptTermsDC5Controller.getRouterTransaction()
-      DataConsentFlow.Completed -> null
+      DataConsentFlow.Completed -> CreateUserFlowController.routerTransaction() //TODO: This will change in the future.
     }
   }
 

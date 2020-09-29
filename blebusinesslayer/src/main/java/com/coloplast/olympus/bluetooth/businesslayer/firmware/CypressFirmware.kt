@@ -8,7 +8,7 @@ class CypressFirmware(
   class Header(
     val siliconId: String,
     val siliconRev: Int,
-    checkSumType: String
+    val checkSumType: String
   ) {
     val checkSum = Checksum.fromId(checkSumType.toInt())
 

@@ -1,5 +1,7 @@
 package com.coloplast.olympus.bluetooth.businesslayer.firmware
 
+import kotlin.experimental.and
+
 fun readHeader(header: String): CypressFirmware.Header {
   val msbString: String = getMSB(header)
   val siliconId = msbString.substring(4, 12)
@@ -42,4 +44,17 @@ fun getMSB(string: String): String {
     i -= 2
   }
   return msbString.toString()
+}
+
+/**
+ * Method to calculate 2's complement
+ */
+fun calculateCheckSum2(data: ByteArray): Int {
+  var checkSum = 0
+
+  data.forEach {
+    checkSum += it.toUByte().toInt()
+  }
+
+  return 1 + checkSum.inv()
 }

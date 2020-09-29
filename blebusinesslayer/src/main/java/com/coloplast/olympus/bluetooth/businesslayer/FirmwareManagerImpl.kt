@@ -2,22 +2,31 @@ package com.coloplast.olympus.bluetooth.businesslayer
 
 import android.content.Context
 import com.coloplast.olympus.bluetooth.businesslayer.extensions.asUUID
+import com.coloplast.olympus.bluetooth.businesslayer.firmware.CypressBootloaderModel
 import com.coloplast.olympus.bluetooth.businesslayer.firmware.CypressFirmware
 import com.coloplast.olympus.bluetooth.businesslayer.firmware.readDataLine
 import com.coloplast.olympus.bluetooth.businesslayer.firmware.readHeader
 import com.coloplast.olympus.bluetooth.businesslayer.services.CommandService
+import com.polidea.rxandroidble2.RxBleConnection
 import io.reactivex.Completable
 import io.reactivex.Observable
 import timber.log.Timber
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
 import java.util.concurrent.TimeUnit
-import kotlin.experimental.and
 
 class FirmwareManagerImpl(
   private val applicationContext: Context,
   private val bluetoothManager: BluetoothManager
 ) : FirmwareManager {
+
+  enum class State {
+    BOOTLOADER,
+    APP,
+    COMPLETED,
+  }
+
+  private var currentState = State.APP
 
   override fun checkFirmwareVersion(currentFirmwareVersion: String): Observable<Unit> {
     TODO("Not yet implemented")
@@ -27,85 +36,93 @@ class FirmwareManagerImpl(
   private val OTA_UPDATE_CHARACTERISTIC = "00060001-f8ce-11e4-abf4-0002a5d5c51b".asUUID()
 
   override fun updateFirmware(macAddress: String): Completable {
-//    return Completable.create {
-//      Timber.d("Signature valid=${Signing.verifySignature(getFirmwareData())}")
+//    val firmware = getCypressFirmware()
 //
-//      val firmware = getCypressFirmware()
-//      Timber.d(firmware.header.toString())
+//    val model = CypressBootloaderModel(firmware)
+//    var next: CypressBootloaderModel.CommandPacket
 //
-//      firmware.dataRows.forEach {
-//        Timber.d("$it")
+//    while(true) {
+//      next = model.nextCommandPacket()
+//
+//      val dataToSend = next.firmwareReadyData()
+//      Timber.d(dataToSend.asUByteArray().joinToString { it.toString(16).padStart(2, '0') })
+//
+//      if(next.command == CypressBootloaderModel.CommandCode.ExitBootLoader.code) {
+//        break
 //      }
 //    }
-//  }
+//
+//    return Completable.complete()
+
+//    bluetoothManager.disconnectTransmitter(macAddress)
+//    return connectBootloader(macAddress)
 
     return bluetoothManager.writeCharacteristic(macAddress, CommandService.Characteristics.UART_RX, "P".toByteArray(Charsets.UTF_8))
       .toSingle { true }
       .toObservable()
       .doOnNext { bluetoothManager.disconnectTransmitter(macAddress) }
       .doOnNext { Timber.d("FIRMWARE AFTER P COMMAND") }
-      .flatMap { bluetoothManager.connectOtaDevice(macAddress) }
-      .delay(10, TimeUnit.SECONDS)
-      .map { bluetoothManager.disconnectTransmitter(macAddress) }
-      .ignoreElements()
+      .flatMapCompletable { connectBootloader(macAddress) }
   }
 
-//        bluetoothManager.initiateBleScanning(null)
-//          .takeUntil(Observable.interval(5, TimeUnit.SECONDS))
-//          .filter { it.macAddress == macAddress }
-//          .distinctUntilChanged()
-//          .buffer(5000, TimeUnit.SECONDS)
-//          .flatMapIterable { it }
-//          .take(1)
-//          .doOnNext { Timber.d("FIRMWARE Found OTA Bootloader") }
-//          .flatMap { scanResult ->
-//
-//              .flatMap { rxBleConnection ->
-//                rxBleConnection.requestMtu(250)
-//                  .toObservable()
-//                  .doOnNext {
-//                  }
-//                  .delay(5, TimeUnit.SECONDS)
-//                  .flatMap {rxBleConnection ->
-//                    rxBleConnection.discoverServices()
-//                      .toObservable()
-//                      .doOnNext { services ->
-//                        services.bluetoothGattServices.forEach { service ->
-//                          Timber.d("service: ${service.uuid}")
-//                          service.characteristics.forEach { char ->
-//                            Timber.e("char ${char.uuid}")
-//                          }
-//                        }
-//                      }
-//                      .flatMap { services ->
-//                        services.getService(OTA_UPDATE_SERVICE)
-//                          .toObservable()
-//                          .map { it.getCharacteristic(OTA_UPDATE_CHARACTERISTIC) }
-//                          .doOnNext { Timber.d("${it.uuid}") }
-//                          .doOnError { Timber.e("OTA UPDATE SERVICE FAILED") }
-//                      }
-//                      .map { rxBleConnection }
-//                  }
-//              }
-//              .doOnNext { Timber.d("Firmware OTA - connected") }
-//              .flatMap { rxBleConnection ->
-//                val fileData = getFileFromAssets()
-//
-//                rxBleConnection.createNewLongWriteBuilder()
-//                  .setBytes(getData(fileData))
-//                  .setCharacteristicUuid(OTA_UPDATE_SERVICE)
-//                  .build()
-//              }
-//              .doOnError { throwable -> Timber.e(throwable) }
-//          }
-//          .doOnError { throwable -> Timber.e(throwable) }
-//      }
-//      .doOnError { throwable -> Timber.e(throwable) }
-//      .ignoreElements()
-//  }
+  private fun connectBootloader(macAddress: String): Completable {
+    return bluetoothManager.connectOtaDevice(macAddress)
+      .delay(3, TimeUnit.SECONDS)
+      .flatMapCompletable { initiateFirmwareTransfer(macAddress, it).ignoreElements() }
+  }
 
-  fun getFirmwareData(): ByteArray {
-    val inputStream: InputStream = applicationContext.assets.open("Firmware.cyacd")
+  private fun initiateFirmwareTransfer(macAddress: String, rxBleConnection: RxBleConnection): Observable<Int> {
+    val filename = when (currentState) {
+      State.BOOTLOADER -> "OlympusBootloader_v2.1.6.cyacd"
+      State.APP -> "OlympusApp_v2.1.3h.cyacd"
+      else -> throw RuntimeException("FAILED")
+    }
+
+    val firmware = getCypressFirmware(filename)
+    val model = CypressBootloaderModel(firmware)
+
+    return setupBootloaderResponseNotification(rxBleConnection)
+      .flatMap { txResponsePacket ->
+        if (txResponsePacket.isSuccessResponse()) {
+          val commandPacket = model.nextCommandPacket()
+
+          writeNextCommand(rxBleConnection, commandPacket)
+            .toSingle { model.progress() }
+            .toObservable()
+            .doOnNext { Timber.d("Percentage: $it") }
+        }
+        else {
+          Observable.error(RuntimeException("Its not working"))
+        }
+      }
+  }
+
+  private fun setupBootloaderResponseNotification(rxBleConnection: RxBleConnection): Observable<CypressBootloaderModel.CommandPacket> {
+    return Observable.merge(
+      rxBleConnection.setupNotification(OTA_UPDATE_CHARACTERISTIC)
+        .flatMap { it }
+        .map { CypressBootloaderModel.CommandPacket(it) },
+      Observable.timer(1000, TimeUnit.MILLISECONDS)
+        .map { CypressBootloaderModel.CommandPacket(CypressBootloaderModel.CommandCode.Success) }
+    )
+  }
+
+  private fun writeNextCommand(rxBleConnection: RxBleConnection, commandPacket: CypressBootloaderModel.CommandPacket): Completable {
+    return rxBleConnection.writeCharacteristic(OTA_UPDATE_CHARACTERISTIC, commandPacket.firmwareReadyData())
+      .ignoreElement()
+  }
+
+  private fun getCypressFirmware(filename: String): CypressFirmware {
+    val lines = String(getFileFromAssets(filename)).split("\r\n")
+
+    val header = lines.first()
+    val dataLines = lines.filter { it.isNotBlank() }.drop(1).map { readDataLine(it) }
+
+    return CypressFirmware(readHeader(header), dataLines)
+  }
+
+  private fun getFileFromAssets(filename: String): ByteArray {
+    val inputStream: InputStream = applicationContext.assets.open(filename)
 
     val buffer = ByteArray(8192)
     var bytesRead: Int
@@ -116,138 +133,4 @@ class FirmwareManagerImpl(
 
     return output.toByteArray()
   }
-
-  fun getCypressFirmware(): CypressFirmware {
-    val lines = getFileFromAssets()
-
-    val header = lines.first()
-    val dataLines = lines.filter { it.isNotBlank() }.drop(1).map { readDataLine(it) }
-
-    return CypressFirmware(readHeader(header), dataLines)
-  }
-
-  fun getFileFromAssets(): List<String> {
-    val inputStream: InputStream = applicationContext.assets.open("olympusapp_v2.1.3f.cyacd")
-
-    val buffer = ByteArray(8192)
-    var bytesRead: Int
-    val output = ByteArrayOutputStream()
-    while (inputStream.read(buffer).also { bytesRead = it } != -1) {
-      output.write(buffer, 0, bytesRead)
-    }
-
-    return String(output.toByteArray()).split("\r\n")
-  }
-
-  val CRC_CHECKSUM = 0x01.toByte()
-  val PACKET_START = 0x01
-  val SEND_DATA = 0x37
-  val PACKET_END = 0x17
-
-  private fun getData(data: ByteArray): ByteArray {
-    var idx = 0
-    val dataLength = data.size
-    val commandSize = 7 + dataLength //BASE_CMD_SIZE
-    val checksumableDataSize = commandSize - 3 //NON_CHECKSUMMABLE_SIZE
-
-    val commandBytes = ByteArray(commandSize)
-    commandBytes[idx++] = PACKET_START.toByte()
-    commandBytes[idx++] = SEND_DATA.toByte()
-    commandBytes[idx++] = dataLength.toByte()
-    commandBytes[idx++] = dataLength.shr(8).toByte()
-
-    data.forEach { byte ->
-      commandBytes[idx++] = byte
-    }
-
-    val checksum = calculateCheckSum2(CRC_CHECKSUM, commandBytes, checksumableDataSize);
-    commandBytes[idx++] = checksum.toByte() //Checksum
-    commandBytes[idx++] = checksum.shr(8).toByte() //Checksum
-    commandBytes[idx++] = PACKET_END.toByte() //End of packet
-
-    //  val checksum =
-    return commandBytes
-  }
-
-
-  fun calculateCheckSum2(checkSumType: Byte, data: ByteArray, dataSize: Int): Int {
-    var dataLength = dataSize
-    var checkSum = 0
-    if (checkSumType == CRC_CHECKSUM) {
-      return crc16(data, dataLength)
-    }
-    else {
-      while (dataLength-- > 0) {
-        checkSum += byteToIntUnsigned(data[dataLength])
-      }
-    }
-    return 1 + checkSum.inv()
-  }
-
-
-  private fun crc16(data: ByteArray, dataLength: Int): Int {
-    var crc = 0xffff
-    var i: Int
-    var tmp: Int
-    if (dataLength == 0) {
-      return crc.inv()
-    }
-    for (h in 0 until dataLength) {
-      i = 0
-      tmp = 0x00ff and data[h].toInt()
-      while (i < 8) {
-        crc = if (crc and 0x0001 xor (tmp and 0x0001) > 0) {
-          crc shr 1 xor 0x8408
-        }
-        else {
-          crc shr 1
-        }
-        i++
-        tmp = tmp shr 1
-      }
-    }
-    crc = crc.inv()
-    tmp = crc
-    crc = crc shl 8 or (tmp shr 8 and 0xFF)
-    crc = 0xffff and crc
-    return crc
-  }
-
-  fun byteToIntUnsigned(b: Byte): Byte {
-    /**
-     * AND with 0xFF to prevent returning negative value
-     */
-    return b and 0xFF.toByte()
-  }
-
 }
-
-
-/*
-
-
-    public void OTASendDataCmd(byte checkSumType, byte[] data) {
-        int idx = 0;
-        final int dataLength = data.length;
-        final int commandSize = BootLoaderCommands_v1.BASE_CMD_SIZE + dataLength;
-        final int checksumableDataSize = commandSize - NON_CHECKSUMMABLE_SIZE;
-
-        byte[] commandBytes = new byte[commandSize];
-        commandBytes[idx++] = (byte) BootLoaderCommands_v1.PACKET_START;//Start of packet
-        commandBytes[idx++] = (byte) BootLoaderCommands_v1.SEND_DATA;//Command
-        commandBytes[idx++] = (byte) dataLength;//Data length
-        commandBytes[idx++] = (byte) (dataLength >> 8);//Data length
-        //Data
-        for (int i = 0; i < data.length; i++) {
-            commandBytes[idx++] = data[i];
-        }
-        int checkSum = CheckSumUtils.calculateCheckSum2(ConvertUtils.byteToIntUnsigned(checkSumType), commandBytes, checksumableDataSize);
-        commandBytes[idx++] = (byte) checkSum;//Checksum
-        commandBytes[idx++] = (byte) (checkSum >> 8);//Checksum
-        commandBytes[idx++] = (byte) BootLoaderCommands_v1.PACKET_END;//End of packet
-
-        Logger.e("OTASendDataCmd send size--->" + commandBytes.length);
-        BluetoothLeService.writeOTABootLoaderCommand(mOtaCharacteristic, commandBytes);
-    }
-
- */

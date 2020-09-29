@@ -6,7 +6,7 @@
     <import type="com.coloplast.olympus.R" />
     <variable
       name="controller"
-      type="com.coloplast.olympus.ui.feature.onboarding.dataconsent.dc5.AcceptTermsDC5Controller" />
+      type="com.coloplast.olympus.ui.feature.onboarding.signup.dataconsent.dc5.AcceptTermsDC5Controller" />
   </data>
 
   <androidx.constraintlayout.widget.ConstraintLayout

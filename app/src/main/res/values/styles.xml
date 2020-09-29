@@ -228,6 +228,10 @@
     <item name="android:textColor">@color/text_grey</item>
   </style>
 
+  <style name="TextStyle.Roboto.Regular.DarkGrey" parent="TextStyle.Roboto.Regular">
+    <item name="android:textColor">@color/text_dark_grey</item>
+  </style>
+
   <style name="TextStyle.Roboto.Regular.ClearGrey" parent="TextStyle.Roboto.Regular">
     <item name="android:textColor">@color/text_clear_grey</item>
   </style>
@@ -291,6 +295,10 @@
 
   <style name="TextStyle.Coloplast.Regular.DarkGrey.20" parent="TextStyle.Coloplast.Regular.DarkGrey">
     <item name="android:textSize">20sp</item>
+  </style>
+
+  <style name="TextStyle.Roboto.Regular.DarkGrey.18" parent="TextStyle.Roboto.Regular.DarkGrey">
+    <item name="android:textSize">18sp</item>
   </style>
 
   <style name="TextStyle.Coloplast.Bold.DarkGrey" parent="TextStyle.Coloplast.Bold">

@@ -4,10 +4,9 @@
   xmlns:tools="http://schemas.android.com/tools">
 
   <data>
-    <import type="com.coloplast.olympus.R" />
     <variable
       name="controller"
-      type="com.coloplast.olympus.ui.feature.onboarding.dataconsent.dc6.AcceptDataPromptDC6Controller" />
+      type="com.coloplast.olympus.ui.feature.onboarding.signup.dataconsent.dc6.AcceptDataPromptDC6Controller" />
   </data>
 
   <androidx.constraintlayout.widget.ConstraintLayout
@@ -62,7 +61,7 @@
       android:layout_height="wrap_content"
       android:layout_width="match_parent"
       style="@style/Button"
-      app:safeText="@{R.string.onboarding_dc6_button_1}"
+      android:text="@string/onboarding_dc6_button_1"
       android:onClick="@{()-> controller.onGoBack()}"
       app:layout_constraintBottom_toTopOf="@id/secondary_button" />
 
@@ -76,7 +75,7 @@
       android:layout_marginEnd="@dimen/spacing_larger"
       android:layout_marginBottom="@dimen/spacing_larger"
       android:textSize="@dimen/text_18"
-      app:safeText="@{R.string.onboarding_dc6_button_2}"
+      android:text="@string/onboarding_dc6_button_1"
       android:onClick="@{()-> controller.onContinue()}"
       app:layout_constraintBottom_toBottomOf="parent" />
 

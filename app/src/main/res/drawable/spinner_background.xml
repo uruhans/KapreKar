@@ -16,7 +16,10 @@
             android:color="@color/edittext_border" />
         </shape>
       </item>
-      <item android:drawable="@drawable/ic_chevron" android:gravity="center_vertical|right" android:right="@dimen/spacing_large"/>
+      <item android:drawable="@drawable/ic_chevron"
+        android:gravity="center_vertical|right"
+        android:start="@dimen/spacing_large"
+        android:right="@dimen/spacing_large" />
     </layer-list>
   </item>
 </selector>

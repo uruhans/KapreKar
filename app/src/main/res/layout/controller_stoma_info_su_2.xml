@@ -6,7 +6,7 @@
   <data>
     <variable
       name="controller"
-      type="com.coloplast.olympus.ui.feature.onboarding.createprofile.su2.StomaInfoSU2Controller" />
+      type="com.coloplast.olympus.ui.feature.onboarding.signup.createprofile.su2.StomaInfoSU2Controller" />
   </data>
 
   <androidx.constraintlayout.widget.ConstraintLayout

@@ -6,7 +6,7 @@
   <data>
     <variable
       name="controller"
-      type="com.coloplast.olympus.ui.feature.onboarding.createprofile.su7.InsuranceSU7Controller" />
+      type="com.coloplast.olympus.ui.feature.onboarding.signup.createprofile.su7.InsuranceSU7Controller" />
   </data>
 
   <androidx.constraintlayout.widget.ConstraintLayout

@@ -11,9 +11,9 @@ import com.coloplast.olympus.shared.models.User
 import com.coloplast.olympus.ui.common.CustomToolbarController
 import com.coloplast.olympus.ui.common.models.GenericUiModel
 import com.coloplast.olympus.ui.feature.home.HomeController
-import com.coloplast.olympus.ui.feature.onboarding.createprofile.types.HealthInsurance
-import com.coloplast.olympus.ui.feature.onboarding.createprofile.types.StomaSurgeryDate
-import com.coloplast.olympus.ui.feature.onboarding.createprofile.types.StomaType
+import com.coloplast.olympus.ui.feature.onboarding.signup.createprofile.types.HealthInsurance
+import com.coloplast.olympus.ui.feature.onboarding.signup.createprofile.types.StomaSurgeryDate
+import com.coloplast.olympus.ui.feature.onboarding.signup.createprofile.types.StomaType
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable

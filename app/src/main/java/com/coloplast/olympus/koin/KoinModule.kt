@@ -19,9 +19,6 @@ import com.coloplast.olympus.shared.preferences.Preferences
 import com.coloplast.olympus.ui.feature.TransmitterManager
 import com.coloplast.olympus.ui.feature.home.BreachesOccurred
 import com.coloplast.olympus.ui.feature.home.HomeViewModel
-import com.coloplast.olympus.ui.feature.onboarding.createprofile.CreateUserFactoryImpl
-import com.coloplast.olympus.ui.feature.onboarding.createprofile.CreateUserViewModel
-import com.coloplast.olympus.ui.feature.onboarding.dataconsent.DataConsentFactoryImpl
 import com.coloplast.olympus.ui.feature.onboarding.login.LoginViewModel
 import com.coloplast.olympus.ui.feature.onboarding.login.forgotpassword.ForgotPasswordFactoryImpl
 import com.coloplast.olympus.ui.feature.onboarding.login.forgotpassword.ForgotPasswordViewModel
@@ -31,6 +28,9 @@ import com.coloplast.olympus.ui.feature.onboarding.setup.SetupGuideIntroFactoryI
 import com.coloplast.olympus.ui.feature.onboarding.setup.SetupGuidePreparingFactoryImpl
 import com.coloplast.olympus.ui.feature.onboarding.setup.applying.AwaitingConnectionViewModel
 import com.coloplast.olympus.ui.feature.onboarding.setup.connection.SetupGuideLocationSGC4ViewModel
+import com.coloplast.olympus.ui.feature.onboarding.signup.createprofile.CreateUserFactoryImpl
+import com.coloplast.olympus.ui.feature.onboarding.signup.createprofile.CreateUserViewModel
+import com.coloplast.olympus.ui.feature.onboarding.signup.dataconsent.DataConsentFactoryImpl
 import com.coloplast.olympus.ui.feature.onboarding.valueproposition.ValuePropositionFactoryImpl
 import com.coloplast.olympus.ui.feature.profile.ProfileViewModel
 import com.coloplast.olympus.ui.feature.splash.SplashViewModel

@@ -7,7 +7,7 @@
 
     <variable
       name="controller"
-      type="com.coloplast.olympus.ui.feature.onboarding.createprofile.su5.PhoneSU5Controller" />
+      type="com.coloplast.olympus.ui.feature.onboarding.signup.createprofile.su5.PhoneSU5Controller" />
   </data>
 
   <androidx.constraintlayout.widget.ConstraintLayout

@@ -14,6 +14,7 @@ import com.coloplast.olympus.R
 import com.coloplast.olympus.activities.MainActivity
 import com.coloplast.olympus.bluetooth.BluetoothServiceViewModel
 import com.coloplast.olympus.bluetooth.StateDispatcher
+import com.coloplast.olympus.bluetooth.businesslayer.FirmwareManager
 import com.coloplast.olympus.bluetooth.model.BluetoothServiceModel
 import com.coloplast.olympus.bluetooth.model.BluetoothServiceResult
 import com.coloplast.olympus.notifications.OlympusNotificationManager
@@ -35,14 +36,15 @@ import timber.log.Timber
  * - will also stay connected to transmitter even if app is in the background
  */
 class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceResult<BluetoothServiceModel> {
-  
+
   private val notificationManager: NotificationManager by inject()
   private val olympusNotificationManager: OlympusNotificationManager = get()
   private val transmitterManager: TransmitterManager by inject()
+  private val firmwareManager: FirmwareManager by inject()
 
   private val compositeDisposable = CompositeDisposable()
 
-  private val bluetoothConnectionChannelId: String by lazy {  applicationContext.getString(R.string.lock_service_notification_channel_id) }
+  private val bluetoothConnectionChannelId: String by lazy { applicationContext.getString(R.string.lock_service_notification_channel_id) }
   private val bluetoothConnectionChannelName: String by lazy { applicationContext.getString(R.string.lock_service_notification_channel_name) }
   private val bluetoothConnectionChannelDescription: String by lazy { applicationContext.getString(R.string.lock_service_notification_channel_description) }
 
@@ -50,32 +52,37 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
     // we are not binding to this service, so just return null
     return null
   }
-  
+
   override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
     return startService()
   }
-  
+
   private fun startService(): Int {
     IntentFilter().let {
       it.addAction(INTENT_FILTER_STOP_SERVICE)
       it.addAction(INTENT_FILTER_INITIATE_RESET)
       registerReceiver(intentReceiver, it)
     }
-    
+
     // start the actual foreground service (a permanent notification is required to inform the user of it)
     startForeground(2125, getServiceNotification())
-    
+
     compositeDisposable.add(get<BluetoothServiceViewModel>().bind(this))
+    compositeDisposable.add(
+      firmwareManager.serviceCallback()
+        .filter { it == FirmwareManager.ServiceState.STOP_SERVICE }
+        .subscribe { killService() }
+    )
     return START_STICKY
   }
-  
+
   override fun onResult(): Function<Observable<BluetoothServiceModel>, Disposable> {
     return RxUi.ui {
       Timber.d("$it")
-      
+
       when (it) {
         is BluetoothServiceModel.DeviceUpdate -> {
-          if(it.statusChange.state == UiState.SOMETHING_ELSE) {
+          if (it.statusChange.state == UiState.SOMETHING_ELSE) {
             return@ui
           }
 
@@ -93,7 +100,7 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
         is BluetoothServiceModel.RawDataPackageUpdate -> {
           val activeTransmitter = transmitterManager.isActiveTransmitter(it.macAddress)
 
-          if(activeTransmitter) {
+          if (activeTransmitter) {
             StateDispatcher.dispatch(it.macAddress)
           }
         }
@@ -103,7 +110,7 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
 
           // this will be used to notify the Ui to change state (so we dont get stuck in multiple tx state or other state based on disconnected tx)
           otherTxStateChange?.let { stateChange ->
-            if(stateChange.overlayState == OverlayState.BLE_CONNECTION_LOST) {
+            if (stateChange.overlayState == OverlayState.BLE_CONNECTION_LOST) {
               olympusNotificationManager.send(OverlayState.BLE_CONNECTION_LOST)
             }
 
@@ -116,17 +123,17 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
       }
     }
   }
-  
+
   private fun getServiceNotification(): Notification {
     createNotificationChannel()
-    
+
     val pendingIntent: PendingIntent = Intent(this, MainActivity::class.java).let { notificationIntent ->
       PendingIntent.getActivity(this, 0, notificationIntent, 0)
     }
-    
+
 //    val resetPendingIntent: PendingIntent = Intent(INTENT_FILTER_INITIATE_RESET)
 //      .let { resetIntent -> PendingIntent.getBroadcast(this, 0, resetIntent, 0) }
-    
+
     val notification = NotificationCompat.Builder(this, bluetoothConnectionChannelId)
       .setContentTitle(bluetoothConnectionChannelName)
       .setContentText(bluetoothConnectionChannelDescription)
@@ -136,10 +143,10 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
       .setPriority(NotificationCompat.PRIORITY_MIN)
       .setCategory(Notification.CATEGORY_SERVICE)
       .setOngoing(true)
-    
+
     return notification.build()
   }
-  
+
   private fun createNotificationChannel() {
     // only create the notification channel if we are above API 25 and the channel doesn't already exist
     if (Build.VERSION.SDK_INT >= 26 && notificationManager.getNotificationChannel(bluetoothConnectionChannelId) == null) {
@@ -154,7 +161,7 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
       notificationManager.createNotificationChannel(bluetoothConnectionNotificationChannel)
     }
   }
-  
+
   private val intentReceiver = object : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
       if (intent?.action == INTENT_FILTER_STOP_SERVICE) {
@@ -169,14 +176,14 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
       }
     }
   }
-  
+
   private fun killService() {
     unregisterReceiver(intentReceiver)
     compositeDisposable.clear()
     stopForeground(true)
     stopSelf()
   }
-  
+
   companion object {
     const val INTENT_FILTER_STOP_SERVICE = "${BuildConfig.APPLICATION_ID}.BLUETOOTH.STOP_SERVICE"
     const val INTENT_FILTER_INITIATE_RESET = "${BuildConfig.APPLICATION_ID}.BLUETOOTH.INTENT_FILTER_INITIATE_RESET"

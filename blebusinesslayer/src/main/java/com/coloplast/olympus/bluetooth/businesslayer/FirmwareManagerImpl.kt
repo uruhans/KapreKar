@@ -7,12 +7,12 @@ import com.coloplast.olympus.bluetooth.businesslayer.firmware.CypressFirmware
 import com.coloplast.olympus.bluetooth.businesslayer.firmware.readDataLine
 import com.coloplast.olympus.bluetooth.businesslayer.firmware.readHeader
 import com.coloplast.olympus.bluetooth.businesslayer.services.CommandService
+import com.coloplast.olympus.shared.utils.FileUtils
+import com.jakewharton.rxrelay2.PublishRelay
 import com.polidea.rxandroidble2.RxBleConnection
 import io.reactivex.Completable
 import io.reactivex.Observable
 import timber.log.Timber
-import java.io.ByteArrayOutputStream
-import java.io.InputStream
 import java.util.concurrent.TimeUnit
 
 class FirmwareManagerImpl(
@@ -26,7 +26,8 @@ class FirmwareManagerImpl(
     COMPLETED,
   }
 
-  private var currentState = State.APP
+  private val serviceRelay = PublishRelay.create<FirmwareManager.ServiceState>()
+  private var currentState = State.BOOTLOADER
 
   override fun checkFirmwareVersion(currentFirmwareVersion: String): Observable<Unit> {
     TODO("Not yet implemented")
@@ -35,40 +36,47 @@ class FirmwareManagerImpl(
   private val OTA_UPDATE_SERVICE = "00060000-f8ce-11e4-abf4-0002a5d5c51b".asUUID()
   private val OTA_UPDATE_CHARACTERISTIC = "00060001-f8ce-11e4-abf4-0002a5d5c51b".asUUID()
 
-  override fun updateFirmware(macAddress: String): Completable {
-//    val firmware = getCypressFirmware()
-//
-//    val model = CypressBootloaderModel(firmware)
-//    var next: CypressBootloaderModel.CommandPacket
-//
-//    while(true) {
-//      next = model.nextCommandPacket()
-//
-//      val dataToSend = next.firmwareReadyData()
-//      Timber.d(dataToSend.asUByteArray().joinToString { it.toString(16).padStart(2, '0') })
-//
-//      if(next.command == CypressBootloaderModel.CommandCode.ExitBootLoader.code) {
-//        break
-//      }
-//    }
-//
-//    return Completable.complete()
+  override fun serviceCallback(): Observable<FirmwareManager.ServiceState> {
+    return serviceRelay
+      .publish()
+      .refCount()
+  }
 
-//    bluetoothManager.disconnectTransmitter(macAddress)
-//    return connectBootloader(macAddress)
-
+  override fun updateFirmware(macAddress: String): Observable<Int> {
     return bluetoothManager.writeCharacteristic(macAddress, CommandService.Characteristics.UART_RX, "P".toByteArray(Charsets.UTF_8))
       .toSingle { true }
       .toObservable()
-      .doOnNext { bluetoothManager.disconnectTransmitter(macAddress) }
+      .doOnNext {
+        bluetoothManager.disconnectTransmitter(macAddress)
+        serviceRelay.accept(FirmwareManager.ServiceState.STOP_SERVICE)
+      }
       .doOnNext { Timber.d("FIRMWARE AFTER P COMMAND") }
-      .flatMapCompletable { connectBootloader(macAddress) }
+      .delay(2, TimeUnit.SECONDS)
+      .flatMap { connectBootloader(macAddress) }
   }
 
-  private fun connectBootloader(macAddress: String): Completable {
+  private fun connectBootloader(macAddress: String): Observable<Int> {
     return bluetoothManager.connectOtaDevice(macAddress)
-      .delay(3, TimeUnit.SECONDS)
-      .flatMapCompletable { initiateFirmwareTransfer(macAddress, it).ignoreElements() }
+      .flatMap { initiateFirmwareTransfer(macAddress, it) }
+      .retryWhen { errors ->
+        errors.flatMap { error ->
+          Timber.e(error)
+          when (currentState) {
+            State.BOOTLOADER -> {
+              currentState = State.APP
+              Observable.timer(5, TimeUnit.SECONDS)
+            }
+            State.APP -> {
+              currentState == State.COMPLETED
+              serviceRelay.accept(FirmwareManager.ServiceState.START_SERVICE)
+              Observable.error(error)
+            }
+            else -> {
+              Observable.error(error)
+            }
+          }
+        }
+      }
   }
 
   private fun initiateFirmwareTransfer(macAddress: String, rxBleConnection: RxBleConnection): Observable<Int> {
@@ -113,24 +121,11 @@ class FirmwareManagerImpl(
   }
 
   private fun getCypressFirmware(filename: String): CypressFirmware {
-    val lines = String(getFileFromAssets(filename)).split("\r\n")
+    val lines = String(FileUtils.fromAssets(filename)).split("\r\n")
 
     val header = lines.first()
     val dataLines = lines.filter { it.isNotBlank() }.drop(1).map { readDataLine(it) }
 
     return CypressFirmware(readHeader(header), dataLines)
-  }
-
-  private fun getFileFromAssets(filename: String): ByteArray {
-    val inputStream: InputStream = applicationContext.assets.open(filename)
-
-    val buffer = ByteArray(8192)
-    var bytesRead: Int
-    val output = ByteArrayOutputStream()
-    while (inputStream.read(buffer).also { bytesRead = it } != -1) {
-      output.write(buffer, 0, bytesRead)
-    }
-
-    return output.toByteArray()
   }
 }

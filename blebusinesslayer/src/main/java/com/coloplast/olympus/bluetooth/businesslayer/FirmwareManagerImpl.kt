@@ -84,7 +84,7 @@ class FirmwareManagerImpl(
             State.APP -> {
               // if we have just completed the app firmware
               // switch state to completed
-              currentState == State.COMPLETED
+              currentState = State.COMPLETED
               // send a START_SERVICE request to start the BluetoothConnectionService
               // to enable regular transmitter connection once again
               serviceRelay.accept(FirmwareManager.ServiceState.START_SERVICE)

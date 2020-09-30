@@ -94,6 +94,14 @@ class UserComponentImpl(private val preferences: Preferences) : UserComponent {
     return user
   }
 
+  override fun requestPhoneValidationSMS(phoneNumber: String): Completable {
+    return apiService.requestPhoneValidationSMS(phoneNumber)
+  }
+
+  override fun validatePhoneCode(phoneNumber: String, code: Int): Completable {
+    return apiService.validatePhoneCode(phoneNumber, code)
+  }
+
   override fun syncUser(userId: UUID): Observable<SyncResult> {
     return getSingleLocalUser(userId)
       .toObservable()

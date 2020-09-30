@@ -10,7 +10,7 @@
 
     <variable
       name="controller"
-      type="com.coloplast.olympus.ui.feature.onboarding.createprofile.su1.CreateUserSU1Controller" />
+      type="com.coloplast.olympus.ui.feature.onboarding.signup.createprofile.su1.CreateUserSU1Controller" />
   </data>
 
   <androidx.constraintlayout.widget.ConstraintLayout
@@ -31,11 +31,13 @@
 
     <TextView
       style="@style/TextStyle.Roboto.Regular.ClearGrey.18"
-      android:layout_width="wrap_content"
+      android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_marginTop="@dimen/spacing_larger"
+      android:layout_marginEnd="@dimen/spacing_larger"
       android:text="@string/onboarding_su1_description"
       app:layout_constraintStart_toStartOf="@id/title"
+      app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintTop_toBottomOf="@id/title" />
 
     <LinearLayout
@@ -53,9 +55,9 @@
         style="@style/TextStyle.Roboto.Regular.ClearGrey.14"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/spacing_standard"
+        android:layout_marginStart="@dimen/spacing_larger"
         android:layout_marginTop="@dimen/spacing_half"
-        android:layout_marginEnd="@dimen/spacing_standard"
+        android:layout_marginEnd="@dimen/spacing_larger"
         android:text="@string/onboarding_first_name_title" />
 
       <com.google.android.material.textfield.TextInputLayout
@@ -63,9 +65,9 @@
         style="@style/TextInputLayoutAppearance"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/spacing_standard"
+        android:layout_marginStart="@dimen/spacing_larger"
         android:layout_marginTop="@dimen/spacing_half"
-        android:layout_marginEnd="@dimen/spacing_standard">
+        android:layout_marginEnd="@dimen/spacing_larger">
 
         <com.google.android.material.textfield.TextInputEditText
           android:id="@+id/email_edittext"
@@ -80,8 +82,8 @@
         style="@style/TextInputLayoutErrorText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/spacing_standard"
-        android:layout_marginEnd="@dimen/spacing_standard"
+        android:layout_marginStart="@dimen/spacing_larger"
+        android:layout_marginEnd="@dimen/spacing_larger"
         android:text="@string/onboarding_first_name_error"
         app:visibleOrGone="@{!controller.validName}" />
 
@@ -89,9 +91,9 @@
         style="@style/TextStyle.Roboto.Regular.ClearGrey.14"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/spacing_standard"
+        android:layout_marginStart="@dimen/spacing_larger"
         android:layout_marginTop="@dimen/spacing_large"
-        android:layout_marginEnd="@dimen/spacing_standard"
+        android:layout_marginEnd="@dimen/spacing_larger"
         android:text="@string/onboarding_last_name_title" />
 
       <com.google.android.material.textfield.TextInputLayout
@@ -99,9 +101,9 @@
         style="@style/TextInputLayoutAppearance"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/spacing_standard"
+        android:layout_marginStart="@dimen/spacing_larger"
         android:layout_marginTop="@dimen/spacing_half"
-        android:layout_marginEnd="@dimen/spacing_standard">
+        android:layout_marginEnd="@dimen/spacing_larger">
 
         <com.google.android.material.textfield.TextInputEditText
           android:id="@+id/password_edittext"
@@ -118,8 +120,8 @@
         style="@style/TextInputLayoutErrorText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/spacing_standard"
-        android:layout_marginEnd="@dimen/spacing_standard"
+        android:layout_marginStart="@dimen/spacing_larger"
+        android:layout_marginEnd="@dimen/spacing_larger"
         android:text="@string/onboarding_last_name_error"
         app:visibleOrGone="@{!controller.validSurname}" />
 

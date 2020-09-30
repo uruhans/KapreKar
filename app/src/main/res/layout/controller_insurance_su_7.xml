@@ -6,7 +6,7 @@
   <data>
     <variable
       name="controller"
-      type="com.coloplast.olympus.ui.feature.onboarding.createprofile.su7.InsuranceSU7Controller" />
+      type="com.coloplast.olympus.ui.feature.onboarding.signup.createprofile.su7.InsuranceSU7Controller" />
   </data>
 
   <androidx.constraintlayout.widget.ConstraintLayout
@@ -25,12 +25,14 @@
       app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-      android:layout_width="wrap_content"
+      android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_marginTop="@dimen/spacing_larger"
+      android:layout_marginEnd="@dimen/spacing_larger"
       android:text="@string/onboarding_su7_description"
       style="@style/TextStyle.Roboto.Regular.ClearGrey.18"
       app:layout_constraintStart_toStartOf="@id/title"
+      app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintTop_toBottomOf="@id/title" />
 
     <LinearLayout
@@ -49,16 +51,16 @@
         android:layout_height="wrap_content"
         android:text="@string/onboarding_insurance_title"
         style="@style/TextStyle.Roboto.Regular.ClearGrey.14"
-        android:layout_marginStart="@dimen/spacing_standard"
+        android:layout_marginStart="@dimen/spacing_larger"
         android:layout_marginTop="@dimen/spacing_half"
-        android:layout_marginEnd="@dimen/spacing_standard" />
+        android:layout_marginEnd="@dimen/spacing_larger" />
 
       <com.coloplast.olympus.ui.common.widgets.NoDefaultSpinner
         android:layout_width="match_parent"
         android:layout_height="@dimen/cardview_button_height_default"
-        android:layout_marginStart="@dimen/spacing_standard"
+        android:layout_marginStart="@dimen/spacing_larger"
         android:layout_marginTop="@dimen/spacing_half"
-        android:layout_marginEnd="@dimen/spacing_standard"
+        android:layout_marginEnd="@dimen/spacing_larger"
         android:background="@{controller.insuranceSelected ? @drawable/spinner_background : @drawable/spinner_background_error}"
         android:spinnerMode="dialog"
         android:prompt="@string/onboarding_insurance_hint"

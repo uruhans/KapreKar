@@ -4,8 +4,8 @@ import com.coloplast.olympus.shared.types.TypeWithId
 
 enum class OnboardingProgression(override val id: Int): TypeWithId {
   NOT_STARTED(-1),
-  SIGN_UP(0),
-  TERMS_AND_CONSENT(1),
+  TERMS_AND_CONSENT(0),
+  SIGN_UP(1),
   SETUP_GUIDE_START(2),
   SETUP_GUIDE_INTRODUCTION(3),
   SETUP_GUIDE_CONNECTING(4),

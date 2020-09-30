@@ -47,15 +47,13 @@
         tools:text="@string/guide_at3_title" />
 
       <TextView
-        android:id="@+id/title"
         style="@style/TextStyle.Roboto.Regular.ClearGrey.18"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/spacing_standard"
         android:layout_marginTop="@dimen/spacing_standard"
         android:layout_marginEnd="@dimen/spacing_standard"
-        android:text="@string/terms_of_use_tu_description"
-        tools:text="@string/guide_at3_body" />
+        android:text="@string/terms_of_use_tu_description" />
 
       <Button
         style="@style/Button.Borderless"

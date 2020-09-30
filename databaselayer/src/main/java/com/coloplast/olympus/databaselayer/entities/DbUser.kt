@@ -20,7 +20,7 @@ class DbUser(
   val surgeryDateInterval: Int?,
   val phoneNumber: String?,
   val insuranceType: Int?,
-  val consent: Boolean?,
+  val consent: Boolean,
   @ColumnInfo(typeAffinity = ColumnInfo.INTEGER)
   var syncState: SyncState
 ) {

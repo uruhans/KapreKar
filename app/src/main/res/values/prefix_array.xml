@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string-array name="prefixes">
+    <item>@string/onboarding_su_5_dk_prefix</item>
+    <item>@string/onboarding_su_5_de_prefix</item>
+    <item>@string/onboarding_su_5_uk_prefix</item>
+  </string-array>
+</resources>

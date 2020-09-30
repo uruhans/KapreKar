@@ -1,9 +1,6 @@
 package com.coloplast.olympus.datalayer.api
 
-import com.coloplast.olympus.datalayer.models.ChangePasswordRequest
-import com.coloplast.olympus.datalayer.models.CredentialsDTO
-import com.coloplast.olympus.datalayer.models.UserDTO
-import com.coloplast.olympus.datalayer.models.UserResponseDTO
+import com.coloplast.olympus.datalayer.models.*
 import io.reactivex.Completable
 import io.reactivex.Observable
 import retrofit2.http.Body
@@ -31,4 +28,10 @@ interface ServerApi {
 
   @PUT("auth/changepassword")
   fun changePassword(@Body changePasswordRequest: ChangePasswordRequest): Completable
+
+  @POST("/api/v1/PhoneValidation")
+  fun requestPhoneValidationSMS(@Body phoneValidationRequestDTO: PhoneValidationRequestDTO): Completable
+
+  @POST("/api/v1/PhoneValidation/validate")
+  fun validatePhoneCode(@Body phoneValidationRequestDTO: PhoneValidationRequestDTO): Completable
 }

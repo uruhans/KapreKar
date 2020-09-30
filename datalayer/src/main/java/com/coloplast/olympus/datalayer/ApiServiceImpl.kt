@@ -1,9 +1,6 @@
 package com.coloplast.olympus.datalayer
 
-import com.coloplast.olympus.datalayer.models.ChangePasswordRequest
-import com.coloplast.olympus.datalayer.models.CredentialsDTO
-import com.coloplast.olympus.datalayer.models.UserDTO
-import com.coloplast.olympus.datalayer.models.UserResponseDTO
+import com.coloplast.olympus.datalayer.models.*
 import com.coloplast.olympus.shared.models.Credentials
 import com.coloplast.olympus.shared.models.User
 import io.reactivex.Completable
@@ -65,6 +62,21 @@ class ApiServiceImpl : ApiService {
       email = email,
       newPassword = password)
     return api.changePassword(changePasswordRequest)
+  }
+
+  override fun requestPhoneValidationSMS(phoneNumber: String): Completable {
+    val phoneValidationRequestDTO = PhoneValidationRequestDTO(
+        phoneNumber = phoneNumber
+    )
+    return api.requestPhoneValidationSMS(phoneValidationRequestDTO)
+  }
+
+  override fun validatePhoneCode(phoneNumber: String, code: Int): Completable {
+    val phoneValidationRequestDTO = PhoneValidationRequestDTO(
+      phoneNumber = phoneNumber,
+      securityCode = code
+    )
+    return api.validatePhoneCode(phoneValidationRequestDTO)
   }
 
 }

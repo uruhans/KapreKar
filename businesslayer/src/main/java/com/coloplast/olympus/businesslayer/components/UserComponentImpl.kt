@@ -21,10 +21,12 @@ class UserComponentImpl(private val preferences: Preferences) : UserComponent {
   private val apiService: ApiService = ApiServiceImpl()
   private val database: DbService = DbServiceImpl()
 
-  override fun createUser(user: User): Observable<CurrentUser> {
-    return apiService.createUser(user)
-      .compose(SetTokenInsertOrUpdateUserAndReturnCurrentUser(database, preferences))
-  }
+  override fun createUser(user: User): Observable<CurrentUser> =
+    if(user.email.isNullOrBlank()){
+      apiService.createAnonymousUser()
+    } else {
+      apiService.createUser(user)
+    }.compose(SetTokenInsertOrUpdateUserAndReturnCurrentUser(database, preferences))
 
   override fun login(credentials: Credentials): Observable<CurrentUser> {
     return apiService.login(credentials)

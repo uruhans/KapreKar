@@ -33,7 +33,7 @@ class SignupViewModel(
             .map {
               me.setCurrentUser(it)
               if(it is CurrentUser.LoggedIn){
-                Callback.USER_CREATED
+                if(it.user.consent) Callback.USER_CREATED else Callback.ANONYMOUS_USER_CREATED
               } else it
             }
             .compose(DelayedLoadingTransformer<Any>())
@@ -119,7 +119,8 @@ class SignupViewModel(
   enum class Callback {
     CODE_REQUESTED,
     CODE_VALIDATED,
-    USER_CREATED
+    USER_CREATED,
+    ANONYMOUS_USER_CREATED
   }
 }
 

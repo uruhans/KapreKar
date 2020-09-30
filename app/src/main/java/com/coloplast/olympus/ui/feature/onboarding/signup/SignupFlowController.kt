@@ -76,12 +76,8 @@ class SignupFlowController : TopMenuFlowFactoryController<SignupFactoryModel>(),
         }
       }
       SignupFlow.DataConsentDC6 -> {
-        // The user choose not to accept data consent.
-        preferences.setCurrentOnboardingProgression(OnboardingProgression.SETUP_GUIDE_START)
-        with(factory){
-          skipUntil(SignupFlow.Completed.id)
-          incrementAndNext()
-        }
+        // The user choose not to accept data consent. Create anonymous user.
+        registrationRelay.accept(data.user)
         true
       }
       SignupFlow.PhoneSU5 -> {
@@ -146,6 +142,13 @@ class SignupFlowController : TopMenuFlowFactoryController<SignupFactoryModel>(),
               //go to confirmation screen
               with(factory) {
                 skipUntil(SignupFlow.ConfirmationSU8.id)
+                incrementAndNext()
+              }
+            }
+            SignupViewModel.Callback.ANONYMOUS_USER_CREATED -> {
+              // finish flow.
+              with(factory) {
+                skipUntil(SignupFlow.Completed.id)
                 incrementAndNext()
               }
             }

@@ -1,12 +1,12 @@
 package com.coloplast.olympus.bluetooth.businesslayer
 
 import android.content.Context
-import com.coloplast.olympus.bluetooth.businesslayer.extensions.asUUID
 import com.coloplast.olympus.bluetooth.businesslayer.firmware.CypressBootloaderModel
 import com.coloplast.olympus.bluetooth.businesslayer.firmware.CypressFirmware
 import com.coloplast.olympus.bluetooth.businesslayer.firmware.readDataLine
 import com.coloplast.olympus.bluetooth.businesslayer.firmware.readHeader
 import com.coloplast.olympus.bluetooth.businesslayer.services.CommandService
+import com.coloplast.olympus.bluetooth.businesslayer.services.OtaFirmware
 import com.coloplast.olympus.shared.utils.FileUtils
 import com.jakewharton.rxrelay2.PublishRelay
 import com.polidea.rxandroidble2.RxBleConnection
@@ -33,9 +33,6 @@ class FirmwareManagerImpl(
     TODO("Not yet implemented")
   }
 
-  private val OTA_UPDATE_SERVICE = "00060000-f8ce-11e4-abf4-0002a5d5c51b".asUUID()
-  private val OTA_UPDATE_CHARACTERISTIC = "00060001-f8ce-11e4-abf4-0002a5d5c51b".asUUID()
-
   override fun serviceCallback(): Observable<FirmwareManager.ServiceState> {
     return serviceRelay
       .publish()
@@ -43,32 +40,55 @@ class FirmwareManagerImpl(
   }
 
   override fun updateFirmware(macAddress: String): Observable<Int> {
-    return bluetoothManager.writeCharacteristic(macAddress, CommandService.Characteristics.UART_RX, "P".toByteArray(Charsets.UTF_8))
+    // P command to this characteristic will put the transmitter into bootloader mode
+    return bluetoothManager.writeCharacteristic(macAddress, CommandService.Characteristics.UART_RX, "P".toByteArray())
       .toSingle { true }
       .toObservable()
       .doOnNext {
+        // the above writeCharacteristics will actually cause a disconnect,
+        // but this disconnect will notify proper channels that it has happened
         bluetoothManager.disconnectTransmitter(macAddress)
+        // send a STOP_SERVICE request to the service, as we dont want it to try to reconnect
         serviceRelay.accept(FirmwareManager.ServiceState.STOP_SERVICE)
       }
-      .doOnNext { Timber.d("FIRMWARE AFTER P COMMAND") }
+      // delay to make sure that we are completely disconnected
       .delay(2, TimeUnit.SECONDS)
+      // connect to the bootloader
       .flatMap { connectBootloader(macAddress) }
   }
 
   private fun connectBootloader(macAddress: String): Observable<Int> {
     return bluetoothManager.connectOtaDevice(macAddress)
+      // initiate firmware transfer
       .flatMap { initiateFirmwareTransfer(macAddress, it) }
+      // upon complete firmware transfer (bootloader or app)
+      // the transmitter will do a restart, meaning we will receive a disconnect
+      // this retryWhen is here to catch that disconnect
       .retryWhen { errors ->
         errors.flatMap { error ->
+          // TODO - probably check the error for a disconnect?
           Timber.e(error)
+
+          // check which state we are currently in and figure out
+          // what to do next
           when (currentState) {
             State.BOOTLOADER -> {
+              // if we have just completed the bootloader firmware
+              // switch state to app firmware, and wait 5 seconds to make
+              // sure the transmitter has booted up completely
               currentState = State.APP
+              // when this timer hits its onNext, the connectOtaDevice observable
+              // will be re-subscribed
               Observable.timer(5, TimeUnit.SECONDS)
             }
             State.APP -> {
+              // if we have just completed the app firmware
+              // switch state to completed
               currentState == State.COMPLETED
+              // send a START_SERVICE request to start the BluetoothConnectionService
+              // to enable regular transmitter connection once again
               serviceRelay.accept(FirmwareManager.ServiceState.START_SERVICE)
+              // return an error to stop the entire firmware upgrade flow
               Observable.error(error)
             }
             else -> {
@@ -80,6 +100,7 @@ class FirmwareManagerImpl(
   }
 
   private fun initiateFirmwareTransfer(macAddress: String, rxBleConnection: RxBleConnection): Observable<Int> {
+    // TODO - this needs to be redone - probably move it to a proper model
     val filename = when (currentState) {
       State.BOOTLOADER -> "OlympusBootloader_v2.1.6.cyacd"
       State.APP -> "OlympusApp_v2.1.3h.cyacd"
@@ -91,10 +112,14 @@ class FirmwareManagerImpl(
 
     return setupBootloaderResponseNotification(rxBleConnection)
       .flatMap { txResponsePacket ->
+        // if the responsePacket from the transmitter is successful
+        // send the next packet, and wait for next tx response
         if (txResponsePacket.isSuccessResponse()) {
           val commandPacket = model.nextCommandPacket()
 
+          // write the next command
           writeNextCommand(rxBleConnection, commandPacket)
+            // and return the current progress
             .toSingle { model.progress() }
             .toObservable()
             .doOnNext { Timber.d("Percentage: $it") }
@@ -107,16 +132,21 @@ class FirmwareManagerImpl(
 
   private fun setupBootloaderResponseNotification(rxBleConnection: RxBleConnection): Observable<CypressBootloaderModel.CommandPacket> {
     return Observable.merge(
-      rxBleConnection.setupNotification(OTA_UPDATE_CHARACTERISTIC)
+      // setup notifications on the OTA update characteristic
+      // this will notify us when we've sent a command to the transmitter
+      rxBleConnection.setupNotification(OtaFirmware.Characteristics.OTA_UPDATE)
         .flatMap { it }
         .map { CypressBootloaderModel.CommandPacket(it) },
-      Observable.timer(1000, TimeUnit.MILLISECONDS)
+      // because the setupNotification does not notify on successful subscription
+      // we wait for a second and return one for ourselves to begin the firmware transfer
+      Observable.timer(1, TimeUnit.SECONDS)
         .map { CypressBootloaderModel.CommandPacket(CypressBootloaderModel.CommandCode.Success) }
     )
   }
 
   private fun writeNextCommand(rxBleConnection: RxBleConnection, commandPacket: CypressBootloaderModel.CommandPacket): Completable {
-    return rxBleConnection.writeCharacteristic(OTA_UPDATE_CHARACTERISTIC, commandPacket.firmwareReadyData())
+    // write characteristics have no return value, so we ignore and complete it
+    return rxBleConnection.writeCharacteristic(OtaFirmware.Characteristics.OTA_UPDATE, commandPacket.firmwareReadyData())
       .ignoreElement()
   }
 

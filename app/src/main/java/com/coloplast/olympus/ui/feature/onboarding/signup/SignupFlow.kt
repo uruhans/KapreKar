@@ -14,15 +14,16 @@ enum class SignupFlow(override val id: Int): TypeWithId {
   DataConsentDC3(3),
   DataConsentDC4(4),
   DataConsentDC5(5),
-  CreateUserSU1(6),
-  StomaInfoSU2(7),
-  EmailSU3(8),
-  PasswordSU4(9),
-  PhoneSU5(10),
-  PhoneValidationSU6(11),
-  InsuranceSU7(12),
-  ConfirmationSU8(13),
-  Completed(14);
+  DataConsentDC6(6),
+  CreateUserSU1(7),
+  StomaInfoSU2(8),
+  EmailSU3(9),
+  PasswordSU4(10),
+  PhoneSU5(11),
+  PhoneValidationSU6(12),
+  InsuranceSU7(13),
+  ConfirmationSU8(14),
+  Completed(15);
 
   companion object {
     fun fromIndex(id: Int): SignupFlow {

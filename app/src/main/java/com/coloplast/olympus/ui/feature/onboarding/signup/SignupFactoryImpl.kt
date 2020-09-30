@@ -19,6 +19,7 @@ import com.coloplast.olympus.ui.feature.onboarding.signup.dataconsent.dc2.HelpYo
 import com.coloplast.olympus.ui.feature.onboarding.signup.dataconsent.dc3.HelpCommunityDC3Controller
 import com.coloplast.olympus.ui.feature.onboarding.signup.dataconsent.dc4.SafeWithUsDC4Controller
 import com.coloplast.olympus.ui.feature.onboarding.signup.dataconsent.dc5.AcceptTermsDC5Controller
+import com.coloplast.olympus.ui.feature.onboarding.signup.dataconsent.dc6.AcceptDataPromptDC6Controller
 import com.coloplast.olympus.ui.feature.onboarding.termsofuse.TermsOfUseTUController
 
 
@@ -42,6 +43,7 @@ class SignupFactoryImpl : FlowFactory<SignupFactoryModel>() {
       SignupFlow.DataConsentDC3 -> HelpCommunityDC3Controller.getRouterTransaction()
       SignupFlow.DataConsentDC4 -> SafeWithUsDC4Controller.getRouterTransaction()
       SignupFlow.DataConsentDC5 -> AcceptTermsDC5Controller.getRouterTransaction()
+      SignupFlow.DataConsentDC6 -> AcceptDataPromptDC6Controller.getRouterTransaction()
       SignupFlow.CreateUserSU1 -> CreateUserSU1Controller.getRouterTransaction()
       SignupFlow.StomaInfoSU2 -> StomaInfoSU2Controller.getRouterTransaction()
       SignupFlow.EmailSU3 -> EmailSU3Controller.getRouterTransaction()

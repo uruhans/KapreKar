@@ -65,11 +65,20 @@ class SignupFlowController : TopMenuFlowFactoryController<SignupFactoryModel>(),
         }
       }
       SignupFlow.DataConsentDC5 -> {
-        if(data.user.consent.not()) {
-          activity?.finish()
-          return true
+        if(data.user.consent) {
+          with(factory){
+            skipUntil(SignupFlow.CreateUserSU1.id)
+            incrementAndNext()
+          }
+          true
+        } else {
+          false // go to next step as usual.
         }
-        false
+      }
+      SignupFlow.DataConsentDC6 -> {
+        // The user choose not to accept data consent. Create anonymous user.
+        registrationRelay.accept(data.user)
+        true
       }
       SignupFlow.PhoneSU5 -> {
         sendCodeRelay.accept(data.user.phoneNumber!!)
@@ -133,6 +142,13 @@ class SignupFlowController : TopMenuFlowFactoryController<SignupFactoryModel>(),
               //go to confirmation screen
               with(factory) {
                 skipUntil(SignupFlow.ConfirmationSU8.id)
+                incrementAndNext()
+              }
+            }
+            SignupViewModel.Callback.ANONYMOUS_USER_CREATED -> {
+              // finish flow.
+              with(factory) {
+                skipUntil(SignupFlow.Completed.id)
                 incrementAndNext()
               }
             }

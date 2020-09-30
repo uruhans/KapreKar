@@ -1,5 +1,6 @@
 package com.coloplast.olympus.ui.feature.onboarding.signup.dataconsent.dc5
 
+import androidx.databinding.ObservableBoolean
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import com.coloplast.olympus.R
@@ -13,6 +14,8 @@ import com.coloplast.olympus.ui.common.listeners.FlowListener
  * Copyright by Dawn Health A/S. All rights reserved.
  */
 class AcceptTermsDC5Controller: BaseController<ControllerAcceptTermsDc5Binding>() {
+
+  val dataPolicyAccepted = ObservableBoolean(false)
 
   override fun attachVariables(viewBinding: ControllerAcceptTermsDc5Binding) {
     viewBinding.controller = this
@@ -31,21 +34,8 @@ class AcceptTermsDC5Controller: BaseController<ControllerAcceptTermsDc5Binding>(
     )
   }
 
-  fun onTermsOfUse(){
-    val url = applicationContext!!.getString(R.string.onboarding_dc5_link2)
-    getContentRouter().pushController(
-      WebViewController.getRouterTransaction(url)
-        .popChangeHandler(VerticalChangeHandler())
-        .pushChangeHandler(VerticalChangeHandler())
-    )
-  }
-
-  fun onAcceptClicked(){
-    getListener(FlowListener::class.java)?.onNextClicked(true)
-  }
-
-  fun onDeclineClicked(){
-    getListener(FlowListener::class.java)?.onNextClicked(false)
+  fun onContinueClicked(){
+    getListener(FlowListener::class.java)!!.onNextClicked(dataPolicyAccepted.get())
   }
 
   override fun getLayout(): Int = R.layout.controller_accept_terms_dc_5

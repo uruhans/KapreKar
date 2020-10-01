@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.ContentFrameLayout
 import com.artemzin.rxui.RxUi
 import com.artemzin.rxui.kotlin.bind
+import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import com.coloplast.olympus.Me
 import com.coloplast.olympus.R
 import com.coloplast.olympus.bluetooth.businesslayer.FirmwareManager
@@ -14,6 +15,7 @@ import com.coloplast.olympus.shared.models.CurrentUser
 import com.coloplast.olympus.ui.common.DrawerStateDispatcher
 import com.coloplast.olympus.ui.common.models.Navigation
 import com.coloplast.olympus.ui.feature.home.HomeController
+import com.coloplast.olympus.ui.feature.onboarding.LandingController
 import com.coloplast.olympus.ui.feature.splash.SplashController
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
@@ -90,12 +92,11 @@ class MainActivity : AppCompatActivity() {
   
   private fun openLoginScreen(): io.reactivex.functions.Function<Observable<CurrentUser>, Disposable> {
     return RxUi.ui {
-      /*navigation.getContentRouter()
-          ?.pushController(
-            LandingController.routerTransaction().pushChangeHandler(VerticalChangeHandler()).popChangeHandler(
-              VerticalChangeHandler()
-            )
-          )*/
+      navigation.getContentRouter()?.setRoot(
+            LandingController.routerTransaction()
+              .pushChangeHandler(VerticalChangeHandler())
+              .popChangeHandler(VerticalChangeHandler())
+          )
     }
   }
   

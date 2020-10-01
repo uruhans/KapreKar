@@ -4,7 +4,6 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.coloplast.olympus.shared.models.User
-import com.coloplast.olympus.shared.types.StomaType
 import com.coloplast.olympus.shared.types.SyncState
 import java.util.*
 
@@ -17,11 +16,11 @@ class DbUser(
   val lastName: String?,
   val email: String?,
   @ColumnInfo(typeAffinity = ColumnInfo.INTEGER)
-  val stomaType: StomaType?,
+  val stomaType: Int?,
   val surgeryDateInterval: Int?,
   val phoneNumber: String?,
   val insuranceType: Int?,
-  val consent: Boolean?,
+  val consent: Boolean,
   @ColumnInfo(typeAffinity = ColumnInfo.INTEGER)
   var syncState: SyncState
 ) {

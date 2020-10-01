@@ -16,13 +16,16 @@ interface UserComponent {
   fun automaticLogin(userId: UUID): Observable<CurrentUser>
 
   fun requestSecurityCode(email: String): Completable
-  fun validateSecurityCode(securityCode: String, email: String): Completable
-  fun changePassword(securityCode: String, email: String, password: String): Completable
+  fun validateSecurityCode(securityCode: Int, email: String): Completable
+  fun changePassword(securityCode: Int, email: String, password: String): Completable
 
   fun getSingleLocalUser(userId: UUID): Single<User>
   fun getLocalUser(userId: UUID): Observable<User>
   fun updateUserConsent(userId: UUID, consent: Boolean) : Observable<User>
   fun updateUser(user: User) : Observable<User>
+
+  fun requestPhoneValidationSMS(phoneNumber: String): Completable
+  fun validatePhoneCode(phoneNumber: String, code: Int): Completable
 
   fun syncUser(userId: UUID) : Observable<SyncResult>
 }

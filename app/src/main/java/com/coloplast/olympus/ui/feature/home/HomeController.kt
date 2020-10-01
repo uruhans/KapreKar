@@ -36,6 +36,7 @@ import com.coloplast.olympus.ui.common.widgets.PatchView
 import com.coloplast.olympus.ui.dialogs.ImageDialogController
 import com.coloplast.olympus.ui.dialogs.PatchDialogController
 import com.coloplast.olympus.ui.feature.TransmitterManager
+import com.coloplast.olympus.ui.feature.about.AboutController
 import com.coloplast.olympus.ui.feature.contact.ContactController
 import com.coloplast.olympus.ui.feature.guides.GuidesFlowController
 import com.coloplast.olympus.ui.feature.guides.articles.GuideController
@@ -44,7 +45,7 @@ import com.coloplast.olympus.ui.feature.home.models.HomeUiModel
 import com.coloplast.olympus.ui.feature.home.models.PatchVisible
 import com.coloplast.olympus.ui.feature.home.models.SideMenuType
 import com.coloplast.olympus.ui.feature.home.models.Stitch
-import com.coloplast.olympus.ui.feature.onboarding.setup.SetupGuideApplyingFlowController
+import com.coloplast.olympus.ui.feature.profile.ProfileController
 import com.coloplast.olympus.ui.feature.settings.SettingsFlowController
 import com.coloplast.olympus.ui.feature.statemachine.models.OverlayState
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
@@ -575,17 +576,22 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
             .popChangeHandler(VerticalChangeHandler())
         )
       }
-      SideMenuType.PROFILE,
-      SideMenuType.ABOUT -> {
-        getContentRouter().pushController(
-          SetupGuideApplyingFlowController.routerTransaction()
+      SideMenuType.PROFILE -> {
+        router.pushController(
+          ProfileController.routerTransaction()
             .pushChangeHandler(VerticalChangeHandler())
-            .popChangeHandler(VerticalChangeHandler())
-        )
+            .popChangeHandler(VerticalChangeHandler()))
       }
       SideMenuType.CONTACT -> {
         router.pushController(
           ContactController.routerTransaction()
+            .pushChangeHandler(VerticalChangeHandler())
+            .popChangeHandler(VerticalChangeHandler())
+        )
+      }
+      SideMenuType.ABOUT -> {
+        router.pushController(
+          AboutController.routerTransaction()
             .pushChangeHandler(VerticalChangeHandler())
             .popChangeHandler(VerticalChangeHandler())
         )

@@ -21,10 +21,12 @@ class UserComponentImpl(private val preferences: Preferences) : UserComponent {
   private val apiService: ApiService = ApiServiceImpl()
   private val database: DbService = DbServiceImpl()
 
-  override fun createUser(user: User): Observable<CurrentUser> {
-    return apiService.createUser(user)
-      .compose(SetTokenInsertOrUpdateUserAndReturnCurrentUser(database, preferences))
-  }
+  override fun createUser(user: User): Observable<CurrentUser> =
+    if(user.email.isNullOrBlank()){
+      apiService.createAnonymousUser()
+    } else {
+      apiService.createUser(user)
+    }.compose(SetTokenInsertOrUpdateUserAndReturnCurrentUser(database, preferences))
 
   override fun login(credentials: Credentials): Observable<CurrentUser> {
     return apiService.login(credentials)
@@ -68,11 +70,11 @@ class UserComponentImpl(private val preferences: Preferences) : UserComponent {
     return apiService.requestSecurityCode(email)
   }
 
-  override fun validateSecurityCode(securityCode: String, email: String) : Completable {
+  override fun validateSecurityCode(securityCode: Int, email: String) : Completable {
     return apiService.validateSecurityCode(securityCode, email)
   }
 
-  override fun changePassword(securityCode: String, email: String, password: String): Completable {
+  override fun changePassword(securityCode: Int, email: String, password: String): Completable {
     return apiService.changePassword(securityCode, email, password)
   }
 
@@ -92,6 +94,14 @@ class UserComponentImpl(private val preferences: Preferences) : UserComponent {
 
     user.syncState = SyncState.Pending
     return user
+  }
+
+  override fun requestPhoneValidationSMS(phoneNumber: String): Completable {
+    return apiService.requestPhoneValidationSMS(phoneNumber)
+  }
+
+  override fun validatePhoneCode(phoneNumber: String, code: Int): Completable {
+    return apiService.validatePhoneCode(phoneNumber, code)
   }
 
   override fun syncUser(userId: UUID): Observable<SyncResult> {

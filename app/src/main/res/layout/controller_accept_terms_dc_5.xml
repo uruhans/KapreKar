@@ -6,7 +6,7 @@
     <import type="com.coloplast.olympus.R" />
     <variable
       name="controller"
-      type="com.coloplast.olympus.ui.feature.onboarding.dataconsent.dc5.AcceptTermsDC5Controller" />
+      type="com.coloplast.olympus.ui.feature.onboarding.signup.dataconsent.dc5.AcceptTermsDC5Controller" />
   </data>
 
   <androidx.constraintlayout.widget.ConstraintLayout
@@ -37,12 +37,6 @@
         android:text="@string/onboarding_dc5_title"
         style="@style/TextStyle.Coloplast.Bold.DarkGrey.24" />
 
-      <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/onboarding_dc5_description"
-        style="@style/TextStyle.Roboto.Regular.ClearGrey.18" />
-
       <Button
         android:id="@+id/policy_agreement_button"
         android:layout_width="match_parent"
@@ -52,43 +46,69 @@
         android:textAllCaps="false"
         android:textSize="@dimen/text_18"
         android:textAlignment="textStart"
-        android:onClick="@{() -> controller.onPolicyAgreementClicked()}"
-        app:layout_constraintBottom_toTopOf="@id/terms_use_button"/>
+        android:onClick="@{() -> controller.onPolicyAgreementClicked()}"/>
 
-      <Button
-        android:id="@+id/terms_use_button"
+      <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        safeText="@{R.string.onboarding_dc5_link2_text}"
-        style="@style/Button.Borderless"
-        android:textAllCaps="false"
-        android:textSize="@dimen/text_18"
-        android:textAlignment="textStart"
-        android:onClick="@{() -> controller.onTermsOfUse()}"
-        app:layout_constraintBottom_toTopOf="@id/primary_button"/>
+        android:background="@drawable/cardview_not_selected"
+        app:cardCornerRadius="@dimen/cardview_corner_radius"
+        app:cardElevation="@dimen/cardview_elevation_default"
+        app:cardUseCompatPadding="true">
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_margin="@dimen/spacing_standard"
+          android:orientation="vertical">
+
+          <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_large"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+              style="@style/TextStyle.Coloplast.Bold.DarkGrey.24"
+              android:layout_width="0dp"
+              android:layout_height="wrap_content"
+              android:layout_weight="1"
+              android:gravity="center_vertical"
+              android:drawablePadding="@dimen/spacing_half"
+              android:text="@string/onboarding_dc5_card_title" />
+
+            <Switch
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_weight="0"
+              android:checked="@={controller.dataPolicyAccepted}" />
+
+          </LinearLayout>
+
+          <TextView
+            style="@style/TextStyle.Roboto.Regular.ClearGrey.16"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_small"
+            android:layout_marginBottom="@dimen/spacing_small"
+            android:text="@string/onboarding_dc5_card_description" />
+
+        </LinearLayout>
+
+
+
+      </androidx.cardview.widget.CardView>
+
+
     </LinearLayout>
 
     <Button
-      android:id="@+id/primary_button"
       android:layout_height="wrap_content"
       android:layout_width="match_parent"
       style="@style/Button"
-      app:safeText="@{R.string.onboarding_dc5_primary_button}"
-      android:onClick="@{()-> controller.onAcceptClicked()}"
-      app:layout_constraintBottom_toTopOf="@id/secondary_button" />
-
-    <Button
-      android:id="@+id/secondary_button"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      style="@style/Button.Secondary"
-      android:textAllCaps="false"
-      android:layout_marginStart="@dimen/spacing_larger"
-      android:layout_marginEnd="@dimen/spacing_larger"
-      android:layout_marginBottom="@dimen/spacing_larger"
-      android:textSize="@dimen/text_18"
-      app:safeText="@{R.string.onboarding_dc5_secondary_button}"
-      android:onClick="@{()-> controller.onDeclineClicked()}"
+      app:safeText="@{R.string.generic_continue}"
+      android:onClick="@{()-> controller.onContinueClicked()}"
       app:layout_constraintBottom_toBottomOf="parent" />
 
   </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--suppress AndroidUnknownAttribute -->
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <data>
+
+    <variable
+      name="controller"
+      type="com.coloplast.olympus.ui.feature.onboarding.signup.createprofile.su5.PhoneSU5Controller" />
+  </data>
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="@dimen/toolbar_height">
+
+    <TextView
+      android:id="@+id/title"
+      style="@style/TextStyle.Coloplast.Bold.DarkGrey.24"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_margin="@dimen/spacing_larger"
+      android:text="@string/onboarding_su5_title"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+      style="@style/TextStyle.Roboto.Regular.ClearGrey.18"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="@dimen/spacing_larger"
+      android:layout_marginEnd="@dimen/spacing_larger"
+      android:text="@string/onboarding_su5_description"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="@id/title"
+      app:layout_constraintTop_toBottomOf="@id/title" />
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="@dimen/spacing_half"
+      android:layout_marginBottom="@dimen/spacing_double"
+      android:orientation="vertical"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent">
+
+      <TextView
+        style="@style/TextStyle.Roboto.Regular.ClearGrey.14"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_larger"
+        android:layout_marginTop="@dimen/spacing_half"
+        android:layout_marginEnd="@dimen/spacing_larger"
+        android:text="@string/onboarding_phone_title" />
+
+      <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_larger"
+        android:layout_marginTop="@dimen/spacing_half"
+        android:layout_marginEnd="@dimen/spacing_larger">
+
+        <!-- paddingEnd is defined to avoid the text overlapping the chevron.
+         Chevron size (36dp) + Spacing standard (16dp) = 52dp-->
+        <Spinner
+          android:id="@+id/prefix_spinner"
+          android:layout_width="wrap_content"
+          android:layout_height="56dp"
+          android:layout_gravity="center_vertical"
+          android:layout_marginTop="@dimen/spacing_standard"
+          android:paddingEnd="52dp"
+          android:layout_weight="0"
+          android:background="@drawable/spinner_background"
+          android:entries="@array/prefixes"
+          android:spinnerMode="dialog"
+          android:selectedItemPosition="@={controller.prefixSpinnerPosition}"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textfield.TextInputLayout
+          android:id="@+id/email_input_layout"
+          style="@style/TextInputLayoutAppearance"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:layout_marginStart="@dimen/spacing_standard"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintStart_toEndOf="@id/prefix_spinner"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintTop_toTopOf="parent">
+
+          <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/email_edittext"
+            style="@style/EditTextInputText"
+            android:hint="@string/onboarding_phone_hint"
+            android:inputType="phone"
+            android:text="@={controller.phone}"
+            app:errorBackground="@{controller.validPhone}"
+            app:onSubmit="@{() -> controller.onNextClicked()}" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+      </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+      <TextView
+        style="@style/TextInputLayoutErrorText"
+        visibleOrGone="@{!controller.validPhone}"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_larger"
+        android:layout_marginEnd="@dimen/spacing_larger"
+        android:text="@string/onboarding_phone_error" />
+
+    </LinearLayout>
+
+    <com.coloplast.olympus.ui.common.widgets.CustomTabLayout
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="@dimen/spacing_double"
+      app:currentIndex="@{5}"
+      app:layout_constraintBottom_toBottomOf="@id/next_button"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="@id/next_button"
+      app:totalCount="@{6}" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+      android:id="@+id/next_button"
+      android:layout_width="56dp"
+      android:layout_height="56dp"
+      android:layout_marginEnd="@dimen/spacing_larger"
+      android:layout_marginBottom="@dimen/spacing_double"
+      android:onClick="@{() -> controller.onNextClicked()}"
+      android:src="@drawable/ic_arrow"
+      android:tint="@color/white"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent" />
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

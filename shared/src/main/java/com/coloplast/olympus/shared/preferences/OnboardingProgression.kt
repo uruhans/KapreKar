@@ -5,13 +5,12 @@ import com.coloplast.olympus.shared.types.TypeWithId
 enum class OnboardingProgression(override val id: Int): TypeWithId {
   NOT_STARTED(-1),
   SIGN_UP(0),
-  TERMS_AND_CONSENT(1),
-  SETUP_GUIDE_START(2),
-  SETUP_GUIDE_INTRODUCTION(3),
-  SETUP_GUIDE_CONNECTING(4),
-  SETUP_GUIDE_PREPARING(5),
-  SETUP_GUIDE_APPLYING(6),
-  COMPLETED(7);
+  SETUP_GUIDE_START(1),
+  SETUP_GUIDE_INTRODUCTION(2),
+  SETUP_GUIDE_CONNECTING(3),
+  SETUP_GUIDE_PREPARING(4),
+  SETUP_GUIDE_APPLYING(5),
+  COMPLETED(6);
 
   companion object {
     fun fromId(id: Int): OnboardingProgression {

@@ -18,7 +18,7 @@ class ApiServiceImpl : ApiService {
         user.lastName,
         user.email,
         user.password,
-        user.stomaType?.id,
+        user.stomaType,
         user.surgeryDateInterval,
         user.phoneNumber,
         user.insuranceType,
@@ -42,16 +42,41 @@ class ApiServiceImpl : ApiService {
   }
 
   override fun requestSecurityCode(email: String): Completable {
-    val securityCodeRequest = SecurityCodeRequest(email)
+    val securityCodeRequest = ChangePasswordRequest(
+      email = email
+    )
     return api.requestSecurityCode(securityCodeRequest)
   }
 
-  override fun validateSecurityCode(securityCode: String, email: String): Completable =
-    api.confirmCode(securityCode, email)
+  override fun validateSecurityCode(securityCode: Int, email: String): Completable{
+    val validateCodeRequest = ChangePasswordRequest(
+      email = email,
+      securityCode = securityCode
+    )
+    return api.confirmCode(validateCodeRequest)
+  }
 
-  override fun changePassword(securityCode: String, email: String, password: String): Completable {
-    val changePasswordRequest = ChangePasswordRequest(securityCode, email, password)
+  override fun changePassword(securityCode: Int, email: String, password: String): Completable {
+    val changePasswordRequest = ChangePasswordRequest(
+      securityCode = securityCode,
+      email = email,
+      newPassword = password)
     return api.changePassword(changePasswordRequest)
+  }
+
+  override fun requestPhoneValidationSMS(phoneNumber: String): Completable {
+    val phoneValidationRequestDTO = PhoneValidationRequestDTO(
+        phoneNumber = phoneNumber
+    )
+    return api.requestPhoneValidationSMS(phoneValidationRequestDTO)
+  }
+
+  override fun validatePhoneCode(phoneNumber: String, code: Int): Completable {
+    val phoneValidationRequestDTO = PhoneValidationRequestDTO(
+      phoneNumber = phoneNumber,
+      securityCode = code
+    )
+    return api.validatePhoneCode(phoneValidationRequestDTO)
   }
 
 }

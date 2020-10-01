@@ -2,10 +2,7 @@ package com.coloplast.olympus.shared.utils
 
 import com.coloplast.olympus.shared.AppSettings
 import timber.log.Timber
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.FileOutputStream
-import java.io.InputStream
+import java.io.*
 import java.util.zip.ZipEntry
 import java.util.zip.ZipFile
 
@@ -22,6 +19,16 @@ object FileUtils {
     }
 
     return output.toByteArray()
+  }
+
+  fun fromExternalFile(filename: String): ByteArray {
+    val file = File("${AppSettings.applicationContext.getExternalFilesDir(null)}${File.separator}$filename")
+
+    if(file.exists()) {
+      return file.readBytes()
+    }
+
+    throw FileNotFoundException()
   }
 
   const val FIRMWARE_ZIP = "latest_firmware.zip"

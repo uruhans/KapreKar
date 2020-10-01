@@ -54,7 +54,7 @@ val koinModule = module {
   /* Bluetooth */
   single<BluetoothManager> { BluetoothManagerImpl(get(), androidContext(), BuildConfig.DEBUG) }
   factory { DeviceConnection(get(), get()) }
-  single<FirmwareManager> { FirmwareManagerImpl(androidContext(), get()) }
+  single<FirmwareManager> { FirmwareManagerImpl(get(), get()) }
 
   single { TransmitterManager(get(), get()) }
   single { BreachesOccurred(get()) }
@@ -67,7 +67,7 @@ val koinModule = module {
   factory { BluetoothServiceViewModel(get(), get(), get()) }
   single { SplashViewModel(get(), get()) }
   single { HomeViewModel(get()) }
-  single { TransmittersViewModel(get(), get()) }
+  single { TransmittersViewModel(get(), get(), get()) }
   single { AddTransmitterAT9ViewModel(get(), get(), get()) }
   single { AwaitingConnectionViewModel(get()) }
   single { LoginViewModel(get(), get()) }

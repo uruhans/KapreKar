@@ -5,6 +5,8 @@ import com.coloplast.olympus.BuildConfig
 import com.coloplast.olympus.bluetooth.ServiceDispatcher
 import com.coloplast.olympus.bluetooth.StateDispatcher
 import com.coloplast.olympus.bluetooth.businesslayer.BluetoothManager
+import com.coloplast.olympus.bluetooth.businesslayer.FirmwareManager
+import com.coloplast.olympus.bluetooth.businesslayer.FirmwareManagerImpl
 import com.coloplast.olympus.bluetooth.model.ConnectionState
 import com.coloplast.olympus.bluetooth.model.ServiceEvent
 import com.coloplast.olympus.businesslayer.interfaces.TransmitterComponent
@@ -19,7 +21,8 @@ import io.reactivex.schedulers.Schedulers
 
 class TransmittersViewModel(
   private val bluetoothManager: BluetoothManager,
-  private val transmitterComponent: TransmitterComponent
+  private val transmitterComponent: TransmitterComponent,
+  private val firmwareManager: FirmwareManager
 ) : BaseViewModel<TransmittersUiModel, TransmittersView>() {
 
   override fun bind(uiView: TransmittersView): Disposable {
@@ -84,8 +87,9 @@ class TransmittersViewModel(
 
     val retryConnectionObservable: Observable<TransmittersUiModel> = uiView.retryConnection()
       .switchMap {
-        transmitterComponent.initiateFirmwareDownload("E3:34:08:30:D7:65", BuildConfig.VERSION_NAME)
+        firmwareManager.initiateFirmwareDownload("E3:34:08:30:D7:65")
           .subscribeOn(Schedulers.io())
+          .flatMap { firmwareManager.updateFirmware("E3:34:08:30:D7:65", it) }
           .map { TransmittersUiModel.RetryConnectComplete() }
 
 //        // initiate reconnection retry on the service

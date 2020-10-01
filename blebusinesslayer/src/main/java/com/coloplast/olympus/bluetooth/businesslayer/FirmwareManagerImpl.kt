@@ -1,13 +1,11 @@
 package com.coloplast.olympus.bluetooth.businesslayer
 
-import android.content.Context
 import com.coloplast.olympus.bluetooth.businesslayer.firmware.CypressBootloaderModel
-import com.coloplast.olympus.bluetooth.businesslayer.firmware.CypressFirmware
-import com.coloplast.olympus.bluetooth.businesslayer.firmware.readDataLine
-import com.coloplast.olympus.bluetooth.businesslayer.firmware.readHeader
+import com.coloplast.olympus.bluetooth.businesslayer.firmware.FirmwareUpdateModel
 import com.coloplast.olympus.bluetooth.businesslayer.services.CommandService
 import com.coloplast.olympus.bluetooth.businesslayer.services.OtaFirmware
-import com.coloplast.olympus.shared.utils.FileUtils
+import com.coloplast.olympus.businesslayer.interfaces.TransmitterComponent
+import com.coloplast.olympus.shared.models.FirmwareResult
 import com.jakewharton.rxrelay2.PublishRelay
 import com.polidea.rxandroidble2.RxBleConnection
 import io.reactivex.Completable
@@ -16,30 +14,22 @@ import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 class FirmwareManagerImpl(
-  private val applicationContext: Context,
-  private val bluetoothManager: BluetoothManager
+  private val bluetoothManager: BluetoothManager,
+  private val transmitterComponent: TransmitterComponent
 ) : FirmwareManager {
 
-  enum class State {
-    BOOTLOADER,
-    APP,
-    COMPLETED,
-  }
-
   private val serviceRelay = PublishRelay.create<FirmwareManager.ServiceState>()
-  private var currentState = State.BOOTLOADER
 
-  override fun checkFirmwareVersion(currentFirmwareVersion: String): Observable<Unit> {
-    TODO("Not yet implemented")
+  override fun latestFirmwareVersion(macAddress: String): Observable<FirmwareResult> {
+    return transmitterComponent.latestFirmwareVersion(macAddress, BuildConfig.VERSION_NAME)
   }
 
-  override fun serviceCallback(): Observable<FirmwareManager.ServiceState> {
-    return serviceRelay
-      .publish()
-      .refCount()
+  override fun initiateFirmwareDownload(macAddress: String) : Observable<FirmwareUpdateModel> {
+    return transmitterComponent.latestFirmwareVersion(macAddress, BuildConfig.VERSION_NAME)
+      .map { FirmwareUpdateModel() }
   }
 
-  override fun updateFirmware(macAddress: String): Observable<Int> {
+  override fun updateFirmware(macAddress: String, firmwareUpdateModel: FirmwareUpdateModel): Observable<Int> {
     // P command to this characteristic will put the transmitter into bootloader mode
     return bluetoothManager.writeCharacteristic(macAddress, CommandService.Characteristics.UART_RX, "P".toByteArray())
       .toSingle { true }
@@ -54,13 +44,13 @@ class FirmwareManagerImpl(
       // delay to make sure that we are completely disconnected
       .delay(2, TimeUnit.SECONDS)
       // connect to the bootloader
-      .flatMap { connectBootloader(macAddress) }
+      .flatMap { connectBootloader(macAddress, firmwareUpdateModel) }
   }
 
-  private fun connectBootloader(macAddress: String): Observable<Int> {
+  private fun connectBootloader(macAddress: String, firmwareUpdateModel: FirmwareUpdateModel): Observable<Int> {
     return bluetoothManager.connectOtaDevice(macAddress)
       // initiate firmware transfer
-      .flatMap { initiateFirmwareTransfer(macAddress, it) }
+      .flatMap { initiateFirmwareTransfer(it, firmwareUpdateModel) }
       // upon complete firmware transfer (bootloader or app)
       // the transmitter will do a restart, meaning we will receive a disconnect
       // this retryWhen is here to catch that disconnect
@@ -71,20 +61,19 @@ class FirmwareManagerImpl(
 
           // check which state we are currently in and figure out
           // what to do next
-          when (currentState) {
-            State.BOOTLOADER -> {
+          when (firmwareUpdateModel.getState()) {
+            FirmwareUpdateModel.State.BOOTLOADER -> {
               // if we have just completed the bootloader firmware
               // switch state to app firmware, and wait 5 seconds to make
               // sure the transmitter has booted up completely
-              currentState = State.APP
+              firmwareUpdateModel.updateState(FirmwareUpdateModel.State.APP)
               // when this timer hits its onNext, the connectOtaDevice observable
               // will be re-subscribed
               Observable.timer(5, TimeUnit.SECONDS)
             }
-            State.APP -> {
+            FirmwareUpdateModel.State.APP -> {
               // if we have just completed the app firmware
-              // switch state to completed
-              currentState = State.COMPLETED
+              firmwareUpdateModel.updateState(FirmwareUpdateModel.State.COMPLETED)
               // send a START_SERVICE request to start the BluetoothConnectionService
               // to enable regular transmitter connection once again
               serviceRelay.accept(FirmwareManager.ServiceState.START_SERVICE)
@@ -99,28 +88,18 @@ class FirmwareManagerImpl(
       }
   }
 
-  private fun initiateFirmwareTransfer(macAddress: String, rxBleConnection: RxBleConnection): Observable<Int> {
-    // TODO - this needs to be redone - probably move it to a proper model
-    val filename = when (currentState) {
-      State.BOOTLOADER -> "OlympusBootloader_v2.1.6.cyacd"
-      State.APP -> "OlympusApp_v2.1.3h.cyacd"
-      else -> throw RuntimeException("FAILED")
-    }
-
-    val firmware = getCypressFirmware(filename)
-    val model = CypressBootloaderModel(firmware)
-
+  private fun initiateFirmwareTransfer(rxBleConnection: RxBleConnection, firmwareUpdateModel: FirmwareUpdateModel): Observable<Int> {
     return setupBootloaderResponseNotification(rxBleConnection)
       .flatMap { txResponsePacket ->
         // if the responsePacket from the transmitter is successful
         // send the next packet, and wait for next tx response
         if (txResponsePacket.isSuccessResponse()) {
-          val commandPacket = model.nextCommandPacket()
+          val commandPacket = firmwareUpdateModel.nextCommand()
 
           // write the next command
           writeNextCommand(rxBleConnection, commandPacket)
             // and return the current progress
-            .toSingle { model.progress() }
+            .toSingle { firmwareUpdateModel.currentProgress() }
             .toObservable()
             .doOnNext { Timber.d("Percentage: $it") }
         }
@@ -150,12 +129,9 @@ class FirmwareManagerImpl(
       .ignoreElement()
   }
 
-  private fun getCypressFirmware(filename: String): CypressFirmware {
-    val lines = String(FileUtils.fromAssets(filename)).split("\r\n")
-
-    val header = lines.first()
-    val dataLines = lines.filter { it.isNotBlank() }.drop(1).map { readDataLine(it) }
-
-    return CypressFirmware(readHeader(header), dataLines)
+  override fun serviceCallback(): Observable<FirmwareManager.ServiceState> {
+    return serviceRelay
+      .publish()
+      .refCount()
   }
 }

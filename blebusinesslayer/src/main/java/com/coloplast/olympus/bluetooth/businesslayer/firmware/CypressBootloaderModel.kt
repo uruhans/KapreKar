@@ -1,18 +1,18 @@
 package com.coloplast.olympus.bluetooth.businesslayer.firmware
 
-import timber.log.Timber
 import kotlin.math.min
 
+@Suppress("LocalVariableName")
 class CypressBootloaderModel(private val currentFirmware: CypressFirmware) {
 
   /// current data row
   private var currentRowDataArray: ByteArray? = null
 
-  /// Device flash start row number
-  private val startRowNumber: UShort = 0u
-
-  /// Device flash end row number
-  private val endRowNumber: UShort = 0u
+//  /// Device flash start row number
+//  private val startRowNumber: UShort = 0u
+//
+//  /// Device flash end row number
+//  private val endRowNumber: UShort = 0u
 
   /// Max payload size for the data packages
   /// This is given as a max of the MTU packages size, set in the Transmitter! Which is 138 at the moment (21/9-2020)
@@ -29,6 +29,7 @@ class CypressBootloaderModel(private val currentFirmware: CypressFirmware) {
     EXIT_BOOTLOADER
   }
 
+  @Suppress("unused")
   enum class CommandCode(val code: Byte) {
     // Bootloader status/Error codes
     Success(0x00),

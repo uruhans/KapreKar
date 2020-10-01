@@ -3,23 +3,25 @@ package com.coloplast.olympus.businesslayer.components
 import com.coloplast.olympus.businesslayer.interfaces.TransmitterComponent
 import com.coloplast.olympus.businesslayer.models.SyncResult
 import com.coloplast.olympus.databaselayer.DbServiceImpl
+import com.coloplast.olympus.datalayer.ApiServiceImpl
 import com.coloplast.olympus.datalayer.AzurePackageApiImpl
-import com.coloplast.olympus.shared.models.DataResult
-import com.coloplast.olympus.shared.models.Transmitter
-import com.coloplast.olympus.shared.models.TransmitterPackage
+import com.coloplast.olympus.shared.models.*
 import com.coloplast.olympus.shared.preferences.Preferences
 import com.coloplast.olympus.shared.types.PackageType
 import com.coloplast.olympus.shared.types.SyncState
+import com.coloplast.olympus.shared.utils.FileUtils
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
 import timber.log.Timber
 import java.util.*
+import kotlin.RuntimeException
 
 class TransmitterComponentImpl(private val preferences: Preferences) : TransmitterComponent {
 
   private val dbService = DbServiceImpl()
   private val azureService = AzurePackageApiImpl()
+  private val apiService = ApiServiceImpl()
 
   override fun getTransmitters(): Observable<DataResult<List<Transmitter>>> {
     return dbService.getTransmitters()
@@ -217,6 +219,38 @@ class TransmitterComponentImpl(private val preferences: Preferences) : Transmitt
                 .toSingle<SyncResult> { SyncResult.Error() }
                 .toObservable()
             )
+        }
+      }
+  }
+
+  override fun latestFirmwareVersion(macAddress: String, currentAppVersion: String): Observable<FirmwareResult> {
+    return dbService.getSingleTransmitter(macAddress)
+      .toObservable()
+      .flatMap { dbTransmitter ->
+        apiService.latestFirmware()
+          .doOnNext { Timber.d("$it") }
+          .map { firmware ->
+            if(firmware.isMinimumAndroidVersion(currentAppVersion)) {
+              if(firmware.isNewer(dbTransmitter.firmwareVersion ?: "")) {
+                return@map FirmwareResult.UpdateAvailable(firmware)
+              }
+            }
+
+            return@map FirmwareResult.NoUpdate()
+          }
+      }
+  }
+
+  override fun initiateFirmwareDownload(macAddress: String, currentAppVersion: String) : Observable<String> {
+    return latestFirmwareVersion(macAddress, currentAppVersion)
+      .flatMap {
+        if(it is FirmwareResult.UpdateAvailable) {
+          apiService.downloadFirmware(it.firmwareContent.filePath)
+            .map { data -> FileUtils.storeZippedFirmwareLocally(data) }
+            .map { zippedFilename -> FileUtils.unzipFirmware(zippedFilename) }
+        }
+        else {
+          Observable.error(RuntimeException("No firmware to download"))
         }
       }
   }

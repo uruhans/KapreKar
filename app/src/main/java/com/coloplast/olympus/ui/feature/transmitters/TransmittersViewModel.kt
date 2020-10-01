@@ -1,10 +1,10 @@
 package com.coloplast.olympus.ui.feature.transmitters
 
 import com.artemzin.rxui.kotlin.bind
+import com.coloplast.olympus.BuildConfig
 import com.coloplast.olympus.bluetooth.ServiceDispatcher
 import com.coloplast.olympus.bluetooth.StateDispatcher
 import com.coloplast.olympus.bluetooth.businesslayer.BluetoothManager
-import com.coloplast.olympus.bluetooth.businesslayer.FirmwareManager
 import com.coloplast.olympus.bluetooth.model.ConnectionState
 import com.coloplast.olympus.bluetooth.model.ServiceEvent
 import com.coloplast.olympus.businesslayer.interfaces.TransmitterComponent
@@ -16,7 +16,6 @@ import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import java.util.concurrent.TimeUnit
 
 class TransmittersViewModel(
   private val bluetoothManager: BluetoothManager,
@@ -85,13 +84,17 @@ class TransmittersViewModel(
 
     val retryConnectionObservable: Observable<TransmittersUiModel> = uiView.retryConnection()
       .switchMap {
-        // initiate reconnection retry on the service
-        ServiceDispatcher.dispatchEvent(ServiceEvent.RetryConnection())
+        transmitterComponent.initiateFirmwareDownload("E3:34:08:30:D7:65", BuildConfig.VERSION_NAME)
+          .subscribeOn(Schedulers.io())
+          .map { TransmittersUiModel.RetryConnectComplete() }
 
-        // after 5 seconds send back a completed response
-        Observable.just(TransmittersUiModel.RetryConnectComplete() as TransmittersUiModel)
-          .delay(5, TimeUnit.SECONDS)
-          .startWith(TransmittersUiModel.RetryConnectToTransmitters())
+//        // initiate reconnection retry on the service
+//        ServiceDispatcher.dispatchEvent(ServiceEvent.RetryConnection())
+//
+//        // after 5 seconds send back a completed response
+//        Observable.just(TransmittersUiModel.RetryConnectComplete() as TransmittersUiModel)
+//          .delay(5, TimeUnit.SECONDS)
+//          .startWith(TransmittersUiModel.RetryConnectToTransmitters())
       }
 
     disposable.add(

@@ -3,10 +3,8 @@ package com.coloplast.olympus.datalayer.api
 import com.coloplast.olympus.datalayer.models.*
 import io.reactivex.Completable
 import io.reactivex.Observable
-import retrofit2.http.Body
-import retrofit2.http.POST
-import retrofit2.http.PUT
-import retrofit2.http.Path
+import okhttp3.ResponseBody
+import retrofit2.http.*
 
 interface ServerApi {
 
@@ -33,4 +31,10 @@ interface ServerApi {
 
   @POST("phonevalidation/validate")
   fun validatePhoneCode(@Body phoneValidationRequestDTO: PhoneValidationRequestDTO): Completable
+
+  @GET("firmware/latest")
+  fun getLatestFirmwareVersion() : Observable<FirmwareDTO>
+
+  @GET
+  fun downloadFirmware(@Url fileUrl: String) : Observable<ResponseBody>
 }

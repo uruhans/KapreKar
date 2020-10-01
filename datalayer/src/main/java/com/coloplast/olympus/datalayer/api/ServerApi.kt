@@ -23,15 +23,14 @@ interface ServerApi {
   fun requestSecurityCode(@Body changePasswordRequest: ChangePasswordRequest): Completable
 
   @POST("securitycodes/validate")
-  //fun confirmCode(@Query("securityCode") code: String, @Query("email") email: String): Completable
   fun confirmCode(@Body changePasswordRequest: ChangePasswordRequest): Completable
 
   @PUT("auth/changepassword")
   fun changePassword(@Body changePasswordRequest: ChangePasswordRequest): Completable
 
-  @POST("/api/v1/PhoneValidation")
+  @POST("phonevalidation")
   fun requestPhoneValidationSMS(@Body phoneValidationRequestDTO: PhoneValidationRequestDTO): Completable
 
-  @POST("/api/v1/PhoneValidation/validate")
+  @POST("phonevalidation/validate")
   fun validatePhoneCode(@Body phoneValidationRequestDTO: PhoneValidationRequestDTO): Completable
 }

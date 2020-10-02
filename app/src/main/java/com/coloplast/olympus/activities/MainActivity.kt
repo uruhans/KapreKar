@@ -78,7 +78,7 @@ class MainActivity : AppCompatActivity() {
      * This is only used when updating the transmitter firmware
      */
     compositeDisposable.add(
-      firmwareManager.serviceCallback()
+      firmwareManager.serviceStateObservable()
         .filter { it == FirmwareManager.ServiceState.START_SERVICE}
         .subscribe { startService() }
     )

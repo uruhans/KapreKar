@@ -141,7 +141,7 @@ class FirmwareManagerImpl(
       .ignoreElement()
   }
 
-  override fun serviceCallback(): Observable<FirmwareManager.ServiceState> {
+  override fun serviceStateObservable(): Observable<FirmwareManager.ServiceState> {
     return serviceRelay
       .publish()
       .refCount()

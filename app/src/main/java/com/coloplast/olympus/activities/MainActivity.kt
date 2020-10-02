@@ -9,6 +9,7 @@ import com.artemzin.rxui.kotlin.bind
 import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import com.coloplast.olympus.Me
 import com.coloplast.olympus.R
+import com.coloplast.olympus.bluetooth.businesslayer.FirmwareManager
 import com.coloplast.olympus.bluetooth.service.BluetoothConnectionService
 import com.coloplast.olympus.shared.models.CurrentUser
 import com.coloplast.olympus.ui.common.DrawerStateDispatcher
@@ -28,6 +29,7 @@ class MainActivity : AppCompatActivity() {
   private lateinit var navigation: Navigation
   
   private val currentUser: Me by inject()
+  private val firmwareManager: FirmwareManager by inject()
   
   private val compositeDisposable = CompositeDisposable()
   private val changeNavigationRelay: PublishRelay<Int> = PublishRelay.create()
@@ -70,7 +72,21 @@ class MainActivity : AppCompatActivity() {
         }
         .subscribe()
     )
-    
+
+    /**
+     * A service callback for managing restart of BluetoothConnectionService
+     * This is only used when updating the transmitter firmware
+     */
+    compositeDisposable.add(
+      firmwareManager.serviceStateObservable()
+        .filter { it == FirmwareManager.ServiceState.START_SERVICE}
+        .subscribe { startService() }
+    )
+
+    startService()
+  }
+
+  private fun startService() {
     startService(Intent(this, BluetoothConnectionService::class.java))
   }
   

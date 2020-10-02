@@ -27,4 +27,6 @@ interface TransmitterComponent {
   fun pendingPackagesRemaining(userId: UUID, packageType: PackageType) : Single<Int>
 
   fun syncTransmitters(userId: UUID) : Observable<SyncResult>
+  fun updateAdditionalInfoForTransmitter(macAddress: String, firmwareVersion: String, hardwareRevision: String, manufacturerName: String, serialNumber: String, settings: ByteArray, classifierSettings: ByteArray) : Completable
+
 }

@@ -83,6 +83,12 @@ class DbServiceImpl : DbService {
       }
   }
 
+  override fun getSingleTransmitter(macAddress: String): Single<Transmitter> {
+    return db.transmitterDao()
+      .getSingleTransmitter(macAddress)
+      .map { it.toTransmitter() }
+  }
+
   override fun insertOrUpdateTransmitter(transmitter: Transmitter): Completable {
     return db.transmitterDao()
       .insertOrUpdate(DbTransmitter.fromTransmitter(transmitter))
@@ -121,7 +127,7 @@ class DbServiceImpl : DbService {
           .toObservable()
           .doOnNext { Timber.d("Number of [$packageType] packages Updated from Pending -> Sending: $it") }
           .map { packages.map { it.toTransmitterPackage() } }
-          .map { DataResult.Success(it) as DataResult<List<TransmitterPackage>> }
+          .map<DataResult<List<TransmitterPackage>>> { DataResult.Success(it) }
       }
       .onErrorReturn {
         Timber.e(it)

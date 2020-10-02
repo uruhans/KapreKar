@@ -10,6 +10,7 @@ import com.coloplast.olympus.bluetooth.businesslayer.exceptions.GattException
 import com.coloplast.olympus.bluetooth.businesslayer.models.*
 import com.coloplast.olympus.bluetooth.businesslayer.services.BatteryPowerService
 import com.coloplast.olympus.bluetooth.businesslayer.services.DeviceInformation
+import com.coloplast.olympus.bluetooth.businesslayer.services.GenericAttribute
 import com.coloplast.olympus.bluetooth.businesslayer.services.OlympusWirelessProtocol
 import com.coloplast.olympus.businesslayer.interfaces.TransmitterComponent
 import com.coloplast.olympus.shared.models.RawDataPackage
@@ -27,8 +28,6 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.exceptions.UndeliverableException
 import io.reactivex.functions.BiFunction
-import io.reactivex.functions.Function3
-import io.reactivex.functions.Function4
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
@@ -128,6 +127,11 @@ class BluetoothManagerImpl(
     }
   }
 
+  override fun initiateBleScanning(uuidFilter: UUID?): Observable<ScanResult> {
+    return bluetoothHandler.scanBleDevices(uuidFilter)
+      .map { ScanResult(it.bleDevice.name?.trim(), it.bleDevice.macAddress, it.rssi) }
+  }
+
   /**
    * Initiate a scan of ble devices filtered by the Olympus Wireless Protocol UUID to limit results only to specific devices
    * - output -> BleDevice containing BleDevice Name, MacAddress and current ConnectionState
@@ -191,7 +195,7 @@ class BluetoothManagerImpl(
   override fun connectBleDevice(macAddress: String): Observable<String> {
     return getBleDevice(macAddress)
       .switchMap { rxBleDevice ->
-        bluetoothHandler.connectRxBleDevice(rxBleDevice)
+        bluetoothHandler.connectRxBleDevice(rxBleDevice, GenericAttribute.Characteristics.SERVICE_CHANGED)
           .takeUntil(
             disconnectRelay
               .publish()
@@ -212,6 +216,11 @@ class BluetoothManagerImpl(
         removeConnectionFromList(macAddress)
         removeDeviceFromConnectedList(getBleDevice(macAddress).blockingFirst())
       }
+  }
+
+  override fun connectOtaDevice(macAddress: String): Observable<RxBleConnection> {
+    return getBleDevice(macAddress)
+      .switchMap { bluetoothHandler.connectRxBleDevice(it, GenericAttribute.Characteristics.SERVICE_CHANGED) }
   }
 
   /**
@@ -239,7 +248,7 @@ class BluetoothManagerImpl(
     return Observable.combineLatest(
       setupOlympusStatusVectorNotifications(macAddress),
       setupBatteryPowerNotifications(macAddress),
-      BiFunction { statusVector: StatusVector, powerLevel: PowerLevel ->
+      { statusVector: StatusVector, powerLevel: PowerLevel ->
         Peripheral(statusVector.patch, statusVector.transmitter, powerLevel)
       })
   }
@@ -289,7 +298,6 @@ class BluetoothManagerImpl(
           .doOnError { throwable -> Timber.e(throwable) }
           .subscribe()
       }
-      .doOnNext { Timber.d("statusVector: {${it[0]}, ${it[1]}, ${it[2]}, ${it[3]}, ${it[4]}, ${it[5]}, ${it[6]}, ${it[7]}, ${it[8]}, ${it[9]}, ${it[10]}, ${it[11]}}") }
       .compose(OlympusWirelessProtocol.statusTransformer)
   }
 
@@ -390,7 +398,7 @@ class BluetoothManagerImpl(
       readDeviceInfo(macAddress),
       readSettings(macAddress),
       readClassifierSettings(macAddress),
-      Function3 { deviceInfo: DeviceInfo, settings: ByteArray, classifierSettings: ByteArray ->
+      { deviceInfo: DeviceInfo, settings: ByteArray, classifierSettings: ByteArray ->
         AdditionalDeviceInfo(deviceInfo, settings, classifierSettings)
       }
     )
@@ -402,7 +410,7 @@ class BluetoothManagerImpl(
       readCharacteristics(macAddress, DeviceInformation.Characteristics.HARDWARE_REVISION).toObservable(),
       readCharacteristics(macAddress, DeviceInformation.Characteristics.FIRMWARE_VERSION).toObservable(),
       readCharacteristics(macAddress, DeviceInformation.Characteristics.SERIAL_NUMBER).toObservable(),
-      Function4 { manufacturer: ByteArray, hardwareRevision: ByteArray, firmwareVersion: ByteArray, serialNumber: ByteArray ->
+      { manufacturer: ByteArray, hardwareRevision: ByteArray, firmwareVersion: ByteArray, serialNumber: ByteArray ->
         DeviceInfo(
           macAddress,
           manufacturer.toString(Charsets.UTF_8),
@@ -446,7 +454,7 @@ class BluetoothManagerImpl(
     }
   }
 
-  private fun writeCharacteristic(macAddress: String, characteristic: UUID, data: ByteArray) : Completable {
+  override fun writeCharacteristic(macAddress: String, characteristic: UUID, data: ByteArray) : Completable {
     val rxConnection = bleConnections[macAddress]
 
     return if(rxConnection == null) {

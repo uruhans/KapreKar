@@ -5,9 +5,7 @@ import android.content.Context
 import com.coloplast.olympus.BuildConfig
 import com.coloplast.olympus.Me
 import com.coloplast.olympus.bluetooth.BluetoothServiceViewModel
-import com.coloplast.olympus.bluetooth.businesslayer.BluetoothManager
-import com.coloplast.olympus.bluetooth.businesslayer.BluetoothManagerImpl
-import com.coloplast.olympus.bluetooth.businesslayer.DeviceConnection
+import com.coloplast.olympus.bluetooth.businesslayer.*
 import com.coloplast.olympus.businesslayer.components.TransmitterComponentImpl
 import com.coloplast.olympus.businesslayer.components.UserComponentImpl
 import com.coloplast.olympus.businesslayer.interfaces.TransmitterComponent
@@ -49,13 +47,14 @@ val koinModule = module {
 
   /* Notifications */
   single { androidContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }
-  single { NotificationCenter(androidContext(), get(), get())}
+  single { NotificationCenter(androidContext(), get(), get()) }
   single { OlympusNotificationManager(get()) }
   single { NotificationScheduler() }
 
   /* Bluetooth */
   single<BluetoothManager> { BluetoothManagerImpl(get(), androidContext(), BuildConfig.DEBUG) }
-  factory { DeviceConnection(get()) }
+  factory { DeviceConnection(get(), get()) }
+  single<FirmwareManager> { FirmwareManagerImpl(androidContext(), get()) }
 
   single { TransmitterManager(get(), get()) }
   single { BreachesOccurred(get()) }

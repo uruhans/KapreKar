@@ -44,8 +44,8 @@ object BleDeviceBondingManager {
           }
           
           context.registerReceiver(receiver, IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED))
+          rxBleDevice.bluetoothDevice.setPin("000000".toByteArray(Charset.forName("UTF-8")))
 
-          rxBleDevice.bluetoothDevice.setPin("123456".toByteArray(Charset.forName("UTF-8")))
           val createBondResult = rxBleDevice.bluetoothDevice.createBond()
           if (!createBondResult) {
             emitter.onError(BleBondingFailedException())

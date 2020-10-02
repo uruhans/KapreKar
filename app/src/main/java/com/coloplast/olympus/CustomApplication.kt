@@ -29,7 +29,6 @@ class CustomApplication : Application() {
       modules(koinModule)
     }
 
-
     if (BuildConfig.DEBUG) {
       scheduleWorkers()
     }

@@ -111,7 +111,7 @@ class BluetoothServiceViewModel(
                   currentBluetoothStateObservable.doOnNext { Timber.d("BEACON currentBluetoothState $it") }.filter { it != BluetoothState.READY }
                 ).doOnNext { Timber.d("BEACON Stopped Scanning") })
               // only return distinct beacons so we prevent duplicates getting through all the time
-              .distinctUntilChanged()
+//              .distinctUntilChanged()
               .doOnNext { Timber.d("BEACON Beacon found: $it") }
               .flatMap { beaconAddress ->
                 // now we need to figure out if the found beacon is one of "ours" - meaning, have we added it manually before?
@@ -149,7 +149,8 @@ class BluetoothServiceViewModel(
     val disconnectTransmitterObservable = ServiceDispatcher.serviceEventObservable()
       .filter { it is ServiceEvent.DisconnectTransmitter }
       .map { it as ServiceEvent.DisconnectTransmitter }
-      .doOnNext { connectedBleDevicesList.remove(it.macAddress) }
+      .doOnNext { removeConnectedDeviceAndNotify(it.macAddress) }
+      .delay(5, TimeUnit.SECONDS)
 
     // merging beacon scannings and database transmitters in order to
     // provide a list of transmitters to connect to
@@ -159,7 +160,7 @@ class BluetoothServiceViewModel(
     )
       // add delay to each onNext to allow for device to be connected to not overload the BLE stack
       .zipWith(repeatIntervalObservable(5),
-        BiFunction { macAddress: String, _: Long -> macAddress })
+        { macAddress: String, _: Long -> macAddress })
       .flatMap { macAddress ->
         bluetoothManager.bleConnectionStateObservable(macAddress)
           .takeUntil(disconnectTransmitterObservable)

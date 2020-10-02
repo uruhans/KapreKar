@@ -30,7 +30,4 @@ interface TransmitterComponent {
 
   fun syncTransmitters(userId: UUID) : Observable<SyncResult>
   fun updateAdditionalInfoForTransmitter(macAddress: String, firmwareVersion: String, hardwareRevision: String, manufacturerName: String, serialNumber: String, settings: ByteArray, classifierSettings: ByteArray) : Completable
-
-  fun latestFirmwareVersion(macAddress: String, currentAppVersion: String) : Observable<FirmwareResult>
-  fun initiateFirmwareDownload(macAddress: String, currentAppVersion: String) : Observable<String>
 }

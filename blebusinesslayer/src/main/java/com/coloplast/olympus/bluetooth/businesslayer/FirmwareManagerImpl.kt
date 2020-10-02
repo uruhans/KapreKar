@@ -4,8 +4,9 @@ import com.coloplast.olympus.bluetooth.businesslayer.firmware.CypressBootloaderM
 import com.coloplast.olympus.bluetooth.businesslayer.firmware.FirmwareUpdateModel
 import com.coloplast.olympus.bluetooth.businesslayer.services.CommandService
 import com.coloplast.olympus.bluetooth.businesslayer.services.OtaFirmware
-import com.coloplast.olympus.businesslayer.interfaces.TransmitterComponent
+import com.coloplast.olympus.businesslayer.interfaces.FirmwareComponent
 import com.coloplast.olympus.shared.models.FirmwareResult
+import com.coloplast.olympus.shared.utils.FileUtils
 import com.jakewharton.rxrelay2.PublishRelay
 import com.polidea.rxandroidble2.RxBleConnection
 import io.reactivex.Completable
@@ -15,17 +16,22 @@ import java.util.concurrent.TimeUnit
 
 class FirmwareManagerImpl(
   private val bluetoothManager: BluetoothManager,
-  private val transmitterComponent: TransmitterComponent
+  private val firmwareComponent: FirmwareComponent
 ) : FirmwareManager {
 
   private val serviceRelay = PublishRelay.create<FirmwareManager.ServiceState>()
 
-  override fun latestFirmwareVersion(macAddress: String): Observable<FirmwareResult> {
-    return transmitterComponent.latestFirmwareVersion(macAddress, BuildConfig.VERSION_NAME)
+  override fun latestFirmwareVersion(macAddress: String, currentAppVersion: String): Observable<FirmwareResult> {
+    return firmwareComponent.latestFirmwareVersion(macAddress, currentAppVersion)
   }
 
-  override fun initiateFirmwareDownload(macAddress: String) : Observable<FirmwareUpdateModel> {
-    return transmitterComponent.latestFirmwareVersion(macAddress, BuildConfig.VERSION_NAME)
+  override fun initiateFirmwareDownload(macAddress: String, currentAppVersion: String) : Observable<FirmwareUpdateModel> {
+    return firmwareComponent.initiateFirmwareDownload(macAddress, currentAppVersion)
+      // this will save the incoming ByteArray to file system
+      .map { data -> FileUtils.saveAsFileInExternalFilesDir(data) }
+      // then unzip the zipped file into separate firmware and signature files
+      .map { zippedFilename -> FileUtils.unzipFirmware(zippedFilename) }
+      // and return a firmware update model (this uses the default naming conventions for firmwares and signatures)
       .map { FirmwareUpdateModel() }
   }
 

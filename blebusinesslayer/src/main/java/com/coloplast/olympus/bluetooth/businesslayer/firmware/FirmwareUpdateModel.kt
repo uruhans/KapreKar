@@ -15,11 +15,11 @@ class FirmwareUpdateModel(
     COMPLETED,
   }
 
-  private val bootloaderData = String(FileUtils.fromExternalFile(bootloaderName))
-  private val appData = String(FileUtils.fromExternalFile(appFirmwareName))
+  private val bootloaderData = String(FileUtils.getFileFromExternalFilesAsByteArray(bootloaderName))
+  private val appData = String(FileUtils.getFileFromExternalFilesAsByteArray(appFirmwareName))
 
-  private val bootloaderSignatureAsString = String(FileUtils.fromExternalFile(bootloaderSignatureName))
-  private val appSignatureAsString = String(FileUtils.fromExternalFile(appSignatureName))
+  private val bootloaderSignatureAsString = String(FileUtils.getFileFromExternalFilesAsByteArray(bootloaderSignatureName))
+  private val appSignatureAsString = String(FileUtils.getFileFromExternalFilesAsByteArray(appSignatureName))
 
   private val isBootloaderSignatureValid: Boolean
   private val isAppSignatureValid: Boolean
@@ -31,7 +31,7 @@ class FirmwareUpdateModel(
   private var currentFirmwareModel = CypressBootloaderModel(bootloaderFirmware)
 
   init {
-    val publicKey = String(FileUtils.fromAssets("publickey.der"))
+    val publicKey = String(FileUtils.getFileFromAssetsAsByteArray("publickey.der"))
 
     isBootloaderSignatureValid = SignatureVerifier.verifySignature(bootloaderData, bootloaderSignatureAsString, publicKey)
     isAppSignatureValid = SignatureVerifier.verifySignature(appData, appSignatureAsString, publicKey)

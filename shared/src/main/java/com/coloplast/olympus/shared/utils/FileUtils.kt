@@ -8,7 +8,12 @@ import java.util.zip.ZipFile
 
 object FileUtils {
 
-  fun fromAssets(assetName: String): ByteArray {
+  /**
+   * Given an assetName will return the ByteArray
+   *
+   * @param assetName the AssetName to get
+   */
+  fun getFileFromAssetsAsByteArray(assetName: String): ByteArray {
     val inputStream: InputStream = AppSettings.applicationContext.assets.open(assetName)
 
     val buffer = ByteArray(8192)
@@ -21,7 +26,12 @@ object FileUtils {
     return output.toByteArray()
   }
 
-  fun fromExternalFile(filename: String): ByteArray {
+  /**
+   * Returns a given file from the external files directory as a ByteArray
+   *
+   * @param filename The name of the file to get from
+   */
+  fun getFileFromExternalFilesAsByteArray(filename: String): ByteArray {
     val file = File("${AppSettings.applicationContext.getExternalFilesDir(null)}${File.separator}$filename")
 
     if(file.exists()) {
@@ -31,10 +41,14 @@ object FileUtils {
     throw FileNotFoundException()
   }
 
-  const val FIRMWARE_ZIP = "latest_firmware.zip"
-
-  fun storeZippedFirmwareLocally(data: ByteArray) : String {
-    val file = File(AppSettings.applicationContext.getExternalFilesDir(null), FIRMWARE_ZIP)
+  /**
+   * Store a ByteArray of data in the external files directory, with a given filename
+   *
+   * @param data Data to store in the external files directory
+   * @param filename Name of the file to store the data in
+   */
+  fun saveAsFileInExternalFilesDir(data: ByteArray, filename: String = "latest_firmware.zip") : String {
+    val file = File(AppSettings.applicationContext.getExternalFilesDir(null), filename)
 
     if(file.exists()) {
       file.delete()
@@ -46,11 +60,22 @@ object FileUtils {
     fileOutputStream.write(data)
     fileOutputStream.close()
 
-    return FIRMWARE_ZIP
+    return filename
   }
 
+  /** ZipIO class to hold information about the current file in a zipped archive **/
   data class ZipIO (val entry: ZipEntry, val output: File)
 
+  /**
+   * Unzip a downloaded firmware archive, that contains the following
+   *
+   * - bootloader.cyacd (the bootloader firmware)
+   * - bootloader.signature (the signature for the bootloader firmware)
+   * - firmware.cyacd (the app firmware)
+   * - firmware.signature (the signature for the app firmware)
+   *
+   * @param zippedFilename the name of the zippedFilename containing the firmwares to unzip
+   */
   fun unzipFirmware(zippedFilename: String) : String {
     val unzipLocationRoot = AppSettings.applicationContext.getExternalFilesDir(null)
 
@@ -70,7 +95,6 @@ object FileUtils {
         }
         .filter { it.entry.name.startsWith("_").not() }
         .map {
-          Timber.d("zipped: $it")
           it.output.parentFile?.run{
             if (!exists()) mkdirs()
           }

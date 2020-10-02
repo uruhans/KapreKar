@@ -18,11 +18,11 @@ import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import java.util.concurrent.TimeUnit
 
 class TransmittersViewModel(
   private val bluetoothManager: BluetoothManager,
-  private val transmitterComponent: TransmitterComponent,
-  private val firmwareManager: FirmwareManager
+  private val transmitterComponent: TransmitterComponent
 ) : BaseViewModel<TransmittersUiModel, TransmittersView>() {
 
   override fun bind(uiView: TransmittersView): Disposable {
@@ -87,18 +87,13 @@ class TransmittersViewModel(
 
     val retryConnectionObservable: Observable<TransmittersUiModel> = uiView.retryConnection()
       .switchMap {
-        firmwareManager.initiateFirmwareDownload("E3:34:08:30:D7:65", BuildConfig.VERSION_NAME)
-          .subscribeOn(Schedulers.io())
-          .flatMap { firmwareManager.updateFirmware("E3:34:08:30:D7:65", it) }
-          .map { TransmittersUiModel.RetryConnectComplete() }
+        // initiate reconnection retry on the service
+        ServiceDispatcher.dispatchEvent(ServiceEvent.RetryConnection())
 
-//        // initiate reconnection retry on the service
-//        ServiceDispatcher.dispatchEvent(ServiceEvent.RetryConnection())
-//
-//        // after 5 seconds send back a completed response
-//        Observable.just(TransmittersUiModel.RetryConnectComplete() as TransmittersUiModel)
-//          .delay(5, TimeUnit.SECONDS)
-//          .startWith(TransmittersUiModel.RetryConnectToTransmitters())
+        // after 5 seconds send back a completed response
+        Observable.just(TransmittersUiModel.RetryConnectComplete() as TransmittersUiModel)
+          .delay(5, TimeUnit.SECONDS)
+          .startWith(TransmittersUiModel.RetryConnectToTransmitters())
       }
 
     disposable.add(

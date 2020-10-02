@@ -21,6 +21,12 @@ class FirmwareManagerImpl(
 
   private val serviceRelay = PublishRelay.create<FirmwareManager.ServiceState>()
 
+  /** just for future reference **/
+  //  firmwareManager.initiateFirmwareDownload("E3:34:08:30:D7:65", BuildConfig.VERSION_NAME)
+  //  .subscribeOn(Schedulers.io())
+  //  .flatMap { firmwareManager.updateFirmware("E3:34:08:30:D7:65", it) }
+  //  .map { TransmittersUiModel.RetryConnectComplete() }
+
   override fun latestFirmwareVersion(macAddress: String, currentAppVersion: String): Observable<FirmwareResult> {
     return firmwareComponent.latestFirmwareVersion(macAddress, currentAppVersion)
   }

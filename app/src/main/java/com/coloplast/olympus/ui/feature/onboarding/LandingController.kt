@@ -31,40 +31,39 @@ class LandingController : BaseController<ControllerLandingBinding>() {
   }
 
   override fun onViewBound(viewBinding: ControllerLandingBinding) {
-    var delay = 1000L
 
-    val routerTransaction = if (preferences.didSeeValueProposition.not()) {
-      ValuePropositionFlowController.routerTransaction()
-    }
-    else if (preferences.getCurrentOnboardingProgress() == OnboardingProgression.NOT_STARTED) {
-      null
-    }
-    else if (preferences.userToken.isNotBlank()) {
-      if (preferences.getCurrentOnboardingProgress() != OnboardingProgression.COMPLETED) {
-        val flowTransaction = when (preferences.getCurrentOnboardingProgress()) {
+    val (routerTransaction, delay) = when (preferences.didSeeValueProposition) {
+      false -> Pair(ValuePropositionFlowController.routerTransaction(), 1000L)
+      true -> if (preferences.userToken.isNotBlank()) {
+        when (preferences.getCurrentOnboardingProgress()) {
+          OnboardingProgression.NOT_STARTED, // freshly installed app and login with existing user.
           OnboardingProgression.SETUP_GUIDE_START,
-          OnboardingProgression.SETUP_GUIDE_INTRODUCTION -> SetupGuideIntroFlowController.routerTransaction()
-          OnboardingProgression.SETUP_GUIDE_CONNECTING -> SetupGuideConnectionFlowController.routerTransaction()
-          OnboardingProgression.SETUP_GUIDE_PREPARING -> SetupGuidePreparingFlowController.routerTransaction()
-          OnboardingProgression.SETUP_GUIDE_APPLYING -> SetupGuideApplyingFlowController.routerTransaction()
-          else -> null
+          OnboardingProgression.SETUP_GUIDE_INTRODUCTION -> Pair(
+            SetupGuideIntroFlowController.routerTransaction(),
+            50L
+          )
+          OnboardingProgression.SETUP_GUIDE_CONNECTING -> Pair(
+            SetupGuideConnectionFlowController.routerTransaction(),
+            50L
+          )
+          OnboardingProgression.SETUP_GUIDE_PREPARING -> Pair(
+            SetupGuidePreparingFlowController.routerTransaction(),
+            50L
+          )
+          OnboardingProgression.SETUP_GUIDE_APPLYING -> Pair(
+            SetupGuideApplyingFlowController.routerTransaction(),
+            50L
+          )
+          OnboardingProgression.COMPLETED -> {
+            router.setPopsLastView(true)
+            router.popCurrentController()
+            router.setPopsLastView(false)
+            Pair(HomeController.routerTransaction(), 1000L)
+          }
+          else -> Pair(null, 0L)
         }
-
-        delay = 50L
-        flowTransaction
       }
-      else if (preferences.getCurrentOnboardingProgress() == OnboardingProgression.COMPLETED) {
-        router.setPopsLastView(true)
-        router.popCurrentController()
-        router.setPopsLastView(false)
-        HomeController.routerTransaction()
-      }
-      else {
-        null
-      }
-    }
-    else {
-      null
+      else { Pair(null, 0L) }
     }
 
     routerTransaction?.let {

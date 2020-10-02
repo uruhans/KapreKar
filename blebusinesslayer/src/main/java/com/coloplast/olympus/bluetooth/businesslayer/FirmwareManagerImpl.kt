@@ -33,7 +33,7 @@ class FirmwareManagerImpl(
     TODO("Not yet implemented")
   }
 
-  override fun serviceCallback(): Observable<FirmwareManager.ServiceState> {
+  override fun serviceStateObservable(): Observable<FirmwareManager.ServiceState> {
     return serviceRelay
       .publish()
       .refCount()

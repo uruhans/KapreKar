@@ -69,7 +69,7 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
 
     compositeDisposable.add(get<BluetoothServiceViewModel>().bind(this))
     compositeDisposable.add(
-      firmwareManager.serviceCallback()
+      firmwareManager.serviceStateObservable()
         .filter { it == FirmwareManager.ServiceState.STOP_SERVICE }
         .subscribe { killService() }
     )

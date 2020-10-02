@@ -1,12 +1,12 @@
 package com.coloplast.olympus.bluetooth.businesslayer
 
 import com.coloplast.olympus.bluetooth.businesslayer.firmware.FirmwareUpdateModel
-import com.coloplast.olympus.shared.models.FirmwareResult
+import com.coloplast.olympus.shared.models.UpdateResult
 import io.reactivex.Observable
 
 interface FirmwareManager {
   fun serviceStateObservable() : Observable<ServiceState>
-  fun latestFirmwareVersion(macAddress: String, currentAppVersion: String): Observable<FirmwareResult>
+  fun firmwareUpdateAvailable(macAddress: String, currentAppVersion: String): Observable<UpdateResult>
   fun initiateFirmwareDownload(macAddress: String, currentAppVersion: String) : Observable<FirmwareUpdateModel>
   fun updateFirmware(macAddress: String, firmwareUpdateModel: FirmwareUpdateModel) : Observable<Int>
 

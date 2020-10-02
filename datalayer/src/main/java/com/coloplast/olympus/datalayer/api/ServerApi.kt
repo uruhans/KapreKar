@@ -37,4 +37,7 @@ interface ServerApi {
 
   @GET
   fun downloadFirmware(@Url fileUrl: String) : Observable<ResponseBody>
+
+  @GET("appversions/android")
+  fun getLatestAppVersion() : Observable<AppVersionDTO>
 }

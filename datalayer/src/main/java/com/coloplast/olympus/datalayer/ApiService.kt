@@ -1,6 +1,7 @@
 package com.coloplast.olympus.datalayer
 
 import com.coloplast.olympus.datalayer.models.UserResponseDTO
+import com.coloplast.olympus.shared.models.AppVersion
 import com.coloplast.olympus.shared.models.Credentials
 import com.coloplast.olympus.shared.models.FirmwareContent
 import com.coloplast.olympus.shared.models.User
@@ -25,4 +26,6 @@ interface ApiService {
 
   fun latestFirmware() : Observable<FirmwareContent>
   fun downloadFirmware(url: String) : Observable<ByteArray>
+
+  fun latestAppVersion(): Observable<AppVersion>
 }

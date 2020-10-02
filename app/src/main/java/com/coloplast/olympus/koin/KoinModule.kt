@@ -6,10 +6,10 @@ import com.coloplast.olympus.BuildConfig
 import com.coloplast.olympus.Me
 import com.coloplast.olympus.bluetooth.BluetoothServiceViewModel
 import com.coloplast.olympus.bluetooth.businesslayer.*
-import com.coloplast.olympus.businesslayer.components.FirmwareComponentImpl
+import com.coloplast.olympus.businesslayer.components.SystemUpdateComponentImpl
 import com.coloplast.olympus.businesslayer.components.TransmitterComponentImpl
 import com.coloplast.olympus.businesslayer.components.UserComponentImpl
-import com.coloplast.olympus.businesslayer.interfaces.FirmwareComponent
+import com.coloplast.olympus.businesslayer.interfaces.SystemUpdateComponent
 import com.coloplast.olympus.businesslayer.interfaces.TransmitterComponent
 import com.coloplast.olympus.businesslayer.interfaces.UserComponent
 import com.coloplast.olympus.notifications.NotificationCenter
@@ -64,13 +64,13 @@ val koinModule = module {
   /* Components */
   single<TransmitterComponent> { TransmitterComponentImpl(get()) }
   single<UserComponent> { UserComponentImpl(get()) }
-  single<FirmwareComponent> { FirmwareComponentImpl() }
+  single<SystemUpdateComponent> { SystemUpdateComponentImpl() }
 
   /* ViewModels */
   factory { BluetoothServiceViewModel(get(), get(), get()) }
   single { SplashViewModel(get(), get()) }
   single { HomeViewModel(get()) }
-  single { TransmittersViewModel(get(), get()) }
+  single { TransmittersViewModel(get(), get(), get()) }
   single { AddTransmitterAT9ViewModel(get(), get(), get()) }
   single { AwaitingConnectionViewModel(get()) }
   single { LoginViewModel(get(), get()) }

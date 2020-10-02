@@ -1,18 +1,28 @@
 package com.coloplast.olympus.businesslayer.components
 
-import com.coloplast.olympus.businesslayer.interfaces.FirmwareComponent
+import com.coloplast.olympus.businesslayer.interfaces.SystemUpdateComponent
 import com.coloplast.olympus.databaselayer.DbServiceImpl
 import com.coloplast.olympus.datalayer.ApiServiceImpl
-import com.coloplast.olympus.shared.models.FirmwareResult
+import com.coloplast.olympus.shared.models.UpdateResult
 import io.reactivex.Observable
 import timber.log.Timber
 
-class FirmwareComponentImpl : FirmwareComponent {
+class SystemUpdateComponentImpl : SystemUpdateComponent {
 
   private val dbService = DbServiceImpl()
   private val apiService = ApiServiceImpl()
 
-  override fun latestFirmwareVersion(macAddress: String, currentAppVersion: String): Observable<FirmwareResult> {
+  override fun appUpdateAvailable(currentAppVersion: String): Observable<UpdateResult> {
+    return apiService.latestAppVersion()
+      .map {
+        if(it.version > currentAppVersion) {
+          return@map UpdateResult.AppUpdateAvailable(it)
+        }
+        return@map UpdateResult.NoUpdate()
+      }
+  }
+
+  override fun firmwareUpdateAvailable(macAddress: String, currentAppVersion: String): Observable<UpdateResult> {
     return dbService.getSingleTransmitter(macAddress)
       .toObservable()
       .flatMap { dbTransmitter ->
@@ -21,19 +31,19 @@ class FirmwareComponentImpl : FirmwareComponent {
           .map { firmware ->
             if (firmware.isMinimumAndroidVersion(currentAppVersion)) {
               if (firmware.isNewer(dbTransmitter.firmwareVersion ?: "")) {
-                return@map FirmwareResult.UpdateAvailable(firmware)
+                return@map UpdateResult.FirmwareUpdateAvailable(firmware)
               }
             }
 
-            return@map FirmwareResult.NoUpdate()
+            return@map UpdateResult.NoUpdate()
           }
       }
   }
 
   override fun initiateFirmwareDownload(macAddress: String, currentAppVersion: String): Observable<ByteArray> {
-    return latestFirmwareVersion(macAddress, currentAppVersion)
+    return firmwareUpdateAvailable(macAddress, currentAppVersion)
       .flatMap {
-        if (it is FirmwareResult.UpdateAvailable) {
+        if (it is UpdateResult.FirmwareUpdateAvailable) {
           apiService.downloadFirmware(it.firmwareContent.filePath)
         }
         else {

@@ -23,6 +23,11 @@ object DeviceUtils {
     }
   }
 
+  @JvmStatic
+  fun versionName() : String {
+    return BuildConfig.VERSION_NAME
+  }
+
   fun screenWidth(): Int {
     return AppSettings.applicationContext.resources.displayMetrics.widthPixels
   }

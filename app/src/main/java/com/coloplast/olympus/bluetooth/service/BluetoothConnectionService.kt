@@ -81,6 +81,10 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
       Timber.d("$it")
 
       when (it) {
+        is BluetoothServiceModel.FirmwareUpdateAvailable -> {
+          olympusNotificationManager.send(UiState.FIRMWARE_AVAILABLE)
+          StateDispatcher.dispatchStateForActiveTransmitter(it.statusChange)
+        }
         is BluetoothServiceModel.DeviceUpdate -> {
           if (it.statusChange.state == UiState.SOMETHING_ELSE) {
             return@ui

@@ -31,6 +31,7 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
    */
   fun send(state: UiState) {
     val payload = when (state) {
+      UiState.FIRMWARE_AVAILABLE -> { null }
       UiState.NO_CHANGE -> { null }
       UiState.TRANSMITTER_DELETED -> { null }
       UiState.INITIAL -> { null }

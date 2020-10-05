@@ -18,6 +18,7 @@ interface DbService {
   fun updateUserSyncState(userId: UUID, syncState: SyncState) : Completable
 
   fun getTransmitters(): Observable<DataResult<List<Transmitter>>>
+  fun getTransmittersAsSingle(): Single<List<Transmitter>>
   fun getTransmitter(macAddress: String): Observable<DataResult<Transmitter>>
   fun getSingleTransmitter(macAddress: String) : Single<Transmitter>
   fun insertOrUpdateTransmitter(transmitter: Transmitter): Completable

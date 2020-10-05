@@ -186,6 +186,11 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
           stateChange.bleDevice.peripheral?.battery?.let { battery.set(it) }
           isConnected.set(stateChange.bleDevice.isConnected())
 
+          if(stateChange.state == UiState.FIRMWARE_AVAILABLE) {
+            changeUiState(stateChange.state)
+            return@ui
+          }
+
           breachesOccurred.add(stateChange)
 
           stateChange.bleDevice.peripheral?.transmitter?.rawRotationalAngle?.let {
@@ -237,6 +242,9 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
     }
     else {
       val routerTransaction = when (newState) {
+        UiState.FIRMWARE_AVAILABLE -> {
+          FirmwareAvailableController.routerTransaction()
+        }
         UiState.SOMETHING_ELSE, // TODO - something else might need to be removed
         UiState.OK_A -> {
           OkController.routerTransaction()

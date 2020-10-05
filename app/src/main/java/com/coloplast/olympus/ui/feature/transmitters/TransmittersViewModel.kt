@@ -1,32 +1,25 @@
 package com.coloplast.olympus.ui.feature.transmitters
 
 import com.artemzin.rxui.kotlin.bind
-import com.coloplast.olympus.BuildConfig
 import com.coloplast.olympus.bluetooth.ServiceDispatcher
 import com.coloplast.olympus.bluetooth.StateDispatcher
 import com.coloplast.olympus.bluetooth.businesslayer.BluetoothManager
-import com.coloplast.olympus.bluetooth.businesslayer.FirmwareManager
-import com.coloplast.olympus.bluetooth.businesslayer.FirmwareManagerImpl
 import com.coloplast.olympus.bluetooth.model.ConnectionState
 import com.coloplast.olympus.bluetooth.model.ServiceEvent
-import com.coloplast.olympus.businesslayer.interfaces.SystemUpdateComponent
 import com.coloplast.olympus.businesslayer.interfaces.TransmitterComponent
 import com.coloplast.olympus.shared.models.DataResult
 import com.coloplast.olympus.shared.models.Transmitter
-import com.coloplast.olympus.shared.models.UpdateResult
 import com.coloplast.olympus.ui.common.BaseViewModel
 import com.coloplast.olympus.ui.feature.transmitters.models.TransmittersUiModel
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 class TransmittersViewModel(
   private val bluetoothManager: BluetoothManager,
-  private val transmitterComponent: TransmitterComponent,
-  private val systemUpdateComponent: SystemUpdateComponent
+  private val transmitterComponent: TransmitterComponent
 ) : BaseViewModel<TransmittersUiModel, TransmittersView>() {
 
   override fun bind(uiView: TransmittersView): Disposable {
@@ -91,18 +84,13 @@ class TransmittersViewModel(
 
     val retryConnectionObservable: Observable<TransmittersUiModel> = uiView.retryConnection()
       .switchMap {
-        systemUpdateComponent.appUpdateAvailable(BuildConfig.VERSION_NAME)
-          .subscribeOn(Schedulers.io())
-          .doOnNext { Timber.d("UpdateAvailable: [${it is UpdateResult.AppUpdateAvailable}]") }
-          .map { TransmittersUiModel.RetryConnectToTransmitters() }
+        // initiate reconnection retry on the service
+        ServiceDispatcher.dispatchEvent(ServiceEvent.RetryConnection())
 
-//        // initiate reconnection retry on the service
-//        ServiceDispatcher.dispatchEvent(ServiceEvent.RetryConnection())
-//
-//        // after 5 seconds send back a completed response
-//        Observable.just(TransmittersUiModel.RetryConnectComplete() as TransmittersUiModel)
-//          .delay(5, TimeUnit.SECONDS)
-//          .startWith(TransmittersUiModel.RetryConnectToTransmitters())
+        // after 5 seconds send back a completed response
+        Observable.just(TransmittersUiModel.RetryConnectComplete() as TransmittersUiModel)
+          .delay(5, TimeUnit.SECONDS)
+          .startWith(TransmittersUiModel.RetryConnectToTransmitters())
       }
 
     disposable.add(

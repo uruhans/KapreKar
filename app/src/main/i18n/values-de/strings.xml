@@ -406,6 +406,8 @@
 <string name="lock_notification_channel_name">Olympus Status Notifications</string>
 <string name="lock_notification_dirt">lock_notification_dirt</string>
 <string name="lock_notification_disconnection_battery">lock_notification_disconnection_battery</string>
+<string name="lock_notification_firmware_update">Olympus won\'t be able to send you leakage notification until the software on your transmitter is updated.</string>
+<string name="lock_notification_firmware_update_title">Critical transmitter software update required</string>
 <string name="lock_notification_inner">lock_notification_inner</string>
 <string name="lock_notification_inner_blind">lock_notification_inner_blind</string>
 <string name="lock_notification_moisture">lock_notification_moisture</string>

@@ -406,6 +406,8 @@
 <string name="lock_notification_channel_name">Olympus Status Notifikationer</string>
 <string name="lock_notification_dirt">Blokeret transmitterforbindelse.</string>
 <string name="lock_notification_disconnection_battery">Transmitterens batteri er løbet tør. Oplad venligst nu.</string>
+<string name="lock_notification_firmware_update">Olympus won\'t be able to send you leakage notification until the software on your transmitter is updated.</string>
+<string name="lock_notification_firmware_update_title">Critical transmitter software update required</string>
 <string name="lock_notification_inner">Tjek snart.</string>
 <string name="lock_notification_inner_blind">Sensorerne virker ikke.</string>
 <string name="lock_notification_moisture">Sensorerne virker ikke.</string>

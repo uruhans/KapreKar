@@ -8,8 +8,10 @@ class AuthInterceptor : Interceptor {
   override fun intercept(chain: Interceptor.Chain): Response {
     val requestBuilder = chain.request().newBuilder()
 
-    if (AppSettings.userToken.isNotBlank()) {
-      requestBuilder.addHeader("Authorization", "Bearer ${AppSettings.userToken}")
+    if(chain.request().url.queryParameter("sig") == null) {
+      if (AppSettings.userToken.isNotBlank()) {
+        requestBuilder.addHeader("Authorization", "Bearer ${AppSettings.userToken}")
+      }
     }
 
     return chain.proceed(requestBuilder.build())

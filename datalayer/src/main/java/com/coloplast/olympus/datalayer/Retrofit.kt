@@ -47,7 +47,6 @@ object Retrofit {
   private fun getMoshi(): Moshi {
     return Moshi.Builder()
       .add(KotlinJsonAdapterFactory())
-//      .add(InstantAdapter())
       .build()
   }
 }

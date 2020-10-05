@@ -2,6 +2,7 @@ package com.coloplast.olympus.datalayer
 
 import com.coloplast.olympus.datalayer.models.*
 import com.coloplast.olympus.shared.models.Credentials
+import com.coloplast.olympus.shared.models.FirmwareContent
 import com.coloplast.olympus.shared.models.User
 import io.reactivex.Completable
 import io.reactivex.Observable
@@ -22,7 +23,7 @@ class ApiServiceImpl : ApiService {
         user.surgeryDateInterval,
         user.phoneNumber,
         user.insuranceType,
-        user.consent ?: false
+        user.consent
       )
     )
   }
@@ -79,4 +80,13 @@ class ApiServiceImpl : ApiService {
     return api.validatePhoneCode(phoneValidationRequestDTO)
   }
 
+  override fun latestFirmware(): Observable<FirmwareContent> {
+    return api.getLatestFirmwareVersion()
+      .map { it.toFirmware() }
+  }
+
+  override fun downloadFirmware(url: String): Observable<ByteArray> {
+    return api.downloadFirmware(url)
+      .map { it.bytes() }
+  }
 }

@@ -16,7 +16,7 @@ class FirmwareAvailableController : BaseHomeUIController<ControllerStateFirmware
     // no-op
   }
   
-  fun onApplicationGuideClicked() {
+  fun onUpdateFirmwareClicked() {
 
   }
   

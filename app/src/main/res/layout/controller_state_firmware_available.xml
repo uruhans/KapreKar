@@ -23,7 +23,7 @@
       android:layout_marginStart="@dimen/spacing_standard"
       android:layout_marginTop="@dimen/spacing_half"
       android:layout_marginEnd="@dimen/spacing_standard"
-      android:text="Firmware available" />
+      android:text="@string/status_critical_firmware_update_title" />
 
     <TextView
       style="@style/Headline.Large"
@@ -33,7 +33,7 @@
       android:layout_marginEnd="@dimen/spacing_standard"
       android:layout_marginBottom="@dimen/spacing_double"
       android:fontFamily="@font/coloplast"
-      android:text="Update Firmware now"
+      android:text="@string/status_critical_firmware_update"
       android:textColor="@color/grey" />
 
     <androidx.cardview.widget.CardView
@@ -43,7 +43,7 @@
       android:layout_marginEnd="@dimen/spacing_standard"
       android:layout_marginBottom="@dimen/spacing_double"
       android:foreground="?attr/selectableItemBackground"
-      android:onClick="@{() -> controller.onApplicationGuideClicked()}"
+      android:onClick="@{() -> controller.onUpdateFirmwareClicked()}"
       app:cardBackgroundColor="@color/white"
       app:cardCornerRadius="28dp"
       app:cardElevation="4dp"
@@ -57,7 +57,7 @@
         android:layout_gravity="center"
         android:fontFamily="sans-serif-medium"
         android:gravity="center"
-        android:text="Update"
+        android:text="@string/guide_critical_firmware_update_title"
         android:textSize="18sp" />
 
     </androidx.cardview.widget.CardView>

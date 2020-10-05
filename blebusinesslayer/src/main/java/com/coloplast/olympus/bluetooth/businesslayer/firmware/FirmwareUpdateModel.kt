@@ -3,10 +3,10 @@ package com.coloplast.olympus.bluetooth.businesslayer.firmware
 import com.coloplast.olympus.shared.utils.FileUtils
 
 class FirmwareUpdateModel(
-  bootloaderName: String,
-  appFirmwareName: String,
-  bootloaderSignatureName: String,
-  appSignatureName: String
+  bootloaderName: String = "bootloader.cyacd",
+  appFirmwareName: String = "firmware.cyacd",
+  bootloaderSignatureName: String = "bootloader.signature",
+  appSignatureName: String = "firmware.signature"
 ) {
 
   enum class State {
@@ -15,11 +15,11 @@ class FirmwareUpdateModel(
     COMPLETED,
   }
 
-  private val bootloaderData = String(FileUtils.fromAssets(bootloaderName))
-  private val appData = String(FileUtils.fromAssets(appFirmwareName))
+  private val bootloaderData = String(FileUtils.getFileFromExternalFilesAsByteArray(bootloaderName))
+  private val appData = String(FileUtils.getFileFromExternalFilesAsByteArray(appFirmwareName))
 
-  private val bootloaderSignatureAsString = String(FileUtils.fromAssets(bootloaderSignatureName))
-  private val appSignatureAsString = String(FileUtils.fromAssets(appSignatureName))
+  private val bootloaderSignatureAsString = String(FileUtils.getFileFromExternalFilesAsByteArray(bootloaderSignatureName))
+  private val appSignatureAsString = String(FileUtils.getFileFromExternalFilesAsByteArray(appSignatureName))
 
   private val isBootloaderSignatureValid: Boolean
   private val isAppSignatureValid: Boolean
@@ -31,7 +31,7 @@ class FirmwareUpdateModel(
   private var currentFirmwareModel = CypressBootloaderModel(bootloaderFirmware)
 
   init {
-    val publicKey = String(FileUtils.fromAssets("publickey.der"))
+    val publicKey = String(FileUtils.getFileFromAssetsAsByteArray("publickey.der"))
 
     isBootloaderSignatureValid = SignatureVerifier.verifySignature(bootloaderData, bootloaderSignatureAsString, publicKey)
     isAppSignatureValid = SignatureVerifier.verifySignature(appData, appSignatureAsString, publicKey)
@@ -57,18 +57,11 @@ class FirmwareUpdateModel(
     return currentState
   }
 
-  fun firmwareCompleted() {
-    when(currentState) {
-      State.BOOTLOADER -> {
-        currentState = State.APP
-        currentFirmwareModel = CypressBootloaderModel(appFirmware)
-      }
-      State.APP -> {
-        currentState = State.COMPLETED
-      }
-      State.COMPLETED -> {
-        
-      }
+  fun updateState(newState: State) {
+    currentState = newState
+
+    if(currentState == State.APP) {
+      currentFirmwareModel = CypressBootloaderModel(appFirmware)
     }
   }
 

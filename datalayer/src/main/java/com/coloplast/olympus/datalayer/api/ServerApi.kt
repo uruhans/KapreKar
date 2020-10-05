@@ -3,10 +3,8 @@ package com.coloplast.olympus.datalayer.api
 import com.coloplast.olympus.datalayer.models.*
 import io.reactivex.Completable
 import io.reactivex.Observable
-import retrofit2.http.Body
-import retrofit2.http.POST
-import retrofit2.http.PUT
-import retrofit2.http.Path
+import okhttp3.ResponseBody
+import retrofit2.http.*
 
 interface ServerApi {
 
@@ -23,15 +21,20 @@ interface ServerApi {
   fun requestSecurityCode(@Body changePasswordRequest: ChangePasswordRequest): Completable
 
   @POST("securitycodes/validate")
-  //fun confirmCode(@Query("securityCode") code: String, @Query("email") email: String): Completable
   fun confirmCode(@Body changePasswordRequest: ChangePasswordRequest): Completable
 
   @PUT("auth/changepassword")
   fun changePassword(@Body changePasswordRequest: ChangePasswordRequest): Completable
 
-  @POST("/api/v1/PhoneValidation")
+  @POST("phonevalidation")
   fun requestPhoneValidationSMS(@Body phoneValidationRequestDTO: PhoneValidationRequestDTO): Completable
 
-  @POST("/api/v1/PhoneValidation/validate")
+  @POST("phonevalidation/validate")
   fun validatePhoneCode(@Body phoneValidationRequestDTO: PhoneValidationRequestDTO): Completable
+
+  @GET("firmware/latest")
+  fun getLatestFirmwareVersion() : Observable<FirmwareDTO>
+
+  @GET
+  fun downloadFirmware(@Url fileUrl: String) : Observable<ResponseBody>
 }

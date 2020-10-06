@@ -397,6 +397,8 @@
 <string name="guides_menu_title">Guides</string>
 <string name="launch_screen_title">Olympus</string>
 <string name="lock_notification_action_snooze">Snooze.</string>
+<string name="lock_notification_app_update">Olympus won\'t be able to send you leakage notification until the software on your transmitter is updated.</string>
+<string name="lock_notification_app_update_title">Critical transmitter software update required</string>
 <string name="lock_notification_battery_critical">Transmitterens batteri er meget lavt.</string>
 <string name="lock_notification_ble_disconnected">Ingen Bluetooth forbindelse.</string>
 <string name="lock_notification_ble_off">Bluetooth er slået fra.</string>

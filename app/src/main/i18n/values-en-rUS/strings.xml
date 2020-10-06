@@ -398,6 +398,8 @@
 <string name="guides_menu_title">Guides</string>
 <string name="launch_screen_title">Olympus</string>
 <string name="lock_notification_action_snooze">Snooze</string>
+<string name="lock_notification_app_update">Olympus will no longer be able to function until the app is updated.</string>
+<string name="lock_notification_app_update_title">Critical transmitter software update required</string>
 <string name="lock_notification_battery_critical">Transmitter battery very low.</string>
 <string name="lock_notification_ble_disconnected">Bluetooth connection lost.</string>
 <string name="lock_notification_ble_off">Bluetooth disconnected.</string>

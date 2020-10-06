@@ -186,7 +186,8 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
           stateChange.bleDevice.peripheral?.battery?.let { battery.set(it) }
           isConnected.set(stateChange.bleDevice.isConnected())
 
-          if(stateChange.state == UiState.FIRMWARE_AVAILABLE) {
+          if(stateChange.state == UiState.APP_UPDATE_AVAILABLE
+            || stateChange.state == UiState.FIRMWARE_AVAILABLE) {
             changeUiState(stateChange.state)
             return@ui
           }
@@ -244,6 +245,9 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
       val routerTransaction = when (newState) {
         UiState.FIRMWARE_AVAILABLE -> {
           FirmwareAvailableController.routerTransaction()
+        }
+        UiState.APP_UPDATE_AVAILABLE -> {
+          AppUpdateAvailableController.routerTransaction()
         }
         UiState.SOMETHING_ELSE, // TODO - something else might need to be removed
         UiState.OK_A -> {

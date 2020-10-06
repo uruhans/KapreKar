@@ -34,6 +34,7 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
       UiState.FIRMWARE_AVAILABLE -> {
         NotificationPayload(state.notificationId(), R.string.lock_notification_firmware_update_title, title = R.string.lock_notification_firmware_update)
       }
+      UiState.APP_UPDATE_AVAILABLE -> { null }
       UiState.NO_CHANGE -> { null }
       UiState.TRANSMITTER_DELETED -> { null }
       UiState.INITIAL -> { null }

@@ -2,16 +2,21 @@ package com.coloplast.olympus.bluetooth.businesslayer
 
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.bluetooth.businesslayer.models.DeviceResult
+import com.coloplast.olympus.businesslayer.interfaces.SystemUpdateComponent
 import com.coloplast.olympus.businesslayer.interfaces.TransmitterComponent
+import com.coloplast.olympus.shared.models.UpdateResult
 import io.reactivex.Observable
+import io.reactivex.schedulers.Schedulers
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 class DeviceConnection(
   private val bluetoothManager: BluetoothManager,
-  private val transmitterComponent: TransmitterComponent
+  private val transmitterComponent: TransmitterComponent,
+  private val systemUpdateComponent: SystemUpdateComponent
 ) {
 
-  fun subscribeForNotifications(macAddress: String): Observable<DeviceResult> {
+  fun subscribeForNotifications(macAddress: String, currentAppVersion: String): Observable<DeviceResult> {
 
     // connect to specific device or use the connection we already have
     val connectedBleDeviceObservable = bluetoothManager.bleConnectionStateObservable(macAddress)
@@ -69,10 +74,23 @@ class DeviceConnection(
       // and map to a raw data result
       .map { DeviceResult.RawDataPackageResult(macAddress, it) }
 
+    val firmwareUpdateAvailableObservable = systemUpdateComponent.firmwareUpdateAvailable(macAddress, currentAppVersion)
+      .subscribeOn(Schedulers.io())
+      .doOnNext { Timber.d("Firmware Update Available: [${it is UpdateResult.FirmwareUpdateAvailable}]") }
+      .cache()
+
     // finally merge and return result
     return Observable.merge(
-      notificationSubscriptionObservable,
+      notificationSubscriptionObservable.withLatestFrom(
+        firmwareUpdateAvailableObservable, { deviceResult, firmwareResult ->
+          if (firmwareResult is UpdateResult.FirmwareUpdateAvailable) {
+            DeviceResult.FirmwareAvailable(firmwareResult, deviceResult.bleDevice)
+          }
+          else {
+            deviceResult
+          }
+        }),
       rawDataPackageObservable
-    )
+      )
   }
 }

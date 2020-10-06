@@ -23,6 +23,10 @@ object DeviceUtils {
     }
   }
 
+  fun versionName() : String {
+    return BuildConfig.VERSION_NAME
+  }
+
   fun screenWidth(): Int {
     return AppSettings.applicationContext.resources.displayMetrics.widthPixels
   }
@@ -33,11 +37,7 @@ object DeviceUtils {
   }
 
   fun closeSoftKeyboard(view: View){
-    /*val imm: InputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-    imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, InputMethodManager.SHOW_IMPLICIT)*/
-
-    val inputManager =
-      view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    val inputManager = view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
     inputManager.hideSoftInputFromWindow(view.windowToken, InputMethodManager.HIDE_IMPLICIT_ONLY)
   }
 }

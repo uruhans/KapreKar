@@ -55,7 +55,7 @@ val koinModule = module {
 
   /* Bluetooth */
   single<BluetoothManager> { BluetoothManagerImpl(get(), androidContext(), BuildConfig.DEBUG) }
-  factory { DeviceConnection(get(), get()) }
+  factory { DeviceConnection(get(), get(), get()) }
   single<FirmwareManager> { FirmwareManagerImpl(get(), get()) }
 
   single { TransmitterManager(get(), get()) }

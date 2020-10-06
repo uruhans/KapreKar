@@ -70,6 +70,12 @@ class DbServiceImpl : DbService {
       }
   }
 
+  override fun getTransmittersAsSingle(): Single<List<Transmitter>> {
+    return db.transmitterDao()
+      .getTransmittersAsSingle()
+      .map { dbTransmitters -> dbTransmitters.map { it.toTransmitter() } }
+  }
+
   override fun getTransmitter(macAddress: String): Observable<DataResult<Transmitter>> {
     return db.transmitterDao()
       .getTransmitter(macAddress)

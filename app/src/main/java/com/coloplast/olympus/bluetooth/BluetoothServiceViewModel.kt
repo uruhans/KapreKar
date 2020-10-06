@@ -13,11 +13,12 @@ import com.coloplast.olympus.shared.models.Transmitter
 import com.coloplast.olympus.ui.feature.home.models.StateTransformers
 import com.coloplast.olympus.ui.feature.statemachine.OverlayStateMachineImpl
 import com.coloplast.olympus.ui.feature.statemachine.UiStateMachineImpl
+import com.coloplast.olympus.ui.feature.statemachine.models.UiState
+import com.coloplast.olympus.utils.DeviceUtils
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
-import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
@@ -177,6 +178,7 @@ class BluetoothServiceViewModel(
     compositeDisposable.add(retryObservable.map<BluetoothServiceModel> { BluetoothServiceModel.ScanningStarted() }.bind(serviceResult.onResult()))
     compositeDisposable.add(connectTransmitterObservable.bind(serviceResult.onResult()))
     compositeDisposable.add(disconnectTransmitterObservable.subscribe())
+
     return compositeDisposable
   }
 
@@ -184,7 +186,7 @@ class BluetoothServiceViewModel(
     val stateMachine = UiStateMachineImpl()
     val overlayStateMachine = OverlayStateMachineImpl()
 
-    return deviceConnection.subscribeForNotifications(macAddress)
+    return deviceConnection.subscribeForNotifications(macAddress, DeviceUtils.versionName())
       .map { deviceResult ->
         when (deviceResult) {
           is DeviceResult.DeviceUpdateResult -> {
@@ -204,6 +206,9 @@ class BluetoothServiceViewModel(
 
             // return a disconnect to the service
             BluetoothServiceModel.Disconnected(macAddress)
+          }
+          is DeviceResult.FirmwareAvailable -> {
+            BluetoothServiceModel.FirmwareUpdateAvailable(StateChange(UiState.FIRMWARE_AVAILABLE, bleDevice = deviceResult.bleDevice))
           }
         }
       }

@@ -33,7 +33,7 @@
         android:layout_height="86dp"
         android:layout_marginStart="@dimen/spacing_standard"
         android:layout_marginEnd="@dimen/spacing_standard"
-        android:scaleType="centerCrop"
+        android:scaleType="fitCenter"
         android:src="@drawable/ic_battery_charging"
         android:contentDescription="@string/guide_update_transmitter_1_title"
         tools:tint="@color/icon_disabled" /> <!-- TODO change to the plug icon -->

@@ -160,7 +160,7 @@ class NotificationCenter(
       PendingIntent.FLAG_ONE_SHOT
     )
 
-    val notification = NotificationCompat.Builder(context, ringingAlertChannelId)
+    val notificationBuilder = NotificationCompat.Builder(context, ringingAlertChannelId)
       .setSmallIcon(R.drawable.ic_detailed_plate_ok)
       .setContentText(context.getString(payload.body))
       .setCategory(Notification.CATEGORY_ALARM)
@@ -178,11 +178,14 @@ class NotificationCenter(
         dismissPendingIntent
       )
       .setFullScreenIntent(dismissPendingIntent, true)
-      .build()
+
+    payload.title?.let {
+      notificationBuilder.setContentTitle(context.getString(it))
+    }
 
     // and display it to the user
     with(NotificationManagerCompat.from(context)) {
-      notify(payload.id, notification)
+      notify(payload.id, notificationBuilder.build())
     }
   }
 
@@ -190,11 +193,11 @@ class NotificationCenter(
     payload: NotificationPayload,
     snoozePendingIntent: PendingIntent
   ) {
-    val notification = NotificationCompat.Builder(context, statusNotificationsChannelId)
+
+    val notificationBuilder = NotificationCompat.Builder(context, statusNotificationsChannelId)
       .setSmallIcon(R.drawable.ic_detailed_plate_ok)
       .setWhen(System.currentTimeMillis())
       .setColor(ContextCompat.getColor(context, R.color.turquoise))
-      .setContentText(context.getString(payload.body))
       .setPriority(NotificationCompat.PRIORITY_DEFAULT)
       // Set the intent that will fire when the user taps the notification
       .setContentIntent(getPendingIntent())
@@ -204,10 +207,15 @@ class NotificationCenter(
         context.getString(R.string.lock_notification_action_snooze),
         snoozePendingIntent
       )
-      .build()
+
+    payload.title?.let {
+      notificationBuilder.setContentTitle(context.getString(it))
+    }
+
+    notificationBuilder.setContentText(context.getString(payload.body))
 
     with(NotificationManagerCompat.from(context)) {
-      notify(payload.id, notification)
+      notify(payload.id, notificationBuilder.build())
     }
   }
 

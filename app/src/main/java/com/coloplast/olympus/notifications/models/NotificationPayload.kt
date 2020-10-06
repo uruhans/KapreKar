@@ -12,5 +12,6 @@ import androidx.annotation.StringRes
 class NotificationPayload(
   val id: Int,
   @StringRes val body: Int,
-  val notificationsToRemove: List<Int> = emptyList()
+  val notificationsToRemove: List<Int> = emptyList(),
+  val title: Int? = null
 )

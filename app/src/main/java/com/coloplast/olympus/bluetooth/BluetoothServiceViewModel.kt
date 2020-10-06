@@ -210,6 +210,9 @@ class BluetoothServiceViewModel(
           is DeviceResult.FirmwareAvailable -> {
             BluetoothServiceModel.FirmwareUpdateAvailable(StateChange(UiState.FIRMWARE_AVAILABLE, bleDevice = deviceResult.bleDevice))
           }
+          is DeviceResult.AppUpdateAvailable -> {
+            BluetoothServiceModel.AppUpdateAvailable(StateChange(UiState.APP_UPDATE_AVAILABLE, bleDevice = deviceResult.bleDevice))
+          }
         }
       }
       .doOnError {

@@ -85,6 +85,10 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
           olympusNotificationManager.send(UiState.FIRMWARE_AVAILABLE)
           StateDispatcher.dispatchStateForActiveTransmitter(it.statusChange)
         }
+        is BluetoothServiceModel.AppUpdateAvailable -> {
+          olympusNotificationManager.send(UiState.APP_UPDATE_AVAILABLE)
+          StateDispatcher.dispatchStateForActiveTransmitter(it.statusChange)
+        }
         is BluetoothServiceModel.DeviceUpdate -> {
           if (it.statusChange.state == UiState.SOMETHING_ELSE) {
             return@ui

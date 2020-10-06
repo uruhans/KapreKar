@@ -47,8 +47,7 @@
       app:cardBackgroundColor="@color/white"
       app:cardCornerRadius="28dp"
       app:cardElevation="4dp"
-      app:cardPreventCornerOverlap="true"
-      app:cardUseCompatPadding="false">
+      app:cardPreventCornerOverlap="true">
 
       <TextView
         style="@style/Text.Medium"

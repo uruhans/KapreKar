@@ -1,6 +1,7 @@
 package com.coloplast.olympus.datalayer
 
 import com.coloplast.olympus.datalayer.models.*
+import com.coloplast.olympus.shared.models.AppVersion
 import com.coloplast.olympus.shared.models.Credentials
 import com.coloplast.olympus.shared.models.FirmwareContent
 import com.coloplast.olympus.shared.models.User
@@ -88,5 +89,10 @@ class ApiServiceImpl : ApiService {
   override fun downloadFirmware(url: String): Observable<ByteArray> {
     return api.downloadFirmware(url)
       .map { it.bytes() }
+  }
+
+  override fun latestAppVersion(): Observable<AppVersion> {
+    return api.getLatestAppVersion()
+      .map { it.toAppVersion() }
   }
 }

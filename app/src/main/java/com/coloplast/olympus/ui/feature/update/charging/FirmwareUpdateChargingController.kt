@@ -12,6 +12,7 @@ import com.coloplast.olympus.ui.common.flow.TopMenuVisibilityListener
 import com.coloplast.olympus.ui.common.listeners.FlowListener
 import com.coloplast.olympus.ui.common.models.GenericUiModel
 import com.coloplast.olympus.ui.common.models.GenericView
+import com.coloplast.olympus.ui.feature.update.charging.model.ChargingStateModel
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Function
@@ -23,7 +24,7 @@ class FirmwareUpdateChargingController : BaseController<ControllerFirmwareUpdate
 
   val resourceId = R.drawable.placeholder // TODO change to proper video or image
   val batteryState = ObservableField<BatteryState>(BatteryState.UNKNOWN)
-  val macAddress  = ObservableField<String>("")
+  val macAddress  = ObservableField<String?>("")
 
   override fun attachVariables(viewBinding: ControllerFirmwareUpdateChargingBinding) {
     viewBinding.controller = this
@@ -35,9 +36,9 @@ class FirmwareUpdateChargingController : BaseController<ControllerFirmwareUpdate
 
   override fun render(): Function<Observable<GenericUiModel>, Disposable> {
     return RxUi.ui {
-      if(it is GenericUiModel.Success<*> && it.data is Pair<*, *>) {
-          batteryState.set(it.data.second as BatteryState)
-          macAddress.set(it.data.first?.toString())
+      if(it is GenericUiModel.Success<*> && it.data is ChargingStateModel) {
+          batteryState.set(it.data.batteryState)
+          macAddress.set(it.data.macAddress)
       }
     }
   }

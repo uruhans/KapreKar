@@ -6,8 +6,6 @@ import com.coloplast.olympus.businesslayer.interfaces.SystemUpdateComponent
 import com.coloplast.olympus.businesslayer.interfaces.TransmitterComponent
 import com.coloplast.olympus.shared.models.UpdateResult
 import io.reactivex.Observable
-import io.reactivex.schedulers.Schedulers
-import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 class DeviceConnection(
@@ -74,23 +72,22 @@ class DeviceConnection(
       // and map to a raw data result
       .map { DeviceResult.RawDataPackageResult(macAddress, it) }
 
-    val firmwareUpdateAvailableObservable = systemUpdateComponent.firmwareUpdateAvailable(macAddress, currentAppVersion)
-      .subscribeOn(Schedulers.io())
-      .doOnNext { Timber.d("Firmware Update Available: [${it is UpdateResult.FirmwareUpdateAvailable}]") }
-      .cache()
-
     // finally merge and return result
     return Observable.merge(
       notificationSubscriptionObservable.withLatestFrom(
-        firmwareUpdateAvailableObservable, { deviceResult, firmwareResult ->
-          if (firmwareResult is UpdateResult.FirmwareUpdateAvailable) {
-            DeviceResult.FirmwareAvailable(firmwareResult, deviceResult.bleDevice)
-          }
-          else {
-            deviceResult
+        systemUpdateComponent.systemUpdateAvailable(currentAppVersion),
+        { deviceResult, updateResult ->
+          when (updateResult) {
+            is UpdateResult.AppUpdateAvailable -> {
+              DeviceResult.AppUpdateAvailable(updateResult, deviceResult.bleDevice)
+            }
+            is UpdateResult.FirmwareUpdateAvailable -> {
+              DeviceResult.FirmwareAvailable(updateResult, deviceResult.bleDevice)
+            }
+            else -> deviceResult
           }
         }),
       rawDataPackageObservable
-      )
+    )
   }
 }

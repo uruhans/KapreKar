@@ -7,6 +7,7 @@ sealed class DeviceResult {
   
   data class DeviceUpdateResult(val bleDevice: BleDevice) : DeviceResult()
   data class FirmwareAvailable(val updateResult: UpdateResult.FirmwareUpdateAvailable, val bleDevice: BleDevice) : DeviceResult()
+  data class AppUpdateAvailable(val updateResult: UpdateResult.AppUpdateAvailable, val bleDevice: BleDevice) : DeviceResult()
   data class RawDataPackageResult(val macAddress: String, val rawDataPackage: RawDataPackage) : DeviceResult()
   data class Error(val throwable: Throwable? = null) : DeviceResult()
   

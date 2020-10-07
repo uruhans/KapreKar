@@ -5,9 +5,11 @@
 
   <data>
 
+    <import type="com.coloplast.olympus.bluetooth.businesslayer.enums.BatteryState" />
+
     <variable
       name="controller"
-      type="com.coloplast.olympus.ui.feature.update.TransmitterUpdateProcessController" />
+      type="com.coloplast.olympus.ui.feature.update.charging.FirmwareUpdateChargingController" />
 
   </data>
 
@@ -66,12 +68,13 @@
 
     <Button
       android:id="@+id/continue_button"
-      style="@style/Button"
+      style="@style/Button.Selectable"
       android:layout_width="match_parent"
       android:layout_marginStart="@dimen/spacing_standard"
       android:layout_marginTop="@dimen/spacing_standard"
       android:layout_marginEnd="@dimen/spacing_standard"
       android:layout_marginBottom="@dimen/spacing_standard"
+      android:enabled="@{controller.batteryState == BatteryState.CHARGING}"
       android:onClick="@{() -> controller.onContinueClicked()}"
       android:text="@string/generic_continue"
       app:layout_constraintBottom_toBottomOf="parent"

@@ -22,9 +22,9 @@ class FirmwareUpdateChargingController : BaseController<ControllerFirmwareUpdate
 
   private val viewModel : FirmwareUpdateChargingViewModel by inject()
 
-  val resourceId = R.drawable.placeholder // TODO change to proper video or image
+  val resourceId: Int = R.raw.at7_plug_in_charger
   val batteryState = ObservableField<BatteryState>(BatteryState.UNKNOWN)
-  val macAddress  = ObservableField<String?>("")
+  val macAddress  = ObservableField<String>("")
 
   override fun attachVariables(viewBinding: ControllerFirmwareUpdateChargingBinding) {
     viewBinding.controller = this

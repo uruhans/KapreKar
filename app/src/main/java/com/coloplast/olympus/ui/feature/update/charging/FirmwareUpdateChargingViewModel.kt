@@ -18,7 +18,7 @@ class FirmwareUpdateChargingViewModel : BaseViewModel<GenericUiModel,GenericView
 
     val chargingObservable = StateDispatcher.stateChangeObservable()
       .map<GenericUiModel> { stateChange ->
-        stateChange.bleDevice.run {
+        with(stateChange.bleDevice) {
           GenericUiModel.Success(ChargingStateModel(macAddress , peripheral?.battery?.state ?: BatteryState.UNKNOWN  ))
         }
       }

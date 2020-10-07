@@ -29,7 +29,7 @@ class TransmitterChargingController : BaseController<ControllerTransmitterChargi
   override fun getLayout(): Int = R.layout.controller_transmitter_charging
 
   companion object {
-    private const val TAG_CONTROLLER = "update_transmitter_charging_controller"
+    private const val TAG_CONTROLLER = "transmitter_charging_controller"
     fun routerTransaction() = RouterTransaction.with(TransmitterChargingController()).tag(TAG_CONTROLLER)
   }
 }

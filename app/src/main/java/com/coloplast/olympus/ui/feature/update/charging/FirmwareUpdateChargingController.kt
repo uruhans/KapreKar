@@ -57,7 +57,7 @@ class FirmwareUpdateChargingController : BaseController<ControllerFirmwareUpdate
   override fun getLayout(): Int = R.layout.controller_firmware_update_charging
 
   companion object {
-    private const val TAG_CONTROLLER = "update_transmitter_update_process"
+    private const val TAG_CONTROLLER = "firmware_update_charging_controller"
     fun routerTransaction() = RouterTransaction.with(FirmwareUpdateChargingController()).tag(
       TAG_CONTROLLER
     )

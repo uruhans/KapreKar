@@ -1,6 +1,7 @@
 package com.coloplast.olympus.bluetooth.businesslayer.models
 
 import com.coloplast.olympus.bluetooth.businesslayer.enums.Attached
+import com.coloplast.olympus.bluetooth.businesslayer.enums.BatteryState
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.shared.moshi.MoshiSerializable
 
@@ -20,5 +21,9 @@ data class BleDevice(val name: String?, val macAddress: String, val connectionSt
 
   fun isAttached() : Boolean {
     return peripheral?.transmitter?.attached == Attached.ATTACHED_ON_BODY || peripheral?.transmitter?.attached == Attached.ATTACHED_ON_PATCH
+  }
+
+  fun isCharging() : Boolean {
+    return peripheral?.battery?.state == BatteryState.CHARGING
   }
 }

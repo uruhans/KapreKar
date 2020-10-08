@@ -21,12 +21,6 @@ class FirmwareManagerImpl(
 
   private val serviceRelay = PublishRelay.create<FirmwareManager.ServiceState>()
 
-  /** just for future reference **/
-  //  firmwareManager.initiateFirmwareDownload("E3:34:08:30:D7:65", BuildConfig.VERSION_NAME)
-  //  .subscribeOn(Schedulers.io())
-  //  .flatMap { firmwareManager.updateFirmware("E3:34:08:30:D7:65", it) }
-  //  .map { TransmittersUiModel.RetryConnectComplete() }
-
   override fun firmwareUpdateAvailable(macAddress: String, currentAppVersion: String): Observable<UpdateResult> {
     return systemUpdateComponent.firmwareUpdateAvailable(macAddress, currentAppVersion)
   }
@@ -111,9 +105,9 @@ class FirmwareManagerImpl(
           // write the next command
           writeNextCommand(rxBleConnection, commandPacket)
             // and return the current progress
-            .toSingle { firmwareUpdateModel.currentProgress() }
+            .toSingle { firmwareUpdateModel.totalProgress() }
             .toObservable()
-            .doOnNext { Timber.d("Percentage: $it") }
+            .doOnNext { Timber.d("Total Progress between the two firmwares: [$it]") }
         }
         else {
           Observable.error(RuntimeException("Its not working"))

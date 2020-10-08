@@ -127,6 +127,10 @@
     <item name="android:textSize">@dimen/text_20</item>
   </style>
 
+  <style name="GuideHeader.24" parent="GuideHeader">
+    <item name="android:textSize">@dimen/text_24</item>
+  </style>
+
   <style name="GuideHeaderDescription" parent="TextStyle.Coloplast.Regular.ClearGrey">
     <item name="android:textSize">@dimen/text_18</item>
     <item name="android:gravity">center</item>

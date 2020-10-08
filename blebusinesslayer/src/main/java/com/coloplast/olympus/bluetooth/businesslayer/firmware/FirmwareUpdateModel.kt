@@ -49,7 +49,11 @@ class FirmwareUpdateModel(
     return currentFirmwareModel.nextCommandPacket()
   }
 
-  fun currentProgress(): Int {
+  fun currentProgress() : Int {
+    return currentFirmwareModel.progress()
+  }
+
+  fun totalProgress(): Int {
     // if we are currently updating the app firmware, the bootloader has already been uploaded
     // so we add 100% to the progress
     val progress = if(currentState == State.APP) 100 else 0

@@ -1,9 +1,9 @@
 package com.coloplast.olympus.ui.feature.update.progress
 
-import com.coloplast.olympus.ui.common.models.GenericView
+import com.coloplast.olympus.ui.common.models.UiView
+import com.coloplast.olympus.ui.feature.update.progress.model.FirmwareProgressUiModel
 import com.coloplast.olympus.ui.feature.update.progress.model.UpdateModel
-import io.reactivex.Observable
 
-interface FirmwareProgressView : GenericView {
-  fun updateFirmwareRequested() : Observable<UpdateModel>
+interface FirmwareProgressView : UiView<FirmwareProgressUiModel> {
+  fun getUpdateModel() : UpdateModel
 }

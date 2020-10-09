@@ -2,7 +2,6 @@ package com.coloplast.olympus.koin
 
 import android.app.NotificationManager
 import android.content.Context
-import com.coloplast.olympus.BuildConfig
 import com.coloplast.olympus.Me
 import com.coloplast.olympus.bluetooth.BluetoothServiceViewModel
 import com.coloplast.olympus.bluetooth.businesslayer.*
@@ -37,6 +36,7 @@ import com.coloplast.olympus.ui.feature.transmitters.add.AddTransmitterFactoryIm
 import com.coloplast.olympus.ui.feature.transmitters.add.at7.AddTransmitterAT7ViewModel
 import com.coloplast.olympus.ui.feature.transmitters.add.at9.AddTransmitterAT9ViewModel
 import com.coloplast.olympus.ui.feature.update.charging.FirmwareUpdateChargingViewModel
+import com.coloplast.olympus.ui.feature.update.progress.FirmwareProgressViewModel
 import com.coloplast.olympus.work.SyncViewModel
 import com.coloplast.olympus.work.SyncWorker
 import org.koin.android.ext.koin.androidContext
@@ -82,6 +82,8 @@ val koinModule = module {
   single { ProfileViewModel(get(), get(), get()) }
   single { SignupViewModel(get(), get()) }
   single { FirmwareUpdateChargingViewModel() }
+  single { FirmwareProgressViewModel(get()) }
+
 
   /* Flows */
   single { AddTransmitterFactoryImpl() }

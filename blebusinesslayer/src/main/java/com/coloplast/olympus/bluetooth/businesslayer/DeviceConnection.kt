@@ -75,7 +75,8 @@ class DeviceConnection(
     // finally merge and return result
     return Observable.merge(
       notificationSubscriptionObservable.withLatestFrom(
-        systemUpdateComponent.systemUpdateAvailable(currentAppVersion),
+        systemUpdateComponent.systemUpdateAvailable(currentAppVersion)
+          .delay(5, TimeUnit.SECONDS),
         { deviceResult, updateResult ->
           when (updateResult) {
             is UpdateResult.AppUpdateAvailable -> {

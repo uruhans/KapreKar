@@ -35,6 +35,7 @@ import com.coloplast.olympus.ui.feature.transmitters.TransmittersViewModel
 import com.coloplast.olympus.ui.feature.transmitters.add.AddTransmitterFactoryImpl
 import com.coloplast.olympus.ui.feature.transmitters.add.at7.AddTransmitterAT7ViewModel
 import com.coloplast.olympus.ui.feature.transmitters.add.at9.AddTransmitterAT9ViewModel
+import com.coloplast.olympus.ui.feature.update.FirmwareUpdateFactoryImpl
 import com.coloplast.olympus.ui.feature.update.charging.FirmwareUpdateChargingViewModel
 import com.coloplast.olympus.ui.feature.update.progress.FirmwareProgressViewModel
 import com.coloplast.olympus.work.SyncViewModel
@@ -93,4 +94,5 @@ val koinModule = module {
   single { SetupGuidePreparingFactoryImpl() }
   single { SetupGuideApplyingFactoryImpl() }
   single { ForgotPasswordFactoryImpl() }
+  single { FirmwareUpdateFactoryImpl() }
 }

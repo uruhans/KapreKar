@@ -5,6 +5,7 @@ import com.coloplast.olympus.R
 import com.coloplast.olympus.ui.common.GenericConfirmationController
 import com.coloplast.olympus.ui.common.flow.FlowFactory
 import com.coloplast.olympus.ui.feature.update.charging.FirmwareUpdateChargingController
+import com.coloplast.olympus.ui.feature.update.initiate.FirmwareInitiateController
 import com.coloplast.olympus.ui.feature.update.model.FirmwareUpdateFlow
 import com.coloplast.olympus.ui.feature.update.model.FirmwareUpdateFlowModel
 import com.coloplast.olympus.ui.feature.update.progress.FirmwareProgressController
@@ -19,7 +20,7 @@ class FirmwareUpdateFactoryImpl : FlowFactory<FirmwareUpdateFlowModel>() {
 
   override fun getRouterTransaction(currentIndex: Int): RouterTransaction? {
     return when (FirmwareUpdateFlow.fromIndex(currentIndex)) {
-      FirmwareUpdateFlow.Initiate -> TransmitterChargingController.routerTransaction()
+      FirmwareUpdateFlow.Initiate -> FirmwareInitiateController.routerTransaction()
       FirmwareUpdateFlow.TransmitterCharging -> FirmwareUpdateChargingController.routerTransaction()
       FirmwareUpdateFlow.Updating -> FirmwareProgressController.routerTransaction(firmwareUpdateFlowModel.macAddress!!)
       FirmwareUpdateFlow.UpdateFinished -> {

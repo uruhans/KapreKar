@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:tools="http://schemas.android.com/tools">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
   <data>
 
     <variable
       name="controller"
-      type="com.coloplast.olympus.ui.feature.update.TransmitterChargingController" />
+      type="com.coloplast.olympus.ui.feature.update.initiate.FirmwareInitiateController" />
 
   </data>
 
@@ -25,9 +24,8 @@
       android:layout_marginStart="@dimen/spacing_standard"
       android:layout_marginEnd="@dimen/spacing_standard"
       android:scaleType="fitCenter"
-      android:src="@drawable/ic_battery_charging"
-      android:contentDescription="@string/guide_update_transmitter_1_title"
-      tools:tint="@color/icon_disabled" /> <!-- TODO change to the plug icon -->
+      android:src="@drawable/ic_power_plug"
+      android:contentDescription="@string/guide_update_transmitter_1_title" />
 
     <TextView
       style="@style/Headline.Small"

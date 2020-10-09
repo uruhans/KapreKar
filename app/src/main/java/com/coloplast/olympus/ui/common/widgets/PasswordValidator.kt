@@ -17,6 +17,6 @@ interface PasswordValidator: InputValidator {
      */
     override fun validate(input: String): Boolean {
 //        return input.matches(regex)
-        return true
+        return !input.isEmpty()
     }
 }

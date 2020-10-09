@@ -1,9 +1,11 @@
 package com.coloplast.olympus.ui.feature.uistates
 
 import com.bluelinelabs.conductor.RouterTransaction
+import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerStateFirmwareAvailableBinding
 import com.coloplast.olympus.ui.feature.home.models.PatchVisible
+import com.coloplast.olympus.ui.feature.update.progress.FirmwareProgressController
 
 class FirmwareAvailableController : BaseHomeUIController<ControllerStateFirmwareAvailableBinding>(), PatchVisible {
   
@@ -17,7 +19,12 @@ class FirmwareAvailableController : BaseHomeUIController<ControllerStateFirmware
   }
   
   fun onUpdateFirmwareClicked() {
-
+    // this needs to open the proper flowController
+//    getContentRouter().pushController(
+//      FirmwareProgressController.routerTransaction("E3:34:08:30:D7:65")
+//      .pushChangeHandler(VerticalChangeHandler())
+//      .popChangeHandler(VerticalChangeHandler())
+//    )
   }
   
   override fun patchInError(): Boolean {

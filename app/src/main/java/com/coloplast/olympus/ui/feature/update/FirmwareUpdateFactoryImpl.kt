@@ -1,6 +1,8 @@
 package com.coloplast.olympus.ui.feature.update
 
 import com.bluelinelabs.conductor.RouterTransaction
+import com.coloplast.olympus.R
+import com.coloplast.olympus.ui.common.GenericConfirmationController
 import com.coloplast.olympus.ui.common.flow.FlowFactory
 import com.coloplast.olympus.ui.feature.update.charging.FirmwareUpdateChargingController
 import com.coloplast.olympus.ui.feature.update.model.FirmwareUpdateFlow
@@ -20,7 +22,17 @@ class FirmwareUpdateFactoryImpl : FlowFactory<FirmwareUpdateFlowModel>() {
       FirmwareUpdateFlow.Initiate -> TransmitterChargingController.routerTransaction()
       FirmwareUpdateFlow.TransmitterCharging -> FirmwareUpdateChargingController.routerTransaction()
       FirmwareUpdateFlow.Updating -> FirmwareProgressController.routerTransaction(firmwareUpdateFlowModel.macAddress!!)
-      FirmwareUpdateFlow.UpdateFinished -> null
+      FirmwareUpdateFlow.UpdateFinished -> {
+        GenericConfirmationController.routerTransaction(
+          R.string.guide_update_transmitter_4_title,
+          R.string.guide_update_transmitter_4_body,
+          R.string.guide_update_transmitter_4_action,
+          imageId = R.drawable.ic_checkmark,
+          showCloseButton = false,
+          showBackButton = false,
+          imageTint = R.color.turquoise
+        )
+      }
       FirmwareUpdateFlow.Completed -> null
     }
   }

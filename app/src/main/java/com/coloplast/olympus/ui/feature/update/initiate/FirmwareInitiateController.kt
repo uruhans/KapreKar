@@ -22,7 +22,7 @@ class FirmwareInitiateController : BaseController<ControllerFirmwareInitiateBind
 
   override fun showCloseButton(): Boolean = false
 
-  fun onContinueClicked() = getListener(FlowListener::class.java)?.onNextClicked(true)
+  fun onContinueClicked() = getListener(FlowListener::class.java)?.onNextClicked()
 
   fun onDiscard() = getListener(FlowListener::class.java)?.onPreviousClicked()
 

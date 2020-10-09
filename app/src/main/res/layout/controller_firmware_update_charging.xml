@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <data>
+
+    <import type="com.coloplast.olympus.bluetooth.businesslayer.enums.BatteryState" />
+
+    <variable
+      name="controller"
+      type="com.coloplast.olympus.ui.feature.update.charging.FirmwareUpdateChargingController" />
+
+  </data>
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+
+    <androidx.constraintlayout.widget.Guideline
+      android:id="@+id/guideline"
+      android:layout_width="0dp"
+      android:layout_height="0dp"
+      android:orientation="horizontal"
+      app:layout_constraintGuide_percent=".5" />
+
+    <com.coloplast.olympus.ui.common.widgets.MediaView
+      android:id="@+id/media_view"
+      android:layout_width="0dp"
+      android:layout_height="0dp"
+      app:layout_constraintBottom_toTopOf="@+id/guideline"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:resource="@{controller.resourceId}" />
+
+    <TextView
+      android:id="@+id/title"
+      style="@style/Text.Medium"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="@dimen/spacing_standard"
+      android:layout_marginTop="@dimen/spacing_double"
+      android:layout_marginEnd="@dimen/spacing_standard"
+      android:text="@string/guide_update_transmitter_2_title"
+      android:textColor="@color/darkGrey03"
+      app:layout_constraintBottom_toTopOf="@+id/description"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/guideline" />
+
+    <TextView
+      android:id="@+id/description"
+      style="@style/Headline.Small"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="@dimen/spacing_standard"
+      android:layout_marginTop="@dimen/spacing_double"
+      android:layout_marginEnd="@dimen/spacing_standard"
+      android:layout_marginBottom="@dimen/spacing_double"
+      android:text="@string/guide_update_transmitter_2_body"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/title"
+      tools:text="@string/guide_update_transmitter_2_body" />
+
+    <Button
+      android:id="@+id/continue_button"
+      style="@style/Button.Selectable"
+      android:layout_width="match_parent"
+      android:layout_marginStart="@dimen/spacing_standard"
+      android:layout_marginTop="@dimen/spacing_standard"
+      android:layout_marginEnd="@dimen/spacing_standard"
+      android:layout_marginBottom="@dimen/spacing_standard"
+      android:enabled="@{controller.batteryState == BatteryState.CHARGING}"
+      android:onClick="@{() -> controller.onContinueClicked()}"
+      android:text="@string/generic_continue"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/description" />
+
+
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

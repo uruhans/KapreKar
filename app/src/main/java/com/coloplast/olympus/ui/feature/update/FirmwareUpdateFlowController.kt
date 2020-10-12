@@ -2,11 +2,11 @@ package com.coloplast.olympus.ui.feature.update
 
 import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.ui.common.flow.FlowFactory
-import com.coloplast.olympus.ui.common.flow.FlowFactoryController
+import com.coloplast.olympus.ui.common.flow.TopMenuFlowFactoryController
 import com.coloplast.olympus.ui.feature.update.model.FirmwareUpdateFlowModel
 import org.koin.core.inject
 
-class FirmwareUpdateFlowController : FlowFactoryController<FirmwareUpdateFlowModel>() {
+class FirmwareUpdateFlowController : TopMenuFlowFactoryController<FirmwareUpdateFlowModel>() {
 
   private val factory: FirmwareUpdateFactoryImpl by inject()
 

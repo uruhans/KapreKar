@@ -8,6 +8,7 @@ import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerFirmwareUpdateProgressBinding
 import com.coloplast.olympus.ui.common.BaseController
+import com.coloplast.olympus.ui.common.flow.TopMenuVisibilityListener
 import com.coloplast.olympus.ui.common.listeners.FlowListener
 import com.coloplast.olympus.ui.feature.update.progress.model.FirmwareProgressUiModel
 import com.coloplast.olympus.ui.feature.update.progress.model.UpdateModel
@@ -17,7 +18,8 @@ import io.reactivex.functions.Function
 import org.koin.core.inject
 import timber.log.Timber
 
-class FirmwareProgressController(args: Bundle) : BaseController<ControllerFirmwareUpdateProgressBinding>(args), FirmwareProgressView {
+class FirmwareProgressController(args: Bundle) : BaseController<ControllerFirmwareUpdateProgressBinding>(args), FirmwareProgressView,
+  TopMenuVisibilityListener {
 
   private val viewModel: FirmwareProgressViewModel by inject()
   private val macAddress = args.getString(BUNDLE_MACADDRESS)!!
@@ -58,6 +60,14 @@ class FirmwareProgressController(args: Bundle) : BaseController<ControllerFirmwa
       }
     }
   }
+
+  override fun handleBack(): Boolean {
+    return false
+  }
+
+  override fun showBackButton(): Boolean = false
+
+  override fun showCloseButton(): Boolean = false
 
   override fun getUpdateModel(): UpdateModel {
     return model

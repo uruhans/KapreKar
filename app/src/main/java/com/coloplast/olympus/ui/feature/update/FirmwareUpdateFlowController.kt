@@ -3,6 +3,7 @@ package com.coloplast.olympus.ui.feature.update
 import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.ui.common.flow.FlowFactory
 import com.coloplast.olympus.ui.common.flow.TopMenuFlowFactoryController
+import com.coloplast.olympus.ui.feature.update.model.FirmwareUpdateFlow
 import com.coloplast.olympus.ui.feature.update.model.FirmwareUpdateFlowModel
 import org.koin.core.inject
 
@@ -12,6 +13,15 @@ class FirmwareUpdateFlowController : TopMenuFlowFactoryController<FirmwareUpdate
 
   override fun getFlowFactory(): FlowFactory<FirmwareUpdateFlowModel> {
     return factory
+  }
+
+  override fun handleBack(): Boolean {
+
+    if (factory.getCurrent() == FirmwareUpdateFlow.Updating.id) {
+      return true
+    }
+    return super.handleBack()
+
   }
 
   companion object {

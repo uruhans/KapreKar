@@ -54,14 +54,32 @@ class DeviceConnection(
       .publish()
       .autoConnect()
 
+    val systemUpdateObservable = systemUpdateComponent.systemUpdateAvailable(currentAppVersion)
+      .cacheWithInitialCapacity(1)
+
+
     val notificationSubscriptionObservable = connectedBleDeviceObservable
       // this one subscribes to notifications and returns a peripheral object containing the latest state of the device
       .flatMap {
         bluetoothManager.bleDeviceResultObservable(macAddress)
           .retryWhen { it }
       }
-      // map it to an actual device update
       .map { DeviceResult.DeviceUpdateResult(it) }
+      .flatMap { deviceUpdateResult ->
+        systemUpdateObservable
+          // map it to an actual device update
+          .map { updateResult ->
+            when (updateResult) {
+              is UpdateResult.AppUpdateAvailable -> {
+                DeviceResult.AppUpdateAvailable(updateResult, deviceUpdateResult.bleDevice)
+              }
+              is UpdateResult.FirmwareUpdateAvailable -> {
+                DeviceResult.FirmwareAvailable(updateResult, deviceUpdateResult.bleDevice)
+              }
+              else -> deviceUpdateResult
+            }
+          }
+      }
 
     val rawDataPackageObservable = connectedBleDeviceObservable
       // subscribe to raw data packages
@@ -74,20 +92,7 @@ class DeviceConnection(
 
     // finally merge and return result
     return Observable.merge(
-      notificationSubscriptionObservable.withLatestFrom(
-        systemUpdateComponent.systemUpdateAvailable(currentAppVersion)
-          .delay(5, TimeUnit.SECONDS),
-        { deviceResult, updateResult ->
-          when (updateResult) {
-            is UpdateResult.AppUpdateAvailable -> {
-              DeviceResult.AppUpdateAvailable(updateResult, deviceResult.bleDevice)
-            }
-            is UpdateResult.FirmwareUpdateAvailable -> {
-              DeviceResult.FirmwareAvailable(updateResult, deviceResult.bleDevice)
-            }
-            else -> deviceResult
-          }
-        }),
+      notificationSubscriptionObservable,
       rawDataPackageObservable
     )
   }

@@ -19,6 +19,9 @@ class FirmwareUpdateFlowController : TopMenuFlowFactoryController<FirmwareUpdate
 
     if (factory.getCurrent() == FirmwareUpdateFlow.Updating.id) {
       return true
+    } else if (factory.getCurrent() == FirmwareUpdateFlow.Completed.id) {
+      closeFlow()
+      return true
     }
     return super.handleBack()
 

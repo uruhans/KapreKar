@@ -48,6 +48,13 @@ class Stack<T>(private var maxSize: Int) {
     }
   }
 
+  @Synchronized
+  fun peekPrevious(index: Int) : T? {
+    synchronized(items) {
+      return items.getOrNull(index)
+    }
+  }
+
   /**
    * Override the max size of the stack
    */
@@ -63,6 +70,13 @@ class Stack<T>(private var maxSize: Int) {
       while (items.size > maxSize) {
         items.removeAt(items.size - 1)
       }
+    }
+  }
+
+  @Synchronized
+  fun size() : Int {
+    synchronized(items) {
+      return items.size
     }
   }
 }

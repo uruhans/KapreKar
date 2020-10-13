@@ -22,6 +22,7 @@ import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
 import com.coloplast.olympus.bluetooth.businesslayer.enums.SensorStatus
 import com.coloplast.olympus.bluetooth.businesslayer.models.Battery
 import com.coloplast.olympus.bluetooth.businesslayer.models.Patch
+import com.coloplast.olympus.bluetooth.model.PatchProbability
 import com.coloplast.olympus.bluetooth.model.ServiceEvent
 import com.coloplast.olympus.databinding.ControllerHomeBinding
 import com.coloplast.olympus.notifications.OlympusNotificationManager
@@ -227,6 +228,8 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
 
           changeUiState(stateToChangeTo)
           changeOverlayState(stateChange.overlayState)
+
+          determinePatchProbability(stateChange.patchProbability)
         }
         is HomeUiModel.RawDataPackageUpdate -> {
           updateAnimation.set(true)
@@ -236,7 +239,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
       }
     }
   }
-  
+
   private fun changeUiState(newState: UiState, forceUpdate: Boolean = false) {
     if (currentUiState == newState && !forceUpdate) {
       Timber.d("Same state was hit [${newState}] - Skipping")
@@ -347,21 +350,6 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
     }
 
     when(overlayState) {
-      OverlayState.QUESTION -> {
-        imageDialogController = null
-
-        imageDialogController = ImageDialogController.create(
-          this,
-          REQUEST_CODE_TRANSMITTERS_CHANGED,
-          R.string.overlay_leak_attactment_title,
-          0,
-          R.string.overlay_leak_attactment_action_new,
-          R.string.overlay_leak_attactment_action_old,
-          R.drawable.ic_info_circle,
-          verticalButtonLayout = true,
-          dismissAllowed = false
-        )
-      }
       OverlayState.BATTERY_LOW -> {
         imageDialogController = ImageDialogController.create(
           this,
@@ -386,6 +374,9 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
           verticalButtonLayout = true,
           dismissAllowed = true
         )
+      }
+      OverlayState.NONE -> {
+        /* no-op */
       }
     }
 
@@ -423,6 +414,28 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
       patchDialog?.show()
     }
   }
+
+  private fun determinePatchProbability(patchProbability: PatchProbability) {
+    Timber.d("PatchProbability: [$patchProbability]")
+
+    when(patchProbability) {
+      PatchProbability.NEW -> {
+        preferences.incrementPatchId()
+        patchChangeTime = LocalTime.now()
+
+        breachesOccurred.clear()
+        resetRelay.accept(transmitterManager.activeTransmitterMacAddress())
+      }
+      PatchProbability.SAME -> {
+        transmitterManager.getStitchBytes().let {
+          stitchRelay.accept(it)
+        }
+      }
+      PatchProbability.NOT_SET -> {
+        /* no-op */
+      }
+    }
+  }
   
   override fun onPositiveButtonClicked(requestCode: Int) {
     when (requestCode) {
@@ -432,35 +445,8 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
       REQUEST_CODE_PERMISSION_RATIONALE -> {
         imageDialogController?.dismissDialog(withCallback = true)
       }
-      REQUEST_CODE_TRANSMITTERS_CHANGED -> {
-        // new patch is being used
-        preferences.updatePatchId()
-
-        patchChangeTime = LocalTime.now()
-
-        breachesOccurred.clear()
-        resetRelay.accept(transmitterManager.activeTransmitterMacAddress())
-        imageDialogController?.dismissDialog(false)
-        imageDialogController = null
-
-        changeUiState(UiState.CONNECTING)
-      }
       REQUEST_CODE_CONNECTION_LOST -> {
         imageDialogController?.dismissDialog(withCallback = true)
-      }
-    }
-  }
-
-  override fun onNegativeButtonClicked(requestCode: Int) {
-    when (requestCode) {
-      REQUEST_CODE_TRANSMITTERS_CHANGED -> {
-        transmitterManager.getStitchBytes().let {
-          stitchRelay.accept(it)
-        }
-        imageDialogController?.dismissDialog(false)
-        imageDialogController = null
-
-        changeUiState(UiState.CONNECTING)
       }
     }
   }
@@ -646,7 +632,6 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
     
     private const val REQUEST_CODE_PERMISSION_LOCATION = 5001
     private const val REQUEST_CODE_PERMISSION_RATIONALE = 5002
-    private const val REQUEST_CODE_TRANSMITTERS_CHANGED = 6001
     private const val REQUEST_CODE_BATTERY_LOW = 6005
     private const val REQUEST_CODE_CONNECTION_LOST = 6010
     private const val REQUEST_CODE_PATCH_DETAILS = 7001

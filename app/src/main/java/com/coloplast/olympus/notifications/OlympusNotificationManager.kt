@@ -95,12 +95,9 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
     val payload = when(state) {
       OverlayState.NONE -> { null }
       OverlayState.BATTERY_LOW -> {
-        
         // this is temporary and not *real* code - but here to present a way to do overlay state notifications
-        // TODO - change when we have properly implemented overlay states
         NotificationPayload(state.notificationId(), R.string.lock_notification_battery_critical)
       }
-      OverlayState.QUESTION -> { null }
       OverlayState.BLE_CONNECTION_LOST -> {
         NotificationPayload(state.notificationId(), R.string.lock_notification_ble_disconnected)
       }

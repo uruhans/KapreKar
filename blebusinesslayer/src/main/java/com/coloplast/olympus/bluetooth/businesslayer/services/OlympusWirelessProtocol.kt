@@ -8,7 +8,6 @@ import com.coloplast.olympus.bluetooth.businesslayer.models.Transmitter
 import com.coloplast.olympus.shared.models.RawDataPackage
 import com.coloplast.olympus.shared.transformers.OlympusWirelessProtocol
 import io.reactivex.ObservableTransformer
-import timber.log.Timber
 
 object OlympusWirelessProtocol {
   val UUID = "cc7314cc-003c-40b2-9372-4881e4805672".asUUID()
@@ -61,7 +60,7 @@ object OlympusWirelessProtocol {
         val waterIngressDetection = WaterIngressDetection.fromId(statusPackage.wid)
         val attached = Attached.fromId(statusPackage.attached)
         val patchType = PatchType.fromId(statusPackage.patchType)
-        val compromised = Compromised.fromId(statusPackage.compromised)
+        val compromised = statusPackage.compromised.toInt() //Compromised.fromId(statusPackage.compromised)
 
         val rawRotationalAngle = statusPackage.angle
         val batteryState = BatteryState.fromId(statusPackage.batteryState)

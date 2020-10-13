@@ -61,10 +61,6 @@ class FirmwareProgressController(args: Bundle) : BaseController<ControllerFirmwa
     }
   }
 
-  override fun handleBack(): Boolean {
-    return false
-  }
-
   override fun showBackButton(): Boolean = false
 
   override fun showCloseButton(): Boolean = false

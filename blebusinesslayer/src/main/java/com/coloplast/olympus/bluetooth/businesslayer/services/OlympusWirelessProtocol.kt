@@ -60,7 +60,7 @@ object OlympusWirelessProtocol {
         val waterIngressDetection = WaterIngressDetection.fromId(statusPackage.wid)
         val attached = Attached.fromId(statusPackage.attached)
         val patchType = PatchType.fromId(statusPackage.patchType)
-        val compromised = statusPackage.compromised.toInt() //Compromised.fromId(statusPackage.compromised)
+        val compromised = statusPackage.compromised.toInt()
 
         val rawRotationalAngle = statusPackage.angle
         val batteryState = BatteryState.fromId(statusPackage.batteryState)

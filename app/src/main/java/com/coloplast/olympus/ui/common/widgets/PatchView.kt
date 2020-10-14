@@ -210,10 +210,8 @@ class PatchView @JvmOverloads constructor(
         this.rawRotationalAngle = it
       }
       
-      //val angle = it.times(360).div(128)
       val newAngle = UiUtils.calculatePatchRotation(it).toFloat()
-      Timber.d("newAngle [$newAngle]")
-      
+
       if (rotation != newAngle) {
         val animation = ObjectAnimator.ofFloat(rotation, newAngle)
         

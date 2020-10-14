@@ -20,6 +20,7 @@ import com.coloplast.olympus.ui.common.extensions.visibleOrGoneFade
 import com.coloplast.olympus.ui.common.listeners.AnimatorListenerImpl
 import com.coloplast.olympus.utils.UiUtils
 import com.coloplast.olympus.utils.UiUtils.dpToPx
+import timber.log.Timber
 
 class PatchView @JvmOverloads constructor(
   context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
@@ -209,9 +210,9 @@ class PatchView @JvmOverloads constructor(
         this.rawRotationalAngle = it
       }
       
-      val angle = it.times(360)
-        .div(128)
-      val newAngle = UiUtils.calculatePatchRotation(angle)
+      //val angle = it.times(360).div(128)
+      val newAngle = UiUtils.calculatePatchRotation(it).toFloat()
+      Timber.d("newAngle [$newAngle]")
       
       if (rotation != newAngle) {
         val animation = ObjectAnimator.ofFloat(rotation, newAngle)

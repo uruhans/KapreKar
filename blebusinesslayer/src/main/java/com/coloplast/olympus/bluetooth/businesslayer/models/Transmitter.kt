@@ -10,7 +10,7 @@ data class Transmitter(
   val waterIngressDetection: WaterIngressDetection,
   val attached: Attached,
   val patchType: PatchType,
-  val compromised: Compromised,
+  val compromised: Int,
   val rawRotationalAngle: Int,
   val batteryState: BatteryState,
   val fwWarning: Int,

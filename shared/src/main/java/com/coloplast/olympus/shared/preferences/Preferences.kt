@@ -56,7 +56,7 @@ class Preferences(applicationContext: Context) {
     return OnboardingProgression.fromId(currentOnboardingProgression)
   }
 
-  fun updatePatchId() {
+  fun incrementPatchId() {
     patchId++
   }
 

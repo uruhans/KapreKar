@@ -2,6 +2,7 @@ package com.coloplast.olympus.ui.feature
 
 import com.coloplast.olympus.bluetooth.businesslayer.BluetoothManager
 import com.coloplast.olympus.bluetooth.businesslayer.services.OlympusWirelessProtocol
+import com.coloplast.olympus.bluetooth.model.PatchProbability
 import com.coloplast.olympus.bluetooth.model.StateChange
 import com.coloplast.olympus.shared.moshi.deserialize
 import com.coloplast.olympus.shared.moshi.serialize
@@ -118,20 +119,52 @@ class TransmitterManager(
    *  - this is used for reset (when new) and stitch (when old)
    */
   fun determineTransmitterPatchQuestioning(updatedStateChange: UpdatedStateChange) : StateChange {
-    if(updatedStateChange.activeTransmitterChanged) {
-      return StateChange(updatedStateChange.stateChange.state, OverlayState.QUESTION, updatedStateChange.stateChange.bleDevice)
-    }
-    else {
+    var fromCompromised: Double? = null
+    val toCompromised = updatedStateChange.stateChange.bleDevice.peripheral?.transmitter?.compromised?.toDouble()
+
+    if(activeTransmitterMacAddress().isNotBlank()) {
       if(updatedStateChange.stateChange.state != UiState.MULTIPLE_TRANSMITTERS) {
-        if (!attachedPreviously(updatedStateChange.stateChange.getMacAddress())) {
-          if (isCurrentlyAttached(updatedStateChange.stateChange)) {
-            return StateChange(updatedStateChange.stateChange.state, OverlayState.QUESTION, updatedStateChange.stateChange.bleDevice)
+        if(updatedStateChange.activeTransmitterChanged) {
+          // determine probability
+          val otherTxPreviousState = latestStateFromOtherTransmitter(updatedStateChange.stateChange.getMacAddress())
+          fromCompromised = otherTxPreviousState?.bleDevice?.peripheral?.transmitter?.compromised?.toDouble()
+        }
+        else {
+          if(updatedStateChange.stateChange.bleDevice.isAttachedOutsideBLE()) {
+            // determine probability
+            val activeTxPreviousState = transmitterStateHistory[activeTransmitter]?.peekPrevious()
+            fromCompromised = activeTxPreviousState?.bleDevice?.peripheral?.transmitter?.compromised?.toDouble()
+          }
+          else {
+            if(transmitterStateHistory[updatedStateChange.stateChange.getMacAddress()]?.size() ?: 0 > 2) {
+              val lastUseableDetachState = transmitterStateHistory[updatedStateChange.stateChange.getMacAddress()]?.peekPrevious(2)
+
+              if(lastUseableDetachState?.bleDevice?.isAttached() == false) {
+                if(updatedStateChange.stateChange.bleDevice.isAttached()) {
+                  // determine probability
+                  fromCompromised = lastUseableDetachState.bleDevice.peripheral?.transmitter?.compromised?.toDouble()
+                }
+              }
+            }
+            else {
+              val activeTxPreviousState = transmitterStateHistory[activeTransmitter]?.peekPrevious()
+              if(activeTxPreviousState?.bleDevice?.isAttached() == false && updatedStateChange.stateChange.bleDevice.isAttached()) {
+                // determine probability
+                fromCompromised = activeTxPreviousState.bleDevice.peripheral?.transmitter?.compromised?.toDouble()
+              }
+            }
           }
         }
       }
-
-      return updatedStateChange.stateChange
     }
+
+    if(fromCompromised != null && toCompromised != null) {
+      // (-0.918720970286731) + 0.066349916060689 * :EC_A6_JJ_CB_from + -0.0832012863049681 * :EC_A6_JJ_CB_to = probability
+      val probability = (-0.918720970286731).plus(0.066349916060689.times(fromCompromised)).plus((-0.0832012863049681).times(toCompromised))
+      updatedStateChange.stateChange.patchProbability = if(probability > 0) PatchProbability.NEW else PatchProbability.SAME
+    }
+
+    return updatedStateChange.stateChange
   }
 
   /**
@@ -163,7 +196,6 @@ class TransmitterManager(
     Timber.d("new active transmitter: [$activeTransmitter] => [${stateChange.getMacAddress()}]")
     activeTransmitter = stateChange.getMacAddress()
 
-    // TODO - this may need to change at a later stage - should possibly be stored in Local DB
     // We store it here, because the current active TX may have changed from beginning to this place
     preferences.latestStateFromActiveTx = stateChange.serialize()
   }

@@ -23,6 +23,10 @@ data class BleDevice(val name: String?, val macAddress: String, val connectionSt
     return peripheral?.transmitter?.attached == Attached.ATTACHED_ON_BODY || peripheral?.transmitter?.attached == Attached.ATTACHED_ON_PATCH
   }
 
+  fun isAttachedOutsideBLE() : Boolean {
+    return peripheral?.transmitter?.attached == Attached.ATTACHED_BODY_BLE || peripheral?.transmitter?.attached == Attached.ATTACHED_BLE_OFF
+  }
+
   fun isCharging() : Boolean {
     return peripheral?.battery?.state == BatteryState.CHARGING
   }

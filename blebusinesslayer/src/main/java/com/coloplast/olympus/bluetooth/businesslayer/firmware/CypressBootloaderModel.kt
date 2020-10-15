@@ -8,12 +8,6 @@ class CypressBootloaderModel(private val currentFirmware: CypressFirmware) {
   /// current data row
   private var currentRowDataArray: ByteArray? = null
 
-//  /// Device flash start row number
-//  private val startRowNumber: UShort = 0u
-//
-//  /// Device flash end row number
-//  private val endRowNumber: UShort = 0u
-
   /// Max payload size for the data packages
   /// This is given as a max of the MTU packages size, set in the Transmitter! Which is 138 at the moment (21/9-2020)
   private val maxDataSize = 131
@@ -62,10 +56,10 @@ class CypressBootloaderModel(private val currentFirmware: CypressFirmware) {
   }
 
   class CommandPacket {
-    val startByte: Byte = 0x01
-    val command: Byte
+    private val startByte: Byte = 0x01
+    private val command: Byte
     val data: ByteArray?
-    val endByte: Byte = 0x17
+    private val endByte: Byte = 0x17
 
     var arrayId: Int? = null
     var rowNo: Int? = null
@@ -168,5 +162,13 @@ class CypressBootloaderModel(private val currentFirmware: CypressFirmware) {
       currentRowDataArray = null
       CommandPacket(CommandCode.ProgramRow, rowData.arrayId, rowData.rowNo, dataToSend)
     }
+  }
+
+  /**
+   * Will reset the progress of the firmware currently being sent
+   */
+  fun reset() {
+    currentRowDataArray = null
+    currentIndex = 0
   }
 }

@@ -13,6 +13,7 @@ import com.coloplast.olympus.ui.common.listeners.FlowListener
  */
 class SafeWithUsDC4Controller: BaseController<ControllerSafeWithUsDc4Binding>() {
 
+  val resourceId = R.raw.dc_animation_step_three
   val position = 3
   val totalCount = 3
 

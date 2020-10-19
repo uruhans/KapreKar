@@ -28,7 +28,6 @@
       app:indicatorColor="@color/turquoise"
       app:indicatorCornerRadius="20dp"
       app:indicatorType="linear"
-      app:indicatorWidth="10dp"
       app:trackColor="#dbdbdb" />
 
     <TextView

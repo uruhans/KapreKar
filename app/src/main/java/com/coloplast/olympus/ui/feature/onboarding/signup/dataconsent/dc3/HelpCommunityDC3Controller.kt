@@ -13,6 +13,7 @@ import com.coloplast.olympus.ui.common.listeners.FlowListener
  */
 class HelpCommunityDC3Controller: BaseController<ControllerHelpCommunityDc3Binding>() {
 
+  val resourceId = R.raw.dc_animation_step_two
   val position = 2
   val totalCount = 3
 

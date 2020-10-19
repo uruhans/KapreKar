@@ -3,7 +3,6 @@
   xmlns:app="http://schemas.android.com/apk/res-auto">
 
   <data>
-    <import type="com.coloplast.olympus.R" />
     <variable
       name="controller"
       type="com.coloplast.olympus.ui.feature.onboarding.signup.dataconsent.dc2.HelpYouDC2Controller" />
@@ -12,14 +11,51 @@
   <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
     android:layout_marginTop="@dimen/toolbar_height">
 
-    <include layout="@layout/item_info_with_banner"
-      app:drawableId="@{R.drawable.help_you_img}"
-      app:titleId="@{R.string.onboarding_dc2_title}"
-      app:descriptionId="@{R.string.onboarding_dc2_description}"
-      app:layout_constraintTop_toTopOf="parent"/>
+    <androidx.constraintlayout.widget.Guideline
+      android:id="@+id/guideline"
+      android:layout_width="0dp"
+      android:layout_height="0dp"
+      android:orientation="horizontal"
+      app:layout_constraintGuide_percent="0.35" />
+
+    <com.coloplast.olympus.ui.common.widgets.AutoPlayVideoView
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
+      app:layout_constraintBottom_toTopOf="@+id/guideline"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:videoSrc="@{controller.resourceId}" />
+
+    <TextView
+      android:id="@+id/headline"
+      style="@style/Headline.Small"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="@dimen/spacing_larger"
+      android:layout_marginTop="@dimen/spacing_standard"
+      android:layout_marginEnd="@dimen/spacing_larger"
+      android:text="@string/onboarding_dc2_title"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/guideline" />
+
+    <TextView
+      android:id="@+id/description"
+      style="@style/Text.Large"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="@dimen/spacing_larger"
+      android:layout_marginTop="@dimen/spacing_standard"
+      android:layout_marginEnd="@dimen/spacing_larger"
+      android:layout_marginBottom="@dimen/spacing_triple"
+      android:text="@string/onboarding_dc2_description"
+      android:textColor="@color/darkGrey03"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/headline" />
 
     <com.coloplast.olympus.ui.common.widgets.CustomTabLayout
       android:layout_width="wrap_content"

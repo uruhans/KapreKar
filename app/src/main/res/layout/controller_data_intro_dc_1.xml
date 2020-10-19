@@ -4,8 +4,6 @@
 
   <data>
 
-    <import type="com.coloplast.olympus.R" />
-
     <variable
       name="controller"
       type="com.coloplast.olympus.ui.feature.onboarding.signup.dataconsent.dc1.DataIntroDC1Controller" />

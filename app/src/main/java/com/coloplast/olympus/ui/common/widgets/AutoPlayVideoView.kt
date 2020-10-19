@@ -31,7 +31,8 @@ class AutoPlayVideoView @JvmOverloads constructor(
     pause()
   }
 
-  /*
+  /* We want this view to stretch to the maximum width of the screen while keeping the aspect ratio
+   * Otherwise, the view size will be the resolution of the video it displays
    * Solution from: https://stackoverflow.com/a/4625578/2145504
    */
   override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {

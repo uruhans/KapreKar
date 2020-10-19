@@ -62,32 +62,41 @@ class FirmwareManagerImpl(
       // this retryWhen is here to catch that disconnect
       .retryWhen { errors ->
         errors.flatMap { error ->
-          // TODO - probably check the error for a disconnect?
           Timber.e(error)
 
-          // check which state we are currently in and figure out
-          // what to do next
-          when (firmwareUpdateModel.getState()) {
-            FirmwareUpdateModel.State.BOOTLOADER -> {
-              // if we have just completed the bootloader firmware
-              // switch state to app firmware, and wait 5 seconds to make
-              // sure the transmitter has booted up completely
-              firmwareUpdateModel.updateState(FirmwareUpdateModel.State.APP)
-              // when this timer hits its onNext, the connectOtaDevice observable
-              // will be re-subscribed
-              Observable.timer(5, TimeUnit.SECONDS)
-            }
-            FirmwareUpdateModel.State.APP -> {
-              // if we have just completed the app firmware
-              firmwareUpdateModel.updateState(FirmwareUpdateModel.State.COMPLETED)
-              // send a START_SERVICE request to start the BluetoothConnectionService
-              // to enable regular transmitter connection once again
-              serviceRelay.accept(FirmwareManager.ServiceState.START_SERVICE)
-              // return an error to stop the entire firmware upgrade flow
-              Observable.error(error)
-            }
-            else -> {
-              Observable.error(error)
+          // if we aren't done with the firmware we are currently trying to update
+          // we should retry connection and restart the firmware update
+          if(firmwareUpdateModel.currentProgress() < 100) {
+            // reset progress
+            firmwareUpdateModel.resetProgress()
+            // and reconnect to the bootloader
+            Observable.timer(5, TimeUnit.SECONDS)
+          }
+          else {
+            // check which state we are currently in and figure out
+            // what to do next
+            when (firmwareUpdateModel.getState()) {
+              FirmwareUpdateModel.State.BOOTLOADER -> {
+                // if we have just completed the bootloader firmware
+                // switch state to app firmware, and wait 5 seconds to make
+                // sure the transmitter has booted up completely
+                firmwareUpdateModel.updateState(FirmwareUpdateModel.State.APP)
+                // when this timer hits its onNext, the connectOtaDevice observable
+                // will be re-subscribed
+                Observable.timer(5, TimeUnit.SECONDS)
+              }
+              FirmwareUpdateModel.State.APP -> {
+                // if we have just completed the app firmware
+                firmwareUpdateModel.updateState(FirmwareUpdateModel.State.COMPLETED)
+                // send a START_SERVICE request to start the BluetoothConnectionService
+                // to enable regular transmitter connection once again
+                serviceRelay.accept(FirmwareManager.ServiceState.START_SERVICE)
+                // return an error to stop the entire firmware upgrade flow
+                Observable.error(error)
+              }
+              else -> {
+                Observable.error(error)
+              }
             }
           }
         }

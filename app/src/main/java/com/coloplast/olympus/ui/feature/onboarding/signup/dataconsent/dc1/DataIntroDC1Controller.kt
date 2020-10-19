@@ -11,7 +11,9 @@ import com.coloplast.olympus.ui.common.listeners.FlowListener
  * Created by Kike Bodi (ebp@dawnhealth.com) on 15/07/2020.
  * Copyright by Dawn Health A/S. All rights reserved.
  */
-class DataIntroDC1Controller: BaseController<ControllerDataIntroDc1Binding>() {
+class DataIntroDC1Controller : BaseController<ControllerDataIntroDc1Binding>() {
+
+  val resourceId: Int = R.raw.dc_animation_intro
 
   override fun attachVariables(viewBinding: ControllerDataIntroDc1Binding) {
     viewBinding.controller = this
@@ -21,17 +23,17 @@ class DataIntroDC1Controller: BaseController<ControllerDataIntroDc1Binding>() {
     //noop
   }
 
-  fun onReadMoreClicked(){
+  fun onContinueClicked() {
     getListener(FlowListener::class.java)!!.onNextClicked(false) // skip = false
   }
 
-  fun onSkipClicked(){
+  fun onSkipClicked() {
     getListener(FlowListener::class.java)!!.onNextClicked(true) // skip = true
   }
 
-  override fun getLayout(): Int= R.layout.controller_data_intro_dc_1
+  override fun getLayout(): Int = R.layout.controller_data_intro_dc_1
 
-  companion object{
+  companion object {
     private const val TAG_CONTROLLER = "data_intro_dc1_controller"
 
     fun getRouterTransaction() = RouterTransaction.with(DataIntroDC1Controller())

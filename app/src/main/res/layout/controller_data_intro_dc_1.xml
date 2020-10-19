@@ -3,7 +3,7 @@
   xmlns:app="http://schemas.android.com/apk/res-auto">
 
   <data>
-    <import type="com.coloplast.olympus.R" />
+
     <variable
       name="controller"
       type="com.coloplast.olympus.ui.feature.onboarding.signup.dataconsent.dc1.DataIntroDC1Controller" />
@@ -12,36 +12,78 @@
   <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
     android:layout_marginTop="@dimen/toolbar_height">
 
-    <include layout="@layout/item_info_with_banner"
-      app:drawableId="@{R.drawable.data_intro_img}"
-      app:titleId="@{R.string.onboarding_dc1_title}"
-      app:descriptionId="@{R.string.onboarding_dc1_description}"
-      app:layout_constraintTop_toTopOf="parent"/>
+    <androidx.constraintlayout.widget.Guideline
+      android:id="@+id/guideline"
+      android:layout_width="0dp"
+      android:layout_height="0dp"
+      android:orientation="horizontal"
+      app:layout_constraintGuide_percent="0.35" />
+
+    <com.coloplast.olympus.ui.common.widgets.AutoPlayVideoView
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
+      app:layout_constraintBottom_toTopOf="@+id/guideline"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:videoSrc="@{controller.resourceId}" />
+
+    <TextView
+      android:id="@+id/headline"
+      style="@style/Headline.Small"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="@dimen/spacing_larger"
+      android:layout_marginTop="@dimen/spacing_standard"
+      android:layout_marginEnd="@dimen/spacing_larger"
+      android:text="@string/onboarding_dc1_title"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/guideline" />
+
+    <TextView
+      android:id="@+id/description"
+      style="@style/Text.Large"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="@dimen/spacing_larger"
+      android:layout_marginTop="@dimen/spacing_standard"
+      android:layout_marginEnd="@dimen/spacing_larger"
+      android:layout_marginBottom="@dimen/spacing_triple"
+      android:text="@string/onboarding_dc1_description"
+      android:textColor="@color/darkGrey03"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/headline" />
 
     <Button
-      android:layout_height="wrap_content"
-      android:layout_width="match_parent"
+      android:id="@+id/confirmation_button"
       style="@style/Button"
-      app:safeText="@{R.string.onboarding_dc1_primary_button}"
-      android:onClick="@{()-> controller.onReadMoreClicked()}"
-      app:layout_constraintBottom_toTopOf="@id/secondary_button" />
-
-    <Button
-      android:id="@+id/secondary_button"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      style="@style/Button.Borderless"
-      android:textAllCaps="false"
+      android:layout_marginBottom="@dimen/spacing_standard"
       android:layout_marginStart="@dimen/spacing_larger"
       android:layout_marginEnd="@dimen/spacing_larger"
-      android:layout_marginBottom="@dimen/spacing_larger"
-      android:textSize="@dimen/text_18"
-      app:safeText="@{R.string.onboarding_dc1_secondary_button}"
-      android:onClick="@{()-> controller.onSkipClicked()}"
-      app:layout_constraintBottom_toBottomOf="parent" />
+      android:onClick="@{() -> controller.onContinueClicked()}"
+      android:text="@string/onboarding_confirmation_button"
+      app:layout_constraintBottom_toTopOf="@+id/button_negative"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+      android:id="@+id/button_negative"
+      style="@style/TextStyle.Roboto.Medium.Turquoise"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="@dimen/spacing_double"
+      android:layout_marginStart="@dimen/spacing_larger"
+      android:layout_marginEnd="@dimen/spacing_larger"
+      android:gravity="center"
+      android:onClick="@{() -> controller.onSkipClicked()}"
+      android:text="@string/onboarding_dc1_secondary_button"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent" />
 
   </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

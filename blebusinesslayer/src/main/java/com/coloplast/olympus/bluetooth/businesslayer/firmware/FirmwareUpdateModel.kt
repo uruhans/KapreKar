@@ -67,6 +67,10 @@ class FirmwareUpdateModel(
     return currentState
   }
 
+  fun resetProgress() {
+    currentFirmwareModel.reset()
+  }
+
   fun updateState(newState: State) {
     currentState = newState
 

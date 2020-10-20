@@ -1,7 +1,6 @@
 package com.coloplast.olympus
 
 import android.app.Application
-import com.amitshekhar.DebugDB
 import com.coloplast.olympus.koin.koinModule
 import com.coloplast.olympus.shared.AppSettings
 import com.coloplast.olympus.work.*
@@ -19,7 +18,6 @@ class CustomApplication : Application() {
     AppSettings.initialize(this, BuildConfig.ServerUrl, BuildConfig.AzureUrl, BuildConfig.AzureCode)
 
     Timber.plant(Timber.DebugTree())
-    Timber.d(DebugDB.getAddressLog())
 
     startKoin {
       // currently a workaround for koin as not having Level.ERROR causes a runtime crash

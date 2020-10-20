@@ -4,7 +4,7 @@ import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerStateDirtInTransmitterBinding
-import com.coloplast.olympus.ui.feature.guides.articles.GuideController
+import com.coloplast.olympus.ui.feature.guides.SingleGuideFlowController
 import com.coloplast.olympus.ui.feature.guides.articles.models.GuideType
 import com.coloplast.olympus.ui.feature.home.models.PatchVisible
 
@@ -21,9 +21,9 @@ class DirtInTransmitterController : BaseHomeUIController<ControllerStateDirtInTr
 
   fun onGuideClicked() {
     getContentRouter().pushController(
-        GuideController.routerTransaction(GuideType.APPLICATION)
-            .pushChangeHandler(VerticalChangeHandler())
-            .popChangeHandler(VerticalChangeHandler())
+      SingleGuideFlowController.routerTransaction(GuideType.APPLICATION)
+        .pushChangeHandler(VerticalChangeHandler())
+        .popChangeHandler(VerticalChangeHandler())
     )
   }
 

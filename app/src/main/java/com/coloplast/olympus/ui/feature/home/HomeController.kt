@@ -40,7 +40,7 @@ import com.coloplast.olympus.ui.feature.TransmitterManager
 import com.coloplast.olympus.ui.feature.about.AboutController
 import com.coloplast.olympus.ui.feature.contact.ContactController
 import com.coloplast.olympus.ui.feature.guides.GuidesFlowController
-import com.coloplast.olympus.ui.feature.guides.articles.GuideController
+import com.coloplast.olympus.ui.feature.guides.SingleGuideFlowController
 import com.coloplast.olympus.ui.feature.guides.articles.models.GuideType
 import com.coloplast.olympus.ui.feature.home.models.HomeUiModel
 import com.coloplast.olympus.ui.feature.home.models.PatchVisible
@@ -63,8 +63,9 @@ import timber.log.Timber
 import java.time.LocalDateTime
 import java.time.LocalTime
 
-class HomeController : BaseController<ControllerHomeBinding>, HomeView, PermissionHandler, BaseDialogController.Listener, ImageDialogController.Listener {
-  
+class HomeController : BaseController<ControllerHomeBinding>, HomeView, PermissionHandler, BaseDialogController.Listener,
+  ImageDialogController.Listener {
+
   private val viewModel: HomeViewModel by inject()
   private val preferences: Preferences by inject()
   private val transmitterManager: TransmitterManager by inject()
@@ -79,13 +80,13 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
 
   private var dialogController: DialogController? = null
   private var imageDialogController: ImageDialogController? = null
-  
+
   val updateAnimation = ObservableBoolean(false)
-  
+
   val battery = ObservableField<Battery>()
   val isConnected = ObservableBoolean(false)
   val lastCheck = ObservableField<LocalDateTime>()
-  
+
   val currentPatch = ObservableField<Patch>()
   val rawRotationAngle = ObservableInt()
   val isPatchVisible = ObservableBoolean(false)
@@ -97,35 +98,35 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   private var patchDialog: PatchDialogController? = null
   private var patchChangeTime: LocalTime? = null
 
-  private var previousBleState : BluetoothState = BluetoothState.UNDEFINED
+  private var previousBleState: BluetoothState = BluetoothState.UNDEFINED
 
   constructor() : super()
   constructor(args: Bundle?) : super(args)
-  
+
   override fun attachVariables(viewBinding: ControllerHomeBinding) {
     viewBinding.controller = this
   }
-  
+
   override fun onViewBound(viewBinding: ControllerHomeBinding) {
     stateRouter = Conductor.attachRouter(activity!!, viewBinding.contentContainer, args)
-    
+
     compositeDisposable.add(viewModel.bind(this))
-    
+
     if (currentUiState != UiState.INITIAL) {
       changeUiState(currentUiState, true)
     }
   }
-  
+
   override fun render(): Function<Observable<HomeUiModel>, Disposable> {
     return RxUi.ui { uiModel ->
 
       Timber.d("uiModel: $uiModel")
-      
+
       when (uiModel) {
         is HomeUiModel.ConnectionStateUpdate -> {
           isConnected.set(uiModel.connectionState == BleConnectionState.CONNECTED)
-          
-          if(uiModel.connectionState != BleConnectionState.CONNECTED) {
+
+          if (uiModel.connectionState != BleConnectionState.CONNECTED) {
             changeUiState(UiState.DISCONNECTED)
           }
         }
@@ -144,16 +145,17 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
               changeUiState(UiState.LOCATION_SERVICES_NOT_ENABLED)
             }
             BluetoothState.UNDEFINED -> {
-            
+
             }
             BluetoothState.READY -> {
-              if(previousBleState == BluetoothState.BLUETOOTH_NOT_ENABLED || previousBleState == BluetoothState.LOCATION_SERVICES_NOT_ENABLED) {
+              if (previousBleState == BluetoothState.BLUETOOTH_NOT_ENABLED || previousBleState == BluetoothState.LOCATION_SERVICES_NOT_ENABLED) {
                 ServiceDispatcher.dispatchEvent(ServiceEvent.RetryConnection())
               }
 
               if (currentUiState == UiState.INITIAL ||
                 currentUiState == UiState.BLUETOOTH_NOT_ENABLED ||
-                currentUiState == UiState.LOCATION_SERVICES_NOT_ENABLED) {
+                currentUiState == UiState.LOCATION_SERVICES_NOT_ENABLED
+              ) {
 
                 StateDispatcher.dispatchScanning()
                 changeUiState(UiState.CONNECTING)
@@ -168,12 +170,12 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
           // a placeholder for initial scanning state when first launching the app
         }
         is HomeUiModel.Scanning -> {
-          if(currentUiState == UiState.INITIAL) {
+          if (currentUiState == UiState.INITIAL) {
             changeUiState(UiState.CONNECTING)
           }
         }
         is HomeUiModel.ScanningStopped -> {
-          if(currentUiState == UiState.CONNECTING) {
+          if (currentUiState == UiState.CONNECTING) {
             changeUiState(UiState.TRANSMITTER_NOT_FOUND)
           }
         }
@@ -187,8 +189,9 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
           stateChange.bleDevice.peripheral?.battery?.let { battery.set(it) }
           isConnected.set(stateChange.bleDevice.isConnected())
 
-          if(stateChange.state == UiState.APP_UPDATE_AVAILABLE
-            || stateChange.state == UiState.FIRMWARE_AVAILABLE) {
+          if (stateChange.state == UiState.APP_UPDATE_AVAILABLE
+            || stateChange.state == UiState.FIRMWARE_AVAILABLE
+          ) {
             changeUiState(stateChange.state)
             return@ui
           }
@@ -198,7 +201,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
           stateChange.bleDevice.peripheral?.transmitter?.rawRotationalAngle?.let {
             rawRotationAngle.set(it)
           }
-          
+
           stateChange.bleDevice.peripheral?.patch?.let {
             currentPatch.set(it)
           }
@@ -209,9 +212,9 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
           // if we get a wet mount or outer leak within 4 minutes (240 seconds)
           // we override the ui state to wet mount
           val timeBetween = LocalTime.now().minusNanos(patchChangeTime?.toNanoOfDay() ?: 0)
-          if(timeBetween.toSecondOfDay() <= 240) {
+          if (timeBetween.toSecondOfDay() <= 240) {
             val outerSensorState = stateChange.bleDevice.peripheral?.patch?.outerSensor
-            if(outerSensorState == SensorStatus.BREACH || outerSensorState == SensorStatus.SOME_SWEAT || outerSensorState == SensorStatus.BLINDED) {
+            if (outerSensorState == SensorStatus.BREACH || outerSensorState == SensorStatus.SOME_SWEAT || outerSensorState == SensorStatus.BLINDED) {
               stateToChangeTo = UiState.WET_MOUNT_G
             }
             // clear the variable so we dont hit this wet mount again the next time
@@ -222,7 +225,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
             patchChangeTime = null
           }
 
-          if(stateChange.overlayState == OverlayState.BLE_CONNECTION_LOST) {
+          if (stateChange.overlayState == OverlayState.BLE_CONNECTION_LOST) {
             isConnected.set(false)
           }
 
@@ -314,22 +317,22 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
           null
         }
       }
-      
+
       routerTransaction?.let {
         if (it.controller() is PatchVisible) {
           it.popChangeHandler(ResizeChangeHandler())
             .pushChangeHandler(ResizeChangeHandler())
-          
+
           patchInErrorState.set((it.controller() as PatchVisible).patchInError())
           isPatchVisible.set((it.controller() as PatchVisible).patchVisible())
         }
         else {
           it.popChangeHandler(FadeChangeHandler())
             .pushChangeHandler(FadeChangeHandler())
-  
+
           isPatchVisible.set(false)
         }
-        
+
         if (stateRouter?.hasRootController() == true) {
           stateRouter?.replaceTopController(it)
         }
@@ -338,18 +341,18 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         }
       }
     }
-    
+
     if (newState != UiState.NO_CHANGE) {
       currentUiState = newState
     }
   }
 
   private fun changeOverlayState(overlayState: OverlayState) {
-    if(overlayState == OverlayState.NONE) {
+    if (overlayState == OverlayState.NONE) {
       return
     }
 
-    when(overlayState) {
+    when (overlayState) {
       OverlayState.BATTERY_LOW -> {
         imageDialogController = ImageDialogController.create(
           this,
@@ -418,7 +421,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   private fun determinePatchProbability(patchProbability: PatchProbability) {
     Timber.d("PatchProbability: [$patchProbability]")
 
-    when(patchProbability) {
+    when (patchProbability) {
       PatchProbability.NEW -> {
         preferences.incrementPatchId()
         patchChangeTime = LocalTime.now()
@@ -436,7 +439,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
       }
     }
   }
-  
+
   override fun onPositiveButtonClicked(requestCode: Int) {
     when (requestCode) {
       REQUEST_CODE_PERMISSION_LOCATION -> {
@@ -461,9 +464,10 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
       }
       REQUEST_CODE_CONNECTION_LOST -> {
         router.pushController(
-          GuideController.routerTransaction(GuideType.CONNECTION)
-          .pushChangeHandler(VerticalChangeHandler())
-          .popChangeHandler(VerticalChangeHandler()))
+          SingleGuideFlowController.routerTransaction(GuideType.CONNECTION)
+            .pushChangeHandler(VerticalChangeHandler())
+            .popChangeHandler(VerticalChangeHandler())
+        )
       }
     }
 
@@ -471,7 +475,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   }
 
   override fun onCloseClicked(requestCode: Int) {
-    when(requestCode) {
+    when (requestCode) {
       REQUEST_CODE_CONNECTION_LOST,
       REQUEST_CODE_BATTERY_LOW -> {
         imageDialogController?.dismissDialog(false)
@@ -493,12 +497,12 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
           verticalButtonLayout = true,
           dismissAllowed = true
         )
-        
+
         imageDialogController?.show()
       }
     }
   }
-  
+
   override fun onPermissionGranted(requestCode: Int) {
     when (requestCode) {
       REQUEST_CODE_PERMISSION_LOCATION -> {
@@ -506,7 +510,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
       }
     }
   }
-  
+
   override fun onPermissionDenied(requestCode: Int) {
     when (requestCode) {
       REQUEST_CODE_PERMISSION_LOCATION -> {
@@ -514,7 +518,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
       }
     }
   }
-  
+
   private fun showPermissionDialog() {
     dialogController = DialogController.create(
       this,
@@ -524,10 +528,10 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
       R.string.dialog_permission_ask,
       dismissAllowed = false
     )
-    
+
     dialogController?.show()
   }
-  
+
   fun onMenuClicked() {
     if (getBinding().drawerLayout.isDrawerOpen(GravityCompat.END)) {
       changeDrawerState(DrawerState.CLOSED)
@@ -538,17 +542,17 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   }
 
   fun changeDrawerState(drawerState: DrawerState) {
-    when(drawerState) {
+    when (drawerState) {
       DrawerState.OPENED -> getBinding().drawerLayout.openDrawer(GravityCompat.END, true)
       DrawerState.CLOSED -> getBinding().drawerLayout.closeDrawer(GravityCompat.END, true)
     }
   }
-  
+
   fun onSideMenuClicked(menuType: SideMenuType) {
     when (menuType) {
       SideMenuType.STATUS -> {
         router.pushController(
-          GuideController.routerTransaction(GuideType.GET_STARTED)
+          SingleGuideFlowController.routerTransaction(GuideType.GET_STARTED)
             .pushChangeHandler(VerticalChangeHandler())
             .popChangeHandler(VerticalChangeHandler())
         )
@@ -578,7 +582,8 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         router.pushController(
           ProfileController.routerTransaction()
             .pushChangeHandler(VerticalChangeHandler())
-            .popChangeHandler(VerticalChangeHandler()))
+            .popChangeHandler(VerticalChangeHandler())
+        )
       }
       SideMenuType.CONTACT -> {
         router.pushController(
@@ -596,7 +601,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
       }
     }
   }
-  
+
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     when (requestCode) {
       REQUEST_CODE_BLUETOOTH_ENABLE -> {
@@ -607,7 +612,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
       else -> super.onActivityResult(requestCode, resultCode, data)
     }
   }
-  
+
   override fun getLayout(): Int {
     return R.layout.controller_home
   }
@@ -626,10 +631,10 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
     connectionStateDisposable.clear()
     super.onDestroyView(view)
   }
-  
+
   companion object {
     const val TAG_CONTROLLER = "home_controller"
-    
+
     private const val REQUEST_CODE_PERMISSION_LOCATION = 5001
     private const val REQUEST_CODE_PERMISSION_RATIONALE = 5002
     private const val REQUEST_CODE_BATTERY_LOW = 6005
@@ -637,7 +642,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
     private const val REQUEST_CODE_PATCH_DETAILS = 7001
 
     const val REQUEST_CODE_BLUETOOTH_ENABLE = 5005
-    
+
     fun routerTransaction() = RouterTransaction.with(HomeController())
       .tag(TAG_CONTROLLER)
   }

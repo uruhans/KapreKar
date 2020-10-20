@@ -4,37 +4,37 @@ import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerStateTransmitterDetachedBinding
-import com.coloplast.olympus.ui.feature.guides.articles.GuideController
+import com.coloplast.olympus.ui.feature.guides.SingleGuideFlowController
 import com.coloplast.olympus.ui.feature.guides.articles.models.GuideType
 import com.coloplast.olympus.ui.feature.home.models.PatchVisible
 
 class TransmitterDetachedController : BaseHomeUIController<ControllerStateTransmitterDetachedBinding>(), PatchVisible {
-  
+
   override fun attachVariables(viewBinding: ControllerStateTransmitterDetachedBinding) {
     super.attachVariables(viewBinding)
     viewBinding.controller = this
   }
-  
+
   override fun onViewBound(viewBinding: ControllerStateTransmitterDetachedBinding) {
     // no-op
   }
-  
+
   fun onApplicationGuideClicked() {
     getContentRouter().pushController(
-      GuideController.routerTransaction(GuideType.GET_STARTED)
+      SingleGuideFlowController.routerTransaction(GuideType.GET_STARTED)
         .pushChangeHandler(VerticalChangeHandler())
         .popChangeHandler(VerticalChangeHandler())
     )
   }
-  
+
   override fun patchInError(): Boolean {
     return true
   }
-  
+
   override fun getLayout(): Int {
     return R.layout.controller_state_transmitter_detached
   }
-  
+
   companion object {
     private const val TAG_CONTROLLER = "state_transmitter_detached_controller"
     fun routerTransaction() = RouterTransaction.with(TransmitterDetachedController()).tag(TAG_CONTROLLER)

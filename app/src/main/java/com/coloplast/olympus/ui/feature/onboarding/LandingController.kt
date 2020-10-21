@@ -34,7 +34,7 @@ class LandingController : BaseController<ControllerLandingBinding>() {
 
     val (routerTransaction, delay) = when (preferences.didSeeValueProposition) {
       false -> Pair(ValuePropositionFlowController.routerTransaction(), 1000L)
-      true -> if (preferences.userToken.isNotBlank()) {
+      true -> if (preferences.getToken().isNotBlank()) {
         when (preferences.getCurrentOnboardingProgress()) {
           OnboardingProgression.NOT_STARTED, // freshly installed app and login with existing user.
           OnboardingProgression.SETUP_GUIDE_START,

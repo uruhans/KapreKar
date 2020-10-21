@@ -107,25 +107,7 @@ class AddTransmitterAT9ViewModel(
                   .skipWhile { it == BleConnectionState.DISCONNECTED }
                   // we are only interested in fully connected
                   .filter { it == BleConnectionState.CONNECTED }
-                  .flatMap<SearchTransmitterUiModel> {
-                    bluetoothManager.readAdditionalTransmitterInfo(scanResult.macAddress)
-                      .flatMap { additionalDeviceInfo ->
-
-                        transmitter.firmwareVersion = additionalDeviceInfo.deviceInfo.firmwareVersion
-                        transmitter.hardwareRevision = additionalDeviceInfo.deviceInfo.hardwareRevision
-                        transmitter.manufacturerName = additionalDeviceInfo.deviceInfo.manufacturer
-                        transmitter.serialNumber = additionalDeviceInfo.deviceInfo.serialNumber
-                        
-                        transmitter.settings = additionalDeviceInfo.settings
-                        transmitter.classifierSettings = additionalDeviceInfo.classifierSettings
-
-                        transmitterComponent.insertOrUpdateTransmitter(transmitter)
-                          .subscribeOn(Schedulers.io())
-                          .toSingle { SearchTransmitterUiModel.ConnectionSuccessful(scanResult.macAddress) }
-                          .toObservable()
-                      }
-                  }
-                  .onErrorReturn { SearchTransmitterUiModel.BondingFailed(scanResult.macAddress) }
+                  .map { SearchTransmitterUiModel.ConnectionSuccessful(scanResult.macAddress) }
               }
           }
       }

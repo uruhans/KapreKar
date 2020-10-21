@@ -33,15 +33,9 @@ android {
       applicationIdSuffix ".dev"
       buildConfigField("String", "Suffix", "\" - DEV\"")
 
-
-      buildConfigField("String", "ServerUrl", "\"https://cp-fc-be-test.azurewebsites.net\"")
-      buildConfigField("String", "AzureUrl", "\"https://cp-fc-test.azurefd.net/api/\"")
-      buildConfigField("String", "AzureCode", "\"yBcdDaPPWKYaL160/7aXnd55ehvzukND6ng3oawFaApU1xd891QtwQ==\"")
-
-//      buildConfigField("String", "ServerUrl", "\"https://cp-fc-be-dev.azurewebsites.net\"")
-//      buildConfigField("String", "AzureUrl", "\"https://cp-fc-dev.azurefd.net/api/\"")
-//      buildConfigField("String", "AzureCode", "\"1aiab34Rsqn2jSVcyXevoG9rvS0HjS9lqf5g8XsUV8BnzRVk3a9u1g==\"")
-
+      buildConfigField("String", "ServerUrl", "\"https://cp-fc-be-dev.azurewebsites.net\"")
+      buildConfigField("String", "AzureUrl", "\"https://cp-fc-dev.azurefd.net/api/\"")
+      buildConfigField("String", "AzureCode", "\"1aiab34Rsqn2jSVcyXevoG9rvS0HjS9lqf5g8XsUV8BnzRVk3a9u1g==\"")
     }
     tpa {
       applicationIdSuffix ".tpa"

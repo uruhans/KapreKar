@@ -14,7 +14,7 @@ import java.util.*
 class Preferences(applicationContext: Context) {
 
   var userLoggedIn: String by bindSharedPreference(applicationContext, USER_LOGGED_IN, "")
-  var userToken: String by bindSharedPreference(applicationContext, USER_TOKEN, "")
+  private var userToken: String by bindSharedPreference(applicationContext, USER_TOKEN, "")
   var activeTransmitter: String by bindSharedPreference(applicationContext, ACTIVE_TRANSMITTER, "")
   var latestStateFromActiveTx: String by bindSharedPreference(applicationContext, LATEST_STATE_FROM_ACTIVE_TRANSMITTER, "")
   var leaks: String by bindSharedPreference(applicationContext, LEAKS, "")
@@ -46,6 +46,7 @@ class Preferences(applicationContext: Context) {
   private fun clearUserToken() {
     userToken = ""
     userLoggedIn = ""
+    AppSettings.userToken = ""
   }
 
   fun setCurrentOnboardingProgression(currentStep: OnboardingProgression) {
@@ -70,6 +71,15 @@ class Preferences(applicationContext: Context) {
 
   fun clear() {
     clearUserToken()
+  }
+
+  fun setToken(token: String) {
+    userToken = token
+    AppSettings.userToken = token
+  }
+
+  fun getToken() : String {
+    return userToken
   }
   
   companion object {

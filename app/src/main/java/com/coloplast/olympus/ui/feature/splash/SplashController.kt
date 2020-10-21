@@ -65,7 +65,7 @@ class SplashController : BaseController<ControllerSplashBinding>(), SplashView {
 
   private fun goToNextScreen() {
     val routerTransaction = when {
-      preferences.userToken.isNotBlank() && preferences.getCurrentOnboardingProgress() == OnboardingProgression.COMPLETED -> {
+      preferences.getToken().isNotBlank() && preferences.getCurrentOnboardingProgress() == OnboardingProgression.COMPLETED -> {
         HomeController.routerTransaction()
       }
       else -> {

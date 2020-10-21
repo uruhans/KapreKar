@@ -58,7 +58,7 @@ class UserComponentImpl(private val preferences: Preferences) : UserComponent {
       .toObservable()
       .flatMap { localUser ->
         // if consent goes from true to false we need to reset the user
-        if(localUser.consent == true && user.consent == false) {
+        if(localUser.consent && !user.consent) {
           resetUser(user)
         }
 
@@ -79,7 +79,7 @@ class UserComponentImpl(private val preferences: Preferences) : UserComponent {
   }
 
   private fun resetUser(user: User) : User {
-    if(user.consent == false) {
+    if(!user.consent) {
       with(user) {
         firstName = null
         lastName = null
@@ -150,9 +150,9 @@ class UserComponentImpl(private val preferences: Preferences) : UserComponent {
 
     override fun apply(upstream: Observable<UserResponseDTO>): ObservableSource<CurrentUser> {
       return upstream
-        .map<User> {
+        .map {
           preferences.userLoggedIn = it.user.userId!!
-          preferences.userToken = it.token
+          preferences.setToken(it.token)
           it.user.toUser()
         }
         .flatMap { database.insertOrUpdateUser(it) }

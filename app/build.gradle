@@ -46,7 +46,7 @@ android {
       buildConfigField("String", "AzureCode", "\"yBcdDaPPWKYaL160/7aXnd55ehvzukND6ng3oawFaApU1xd891QtwQ==\"")
     }
     internal {
-      applicationIdSuffix ".tpa"
+      applicationIdSuffix ".internal"
       buildConfigField("String", "Suffix", "\" - internal\"")
 
       buildConfigField("String", "ServerUrl", "\"https://cp-fc-be-test.azurewebsites.net\"")

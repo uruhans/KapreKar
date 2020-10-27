@@ -3,9 +3,7 @@ package com.coloplast.olympus.ui.common.widgets
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.view.View
 import android.view.animation.AccelerateInterpolator
-import android.view.animation.LinearInterpolator
 import android.widget.FrameLayout
 import androidx.annotation.RawRes
 import androidx.databinding.ObservableBoolean

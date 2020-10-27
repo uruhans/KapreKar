@@ -13,7 +13,7 @@ class StatusPackageDTO(
    * this represents the date that the phone received the raw package from the transmitter
    */
   @Json(name = "timeStamp")
-  val receivedDate: Instant,
+  val receivedDate: Long,
 
   val classifier0: Int,
   val classifier1: Int,
@@ -36,7 +36,7 @@ class StatusPackageDTO(
     fun fromStatusPackage(id: Int, dataReceived: Instant, statusPackage: StatusPackage) : StatusPackageDTO {
       return StatusPackageDTO(
         id.toString(),
-        dataReceived,
+        dataReceived.epochSecond,
         statusPackage.sensor0.toInt(),
         statusPackage.sensor1.toInt(),
         statusPackage.sensor2.toInt(),

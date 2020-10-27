@@ -8,12 +8,12 @@ def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
 android {
-  compileSdkVersion 29
+  compileSdkVersion 30
 
   defaultConfig {
     applicationId "com.coloplast.olympus"
     minSdkVersion 23
-    targetSdkVersion 29
+    targetSdkVersion 30
     versionCode gitVersionCode()
     versionName "1.7.0"
     testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -40,6 +40,14 @@ android {
     tpa {
       applicationIdSuffix ".tpa"
       buildConfigField("String", "Suffix", "\" - TPA\"")
+
+      buildConfigField("String", "ServerUrl", "\"https://cp-fc-be-test.azurewebsites.net\"")
+      buildConfigField("String", "AzureUrl", "\"https://cp-fc-test.azurefd.net/api/\"")
+      buildConfigField("String", "AzureCode", "\"yBcdDaPPWKYaL160/7aXnd55ehvzukND6ng3oawFaApU1xd891QtwQ==\"")
+    }
+    internal {
+      applicationIdSuffix ".internal"
+      buildConfigField("String", "Suffix", "\" - internal\"")
 
       buildConfigField("String", "ServerUrl", "\"https://cp-fc-be-test.azurewebsites.net\"")
       buildConfigField("String", "AzureUrl", "\"https://cp-fc-test.azurefd.net/api/\"")

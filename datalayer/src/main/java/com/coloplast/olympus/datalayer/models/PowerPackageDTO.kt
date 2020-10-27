@@ -12,12 +12,12 @@ class PowerPackageDTO(
    * this represents the date that the phone received the raw package from the transmitter
    */
   @Json(name = "timeStamp")
-  val receivedDate: Instant,
+  val receivedDate: Long,
   val powerLevel: Int
 ) : TransmitterValue {
   companion object {
     fun fromPowerPackage(id: Int, dataReceived: Instant, powerLevel: Int) : PowerPackageDTO {
-      return PowerPackageDTO(id.toString(), dataReceived, powerLevel)
+      return PowerPackageDTO(id.toString(), dataReceived.epochSecond, powerLevel)
     }
   }
 }

@@ -15,7 +15,7 @@ class RawPackageDTO(
    * this represents the date that the phone received the raw package from the transmitter
    */
   @Json(name = "timeStamp")
-  val receivedDate: Instant,
+  val receivedDate: Long,
 
   /**
    * this represents the date specified in the raw package itself
@@ -30,7 +30,7 @@ class RawPackageDTO(
    *    - seconds256
    */
   @Json(name = "date")
-  val packageDate: Instant,
+  val packageDate: Long,
 
   @Json(name = "WID_R")
   val widR : Int,
@@ -121,7 +121,7 @@ class RawPackageDTO(
     fun fromRawDataPackage(id: Int, dataReceived: Instant, rawDataPackage: RawDataPackage) : RawPackageDTO {
       return RawPackageDTO(
         id.toString(),
-        dataReceived,
+        dataReceived.epochSecond,
         LocalDateTime.of(
           rawDataPackage.year.toInt(),
           rawDataPackage.month.toInt(),
@@ -129,7 +129,7 @@ class RawPackageDTO(
           rawDataPackage.hour.toInt(),
           rawDataPackage.minute.toInt(),
           rawDataPackage.seconds.toInt()
-        ).toInstant(ZoneOffset.UTC),
+        ).toInstant(ZoneOffset.UTC).epochSecond,
         rawDataPackage.widR.toInt(),
         rawDataPackage.s0SensorData.toInt(),
         rawDataPackage.s1SensorData.toInt(),

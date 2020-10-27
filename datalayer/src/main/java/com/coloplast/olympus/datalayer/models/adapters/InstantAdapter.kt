@@ -15,6 +15,6 @@ class InstantAdapter {
 
   @ToJson
   fun toJson(date: Instant): Long {
-    return date.toEpochMilli() / 1000
+    return date.epochSecond
   }
 }

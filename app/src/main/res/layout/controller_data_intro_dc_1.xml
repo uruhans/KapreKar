@@ -21,14 +21,15 @@
       android:orientation="horizontal"
       app:layout_constraintGuide_percent="0.35" />
 
-    <com.coloplast.olympus.ui.common.widgets.AutoPlayVideoView
+    <com.coloplast.olympus.ui.common.widgets.MediaView
       android:layout_width="match_parent"
       android:layout_height="0dp"
       app:layout_constraintBottom_toTopOf="@+id/guideline"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"
-      app:videoSrc="@{controller.resourceId}" />
+      app:resource="@{controller.resourceId}"
+      app:isLooping="@{true}" />
 
     <TextView
       android:id="@+id/headline"

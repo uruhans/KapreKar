@@ -23,6 +23,7 @@ class MediaView @JvmOverloads constructor(
 
     val resId = ObservableInt()
     val isVideo = ObservableBoolean(true)
+    val isLooping = ObservableBoolean(false)
 
     private val inflater = LayoutInflater.from(context)
     private val view = ViewMediaBinding.inflate(inflater, this, true).apply {
@@ -32,5 +33,9 @@ class MediaView @JvmOverloads constructor(
     fun setResource(resourceId: Int){
         isVideo.set(!ResourceUtils.isDrawableResource(context, resourceId))
         resId.set(resourceId)
+    }
+
+    fun setIsLooping(loop : Boolean) {
+        isLooping.set(loop)
     }
 }

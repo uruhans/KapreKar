@@ -1,13 +1,16 @@
 package com.coloplast.olympus.ui.common.widgets
 
 import android.content.Context
-import android.net.Uri
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.View
+import android.view.animation.AccelerateInterpolator
+import android.view.animation.LinearInterpolator
 import android.widget.FrameLayout
 import androidx.annotation.RawRes
 import androidx.databinding.ObservableBoolean
 import com.coloplast.olympus.databinding.ViewVideoPlayerBinding
+import com.coloplast.olympus.extensions.getResourceUri
 
 
 /**
@@ -19,34 +22,33 @@ class VideoPlayer @JvmOverloads constructor(
 ) : FrameLayout(context, attrs, defStyleAttr) {
 
     val showPlay = ObservableBoolean(true)
+    private val looping = ObservableBoolean(true)
 
     private val inflater = LayoutInflater.from(context)
     private val videoView = with(ViewVideoPlayerBinding.inflate(inflater, this, true)){
         this.view = this@VideoPlayer
         this.videoView
+    }.also {
+        it.alpha = 0f
+        it.setOnPreparedListener { mp ->
+            mp.isLooping = looping.get()
+            playVideo()
+        }
+        it.setOnCompletionListener { showPlay.set(true) }
     }
 
     fun setVideoSrc(@RawRes videoId: Int){
-        val videoPath = "android.resource://${context.packageName}/$videoId"
-        val uri = Uri.parse(videoPath)
+        videoView.setVideoURI(context.getResourceUri(videoId))
+    }
 
-        videoView.setVideoURI(uri)
-        showPreview()
-
-        videoView.setOnCompletionListener { showPlay.set(true) }
+    fun setIsLooping(loop : Boolean) {
+        looping.set(loop)
     }
 
     fun playVideo(){
         showPlay.set(false)
         videoView.start()
+        videoView.animate().alpha(1F).setInterpolator(AccelerateInterpolator(2F)).setDuration(500).start() // we prevent a black screen by animating the view
     }
 
-    // The image shown on the view before playing the video is just a black screen.
-    // This forces an image by playing 100ms.
-    private fun showPreview(){
-        videoView.start()
-        postDelayed({
-            videoView.pause()
-        }, 100)
-    }
 }

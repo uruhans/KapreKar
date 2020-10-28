@@ -7,12 +7,12 @@ import com.coloplast.olympus.shared.preferences.OnboardingProgression
 import com.coloplast.olympus.shared.preferences.Preferences
 import com.coloplast.olympus.ui.common.MediaGuideController
 import com.coloplast.olympus.ui.common.flow.FlowFactory
-import com.coloplast.olympus.ui.common.flow.FlowFactoryController
+import com.coloplast.olympus.ui.common.flow.TopMenuFlowFactoryController
 import com.coloplast.olympus.ui.common.models.flow.EmptyModel
 import com.coloplast.olympus.ui.dialogs.CallHelpDialogController
 import org.koin.core.inject
 
-class SetupGuideIntroFlowController : FlowFactoryController<EmptyModel>(), MediaGuideController.Listener,
+class SetupGuideIntroFlowController : TopMenuFlowFactoryController<EmptyModel>(), MediaGuideController.Listener,
   CallHelpDialogController.Listener {
 
   private val factory: SetupGuideIntroFactoryImpl by inject()

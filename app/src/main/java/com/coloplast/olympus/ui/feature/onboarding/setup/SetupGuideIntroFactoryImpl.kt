@@ -23,7 +23,9 @@ class SetupGuideIntroFactoryImpl : FlowFactory<EmptyModel>() {
           R.string.onboarding_chapter_intro_setup_guide,
           R.string.onboarding_chapter_intro_setup_guide_message,
           R.string.generic_get_started,
-          R.drawable.ic_sidemenu_guides
+          R.drawable.ic_sidemenu_guides,
+          showBackButton = false,
+          showCloseButton = false
         )
       }
       SetupGuideIntroductionFlow.SetupGuideSG2 -> SetupGuideSG2.routerTransaction()

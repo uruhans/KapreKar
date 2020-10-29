@@ -40,7 +40,7 @@ class AddTransmitterAT9ViewModel(
           // scan for transmitters
           bluetoothManager.scanBleDevices()
             // only return distinct items (based on macAddress)
-            .distinctUntilChanged { scanResult: ScanResult -> scanResult.macAddress }
+            .distinct { scanResult: ScanResult -> scanResult.macAddress }
             // shut down the scanning after 14 seconds
             // it's 14 (and not 15) because the buffer would stop a little bit before this
             // which resulted in the buffer being emptied twice (which caused issues in the UI)

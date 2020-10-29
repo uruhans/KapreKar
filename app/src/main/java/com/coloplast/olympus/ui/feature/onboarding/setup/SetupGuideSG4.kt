@@ -6,11 +6,12 @@ import com.coloplast.olympus.BR
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerStartupGuide4Binding
 import com.coloplast.olympus.ui.common.BaseController
+import com.coloplast.olympus.ui.common.flow.TopMenuVisibilityListener
 import com.coloplast.olympus.ui.common.listeners.FlowListener
 import com.coloplast.olympus.ui.feature.onboarding.setup.model.NumberedCard
 import me.tatarka.bindingcollectionadapter2.itembindings.OnItemBindClass
 
-class SetupGuideSG4 : BaseController<ControllerStartupGuide4Binding>() {
+class SetupGuideSG4 : BaseController<ControllerStartupGuide4Binding>(), TopMenuVisibilityListener {
 
   val items = ObservableArrayList<Any>()
   val itemBinding: OnItemBindClass<Any> = OnItemBindClass<Any>()
@@ -32,6 +33,10 @@ class SetupGuideSG4 : BaseController<ControllerStartupGuide4Binding>() {
       items.addAll(list)
     }
   }
+
+  override fun showBackButton(): Boolean = false
+
+  override fun showCloseButton(): Boolean = false
 
   fun onNextClicked() {
     getListener(FlowListener::class.java)?.onNextClicked()

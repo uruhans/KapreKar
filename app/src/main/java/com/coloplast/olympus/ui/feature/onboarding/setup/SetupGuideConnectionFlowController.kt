@@ -12,7 +12,7 @@ import com.coloplast.olympus.shared.preferences.Preferences
 import com.coloplast.olympus.ui.common.MediaGuideController
 import com.coloplast.olympus.ui.common.PermissionHandler
 import com.coloplast.olympus.ui.common.flow.FlowFactory
-import com.coloplast.olympus.ui.common.flow.FlowFactoryController
+import com.coloplast.olympus.ui.common.flow.TopMenuFlowFactoryController
 import com.coloplast.olympus.ui.common.models.flow.EmptyModel
 import com.coloplast.olympus.ui.dialogs.CallHelpDialogController
 import com.coloplast.olympus.ui.feature.onboarding.setup.model.SetupGuideConnectionFlow
@@ -21,7 +21,7 @@ import com.coloplast.olympus.utils.OSUtils
 import org.koin.core.inject
 import timber.log.Timber
 
-class SetupGuideConnectionFlowController : FlowFactoryController<EmptyModel>(), PermissionHandler,
+class SetupGuideConnectionFlowController : TopMenuFlowFactoryController<EmptyModel>(), PermissionHandler,
   MediaGuideController.Listener,
   CallHelpDialogController.Listener {
 

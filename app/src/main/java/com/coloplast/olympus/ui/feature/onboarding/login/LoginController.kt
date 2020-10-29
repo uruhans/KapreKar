@@ -8,6 +8,8 @@ import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerLoginBinding
 import com.coloplast.olympus.shared.models.Credentials
+import com.coloplast.olympus.shared.preferences.OnboardingProgression
+import com.coloplast.olympus.shared.preferences.Preferences
 import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.common.LoadingController
 import com.coloplast.olympus.ui.common.dialogs.BaseDialogController
@@ -31,6 +33,8 @@ class LoginController: BaseController<ControllerLoginBinding>(),
   BaseDialogController.Listener {
 
   private val viewModel: LoginViewModel by inject()
+  private val preferences: Preferences by inject()
+
   private val loginRelay: PublishRelay<Credentials> = PublishRelay.create()
 
   private var dialogController: DialogController? = null
@@ -75,6 +79,8 @@ class LoginController: BaseController<ControllerLoginBinding>(),
       when (uiModel) {
         is GenericUiModel.Success<*> -> {
           if(uiModel.data == true){
+            preferences.setCurrentOnboardingProgression(OnboardingProgression.COMPLETED)
+
             //Login successful
             getContentRouter().setRoot(HomeController.routerTransaction()
               .popChangeHandler(VerticalChangeHandler())

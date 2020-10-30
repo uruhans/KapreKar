@@ -34,6 +34,11 @@ class SettingsFlowController(args: Bundle? = null): BaseFlowController(args),
     pushController(ChooseSensorsController.routerTransaction())
   }
 
+  override fun onCloseClicked() {
+    DrawerStateDispatcher.closeNavigationDrawerOnHome()
+    super.onCloseClicked()
+  }
+
   companion object{
 
     private const val TAG_CONTROLLER = "settings_flow_controller"

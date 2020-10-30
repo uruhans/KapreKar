@@ -250,6 +250,11 @@ class TransmittersController(args: Bundle? = null) :
     items.update(newList)
   }
 
+  override fun onCloseClicked() {
+    DrawerStateDispatcher.closeNavigationDrawerOnHome()
+    super.onCloseClicked()
+  }
+
   companion object {
     private const val TAG_CONTROLLER = "transmitters_controller"
     private const val REQUEST_CODE_DELETE_TRANSMITTER = 1000

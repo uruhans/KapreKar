@@ -3,6 +3,7 @@ package com.coloplast.olympus.ui.feature.guides
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.ui.common.BaseFlowController
+import com.coloplast.olympus.ui.common.DrawerStateDispatcher
 
 
 /**
@@ -25,6 +26,11 @@ class GuidesFlowController: BaseFlowController() {
       .targetController = this
 
     return transaction
+  }
+
+  override fun onCloseClicked() {
+    DrawerStateDispatcher.closeNavigationDrawerOnHome()
+    super.onCloseClicked()
   }
 
   companion object{

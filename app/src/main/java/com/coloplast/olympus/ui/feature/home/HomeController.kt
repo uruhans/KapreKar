@@ -265,6 +265,9 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         UiState.OUTER_BREACH_C -> {
           OuterBreachController.routerTransaction()
         }
+        UiState.INNER_BLIND_D -> {
+          InnerBlindController.routerTransaction()
+        }
         UiState.TOTAL_BLIND_E -> {
           TotalBlindController.routerTransaction()
         }

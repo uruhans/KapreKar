@@ -6,6 +6,7 @@ import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerContactBinding
 import com.coloplast.olympus.ui.common.CustomToolbarController
+import com.coloplast.olympus.ui.common.DrawerStateDispatcher
 
 
 /**
@@ -40,6 +41,11 @@ class ContactController: CustomToolbarController<ControllerContactBinding>() {
   override fun getLayout(): Int = R.layout.controller_contact
 
   override fun getNavigationIconResId() = R.drawable.ic_arrow
+
+  override fun onCloseClicked() {
+    DrawerStateDispatcher.closeNavigationDrawerOnHome()
+    super.onCloseClicked()
+  }
 
   companion object{
     private const val TAG_CONTROLLER = "contact_controller"

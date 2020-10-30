@@ -554,11 +554,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   fun onSideMenuClicked(menuType: SideMenuType) {
     when (menuType) {
       SideMenuType.STATUS -> {
-        router.pushController(
-          SingleGuideFlowController.routerTransaction(GuideType.GET_STARTED)
-            .pushChangeHandler(VerticalChangeHandler())
-            .popChangeHandler(VerticalChangeHandler())
-        )
+        changeDrawerState(DrawerState.CLOSED)
       }
       SideMenuType.GUIDES -> {
         router.pushController(

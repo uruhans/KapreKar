@@ -116,14 +116,14 @@ class BluetoothManagerImpl(
    */
   private fun getBleDevice(macAddress: String): Observable<RxBleDevice> {
     return Observable.create { emitter ->
-      if (bleDevices.any { it.key == macAddress }) {
-        emitter.onNext(bleDevices[macAddress]!!)
-      }
-      else {
-        val rxBleDevice = bluetoothHandler.getBleDevice(macAddress)
+      var rxBleDevice = bleDevices[macAddress]
+
+      if (rxBleDevice == null) {
+        rxBleDevice = bluetoothHandler.getBleDevice(macAddress)
         bleDevices[macAddress] = rxBleDevice
-        emitter.onNext(rxBleDevice)
       }
+
+      emitter.onNext(rxBleDevice)
     }
   }
 

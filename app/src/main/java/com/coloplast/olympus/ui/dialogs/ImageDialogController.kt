@@ -33,7 +33,7 @@ class ImageDialogController(args: Bundle) : BaseDialogController<ControllerDialo
   val showTopImage: Boolean
   
   val dismissAllowed: Boolean
-  private val requestCode: Int
+  val requestCode: Int
   
   init {
     titleResId.set(args.getInt(BUNDLE_TITLE_RES_ID))

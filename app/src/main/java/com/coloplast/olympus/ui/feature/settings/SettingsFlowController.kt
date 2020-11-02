@@ -26,17 +26,17 @@ class SettingsFlowController(args: Bundle? = null): BaseFlowController(args),
     controller().targetController = this@SettingsFlowController
   }
 
-  override fun onCloseClicked() {
-    DrawerStateDispatcher.closeNavigationDrawerOnHome()
-    super.onCloseClicked()
-  }
-
   override fun setBedtimeAlarm() {
     pushController(BedtimeAlarmController.routerTransaction())
   }
 
   override fun chooseSensors() {
     pushController(ChooseSensorsController.routerTransaction())
+  }
+
+  override fun onCloseClicked() {
+    DrawerStateDispatcher.closeNavigationDrawerOnHome()
+    super.onCloseClicked()
   }
 
   companion object{

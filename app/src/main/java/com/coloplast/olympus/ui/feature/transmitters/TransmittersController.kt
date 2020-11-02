@@ -221,11 +221,6 @@ class TransmittersController(args: Bundle? = null) :
     return R.drawable.ic_arrow
   }
 
-  override fun onCloseClicked() {
-    DrawerStateDispatcher.closeNavigationDrawerOnHome()
-    super.onCloseClicked()
-  }
-
   override fun getLayout(): Int {
     return R.layout.controller_transmitters
   }
@@ -253,6 +248,11 @@ class TransmittersController(args: Bundle? = null) :
     }
 
     items.update(newList)
+  }
+
+  override fun onCloseClicked() {
+    DrawerStateDispatcher.closeNavigationDrawerOnHome()
+    super.onCloseClicked()
   }
 
   companion object {

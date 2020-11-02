@@ -248,6 +248,8 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   }
 
   private fun changeUiState(newState: UiState, forceUpdate: Boolean = false) {
+    var removeBleDisconnectOverlay = true
+
     if (currentUiState == newState && !forceUpdate) {
       Timber.d("Same state was hit [${newState}] - Skipping")
     }
@@ -268,6 +270,9 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         }
         UiState.OUTER_BREACH_C -> {
           OuterBreachController.routerTransaction()
+        }
+        UiState.INNER_BLIND_D -> {
+          InnerBlindController.routerTransaction()
         }
         UiState.TOTAL_BLIND_E -> {
           TotalBlindController.routerTransaction()
@@ -294,6 +299,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
           TransmitterChargingController.routerTransaction()
         }
         UiState.BLUETOOTH_NOT_ENABLED -> {
+          removeBleDisconnectOverlay = false
           BluetoothNotEnabledController.routerTransaction()
         }
         UiState.LOCATION_SERVICES_NOT_ENABLED -> {
@@ -306,6 +312,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
           TransmitterNotFoundController.routerTransaction()
         }
         UiState.DISCONNECTED -> {
+          removeBleDisconnectOverlay = false
           ConnectingController.routerTransaction()
         }
         UiState.INITIAL -> {
@@ -348,6 +355,10 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
 
     if (newState != UiState.NO_CHANGE) {
       currentUiState = newState
+    }
+
+    if(removeBleDisconnectOverlay && imageDialogController?.requestCode == REQUEST_CODE_CONNECTION_LOST) {
+      onCloseClicked(REQUEST_CODE_CONNECTION_LOST)
     }
   }
 
@@ -555,11 +566,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   fun onSideMenuClicked(menuType: SideMenuType) {
     when (menuType) {
       SideMenuType.STATUS -> {
-        router.pushController(
-          SingleGuideFlowController.routerTransaction(GuideType.GET_STARTED)
-            .pushChangeHandler(VerticalChangeHandler())
-            .popChangeHandler(VerticalChangeHandler())
-        )
+        changeDrawerState(DrawerState.CLOSED)
       }
       SideMenuType.GUIDES -> {
         router.pushController(

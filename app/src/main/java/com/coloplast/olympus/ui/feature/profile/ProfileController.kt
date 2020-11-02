@@ -9,6 +9,7 @@ import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerProfileBinding
 import com.coloplast.olympus.shared.models.User
 import com.coloplast.olympus.ui.common.CustomToolbarController
+import com.coloplast.olympus.ui.common.DrawerStateDispatcher
 import com.coloplast.olympus.ui.common.models.GenericUiModel
 import com.coloplast.olympus.ui.feature.home.HomeController
 import com.coloplast.olympus.ui.feature.onboarding.signup.createprofile.types.HealthInsurance
@@ -83,6 +84,11 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
   override fun getLayout(): Int = R.layout.controller_profile
 
   override fun getNavigationIconResId(): Int = R.drawable.ic_arrow
+
+  override fun onCloseClicked() {
+    DrawerStateDispatcher.closeNavigationDrawerOnHome()
+    super.onCloseClicked()
+  }
 
   companion object {
     const val TAG_CONTROLLER = "profile_controller"

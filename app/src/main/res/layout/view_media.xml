@@ -15,7 +15,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:visibleOrGone="@{view.isVideo}"
-            app:videoSrc="@{view.resId}" />
+            app:videoSrc="@{view.resId}"
+            app:isLooping="@{view.isLooping}"/>
 
         <ImageView
             android:id="@+id/image"

@@ -80,10 +80,10 @@ class AddTransmitterAT9Controller(args: Bundle) :
         is SearchTransmitterUiModel.TransmittersFound -> {
 
           // try to see if *out* transmitter is amongst the scan results
-          uiModel.scanResults.find { it.name?.contains(transmitterToSearchFor) ?: false }.let {
-            if (it != null && uiModel.scanResults.size == 1) {
+          uiModel.scanResults.filter { it.name?.contains(transmitterToSearchFor) ?: false }.let {
+            if (it.size == 1) {
               // we found it, so try to connect to it
-              onScanResultClicked(it)
+              onScanResultClicked(it.first())
               onSelectionConfirmed()
             } else {
               // we have more than one result, so show result set to the user to allow him to choose

@@ -21,7 +21,7 @@
             android:layout_height="match_parent"
             android:src="@drawable/ic_play_120dp"
             android:scaleType="center"
-            android:tint="@color/default_background"
+            app:tint="@color/default_background"
             android:background="@color/transparent_black_20"
             app:visibleOrGone="@{view.showPlay}"
             android:onClick="@{() -> view.playVideo()}" />

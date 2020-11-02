@@ -5,6 +5,7 @@ import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerAboutBinding
 import com.coloplast.olympus.ui.common.CustomToolbarController
+import com.coloplast.olympus.ui.common.DrawerStateDispatcher
 import com.coloplast.olympus.ui.common.WebViewController
 
 
@@ -41,6 +42,11 @@ class AboutController: CustomToolbarController<ControllerAboutBinding>() {
   override fun getLayout(): Int = R.layout.controller_about
 
   override fun getNavigationIconResId(): Int = R.drawable.ic_arrow
+
+  override fun onCloseClicked() {
+    DrawerStateDispatcher.closeNavigationDrawerOnHome()
+    super.onCloseClicked()
+  }
 
   companion object{
 

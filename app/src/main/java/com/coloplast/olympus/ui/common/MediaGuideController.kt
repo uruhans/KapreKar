@@ -18,6 +18,7 @@ abstract class MediaGuideController(args: Bundle) :
   private val screenName: String = args.getString(SCREEN_NAME)!!
 
   abstract val resourceId: Int
+  open val looping: Boolean = true
   abstract val titleId: Int
   abstract val descriptionId: Int
   abstract val position: Int

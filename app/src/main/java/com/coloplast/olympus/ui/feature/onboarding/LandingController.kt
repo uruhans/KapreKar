@@ -1,5 +1,6 @@
 package com.coloplast.olympus.ui.feature.onboarding
 
+import androidx.databinding.ObservableBoolean
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.FadeChangeHandler
 import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
@@ -25,6 +26,8 @@ import org.koin.core.inject
 class LandingController : BaseController<ControllerLandingBinding>() {
 
   private val preferences: Preferences by inject()
+
+  val isVisible = ObservableBoolean(false) // by default, we hide the content of this view
 
   override fun attachVariables(viewBinding: ControllerLandingBinding) {
     viewBinding.controller = this
@@ -65,6 +68,8 @@ class LandingController : BaseController<ControllerLandingBinding>() {
       }
       else { Pair(null, 0L) }
     }
+
+    isVisible.set(routerTransaction == null) // if there is no pending transaction we show the content of this view
 
     routerTransaction?.let {
       viewBinding.logInButton.postDelayed({

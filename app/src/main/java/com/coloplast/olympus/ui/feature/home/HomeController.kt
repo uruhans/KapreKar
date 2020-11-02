@@ -196,8 +196,6 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
             return@ui
           }
 
-          breachesOccurred.add(stateChange)
-
           stateChange.bleDevice.peripheral?.transmitter?.rawRotationalAngle?.let {
             rawRotationAngle.set(it)
           }
@@ -233,6 +231,13 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
           changeOverlayState(stateChange.overlayState)
 
           determinePatchProbability(stateChange.patchProbability)
+
+          if(stateChange.patchProbability != PatchProbability.NEW) {
+            breachesOccurred.add(stateChange)
+          }
+          else {
+            breachesOccurred.clear()
+          }
         }
         is HomeUiModel.RawDataPackageUpdate -> {
           updateAnimation.set(true)
@@ -437,7 +442,6 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         preferences.incrementPatchId()
         patchChangeTime = LocalTime.now()
 
-        breachesOccurred.clear()
         resetRelay.accept(transmitterManager.activeTransmitterMacAddress())
       }
       PatchProbability.SAME -> {

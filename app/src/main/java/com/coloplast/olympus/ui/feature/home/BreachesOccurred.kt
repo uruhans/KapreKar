@@ -1,5 +1,6 @@
 package com.coloplast.olympus.ui.feature.home
 
+import com.coloplast.olympus.bluetooth.businesslayer.enums.SensorStatus
 import com.coloplast.olympus.bluetooth.businesslayer.models.Patch
 import com.coloplast.olympus.bluetooth.businesslayer.models.PatchState
 import com.coloplast.olympus.bluetooth.model.StateChange
@@ -68,10 +69,9 @@ class BreachesOccurred(private val preferences: Preferences) {
       if (state == PatchState.INNER_LEAK) {
         if (previousPatch != null) {
           // we need to check if the sensors have changed from last breach to this one - because the UiState will be INNER LEAK no matter what from this moment on
-          if (previousPatch.innerSensor1 != currentPatch.innerSensor1
-            || previousPatch.innerSensor2 != currentPatch.innerSensor2
-            || previousPatch.innerSensor3 != currentPatch.innerSensor3
-          ) {
+          if((currentPatch.innerSensor1 == SensorStatus.BREACH && previousPatch.innerSensor1 != currentPatch.innerSensor1)
+            || (currentPatch.innerSensor2 == SensorStatus.BREACH && previousPatch.innerSensor2 != currentPatch.innerSensor2)
+            || (currentPatch.innerSensor3 == SensorStatus.BREACH && previousPatch.innerSensor3 != currentPatch.innerSensor3)) {
             // there has been a change on the inner sensors
             return true
           }

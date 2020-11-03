@@ -1,5 +1,7 @@
 package com.coloplast.olympus.ui.feature.home
 
+import com.coloplast.olympus.bluetooth.businesslayer.enums.SensorStatus
+import com.coloplast.olympus.bluetooth.businesslayer.models.Patch
 import com.coloplast.olympus.bluetooth.businesslayer.models.PatchState
 import com.coloplast.olympus.bluetooth.model.StateChange
 import com.coloplast.olympus.shared.moshi.MoshiSerializable
@@ -28,7 +30,7 @@ class BreachesOccurred(private val preferences: Preferences) {
 
   fun add(stateChange: StateChange) {
     if(isBreach(stateChange)) {
-      breaches.add(Breach(LocalDateTime.now().toMillis()))
+      breaches.add(Breach(LocalDateTime.now().toMillis(), stateChange.bleDevice.peripheral?.patch!!))
       updateStore()
     }
     else if(stateChange.state == UiState.OK_A) {
@@ -52,10 +54,41 @@ class BreachesOccurred(private val preferences: Preferences) {
   }
 
   private fun isBreach(stateChange: StateChange) : Boolean {
-    // the reason we have to check the actual patch here, is because the statemachine may have
-    // changed the UiState to UiState.NO_CHANGE (this would occur if we got two inner leaks in a row (OK -> INNER_LEAK -> NO_CHANGE)
-    val state = stateChange.bleDevice.peripheral?.patch?.getState()
-    return state == PatchState.INNER_LEAK || state == PatchState.OUTER_LEAK
+    if(stateChange.state == UiState.NO_CHANGE || stateChange.state == UiState.INNER_BREACH_B || stateChange.state == UiState.OUTER_BREACH_C) {
+      // the reason we have to check the actual patch here, is because the statemachine may have
+      // changed the UiState to UiState.NO_CHANGE (this would occur if we got two inner leaks in a row (OK -> INNER_LEAK -> NO_CHANGE)
+      val currentPatch = stateChange.bleDevice.peripheral?.patch
+      val state = currentPatch?.getState()
+
+      if (state != PatchState.INNER_LEAK && state != PatchState.OUTER_LEAK) {
+        return false
+      }
+
+      val previousPatch = getBreaches().lastOrNull()?.patch
+
+      if (state == PatchState.INNER_LEAK) {
+        if (previousPatch != null) {
+          // we need to check if the sensors have changed from last breach to this one - because the UiState will be INNER LEAK no matter what from this moment on
+          if((currentPatch.innerSensor1 == SensorStatus.BREACH && previousPatch.innerSensor1 != currentPatch.innerSensor1)
+            || (currentPatch.innerSensor2 == SensorStatus.BREACH && previousPatch.innerSensor2 != currentPatch.innerSensor2)
+            || (currentPatch.innerSensor3 == SensorStatus.BREACH && previousPatch.innerSensor3 != currentPatch.innerSensor3)) {
+            // there has been a change on the inner sensors
+            return true
+          }
+
+          // we have an inner leak, but it's the same sensor as before, so no new breach
+          return false
+        }
+        else {
+          // first time we have an inner leak
+          return true
+        }
+      }
+
+      return state == PatchState.OUTER_LEAK
+    }
+
+    return false
   }
 
   private fun updateStore() {
@@ -63,4 +96,4 @@ class BreachesOccurred(private val preferences: Preferences) {
   }
 }
 
-class Breach(val localDateTime: Long) : MoshiSerializable
+class Breach(val localDateTime: Long, val patch: Patch) : MoshiSerializable

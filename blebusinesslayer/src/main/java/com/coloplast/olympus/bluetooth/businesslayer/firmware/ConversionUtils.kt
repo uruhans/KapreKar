@@ -1,7 +1,5 @@
 package com.coloplast.olympus.bluetooth.businesslayer.firmware
 
-import kotlin.experimental.and
-
 fun readHeader(header: String): CypressFirmware.Header {
   val msbString: String = getMSB(header)
   val siliconId = msbString.substring(4, 12)

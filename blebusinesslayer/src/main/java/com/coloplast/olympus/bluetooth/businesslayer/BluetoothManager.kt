@@ -32,6 +32,7 @@ interface BluetoothManager {
   fun stitchTransmitter(macAddress: String, data: ByteArray) : Completable
   fun writeCharacteristic(macAddress: String, characteristic: UUID, data: ByteArray) : Completable
 
+  fun updateTransmitterTimestamp(macAddress: String) : Observable<String>
   fun readDeviceInfo(macAddress: String) : Observable<DeviceInfo>
   fun readAdditionalTransmitterInfo(macAddress: String) : Observable<AdditionalDeviceInfo>
   fun isConnected(macAddress: String) : Boolean

@@ -20,7 +20,6 @@ import com.coloplast.olympus.ui.common.extensions.visibleOrGoneFade
 import com.coloplast.olympus.ui.common.listeners.AnimatorListenerImpl
 import com.coloplast.olympus.utils.UiUtils
 import com.coloplast.olympus.utils.UiUtils.dpToPx
-import timber.log.Timber
 
 class PatchView @JvmOverloads constructor(
   context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
@@ -45,6 +44,7 @@ class PatchView @JvmOverloads constructor(
     override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
       if (isInError.get()) {
         clearTopImages()
+        previousPatchState = null
         background.tintDrawable(R.color.patch_grey)
         rotateBasedOnAngle(0, forceRotation = true)
       }

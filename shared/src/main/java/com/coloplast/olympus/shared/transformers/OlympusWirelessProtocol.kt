@@ -88,7 +88,7 @@ object OlympusWirelessProtocol {
     Timber.d("RawPackage: ${value.joinToString { it.toInt().toString() }}")
 
     val year = ValueInterpreter.getIntValue(value, ValueInterpreter.FORMAT_UINT16, 0).toUShort()
-    val month = (value[2] + 1).toUByte()
+    val month = (value[2]).toUByte()
     val day = value[3].toUByte()
     val hour = value[4].toUByte()
     val minute = value[5].toUByte()

@@ -118,7 +118,7 @@ class PatchView @JvmOverloads constructor(
       var animatePulse = PulseAnim.NONE
       
       if (isDetailView) {
-        if (newPatch.outerSensor == SensorStatus.OK) {
+        if (newPatch.outerSensor != SensorStatus.BREACH) {
           if (newPatch.innerSensor1 == SensorStatus.BREACH) {
             patchIcons.add(R.drawable.ic_detailed_plate_inner_nw)
           }

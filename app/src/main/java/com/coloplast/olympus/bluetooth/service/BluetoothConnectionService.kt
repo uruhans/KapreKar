@@ -17,6 +17,7 @@ import com.coloplast.olympus.bluetooth.StateDispatcher
 import com.coloplast.olympus.bluetooth.businesslayer.FirmwareManager
 import com.coloplast.olympus.bluetooth.model.BluetoothServiceModel
 import com.coloplast.olympus.bluetooth.model.BluetoothServiceResult
+import com.coloplast.olympus.bluetooth.model.StateChange
 import com.coloplast.olympus.notifications.OlympusNotificationManager
 import com.coloplast.olympus.ui.feature.TransmitterManager
 import com.coloplast.olympus.ui.feature.statemachine.models.OverlayState
@@ -125,12 +126,22 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
           val otherTxStateChange = transmitterManager.onTransmitterDisconnect(it.macAddress)
 
           // this will be used to notify the Ui to change state (so we dont get stuck in multiple tx state or other state based on disconnected tx)
-          otherTxStateChange?.let { stateChange ->
-            if (stateChange.overlayState == OverlayState.BLE_CONNECTION_LOST) {
+
+          if(otherTxStateChange != null) {
+            if (otherTxStateChange.overlayState == OverlayState.BLE_CONNECTION_LOST) {
               olympusNotificationManager.send(OverlayState.BLE_CONNECTION_LOST)
             }
 
-            StateDispatcher.dispatchStateForActiveTransmitter(stateChange)
+            StateDispatcher.dispatchStateForActiveTransmitter(otherTxStateChange)
+          }
+          else {
+            val latestState = transmitterManager.getLatestState(it.macAddress)
+
+            if(latestState != null) {
+              olympusNotificationManager.send(OverlayState.BLE_CONNECTION_LOST)
+
+              StateDispatcher.dispatchStateForActiveTransmitter(StateChange(UiState.DISCONNECTED, OverlayState.BLE_CONNECTION_LOST, latestState.bleDevice))
+            }
           }
         }
         is BluetoothServiceModel.ScanningStarted -> {

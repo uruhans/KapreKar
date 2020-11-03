@@ -149,4 +149,8 @@ class FirmwareManagerImpl(
       .publish()
       .refCount()
   }
+
+  override fun createServiceRequest(serviceState: FirmwareManager.ServiceState) {
+    serviceRelay.accept(serviceState)
+  }
 }

@@ -8,10 +8,7 @@ import com.coloplast.olympus.bluetooth.businesslayer.exceptions.DisconnectExcept
 import com.coloplast.olympus.bluetooth.businesslayer.exceptions.GattCallbackTimeoutException
 import com.coloplast.olympus.bluetooth.businesslayer.exceptions.GattException
 import com.coloplast.olympus.bluetooth.businesslayer.models.*
-import com.coloplast.olympus.bluetooth.businesslayer.services.BatteryPowerService
-import com.coloplast.olympus.bluetooth.businesslayer.services.DeviceInformation
-import com.coloplast.olympus.bluetooth.businesslayer.services.GenericAttribute
-import com.coloplast.olympus.bluetooth.businesslayer.services.OlympusWirelessProtocol
+import com.coloplast.olympus.bluetooth.businesslayer.services.*
 import com.coloplast.olympus.businesslayer.interfaces.TransmitterComponent
 import com.coloplast.olympus.shared.models.RawDataPackage
 import com.dawn.bluetooth.BluetoothHandler
@@ -31,12 +28,16 @@ import io.reactivex.functions.BiFunction
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
+import java.nio.ByteBuffer
+import java.nio.ByteOrder
+import java.time.LocalDateTime
 import java.util.*
 
 class BluetoothManagerImpl(
   private val transmitterComponent: TransmitterComponent,
   context: Context,
-  isDebugging: Boolean) : BluetoothManager {
+  isDebugging: Boolean
+) : BluetoothManager {
 
   // a reference to the bluetoothHandler
   private val bluetoothHandler = BluetoothHandler(context, isDebugging)
@@ -102,11 +103,11 @@ class BluetoothManagerImpl(
       .startWith(BluetoothState.UNDEFINED)
   }
 
-  override fun scanBeacons() : Observable<String> {
+  override fun scanBeacons(): Observable<String> {
     return bluetoothHandler.scanBeacons(OlympusWirelessProtocol.UUID)
   }
 
-  override fun scanSpecificBeacon(macAddress: String) : Observable<String> {
+  override fun scanSpecificBeacon(macAddress: String): Observable<String> {
     return bluetoothHandler.scanBeacons(OlympusWirelessProtocol.UUID, macAddress)
   }
 
@@ -171,14 +172,14 @@ class BluetoothManagerImpl(
     return Observable.combineLatest(
       rxBleDeviceConnectionState(macAddress),
       bleConnectionObservable(),
-        BiFunction { bleDevice: BleDevice, rxConnections: Map<String, RxBleConnection> ->
-          if (bleDevice.connectionState == BleConnectionState.CONNECTED) {
-            if (rxConnections.none { it.key == macAddress }) {
-              return@BiFunction BleConnectionState.CONNECTING
-            }
+      BiFunction { bleDevice: BleDevice, rxConnections: Map<String, RxBleConnection> ->
+        if (bleDevice.connectionState == BleConnectionState.CONNECTED) {
+          if (rxConnections.none { it.key == macAddress }) {
+            return@BiFunction BleConnectionState.CONNECTING
           }
-          return@BiFunction bleDevice.connectionState
-        })
+        }
+        return@BiFunction bleDevice.connectionState
+      })
       .doOnNext { Timber.e("ConnectionState: $it") }
       .publish()
       .refCount()
@@ -348,7 +349,7 @@ class BluetoothManagerImpl(
     notifyConnectedDevices()
   }
 
-  private fun bleConnectionObservable() : Observable<Map<String, RxBleConnection>> {
+  private fun bleConnectionObservable(): Observable<Map<String, RxBleConnection>> {
     return bleConnectionRelay.publish().refCount().startWith(bleConnections)
   }
 
@@ -393,7 +394,32 @@ class BluetoothManagerImpl(
     return writeCharacteristic(macAddress, OlympusWirelessProtocol.Characteristics.STATUS, data)
   }
 
-  override fun readAdditionalTransmitterInfo(macAddress: String) : Observable<AdditionalDeviceInfo> {
+  override fun updateTransmitterTimestamp(macAddress: String): Observable<String> {
+    val currentTime = LocalDateTime.now()
+
+    val bufferSize = 2
+    val buffer = ByteBuffer.allocate(bufferSize)
+    buffer.order(ByteOrder.LITTLE_ENDIAN) // transmitter is running little endian
+    buffer.putShort(currentTime.year.toShort())
+
+    val year = buffer.array()
+    val month = currentTime.month.value.toByte()
+    val day = currentTime.dayOfMonth.toByte()
+    val hour = currentTime.hour.toByte()
+    val minute = currentTime.minute.toByte()
+    val second = currentTime.second.toByte()
+    val dayOfWeek = (((currentTime.dayOfWeek.value + 5) % 7) + 1).toByte()
+    val fraction: Byte = 0x00
+    val reason: Byte = 0x02
+
+    val timeStamp = byteArrayOf(year[0], year[1], month, day, hour, minute, second, dayOfWeek, fraction, reason)
+
+    return writeCharacteristic(macAddress, CurrentTimeService.Characteristics.CURRENT_TIME, timeStamp)
+      .toSingle { macAddress }
+      .toObservable()
+  }
+
+  override fun readAdditionalTransmitterInfo(macAddress: String): Observable<AdditionalDeviceInfo> {
     return Observable.zip(
       readDeviceInfo(macAddress),
       readSettings(macAddress),
@@ -404,7 +430,7 @@ class BluetoothManagerImpl(
     )
   }
 
-  override fun readDeviceInfo(macAddress: String) : Observable<DeviceInfo> {
+  override fun readDeviceInfo(macAddress: String): Observable<DeviceInfo> {
     return Observable.combineLatest(
       readCharacteristics(macAddress, DeviceInformation.Characteristics.MANUFACTURER_NAME).toObservable(),
       readCharacteristics(macAddress, DeviceInformation.Characteristics.HARDWARE_REVISION).toObservable(),
@@ -416,12 +442,13 @@ class BluetoothManagerImpl(
           manufacturer.toString(Charsets.UTF_8),
           hardwareRevision.toString(Charsets.UTF_8),
           firmwareVersion.toString(Charsets.UTF_8),
-          serialNumber.toString(Charsets.UTF_8))
+          serialNumber.toString(Charsets.UTF_8)
+        )
       })
   }
 
-  override fun isConnected(macAddress: String) : Boolean {
-    if(macAddress.isEmpty()) {
+  override fun isConnected(macAddress: String): Boolean {
+    if (macAddress.isEmpty()) {
       return false
     }
 
@@ -432,20 +459,20 @@ class BluetoothManagerImpl(
     disconnectRelay.accept(macAddress)
   }
 
-  private fun readSettings(macAddress: String) : Observable<ByteArray> {
+  private fun readSettings(macAddress: String): Observable<ByteArray> {
     return readCharacteristics(macAddress, OlympusWirelessProtocol.Characteristics.SETTINGS)
       .toObservable()
   }
 
-  private fun readClassifierSettings(macAddress: String) : Observable<ByteArray> {
+  private fun readClassifierSettings(macAddress: String): Observable<ByteArray> {
     return readCharacteristics(macAddress, OlympusWirelessProtocol.Characteristics.CLASSIFIER_SETTINGS)
       .toObservable()
   }
 
-  private fun readCharacteristics(macAddress: String, characteristic: UUID) : Single<ByteArray> {
+  private fun readCharacteristics(macAddress: String, characteristic: UUID): Single<ByteArray> {
     val rxConnection = bleConnections[macAddress]
 
-    return if(rxConnection == null) {
+    return if (rxConnection == null) {
       Single.error(NullPointerException("No connection exist to device with address: [$macAddress] - Unable to read characteristic: [$characteristic]"))
     }
     else {
@@ -454,10 +481,10 @@ class BluetoothManagerImpl(
     }
   }
 
-  override fun writeCharacteristic(macAddress: String, characteristic: UUID, data: ByteArray) : Completable {
+  override fun writeCharacteristic(macAddress: String, characteristic: UUID, data: ByteArray): Completable {
     val rxConnection = bleConnections[macAddress]
 
-    return if(rxConnection == null) {
+    return if (rxConnection == null) {
       Timber.e("writeCharacteristic: rxConnection was NULL")
       Completable.complete()
     }

@@ -2,6 +2,7 @@ package com.coloplast.olympus.bluetooth.businesslayer
 
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.bluetooth.businesslayer.models.DeviceResult
+import com.coloplast.olympus.bluetooth.businesslayer.services.CurrentTimeService
 import com.coloplast.olympus.businesslayer.interfaces.SystemUpdateComponent
 import com.coloplast.olympus.businesslayer.interfaces.TransmitterComponent
 import com.coloplast.olympus.shared.models.UpdateResult
@@ -34,6 +35,7 @@ class DeviceConnection(
       }
       // only continue if we are fully connected
       .filter { it.isConnected() }
+      .flatMap { bluetoothManager.updateTransmitterTimestamp(macAddress) }
       .flatMap {
         bluetoothManager.readAdditionalTransmitterInfo(macAddress)
           .flatMap { additionalDeviceInfo ->

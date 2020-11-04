@@ -7,7 +7,6 @@ import com.coloplast.olympus.bluetooth.businesslayer.services.OtaFirmware
 import com.coloplast.olympus.businesslayer.interfaces.SystemUpdateComponent
 import com.coloplast.olympus.shared.models.UpdateResult
 import com.coloplast.olympus.shared.utils.FileUtils
-import com.jakewharton.rxrelay2.PublishRelay
 import com.polidea.rxandroidble2.RxBleConnection
 import io.reactivex.Completable
 import io.reactivex.Observable
@@ -16,10 +15,9 @@ import java.util.concurrent.TimeUnit
 
 class FirmwareManagerImpl(
   private val bluetoothManager: BluetoothManager,
-  private val systemUpdateComponent: SystemUpdateComponent
+  private val systemUpdateComponent: SystemUpdateComponent,
+  private val serviceStateDispatcher: ServiceStateDispatcher
 ) : FirmwareManager {
-
-  private val serviceRelay = PublishRelay.create<FirmwareManager.ServiceState>()
 
   override fun firmwareUpdateAvailable(macAddress: String, currentAppVersion: String): Observable<UpdateResult> {
     return systemUpdateComponent.firmwareUpdateAvailable(macAddress, currentAppVersion)
@@ -45,7 +43,7 @@ class FirmwareManagerImpl(
         // but this disconnect will notify proper channels that it has happened
         bluetoothManager.disconnectTransmitter(macAddress)
         // send a STOP_SERVICE request to the service, as we dont want it to try to reconnect
-        serviceRelay.accept(FirmwareManager.ServiceState.STOP_SERVICE)
+        serviceStateDispatcher.serviceRelay.accept(ServiceStateDispatcher.ServiceState.STOP_SERVICE)
       }
       // delay to make sure that we are completely disconnected
       .delay(2, TimeUnit.SECONDS)
@@ -90,7 +88,7 @@ class FirmwareManagerImpl(
                 firmwareUpdateModel.updateState(FirmwareUpdateModel.State.COMPLETED)
                 // send a START_SERVICE request to start the BluetoothConnectionService
                 // to enable regular transmitter connection once again
-                serviceRelay.accept(FirmwareManager.ServiceState.START_SERVICE)
+                serviceStateDispatcher.serviceRelay.accept(ServiceStateDispatcher.ServiceState.START_SERVICE)
                 // return an error to stop the entire firmware upgrade flow
                 Observable.error(error)
               }
@@ -144,13 +142,4 @@ class FirmwareManagerImpl(
       .ignoreElement()
   }
 
-  override fun serviceStateObservable(): Observable<FirmwareManager.ServiceState> {
-    return serviceRelay
-      .publish()
-      .refCount()
-  }
-
-  override fun createServiceRequest(serviceState: FirmwareManager.ServiceState) {
-    serviceRelay.accept(serviceState)
-  }
 }

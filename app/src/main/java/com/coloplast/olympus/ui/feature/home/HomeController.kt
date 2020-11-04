@@ -3,7 +3,6 @@ package com.coloplast.olympus.ui.feature.home
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
 import android.view.View
 import androidx.core.view.GravityCompat
 import androidx.databinding.ObservableBoolean
@@ -18,7 +17,7 @@ import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import com.coloplast.olympus.R
 import com.coloplast.olympus.bluetooth.ServiceDispatcher
 import com.coloplast.olympus.bluetooth.StateDispatcher
-import com.coloplast.olympus.bluetooth.businesslayer.FirmwareManager
+import com.coloplast.olympus.bluetooth.businesslayer.ServiceStateDispatcher
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
 import com.coloplast.olympus.bluetooth.businesslayer.enums.SensorStatus
@@ -27,7 +26,6 @@ import com.coloplast.olympus.bluetooth.businesslayer.models.Patch
 import com.coloplast.olympus.bluetooth.model.PatchProbability
 import com.coloplast.olympus.bluetooth.model.ServiceEvent
 import com.coloplast.olympus.databinding.ControllerHomeBinding
-import com.coloplast.olympus.notifications.OlympusNotificationManager
 import com.coloplast.olympus.shared.preferences.Preferences
 import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.common.DrawerState
@@ -72,8 +70,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   private val preferences: Preferences by inject()
   private val transmitterManager: TransmitterManager by inject()
   private val breachesOccurred: BreachesOccurred by inject()
-  private val olympusNotificationManager: OlympusNotificationManager by inject()
-  private val firmwareManager: FirmwareManager by inject()
+  private val serviceStateDispatcher: ServiceStateDispatcher by inject()
 
   private val requestConnectionStateRelay = PublishRelay.create<String>()
   private val stitchRelay = PublishRelay.create<Stitch>()
@@ -145,9 +142,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
             BluetoothState.BLUETOOTH_NOT_ENABLED -> {
               isConnected.set(false)
               changeUiState(UiState.BLUETOOTH_NOT_ENABLED)
-              Handler().postDelayed({
-                firmwareManager.createServiceRequest(FirmwareManager.ServiceState.STOP_SERVICE)
-              }, 500)
+              serviceStateDispatcher.serviceRelay.accept(ServiceStateDispatcher.ServiceState.STOP_SERVICE)
             }
             BluetoothState.LOCATION_SERVICES_NOT_ENABLED -> {
               changeUiState(UiState.LOCATION_SERVICES_NOT_ENABLED)
@@ -157,7 +152,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
             }
             BluetoothState.READY -> {
               if (previousBleState == BluetoothState.BLUETOOTH_NOT_ENABLED || previousBleState == BluetoothState.LOCATION_SERVICES_NOT_ENABLED) {
-                firmwareManager.createServiceRequest(FirmwareManager.ServiceState.START_SERVICE)
+                serviceStateDispatcher.serviceRelay.accept(ServiceStateDispatcher.ServiceState.START_SERVICE)
                 ServiceDispatcher.dispatchEvent(ServiceEvent.RetryConnection())
               }
 

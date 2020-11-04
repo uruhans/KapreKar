@@ -14,7 +14,7 @@ import com.coloplast.olympus.R
 import com.coloplast.olympus.activities.MainActivity
 import com.coloplast.olympus.bluetooth.BluetoothServiceViewModel
 import com.coloplast.olympus.bluetooth.StateDispatcher
-import com.coloplast.olympus.bluetooth.businesslayer.FirmwareManager
+import com.coloplast.olympus.bluetooth.businesslayer.ServiceStateDispatcher
 import com.coloplast.olympus.bluetooth.model.BluetoothServiceModel
 import com.coloplast.olympus.bluetooth.model.BluetoothServiceResult
 import com.coloplast.olympus.notifications.OlympusNotificationManager
@@ -40,7 +40,7 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
   private val notificationManager: NotificationManager by inject()
   private val olympusNotificationManager: OlympusNotificationManager = get()
   private val transmitterManager: TransmitterManager by inject()
-  private val firmwareManager: FirmwareManager by inject()
+  private val serviceStateDispatcher: ServiceStateDispatcher by inject()
 
   private val compositeDisposable = CompositeDisposable()
 
@@ -69,8 +69,8 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
 
     compositeDisposable.add(get<BluetoothServiceViewModel>().bind(this))
     compositeDisposable.add(
-      firmwareManager.serviceStateObservable()
-        .filter { it == FirmwareManager.ServiceState.STOP_SERVICE }
+      serviceStateDispatcher.serviceStateObservable()
+        .filter { it == ServiceStateDispatcher.ServiceState.STOP_SERVICE }
         .subscribe { killService() }
     )
     return START_STICKY
@@ -204,10 +204,5 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
     const val INTENT_FILTER_STOP_SERVICE = "${BuildConfig.APPLICATION_ID}.BLUETOOTH.STOP_SERVICE"
     const val INTENT_FILTER_INITIATE_RESET = "${BuildConfig.APPLICATION_ID}.BLUETOOTH.INTENT_FILTER_INITIATE_RESET"
     const val INTENT_FILTER_RESET_SERVICE = " ${BuildConfig.APPLICATION_ID}.BLUETOOTH.RESET_SERVICE"
-    //    fun resetService(activity: Activity) {
-    //      with(Intent(INTENT_FILTER_RESET_SERVICE)) {
-    //        activity.sendBroadcast(this)
-    //      }
-    //    }
   }
 }

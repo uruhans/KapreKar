@@ -5,13 +5,7 @@ import com.coloplast.olympus.shared.models.UpdateResult
 import io.reactivex.Observable
 
 interface FirmwareManager {
-  fun serviceStateObservable() : Observable<ServiceState>
   fun firmwareUpdateAvailable(macAddress: String, currentAppVersion: String): Observable<UpdateResult>
   fun initiateFirmwareDownload(macAddress: String, currentAppVersion: String) : Observable<FirmwareUpdateModel>
   fun updateFirmware(macAddress: String, firmwareUpdateModel: FirmwareUpdateModel) : Observable<Int>
-
-  enum class ServiceState {
-    STOP_SERVICE,
-    START_SERVICE
-  }
 }

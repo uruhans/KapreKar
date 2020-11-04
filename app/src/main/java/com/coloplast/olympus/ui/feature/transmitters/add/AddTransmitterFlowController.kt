@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Bundle
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
+import com.coloplast.olympus.bluetooth.businesslayer.ServiceStateDispatcher
 import com.coloplast.olympus.ui.common.MediaGuideController
 import com.coloplast.olympus.ui.common.flow.FlowFactory
 import com.coloplast.olympus.ui.common.flow.FlowFactoryController
@@ -20,6 +21,7 @@ class AddTransmitterFlowController(args: Bundle) : FlowFactoryController<AddTran
 
   private val startAtIndex = args.getInt(BUNDLE_START_FLOW_AT, 0)
   private val factory: AddTransmitterFactoryImpl by inject()
+  private val serviceStateDispatcher: ServiceStateDispatcher by inject()
 
   private var callHelpDialogController: CallHelpDialogController? = null
 
@@ -37,6 +39,12 @@ class AddTransmitterFlowController(args: Bundle) : FlowFactoryController<AddTran
       if(data.bluetoothEnabled) {
         factory.skipUntil(AddTransmitterFlow.AddTransmitterAT8.index)
       }
+    }
+    else if (AddTransmitterFlow.fromIndex(currentIndex) == AddTransmitterFlow.AddTransmitterAT8) {
+      serviceStateDispatcher.serviceRelay.accept(ServiceStateDispatcher.ServiceState.STOP_SERVICE)
+      serviceStateDispatcher.serviceRelay.accept(ServiceStateDispatcher.ServiceState.START_SERVICE)
+      factory.incrementAndNext()
+      return true
     }
 
     return false

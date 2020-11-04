@@ -15,7 +15,7 @@ class SetupGuideIntroSGI16Controller(args: Bundle = Bundle()) :
   override val totalCount: Int = 2
 
   companion object {
-    private const val TAG_CONTROLLER = "setup_guide_intro_sgi13_controller"
+    private const val TAG_CONTROLLER = "setup_guide_intro_sgi16_controller"
 
     fun routerTransaction() = RouterTransaction.with(SetupGuideIntroSGI13Controller())
       .tag(TAG_CONTROLLER)

@@ -8,11 +8,11 @@ import com.coloplast.olympus.ui.common.MediaGuideController
 class SetupGuideIntroSGI13Controller(args: Bundle = Bundle()) :
   MediaGuideController(args.apply { putString(SCREEN_NAME, TAG_CONTROLLER) }) {
 
-  override val resourceId: Int = R.drawable.sg_i13_chargerandcable
-  override val titleId: Int = R.string.onboarding_chapter_intro_charging_title
-  override val descriptionId: Int = R.string.onboarding_chapter_intro_charging_description
-  override val position: Int = 1
-  override val totalCount: Int = 2
+  override val resourceId: Int = R.raw.sg_i13_tm_opening
+  override val titleId: Int = R.string.guide_co9_title
+  override val descriptionId: Int = R.string.guide_co9_description
+  override val position: Int = 3
+  override val totalCount: Int = 5
 
   companion object {
     private const val TAG_CONTROLLER = "setup_guide_intro_sgi13_controller"

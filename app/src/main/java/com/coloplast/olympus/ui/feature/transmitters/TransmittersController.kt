@@ -8,6 +8,7 @@ import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import com.coloplast.olympus.BR
 import com.coloplast.olympus.R
+import com.coloplast.olympus.bluetooth.businesslayer.ServiceStateDispatcher
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.databinding.ControllerTransmittersBinding
 import com.coloplast.olympus.shared.models.DiffListItem
@@ -36,6 +37,8 @@ class TransmittersController(args: Bundle? = null) :
   TransmitterItem.Listener, ImageDialogController.Listener {
 
   private val viewModel: TransmittersViewModel by inject()
+  private val serviceStateDispatcher: ServiceStateDispatcher by inject()
+
   private val deleteTransmitterRelay = PublishRelay.create<String>()
   private val retryConnectionRelay = PublishRelay.create<Unit>()
 
@@ -106,6 +109,9 @@ class TransmittersController(args: Bundle? = null) :
         }
         is TransmittersUiModel.Empty -> {
           hasTransmittersAdded.set(false)
+
+          // TODO - verify this actually works properly
+          serviceStateDispatcher.serviceRelay.accept(ServiceStateDispatcher.ServiceState.STOP_SERVICE)
         }
         is TransmittersUiModel.RetryConnectToTransmitters -> {
           retryPressed.set(true)

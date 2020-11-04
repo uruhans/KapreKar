@@ -92,6 +92,10 @@ class NotificationCenter(
       cancel(id)
     }
 
+    if(notificationManager.activeNotifications.any { it.id == payload.id }) {
+      return
+    }
+
     // create an intent for the snooze action
     val snoozeIntent = Intent().apply {
       action = INTENT_FILTER_ACTION_SNOOZE
@@ -164,8 +168,9 @@ class NotificationCenter(
       .setSmallIcon(R.drawable.ic_detailed_plate_ok)
       .setContentText(context.getString(payload.body))
       .setCategory(Notification.CATEGORY_ALARM)
-      .setPriority(NotificationCompat.PRIORITY_MAX)
       .setDefaults(Notification.DEFAULT_ALL)
+      .setPriority(NotificationCompat.PRIORITY_MAX)
+      .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
       .setAutoCancel(false)
       .addAction(
         R.drawable.ic_baseline_snooze_24,
@@ -198,10 +203,11 @@ class NotificationCenter(
       .setSmallIcon(R.drawable.ic_detailed_plate_ok)
       .setWhen(System.currentTimeMillis())
       .setColor(ContextCompat.getColor(context, R.color.turquoise))
-      .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+      .setPriority(NotificationCompat.PRIORITY_HIGH)
+      .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
       // Set the intent that will fire when the user taps the notification
       .setContentIntent(getPendingIntent())
-      .setAutoCancel(true)
+      .setAutoCancel(false)
       .addAction(
         R.drawable.ic_baseline_snooze_24,
         context.getString(R.string.lock_notification_action_snooze),

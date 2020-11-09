@@ -12,7 +12,7 @@ class SetupGuideIntroSGI12Controller(args: Bundle = Bundle()) :
   override val titleId: Int = R.string.onboarding_chapter_intro_transmitter_lid_title
   override val descriptionId: Int = R.string.onboarding_chapter_intro_transmitter_lid_description
   override val position: Int = 2
-  override val totalCount: Int = 2
+  override val totalCount: Int = 5
 
   companion object {
     private const val TAG_CONTROLLER = "setup_guide_intro_sgi12_controller"

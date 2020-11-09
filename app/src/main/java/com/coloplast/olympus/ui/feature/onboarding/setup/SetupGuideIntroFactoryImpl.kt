@@ -36,9 +36,12 @@ class SetupGuideIntroFactoryImpl : FlowFactory<EmptyModel>() {
       SetupGuideIntroductionFlow.SetupGuideOuterSensorsSGI9 -> SetupGuideIntroSGI9Controller.routerTransaction()
       SetupGuideIntroductionFlow.SetupGuideConnectorFlapSGI10 -> SetupGuideIntroSGI10Controller.routerTransaction()
       SetupGuideIntroductionFlow.SetupGuideTransmitterSGI11 -> SetupGuideIntroSGI11Controller.routerTransaction()
-      SetupGuideIntroductionFlow.SetupGuideOpeningLidSGI12 -> SetupGuideIntroSGI12Controller.routerTransaction()
-      SetupGuideIntroductionFlow.SetupGuideChargerSGI13 -> SetupGuideIntroSGI13Controller.routerTransaction()
-      SetupGuideIntroductionFlow.SetupGuidePairingSGI14 -> SetupGuideIntroSGI14Controller.routerTransaction()
+      SetupGuideIntroductionFlow.SetupGuideLiftingTransmitterLidSGI12 -> SetupGuideIntroSGI12Controller.routerTransaction()
+      SetupGuideIntroductionFlow.SetupGuideOpeningTransmitterLidSGI13 -> SetupGuideIntroSGI13Controller.routerTransaction()
+      SetupGuideIntroductionFlow.SetupGuideDisengagingTransmitterLidSGI14 -> SetupGuideIntroSGI14Controller.routerTransaction()
+      SetupGuideIntroductionFlow.SetupGuideClosingTransmitterLidSGI15 -> SetupGuideIntroSGI15Controller.routerTransaction()
+      SetupGuideIntroductionFlow.SetupGuideChargerSGI16 -> SetupGuideIntroSGI16Controller.routerTransaction()
+      SetupGuideIntroductionFlow.SetupGuidePairingSGI17 -> SetupGuideIntroSGI17Controller.routerTransaction()
       SetupGuideIntroductionFlow.Completed -> null
     }
   }

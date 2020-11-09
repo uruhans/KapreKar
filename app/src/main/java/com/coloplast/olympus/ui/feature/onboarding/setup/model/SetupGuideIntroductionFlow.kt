@@ -12,10 +12,13 @@ enum class SetupGuideIntroductionFlow(override val id: Int) : TypeWithId {
   SetupGuideOuterSensorsSGI9(6),
   SetupGuideConnectorFlapSGI10(7),
   SetupGuideTransmitterSGI11(8),
-  SetupGuideOpeningLidSGI12(9),
-  SetupGuideChargerSGI13(10),
-  SetupGuidePairingSGI14(11),
-  Completed(12);
+  SetupGuideLiftingTransmitterLidSGI12(9),
+  SetupGuideOpeningTransmitterLidSGI13(10),
+  SetupGuideDisengagingTransmitterLidSGI14(11),
+  SetupGuideClosingTransmitterLidSGI15(12),
+  SetupGuideChargerSGI16(13),
+  SetupGuidePairingSGI17(14),
+  Completed(15);
 
   companion object {
     fun fromIndex(id: Int): SetupGuideIntroductionFlow {

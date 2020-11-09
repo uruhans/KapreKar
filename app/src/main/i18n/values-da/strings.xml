@@ -54,7 +54,7 @@
 <string name="dialog_setting_notificaiton_turning_on_message">[Missing translation]</string>
 <string name="dialog_setting_notificaiton_turning_on_title">Tænd for meddelelser!</string>
 <string name="dialog_transmitters_cannot_add_more_transmitters_button">Delete transmitter guide</string>
-<string name="dialog_transmitters_cannot_add_more_transmitters_message">HeyloTM can only handle two transmitters at once. Please delete a transmitter before adding a new one.</string>
+<string name="dialog_transmitters_cannot_add_more_transmitters_message">Heylo™ can only handle two transmitters at once. Please delete a transmitter before adding a new one.</string>
 <string name="dialog_transmitters_cannot_add_more_transmitters_title">Maximum transmitters reached</string>
 <string name="dialog_transmitters_delete_message">[Missing translation]</string>
 <string name="dialog_transmitters_delete_title">[Missing translation]</string>
@@ -463,6 +463,8 @@
 <string name="onboarding_chapter_applying_checklist_title">You\'re almost there!</string>
 <string name="onboarding_chapter_applying_connector_flap_description">Identify the connector flap on the sensor layer. Lift the flap away from your body to prepare it for attaching your transmitter.</string>
 <string name="onboarding_chapter_applying_connector_flap_title">Lift connector flap</string>
+<string name="onboarding_chapter_applying_contact_to_skin_description">Next, you\'ll apply your baseplate with sensor layer to your body. To ensure proper functioning, no part of the sensor layer should be covered by accessories, such as rings or pastes.\n\nPlease also be aware that the sensor layer must be applied to intact peristomal skin.</string>
+<string name="onboarding_chapter_applying_contact_to_skin_title">The sensor layer must have full, direct contact to your skin</string>
 <string name="onboarding_chapter_applying_ensure_closed_description">Ensure the lid of the transmitter is fully closed before continuing. The lid should be level with front surface of the transmitter.</string>
 <string name="onboarding_chapter_applying_ensure_closed_title">Ensure transmitter lid is closed</string>
 <string name="onboarding_chapter_applying_ensure_tm_closed_description">Start by ensuring the lid of the transmitter is closed fully. The lid should be level with the front surface of the transmitter.</string>
@@ -560,6 +562,8 @@
 <string name="onboarding_chapter_preparing_come_back_later_button">I\'m ready now</string>
 <string name="onboarding_chapter_preparing_come_back_later_description">Simply come back to the app when you are ready to change your ostomy appliance. Your progress will be saved and you can pick up where you left off.</string>
 <string name="onboarding_chapter_preparing_come_back_later_title">Take your time. Your setup guide will be waiting for you.</string>
+<string name="onboarding_chapter_preparing_direct_contact_description">In the next steps, you\'ll be applying a sensor layer to your baseplate. It is important that nothing is placed between any part of them.\n\nDo not apply any accessories to your baseplate yet. If you need to cut or warm your baseplate, do so now before continuing.</string>
+<string name="onboarding_chapter_preparing_direct_contact_title">The sensor layer must have direct contact to the baseplate</string>
 <string name="onboarding_chapter_preparing_place_sl_description">With the turquoise ring facing up, place the sensor layer on your baseplate. The long sensor layer arm can point in the direction that suits you.</string>
 <string name="onboarding_chapter_preparing_place_sl_title">Place sensor layer on baseplate</string>
 <string name="onboarding_chapter_preparing_press_down_description">Press the sensor layer down firmly. Avoid touching the exposed baseplate adhesive as this could reduce adhesion to the body later.</string>
@@ -733,10 +737,18 @@
 <string name="profile_pp_health_insurance">Health insurance provider</string>
 <string name="profile_pp_last_name">Last name</string>
 <string name="profile_pp_log_out_button">Log out</string>
+<string name="profile_pp_log_out_modal_description">You will not receive leakage notifications when logged out.</string>
+<string name="profile_pp_log_out_modal_title">Are you sure you want to log out?</string>
+<string name="profile_pp_no_profile_consent_description">Allow Coloplast to store and protect your data, in orter to improve the functionality of the product.</string>
+<string name="profile_pp_no_profile_consent_read_policy">Read Data Policy agreement</string>
+<string name="profile_pp_no_profile_create_profile_button">Create profile</string>
+<string name="profile_pp_no_profile_description">Create a profile to get all the benefits of Heylo™. Accept the Data Policy below and then hit \"Create Profile\".</string>
+<string name="profile_pp_no_profile_title">You haven\'t created a Heylo™ profile yet.</string>
 <string name="profile_pp_stoma_surgery_date">First stoma surgery data</string>
 <string name="profile_pp_stoma_type">Stoma type</string>
 <string name="profile_pp_telephone">Mobile phone number</string>
 <string name="profile_pp_title">Profile</string>
+<string name="profile_pp_unsaved_changes_title">You have made changes to your profile. Do you want to save them?</string>
 <string name="profile_pp_withdraw_consent_modal_description">By continuing without sharing data with Coloplast, you won\'t be able to get all the benefits of Heylo™.</string>
 <string name="profile_pp_withdraw_consent_modal_title">Are you sure you want to withdraw data consent?</string>
 <string name="profile_pp_withdraw_consent_modal_withdraw">Withdraw data consent</string>

@@ -43,6 +43,16 @@ class SetupGuidePreparingFactoryImpl : FlowFactory<EmptyModel>() {
           showCloseButton = false
         )
       }
+      SetupGuidePreparingFlow.SetupGuideDirectContact -> {
+        InfoPageController.routerTransaction(
+          R.drawable.ic_sensor_layer,
+          R.string.onboarding_chapter_preparing_direct_contact_title,
+          R.string.onboarding_chapter_preparing_direct_contact_description,
+          R.string.onboarding_confirmation_button,
+          showBackButton = true,
+          showCloseButton = false
+        )
+      }
       SetupGuidePreparingFlow.SetupGuideRemoveSGP2 -> SetupGuidePreparingSGP2Controller.routerTransaction()
       SetupGuidePreparingFlow.SetupGuidePlaceSLSGP3 -> SetupGuidePreparingSGP3Controller.routerTransaction()
       SetupGuidePreparingFlow.SetupGuidePressDownSGP4 -> SetupGuidePreparingSGP4Controller.routerTransaction()

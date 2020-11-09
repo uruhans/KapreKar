@@ -7,11 +7,12 @@ enum class SetupGuidePreparingFlow(override val id: Int) : TypeWithId {
   SetupGuideSG4(0),
   SetupGuideChangingSGP1(1),
   SetupGuideComeBackLaterSGP1_2(2),
-  SetupGuideRemoveSGP2(3),
-  SetupGuidePlaceSLSGP3(4),
-  SetupGuidePressDownSGP4(5),
-  SetupGuideSecureSGP5(6),
-  Completed(7);
+  SetupGuideDirectContact(3),
+  SetupGuideRemoveSGP2(4),
+  SetupGuidePlaceSLSGP3(5),
+  SetupGuidePressDownSGP4(6),
+  SetupGuideSecureSGP5(7),
+  Completed(8);
 
   companion object {
     fun fromIndex(id: Int): SetupGuidePreparingFlow {

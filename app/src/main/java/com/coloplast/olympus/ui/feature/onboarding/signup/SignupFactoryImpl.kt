@@ -52,8 +52,8 @@ class SignupFactoryImpl : FlowFactory<SignupFactoryModel>() {
       SignupFlow.PhoneValidationSU6 -> PhoneValidationSU6.getRouterTransaction()
       SignupFlow.InsuranceSU7 -> InsuranceSU7Controller.getRouterTransaction()
       SignupFlow.ConfirmationSU8 -> GenericConfirmationController.routerTransaction(
-        R.string.onboarding_pc_title,
-        R.string.onboarding_pc_description,
+        R.string.onboarding_confirmation_title,
+        R.string.onboarding_confirmation_description,
         R.string.onboarding_pc_button_text,
         R.drawable.ic_checkmark
       )

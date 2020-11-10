@@ -22,6 +22,16 @@ class SetupGuideApplyingFactoryImpl : FlowFactory<ApplyingFlowModel>() {
     return when (SetupGuideApplyingFlow.fromIndex(currentIndex)) {
       SetupGuideApplyingFlow.SetupGuideSG5 -> SetupGuideSG5.routerTransaction()
       SetupGuideApplyingFlow.SetupGuideRemoveSlSGA1 -> SetupGuideApplyingSGA1Controller.routerTransaction()
+      SetupGuideApplyingFlow.SetupGuideDirectContact -> {
+        InfoPageController.routerTransaction(
+          R.drawable.ic_sensor_layer,
+          R.string.onboarding_chapter_applying_contact_to_skin_title,
+          R.string.onboarding_chapter_applying_contact_to_skin_description,
+          R.string.onboarding_confirmation_button,
+          showBackButton = true,
+          showCloseButton = false
+        )
+      }
       SetupGuideApplyingFlow.SetupGuideApplySGA2 -> SetupGuideApplyingSGA2Controller.routerTransaction()
       SetupGuideApplyingFlow.SetupGuideConnectorFlapSGA3 -> SetupGuideApplyingSGA3Controller.routerTransaction()
       SetupGuideApplyingFlow.SetupGuidePreventDamageSGA4 -> {

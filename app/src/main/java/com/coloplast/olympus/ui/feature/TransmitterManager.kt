@@ -243,6 +243,10 @@ class TransmitterManager(
     return activeTransmitter == macAddress
   }
 
+  fun getLatestState(macAddress: String) : StateChange? {
+    return transmitterStateHistory[macAddress]?.peek()
+  }
+
   /**
    * Tell the manager that a Tx Disconnect occurred
    * @return latest State from other transmitter or NULL if we only have one Tx

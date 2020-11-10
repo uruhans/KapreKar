@@ -10,7 +10,7 @@ class SetupGuideApplyingSGA12Controller(args: Bundle = Bundle()) :
   MediaGuideController(args.apply { putString(SCREEN_NAME, TAG_CONTROLLER) }),
   TopMenuVisibilityListener {
 
-  override val resourceId: Int = R.raw.sg_a7_identifyreverse // this is out of "sync"
+  override val resourceId: Int = R.raw.sg_a12_attach_tm_flap
   override val titleId: Int = R.string.onboarding_chapter_applying_attach_title
   override val descriptionId: Int = R.string.onboarding_chapter_applying_attach_description
   override val position: Int = 3

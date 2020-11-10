@@ -10,7 +10,7 @@ import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import androidx.work.testing.SynchronousExecutor
 import androidx.work.testing.WorkManagerTestInitHelper
-import com.coloplast.olympus.work.SyncRawPackagesWorker
+import com.coloplast.olympus.work.SyncTransmitterPackagesWorker
 import org.hamcrest.CoreMatchers.`is`
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertThat
@@ -57,7 +57,7 @@ class WorkManagerTests {
   @Throws(Exception::class)
   fun testPeriodicWork() {
     // Create request
-    val request = PeriodicWorkRequestBuilder<SyncRawPackagesWorker>(15, TimeUnit.MINUTES)
+    val request = PeriodicWorkRequestBuilder<SyncTransmitterPackagesWorker>(15, TimeUnit.MINUTES)
       .build()
 
     val workManager = WorkManager.getInstance(appContext)

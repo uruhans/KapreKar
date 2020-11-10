@@ -38,7 +38,6 @@ import com.coloplast.olympus.ui.feature.transmitters.add.at9.AddTransmitterAT9Vi
 import com.coloplast.olympus.ui.feature.update.FirmwareUpdateFactoryImpl
 import com.coloplast.olympus.ui.feature.update.charging.FirmwareUpdateChargingViewModel
 import com.coloplast.olympus.ui.feature.update.progress.FirmwareProgressViewModel
-import com.coloplast.olympus.work.SyncViewModel
 import com.coloplast.olympus.work.SyncWorker
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
@@ -72,7 +71,7 @@ val koinModule = module {
   /* ViewModels */
   factory { BluetoothServiceViewModel(get(), get(), get()) }
   single { SplashViewModel(get(), get()) }
-  single { HomeViewModel(get()) }
+  single { HomeViewModel(get(), get(), get(), get()) }
   single { TransmittersViewModel(get(), get()) }
   single { AddTransmitterAT9ViewModel(get(), get(), get()) }
   single { AwaitingConnectionViewModel(get()) }
@@ -80,7 +79,6 @@ val koinModule = module {
   single { ForgotPasswordViewModel(get()) }
   single { SetupGuideLocationSGC4ViewModel(get()) }
   single { AddTransmitterAT7ViewModel(get()) }
-  single { SyncViewModel(get(), get(), get()) }
   single { ProfileViewModel(get(), get(), get()) }
   single { SignupViewModel(get(), get()) }
   single { FirmwareUpdateChargingViewModel() }

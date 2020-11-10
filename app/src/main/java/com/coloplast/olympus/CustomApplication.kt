@@ -1,6 +1,10 @@
 package com.coloplast.olympus
 
 import android.app.Application
+import androidx.work.BackoffPolicy
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import com.coloplast.olympus.koin.koinModule
 import com.coloplast.olympus.shared.AppSettings
 import com.coloplast.olympus.work.*
@@ -9,6 +13,7 @@ import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 import org.koin.core.logger.Level
 import timber.log.Timber
+import java.util.concurrent.TimeUnit
 
 class CustomApplication : Application() {
 
@@ -32,40 +37,25 @@ class CustomApplication : Application() {
     }
   }
 
-  private fun scheduleWorkers(cancelWork: Boolean = false) {
-    WorkScheduler.schedulePeriodicWork(
-      this,
-      SyncUserWorker.workName,
-      SyncUserWorker.createPeriodicWorker(),
-      cancelWork
-    )
+  private fun scheduleWorkers() {
+    val workManager = WorkManager.getInstance(this)
 
-    WorkScheduler.schedulePeriodicWork(
-      this,
-      SyncTransmittersWorker.workName,
-      SyncTransmittersWorker.createPeriodicWorker(),
-      cancelWork
-    )
+    // cancel all previous work
+    workManager.cancelAllWork()
 
-    WorkScheduler.schedulePeriodicWork(
-      this,
-      SyncRawPackagesWorker.workName,
-      SyncRawPackagesWorker.createPeriodicWorker(),
-      cancelWork
-    )
+    val periodicSyncRequest = PeriodicWorkRequestBuilder<SyncTransmitterPackagesWorker>(15, TimeUnit.MINUTES)
+//      .setConstraints(
+//        Constraints.Builder()
+//        .setRequiresCharging(true)
+//        .build()
+//      )
+      .setBackoffCriteria(BackoffPolicy.LINEAR, 10, TimeUnit.SECONDS)
+      .build()
 
-    WorkScheduler.schedulePeriodicWork(
-      this,
-      SyncStatusPackagesWorker.workName,
-      SyncStatusPackagesWorker.createPeriodicWorker(),
-      cancelWork
-    )
-
-    WorkScheduler.schedulePeriodicWork(
-      this,
-      SyncPowerPackagesWorker.workName,
-      SyncPowerPackagesWorker.createPeriodicWorker(),
-      cancelWork
-    )
+    workManager.enqueueUniquePeriodicWork(
+        "SyncTransmitterPackagesWorker",
+        ExistingPeriodicWorkPolicy.REPLACE,
+        periodicSyncRequest
+      )
   }
 }

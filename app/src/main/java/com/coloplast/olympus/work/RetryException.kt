@@ -1,4 +1,4 @@
-package com.coloplast.olympus.work.exceptions
+package com.coloplast.olympus.work
 
 import com.coloplast.olympus.shared.types.PackageType
 

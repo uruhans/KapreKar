@@ -16,11 +16,17 @@ object PasswordViewAdapters {
     fun setPasswordValidityCallback(passwordView: PasswordView, callbackFunction: (Boolean) -> Unit) {
         passwordView.onValidityChanged = callbackFunction
     }
-    
+
     @BindingAdapter("checkValidity")
     @JvmStatic
     fun shouldCheckValidity(passwordView: PasswordView, shouldCheckValidity: Boolean) {
         passwordView.shouldCheckValidity = shouldCheckValidity
+    }
+
+    @BindingAdapter("hint")
+    @JvmStatic
+    fun hint(passwordView: PasswordView, hint: String){
+        passwordView.setHintText(hint)
     }
 
     @BindingAdapter("forceValidation")

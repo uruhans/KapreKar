@@ -13,6 +13,7 @@ import androidx.databinding.ObservableInt
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ViewPasswordInputLayoutBinding
 import com.coloplast.olympus.ui.common.extensions.hideKeyboard
+import kotlinx.android.synthetic.main.view_password_input_layout.view.*
 import timber.log.Timber
 import kotlin.properties.Delegates
 
@@ -78,6 +79,11 @@ class PasswordView @JvmOverloads constructor(context: Context,
         }.apply { passwordBackgroundDrawableResId.set(this) }
 
         showInvalidPasswordText.set(isValid.not())
+    }
+
+
+    fun setHintText(hint: String){
+        security_code_edit_text.hint = hint
     }
 
     //Focus listener that on focus lost, will hide the keyboard and will notify the callback.

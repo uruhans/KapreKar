@@ -55,6 +55,7 @@ class SyncWorker(private val userComponent: UserComponent,
           }
         }
       }
+      .onErrorReturn { ListenableWorker.Result.success() }
       // if we get an error always return a success to allow the worker to continue being enqueued on the next pass
       .doOnError { result = ListenableWorker.Result.success() }
       .blockingSubscribe { result = it }

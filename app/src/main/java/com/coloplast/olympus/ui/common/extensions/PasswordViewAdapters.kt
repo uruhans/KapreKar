@@ -23,12 +23,6 @@ object PasswordViewAdapters {
         passwordView.shouldCheckValidity = shouldCheckValidity
     }
 
-    @BindingAdapter("hint")
-    @JvmStatic
-    fun hint(passwordView: PasswordView, hint: String){
-        passwordView.setHintText(hint)
-    }
-
     @BindingAdapter("forceValidation")
     @JvmStatic
     fun forceValidation(passwordView: PasswordView, forceValidation: Boolean){

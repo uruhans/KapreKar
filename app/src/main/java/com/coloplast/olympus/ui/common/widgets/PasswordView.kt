@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
 import androidx.annotation.AttrRes
+import androidx.annotation.StringRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
@@ -54,9 +55,11 @@ class PasswordView @JvmOverloads constructor(context: Context,
     var onValidityChanged: ((Boolean) -> Unit)? = null
     var shouldCheckValidity = true
 
+    var binding :  ViewPasswordInputLayoutBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.view_password_input_layout, this, true)
+
     init {
         orientation = VERTICAL
-        val binding = DataBindingUtil.inflate<ViewPasswordInputLayoutBinding>(LayoutInflater.from(context), R.layout.view_password_input_layout, this, true)
+
         binding.view = this
 
         onFocusChangeListener = OnFocusChangeListener(callback)
@@ -78,6 +81,10 @@ class PasswordView @JvmOverloads constructor(context: Context,
         }.apply { passwordBackgroundDrawableResId.set(this) }
 
         showInvalidPasswordText.set(isValid.not())
+    }
+
+    fun setHint(@StringRes resId: Int) {
+        binding.securityCodeEditText.hint = context.getString(resId)
     }
 
     //Focus listener that on focus lost, will hide the keyboard and will notify the callback.

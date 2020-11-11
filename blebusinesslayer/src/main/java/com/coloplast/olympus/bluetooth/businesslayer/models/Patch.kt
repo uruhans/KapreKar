@@ -23,12 +23,17 @@ data class Patch(
   
   // the list of inner sensors
   private val innerSensors = listOf(innerSensor1, innerSensor2, innerSensor3)
+  // a list of all sensors BUT the cutguard
+  private val allSensorsButCutGuard = listOf(innerSensors, wearSensor, outerSensor)
+
   // do we have an inner sensor breach
   val innerSensorBreach: Boolean by lazy { innerSensors.any { it == SensorStatus.BREACH } }
   // do any of the inner sensors have a state of PAY_ATTENTION
   private val innerSensorPayAttention: Boolean by lazy { innerSensors.any { it == SensorStatus.PAY_ATTENTION } }
   // a list of inner sensors that are currently in the BLINDED state
   private val innerSensorBlinded: List<SensorStatus> by lazy { innerSensors.filter { it == SensorStatus.BLINDED } }
+  // figure out if *any* of the sensors are broken - if the cutguard sensor is <= 18 or any of the other sensors are set to CutGuardBroken Or CutGuardDirt
+  private val isAnySensorsCutGuard: Boolean by lazy { allSensorsButCutGuard.any { it == SensorStatus.CUT_GUARD_CUT_BROKEN || it == SensorStatus.CUT_GUARD_DIRT_IN_CONNECTOR } || cutguardSensor.id <= SensorStatus.CUT_GUARD_CUT_BROKEN.id }
   
   /**
    * convert the sensor states into a PatchState based on Priorities
@@ -36,7 +41,7 @@ data class Patch(
   fun getState(): PatchState {
     return when {
       // PRIORITY 7
-      cutguardSensor == SensorStatus.CUT_GUARD_CUT_BROKEN -> PatchState.CUTGUARD_CUT_BROKEN
+      isAnySensorsCutGuard -> PatchState.CUTGUARD_CUT_BROKEN
       // PRIORITY 8
       cutguardSensor == SensorStatus.CUT_GUARD_DIRT_IN_CONNECTOR -> PatchState.CUTGUARD_DIRT_IN_TRANSMITTER
       // PRIORITY 9

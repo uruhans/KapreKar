@@ -1,6 +1,8 @@
 package com.coloplast.olympus.ui.feature
 
 import com.coloplast.olympus.bluetooth.businesslayer.BluetoothManager
+import com.coloplast.olympus.bluetooth.businesslayer.enums.SensorStatus
+import com.coloplast.olympus.bluetooth.businesslayer.enums.WaterIngressDetection
 import com.coloplast.olympus.bluetooth.businesslayer.services.OlympusWirelessProtocol
 import com.coloplast.olympus.bluetooth.model.PatchProbability
 import com.coloplast.olympus.bluetooth.model.StateChange
@@ -28,8 +30,13 @@ class TransmitterManager(
       preferences.activeTransmitter = value
     }
 
+  // constants for automatic patch detection
+  private val validDetachInterval = 60*60
+  private val aFrom = -0.160133252649434
+  private val aTo = 0.25228545137611
+  private val intercept = 0.761724504394094
+
   init {
-    // TODO - this may need to change at a later stage to come from DB instead
     preferences.latestStateFromActiveTx.let { latestStateFromActiveTx ->
       if(latestStateFromActiveTx.isEmpty()) {
         return@let
@@ -114,57 +121,89 @@ class TransmitterManager(
     }
   }
 
-  /**
-   * Determines whether or not the user needs to be asked whether or not the transmitter has been put onto a new or an old patch
-   *  - this is used for reset (when new) and stitch (when old)
-   */
-  fun determineTransmitterPatchQuestioning(updatedStateChange: UpdatedStateChange) : StateChange {
-    var fromCompromised: Double? = null
-    val toCompromised = updatedStateChange.stateChange.bleDevice.peripheral?.transmitter?.compromised?.toDouble()
+  fun determinePatchCommand(updatedStateChange: UpdatedStateChange) {
+    val activeTxAddress = activeTransmitterMacAddress()
 
-    if(activeTransmitterMacAddress().isNotBlank()) {
-      if(updatedStateChange.stateChange.state != UiState.MULTIPLE_TRANSMITTERS) {
-        if(updatedStateChange.activeTransmitterChanged) {
-          // determine probability
-          val otherTxPreviousState = latestStateFromOtherTransmitter(updatedStateChange.stateChange.getMacAddress())
-          fromCompromised = otherTxPreviousState?.bleDevice?.peripheral?.transmitter?.compromised?.toDouble()
+    val newUiState = updatedStateChange.stateChange.state
+
+    val bleDevice = updatedStateChange.stateChange.bleDevice
+    val patch = bleDevice.peripheral?.patch
+    val transmitter = bleDevice.peripheral?.transmitter
+
+    val patchProbability = if (newUiState != UiState.MULTIPLE_TRANSMITTERS &&
+      transmitter?.waterIngressDetection != WaterIngressDetection.WATER_INGRESS &&
+      transmitter?.compromised != -1 && transmitter?.compromised != 255 &&
+      (patch?.cutguardSensor != SensorStatus.CUT_GUARD_CUT_BROKEN ||
+          patch.cutguardSensor != SensorStatus.CUT_GUARD_DIRT_IN_CONNECTOR ||
+          patch.cutguardSensor != SensorStatus.CUT_GUARD_NOISE)
+    ) {
+
+      val incomingCompromised = transmitter?.compromised
+
+      if(updatedStateChange.activeTransmitterChanged) {
+        val previousUiStateFromOther = latestStateFromOtherTransmitter(activeTransmitter)
+        val otherCompromised = previousUiStateFromOther?.bleDevice?.peripheral?.transmitter?.compromised
+
+        if(previousUiStateFromOther?.state == UiState.MULTIPLE_TRANSMITTERS) {
+          // CALCULATE SPLIT COMMAND
+          calculateSplitCommand(from = incomingCompromised, to = otherCompromised)
         }
         else {
-          if(updatedStateChange.stateChange.bleDevice.isAttachedOutsideBLE()) {
-            // determine probability
-            val activeTxPreviousState = transmitterStateHistory[activeTransmitter]?.peekPrevious()
-            fromCompromised = activeTxPreviousState?.bleDevice?.peripheral?.transmitter?.compromised?.toDouble()
-          }
-          else {
-            if(transmitterStateHistory[updatedStateChange.stateChange.getMacAddress()]?.size() ?: 0 > 2) {
-              val lastUseableDetachState = transmitterStateHistory[updatedStateChange.stateChange.getMacAddress()]?.peekPrevious(2)
-
-              if(lastUseableDetachState?.bleDevice?.isAttached() == false) {
-                if(updatedStateChange.stateChange.bleDevice.isAttached()) {
-                  // determine probability
-                  fromCompromised = lastUseableDetachState.bleDevice.peripheral?.transmitter?.compromised?.toDouble()
-                }
-              }
+          calculateSplitCommand(from = otherCompromised, to = incomingCompromised)
+        }
+      }
+      else {
+        val firstDetachState = transmitterStateHistory[activeTxAddress]?.firstOrNull { it.state == UiState.TRANSMITTER_DETACHED_V }
+        if(firstDetachState == null) {
+          PatchProbability.NOT_SET
+        }
+        else {
+          if (bleDevice.isAttachedOutsideBLE()) {
+            if (firstDetachState.secondsSinceNow() > validDetachInterval) {
+              PatchProbability.NOT_SET
             }
             else {
-              val activeTxPreviousState = transmitterStateHistory[activeTransmitter]?.peekPrevious()
-              if(activeTxPreviousState?.bleDevice?.isAttached() == false && updatedStateChange.stateChange.bleDevice.isAttached()) {
-                // determine probability
-                fromCompromised = activeTxPreviousState.bleDevice.peripheral?.transmitter?.compromised?.toDouble()
-              }
+              calculateSplitCommand(from = firstDetachState.bleDevice.peripheral?.transmitter?.compromised, to = incomingCompromised)
             }
+          }
+          else if (bleDevice.isAttached()) {
+            calculateSplitCommand(from = firstDetachState.bleDevice.peripheral?.transmitter?.compromised, to = incomingCompromised)
+          }
+          else {
+            PatchProbability.NOT_SET
           }
         }
       }
     }
-
-    if(fromCompromised != null && toCompromised != null) {
-      // (-0.918720970286731) + 0.066349916060689 * :EC_A6_JJ_CB_from + -0.0832012863049681 * :EC_A6_JJ_CB_to = probability
-      val probability = (-0.918720970286731).plus(0.066349916060689.times(fromCompromised)).plus((-0.0832012863049681).times(toCompromised))
-      updatedStateChange.stateChange.patchProbability = if(probability > 0) PatchProbability.NEW else PatchProbability.SAME
+    else {
+      PatchProbability.NOT_SET
     }
 
-    return updatedStateChange.stateChange
+    updatedStateChange.stateChange.patchProbability = patchProbability
+  }
+
+  private fun calculateSplitCommand(from: Int?, to: Int?) : PatchProbability {
+    if(to == null) {
+      return PatchProbability.NOT_SET
+    }
+
+    return if(from != null) {
+      val calculation = ((intercept.plus(aTo).times(to)).div(-aFrom)).minus(from)
+      if(calculation < 0) {
+        PatchProbability.NEW
+      }
+      else {
+        PatchProbability.SAME
+      }
+    }
+    else {
+      if(to < 23.1) {
+        PatchProbability.NEW
+      }
+      else {
+        PatchProbability.SAME
+      }
+    }
   }
 
   /**
@@ -222,14 +261,6 @@ class TransmitterManager(
     // verify that the *other* transmitter is actually connected
     val isConnected = bluetoothManager.isConnected(otherTransmitter?.key ?: "")
     return if(isConnected) otherTransmitter?.value?.peek() else null
-  }
-
-  private fun attachedPreviously(macAddress: String) : Boolean {
-    val transmitter = transmitterStateHistory.entries.firstOrNull { it.key == macAddress }
-
-    // verify that the transmitter is actually connected
-    val isConnected = bluetoothManager.isConnected(transmitter?.key ?: "")
-    return isConnected && transmitter?.value?.peekPrevious()?.bleDevice?.isAttached() ?: false
   }
 
   private fun isCurrentlyAttached(stateChange: StateChange) : Boolean {

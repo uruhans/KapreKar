@@ -107,12 +107,11 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
           StateDispatcher.dispatch(it.statusChange)
 
           val updatedStateChange = transmitterManager.determineCurrentlyActiveTransmitterAndReturnStateChangeFromIt(it.statusChange)
-          val newStateChange = transmitterManager.determineTransmitterPatchQuestioning(updatedStateChange)
+          transmitterManager.determinePatchCommand(updatedStateChange)
 
-          // TODO - this will result in multiple notifications sent on EVERY statechange on EVERY transmitter
           // this will allow for notifications to be send when app is in the background
-          olympusNotificationManager.send(newStateChange.state)
-          StateDispatcher.dispatchStateForActiveTransmitter(newStateChange)
+          olympusNotificationManager.send(updatedStateChange.stateChange.state)
+          StateDispatcher.dispatchStateForActiveTransmitter(updatedStateChange.stateChange)
         }
         is BluetoothServiceModel.RawDataPackageUpdate -> {
           val activeTransmitter = transmitterManager.isActiveTransmitter(it.macAddress)

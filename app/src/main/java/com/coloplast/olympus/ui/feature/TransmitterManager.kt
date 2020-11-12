@@ -1,6 +1,8 @@
 package com.coloplast.olympus.ui.feature
 
 import com.coloplast.olympus.bluetooth.businesslayer.BluetoothManager
+import com.coloplast.olympus.bluetooth.businesslayer.enums.SensorStatus
+import com.coloplast.olympus.bluetooth.businesslayer.enums.WaterIngressDetection
 import com.coloplast.olympus.bluetooth.businesslayer.services.OlympusWirelessProtocol
 import com.coloplast.olympus.bluetooth.model.PatchProbability
 import com.coloplast.olympus.bluetooth.model.StateChange
@@ -165,6 +167,97 @@ class TransmitterManager(
     }
 
     return updatedStateChange.stateChange
+  }
+
+  private val validDetachInterval = 60*60
+  private val aFrom = -0.160133252649434
+  private val aTo = 0.25228545137611
+  private val intercept = 0.761724504394094
+
+  fun determinePatchCommand(updatedStateChange: UpdatedStateChange) {
+    val activeTxAddress = activeTransmitterMacAddress()
+    val latestStateFromActiveTx = getLatestState(activeTxAddress)
+
+    val newUiState = updatedStateChange.stateChange.state
+
+    val bleDevice = updatedStateChange.stateChange.bleDevice
+    val patch = bleDevice.peripheral?.patch
+    val transmitter = bleDevice.peripheral?.transmitter
+
+    val patchProbability = if (newUiState != UiState.MULTIPLE_TRANSMITTERS &&
+      transmitter?.waterIngressDetection != WaterIngressDetection.WATER_INGRESS &&
+      transmitter?.compromised != -1 && transmitter?.compromised != 255 &&
+      (patch?.cutguardSensor != SensorStatus.CUT_GUARD_CUT_BROKEN ||
+          patch.cutguardSensor != SensorStatus.CUT_GUARD_DIRT_IN_CONNECTOR ||
+          patch.cutguardSensor != SensorStatus.CUT_GUARD_NOISE)
+    ) {
+
+      val incomingCompromised = transmitter?.compromised
+
+      if(updatedStateChange.activeTransmitterChanged) {
+        val previousUiStateFromOther = latestStateFromOtherTransmitter(activeTransmitter)
+        val otherCompromised = previousUiStateFromOther?.bleDevice?.peripheral?.transmitter?.compromised
+
+        if(previousUiStateFromOther?.state == UiState.MULTIPLE_TRANSMITTERS) {
+          // CALCULATE SPLIT COMMAND
+          calculateSplitCommand(from = incomingCompromised, to = otherCompromised)
+        }
+        else {
+          calculateSplitCommand(from = otherCompromised, to = incomingCompromised)
+        }
+      }
+      else {
+        val firstDetachState = transmitterStateHistory[activeTxAddress]?.firstOrNull { it.state == UiState.TRANSMITTER_DETACHED_V }
+        if(firstDetachState == null) {
+          PatchProbability.NOT_SET
+        }
+        else {
+          if (bleDevice.isAttachedOutsideBLE()) {
+            if (firstDetachState.secondsSinceNow() > validDetachInterval) {
+              PatchProbability.NOT_SET
+            }
+            else {
+              calculateSplitCommand(from = firstDetachState.bleDevice?.peripheral?.transmitter?.compromised, to = incomingCompromised)
+            }
+          }
+          else if (bleDevice.isAttached()) {
+            calculateSplitCommand(from = firstDetachState.bleDevice?.peripheral?.transmitter?.compromised, to = incomingCompromised)
+          }
+          else {
+            PatchProbability.NOT_SET
+          }
+        }
+      }
+    }
+    else {
+      PatchProbability.NOT_SET
+    }
+
+    updatedStateChange.stateChange.patchProbability = patchProbability
+  }
+
+  private fun calculateSplitCommand(from: Int?, to: Int?) : PatchProbability {
+    if(to == null) {
+      return PatchProbability.NOT_SET
+    }
+
+    return if(from != null) {
+      val calculation = ((intercept.plus(aTo).times(to)).div(-aFrom)).minus(from)
+      if(calculation < 0) {
+        PatchProbability.NEW
+      }
+      else {
+        PatchProbability.SAME
+      }
+    }
+    else {
+      if(to < 23.1) {
+        PatchProbability.NEW
+      }
+      else {
+        PatchProbability.SAME
+      }
+    }
   }
 
   /**

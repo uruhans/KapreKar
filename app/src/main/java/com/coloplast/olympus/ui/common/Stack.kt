@@ -79,4 +79,11 @@ class Stack<T>(private var maxSize: Int) {
       return items.size
     }
   }
+
+  @Synchronized
+  fun firstOrNull(predicate: (T) -> Boolean) : T? {
+    synchronized(items) {
+      return items.firstOrNull(predicate)
+    }
+  }
 }

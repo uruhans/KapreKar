@@ -577,9 +577,9 @@
 <string name="onboarding_complete_description">Heylo™ will now keep you informed of any signs of leakage. You can return to this Setup Guide or learn more about Heylo™ in the app\'s Guides, accessed in the app menu.</string>
 <string name="onboarding_complete_title">Setup complete</string>
 <string name="onboarding_confirmation_button">Continue</string>
-<string name="onboarding_confirmation_description">You\'re now readt to move on to setting up Heylo™.</string>
+<string name="onboarding_confirmation_description">You\'re now ready to move on to setting up Heylo™.</string>
 <string name="onboarding_confirmation_title">Profile saved</string>
-<string name="onboarding_dc1_description">You\'ll soon be asked to agree to our Data Policy and Terms of Use. Before your do, here are a few highlights that you might like to know.</string>
+<string name="onboarding_dc1_description">You\'ll soon be asked to agree to our Data Policy and Terms of Use. Before you do, here are a few highlights that you might like to know.</string>
 <string name="onboarding_dc1_primary_button">Continue</string>
 <string name="onboarding_dc1_secondary_button">Skip data introduction</string>
 <string name="onboarding_dc1_title">A quick word about your personal data.</string>
@@ -587,7 +587,7 @@
 <string name="onboarding_dc2_title">Your data helps us help you.</string>
 <string name="onboarding_dc3_description">By allowing us to access your data on how Heylo™ is working, you\'ll contribute to our ongoing efforts to improve the product and the lives of everyone in the ostomy community.</string>
 <string name="onboarding_dc3_title">Helps us help the community.</string>
-<string name="onboarding_dc4_description">We store all personal data information securely and in accordance with the best intrustry practices. Your personal data can only be accesses by Coloplast and relevant healthcare providers. We won\'t share your data or personal information with third parties without your consent.</string>
+<string name="onboarding_dc4_description">We store all personal data information securely and in accordance with the best industry practices. Your personal data can only be accessed by Coloplast and relevant healthcare providers. We won\'t share your data or personal information with third parties without your consent.</string>
 <string name="onboarding_dc4_title">Your data is safe with us.</string>
 <string name="onboarding_dc5_card_description">By toggling this switch on, I hereby accept the Heylo™ Data Policy Agreement</string>
 <string name="onboarding_dc5_card_title">Accept Data Policy</string>
@@ -672,8 +672,8 @@
 <string name="onboarding_pc_description">You\'re now ready to more on to setting up Heylo™. Hit \'Continue\' to move on to the Heylo™ Setup Guide.</string>
 <string name="onboarding_pc_title">Profile complete</string>
 <string name="onboarding_phone_error">Incorrect phone number format</string>
-<string name="onboarding_phone_hint">Enter phone number</string>
-<string name="onboarding_phone_title">Country code and phone number</string>
+<string name="onboarding_phone_hint">Enter mobile number</string>
+<string name="onboarding_phone_title">Country code and mobile phone number</string>
 <string name="onboarding_save_profile">Save profile</string>
 <string name="onboarding_sg6_description">You\'re very nearly done setting up. There\'s just one last important thing to do to make sure you\'re kept informed.</string>
 <string name="onboarding_sg6_title">Just one more thing…</string>
@@ -695,8 +695,8 @@
 <string name="onboarding_su3_title">Your email</string>
 <string name="onboarding_su4_description">Please choose a password for your profile</string>
 <string name="onboarding_su4_title">Create a password</string>
-<string name="onboarding_su5_description">Please enter your home or mobile phone number</string>
-<string name="onboarding_su5_title">Your phone number</string>
+<string name="onboarding_su5_description">Please enter your mobile phone number. \nYou\'ll receive a verification code next.</string>
+<string name="onboarding_su5_title">Your mobile number</string>
 <string name="onboarding_su6_description">To validate your phone number, please enter the 4-digit security code sent to your phone</string>
 <string name="onboarding_su6_error">Invalid code</string>
 <string name="onboarding_su6_title">Enter security code</string>
@@ -864,7 +864,7 @@
 <string name="terms_of_use_link">https://www.coloplast.us/global/legal-aspects/</string>
 <string name="terms_of_use_link_text">Read full Terms of Use</string>
 <string name="terms_of_use_tu_description">You can read the full Terms of Use by following the link below. These terms will be available to you later in the app\'s \'About\' section, as well as in the printed instructions.</string>
-<string name="terms_of_use_tu_title">[Heylo™] Terms of Use</string>
+<string name="terms_of_use_tu_title">Heylo™ Terms of Use</string>
 <string name="transmitters_add_transmitter">[Missing translation]</string>
 <string name="transmitters_attached">[Missing translation]</string>
 <string name="transmitters_delete">[Missing translation]</string>

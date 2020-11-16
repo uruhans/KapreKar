@@ -6,13 +6,14 @@ import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerTermsOfUseBinding
 import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.common.WebViewController
+import com.coloplast.olympus.ui.common.flow.TopMenuVisibilityListener
 import com.coloplast.olympus.ui.common.listeners.FlowListener
 
 /**
  * Created by Kike Bodi (ebp@dawnhealth.com) on 25/09/2020.
  * Copyright by Dawn Health A/S. All rights reserved.
  */
-class TermsOfUseTUController: BaseController<ControllerTermsOfUseBinding>() {
+class TermsOfUseTUController: BaseController<ControllerTermsOfUseBinding>() , TopMenuVisibilityListener{
 
   override fun attachVariables(viewBinding: ControllerTermsOfUseBinding) {
     viewBinding.controller = this
@@ -34,6 +35,8 @@ class TermsOfUseTUController: BaseController<ControllerTermsOfUseBinding>() {
   fun onContinueClicked(){
     getListener(FlowListener::class.java)!!.onNextClicked()
   }
+
+  override fun showCloseButton(): Boolean  = false
 
   override fun getLayout(): Int = R.layout.controller_terms_of_use
 

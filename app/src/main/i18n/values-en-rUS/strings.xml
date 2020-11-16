@@ -452,8 +452,8 @@
 <string name="menu_transmitters">Transmitters</string>
 <string name="missing_translation">Missing translation</string>
 <string name="onboarding_TU_description">onboarding_TU_description</string>
-<string name="onboarding_TU_link">onboarding_TU_link</string>
-<string name="onboarding_TU_title">onboarding_TU_title</string>
+<string name="onboarding_TU_link">Read Full Terms of Use</string>
+<string name="onboarding_TU_title">Heylo™ Terms of Use</string>
 <string name="onboarding_chapter_applying_apply_description">Apply your appliance as you would normally, to clean, dry skin. Press down to ensure tight fit. Also press down along the sensor layer arm.</string>
 <string name="onboarding_chapter_applying_apply_title">Apply to body</string>
 <string name="onboarding_chapter_applying_attach_description">Insert the transmitter flap into the transmitter opening and slide it all the way on. Press down on the transmitter lid to fully close it with a soft click.</string>

@@ -48,15 +48,16 @@
       <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/onboarding_email_title"
+        android:text="@string/onboarding_email_address"
         style="@style/TextStyle.Roboto.Regular.ClearGrey.14"
-        android:layout_marginStart="@dimen/spacing_standard"
+        android:layout_marginStart="@dimen/spacing_larger"
         android:layout_marginTop="@dimen/spacing_half"
         android:layout_marginEnd="@dimen/spacing_standard" />
 
       <com.coloplast.olympus.ui.common.widgets.EmailView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_half"
         app:checkValidity="@{true}"
         app:emailCallback="@{controller.onCurrentEmailChanged}"
         app:onValidityChanged="@{controller.onValidityChanged}" />

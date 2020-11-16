@@ -2,6 +2,8 @@
 <resources>
 <string name="about_ap_about_coloplast_description">At coloplast, we work to make life easier for people with intimate healthcare needs. By listening to the people who use our products - users as well as the nurses and specialists who care for them - we get a better understanding of their needs and challenges.\nThat knowledge inspires our innovation.</string>
 <string name="about_ap_about_coloplast_header">About Coloplast</string>
+<string name="about_ap_heylo_terms_of_use_website_link">https://www.coloplast.com/global/heylo-privacy-notice/</string>
+<string name="about_ap_heylo_website_link">https://countrysite.coloplast.com/en-GB/landingpages/heylo/</string>
 <string name="about_ap_legal_description">For more information about how Coloplast is processing your data, your rights, how to contact Coloplast and Terms of use please see the links below:</string>
 <string name="about_ap_legal_title">Legal</string>
 <string name="about_ap_manufacturer">Manufacturer</string>
@@ -705,8 +707,8 @@
 <string name="onboarding_su_5_dk_prefix">+45</string>
 <string name="onboarding_su_5_uk_prefix">+44</string>
 <string name="onboarding_value_proposition_screen_1_description">Heylo™ is a digital appliance monitor that detects and notifies you about leakage - giving you the peace of mind to get on with being you</string>
-<string name="onboarding_value_proposition_screen_1_title">Welcome to the Heylo™ app</string>
-<string name="onboarding_value_proposition_screen_2_description">To help us provide the best posible product experience, we will gather information such as activity in the app, profile information, leak status, error messages received, product usage and notification settings.</string>
+<string name="onboarding_value_proposition_screen_1_title">Welcome to the \nHeylo™ app</string>
+<string name="onboarding_value_proposition_screen_2_description">Designed to be used together with your ostomy appliance, the advanced sensor technology detects leakage when it develops.</string>
 <string name="onboarding_value_proposition_screen_2_title">Advanced sensor technology</string>
 <string name="onboarding_value_proposition_screen_3_description">Heylo™ is connected to your smartphone view Bluetooth, and will notify discreetly when leakage is detected, it also allows you to discreetly check the status of your baseplate directly in the app.</string>
 <string name="onboarding_value_proposition_screen_3_title">Notifications directly to your smartphone</string>

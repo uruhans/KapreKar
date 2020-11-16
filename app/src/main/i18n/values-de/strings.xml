@@ -548,10 +548,10 @@
 <string name="onboarding_chapter_intro_pairing_title">Charging and pairing</string>
 <string name="onboarding_chapter_intro_sensor_layer_description">This is a Heylo™ sensor layer. It is applied to your ostomy appliance to help you detect leakage. You\'ll learn how to apply this later.</string>
 <string name="onboarding_chapter_intro_sensor_layer_title">Sensor layer</string>
-<string name="onboarding_chapter_intro_sensor_technology_description">On the reverse side, you can see the advanced sensor technology. Each layer has 68 leakage sensors, one under each of the small dots.</string>
+<string name="onboarding_chapter_intro_sensor_technology_description">On the reverse side, you can see the advanced sensor technology - one sensor under each of the small dots.</string>
 <string name="onboarding_chapter_intro_sensor_technology_title">Advanced sensor technology</string>
 <string name="onboarding_chapter_intro_setup_guide">[Missing translation]</string>
-<string name="onboarding_chapter_intro_setup_guide_message">[Missing translation]</string>
+<string name="onboarding_chapter_intro_setup_guide_message">This guide will take you step-by-step through the process of setting up Heylo™ and applying in to your body.</string>
 <string name="onboarding_chapter_intro_transmitter_description">This is your transmitter. It communicates with your phone via Bluetooth, to keep you informed of any signs of leakage.</string>
 <string name="onboarding_chapter_intro_transmitter_lid_description">Your transmitter has a lid on the lighter grey front side. The lid opens and closes to allow attachment to a sensor layer (you\'ll attach later).</string>
 <string name="onboarding_chapter_intro_transmitter_lid_title">Lifting the transmitter lid</string>
@@ -606,7 +606,7 @@
 <string name="onboarding_email_address">Email address</string>
 <string name="onboarding_email_error">Incorrect email</string>
 <string name="onboarding_email_exists_error">User with this email address is already registered.</string>
-<string name="onboarding_email_hint">Email</string>
+<string name="onboarding_email_hint">Enter email</string>
 <string name="onboarding_email_title">Email</string>
 <string name="onboarding_first_name_error">First name input error</string>
 <string name="onboarding_first_name_hint">Enter first name</string>

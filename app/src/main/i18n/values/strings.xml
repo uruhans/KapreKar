@@ -402,7 +402,7 @@
 <string name="guides_m_title">Maintenance</string>
 <string name="guides_menu_applying_changing">Applying &amp; changing</string>
 <string name="guides_menu_connection_transmitter">Connection &amp; transmitter</string>
-<string name="guides_menu_description">Everything you need to know to get the most of [Heylo™]</string>
+<string name="guides_menu_description">Everything you need to know to get the most of Heylo™</string>
 <string name="guides_menu_faq">FAQ</string>
 <string name="guides_menu_getting_started">Getting started</string>
 <string name="guides_menu_maintenance">Maintenance</string>
@@ -581,7 +581,7 @@
 <string name="onboarding_confirmation_description">You\'re now readt to move on to setting up Heylo™.</string>
 <string name="onboarding_confirmation_title">Profile saved</string>
 <string name="onboarding_dc1_description">You\'ll soon be asked to agree to our Data Policy and Terms of Use. Before your do, here are a few highlights that you might like to know.</string>
-<string name="onboarding_dc1_primary_button">Read more</string>
+<string name="onboarding_dc1_primary_button">Continue</string>
 <string name="onboarding_dc1_secondary_button">Skip data introduction</string>
 <string name="onboarding_dc1_title">A quick word about your personal data.</string>
 <string name="onboarding_dc2_description">By giving access to your personal information and your Heylo™ usage data, our support team will be able to give you tailored help when you need it.</string>
@@ -590,7 +590,7 @@
 <string name="onboarding_dc3_title">Helps us help the community.</string>
 <string name="onboarding_dc4_description">We store all personal data information securely and in accordance with the best intrustry practices. Your personal data can only be accesses by Coloplast and relevant healthcare providers. We won\'t share your data or personal information with third parties without your consent.</string>
 <string name="onboarding_dc4_title">Your data is safe with us.</string>
-<string name="onboarding_dc5_card_description">By toggling this switch on, I hereby accept the [Heylo™] Data Policy Agreement</string>
+<string name="onboarding_dc5_card_description">By toggling this switch on, I hereby accept the Heylo™ Data Policy Agreement</string>
 <string name="onboarding_dc5_card_title">Data consent</string>
 <string name="onboarding_dc5_description">onboarding_dc5_description</string>
 <string name="onboarding_dc5_link1">https://www.coloplast.com/about-coloplast/compliance/data-privacy-and-security/</string>
@@ -602,12 +602,12 @@
 <string name="onboarding_dc5_title">Ready to share your data with Coloplast?</string>
 <string name="onboarding_dc6_button_1">Go back and accept</string>
 <string name="onboarding_dc6_button_2">Continue without accepting</string>
-<string name="onboarding_dc6_description">Looks like you didn\'t accept the Data Policy. By continuing without sharing data with Coloplast, you won\'t be able to get all the benefits of [Heylo™].</string>
+<string name="onboarding_dc6_description">Looks like you didn\'t accept the Data Policy. By continuing without sharing data with Coloplast, you won\'t be able to get all the benefits of Heylo™.</string>
 <string name="onboarding_dc6_title">Are you sure you don\'t want to accept the Data Policy?</string>
 <string name="onboarding_email_address">Email address</string>
 <string name="onboarding_email_error">Incorrect email</string>
 <string name="onboarding_email_exists_error">User with this email address is already registered.</string>
-<string name="onboarding_email_hint">Enter email</string>
+<string name="onboarding_email_hint">Email</string>
 <string name="onboarding_email_title">Email</string>
 <string name="onboarding_first_name_error">First name input error</string>
 <string name="onboarding_first_name_hint">Enter first name</string>
@@ -626,7 +626,7 @@
 <string name="onboarding_fp3_description">Please create a new password below</string>
 <string name="onboarding_fp3_title">Choose a new password</string>
 <string name="onboarding_fp4_button_text">Go to login</string>
-<string name="onboarding_fp4_description">You can now use your new password to log in to the [Heylo™] app</string>
+<string name="onboarding_fp4_description">You can now use your new password to log in to the Heylo™ app</string>
 <string name="onboarding_fp4_title">Password reset</string>
 <string name="onboarding_health_insurance_1">onboarding_health_insurance_1</string>
 <string name="onboarding_health_insurance_2">onboarding_health_insurance_2</string>

@@ -579,12 +579,12 @@
 <string name="onboarding_confirmation_button">Continue</string>
 <string name="onboarding_confirmation_description">You\'re now readt to move on to setting up Heylo™.</string>
 <string name="onboarding_confirmation_title">Profile saved</string>
-<string name="onboarding_dc1_description">You\'ll soon be asked to agree to our Data Policy and Terms of Use. Before your do, here are a few highlights that you maght like to know.</string>
+<string name="onboarding_dc1_description">You\'ll soon be asked to agree to our Data Policy and Terms of Use. Before your do, here are a few highlights that you might like to know.</string>
 <string name="onboarding_dc1_primary_button">Read more</string>
 <string name="onboarding_dc1_secondary_button">Skip data introduction</string>
 <string name="onboarding_dc1_title">A quick word about your personal data.</string>
 <string name="onboarding_dc2_description">By giving access to your personal information and your Heylo™ usage data, our support team will be able to give you tailored help when you need it.</string>
-<string name="onboarding_dc2_title">Your data helps us to help you.</string>
+<string name="onboarding_dc2_title">Your data helps us help you.</string>
 <string name="onboarding_dc3_description">By allowing us to access your data on how Heylo™ is working, you\'ll contribute to our ongoing efforts to improve the product and the lives of everyone in the ostomy community.</string>
 <string name="onboarding_dc3_title">Helps us help the community.</string>
 <string name="onboarding_dc4_description">We store all personal data information securely and in accordance with the best intrustry practices. Your personal data can only be accesses by Coloplast and relevant healthcare providers. We won\'t share your data or personal information with third parties without your consent.</string>
@@ -661,7 +661,7 @@
 <string name="onboarding_last_name_hint">Enter last name</string>
 <string name="onboarding_last_name_title">Last name</string>
 <string name="onboarding_login_button">Log in</string>
-<string name="onboarding_login_description">Please log in to your acoount</string>
+<string name="onboarding_login_description">Please log in to your account</string>
 <string name="onboarding_login_error">Incorrect credentials</string>
 <string name="onboarding_login_title">Welcome.</string>
 <string name="onboarding_password_enter_hint">Enter password</string>

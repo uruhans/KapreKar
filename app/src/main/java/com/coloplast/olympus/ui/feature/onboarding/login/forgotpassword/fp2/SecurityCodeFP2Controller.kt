@@ -5,6 +5,7 @@ import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerSecurityCodeFp2Binding
 import com.coloplast.olympus.ui.common.BaseController
+import com.coloplast.olympus.ui.common.flow.TopMenuVisibilityListener
 import com.coloplast.olympus.ui.common.listeners.FlowListener
 import com.coloplast.olympus.ui.common.widgets.InputCodeEditText
 import com.coloplast.olympus.ui.feature.onboarding.login.forgotpassword.ForgotPasswordView
@@ -14,7 +15,7 @@ import com.coloplast.olympus.ui.feature.onboarding.login.forgotpassword.ForgotPa
  * Created by Kike Bodi (ebp@dawnhealth.com) on 15/07/2020.
  * Copyright by Dawn Health A/S. All rights reserved.
  */
-class SecurityCodeFP2Controller(args: Bundle): BaseController<ControllerSecurityCodeFp2Binding>(args),
+class SecurityCodeFP2Controller(args: Bundle): BaseController<ControllerSecurityCodeFp2Binding>(args) , TopMenuVisibilityListener,
   InputCodeEditText.Listener {
 
   val email = args.getString(EMAIL)!!
@@ -36,6 +37,8 @@ class SecurityCodeFP2Controller(args: Bundle): BaseController<ControllerSecurity
   }
 
   override fun getLayout(): Int = R.layout.controller_security_code_fp_2
+
+  override fun showCloseButton(): Boolean = false
 
   companion object{
     const val TAG_CONTROLLER = "security_code_fp_2_controller"

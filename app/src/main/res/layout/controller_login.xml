@@ -7,6 +7,10 @@
     <import type="com.coloplast.olympus.R" />
 
     <variable
+      name="toolbarSupport"
+      type="com.coloplast.olympus.ui.common.ToolbarSupportController" />
+
+    <variable
       name="controller"
       type="com.coloplast.olympus.ui.feature.onboarding.login.LoginController" />
   </data>
@@ -14,8 +18,15 @@
   <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="@dimen/toolbar_height"
     android:background="@color/default_background">
+
+    <include
+      android:id="@+id/toolbar"
+      layout="@layout/view_toolbar"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:support="@{toolbarSupport}" />
 
     <TextView
       android:id="@+id/title"
@@ -26,7 +37,7 @@
       android:text="@string/onboarding_login_title"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent" />
+      app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
     <TextView
       android:id="@+id/description"

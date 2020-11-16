@@ -17,7 +17,7 @@ class SetupGuideIntroSGI17Controller(args: Bundle = Bundle()) :
   companion object {
     private const val TAG_CONTROLLER = "setup_guide_intro_sgi17_controller"
 
-    fun routerTransaction() = RouterTransaction.with(SetupGuideIntroSGI14Controller())
+    fun routerTransaction() = RouterTransaction.with(SetupGuideIntroSGI17Controller())
       .tag(TAG_CONTROLLER)
   }
 }

@@ -4,6 +4,7 @@ import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerAddTransmitterAt4Binding
 import com.coloplast.olympus.ui.common.BaseController
+import com.coloplast.olympus.ui.common.flow.TopMenuVisibilityListener
 import com.coloplast.olympus.ui.common.listeners.FlowListener
 import com.coloplast.olympus.ui.common.widgets.InputCodeEditText
 
@@ -12,7 +13,7 @@ import com.coloplast.olympus.ui.common.widgets.InputCodeEditText
  * Created by Kike Bodi (ebp@dawnhealth.com) on 11/05/2020.
  * Copyright by Dawn Health A/S. All rights reserved.
  */
-class AddTransmitterAT4Controller: BaseController<ControllerAddTransmitterAt4Binding>(),
+class AddTransmitterAT4Controller: BaseController<ControllerAddTransmitterAt4Binding>(), TopMenuVisibilityListener,
     InputCodeEditText.Listener {
 
     override fun attachVariables(viewBinding: ControllerAddTransmitterAt4Binding) {
@@ -26,6 +27,8 @@ class AddTransmitterAT4Controller: BaseController<ControllerAddTransmitterAt4Bin
     override fun onCodeInput(code: String) {
         getListener(FlowListener::class.java)!!.onNextClicked(code)
     }
+
+    override fun showCloseButton(): Boolean = false
 
     override fun getLayout(): Int = R.layout.controller_add_transmitter_at_4
     companion object {

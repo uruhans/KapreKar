@@ -454,6 +454,7 @@
 <string name="onboarding_TU_description">onboarding_TU_description</string>
 <string name="onboarding_TU_link">Read Full Terms of Use</string>
 <string name="onboarding_TU_title">Heylo™ Terms of Use</string>
+<string name="onboarding_c4_always_allow_button1">Turn on in settings</string>
 <string name="onboarding_chapter_applying_apply_description">Apply your appliance as you would normally, to clean, dry skin. Press down to ensure tight fit. Also press down along the sensor layer arm.</string>
 <string name="onboarding_chapter_applying_apply_title">Apply to body</string>
 <string name="onboarding_chapter_applying_attach_description">Insert the transmitter flap into the transmitter opening and slide it all the way on. Press down on the transmitter lid to fully close it with a soft click.</string>
@@ -554,7 +555,7 @@
 <string name="onboarding_chapter_intro_setup_guide">Setup guide</string>
 <string name="onboarding_chapter_intro_setup_guide_message">This guide will take you step-by-step through the process of setting up Heylo™ and applying in to your body.</string>
 <string name="onboarding_chapter_intro_transmitter_description">This is your transmitter. It communicates with your phone via Bluetooth, to keep you informed of any signs of leakage.</string>
-<string name="onboarding_chapter_intro_transmitter_lid_description">Your transmitter has a lid on the lighter grey front side. The lid opens and closes to allow attachment to a sensor layer (you\'ll attach later).</string>
+<string name="onboarding_chapter_intro_transmitter_lid_description">Your transmitter has a lid on the front side. Lifting the lidt one \'click\' to a fixed, lifted position prepares it for attaching to a sensor layer.</string>
 <string name="onboarding_chapter_intro_transmitter_lid_title">Lifting the transmitter lid</string>
 <string name="onboarding_chapter_intro_transmitter_title">Your transmitter</string>
 <string name="onboarding_chapter_preparing_change_come_back_later_button">I\'ll return later</string>

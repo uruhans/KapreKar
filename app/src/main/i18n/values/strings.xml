@@ -454,6 +454,7 @@
 <string name="onboarding_TU_description">You can read the full Terms of Use by following the link below. These terms will be available to you later in the app\'s \'About\' section, as will as in the printed instructions.</string>
 <string name="onboarding_TU_link">Read Full Terms of Use</string>
 <string name="onboarding_TU_title">Heylo™ Terms of Use</string>
+<string name="onboarding_c4_always_allow_button1">Turn on in settings</string>
 <string name="onboarding_chapter_applying_apply_description">Apply your appliance as you would normally, to clean, dry skin. Press down to ensure tight fit. Also press down along the sensor layer arm.</string>
 <string name="onboarding_chapter_applying_apply_title">Apply to body</string>
 <string name="onboarding_chapter_applying_attach_description">Insert the transmitter flap into the transmitter opening and slide it all the way on. Press down on the transmitter lid to fully close it with a soft click.</string>
@@ -508,7 +509,7 @@
 <string name="onboarding_chapter_applying_transmitter_checker_title">Just checking...</string>
 <string name="onboarding_chapter_applying_wait_description">Trying to attach a transmitter when the lid is disengaged could cause damage. Don\'t worry about not getting it first time round - it\'ll soon be second nature. Have a look at the steps for preparing the transmitter for attaching again. If you\'re still having trouble, you\'ll be able to call our support team.</string>
 <string name="onboarding_chapter_applying_wait_title">Wait. Don\'t let a loose lid break your connection.</string>
-<string name="onboarding_chapter_connecting_allow_location_description">To continue go to your phone\'s settings to turn location \'on\'.</string>
+<string name="onboarding_chapter_connecting_allow_location_description">To continue, go to your phone settings to turn location \'on\' for Heylo™</string>
 <string name="onboarding_chapter_connecting_allow_location_title">Turn location on</string>
 <string name="onboarding_chapter_connecting_avoid_leaks_description">Coloplast will not track your location at any time. Non-continuous location should not drain your battery. \n\nYour transmitter broadcasts its location to your phone so they can find each other and reconnect when Bluetooth connection is lost. Bluetooth connection is critical for Heylo™ to keep you informed at all times.</string>
 <string name="onboarding_chapter_connecting_avoid_leaks_title">Heylo™ needs location so you never miss a leak</string>
@@ -554,7 +555,7 @@
 <string name="onboarding_chapter_intro_setup_guide">Setup guide</string>
 <string name="onboarding_chapter_intro_setup_guide_message">This guide will take you step-by-step through the process of setting up Heylo™ and applying in to your body.</string>
 <string name="onboarding_chapter_intro_transmitter_description">This is your transmitter. It communicates with your phone via Bluetooth, to keep you informed of any signs of leakage.</string>
-<string name="onboarding_chapter_intro_transmitter_lid_description">Your transmitter has a lid on the lighter grey front side. The lid opens and closes to allow attachment to a sensor layer (you\'ll attach later).</string>
+<string name="onboarding_chapter_intro_transmitter_lid_description">Your transmitter has a lid on the front side. Lifting the lidt one \'click\' to a fixed, lifted position prepares it for attaching to a sensor layer.</string>
 <string name="onboarding_chapter_intro_transmitter_lid_title">Lifting the transmitter lid</string>
 <string name="onboarding_chapter_intro_transmitter_title">Your transmitter</string>
 <string name="onboarding_chapter_preparing_change_come_back_later_button">I\'ll return later</string>

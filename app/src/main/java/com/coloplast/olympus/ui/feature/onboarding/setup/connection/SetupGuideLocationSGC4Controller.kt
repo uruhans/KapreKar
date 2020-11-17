@@ -48,7 +48,7 @@ class SetupGuideLocationSGC4Controller :
       when ((it as SetupGuideLocationSGC4UiModel.CurrentBluetoothState).state) {
         BluetoothState.LOCATION_SERVICES_NOT_ENABLED -> {
           locationEnabled = false
-          buttonText.set(R.string.guide_ble_off)
+          buttonText.set(R.string.onboarding_c4_always_allow_button1)
         }
         else -> {
           locationEnabled = true

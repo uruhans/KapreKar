@@ -9,6 +9,7 @@ import com.coloplast.olympus.bluetooth.businesslayer.ServiceStateDispatcher
 import com.coloplast.olympus.ui.common.MediaGuideController
 import com.coloplast.olympus.ui.common.flow.FlowFactory
 import com.coloplast.olympus.ui.common.flow.FlowFactoryController
+import com.coloplast.olympus.ui.common.flow.TopMenuFlowFactoryController
 import com.coloplast.olympus.ui.common.models.flow.EmptyModel
 import com.coloplast.olympus.ui.dialogs.CallHelpDialogController
 import com.coloplast.olympus.ui.feature.onboarding.setup.SetupGuideConnectionFlowController
@@ -16,7 +17,7 @@ import com.coloplast.olympus.ui.feature.transmitters.add.models.AddTransmitterFl
 import com.coloplast.olympus.ui.feature.transmitters.add.models.AddTransmitterModel
 import org.koin.core.inject
 
-class AddTransmitterFlowController(args: Bundle) : FlowFactoryController<AddTransmitterModel>(args),
+class AddTransmitterFlowController(args: Bundle) : TopMenuFlowFactoryController<AddTransmitterModel>(args),
   MediaGuideController.Listener,  CallHelpDialogController.Listener {
 
   private val startAtIndex = args.getInt(BUNDLE_START_FLOW_AT, 0)

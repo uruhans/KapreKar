@@ -13,7 +13,7 @@ import com.coloplast.olympus.ui.common.MediaGuideController
 class AppTourAP6Controller(args: Bundle = Bundle()) :
   MediaGuideController(args.apply { putString(SCREEN_NAME, TAG_CONTROLLER) }){
 
-  override val resourceId: Int = R.drawable.guide_placeholder
+  override val resourceId: Int = R.drawable.guide_app_tour_transmitter_battery
   override val titleId: Int = R.string.guide_ap6_title
   override val descriptionId: Int = R.string.guide_ap6_subtitle
   override val position: Int = 5

@@ -9,8 +9,8 @@ class SetupGuidePreparingSGP2Controller(args: Bundle = Bundle()) :
   MediaGuideController(args.apply { putString(SCREEN_NAME, TAG_CONTROLLER) }) {
 
   override val resourceId: Int = R.raw.sg_p2_changecoming
-  override val titleId: Int = R.string.onboarding_chapter_preparing_change_title
-  override val descriptionId: Int = R.string.onboarding_chapter_preparing_change_description
+  override val titleId: Int = R.string.onboarding_chapter_preparing_removing_title
+  override val descriptionId: Int = R.string.onboarding_chapter_preparing_removing_description
   override val position: Int = 1
   override val totalCount: Int = 4
 

@@ -1,9 +1,10 @@
 package com.coloplast.olympus.ui.feature.transmitters.add
 
 import com.bluelinelabs.conductor.RouterTransaction
+import com.coloplast.olympus.R
+import com.coloplast.olympus.ui.common.GenericConfirmationController
+import com.coloplast.olympus.ui.common.InfoPageController
 import com.coloplast.olympus.ui.common.flow.FlowFactory
-import com.coloplast.olympus.ui.feature.transmitters.add.at1.AddTransmitterAT1Controller
-import com.coloplast.olympus.ui.feature.transmitters.add.at10.AddTransmitterAT10Controller
 import com.coloplast.olympus.ui.feature.transmitters.add.at2.AddTransmitterAT2Controller
 import com.coloplast.olympus.ui.feature.transmitters.add.at3.AddTransmitterAT3Controller
 import com.coloplast.olympus.ui.feature.transmitters.add.at4.AddTransmitterAT4Controller
@@ -27,7 +28,14 @@ class AddTransmitterFactoryImpl : FlowFactory<AddTransmitterModel>() {
 
   override fun getRouterTransaction(currentIndex: Int): RouterTransaction? {
     return when (AddTransmitterFlow.fromIndex(currentIndex)) {
-      AddTransmitterFlow.AddTransmitterAT1 -> AddTransmitterAT1Controller.routerTransaction()
+      AddTransmitterFlow.AddTransmitterAT1 -> InfoPageController.routerTransaction(
+        iconId = R.drawable.ic_icon_guides,
+        titleId = R.string.guide_at1_title,
+        descriptionId = R.string.guide_at1_body,
+        positiveButtonTextId = R.string.generic_continue,
+        showCloseButton = true,
+        showBackButton = true
+      )
       AddTransmitterFlow.AddTransmitterAT2 -> AddTransmitterAT2Controller.routerTransaction()
       AddTransmitterFlow.AddTransmitterAT3 -> AddTransmitterAT3Controller.routerTransaction()
       AddTransmitterFlow.AddTransmitterAT4 -> AddTransmitterAT4Controller.routerTransaction()
@@ -38,7 +46,12 @@ class AddTransmitterFactoryImpl : FlowFactory<AddTransmitterModel>() {
       AddTransmitterFlow.AddTransmitterBle3Activated -> AddTransmitterBle3Controller.routerTransaction()
       AddTransmitterFlow.AddTransmitterAT8 -> AddTransmitterAT8Controller.routerTransaction()
       AddTransmitterFlow.AddTransmitterAT9 -> AddTransmitterAT9Controller.routerTransaction(model.transmitterNameToSearchFor)
-      AddTransmitterFlow.AddTransmitterAT10 -> AddTransmitterAT10Controller.routerTransaction()
+      AddTransmitterFlow.AddTransmitterAT10 -> GenericConfirmationController.routerTransaction(
+        imageId = R.drawable.ic_checkmark,
+        titleId = R.string.guide_at10_title,
+        descriptionId = R.string.guide_at10_body,
+        buttonId = R.string.generic_continue
+      )
       AddTransmitterFlow.Completed -> null
     }
   }

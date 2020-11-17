@@ -122,6 +122,7 @@
 <string name="guide_ap7_title">Menu</string>
 <string name="guide_ap8_subtitle">The Guides menu has everything you need to know about Heylo™, including how to reapply during your next change.</string>
 <string name="guide_ap8_title">Guides</string>
+<string name="guide_ap9_intro_screen_subtitle">A step-by-step guide to applying a new sensor layer and attaching your transmitter</string>
 <string name="guide_ap9_subtitle">It\'s recommended that you use the Applying guide when changing your product, at least for the first times.</string>
 <string name="guide_ap9_title">Applying guide</string>
 <string name="guide_at10_body">Well done! Your transmitter is now communicating with your phone.</string>

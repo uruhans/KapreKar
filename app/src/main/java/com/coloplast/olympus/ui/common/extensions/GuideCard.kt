@@ -15,7 +15,7 @@ import com.coloplast.olympus.ui.feature.guides.models.GuideCard
   GuideCard.COMPONENT_GUIDE -> R.drawable.guide_co_thumbnail
   GuideCard.APP_TOUR -> R.drawable.guide_ap_thumbnail
   GuideCard.APPLYING_GUIDE -> R.drawable.guide_ag_thumbnail
-  GuideCard.DRY_APPLYING_TIPS -> R.drawable.guide_ag_thumbnail
+  GuideCard.DRY_APPLYING_TIPS -> R.drawable.guide_dry_applying_tips_thumbnail
   GuideCard.CONNECTION_GUIDE -> R.drawable.guide_cg_thumbnail
   GuideCard.CHARGING_GUIDE -> R.drawable.guide_ch_thumbnail
   GuideCard.LOCATION_GUIDE -> R.drawable.guide_lg_thumbnail

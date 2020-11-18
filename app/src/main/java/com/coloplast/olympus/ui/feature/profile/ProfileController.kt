@@ -13,6 +13,7 @@ import com.coloplast.olympus.shared.models.User
 import com.coloplast.olympus.ui.common.CustomToolbarController
 import com.coloplast.olympus.ui.common.DrawerStateDispatcher
 import com.coloplast.olympus.ui.common.WebViewController
+import com.coloplast.olympus.ui.dialogs.ImageDialogController
 import com.coloplast.olympus.ui.feature.home.HomeController
 import com.coloplast.olympus.ui.feature.onboarding.signup.createprofile.types.HealthInsurance
 import com.coloplast.olympus.ui.feature.onboarding.signup.createprofile.types.StomaSurgeryDate
@@ -61,6 +62,8 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
 
   val dataPolicyAccepted = ObservableBoolean()
 
+  private var imageDialogController: ImageDialogController? = null
+
   private lateinit var user: User
 
   private var infoChanged = false
@@ -81,15 +84,49 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
             user.surgeryDateInterval != surgerySpinnerPosition.get() ||
             user.insuranceType != insuranceSpinnerPosition.get()
 
-      consentChanged = user.consent != dataPolicyAccepted.get()
 
       userProfileChanged = infoChanged || healthInfoChanged || consentChanged
+    }
+  }
 
-      // TODO - this is temporary until we enable changes to all fields
-      if(consentChanged) {
-        user.consent = dataPolicyAccepted.get()
-        updateUserRelay.accept(user)
+  private val consentChangedCallback = object : androidx.databinding.Observable.OnPropertyChangedCallback() {
+    override fun onPropertyChanged(sender: androidx.databinding.Observable?, propertyId: Int) {
+      // removing consent
+      if(user.consent && !dataPolicyAccepted.get()) {
+        showConsentOverlay()
       }
+      else if(dataPolicyAccepted.get()){
+        // accepting consent
+        changeConsent(true)
+      }
+    }
+  }
+
+  private fun showConsentOverlay() {
+    // TODO - show consent overlay
+    imageDialogController = ImageDialogController.create(
+      this,
+      REQUEST_CODE_CONSENT_DIALOG,
+      R.string.profile_pp_withdraw_consent_modal_title,
+      R.string.profile_pp_withdraw_consent_modal_description,
+      R.string.profile_pp_withdraw_consent_modal_withdraw,
+      R.string.generic_cancel,
+      R.drawable.ic_info_circle,
+      verticalButtonLayout = true,
+      dismissAllowed = false)
+
+    imageDialogController?.show()
+  }
+
+  private fun changeConsent(consent: Boolean) {
+    consentChanged = user.consent != consent
+
+    userProfileChanged = infoChanged || healthInfoChanged || consentChanged
+
+    // TODO - this is temporary until we enable changes to all fields
+    if(consentChanged) {
+      user.consent = dataPolicyAccepted.get()
+      updateUserRelay.accept(user)
     }
   }
 
@@ -131,7 +168,7 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
     stomaSpinnerPosition.addOnPropertyChangedCallback(profileVarsChangedCallback)
     surgerySpinnerPosition.addOnPropertyChangedCallback(profileVarsChangedCallback)
     insuranceSpinnerPosition.addOnPropertyChangedCallback(profileVarsChangedCallback)
-    dataPolicyAccepted.addOnPropertyChangedCallback(profileVarsChangedCallback)
+    dataPolicyAccepted.addOnPropertyChangedCallback(consentChangedCallback)
   }
 
   private fun updateUserData(user: User) {
@@ -226,7 +263,7 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
     stomaSpinnerPosition.removeOnPropertyChangedCallback(profileVarsChangedCallback)
     surgerySpinnerPosition.removeOnPropertyChangedCallback(profileVarsChangedCallback)
     insuranceSpinnerPosition.removeOnPropertyChangedCallback(profileVarsChangedCallback)
-    dataPolicyAccepted.removeOnPropertyChangedCallback(profileVarsChangedCallback)
+    dataPolicyAccepted.removeOnPropertyChangedCallback(consentChangedCallback)
   }
 
   override fun onBackClicked() {
@@ -240,6 +277,8 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
 
   companion object {
     const val TAG_CONTROLLER = "profile_controller"
+
+    private const val REQUEST_CODE_CONSENT_DIALOG = 3000
 
     fun routerTransaction() = RouterTransaction.with(ProfileController()).tag(HomeController.TAG_CONTROLLER)
   }

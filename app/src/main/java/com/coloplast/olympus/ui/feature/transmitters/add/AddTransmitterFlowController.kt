@@ -9,13 +9,11 @@ import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import com.coloplast.olympus.bluetooth.businesslayer.ServiceStateDispatcher
 import com.coloplast.olympus.ui.common.MediaGuideController
 import com.coloplast.olympus.ui.common.flow.FlowFactory
-import com.coloplast.olympus.ui.common.flow.FlowFactoryController
 import com.coloplast.olympus.ui.common.flow.TopMenuFlowFactoryController
 import com.coloplast.olympus.ui.common.models.flow.EmptyModel
 import com.coloplast.olympus.ui.dialogs.CallHelpDialogController
-import com.coloplast.olympus.ui.feature.guides.GuidesSubsectionController
+import com.coloplast.olympus.ui.feature.home.HomeController
 import com.coloplast.olympus.ui.feature.onboarding.setup.SetupGuideConnectionFlowController
-import com.coloplast.olympus.ui.feature.settings.SettingsFlowController
 import com.coloplast.olympus.ui.feature.transmitters.TransmittersController
 import com.coloplast.olympus.ui.feature.transmitters.add.models.AddTransmitterFlow
 import com.coloplast.olympus.ui.feature.transmitters.add.models.AddTransmitterModel
@@ -82,6 +80,18 @@ class AddTransmitterFlowController(args: Bundle) : TopMenuFlowFactoryController<
 
   override fun onFlowCompleted(data: AddTransmitterModel) {
 
+    if (args.getBoolean(FINISH_FLOW_TO_TRANSMITTER_CONTROLLER)) {
+
+      with(getContentRouter()) {
+        popToTag(HomeController.TAG_CONTROLLER)
+        pushController(
+        TransmittersController.routerTransaction()
+          .pushChangeHandler(VerticalChangeHandler())
+          .popChangeHandler(VerticalChangeHandler()))
+      }
+
+    }
+
     val closeFlow = targetController is SetupGuideConnectionFlowController
     super.onFlowCompleted(data)
 
@@ -92,14 +102,15 @@ class AddTransmitterFlowController(args: Bundle) : TopMenuFlowFactoryController<
   }
 
   companion object {
+    private const val FINISH_FLOW_TO_TRANSMITTER_CONTROLLER = "finish_flow_to_transmitter_controller"
     private const val CONTROLLER_TAG = "add_transmitter_flow_controller"
     private const val BUNDLE_START_FLOW_AT = "BUNDLE_START_FLOW_AT"
     private const val DIALOG_CALL_HELP = 1005
 
-    fun routerTransaction(startAtIndex: Int = 0): RouterTransaction {
+    fun routerTransaction(startAtIndex: Int = 0, finishFlowToTransmitterController : Boolean = false): RouterTransaction {
       with(Bundle()) {
         putInt(BUNDLE_START_FLOW_AT, startAtIndex)
-
+        putBoolean(FINISH_FLOW_TO_TRANSMITTER_CONTROLLER, finishFlowToTransmitterController)
         return RouterTransaction.with(AddTransmitterFlowController(this))
           .tag(CONTROLLER_TAG)
       }

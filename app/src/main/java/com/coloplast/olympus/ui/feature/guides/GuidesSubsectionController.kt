@@ -84,7 +84,7 @@ class GuidesSubsectionController(args: Bundle): BaseController<ControllerGuidesS
       GuideCard.CHARGING_GUIDE -> Pair(router, GuideController.routerTransaction(GuideType.CHARGING))
       GuideCard.LOCATION_GUIDE -> Pair(getContentRouter(), LocationGuideFlowController.routerTransaction())
       GuideCard.CHECK_BATTERY_LEVEL -> Pair(router, GuideController.routerTransaction(GuideType.CHECK_BATTERY))
-      GuideCard.ADD_TRANSMITTER -> Pair(getContentRouter(), AddTransmitterFlowController.routerTransaction())
+      GuideCard.ADD_TRANSMITTER -> Pair(getContentRouter(), AddTransmitterFlowController.routerTransaction(finishFlowToTransmitterController = true))
       GuideCard.DELETE_TRANSMITTER -> Pair(router, GuideController.routerTransaction(GuideType.DELETE_TRANSMITTER))
       GuideCard.CLEANING_GUIDE -> Pair(router, GuideController.routerTransaction(GuideType.CLEANING))
       GuideCard.DRYING_GUIDE -> Pair(router, GuideController.routerTransaction(GuideType.DRYING))

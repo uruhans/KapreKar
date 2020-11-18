@@ -14,7 +14,7 @@ android {
     applicationId "com.coloplast.olympus"
     minSdkVersion 23
     targetSdkVersion 30
-    versionCode gitVersionCode()
+    versionCode 1211 //gitVersionCode()
     versionName "1.7.1"
     testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 

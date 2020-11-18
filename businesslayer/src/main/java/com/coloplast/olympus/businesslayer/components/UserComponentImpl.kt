@@ -58,10 +58,12 @@ class UserComponentImpl(private val preferences: Preferences) : UserComponent {
       .toObservable()
       .flatMap { localUser ->
         // if consent goes from true to false we need to reset the user
-        if(localUser.consent && !user.consent) {
-          resetUser(user)
-        }
+        // TODO - this is removed temporarily because we have no way of setting these values again if they are reset
+//        if(localUser.consent && !user.consent) {
+//          resetUser(user)
+//        }
 
+        user.syncState = SyncState.Pending
         database.insertOrUpdateUser(user)
       }
   }

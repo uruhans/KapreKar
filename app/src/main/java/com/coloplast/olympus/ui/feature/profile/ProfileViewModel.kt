@@ -6,29 +6,45 @@ import com.coloplast.olympus.businesslayer.interfaces.UserComponent
 import com.coloplast.olympus.shared.models.User
 import com.coloplast.olympus.shared.preferences.Preferences
 import com.coloplast.olympus.ui.common.BaseViewModel
-import com.coloplast.olympus.ui.common.models.GenericUiModel
 import com.coloplast.olympus.ui.common.rx.DelayedLoadingTransformer
-import com.coloplast.olympus.ui.common.rx.GenericUiModelTransformer
+import com.coloplast.olympus.ui.feature.profile.model.ProfileUiModel
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import java.util.*
 
-
-/**
- * Created by Kike Bodi (ebp@dawnhealth.com) on 08/09/2020.
- * Copyright by Dawn Health A/S. All rights reserved.
- */
-class ProfileViewModel(private val preferences: Preferences, private val userComponent: UserComponent, private val me: Me) :
-  BaseViewModel<GenericUiModel, ProfileView>() {
+class ProfileViewModel(
+  private val preferences: Preferences,
+  private val userComponent: UserComponent,
+  private val me: Me
+) : BaseViewModel<ProfileUiModel, ProfileView>() {
 
   override fun bind(uiView: ProfileView): Disposable {
     val disposable = CompositeDisposable()
 
-    val onUserDataRequested: Observable<GenericUiModel> =
+    val onUserDataRequested: Observable<ProfileUiModel> =
       userComponent.getLocalUser(UUID.fromString(preferences.userLoggedIn))
         .compose(DelayedLoadingTransformer<User>())
-        .compose(GenericUiModelTransformer())
+        .map {
+          if (it.result != null) {
+            ProfileUiModel.FetchedUser(it.result!!)
+          }
+          else {
+            ProfileUiModel.LoadingData()
+          }
+        }
+
+    val updateUserObservable = uiView.onUpdateUserRequest()
+      .switchMap { user ->
+        userComponent.updateUser(user)
+          .subscribeOn(Schedulers.io())
+          .flatMap {
+            userComponent.syncUser(user.id!!)
+              .map<ProfileUiModel> { ProfileUiModel.UserUpdated() }
+              .onErrorReturn { ProfileUiModel.UpdateFailed() }
+          }
+      }
 
     val onLogoutRequested =
       uiView.onLogoutRequested()
@@ -36,7 +52,7 @@ class ProfileViewModel(private val preferences: Preferences, private val userCom
         .subscribe()
 
     disposable.add(onLogoutRequested)
-    disposable.add(onUserDataRequested.bind(uiView.render()))
+    disposable.add(Observable.merge(onUserDataRequested, updateUserObservable).bind(uiView.render()))
     return disposable
   }
 }

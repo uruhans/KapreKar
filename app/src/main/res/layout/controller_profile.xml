@@ -3,6 +3,9 @@
   xmlns:app="http://schemas.android.com/apk/res-auto">
 
   <data>
+
+    <import type="com.coloplast.olympus.R" />
+
     <variable
       name="toolbarSupport"
       type="com.coloplast.olympus.ui.common.ToolbarSupportController" />
@@ -15,7 +18,7 @@
   <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/default_background"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <include
@@ -45,7 +48,7 @@
           style="@style/TextStyle.Coloplast.Bold.DarkGrey.20"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_marginTop="@dimen/spacing_triple"
+          android:layout_marginTop="@dimen/spacing_double"
           android:text="@string/profile_pp_header_1" />
 
         <TextView
@@ -55,12 +58,16 @@
           android:layout_marginTop="@dimen/spacing_standard"
           android:text="@string/profile_pp_first_name" />
 
-        <TextView
+        <EditText
           style="@style/TextStyle.Roboto.Regular.Grey"
           android:layout_width="match_parent"
           android:layout_height="56dp"
           android:layout_marginTop="@dimen/spacing_quarter"
           android:background="@drawable/edittext_background"
+          android:enabled="@{controller.editingEnabled}"
+          android:focusable="false"
+          android:focusableInTouchMode="false"
+          android:focusedByDefault="false"
           android:gravity="center_vertical"
           android:paddingStart="@dimen/spacing_standard"
           android:paddingEnd="@dimen/spacing_standard"
@@ -73,12 +80,16 @@
           android:layout_marginTop="@dimen/spacing_standard"
           android:text="@string/profile_pp_last_name" />
 
-        <TextView
+        <EditText
           style="@style/TextStyle.Roboto.Regular.Grey"
           android:layout_width="match_parent"
           android:layout_height="56dp"
           android:layout_marginTop="@dimen/spacing_quarter"
           android:background="@drawable/edittext_background"
+          android:enabled="@{controller.editingEnabled}"
+          android:focusable="false"
+          android:focusableInTouchMode="false"
+          android:focusedByDefault="false"
           android:gravity="center_vertical"
           android:paddingStart="@dimen/spacing_standard"
           android:paddingEnd="@dimen/spacing_standard"
@@ -91,12 +102,16 @@
           android:layout_marginTop="@dimen/spacing_standard"
           android:text="@string/profile_pp_telephone" />
 
-        <TextView
+        <EditText
           style="@style/TextStyle.Roboto.Regular.Grey"
           android:layout_width="match_parent"
           android:layout_height="56dp"
           android:layout_marginTop="@dimen/spacing_quarter"
           android:background="@drawable/edittext_background"
+          android:enabled="@{controller.editingEnabled}"
+          android:focusable="false"
+          android:focusableInTouchMode="false"
+          android:focusedByDefault="false"
           android:gravity="center_vertical"
           android:paddingStart="@dimen/spacing_standard"
           android:paddingEnd="@dimen/spacing_standard"
@@ -109,12 +124,16 @@
           android:layout_marginTop="@dimen/spacing_standard"
           android:text="@string/profile_pp_email" />
 
-        <TextView
+        <EditText
           style="@style/TextStyle.Roboto.Regular.Grey"
           android:layout_width="match_parent"
           android:layout_height="56dp"
           android:layout_marginTop="@dimen/spacing_quarter"
           android:background="@drawable/edittext_background"
+          android:enabled="@{controller.editingEnabled}"
+          android:focusable="false"
+          android:focusableInTouchMode="false"
+          android:focusedByDefault="false"
           android:gravity="center_vertical"
           android:paddingStart="@dimen/spacing_standard"
           android:paddingEnd="@dimen/spacing_standard"
@@ -130,7 +149,7 @@
           style="@style/TextStyle.Coloplast.Bold.DarkGrey.20"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_marginTop="@dimen/spacing_triple"
+          android:layout_marginTop="@dimen/spacing_double"
           android:text="@string/profile_pp_header_2" />
 
         <TextView
@@ -140,16 +159,32 @@
           android:layout_marginTop="@dimen/spacing_standard"
           android:text="@string/profile_pp_stoma_type" />
 
-        <TextView
-          style="@style/TextStyle.Roboto.Regular.Grey"
+        <LinearLayout
           android:layout_width="match_parent"
-          android:layout_height="56dp"
-          android:layout_marginTop="@dimen/spacing_quarter"
+          android:layout_height="wrap_content"
           android:background="@drawable/edittext_background"
-          android:gravity="center_vertical"
-          android:paddingStart="@dimen/spacing_standard"
-          android:paddingEnd="@dimen/spacing_standard"
-          app:safeText="@{controller.stomaType}" />
+          android:orientation="horizontal">
+
+          <com.coloplast.olympus.ui.common.widgets.NoDefaultSpinner
+            android:layout_width="0dp"
+            android:layout_height="@dimen/cardview_button_height_default"
+            android:layout_weight="1"
+            android:clickable="@{controller.editingEnabled}"
+            android:enabled="@{controller.editingEnabled}"
+            android:entries="@{controller.stomaValues}"
+            android:prompt="@string/onboarding_insurance_hint"
+            android:selectedItemPosition="@={controller.stomaSpinnerPosition}"
+            android:spinnerMode="dialog" />
+
+          <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginEnd="@dimen/spacing_standard"
+            android:src="@drawable/ic_baseline_keyboard_arrow_down_24"
+            app:tintDrawable="@{R.color.chevron_dropdown}" />
+
+        </LinearLayout>
 
         <TextView
           style="@style/TextStyle.Roboto.Regular.ClearGrey.14"
@@ -158,16 +193,32 @@
           android:layout_marginTop="@dimen/spacing_standard"
           android:text="@string/profile_pp_stoma_surgery_date" />
 
-        <TextView
-          style="@style/TextStyle.Roboto.Regular.Grey"
+        <LinearLayout
           android:layout_width="match_parent"
-          android:layout_height="56dp"
-          android:layout_marginTop="@dimen/spacing_quarter"
+          android:layout_height="wrap_content"
           android:background="@drawable/edittext_background"
-          android:gravity="center_vertical"
-          android:paddingStart="@dimen/spacing_standard"
-          android:paddingEnd="@dimen/spacing_standard"
-          app:safeText="@{controller.stomaSurgeryDate}" />
+          android:orientation="horizontal">
+
+          <com.coloplast.olympus.ui.common.widgets.NoDefaultSpinner
+            android:layout_width="0dp"
+            android:layout_height="@dimen/cardview_button_height_default"
+            android:layout_weight="1"
+            android:clickable="@{controller.editingEnabled}"
+            android:enabled="@{controller.editingEnabled}"
+            android:entries="@{controller.surgeryDateValues}"
+            android:prompt="@string/onboarding_insurance_hint"
+            android:selectedItemPosition="@={controller.surgerySpinnerPosition}"
+            android:spinnerMode="dialog" />
+
+          <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginEnd="@dimen/spacing_standard"
+            android:src="@drawable/ic_baseline_keyboard_arrow_down_24"
+            app:tintDrawable="@{R.color.chevron_dropdown}" />
+
+        </LinearLayout>
 
         <TextView
           style="@style/TextStyle.Roboto.Regular.ClearGrey.14"
@@ -175,24 +226,102 @@
           android:layout_height="wrap_content"
           android:layout_marginTop="@dimen/spacing_standard"
           android:text="@string/profile_pp_health_insurance"
-          app:visibleOrGone="@{controller.showHealthInsurance}"/>
+          app:visibleOrGone="@{controller.showHealthInsurance}" />
 
-        <TextView
-          style="@style/TextStyle.Roboto.Regular.Grey"
+        <LinearLayout
           android:layout_width="match_parent"
-          android:layout_height="56dp"
-          android:layout_marginTop="@dimen/spacing_quarter"
+          android:layout_height="wrap_content"
           android:background="@drawable/edittext_background"
-          android:gravity="center_vertical"
-          android:paddingStart="@dimen/spacing_standard"
-          android:paddingEnd="@dimen/spacing_standard"
-          app:safeText="@{controller.healthInsurance}"
-          app:visibleOrGone="@{controller.showHealthInsurance}"/>
+          android:orientation="horizontal">
+
+          <com.coloplast.olympus.ui.common.widgets.NoDefaultSpinner
+            android:layout_width="0dp"
+            android:layout_height="@dimen/cardview_button_height_default"
+            android:layout_weight="1"
+            android:clickable="@{controller.editingEnabled}"
+            android:enabled="@{controller.editingEnabled}"
+            android:entries="@{controller.insuranceValues}"
+            android:prompt="@string/onboarding_insurance_hint"
+            android:selectedItemPosition="@={controller.insuranceSpinnerPosition}"
+            android:spinnerMode="dialog" />
+
+          <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginEnd="@dimen/spacing_standard"
+            android:src="@drawable/ic_baseline_keyboard_arrow_down_24"
+            app:tintDrawable="@{R.color.chevron_dropdown}" />
+
+        </LinearLayout>
 
         <View
           android:layout_width="match_parent"
           android:layout_height="1dp"
           android:layout_marginTop="@dimen/spacing_double"
+          android:background="@color/ten_percent_transparent_black" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:layout_marginTop="@dimen/spacing_double"
+          android:layout_marginBottom="@dimen/spacing_standard">
+
+          <TextView
+            android:id="@+id/data_policy_card_title"
+            style="@style/TextStyle.Coloplast.Bold.DarkGrey.20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/onboarding_dc5_card_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+          <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/data_policy_card_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="@={controller.dataPolicyAccepted}"
+            app:layout_constraintBottom_toBottomOf="@id/data_policy_card_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+          <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="start"
+            app:constraint_referenced_ids="data_policy_card_switch" />
+
+          <TextView
+            android:id="@+id/data_policy_card_description"
+            style="@style/TextStyle.Roboto.Regular.ClearGrey.16"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_small"
+            android:text="@string/onboarding_dc5_card_description"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/barrier"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/data_policy_card_switch" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <Button
+          android:id="@+id/policy_agreement_button"
+          style="@style/Button.Borderless"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="@dimen/spacing_half"
+          android:onClick="@{() -> controller.onPolicyAgreementClicked()}"
+          android:text="@string/onboarding_dc5_link1_text"
+          android:textAlignment="textStart"
+          android:textAllCaps="false"
+          android:textSize="@dimen/text_18" />
+
+        <View
+          android:layout_width="match_parent"
+          android:layout_height="1dp"
+          android:layout_marginTop="@dimen/spacing_standard"
           android:background="@color/ten_percent_transparent_black" />
 
         <Button
@@ -202,8 +331,8 @@
           android:layout_marginStart="@dimen/spacing_none"
           android:layout_marginTop="@dimen/spacing_double"
           android:layout_marginEnd="@dimen/spacing_none"
-          android:text="@string/profile_pp_log_out_button"
-          android:onClick="@{() -> controller.onLogoutClicked()}"/>
+          android:onClick="@{() -> controller.onLogoutClicked()}"
+          android:text="@string/profile_pp_log_out_button" />
 
       </LinearLayout>
 

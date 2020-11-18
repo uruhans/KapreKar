@@ -8,7 +8,7 @@ import com.coloplast.olympus.ui.common.MediaGuideController
 class SetupGuideIntroSGI17Controller(args: Bundle = Bundle()) :
   MediaGuideController(args.apply { putString(SCREEN_NAME, TAG_CONTROLLER) }) {
 
-  override val resourceId: Int = R.drawable.sg_i14_chargingandpairing
+  override val resourceId: Int = R.raw.sg_i17_chargingandpairing
   override val titleId: Int = R.string.onboarding_chapter_intro_pairing_title
   override val descriptionId: Int = R.string.onboarding_chapter_intro_pairing_description
   override val position: Int = 2

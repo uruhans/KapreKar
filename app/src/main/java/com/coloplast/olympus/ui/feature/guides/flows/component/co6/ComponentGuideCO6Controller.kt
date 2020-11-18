@@ -11,10 +11,10 @@ import com.coloplast.olympus.ui.common.MediaGuideController
  * Copyright by Dawn Health A/S. All rights reserved.
  */
 class ComponentGuideCO6Controller(args: Bundle = Bundle()) : MediaGuideController(args.apply { putString(
-  MediaGuideController.SCREEN_NAME, TAG_CONTROLLER
+  SCREEN_NAME, TAG_CONTROLLER
 ) }){
 
-  override val resourceId: Int = R.drawable.placeholder
+  override val resourceId: Int = R.raw.sg_i10_connectorflap
   override val titleId: Int = R.string.guide_co6_title
   override val descriptionId: Int = R.string.guide_co6_description
   override val position: Int = 5

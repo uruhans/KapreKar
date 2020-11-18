@@ -4,6 +4,8 @@
 
   <data>
 
+    <import type="com.coloplast.olympus.R" />
+
     <import type="com.coloplast.olympus.ui.feature.onboarding.setup.model.TransmitterCheckerSelectionType" />
 
     <variable
@@ -94,16 +96,17 @@
             android:layout_marginStart="@dimen/spacing_standard"
             android:layout_marginEnd="@dimen/spacing_standard"
             android:gravity="center_vertical"
-            app:layout_constraintEnd_toStartOf="@+id/image1"
+            app:layout_constraintEnd_toStartOf="@+id/media1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/name"
             android:text="@string/onboarding_chapter_applying_transmitter_checker_option_1_description" />
 
-          <ImageView
-            android:id="@+id/image1"
+          <com.coloplast.olympus.ui.common.widgets.MediaView
+            android:id="@+id/media1"
             android:layout_width="120dp"
             android:layout_height="120dp"
-            android:src="@drawable/guide_change_plate_7"
+            app:resource="@{R.raw.sg_a9_transmitter_checker_1_lifted_fixed}"
+            app:isLooping="@{true}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1"
@@ -166,16 +169,17 @@
             android:layout_marginStart="@dimen/spacing_standard"
             android:layout_marginEnd="@dimen/spacing_standard"
             android:gravity="center_vertical"
-            app:layout_constraintEnd_toStartOf="@+id/image2"
+            app:layout_constraintEnd_toStartOf="@+id/media2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/name2"
             android:text="@string/onboarding_chapter_applying_transmitter_checker_option_2_description" />
 
-          <ImageView
-            android:id="@+id/image2"
+          <com.coloplast.olympus.ui.common.widgets.MediaView
+            android:id="@+id/media2"
             android:layout_width="120dp"
             android:layout_height="120dp"
-            android:src="@drawable/guide_change_plate_7"
+            app:resource="@{R.raw.sg_a9_transmitter_checker_1_lifted}"
+            app:isLooping="@{true}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1"

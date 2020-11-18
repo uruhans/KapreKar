@@ -303,6 +303,9 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
       REQUEST_CODE_SAVE_CHANGES_DIALOG -> {
         imageDialogController?.dismissDialog(withCallback = true)
       }
+      REQUEST_CODE_CONSENT_DIALOG -> {
+        imageDialogController?.dismissDialog(withCallback = true)
+      }
       else -> {
         super.onPositiveButtonClicked(requestCode)
       }
@@ -314,8 +317,13 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
       REQUEST_CODE_SAVE_CHANGES_DIALOG -> {
         imageDialogController?.dismissDialog(withCallback = false)
         imageDialogController = null
-
         super.handleBack()
+      }
+      REQUEST_CODE_CONSENT_DIALOG -> {
+        // revert consent to true because the user has cancelled
+        dataPolicyAccepted.set(true)
+        imageDialogController?.dismissDialog(withCallback = false)
+        imageDialogController = null
       }
       else -> {
         super.onNegativeButtonClicked(requestCode)
@@ -328,6 +336,12 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
       REQUEST_CODE_SAVE_CHANGES_DIALOG -> {
         saveProfileClicked()
         imageDialogController = null
+      }
+      REQUEST_CODE_CONSENT_DIALOG -> {
+        // set consent to false and update the user
+        // TODO - this probably have to change at some point
+        user.consent = false
+        updateUserRelay.accept(user)
       }
       else -> {
         super.onDialogDismissed(requestCode)

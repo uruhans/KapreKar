@@ -102,7 +102,7 @@ class SyncWorker(private val userComponent: UserComponent,
 
   private fun deletePackages(packageType: PackageType): Observable<SyncResult> {
     // only delete if we are in release mode
-    return if(BuildConfig.DEBUG) {
+    return if(BuildConfig.DEBUG || packageType != PackageType.Raw) {
       Observable.just(SyncResult.Completed())
     }
     else {

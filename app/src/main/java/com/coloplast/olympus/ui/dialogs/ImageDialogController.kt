@@ -101,7 +101,7 @@ class ImageDialogController(args: Bundle) : BaseDialogController<ControllerDialo
         targetController: Controller,
         requestCode: Int,
         @StringRes titleId: Int,
-        @StringRes messageId: Int,
+        @StringRes messageId: Int = 0,
         @StringRes positiveButtonId: Int,
         @StringRes negativeButtonId: Int = 0,
         @DrawableRes topImage: Int = 0,

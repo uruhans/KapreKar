@@ -46,6 +46,8 @@
   <color name="text_gray">#666666</color>
   <color name="text_red">@color/red</color>
 
+  <color name="chevron_dropdown">#2b2b2b</color>
+
   <color name="edittext_title">#666666</color>
   <color name="edittext_border">#38000000</color>
   <color name="edittext_drop_shadow">#07000000</color>

@@ -13,6 +13,7 @@ import com.coloplast.olympus.shared.models.User
 import com.coloplast.olympus.ui.common.CustomToolbarController
 import com.coloplast.olympus.ui.common.DrawerStateDispatcher
 import com.coloplast.olympus.ui.common.WebViewController
+import com.coloplast.olympus.ui.dialogs.ImageDialogController
 import com.coloplast.olympus.ui.feature.home.HomeController
 import com.coloplast.olympus.ui.feature.onboarding.signup.createprofile.types.HealthInsurance
 import com.coloplast.olympus.ui.feature.onboarding.signup.createprofile.types.StomaSurgeryDate
@@ -25,11 +26,13 @@ import io.reactivex.functions.Function
 import org.koin.core.inject
 
 class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
-  ProfileView {
+  ProfileView, ImageDialogController.Listener {
 
   private val viewModel: ProfileViewModel by inject()
   private val logoutRelay: PublishRelay<Unit> = PublishRelay.create()
   private val updateUserRelay: PublishRelay<User> = PublishRelay.create()
+
+  private var imageDialogController: ImageDialogController? = null
 
   val stomaValues by lazy {
     StomaType.values()
@@ -115,6 +118,10 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
         }
         is ProfileUiModel.UserUpdated -> {
           // TODO - show updates success
+          infoChanged = false
+          healthInfoChanged = false
+          consentChanged = false
+          userProfileChanged = false
         }
         is ProfileUiModel.UpdateFailed -> {
           Toast.makeText(activity!!, "Could not update server", Toast.LENGTH_SHORT).show()
@@ -229,17 +236,75 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
     dataPolicyAccepted.removeOnPropertyChangedCallback(profileVarsChangedCallback)
   }
 
-  override fun onBackClicked() {
+  override fun handleBack(): Boolean {
     if (userProfileChanged) {
-      // TODO - show dialog box stating unsaved changes
+      imageDialogController = ImageDialogController.create(
+        this,
+        REQUEST_CODE_SAVE_CHANGES_DIALOG,
+        titleId = R.string.profile_pp_unsaved_changes_title,
+        topImage = R.drawable.ic_info_circle,
+        positiveButtonId = R.string.generic_save_changes,
+        negativeButtonId = R.string.generic_cancel,
+        verticalButtonLayout = true
+      )
+
+      imageDialogController?.show()
+      return true
     }
     else {
-      super.onBackClicked()
+      return super.handleBack()
+    }
+  }
+
+  override fun onCloseClicked(requestCode: Int) {
+    when(requestCode) {
+      REQUEST_CODE_SAVE_CHANGES_DIALOG -> {
+        imageDialogController?.dismissDialog(withCallback = true)
+      }
+    }
+  }
+
+  override fun onPositiveButtonClicked(requestCode: Int) {
+    when(requestCode) {
+      REQUEST_CODE_SAVE_CHANGES_DIALOG -> {
+        imageDialogController?.dismissDialog(withCallback = true)
+      }
+      else -> {
+        super.onPositiveButtonClicked(requestCode)
+      }
+    }
+  }
+
+  override fun onNegativeButtonClicked(requestCode: Int) {
+    when(requestCode) {
+      REQUEST_CODE_SAVE_CHANGES_DIALOG -> {
+        imageDialogController?.dismissDialog(withCallback = false)
+        imageDialogController = null
+
+        super.handleBack()
+      }
+      else -> {
+        super.onNegativeButtonClicked(requestCode)
+      }
+    }
+  }
+
+  override fun onDialogDismissed(requestCode: Int) {
+    when(requestCode) {
+      REQUEST_CODE_SAVE_CHANGES_DIALOG -> {
+        saveProfileClicked()
+        imageDialogController = null
+      }
+      else -> {
+        super.onDialogDismissed(requestCode)
+      }
     }
   }
 
   companion object {
     const val TAG_CONTROLLER = "profile_controller"
+
+    private const val REQUEST_CODE_SAVE_CHANGES_DIALOG = 2000
 
     fun routerTransaction() = RouterTransaction.with(ProfileController()).tag(HomeController.TAG_CONTROLLER)
   }

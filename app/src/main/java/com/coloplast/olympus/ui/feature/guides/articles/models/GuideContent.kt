@@ -20,7 +20,7 @@ object GuideContent {
             subHeader = R.string.guide_da_subtitle
           ),
           ArticleItem(
-            image = R.drawable.guide_placeholder,
+            image = R.drawable.guide_dry_applying_tips,
             title = R.string.guide_da_article_1_header,
             description = R.string.guide_da_article_1_body
           )
@@ -114,12 +114,12 @@ object GuideContent {
             description = R.string.guide_dg_article_1_body
           ),
           ArticleItem(
-            image = R.drawable.guide_placeholder,
+            image = R.drawable.guide_article_image_1,
             title = R.string.guide_dg_article_2_header,
             description = R.string.guide_dg_article_2_body
           ),
           ArticleItem(
-            image = R.drawable.guide_placeholder,
+            image = R.drawable.guide_article_image_2,
             title = R.string.guide_dg_article_3_header,
             description = R.string.guide_dg_article_3_body
           )

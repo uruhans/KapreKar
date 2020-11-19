@@ -22,8 +22,8 @@ import com.coloplast.olympus.ui.feature.guides.models.GuideCard
   GuideCard.CHECK_BATTERY_LEVEL -> R.drawable.guide_cb_thumbnail
   GuideCard.ADD_TRANSMITTER -> R.drawable.guide_at_thumbnail
   GuideCard.DELETE_TRANSMITTER -> R.drawable.guide_dt_thumbnail
-  GuideCard.CLEANING_GUIDE -> R.drawable.guide_thumbnail_placeholder
-  GuideCard.DRYING_GUIDE -> R.drawable.guide_thumbnail_placeholder
+  GuideCard.CLEANING_GUIDE -> R.drawable.guide_cleaning
+  GuideCard.DRYING_GUIDE -> R.drawable.guide_drying
 }
 
 @StringRes fun GuideCard.getTitle(): Int = when (this) {

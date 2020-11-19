@@ -49,7 +49,7 @@ class SetupGuideApplyingFactoryImpl : FlowFactory<ApplyingFlowModel>() {
       SetupGuideApplyingFlow.SetupGuideTransmitterCheckerSGA8 -> SetupGuideApplyingSGA8Controller.routerTransaction()
       SetupGuideApplyingFlow.SetupGuideWaitSGATMH1 -> {
         InfoPageController.routerTransaction(
-          R.drawable.ic_sidemenu_transmitters,
+          R.drawable.ic_transmitter_nok,
           R.string.onboarding_chapter_applying_wait_title,
           R.string.onboarding_chapter_applying_wait_description,
           R.string.generic_continue,
@@ -58,7 +58,7 @@ class SetupGuideApplyingFactoryImpl : FlowFactory<ApplyingFlowModel>() {
       }
       SetupGuideApplyingFlow.SetupGuideNoProblemSGATMH2 -> {
         InfoPageController.routerTransaction(
-          R.drawable.ic_sidemenu_transmitters,
+          R.drawable.ic_transmitter,
           R.string.onboarding_chapter_applying_no_problem_title,
           R.string.onboarding_chapter_applying_no_problem_description,
           R.string.generic_continue,
@@ -70,7 +70,7 @@ class SetupGuideApplyingFactoryImpl : FlowFactory<ApplyingFlowModel>() {
       SetupGuideApplyingFlow.SetupGuideCheckLidFixedSGATMH5 -> SetupGuideApplyingSGATMH5Controller.routerTransaction()
       SetupGuideApplyingFlow.SetupGuideContinueSGATMH6 -> {
         InfoPageController.routerTransaction(
-          R.drawable.ic_sidemenu_transmitters, // todo - correct image
+          R.drawable.ic_icon_questionmark_circle,
           R.string.onboarding_chapter_applying_ready_to_continue_title,
           R.string.onboarding_chapter_applying_ready_to_continue_description,
           R.string.onboarding_chapter_applying_ready_to_continue_button_continue,
@@ -80,7 +80,7 @@ class SetupGuideApplyingFactoryImpl : FlowFactory<ApplyingFlowModel>() {
       }
       SetupGuideApplyingFlow.SetupGuideReadyAttachSGA9 -> {
         InfoPageController.routerTransaction(
-          R.drawable.ic_sidemenu_transmitters, // TODO - correct image
+          R.drawable.ic_transmitter_ok,
           R.string.onboarding_chapter_applying_ready_attach_title,
           R.string.onboarding_chapter_applying_ready_attach_description,
           R.string.generic_continue,
@@ -131,17 +131,13 @@ class SetupGuideApplyingFactoryImpl : FlowFactory<ApplyingFlowModel>() {
     @Suppress("NON_EXHAUSTIVE_WHEN")
     when (SetupGuideApplyingFlow.fromIndex(currentIndex)) {
       SetupGuideApplyingFlow.SetupGuideTransmitterCheckerSGA8 -> {
-        when (result as TransmitterCheckerSelectionType) {
-          TransmitterCheckerSelectionType.FIXED -> skipUntil(SetupGuideApplyingFlow.SetupGuideReadyAttachSGA9.id)
-          TransmitterCheckerSelectionType.LOOSE -> skipUntil(SetupGuideApplyingFlow.SetupGuideWaitSGATMH1.id)
-          TransmitterCheckerSelectionType.NOT_SURE -> skipUntil(SetupGuideApplyingFlow.SetupGuideNoProblemSGATMH2.id)
-        }
-      }
-      SetupGuideApplyingFlow.AwaitingConnection -> {
-        model.connectionSuccessful = result as Boolean
+        model.transmitterCheckerSelectionType = result as TransmitterCheckerSelectionType
       }
       SetupGuideApplyingFlow.SetupGuideContinueSGATMH6 -> {
         model.SetupGuideContinueSGATMH6_Call_Support = (result as Boolean).not()
+      }
+      SetupGuideApplyingFlow.AwaitingConnection -> {
+        model.connectionSuccessful = result as Boolean
       }
       SetupGuideApplyingFlow.SetupGuideAttachedFailedSGA13_2 -> {
         model.SetupGuideAttachedFailedSGA13_2_Call_Support = (result as Boolean).not()

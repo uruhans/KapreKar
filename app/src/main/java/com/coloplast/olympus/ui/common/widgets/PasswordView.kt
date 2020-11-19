@@ -13,7 +13,7 @@ import androidx.databinding.ObservableField
 import androidx.databinding.ObservableInt
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ViewPasswordInputLayoutBinding
-import com.coloplast.olympus.ui.common.extensions.hideKeyboard
+import com.coloplast.olympus.ui.common.extensions.hideSoftKeyboard
 import timber.log.Timber
 import kotlin.properties.Delegates
 
@@ -91,7 +91,7 @@ class PasswordView @JvmOverloads constructor(context: Context,
     inner class OnFocusChangeListener(private val focusLostCallback: (String) -> Boolean) : View.OnFocusChangeListener {
         override fun onFocusChange(v: View, hasFocus: Boolean) {
             if (!v.hasFocus()) {
-                v.hideKeyboard()
+                v.hideSoftKeyboard()
                 focusLostCallback.invoke(password)
             }
         }

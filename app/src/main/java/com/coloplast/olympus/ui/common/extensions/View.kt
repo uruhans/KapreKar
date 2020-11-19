@@ -7,6 +7,7 @@ import android.view.View
 import android.view.animation.*
 import android.view.inputmethod.InputMethodManager
 import androidx.annotation.DrawableRes
+import androidx.core.view.WindowInsetsCompat
 import androidx.databinding.BindingAdapter
 import com.coloplast.olympus.ui.common.listeners.AnimatorListenerImpl
 import com.coloplast.olympus.utils.UiUtils
@@ -33,7 +34,7 @@ fun View.visibleOrGoneFade(visible: Boolean) {
 
 @BindingAdapter("backgroundResource")
 fun View.backgroundResource(@DrawableRes backgroundResource: Int) {
-  if(backgroundResource != 0) {
+  if (backgroundResource != 0) {
     setBackgroundResource(backgroundResource)
   }
 }
@@ -94,14 +95,25 @@ fun View.rotate360(
   }
 }
 
-fun View.hideKeyboard() {
-  val inputMethodManager = context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-  inputMethodManager.hideSoftInputFromWindow(this.windowToken, 0)
+@BindingAdapter("expandOrCollapse")
+fun View.expandOrCollapse(expand: Boolean) {
+  post {
+    if (expand) UiUtils.expand(this@expandOrCollapse) else UiUtils.collapse(this@expandOrCollapse)
+  }
 }
 
-@BindingAdapter("expandOrCollapse")
-fun View.expandOrCollapse(expand: Boolean){
-  post {
-    if(expand) UiUtils.expand(this@expandOrCollapse) else UiUtils.collapse(this@expandOrCollapse)
-  }
+fun View.isSoftKeyboardVisible(): Boolean {
+  return WindowInsetsCompat
+    .toWindowInsetsCompat(rootWindowInsets)
+    .isVisible(WindowInsetsCompat.Type.ime())
+}
+
+fun View.showSoftKeyboard() {
+  val inputMethodManager = context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+  inputMethodManager.showSoftInput(this, 0)
+}
+
+fun View.hideSoftKeyboard() {
+  val inputMethodManager = context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+  inputMethodManager.hideSoftInputFromWindow(windowToken, 0)
 }

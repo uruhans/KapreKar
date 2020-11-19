@@ -93,11 +93,11 @@ class AddTransmitterFlowController(args: Bundle) : TopMenuFlowFactoryController<
     }
 
     val closeFlow = targetController is SetupGuideConnectionFlowController
-    super.onFlowCompleted(data)
 
     if(closeFlow) {
       (targetController as SetupGuideConnectionFlowController).onFlowCompleted(EmptyModel())
     }
+    super.onFlowCompleted(data)
 
   }
 

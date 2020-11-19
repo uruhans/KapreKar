@@ -12,7 +12,7 @@ fun EditText.onSubmit(action: () -> Unit) {
 
   setOnEditorActionListener { _, actionId, _ ->
     if (actionId == EditorInfo.IME_ACTION_DONE) {
-      hideKeyboard()
+      hideSoftKeyboard()
       action.invoke()
     }
     true

@@ -121,6 +121,11 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   override fun onViewBound(viewBinding: ControllerHomeBinding) {
     stateRouter = Conductor.attachRouter(activity!!, viewBinding.contentContainer, args)
     compositeDisposable.add(viewModel.bind(this))
+
+    // we want to force an update if we are coming from the background
+    if (currentUiState != UiState.INITIAL) {
+      changeUiState(currentUiState, true)
+    }
   }
 
   override fun render(): Function<Observable<HomeUiModel>, Disposable> {

@@ -84,15 +84,49 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
             user.surgeryDateInterval != surgerySpinnerPosition.get() ||
             user.insuranceType != insuranceSpinnerPosition.get()
 
-      consentChanged = user.consent != dataPolicyAccepted.get()
 
       userProfileChanged = infoChanged || healthInfoChanged || consentChanged
+    }
+  }
 
-      // TODO - this is temporary until we enable changes to all fields
-      if(consentChanged) {
-        user.consent = dataPolicyAccepted.get()
-        updateUserRelay.accept(user)
+  private val consentChangedCallback = object : androidx.databinding.Observable.OnPropertyChangedCallback() {
+    override fun onPropertyChanged(sender: androidx.databinding.Observable?, propertyId: Int) {
+      // removing consent
+      if(user.consent && !dataPolicyAccepted.get()) {
+        showConsentOverlay()
       }
+      else if(dataPolicyAccepted.get()){
+        // accepting consent
+        changeConsent(true)
+      }
+    }
+  }
+
+  private fun showConsentOverlay() {
+    // TODO - show consent overlay
+    imageDialogController = ImageDialogController.create(
+      this,
+      REQUEST_CODE_CONSENT_DIALOG,
+      R.string.profile_pp_withdraw_consent_modal_title,
+      R.string.profile_pp_withdraw_consent_modal_description,
+      R.string.profile_pp_withdraw_consent_modal_withdraw,
+      R.string.generic_cancel,
+      R.drawable.ic_info_circle,
+      verticalButtonLayout = true,
+      dismissAllowed = false)
+
+    imageDialogController?.show()
+  }
+
+  private fun changeConsent(consent: Boolean) {
+    consentChanged = user.consent != consent
+
+    userProfileChanged = infoChanged || healthInfoChanged || consentChanged
+
+    // TODO - this is temporary until we enable changes to all fields
+    if(consentChanged) {
+      user.consent = dataPolicyAccepted.get()
+      updateUserRelay.accept(user)
     }
   }
 
@@ -138,7 +172,7 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
     stomaSpinnerPosition.addOnPropertyChangedCallback(profileVarsChangedCallback)
     surgerySpinnerPosition.addOnPropertyChangedCallback(profileVarsChangedCallback)
     insuranceSpinnerPosition.addOnPropertyChangedCallback(profileVarsChangedCallback)
-    dataPolicyAccepted.addOnPropertyChangedCallback(profileVarsChangedCallback)
+    dataPolicyAccepted.addOnPropertyChangedCallback(consentChangedCallback)
   }
 
   private fun updateUserData(user: User) {
@@ -233,7 +267,7 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
     stomaSpinnerPosition.removeOnPropertyChangedCallback(profileVarsChangedCallback)
     surgerySpinnerPosition.removeOnPropertyChangedCallback(profileVarsChangedCallback)
     insuranceSpinnerPosition.removeOnPropertyChangedCallback(profileVarsChangedCallback)
-    dataPolicyAccepted.removeOnPropertyChangedCallback(profileVarsChangedCallback)
+    dataPolicyAccepted.removeOnPropertyChangedCallback(consentChangedCallback)
   }
 
   override fun handleBack(): Boolean {
@@ -269,6 +303,9 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
       REQUEST_CODE_SAVE_CHANGES_DIALOG -> {
         imageDialogController?.dismissDialog(withCallback = true)
       }
+      REQUEST_CODE_CONSENT_DIALOG -> {
+        imageDialogController?.dismissDialog(withCallback = true)
+      }
       else -> {
         super.onPositiveButtonClicked(requestCode)
       }
@@ -280,8 +317,13 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
       REQUEST_CODE_SAVE_CHANGES_DIALOG -> {
         imageDialogController?.dismissDialog(withCallback = false)
         imageDialogController = null
-
         super.handleBack()
+      }
+      REQUEST_CODE_CONSENT_DIALOG -> {
+        // revert consent to true because the user has cancelled
+        dataPolicyAccepted.set(true)
+        imageDialogController?.dismissDialog(withCallback = false)
+        imageDialogController = null
       }
       else -> {
         super.onNegativeButtonClicked(requestCode)
@@ -295,6 +337,12 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
         saveProfileClicked()
         imageDialogController = null
       }
+      REQUEST_CODE_CONSENT_DIALOG -> {
+        // set consent to false and update the user
+        // TODO - this probably have to change at some point
+        user.consent = false
+        updateUserRelay.accept(user)
+      }
       else -> {
         super.onDialogDismissed(requestCode)
       }
@@ -304,6 +352,7 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
   companion object {
     const val TAG_CONTROLLER = "profile_controller"
 
+    private const val REQUEST_CODE_CONSENT_DIALOG = 3000
     private const val REQUEST_CODE_SAVE_CHANGES_DIALOG = 2000
 
     fun routerTransaction() = RouterTransaction.with(ProfileController()).tag(HomeController.TAG_CONTROLLER)

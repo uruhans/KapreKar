@@ -141,7 +141,7 @@ class SignupFlowController : TopMenuFlowFactoryController<SignupFactoryModel>(),
             SignupViewModel.Callback.USER_CREATED -> {
               //go to confirmation screen
               with(factory) {
-                skipUntil(SignupFlow.ConfirmationSU8.id)
+                skipUntil(SignupFlow.InsuranceSU7.id)
                 incrementAndNext()
               }
             }

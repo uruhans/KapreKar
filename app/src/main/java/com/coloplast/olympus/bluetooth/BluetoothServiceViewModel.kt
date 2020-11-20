@@ -173,6 +173,7 @@ class BluetoothServiceViewModel(
 
     val connectTransmitterObservable = devicesToConnectToObservable
       .doOnNext { connectedBleDevicesList.add(it) }
+      .distinctUntilChanged()
       .flatMap { connectObservable(it) }
 
     compositeDisposable.add(retryObservable.map<BluetoothServiceModel> { BluetoothServiceModel.ScanningStarted() }.bind(serviceResult.onResult()))

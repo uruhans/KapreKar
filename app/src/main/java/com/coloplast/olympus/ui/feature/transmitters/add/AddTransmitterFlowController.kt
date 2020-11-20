@@ -3,15 +3,17 @@ package com.coloplast.olympus.ui.feature.transmitters.add
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import com.bluelinelabs.conductor.Controller
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
-import com.coloplast.olympus.bluetooth.businesslayer.ServiceStateDispatcher
+import com.coloplast.olympus.bluetooth.businesslayer.BluetoothManager
 import com.coloplast.olympus.ui.common.MediaGuideController
 import com.coloplast.olympus.ui.common.flow.FlowFactory
 import com.coloplast.olympus.ui.common.flow.FlowFactoryController
 import com.coloplast.olympus.ui.common.models.flow.EmptyModel
 import com.coloplast.olympus.ui.dialogs.CallHelpDialogController
 import com.coloplast.olympus.ui.feature.onboarding.setup.SetupGuideConnectionFlowController
+import com.coloplast.olympus.ui.feature.transmitters.add.at8.AddTransmitterAT8Controller
 import com.coloplast.olympus.ui.feature.transmitters.add.models.AddTransmitterFlow
 import com.coloplast.olympus.ui.feature.transmitters.add.models.AddTransmitterModel
 import org.koin.core.inject
@@ -21,7 +23,7 @@ class AddTransmitterFlowController(args: Bundle) : FlowFactoryController<AddTran
 
   private val startAtIndex = args.getInt(BUNDLE_START_FLOW_AT, 0)
   private val factory: AddTransmitterFactoryImpl by inject()
-  private val serviceStateDispatcher: ServiceStateDispatcher by inject()
+  private val bluetoothManager: BluetoothManager by inject()
 
   private var callHelpDialogController: CallHelpDialogController? = null
 
@@ -39,12 +41,6 @@ class AddTransmitterFlowController(args: Bundle) : FlowFactoryController<AddTran
       if(data.bluetoothEnabled) {
         factory.skipUntil(AddTransmitterFlow.AddTransmitterAT8.index)
       }
-    }
-    else if (AddTransmitterFlow.fromIndex(currentIndex) == AddTransmitterFlow.AddTransmitterAT8) {
-      serviceStateDispatcher.serviceRelay.accept(ServiceStateDispatcher.ServiceState.STOP_SERVICE)
-      serviceStateDispatcher.serviceRelay.accept(ServiceStateDispatcher.ServiceState.START_SERVICE)
-      factory.incrementAndNext()
-      return true
     }
 
     return false
@@ -81,6 +77,17 @@ class AddTransmitterFlowController(args: Bundle) : FlowFactoryController<AddTran
 
     if(closeFlow) {
       (targetController as SetupGuideConnectionFlowController).onFlowCompleted(EmptyModel())
+    }
+  }
+
+  override fun afterControllerPopped(topController: Controller?) {
+    super.afterControllerPopped(topController)
+
+    // if we move back from the searching controller - we want to make sure we aren't actually still connected to it
+    // this could happen if something weird occurred, where the transmitter has been deleted from the local database, but
+    // the service would actually still be connected to it
+    if(topController is AddTransmitterAT8Controller) {
+      bluetoothManager.disconnectTransmitter(factory.getData().transmitterNameToSearchFor)
     }
   }
 

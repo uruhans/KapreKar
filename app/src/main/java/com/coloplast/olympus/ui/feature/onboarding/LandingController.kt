@@ -1,10 +1,12 @@
 package com.coloplast.olympus.ui.feature.onboarding
 
+import android.content.Context
 import androidx.databinding.ObservableBoolean
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.FadeChangeHandler
 import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import com.coloplast.olympus.R
+import com.coloplast.olympus.bluetooth.businesslayer.ServiceStateDispatcher
 import com.coloplast.olympus.databinding.ControllerLandingBinding
 import com.coloplast.olympus.shared.preferences.OnboardingProgression
 import com.coloplast.olympus.shared.preferences.Preferences
@@ -26,11 +28,19 @@ import org.koin.core.inject
 class LandingController : BaseController<ControllerLandingBinding>() {
 
   private val preferences: Preferences by inject()
+  private val serviceStateDispatcher: ServiceStateDispatcher by inject()
 
   val isVisible = ObservableBoolean(false) // by default, we hide the content of this view
 
   override fun attachVariables(viewBinding: ControllerLandingBinding) {
     viewBinding.controller = this
+  }
+
+  override fun onContextAvailable(context: Context) {
+    super.onContextAvailable(context)
+    // make sure that the service is started at this point
+    // if the user has just logged out, it will not be started
+    serviceStateDispatcher.serviceRelay.accept(ServiceStateDispatcher.ServiceState.START_SERVICE)
   }
 
   override fun onViewBound(viewBinding: ControllerLandingBinding) {

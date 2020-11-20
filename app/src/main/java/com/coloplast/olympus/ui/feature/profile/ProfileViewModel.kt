@@ -41,7 +41,7 @@ class ProfileViewModel(
           .subscribeOn(Schedulers.io())
           .flatMap {
             userComponent.syncUser(user.id!!)
-              .map<ProfileUiModel> { ProfileUiModel.UserUpdated() }
+              .map<ProfileUiModel> { ProfileUiModel.UserUpdated(user) }
               .onErrorReturn { ProfileUiModel.UpdateFailed() }
           }
       }

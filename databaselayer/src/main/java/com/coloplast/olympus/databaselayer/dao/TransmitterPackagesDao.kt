@@ -4,10 +4,14 @@ import androidx.room.*
 import com.coloplast.olympus.databaselayer.entities.DbTransmitterPackage
 import com.coloplast.olympus.shared.types.PackageType
 import com.coloplast.olympus.shared.types.SyncState
+import io.reactivex.Completable
 import io.reactivex.Single
 
 @Dao
 interface TransmitterPackageDao {
+
+  @Query("DELETE FROM DbTransmitterPackage")
+  fun deleteTransmitterPackages() : Single<Int>
 
   @Insert(onConflict = OnConflictStrategy.REPLACE)
   fun insertTransmitterPackage(dbTransmitterPackage: DbTransmitterPackage) : Single<Long>

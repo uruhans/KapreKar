@@ -103,7 +103,6 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
   }
 
   private fun showConsentOverlay() {
-    // TODO - show consent overlay
     imageDialogController = ImageDialogController.create(
       this,
       REQUEST_CODE_CONSENT_DIALOG,
@@ -339,7 +338,6 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
       }
       REQUEST_CODE_CONSENT_DIALOG -> {
         // set consent to false and update the user
-        // TODO - this probably have to change at some point
         user.consent = false
         updateUserRelay.accept(user)
       }

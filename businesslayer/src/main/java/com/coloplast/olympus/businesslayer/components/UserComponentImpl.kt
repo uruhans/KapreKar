@@ -21,10 +21,18 @@ class UserComponentImpl(private val preferences: Preferences) : UserComponent {
   private val apiService: ApiService = ApiServiceImpl()
   private val database: DbService = DbServiceImpl()
 
+  override fun clearLocalStorage(): Observable<SyncResult> {
+    return database.clearLocalStorage()
+      .toSingle<SyncResult> { SyncResult.Completed(0) }
+      .toObservable()
+      .onErrorReturn { SyncResult.Error() }
+  }
+
   override fun createUser(user: User): Observable<CurrentUser> =
-    if(user.email.isNullOrBlank()){
+    if (user.email.isNullOrBlank()) {
       apiService.createAnonymousUser()
-    } else {
+    }
+    else {
       apiService.createUser(user)
     }.compose(SetTokenInsertOrUpdateUserAndReturnCurrentUser(database, preferences))
 
@@ -58,7 +66,7 @@ class UserComponentImpl(private val preferences: Preferences) : UserComponent {
       .toObservable()
       .flatMap { localUser ->
         // if consent goes from true to false we need to reset the user
-        if(localUser.consent && !user.consent) {
+        if (localUser.consent && !user.consent) {
           resetUser(user)
         }
 
@@ -67,11 +75,11 @@ class UserComponentImpl(private val preferences: Preferences) : UserComponent {
       }
   }
 
-  override fun requestSecurityCode(email: String) : Completable {
+  override fun requestSecurityCode(email: String): Completable {
     return apiService.requestSecurityCode(email)
   }
 
-  override fun validateSecurityCode(securityCode: Int, email: String) : Completable {
+  override fun validateSecurityCode(securityCode: Int, email: String): Completable {
     return apiService.validateSecurityCode(securityCode, email)
   }
 
@@ -79,8 +87,8 @@ class UserComponentImpl(private val preferences: Preferences) : UserComponent {
     return apiService.changePassword(securityCode, email, password)
   }
 
-  private fun resetUser(user: User) : User {
-    if(!user.consent) {
+  private fun resetUser(user: User): User {
+    if (!user.consent) {
       with(user) {
         firstName = null
         lastName = null
@@ -109,7 +117,7 @@ class UserComponentImpl(private val preferences: Preferences) : UserComponent {
     return getSingleLocalUser(userId)
       .toObservable()
       .flatMap {
-        if(it.syncState == SyncState.Uploaded) {
+        if (it.syncState == SyncState.Uploaded) {
           Observable.just(SyncResult.Completed())
         }
         else {

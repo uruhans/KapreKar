@@ -11,12 +11,12 @@ import com.coloplast.olympus.databinding.ControllerGuidesSubsectionBinding
 import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.feature.guides.articles.GuideController
 import com.coloplast.olympus.ui.feature.guides.articles.models.GuideType
+import com.coloplast.olympus.ui.feature.guides.flows.applying.GuideApplyingTransmitterFlowController
 import com.coloplast.olympus.ui.feature.guides.flows.component.ComponentGuideFlowController
 import com.coloplast.olympus.ui.feature.guides.flows.location.LocationGuideFlowController
 import com.coloplast.olympus.ui.feature.guides.flows.tour.AppTourFlowController
 import com.coloplast.olympus.ui.feature.guides.models.GuideCard
 import com.coloplast.olympus.ui.feature.guides.types.GuidesMenuSubsection
-import com.coloplast.olympus.ui.feature.onboarding.setup.SetupGuideApplyingFlowController
 import com.coloplast.olympus.ui.feature.transmitters.add.AddTransmitterFlowController
 import me.tatarka.bindingcollectionadapter2.OnItemBind
 
@@ -78,7 +78,7 @@ class GuidesSubsectionController(args: Bundle): BaseController<ControllerGuidesS
     val (selectedRouter, routerTransaction) = when(guideCard){
       GuideCard.COMPONENT_GUIDE -> Pair(getContentRouter(), ComponentGuideFlowController.routerTransaction())
       GuideCard.APP_TOUR -> Pair(getContentRouter(), AppTourFlowController.routerTransaction())
-      GuideCard.APPLYING_GUIDE -> Pair(getContentRouter(), SetupGuideApplyingFlowController.routerTransaction())
+      GuideCard.APPLYING_GUIDE -> Pair(getContentRouter(), GuideApplyingTransmitterFlowController.routerTransaction())
       GuideCard.DRY_APPLYING_TIPS -> Pair(router, GuideController.routerTransaction(GuideType.DRY_APPLYING_TIPS))
       GuideCard.CONNECTION_GUIDE -> Pair(router, GuideController.routerTransaction(GuideType.CONNECTION))
       GuideCard.CHARGING_GUIDE -> Pair(router, GuideController.routerTransaction(GuideType.CHARGING))

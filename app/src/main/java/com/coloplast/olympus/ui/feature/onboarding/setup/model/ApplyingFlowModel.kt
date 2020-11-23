@@ -7,5 +7,5 @@ class ApplyingFlowModel : FlowFactoryModel {
   var connectionSuccessful = false
   var SetupGuideContinueSGATMH6_Call_Support = false
   var SetupGuideAttachedFailedSGA13_2_Call_Support = false
-
+  var retryConnection = false
 }

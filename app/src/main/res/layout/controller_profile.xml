@@ -378,7 +378,6 @@
         android:layout_marginBottom="@dimen/spacing_small"
         android:text="@string/profile_pp_no_profile_description" />
 
-
     </LinearLayout>
 
   </LinearLayout>

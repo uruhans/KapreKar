@@ -79,7 +79,7 @@ val koinModule = module {
   single { ForgotPasswordViewModel(get()) }
   single { SetupGuideLocationSGC4ViewModel(get()) }
   single { AddTransmitterAT7ViewModel(get()) }
-  single { ProfileViewModel(get(), get(), get()) }
+  single { ProfileViewModel(get(), get(), get(), get(), get()) }
   single { SignupViewModel(get(), get()) }
   single { FirmwareUpdateChargingViewModel() }
   single { FirmwareProgressViewModel(get()) }

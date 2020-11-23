@@ -12,6 +12,8 @@ import io.reactivex.Single
 import java.util.*
 
 interface DbService {
+  fun clearLocalStorage() : Completable
+
   fun insertOrUpdateUser(user: User): Observable<User>
   fun getUser(userId: UUID): Observable<User>
   fun getSingleUser(userId: UUID): Single<User>

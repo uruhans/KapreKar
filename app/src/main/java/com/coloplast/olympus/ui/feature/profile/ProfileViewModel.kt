@@ -2,6 +2,8 @@ package com.coloplast.olympus.ui.feature.profile
 
 import com.artemzin.rxui.kotlin.bind
 import com.coloplast.olympus.Me
+import com.coloplast.olympus.bluetooth.businesslayer.BluetoothManager
+import com.coloplast.olympus.bluetooth.businesslayer.ServiceStateDispatcher
 import com.coloplast.olympus.businesslayer.interfaces.UserComponent
 import com.coloplast.olympus.shared.models.User
 import com.coloplast.olympus.shared.preferences.Preferences
@@ -13,11 +15,14 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 class ProfileViewModel(
   private val preferences: Preferences,
   private val userComponent: UserComponent,
-  private val me: Me
+  private val me: Me,
+  private val bluetoothManager: BluetoothManager,
+  private val serviceStateDispatcher: ServiceStateDispatcher
 ) : BaseViewModel<ProfileUiModel, ProfileView>() {
 
   override fun bind(uiView: ProfileView): Disposable {
@@ -48,7 +53,17 @@ class ProfileViewModel(
 
     val onLogoutRequested =
       uiView.onLogoutRequested()
-        .map { me.logout(true) }
+        .flatMap {
+          userComponent.clearLocalStorage()
+            .subscribeOn(Schedulers.io())
+            // disconnect all transmitters
+            .map { bluetoothManager.disconnectAllTransmitters() }
+            .delay(2, TimeUnit.SECONDS)
+            // stop the service to make sure it doesn't try to automatically reconnect to any transmitters
+            .map { serviceStateDispatcher.serviceRelay.accept(ServiceStateDispatcher.ServiceState.STOP_SERVICE) }
+            // log out user -> will move user to landing page
+            .map { me.logout(true) }
+        }
         .subscribe()
 
     disposable.add(onLogoutRequested)

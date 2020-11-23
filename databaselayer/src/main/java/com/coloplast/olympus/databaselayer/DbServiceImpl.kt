@@ -23,6 +23,12 @@ class DbServiceImpl : DbService {
 
   private val db = OlympusDatabase.getDatabase(AppSettings.applicationContext)
 
+  override fun clearLocalStorage(): Completable {
+    return db.transmitterPackageDao().deleteTransmitterPackages().ignoreElement()
+      .andThen(db.transmitterDao().deleteAll().ignoreElement())
+      .andThen(db.userDao().deleteUser().ignoreElement())
+  }
+
   override fun insertOrUpdateUser(user: User): Observable<User> {
     return db.userDao()
       .insertOrUpdate(DbUser.fromUser(user))

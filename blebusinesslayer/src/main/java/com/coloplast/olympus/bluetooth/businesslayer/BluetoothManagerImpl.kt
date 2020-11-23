@@ -459,6 +459,12 @@ class BluetoothManagerImpl(
     disconnectRelay.accept(macAddress)
   }
 
+  override fun disconnectAllTransmitters() {
+    bleDevices.keys.forEach { macAddress ->
+      disconnectRelay.accept(macAddress)
+    }
+  }
+
   private fun readSettings(macAddress: String): Observable<ByteArray> {
     return readCharacteristics(macAddress, OlympusWirelessProtocol.Characteristics.SETTINGS)
       .toObservable()

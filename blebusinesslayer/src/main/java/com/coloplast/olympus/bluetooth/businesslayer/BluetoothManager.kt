@@ -38,4 +38,5 @@ interface BluetoothManager {
   fun isConnected(macAddress: String) : Boolean
 
   fun disconnectTransmitter(macAddress: String)
+  fun disconnectAllTransmitters()
 }

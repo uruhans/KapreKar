@@ -1,4 +1,4 @@
-package com.coloplast.olympus.ui.feature.guides.flows.location.lg2
+package com.coloplast.olympus.ui.feature.guides.flows.location.lg7
 
 import android.os.Bundle
 import com.bluelinelabs.conductor.RouterTransaction
@@ -11,9 +11,10 @@ import com.coloplast.olympus.ui.common.MediaGuideController
  * Copyright by Dawn Health A/S. All rights reserved.
  */
 class LocationGuideLG7Controller(args: Bundle = Bundle()) : MediaGuideController(args.apply { putString(
-  SCREEN_NAME, TAG_CONTROLLER) }){
+  SCREEN_NAME, TAG_CONTROLLER
+) }){
 
-  override val resourceId: Int = R.drawable.placeholder
+  override val resourceId: Int = R.drawable.location_guide_battery_drain
   override val titleId: Int = R.string.guide_lg7_title
   override val descriptionId: Int = R.string.guide_lg7_subtitle
   override val position: Int = 6

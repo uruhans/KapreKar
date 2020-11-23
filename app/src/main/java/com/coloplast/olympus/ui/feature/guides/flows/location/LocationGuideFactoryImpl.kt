@@ -6,6 +6,11 @@ import com.coloplast.olympus.ui.common.GenericConfirmationController
 import com.coloplast.olympus.ui.common.InfoPageController
 import com.coloplast.olympus.ui.common.flow.FlowFactory
 import com.coloplast.olympus.ui.feature.guides.flows.location.lg2.*
+import com.coloplast.olympus.ui.feature.guides.flows.location.lg3.LocationGuideLG3Controller
+import com.coloplast.olympus.ui.feature.guides.flows.location.lg4.LocationGuideLG4Controller
+import com.coloplast.olympus.ui.feature.guides.flows.location.lg5.LocationGuideLG5Controller
+import com.coloplast.olympus.ui.feature.guides.flows.location.lg6.LocationGuideLG6Controller
+import com.coloplast.olympus.ui.feature.guides.flows.location.lg7.LocationGuideLG7Controller
 
 
 /**

@@ -30,7 +30,7 @@ class SetupGuideConnectionFactoryImpl : FlowFactory<EmptyModel>() {
       }
       SetupGuideConnectionFlow.SetupGuideLocationSGC3 -> {
         InfoPageSmallButtonController.routerTransaction(
-          R.drawable.ic_bluetooth, // TODO - proper image
+          R.drawable.ic_location,
           R.string.onboarding_chapter_connecting_avoid_leaks_title,
           R.string.onboarding_chapter_connecting_avoid_leaks_description,
           showCloseButton = false

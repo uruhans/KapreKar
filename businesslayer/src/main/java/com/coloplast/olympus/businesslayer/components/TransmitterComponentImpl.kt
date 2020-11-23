@@ -141,10 +141,7 @@ class TransmitterComponentImpl(private val preferences: Preferences) : Transmitt
     }
   }
 
-  override fun syncPackagesWithCloud(
-    userId: UUID,
-    packageType: PackageType
-  ): Observable<SyncResult> {
+  override fun syncPackagesWithCloud(userId: UUID, packageType: PackageType): Observable<SyncResult> {
     return getPendingPackages(userId, packageType)
       .filter { it.isNotEmpty() }
       .doOnNext { Timber.d("Number of [$packageType] packages to sync: ${it.size}") }
@@ -176,10 +173,7 @@ class TransmitterComponentImpl(private val preferences: Preferences) : Transmitt
       }
   }
 
-  private fun getPendingPackages(
-    userId: UUID,
-    packageType: PackageType
-  ): Observable<List<TransmitterPackage>> {
+  private fun getPendingPackages(userId: UUID, packageType: PackageType): Observable<List<TransmitterPackage>> {
     return dbService.getPendingTransmitterPackages(userId, packageType)
       .map {
         if (it is DataResult.Success<*>) {

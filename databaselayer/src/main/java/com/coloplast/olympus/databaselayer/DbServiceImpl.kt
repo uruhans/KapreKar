@@ -132,18 +132,24 @@ class DbServiceImpl : DbService {
       .doOnNext { Timber.d("Number of pending [$packageType] packages in database: ${it.size}") }
       .filter { it.isNotEmpty() }
       .flatMap { packages ->
-        packages.forEach { it.syncState = SyncState.Sending }
+        if(packageType == PackageType.Raw && packages.size < 1000) {
+          Timber.d("Skipping sync of [$packageType] - less than 1000 packages")
+          Observable.just(DataResult.Empty())
+        }
+        else {
+          packages.forEach { it.syncState = SyncState.Sending }
 
-        db.transmitterPackageDao()
-          .updatePackages(packages)
-          .toObservable()
-          .doOnNext { Timber.d("Number of [$packageType] packages Updated from Pending -> Sending: $it") }
-          .map { packages.map { it.toTransmitterPackage() } }
-          .map<DataResult<List<TransmitterPackage>>> { DataResult.Success(it) }
+          db.transmitterPackageDao()
+            .updatePackages(packages)
+            .toObservable()
+            .doOnNext { Timber.d("Number of [$packageType] packages Updated from Pending -> Sending: $it") }
+            .map { packages.map { it.toTransmitterPackage() } }
+            .map<DataResult<List<TransmitterPackage>>> { DataResult.Success(it) }
+        }
       }
       .onErrorReturn {
         Timber.e(it)
-        DataResult.Empty<List<TransmitterPackage>>()
+        DataResult.Empty()
       }
   }
 

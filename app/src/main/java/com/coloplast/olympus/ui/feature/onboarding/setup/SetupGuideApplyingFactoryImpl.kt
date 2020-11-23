@@ -4,8 +4,10 @@ import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.R
 import com.coloplast.olympus.ui.common.GenericConfirmationController
 import com.coloplast.olympus.ui.common.InfoPageController
+import com.coloplast.olympus.ui.common.MediaGuideController
 import com.coloplast.olympus.ui.common.flow.FlowFactory
-import com.coloplast.olympus.ui.feature.onboarding.setup.applying.*
+import com.coloplast.olympus.ui.feature.onboarding.setup.applying.AwaitingConnectionController
+import com.coloplast.olympus.ui.feature.onboarding.setup.applying.SetupGuideApplyingSGA8Controller
 import com.coloplast.olympus.ui.feature.onboarding.setup.model.ApplyingFlowModel
 import com.coloplast.olympus.ui.feature.onboarding.setup.model.SetupGuideApplyingFlow
 import com.coloplast.olympus.ui.feature.onboarding.setup.model.TransmitterCheckerSelectionType
@@ -19,21 +21,48 @@ class SetupGuideApplyingFactoryImpl : FlowFactory<ApplyingFlowModel>() {
   }
 
   override fun getRouterTransaction(currentIndex: Int): RouterTransaction? {
+    val screenName = SetupGuideApplyingFlow.fromIndex(currentIndex).name
+
     return when (SetupGuideApplyingFlow.fromIndex(currentIndex)) {
       SetupGuideApplyingFlow.SetupGuideSG5 -> SetupGuideSG5.routerTransaction()
-      SetupGuideApplyingFlow.SetupGuideRemoveSlSGA1 -> SetupGuideApplyingSGA1Controller.routerTransaction()
+      SetupGuideApplyingFlow.SetupGuideRemoveSlSGA1 -> {
+        MediaGuideController.routerTransaction(
+          resourceId = R.raw.sg_a1_removeslreleaseliner,
+          titleId = R.string.onboarding_chapter_applying_remove_sl_title,
+          descriptionId = R.string.onboarding_chapter_applying_remove_sl_description,
+          position = 1,
+          totalCount = 3,
+          screenName = screenName,
+          showCloseButton = false
+        )
+      }
       SetupGuideApplyingFlow.SetupGuideDirectContact -> {
         InfoPageController.routerTransaction(
           R.drawable.ic_sensor_layer,
           R.string.onboarding_chapter_applying_contact_to_skin_title,
           R.string.onboarding_chapter_applying_contact_to_skin_description,
           R.string.onboarding_confirmation_button,
-          showBackButton = true,
           showCloseButton = false
         )
       }
-      SetupGuideApplyingFlow.SetupGuideApplySGA2 -> SetupGuideApplyingSGA2Controller.routerTransaction()
-      SetupGuideApplyingFlow.SetupGuideConnectorFlapSGA3 -> SetupGuideApplyingSGA3Controller.routerTransaction()
+      SetupGuideApplyingFlow.SetupGuideApplySGA2 -> MediaGuideController.routerTransaction(
+        resourceId = R.raw.sg_a2_applytobody,
+        titleId = R.string.onboarding_chapter_applying_apply_title,
+        descriptionId = R.string.onboarding_chapter_applying_apply_description,
+        position = 2,
+        totalCount = 3,
+        screenName = screenName,
+        showCloseButton = false
+      )
+      SetupGuideApplyingFlow.SetupGuideConnectorFlapSGA3 -> MediaGuideController.routerTransaction(
+        resourceId = R.raw.sg_a3_liftconnectorflap,
+        titleId = R.string.onboarding_chapter_applying_connector_flap_title,
+        descriptionId = R.string.onboarding_chapter_applying_connector_flap_description,
+        position = 3,
+        totalCount = 3,
+        screenName = screenName,
+        showCloseButton = false
+      )
       SetupGuideApplyingFlow.SetupGuidePreventDamageSGA4 -> {
         InfoPageController.routerTransaction(
           R.drawable.ic_sidemenu_transmitters,
@@ -43,9 +72,33 @@ class SetupGuideApplyingFactoryImpl : FlowFactory<ApplyingFlowModel>() {
           showCloseButton = false
         )
       }
-      SetupGuideApplyingFlow.SetupGuideTakeOutSGA5 -> SetupGuideApplyingSGA5Controller.routerTransaction()
-      SetupGuideApplyingFlow.SetupGuideEnsureClosedSGA6 -> SetupGuideApplyingSGA6Controller.routerTransaction()
-      SetupGuideApplyingFlow.SetupGuideLiftLidSGA7 -> SetupGuideApplyingSGA7Controller.routerTransaction()
+      SetupGuideApplyingFlow.SetupGuideTakeOutSGA5 -> MediaGuideController.routerTransaction(
+        resourceId = R.raw.sg_a4_takeouttm,
+        titleId = R.string.onboarding_chapter_applying_take_out_title,
+        descriptionId = R.string.onboarding_chapter_applying_take_out_description,
+        position = 1,
+        totalCount = 3,
+        screenName = screenName,
+        showCloseButton = false
+      )
+      SetupGuideApplyingFlow.SetupGuideEnsureClosedSGA6 -> MediaGuideController.routerTransaction(
+        resourceId = R.raw.sg_a_tmh3_ensuretmclosed,
+        titleId = R.string.onboarding_chapter_applying_ensure_closed_title,
+        descriptionId = R.string.onboarding_chapter_applying_ensure_closed_description,
+        position = 2,
+        totalCount = 3,
+        screenName = screenName,
+        showCloseButton = false
+      )
+      SetupGuideApplyingFlow.SetupGuideLiftLidSGA7 -> MediaGuideController.routerTransaction(
+        resourceId = R.raw.sg_a_tmh4_lifttmlid,
+        titleId = R.string.onboarding_chapter_applying_lift_lid_title,
+        descriptionId = R.string.onboarding_chapter_applying_lift_lid_description,
+        position = 3,
+        totalCount = 3,
+        screenName = screenName,
+        showCloseButton = false
+      )
       SetupGuideApplyingFlow.SetupGuideTransmitterCheckerSGA8 -> SetupGuideApplyingSGA8Controller.routerTransaction()
       SetupGuideApplyingFlow.SetupGuideWaitSGATMH1 -> {
         InfoPageController.routerTransaction(
@@ -65,9 +118,33 @@ class SetupGuideApplyingFactoryImpl : FlowFactory<ApplyingFlowModel>() {
           showCloseButton = false
         )
       }
-      SetupGuideApplyingFlow.SetupGuideEnsureClosedSGATMH3 -> SetupGuideApplyingSGATMH3Controller.routerTransaction()
-      SetupGuideApplyingFlow.SetupGuideLiftLidSGATMH4 -> SetupGuideApplyingSGATMH4Controller.routerTransaction()
-      SetupGuideApplyingFlow.SetupGuideCheckLidFixedSGATMH5 -> SetupGuideApplyingSGATMH5Controller.routerTransaction()
+      SetupGuideApplyingFlow.SetupGuideEnsureClosedSGATMH3 -> MediaGuideController.routerTransaction(
+        resourceId = R.raw.sg_a_tmh3_ensuretmclosed,
+        titleId = R.string.onboarding_chapter_applying_ensure_tm_closed_title,
+        descriptionId = R.string.onboarding_chapter_applying_ensure_tm_closed_description,
+        position = 1,
+        totalCount = 3,
+        screenName = screenName,
+        showCloseButton = false
+      )
+      SetupGuideApplyingFlow.SetupGuideLiftLidSGATMH4 -> MediaGuideController.routerTransaction(
+        resourceId = R.raw.sg_a_tmh4_lifttmlid,
+        titleId = R.string.onboarding_chapter_applying_lift_tm_lid_title,
+        descriptionId = R.string.onboarding_chapter_applying_lift_tm_lid_description,
+        position = 2,
+        totalCount = 3,
+        screenName = screenName,
+        showCloseButton = false
+      )
+      SetupGuideApplyingFlow.SetupGuideCheckLidFixedSGATMH5 -> MediaGuideController.routerTransaction(
+        resourceId = R.raw.sg_a_tmh5_checklidfixed,
+        titleId = R.string.onboarding_chapter_applying_check_lid_fixed_title,
+        descriptionId = R.string.onboarding_chapter_applying_lift_tm_lid_description,
+        position = 3,
+        totalCount = 3,
+        screenName = screenName,
+        showCloseButton = false
+      )
       SetupGuideApplyingFlow.SetupGuideContinueSGATMH6 -> {
         InfoPageController.routerTransaction(
           R.drawable.ic_icon_questionmark_circle,
@@ -87,9 +164,33 @@ class SetupGuideApplyingFactoryImpl : FlowFactory<ApplyingFlowModel>() {
           showCloseButton = false
         )
       }
-      SetupGuideApplyingFlow.SetupGuideLocateOpeningSGA10 -> SetupGuideApplyingSGA10Controller.routerTransaction()
-      SetupGuideApplyingFlow.SetupGuideIdentifySGA11 -> SetupGuideApplyingSGA11Controller.routerTransaction()
-      SetupGuideApplyingFlow.SetupGuideAttachTransmitterSGA12 -> SetupGuideApplyingSGA12Controller.routerTransaction()
+      SetupGuideApplyingFlow.SetupGuideLocateOpeningSGA10 -> MediaGuideController.routerTransaction(
+        resourceId = R.raw.sg_a6_locatetmopening,
+        titleId = R.string.onboarding_chapter_applying_locating_opening_title,
+        descriptionId = R.string.onboarding_chapter_applying_locating_opening_description,
+        position = 1,
+        totalCount = 3,
+        screenName = screenName,
+        showCloseButton = false
+      )
+      SetupGuideApplyingFlow.SetupGuideIdentifySGA11 -> MediaGuideController.routerTransaction(
+        resourceId = R.raw.sg_a7_identifyreverse,
+        titleId = R.string.onboarding_chapter_applying_identify_dark_title,
+        descriptionId = R.string.onboarding_chapter_applying_identify_dark_description,
+        position = 2,
+        totalCount = 3,
+        screenName = screenName,
+        showCloseButton = false
+      )
+      SetupGuideApplyingFlow.SetupGuideAttachTransmitterSGA12 -> MediaGuideController.routerTransaction(
+        resourceId = R.raw.sg_a12_attach_tm_flap,
+        titleId = R.string.onboarding_chapter_applying_attach_title,
+        descriptionId = R.string.onboarding_chapter_applying_attach_description,
+        position = 3,
+        totalCount = 3,
+        screenName = screenName,
+        showCloseButton = false
+      )
       SetupGuideApplyingFlow.AwaitingConnection -> AwaitingConnectionController.routerTransaction()
       SetupGuideApplyingFlow.SetupGuideAttachedSuccessSGA13 -> {
         GenericConfirmationController.routerTransaction(

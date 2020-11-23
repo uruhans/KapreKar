@@ -9,7 +9,8 @@ import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.R
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
 import com.coloplast.olympus.databinding.ControllerSetupGuideAllowLocationBinding
-import com.coloplast.olympus.ui.common.CustomToolbarController
+import com.coloplast.olympus.ui.common.BaseController
+import com.coloplast.olympus.ui.common.flow.TopMenuVisibilityListener
 import com.coloplast.olympus.ui.common.listeners.FlowListener
 import com.coloplast.olympus.ui.dialogs.CallHelpDialogController
 import com.coloplast.olympus.ui.feature.onboarding.setup.model.SetupGuideLocationSGC4UiModel
@@ -19,8 +20,8 @@ import io.reactivex.functions.Function
 import org.koin.core.inject
 
 class SetupGuideLocationSGC4Controller :
-  CustomToolbarController<ControllerSetupGuideAllowLocationBinding>(), SetupGuideLocationSGC4View,
-  CallHelpDialogController.Listener {
+  BaseController<ControllerSetupGuideAllowLocationBinding>(), SetupGuideLocationSGC4View,
+  CallHelpDialogController.Listener, TopMenuVisibilityListener {
 
   private val viewModel: SetupGuideLocationSGC4ViewModel by inject()
   private var callHelpDialogController: CallHelpDialogController? = null
@@ -34,12 +35,10 @@ class SetupGuideLocationSGC4Controller :
   private var locationEnabled = true
 
   override fun attachVariables(viewBinding: ControllerSetupGuideAllowLocationBinding) {
-    super.attachVariables(viewBinding)
     viewBinding.controller = this
   }
 
   override fun onViewBound(viewBinding: ControllerSetupGuideAllowLocationBinding) {
-    super.onViewBound(viewBinding)
     compositeDisposable.add(viewModel.bind(this))
   }
 
@@ -58,6 +57,8 @@ class SetupGuideLocationSGC4Controller :
 
     }
   }
+
+  override fun showCloseButton(): Boolean  = false
 
   fun onNextClicked() {
     if (locationEnabled) {

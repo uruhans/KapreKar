@@ -10,7 +10,6 @@ import com.coloplast.olympus.ui.common.MediaGuideController
 import com.coloplast.olympus.ui.common.flow.FlowFactory
 import com.coloplast.olympus.ui.common.flow.TopMenuFlowFactoryController
 import com.coloplast.olympus.ui.dialogs.CallHelpDialogController
-import com.coloplast.olympus.ui.feature.onboarding.setup.applying.SetupGuideApplyingSGA6Controller
 import com.coloplast.olympus.ui.feature.onboarding.setup.model.ApplyingFlowModel
 import com.coloplast.olympus.ui.feature.onboarding.setup.model.SetupGuideApplyingFlow
 import com.coloplast.olympus.ui.feature.onboarding.setup.model.TransmitterCheckerSelectionType
@@ -84,7 +83,7 @@ class SetupGuideApplyingFlowController : TopMenuFlowFactoryController<ApplyingFl
   override fun popUntil(currentIndex: Int) {
     if (currentIndex == SetupGuideApplyingFlow.SetupGuideEnsureClosedSGA6.id) {
       getFlowChildRouter().popToTag(
-        SetupGuideApplyingSGA6Controller.TAG_CONTROLLER,
+        SetupGuideApplyingFlow.SetupGuideEnsureClosedSGA6.name,
         HorizontalChangeHandler()
       )
     }

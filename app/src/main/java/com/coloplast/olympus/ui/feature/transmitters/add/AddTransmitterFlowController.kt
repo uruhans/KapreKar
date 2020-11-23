@@ -16,7 +16,6 @@ import com.coloplast.olympus.ui.dialogs.CallHelpDialogController
 import com.coloplast.olympus.ui.feature.home.HomeController
 import com.coloplast.olympus.ui.feature.onboarding.setup.SetupGuideConnectionFlowController
 import com.coloplast.olympus.ui.feature.transmitters.TransmittersController
-import com.coloplast.olympus.ui.feature.transmitters.add.at8.AddTransmitterAT8Controller
 import com.coloplast.olympus.ui.feature.transmitters.add.models.AddTransmitterFlow
 import com.coloplast.olympus.ui.feature.transmitters.add.models.AddTransmitterModel
 import org.koin.core.inject
@@ -103,7 +102,7 @@ class AddTransmitterFlowController(args: Bundle) : TopMenuFlowFactoryController<
     // if we move back from the searching controller - we want to make sure we aren't actually still connected to it
     // this could happen if something weird occurred, where the transmitter has been deleted from the local database, but
     // the service would actually still be connected to it
-    if(topController is AddTransmitterAT8Controller) {
+    if(topController is MediaGuideController && topController.args.getString(MediaGuideController.SCREEN_NAME) == AddTransmitterFlow.AddTransmitterAT8.name) {
       bluetoothManager.disconnectTransmitter(factory.getData().transmitterNameToSearchFor)
     }
   }

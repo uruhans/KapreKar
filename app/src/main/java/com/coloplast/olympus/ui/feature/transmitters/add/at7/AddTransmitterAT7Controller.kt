@@ -21,11 +21,15 @@ class AddTransmitterAT7Controller(args: Bundle = Bundle()) :
 
   private val viewModel: AddTransmitterAT7ViewModel by inject()
 
+  override val looping: Boolean = true
   override val resourceId: Int = R.raw.at7_plug_in_charger
   override val titleId: Int = R.string.guide_at7_title
   override val descriptionId: Int = R.string.guide_at7_body
   override val position: Int = 4
   override val totalCount: Int = 5
+  override var nextEnabled: Boolean = true
+  override var showBackButton: Boolean = true
+  override var showCloseButton: Boolean = false
 
   var bluetoothEnabled = true
 

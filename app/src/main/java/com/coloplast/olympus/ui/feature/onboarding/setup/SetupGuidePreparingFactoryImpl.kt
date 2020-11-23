@@ -35,7 +35,7 @@ class SetupGuidePreparingFactoryImpl : FlowFactory<EmptyModel>() {
       }
       SetupGuidePreparingFlow.SetupGuideComeBackLaterSGP1_2 -> {
         InfoPageController.routerTransaction(
-          R.drawable.ic_sidemenu_settings, // TODO - need correct image
+          R.drawable.ic_coffee,
           R.string.onboarding_chapter_preparing_come_back_later_title,
           R.string.onboarding_chapter_preparing_come_back_later_description,
           R.string.onboarding_chapter_preparing_come_back_later_button,

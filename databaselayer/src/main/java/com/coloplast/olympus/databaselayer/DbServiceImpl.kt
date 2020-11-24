@@ -125,14 +125,14 @@ class DbServiceImpl : DbService {
       .flatMapCompletable { RxHelper.completeOrError(it.toInt(), InsertOrUpdateFailedException()) }
   }
 
-  override fun getPendingTransmitterPackages(userId: UUID, packageType: PackageType): Observable<DataResult<List<TransmitterPackage>>> {
+  override fun getPendingTransmitterPackages(userId: UUID, packageType: PackageType, forceSync: Boolean): Observable<DataResult<List<TransmitterPackage>>> {
     return db.transmitterPackageDao()
       .getPendingPackagesOfType(userId.toString(), packageType)
       .toObservable()
       .doOnNext { Timber.d("Number of pending [$packageType] packages in database: ${it.size}") }
       .filter { it.isNotEmpty() }
       .flatMap { packages ->
-        if(packageType == PackageType.Raw && packages.size < 1000) {
+        if(!forceSync && packageType == PackageType.Raw && packages.size < 1000) {
           Timber.d("Skipping sync of [$packageType] - less than 1000 packages")
           Observable.just(DataResult.Empty())
         }

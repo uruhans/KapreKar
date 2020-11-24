@@ -141,7 +141,7 @@ class TransmitterComponentImpl(private val preferences: Preferences) : Transmitt
     }
   }
 
-  override fun syncPackagesWithCloud(userId: UUID, packageType: PackageType): Observable<SyncResult> {
+  override fun syncPackagesWithCloud(userId: UUID, packageType: PackageType, forceSync: Boolean): Observable<SyncResult> {
     return getPendingPackages(userId, packageType)
       .filter { it.isNotEmpty() }
       .doOnNext { Timber.d("Number of [$packageType] packages to sync: ${it.size}") }

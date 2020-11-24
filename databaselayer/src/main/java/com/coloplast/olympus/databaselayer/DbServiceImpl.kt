@@ -23,6 +23,12 @@ class DbServiceImpl : DbService {
 
   private val db = OlympusDatabase.getDatabase(AppSettings.applicationContext)
 
+  override fun clearLocalStorage(): Completable {
+    return db.transmitterPackageDao().deleteTransmitterPackages().ignoreElement()
+      .andThen(db.transmitterDao().deleteAll().ignoreElement())
+      .andThen(db.userDao().deleteUser().ignoreElement())
+  }
+
   override fun insertOrUpdateUser(user: User): Observable<User> {
     return db.userDao()
       .insertOrUpdate(DbUser.fromUser(user))
@@ -119,25 +125,31 @@ class DbServiceImpl : DbService {
       .flatMapCompletable { RxHelper.completeOrError(it.toInt(), InsertOrUpdateFailedException()) }
   }
 
-  override fun getPendingTransmitterPackages(userId: UUID, packageType: PackageType): Observable<DataResult<List<TransmitterPackage>>> {
+  override fun getPendingTransmitterPackages(userId: UUID, packageType: PackageType, forceSync: Boolean): Observable<DataResult<List<TransmitterPackage>>> {
     return db.transmitterPackageDao()
       .getPendingPackagesOfType(userId.toString(), packageType)
       .toObservable()
       .doOnNext { Timber.d("Number of pending [$packageType] packages in database: ${it.size}") }
       .filter { it.isNotEmpty() }
       .flatMap { packages ->
-        packages.forEach { it.syncState = SyncState.Sending }
+        if(!forceSync && packageType == PackageType.Raw && packages.size < 1000) {
+          Timber.d("Skipping sync of [$packageType] - less than 1000 packages")
+          Observable.just(DataResult.Empty())
+        }
+        else {
+          packages.forEach { it.syncState = SyncState.Sending }
 
-        db.transmitterPackageDao()
-          .updatePackages(packages)
-          .toObservable()
-          .doOnNext { Timber.d("Number of [$packageType] packages Updated from Pending -> Sending: $it") }
-          .map { packages.map { it.toTransmitterPackage() } }
-          .map<DataResult<List<TransmitterPackage>>> { DataResult.Success(it) }
+          db.transmitterPackageDao()
+            .updatePackages(packages)
+            .toObservable()
+            .doOnNext { Timber.d("Number of [$packageType] packages Updated from Pending -> Sending: $it") }
+            .map { packages.map { it.toTransmitterPackage() } }
+            .map<DataResult<List<TransmitterPackage>>> { DataResult.Success(it) }
+        }
       }
       .onErrorReturn {
         Timber.e(it)
-        DataResult.Empty<List<TransmitterPackage>>()
+        DataResult.Empty()
       }
   }
 

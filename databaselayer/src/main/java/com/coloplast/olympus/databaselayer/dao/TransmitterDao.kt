@@ -9,6 +9,9 @@ import io.reactivex.Single
 @Dao
 interface TransmitterDao {
 
+  @Query("DELETE FROM DbTransmitter")
+  fun deleteTransmitters() : Single<Int>
+
   @Insert(onConflict = OnConflictStrategy.REPLACE)
   fun insertOrUpdate(dbTransmitter: DbTransmitter): Single<Long>
 

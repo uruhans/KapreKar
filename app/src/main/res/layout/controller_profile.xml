@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto">
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools">
 
   <data>
 
@@ -28,7 +29,9 @@
 
     <ScrollView
       android:layout_width="match_parent"
-      android:layout_height="match_parent">
+      android:layout_height="match_parent"
+      app:visibleOrGone="@{controller.hasUserProfile}"
+      tools:visibility="gone">
 
       <LinearLayout
         android:layout_width="match_parent"
@@ -337,6 +340,45 @@
       </LinearLayout>
 
     </ScrollView>
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="@dimen/spacing_larger"
+      android:layout_marginEnd="@dimen/spacing_larger"
+      android:layout_marginBottom="@dimen/spacing_double"
+      app:visibleOrGone="@{!controller.hasUserProfile}"
+      android:orientation="vertical">
+
+      <TextView
+        style="@style/TextStyle.Coloplast.Bold.DarkGrey.32"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/profile_pp_title" />
+
+      <ImageView
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_marginTop="@dimen/spacing_triple"
+        android:src="@drawable/ic_info_circle"
+        app:tint="@color/colorAccent" />
+
+      <TextView
+        style="@style/TextStyle.Coloplast.Bold.DarkGrey.24"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_standard"
+        android:text="@string/profile_pp_no_profile_title" />
+
+      <TextView
+        style="@style/TextStyle.Roboto.Regular.ClearGrey.18"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_small"
+        android:layout_marginBottom="@dimen/spacing_small"
+        android:text="@string/profile_pp_no_profile_description" />
+
+    </LinearLayout>
 
   </LinearLayout>
 </layout>

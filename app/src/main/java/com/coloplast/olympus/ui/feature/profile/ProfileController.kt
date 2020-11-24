@@ -34,6 +34,8 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
 
   private var imageDialogController: ImageDialogController? = null
 
+  val hasUserProfile = ObservableBoolean()
+
   val stomaValues by lazy {
     StomaType.values()
       .map { applicationContext!!.getString(it.stringId) }
@@ -96,14 +98,13 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
         showConsentOverlay()
       }
       else if(dataPolicyAccepted.get()){
-        // accepting consent
+        // accepting consent - currently never being hit
         changeConsent(true)
       }
     }
   }
 
   private fun showConsentOverlay() {
-    // TODO - show consent overlay
     imageDialogController = ImageDialogController.create(
       this,
       REQUEST_CODE_CONSENT_DIALOG,
@@ -147,32 +148,23 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
         is ProfileUiModel.FetchedUser -> {
           user = uiModel.user
           updateUserData(user)
-
-          addChangeListeners()
         }
         is ProfileUiModel.UserUpdated -> {
-          // TODO - show updates success
+          user = uiModel.user
+
+          // reset changes made
           infoChanged = false
           healthInfoChanged = false
           consentChanged = false
           userProfileChanged = false
+
+          updateUserData(user)
         }
         is ProfileUiModel.UpdateFailed -> {
           Toast.makeText(activity!!, "Could not update server", Toast.LENGTH_SHORT).show()
         }
       }
     }
-  }
-
-  private fun addChangeListeners() {
-    firstName.addOnPropertyChangedCallback(profileVarsChangedCallback)
-    lastName.addOnPropertyChangedCallback(profileVarsChangedCallback)
-    phoneNumber.addOnPropertyChangedCallback(profileVarsChangedCallback)
-    email.addOnPropertyChangedCallback(profileVarsChangedCallback)
-    stomaSpinnerPosition.addOnPropertyChangedCallback(profileVarsChangedCallback)
-    surgerySpinnerPosition.addOnPropertyChangedCallback(profileVarsChangedCallback)
-    insuranceSpinnerPosition.addOnPropertyChangedCallback(profileVarsChangedCallback)
-    dataPolicyAccepted.addOnPropertyChangedCallback(consentChangedCallback)
   }
 
   private fun updateUserData(user: User) {
@@ -195,6 +187,10 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
     }
 
     dataPolicyAccepted.set(user.consent)
+    hasUserProfile.set(user.consent)
+
+    // add callbacks again to support changes made to user profile
+    addCallbacks()
   }
 
   fun onLogoutClicked() {
@@ -240,11 +236,15 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
       user.consent = dataPolicyAccepted.get()
     }
 
+    // remove callbacks so we dont get a million updates when we update user data later
+    removeCallbacks()
     updateUserRelay.accept(user)
   }
 
   // TODO - add this to actual buttons in the xml when ready
   fun discardChangesClicked() {
+    // remove callbacks so we dont get a million updates when we update user data later
+    removeCallbacks()
     updateUserData(user)
   }
 
@@ -255,19 +255,6 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
   override fun onCloseClicked() {
     DrawerStateDispatcher.closeNavigationDrawerOnHome()
     super.onCloseClicked()
-  }
-
-  override fun onUnbind(viewBinding: ControllerProfileBinding) {
-    super.onUnbind(viewBinding)
-
-    firstName.removeOnPropertyChangedCallback(profileVarsChangedCallback)
-    lastName.removeOnPropertyChangedCallback(profileVarsChangedCallback)
-    phoneNumber.removeOnPropertyChangedCallback(profileVarsChangedCallback)
-    email.removeOnPropertyChangedCallback(profileVarsChangedCallback)
-    stomaSpinnerPosition.removeOnPropertyChangedCallback(profileVarsChangedCallback)
-    surgerySpinnerPosition.removeOnPropertyChangedCallback(profileVarsChangedCallback)
-    insuranceSpinnerPosition.removeOnPropertyChangedCallback(profileVarsChangedCallback)
-    dataPolicyAccepted.removeOnPropertyChangedCallback(consentChangedCallback)
   }
 
   override fun handleBack(): Boolean {
@@ -339,14 +326,43 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
       }
       REQUEST_CODE_CONSENT_DIALOG -> {
         // set consent to false and update the user
-        // TODO - this probably have to change at some point
         user.consent = false
+
+        // remove callbacks so we dont get a million updates when we update user data later
+        removeCallbacks()
         updateUserRelay.accept(user)
       }
       else -> {
         super.onDialogDismissed(requestCode)
       }
     }
+  }
+
+  private fun addCallbacks() {
+    firstName.addOnPropertyChangedCallback(profileVarsChangedCallback)
+    lastName.addOnPropertyChangedCallback(profileVarsChangedCallback)
+    phoneNumber.addOnPropertyChangedCallback(profileVarsChangedCallback)
+    email.addOnPropertyChangedCallback(profileVarsChangedCallback)
+    stomaSpinnerPosition.addOnPropertyChangedCallback(profileVarsChangedCallback)
+    surgerySpinnerPosition.addOnPropertyChangedCallback(profileVarsChangedCallback)
+    insuranceSpinnerPosition.addOnPropertyChangedCallback(profileVarsChangedCallback)
+    dataPolicyAccepted.addOnPropertyChangedCallback(consentChangedCallback)
+  }
+
+  private fun removeCallbacks() {
+    firstName.removeOnPropertyChangedCallback(profileVarsChangedCallback)
+    lastName.removeOnPropertyChangedCallback(profileVarsChangedCallback)
+    phoneNumber.removeOnPropertyChangedCallback(profileVarsChangedCallback)
+    email.removeOnPropertyChangedCallback(profileVarsChangedCallback)
+    stomaSpinnerPosition.removeOnPropertyChangedCallback(profileVarsChangedCallback)
+    surgerySpinnerPosition.removeOnPropertyChangedCallback(profileVarsChangedCallback)
+    insuranceSpinnerPosition.removeOnPropertyChangedCallback(profileVarsChangedCallback)
+    dataPolicyAccepted.removeOnPropertyChangedCallback(consentChangedCallback)
+  }
+
+  override fun onUnbind(viewBinding: ControllerProfileBinding) {
+    super.onUnbind(viewBinding)
+    removeCallbacks()
   }
 
   companion object {

@@ -130,12 +130,13 @@ class BluetoothServiceViewModel(
     val immediateConnectionObservable = dbTransmittersObservable
       // convert the list of transmitters into single items to be emitted
       .flatMapIterable { it }
-      .flatMap { dbTransmitter ->
-        connectedBleDevicesObservable
-          // make sure we are not already connected to it
-          .filter { connectedDevices -> connectedDevices.none { it == dbTransmitter.id } }
-          .map { dbTransmitter.id }
-      }
+      .map { it.id }
+//      .flatMap { dbTransmitter ->
+//        connectedBleDevicesObservable
+//          // make sure we are not already connected to it
+//          .filter { connectedDevices -> connectedDevices.none { it == dbTransmitter.id } }
+//          .map { dbTransmitter.id }
+//      }
 
     val retryObservable = ServiceDispatcher.serviceEventObservable()
       .filter { it is ServiceEvent.RetryConnection }
@@ -173,6 +174,7 @@ class BluetoothServiceViewModel(
 
     val connectTransmitterObservable = devicesToConnectToObservable
       .doOnNext { connectedBleDevicesList.add(it) }
+      .distinctUntilChanged()
       .flatMap { connectObservable(it) }
 
     compositeDisposable.add(retryObservable.map<BluetoothServiceModel> { BluetoothServiceModel.ScanningStarted() }.bind(serviceResult.onResult()))

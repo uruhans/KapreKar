@@ -1,5 +1,6 @@
 package com.coloplast.olympus.ui.feature.about
 
+import android.content.Intent
 import androidx.annotation.StringRes
 import androidx.databinding.ObservableField
 import com.artemzin.rxui.RxUi
@@ -42,7 +43,7 @@ class AboutController : CustomToolbarController<ControllerAboutBinding>(), Gener
   override fun render(): Function<Observable<GenericUiModel>, Disposable> {
     return RxUi.ui { uiModel ->
 
-      when(uiModel) {
+      when (uiModel) {
         is GenericUiModel.Success<*> -> {
           val txData = uiModel.data as List<Transmitter>
 
@@ -70,6 +71,11 @@ class AboutController : CustomToolbarController<ControllerAboutBinding>(), Gener
 
   fun onEmailClicked(@StringRes resId: Int) {
     val email = getString(resId).toString()
+
+    val emailIntent = Intent(Intent.ACTION_SEND)
+    emailIntent.type = "message/rfc822"
+    emailIntent.putExtra(Intent.EXTRA_EMAIL, email)
+    activity!!.startActivity(Intent.createChooser(emailIntent, getString(R.string.onboarding_email_title)))
   }
 
   override fun getLayout(): Int = R.layout.controller_about

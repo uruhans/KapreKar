@@ -22,7 +22,7 @@
       android:layout_marginTop="@dimen/spacing_larger"
       android:layout_marginStart="@dimen/spacing_standard"
       android:layout_marginBottom="@dimen/spacing_half"
-      android:scaleType="fitXY"
+      android:scaleType="centerCrop"
       app:resource="@{item.image}"
       app:visibleOrGone="@{item.showImage}"
       tools:src="@drawable/guide_get_started_1" />

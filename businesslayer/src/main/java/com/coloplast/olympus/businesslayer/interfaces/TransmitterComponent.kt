@@ -23,7 +23,7 @@ interface TransmitterComponent {
 
   /** Syncing with future cloud **/
   fun deletePackagesAlreadySynced(packageType: PackageType): Observable<SyncResult>
-  fun syncPackagesWithCloud(userId: UUID, packageType: PackageType): Observable<SyncResult>
+  fun syncPackagesWithCloud(userId: UUID, packageType: PackageType, forceSync: Boolean = false) : Observable<SyncResult>
   fun pendingPackagesRemaining(userId: UUID, packageType: PackageType) : Single<Int>
 
   fun syncTransmitters(userId: UUID) : Observable<SyncResult>

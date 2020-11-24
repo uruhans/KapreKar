@@ -39,40 +39,6 @@
         android:orientation="vertical">
 
         <TextView
-          style="@style/TextStyle.Coloplast.Bold.DarkGrey.32"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:text="@string/about_ap_title" />
-
-        <TextView
-          style="@style/TextStyle.Coloplast.Bold.DarkGrey.20"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="@dimen/spacing_triple"
-          android:text="@string/about_ap_section1_header" />
-
-        <TextView
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:text="@string/about_ap_section1_description"
-          android:layout_marginTop="@dimen/spacing_small" />
-
-        <Button
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:text="@string/about_ap_section1_link_text"
-          style="@style/Button.Borderless"
-          android:textAlignment="textStart"
-          android:textAllCaps="false"
-          android:onClick="@{() -> controller.onLinkOneClicked()}"/>
-
-        <View
-          android:layout_width="match_parent"
-          android:layout_height="1dp"
-          android:layout_marginTop="@dimen/spacing_double"
-          android:background="@color/patch_grey" />
-
-        <TextView
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_marginTop="@dimen/spacing_double"
@@ -85,6 +51,30 @@
           android:layout_marginTop="@dimen/spacing_small"
           android:text="@string/about_ap_section2_description"
           style="@style/TextStyle.Roboto.Regular.ClearGrey.16" />
+
+        <Button
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:text="@string/about_ap_heylo_website_link"
+          style="@style/Button.Borderless"
+          android:textAlignment="textStart"
+          android:textAllCaps="false"
+          android:onClick="@{() -> controller.onLinkTwoClicked()}"/>
+
+        <Button
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:text="@string/about_ap_section2_link_text"
+          style="@style/Button.Borderless"
+          android:textAlignment="textStart"
+          android:textAllCaps="false"
+          android:onClick="@{() -> controller.onLinkTwoClicked()}"/>
+
+        <View
+          android:layout_width="match_parent"
+          android:layout_height="1dp"
+          android:layout_marginTop="@dimen/spacing_double"
+          android:background="@color/patch_grey" />
 
         <TextView
           android:layout_width="match_parent"
@@ -122,6 +112,35 @@
           android:textAlignment="textStart"
           android:textAllCaps="false"
           android:onClick="@{() -> controller.onLinkTwoClicked()}"/>
+
+        <TextView
+          style="@style/TextStyle.Coloplast.Bold.DarkGrey.32"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/about_ap_title" />
+
+        <TextView
+          style="@style/TextStyle.Coloplast.Bold.DarkGrey.20"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/spacing_triple"
+          android:text="@string/about_ap_section1_header" />
+
+        <TextView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:text="@string/about_ap_section1_description"
+          android:layout_marginTop="@dimen/spacing_small" />
+
+        <Button
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:text="@string/about_ap_section1_link_text"
+          style="@style/Button.Borderless"
+          android:textAlignment="textStart"
+          android:textAllCaps="false"
+          android:onClick="@{() -> controller.onLinkOneClicked()}"/>
+
 
       </LinearLayout>
 

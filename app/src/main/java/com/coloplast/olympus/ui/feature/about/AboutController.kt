@@ -1,28 +1,67 @@
 package com.coloplast.olympus.ui.feature.about
 
+import android.content.Intent
+import androidx.annotation.StringRes
+import androidx.databinding.ObservableField
+import com.artemzin.rxui.RxUi
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerAboutBinding
+import com.coloplast.olympus.shared.models.Transmitter
 import com.coloplast.olympus.ui.common.CustomToolbarController
 import com.coloplast.olympus.ui.common.DrawerStateDispatcher
 import com.coloplast.olympus.ui.common.WebViewController
+import com.coloplast.olympus.ui.common.models.GenericUiModel
+import com.coloplast.olympus.ui.common.models.GenericView
+import com.coloplast.olympus.utils.DeviceUtils
+import io.reactivex.Observable
+import io.reactivex.disposables.Disposable
+import io.reactivex.functions.Function
+import org.koin.core.inject
 
+class AboutController : CustomToolbarController<ControllerAboutBinding>(), GenericView {
 
-/**
- * Created by Kike Bodi (ebp@dawnhealth.com) on 10/09/2020.
- * Copyright by Dawn Health A/S. All rights reserved.
- */
-class AboutController: CustomToolbarController<ControllerAboutBinding>() {
+  private val viewModel: AboutViewModel by inject()
+
+  val appVersion = DeviceUtils.getAppVersion()
+
+  val nameTx1 = ObservableField<String>()
+  val nameTx2 = ObservableField<String>()
 
   override fun attachVariables(viewBinding: ControllerAboutBinding) {
     super.attachVariables(viewBinding)
     viewBinding.controller = this
   }
 
-  //TODO: Give these methods a better naming.
-  fun onLinkOneClicked(){
-    val url = getString(R.string.about_ap_section1_link).toString()
+  override fun onViewBound(viewBinding: ControllerAboutBinding) {
+    super.onViewBound(viewBinding)
+
+    compositeDisposable.add(viewModel.bind(this))
+  }
+
+  override fun render(): Function<Observable<GenericUiModel>, Disposable> {
+    return RxUi.ui { uiModel ->
+
+      when (uiModel) {
+        is GenericUiModel.Success<*> -> {
+          val txData = uiModel.data as List<Transmitter>
+
+          val firstTx = txData.first()
+          val secondTx = txData.lastOrNull { it.id != firstTx.id }
+
+          nameTx1.set("${firstTx.name} (v${firstTx.firmwareVersion})")
+          secondTx?.let {
+            nameTx2.set("${it.name} (v${it.firmwareVersion})")
+          }
+        }
+      }
+    }
+  }
+
+  fun onLinkClicked(@StringRes resId: Int) {
+    val url = getString(resId).toString()
+
     getContentRouter().pushController(
       WebViewController.getRouterTransaction(url)
         .pushChangeHandler(VerticalChangeHandler())
@@ -30,13 +69,13 @@ class AboutController: CustomToolbarController<ControllerAboutBinding>() {
     )
   }
 
-  fun onLinkTwoClicked(){
-    val url = getString(R.string.about_ap_section2_link).toString()
-    getContentRouter().pushController(
-      WebViewController.getRouterTransaction(url)
-        .pushChangeHandler(VerticalChangeHandler())
-        .popChangeHandler(VerticalChangeHandler())
-    )
+  fun onEmailClicked(@StringRes resId: Int) {
+    val email = getString(resId).toString()
+
+    val emailIntent = Intent(Intent.ACTION_SEND)
+    emailIntent.type = "message/rfc822"
+    emailIntent.putExtra(Intent.EXTRA_EMAIL, email)
+    activity?.startActivity(Intent.createChooser(emailIntent, getString(R.string.onboarding_email_title)))
   }
 
   override fun getLayout(): Int = R.layout.controller_about
@@ -48,7 +87,7 @@ class AboutController: CustomToolbarController<ControllerAboutBinding>() {
     super.onCloseClicked()
   }
 
-  companion object{
+  companion object {
 
     private const val CONTROLLER_TAG = "about_controller"
 

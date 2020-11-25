@@ -4,6 +4,13 @@
 <string name="about_ap_about_coloplast_header">About Coloplast</string>
 <string name="about_ap_heylo_terms_of_use_website_link">https://www.coloplast.com/global/heylo-privacy-notice/</string>
 <string name="about_ap_heylo_website_link">https://countrysite.coloplast.com/en-GB/landingpages/heylo/</string>
+<string name="about_ap_heylo_coloplast_website">Coloplast website</string>
+<string name="about_ap_heylo_compatible_phones_link">https://countrysite.coloplast.com/en-GB/landingpages/heylo/</string>
+<string name="about_ap_heylo_compatible_phones_text">List compatible phones</string>
+<string name="about_ap_heylo_privacy_policy_link">https://countrysite.coloplast.com/en-GB/landingpages/heylo/</string>
+<string name="about_ap_heylo_privacy_policy_text">Privacy Policy</string>
+<string name="about_ap_heylo_terms_of_use_text">Terms and Conditions</string>
+<string name="about_ap_heylo_website_text">Heylo™ website</string>
 <string name="about_ap_legal_description">For more information about how Coloplast is processing your data, your rights, how to contact Coloplast and Terms of use please see the links below:</string>
 <string name="about_ap_legal_title">Legal</string>
 <string name="about_ap_manufacturer">Manufacturer</string>
@@ -14,7 +21,7 @@
 <string name="about_ap_section2_description">Heylo™ is a leakage notification system that detects and notifies you about leakage - giving you the peace of mind to get on with being you. \n\nDesigned to be used together with your ostomy appliance, Heylo™ is connected to your smartphone via Bluetooth and will notify you discreetly if leakage is detected, it also allows you to check the status of your baseplate directly in the app.</string>
 <string name="about_ap_section2_header">About Heylo™</string>
 <string name="about_ap_section2_link">https://www.coloplast.co.uk/global/terms-and-conditions/</string>
-<string name="about_ap_section2_link_text">Coloplast® Terms of Use</string>
+<string name="about_ap_section2_link_text">Coloplast® Terms and conditions</string>
 <string name="about_ap_section2_subsection1_description">Nori grape silver beet broccoli kombu beet greens fava bean potato quandong celery. Bunya nuts black  yed pea prairie turnip leek lentil turnip greens parsnip. Sea lettuce lettuce water chestnut eggplant winter purslane fennel azuki bean earthnut pea sierra leone bologi leek soko chicory celtuce parsley jícama salsify.</string>
 <string name="about_ap_section2_subsection1_header">[The benefits of Heylo™]</string>
 <string name="about_ap_title">About</string>
@@ -554,7 +561,7 @@
 <string name="onboarding_chapter_intro_sensor_technology_description">On the reverse side, you can see the advanced sensor technology - one sensor under each of the small dots.</string>
 <string name="onboarding_chapter_intro_sensor_technology_title">Advanced sensor technology</string>
 <string name="onboarding_chapter_intro_setup_guide">Setup guide</string>
-<string name="onboarding_chapter_intro_setup_guide_message">This guide will take you step-by-step through the process of setting up Heylo™ and applying in to your body.</string>
+<string name="onboarding_chapter_intro_setup_guide_message">This guide will take you step-by-step through the process of setting up Heylo™ and applying it to your body.</string>
 <string name="onboarding_chapter_intro_transmitter_description">This is your transmitter. It communicates with your phone via Bluetooth, to keep you informed of any signs of leakage.</string>
 <string name="onboarding_chapter_intro_transmitter_lid_description">Your transmitter has a lid on the front side. Lifting the lidt one \'click\' to a fixed, lifted position prepares it for attaching to a sensor layer.</string>
 <string name="onboarding_chapter_intro_transmitter_lid_title">Lifting the transmitter lid</string>

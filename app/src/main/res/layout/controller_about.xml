@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto">
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools">
 
   <data>
+
+    <import type="com.coloplast.olympus.R" />
 
     <variable
       name="toolbarSupport"
@@ -46,25 +49,35 @@
 
         <TextView
           style="@style/TextStyle.Coloplast.Bold.DarkGrey.20"
-          android:layout_width="wrap_content"
+          android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_marginTop="@dimen/spacing_triple"
-          android:text="@string/about_ap_section1_header" />
+          android:layout_marginTop="@dimen/spacing_double"
+          android:text="@string/about_ap_section2_header" />
 
         <TextView
+          style="@style/TextStyle.Roboto.Regular.ClearGrey.16"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:text="@string/about_ap_section1_description"
-          android:layout_marginTop="@dimen/spacing_small" />
+          android:layout_marginTop="@dimen/spacing_small"
+          android:text="@string/about_ap_section2_description" />
 
         <Button
+          style="@style/Button.Borderless"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:text="@string/about_ap_section1_link_text"
-          style="@style/Button.Borderless"
+          android:onClick="@{() -> controller.onLinkClicked(R.string.about_ap_heylo_website_link)}"
+          android:text="@string/about_ap_heylo_website_text"
           android:textAlignment="textStart"
-          android:textAllCaps="false"
-          android:onClick="@{() -> controller.onLinkOneClicked()}"/>
+          android:textAllCaps="false" />
+
+        <Button
+          style="@style/Button.Borderless"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:onClick="@{() -> controller.onLinkClicked(R.string.about_ap_heylo_compatible_phones_link)}"
+          android:text="@string/about_ap_heylo_compatible_phones_text"
+          android:textAlignment="textStart"
+          android:textAllCaps="false" />
 
         <View
           android:layout_width="match_parent"
@@ -73,55 +86,334 @@
           android:background="@color/patch_grey" />
 
         <TextView
+          style="@style/TextStyle.Coloplast.Bold.DarkGrey.20"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_marginTop="@dimen/spacing_double"
-          android:text="@string/about_ap_section2_header"
-          style="@style/TextStyle.Coloplast.Bold.DarkGrey.20" />
+          android:text="@string/about_ap_about_coloplast_header" />
 
         <TextView
+          style="@style/TextStyle.Roboto.Regular.ClearGrey.16"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_marginTop="@dimen/spacing_small"
-          android:text="@string/about_ap_section2_description"
-          style="@style/TextStyle.Roboto.Regular.ClearGrey.16" />
-
-        <TextView
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="@dimen/spacing_larger"
-          android:text="@string/about_ap_section2_subsection1_header"
-          style="@style/TextStyle.Coloplast.Bold.DarkGrey.16" />
-
-        <TextView
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="@dimen/spacing_small"
-          android:text="@string/about_ap_section2_subsection1_description"
-          style="@style/TextStyle.Roboto.Regular.ClearGrey.16" />
-
-        <TextView
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="@dimen/spacing_larger"
-          android:text="@string/about_ap_section2_subsection1_header"
-          style="@style/TextStyle.Coloplast.Bold.DarkGrey.16" />
-
-        <TextView
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="@dimen/spacing_small"
-          android:text="@string/about_ap_section2_subsection1_description"
-          style="@style/TextStyle.Roboto.Regular.ClearGrey.16" />
+          android:text="@string/about_ap_about_coloplast_description" />
 
         <Button
+          style="@style/Button.Borderless"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:text="@string/about_ap_section2_link_text"
-          style="@style/Button.Borderless"
+          android:onClick="@{() -> controller.onLinkClicked(R.string.about_ap_section1_link)}"
+          android:text="@string/about_ap_heylo_coloplast_website"
           android:textAlignment="textStart"
-          android:textAllCaps="false"
-          android:onClick="@{() -> controller.onLinkTwoClicked()}"/>
+          android:textAllCaps="false" />
+
+        <View
+          android:layout_width="match_parent"
+          android:layout_height="1dp"
+          android:layout_marginTop="@dimen/spacing_double"
+          android:background="@color/patch_grey" />
+
+        <TextView
+          style="@style/TextStyle.Coloplast.Bold.DarkGrey.20"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/spacing_double"
+          android:text="@string/about_ap_write_to_us_header" />
+
+        <TextView
+          style="@style/TextStyle.Roboto.Regular.ClearGrey.16"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/spacing_small"
+          android:text="@string/about_ap_write_to_us_description" />
+
+        <Button
+          style="@style/Button.Borderless"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:onClick="@{() -> controller.onEmailClicked(R.string.contact_cp_support_email)}"
+          android:text="@string/contact_cp_support_email"
+          android:textAlignment="textStart"
+          android:textAllCaps="false" />
+
+        <View
+          android:layout_width="match_parent"
+          android:layout_height="1dp"
+          android:layout_marginTop="@dimen/spacing_double"
+          android:background="@color/patch_grey" />
+
+        <TextView
+          style="@style/TextStyle.Coloplast.Bold.DarkGrey.20"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/spacing_double"
+          android:text="@string/about_ap_section1_header" />
+
+        <TextView
+          style="@style/TextStyle.Roboto.Regular.ClearGrey.16"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/spacing_small"
+          android:text="@string/about_ap_section1_description" />
+
+        <Button
+          style="@style/Button.Borderless"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:onClick="@{() -> controller.onLinkClicked(R.string.about_ap_heylo_website_link)}"
+          android:text="@string/about_ap_heylo_website_text"
+          android:textAlignment="textStart"
+          android:textAllCaps="false" />
+
+        <View
+          android:layout_width="match_parent"
+          android:layout_height="1dp"
+          android:layout_marginTop="@dimen/spacing_double"
+          android:background="@color/patch_grey" />
+
+        <TextView
+          style="@style/TextStyle.Coloplast.Bold.DarkGrey.20"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/spacing_double"
+          android:text="@string/about_ap_legal_title" />
+
+        <TextView
+          style="@style/TextStyle.Roboto.Regular.ClearGrey.16"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/spacing_small"
+          android:text="@string/about_ap_legal_description" />
+
+        <Button
+          style="@style/Button.Borderless"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:onClick="@{() -> controller.onLinkClicked(R.string.about_ap_heylo_terms_of_use_website_link)}"
+          android:text="@string/about_ap_heylo_terms_of_use_text"
+          android:textAlignment="textStart"
+          android:textAllCaps="false" />
+
+        <Button
+          style="@style/Button.Borderless"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:onClick="@{() -> controller.onLinkClicked(R.string.about_ap_heylo_privacy_policy_link)}"
+          android:text="@string/about_ap_heylo_privacy_policy_text"
+          android:textAlignment="textStart"
+          android:textAllCaps="false" />
+
+        <View
+          android:layout_width="match_parent"
+          android:layout_height="1dp"
+          android:layout_marginTop="@dimen/spacing_double"
+          android:background="@color/patch_grey" />
+
+        <TextView
+          style="@style/TextStyle.Coloplast.Bold.DarkGrey.20"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/spacing_double"
+          android:text="@string/about_ap_manufacturer" />
+
+        <ImageView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/spacing_double"
+          android:src="@drawable/ic_coloplast_logo_big" />
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="@dimen/spacing_half"
+          android:layout_marginTop="@dimen/spacing_large"
+          android:orientation="horizontal">
+
+          <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_manufacturer" />
+
+          <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_standard"
+            android:orientation="vertical">
+
+            <TextView
+              style="@style/TextStyle.Roboto.Medium"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginTop="@dimen/spacing_small"
+              android:text="@string/settings_footer_company_name"
+              android:textSize="16sp" />
+
+            <TextView
+              style="@style/TextStyle.Roboto.Regular.ClearGrey.14"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:text="@string/settings_footer_company_address" />
+
+          </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+          style="@style/TextStyle.Roboto.Medium"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/spacing_large"
+          android:text="@string/settings_footer_app_version"
+          android:textSize="16sp" />
+
+        <TextView
+          style="@style/TextStyle.Roboto.Medium"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:text="@{controller.appVersion}"
+          android:textColor="@color/grey"
+          tools:text="1.7.1 (2323)" />
+
+        <TextView
+          style="@style/TextStyle.Roboto.Medium"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/spacing_small"
+          android:text="@string/about_ap_transmitter_firmware_version"
+          android:textSize="16sp" />
+
+        <TextView
+          style="@style/TextStyle.Roboto.Medium"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:text="@{controller.nameTx1}"
+          android:textColor="@color/grey"
+          tools:text="--01 (v1.7.1)" />
+
+        <TextView
+          style="@style/TextStyle.Roboto.Medium"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:text="@{controller.nameTx2}"
+          android:textColor="@color/grey"
+          app:visibleOrGone="@{controller.nameTx2 != null}"
+          tools:text="--02 (v1.7.1)" />
+
+        <View
+          android:layout_width="match_parent"
+          android:layout_height="1dp"
+          android:layout_marginTop="@dimen/spacing_double"
+          android:background="@color/patch_grey" />
+
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/spacing_double"
+          android:orientation="horizontal">
+
+          <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_lot" />
+
+          <TextView
+            style="@style/TextStyle.Roboto.Medium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="@dimen/spacing_standard"
+            android:text="000"
+            android:textColor="@color/grey" />
+
+        </LinearLayout>
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/spacing_standard"
+          android:orientation="horizontal">
+
+          <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_gtin" />
+
+          <TextView
+            style="@style/TextStyle.Roboto.Medium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="@dimen/spacing_standard"
+            android:text="000"
+            android:textColor="@color/grey" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/spacing_standard"
+          android:orientation="horizontal">
+
+          <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_udi" />
+
+          <TextView
+            style="@style/TextStyle.Roboto.Medium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="@dimen/spacing_standard"
+            android:text="000"
+            android:textColor="@color/grey" />
+
+        </LinearLayout>
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/spacing_standard"
+          android:orientation="horizontal">
+
+          <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_ref" />
+
+          <TextView
+            style="@style/TextStyle.Roboto.Medium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="@dimen/spacing_standard"
+            android:text="000"
+            android:textColor="@color/grey" />
+
+        </LinearLayout>
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/spacing_double"
+          android:layout_marginBottom="@dimen/spacing_triple"
+          android:orientation="horizontal">
+
+          <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_blue_circle_reading_dude" />
+
+          <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_large"
+            android:src="@drawable/ic_ce_mark" />
+
+        </LinearLayout>
 
       </LinearLayout>
 

@@ -2,8 +2,15 @@
 <resources>
 <string name="about_ap_about_coloplast_description">At coloplast, we work to make life easier for people with intimate healthcare needs. By listening to the people who use our products - users as well as the nurses and specialists who care for them - we get a better understanding of their needs and challenges.\nThat knowledge inspires our innovation.</string>
 <string name="about_ap_about_coloplast_header">About Coloplast</string>
+<string name="about_ap_heylo_coloplast_website">Coloplast website</string>
+<string name="about_ap_heylo_compatible_phones_link">https://countrysite.coloplast.com/en-GB/landingpages/heylo/</string>
+<string name="about_ap_heylo_compatible_phones_text">List compatible phones</string>
+<string name="about_ap_heylo_privacy_policy_link">https://countrysite.coloplast.com/en-GB/landingpages/heylo/</string>
+<string name="about_ap_heylo_privacy_policy_text">Privacy Policy</string>
+<string name="about_ap_heylo_terms_of_use_text">Terms and Conditions</string>
 <string name="about_ap_heylo_terms_of_use_website_link">https://www.coloplast.com/global/heylo-privacy-notice/</string>
 <string name="about_ap_heylo_website_link">https://countrysite.coloplast.com/en-GB/landingpages/heylo/</string>
+<string name="about_ap_heylo_website_text">Heylo™ website</string>
 <string name="about_ap_legal_description">For more information about how Coloplast is processing your data, your rights, how to contact Coloplast and Terms of use please see the links below:</string>
 <string name="about_ap_legal_title">Legal</string>
 <string name="about_ap_manufacturer">Manufacturer</string>
@@ -553,7 +560,7 @@
 <string name="onboarding_chapter_intro_sensor_technology_description">On the reverse side, you can see the advanced sensor technology - one sensor under each of the small dots.</string>
 <string name="onboarding_chapter_intro_sensor_technology_title">Advanced sensor technology</string>
 <string name="onboarding_chapter_intro_setup_guide">[Missing translation]</string>
-<string name="onboarding_chapter_intro_setup_guide_message">This guide will take you step-by-step through the process of setting up Heylo™ and applying in to your body.</string>
+<string name="onboarding_chapter_intro_setup_guide_message">This guide will take you step-by-step through the process of setting up Heylo™ and applying it to your body.</string>
 <string name="onboarding_chapter_intro_transmitter_description">This is your transmitter. It communicates with your phone via Bluetooth, to keep you informed of any signs of leakage.</string>
 <string name="onboarding_chapter_intro_transmitter_lid_description">Your transmitter has a lid on the front side. Lifting the lidt one \'click\' to a fixed, lifted position prepares it for attaching to a sensor layer.</string>
 <string name="onboarding_chapter_intro_transmitter_lid_title">Lifting the transmitter lid</string>

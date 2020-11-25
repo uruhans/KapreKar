@@ -75,9 +75,7 @@ class AboutController : CustomToolbarController<ControllerAboutBinding>(), Gener
     val emailIntent = Intent(Intent.ACTION_SEND)
     emailIntent.type = "message/rfc822"
     emailIntent.putExtra(Intent.EXTRA_EMAIL, email)
-    activity?.let {
-      it.startActivity(Intent.createChooser(emailIntent, getString(R.string.onboarding_email_title)))
-    }
+    activity?.startActivity(Intent.createChooser(emailIntent, getString(R.string.onboarding_email_title)))
   }
 
   override fun getLayout(): Int = R.layout.controller_about

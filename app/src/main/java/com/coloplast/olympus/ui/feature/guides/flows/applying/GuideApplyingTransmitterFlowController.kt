@@ -49,9 +49,6 @@ class GuideApplyingTransmitterFlowController : TopMenuFlowFactoryController<Appl
 
   override fun onFlowCompleted(data: ApplyingFlowModel) {
     preferences.setCurrentOnboardingProgression(OnboardingProgression.COMPLETED)
-
-    getContentRouter().popToTag(HomeController.TAG_CONTROLLER)
-
     super.onFlowCompleted(data)
   }
 

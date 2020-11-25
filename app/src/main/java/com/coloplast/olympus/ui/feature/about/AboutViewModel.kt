@@ -16,8 +16,7 @@ class AboutViewModel(private val transmitterComponent: TransmitterComponent) : B
     val disposable = CompositeDisposable()
 
     val transmittersDataObservable = transmitterComponent.getTransmitters()
-      .filter { it is DataResult.Success<*> }
-      .map { it as DataResult.Success<*> }
+      .ofType(DataResult.Success::class.java)
       .map { it.data as List<Transmitter> }
       .map<GenericUiModel> { GenericUiModel.Success(it) }
 

@@ -24,7 +24,7 @@ class AboutController : CustomToolbarController<ControllerAboutBinding>(), Gener
 
   private val viewModel: AboutViewModel by inject()
 
-  val appVersion = ObservableField(DeviceUtils.getAppVersion())
+  val appVersion = DeviceUtils.getAppVersion()
 
   val nameTx1 = ObservableField<String>()
   val nameTx2 = ObservableField<String>()
@@ -75,7 +75,7 @@ class AboutController : CustomToolbarController<ControllerAboutBinding>(), Gener
     val emailIntent = Intent(Intent.ACTION_SEND)
     emailIntent.type = "message/rfc822"
     emailIntent.putExtra(Intent.EXTRA_EMAIL, email)
-    activity!!.startActivity(Intent.createChooser(emailIntent, getString(R.string.onboarding_email_title)))
+    activity?.startActivity(Intent.createChooser(emailIntent, getString(R.string.onboarding_email_title)))
   }
 
   override fun getLayout(): Int = R.layout.controller_about

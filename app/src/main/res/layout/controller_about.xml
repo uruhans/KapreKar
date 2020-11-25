@@ -218,18 +218,51 @@
           android:text="@string/about_ap_manufacturer" />
 
         <ImageView
-          android:layout_width="180dp"
-          android:layout_height="60dp"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
           android:layout_marginTop="@dimen/spacing_double"
-          android:src="@drawable/ic_coloplast_logo"
-          app:tintDrawable="@{R.color.darkgrey}"
-          tools:tint="@color/darkgrey" />
+          android:src="@drawable/ic_coloplast_logo_big" />
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="@dimen/spacing_half"
+          android:layout_marginTop="@dimen/spacing_large"
+          android:orientation="horizontal">
+
+          <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_manufacturer" />
+
+          <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_standard"
+            android:orientation="vertical">
+
+            <TextView
+              style="@style/TextStyle.Roboto.Medium"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginTop="@dimen/spacing_small"
+              android:text="@string/settings_footer_company_name"
+              android:textSize="16sp" />
+
+            <TextView
+              style="@style/TextStyle.Roboto.Regular.ClearGrey.14"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:text="@string/settings_footer_company_address" />
+
+          </LinearLayout>
+        </LinearLayout>
 
         <TextView
           style="@style/TextStyle.Roboto.Medium"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_marginTop="@dimen/spacing_small"
+          android:layout_marginTop="@dimen/spacing_large"
           android:text="@string/settings_footer_app_version"
           android:textSize="16sp" />
 
@@ -271,6 +304,116 @@
           android:layout_height="1dp"
           android:layout_marginTop="@dimen/spacing_double"
           android:background="@color/patch_grey" />
+
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/spacing_double"
+          android:orientation="horizontal">
+
+          <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_lot" />
+
+          <TextView
+            style="@style/TextStyle.Roboto.Medium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="@dimen/spacing_standard"
+            android:text="000"
+            android:textColor="@color/grey" />
+
+        </LinearLayout>
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/spacing_standard"
+          android:orientation="horizontal">
+
+          <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_gtin" />
+
+          <TextView
+            style="@style/TextStyle.Roboto.Medium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="@dimen/spacing_standard"
+            android:text="000"
+            android:textColor="@color/grey" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/spacing_standard"
+          android:orientation="horizontal">
+
+          <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_udi" />
+
+          <TextView
+            style="@style/TextStyle.Roboto.Medium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="@dimen/spacing_standard"
+            android:text="000"
+            android:textColor="@color/grey" />
+
+        </LinearLayout>
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/spacing_standard"
+          android:orientation="horizontal">
+
+          <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_ref" />
+
+          <TextView
+            style="@style/TextStyle.Roboto.Medium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="@dimen/spacing_standard"
+            android:text="000"
+            android:textColor="@color/grey" />
+
+        </LinearLayout>
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/spacing_double"
+          android:layout_marginBottom="@dimen/spacing_triple"
+          android:orientation="horizontal">
+
+          <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_blue_circle_reading_dude" />
+
+          <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_large"
+            android:src="@drawable/ic_ce_mark" />
+
+        </LinearLayout>
 
       </LinearLayout>
 

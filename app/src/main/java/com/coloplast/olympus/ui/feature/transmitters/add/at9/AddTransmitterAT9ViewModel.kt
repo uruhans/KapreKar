@@ -64,8 +64,7 @@ class AddTransmitterAT9ViewModel(
       .switchMap { scanResult ->
 
         me.currentUserObservable()
-          .filter { it is CurrentUser.LoggedIn }
-          .map { it as CurrentUser.LoggedIn }
+          .ofType(CurrentUser.LoggedIn::class.java)
           .map {
 
             val transmitterName = it.user.firstName?.let { firstName ->
@@ -92,7 +91,7 @@ class AddTransmitterAT9ViewModel(
                   .filter { it == BleConnectionState.CONNECTED }
                   .map<SearchTransmitterUiModel> { SearchTransmitterUiModel.ConnectionSuccessful(scanResult.macAddress) }
 
-                  // if connection has not happened within a 30 second window, we assume something is wrong
+                  // if a connection has not happened within a 30 second window, we assume something is wrong
                   .takeUntil(Observable.timer(30, TimeUnit.SECONDS)
                     .flatMap {
                       // we therefore delete the transmitter from the database again

@@ -10,7 +10,7 @@ import com.coloplast.olympus.databinding.ControllerLoginBinding
 import com.coloplast.olympus.shared.models.Credentials
 import com.coloplast.olympus.shared.preferences.OnboardingProgression
 import com.coloplast.olympus.shared.preferences.Preferences
-import com.coloplast.olympus.ui.common.BaseController
+import com.coloplast.olympus.ui.common.CustomToolbarController
 import com.coloplast.olympus.ui.common.LoadingController
 import com.coloplast.olympus.ui.common.dialogs.BaseDialogController
 import com.coloplast.olympus.ui.common.dialogs.DialogController
@@ -28,7 +28,7 @@ import org.koin.core.inject
  * Created by Kike Bodi (ebp@dawnhealth.com) on 07/07/2020.
  * Copyright by Dawn Health A/S. All rights reserved.
  */
-class LoginController: BaseController<ControllerLoginBinding>(),
+class LoginController: CustomToolbarController<ControllerLoginBinding>(),
   LoginView,
   BaseDialogController.Listener {
 
@@ -64,10 +64,12 @@ class LoginController: BaseController<ControllerLoginBinding>(),
 
   override fun attachVariables(viewBinding: ControllerLoginBinding) {
     viewBinding.controller = this
+    super.attachVariables(viewBinding)
   }
 
   override fun onViewBound(viewBinding: ControllerLoginBinding) {
     compositeDisposable.add(viewModel.bind(this))
+    super.onViewBound(viewBinding)
   }
 
   override fun render(): Function<Observable<GenericUiModel>, Disposable> {
@@ -142,6 +144,8 @@ class LoginController: BaseController<ControllerLoginBinding>(),
       .pushChangeHandler(HorizontalChangeHandler())
     )
   }
+
+  override fun displayCloseButton(): Boolean = false
 
   override fun getLayout(): Int = R.layout.controller_login
 

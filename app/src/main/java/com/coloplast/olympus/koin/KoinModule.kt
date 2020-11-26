@@ -16,6 +16,7 @@ import com.coloplast.olympus.notifications.NotificationScheduler
 import com.coloplast.olympus.notifications.OlympusNotificationManager
 import com.coloplast.olympus.shared.preferences.Preferences
 import com.coloplast.olympus.ui.feature.TransmitterManager
+import com.coloplast.olympus.ui.feature.guides.flows.applying.GuideApplyingTransmitterFactoryImpl
 import com.coloplast.olympus.ui.feature.about.AboutViewModel
 import com.coloplast.olympus.ui.feature.home.BreachesOccurred
 import com.coloplast.olympus.ui.feature.home.HomeViewModel
@@ -94,6 +95,7 @@ val koinModule = module {
   single { SetupGuideConnectionFactoryImpl() }
   single { SetupGuidePreparingFactoryImpl() }
   single { SetupGuideApplyingFactoryImpl() }
+  single { GuideApplyingTransmitterFactoryImpl() }
   single { ForgotPasswordFactoryImpl() }
   single { FirmwareUpdateFactoryImpl() }
 }

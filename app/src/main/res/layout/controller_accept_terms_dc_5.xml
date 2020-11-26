@@ -13,8 +13,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="bottom"
-    android:layout_marginStart="@dimen/spacing_standard"
-    android:layout_marginEnd="@dimen/spacing_standard"
+    android:layout_marginStart="@dimen/spacing_larger"
+    android:layout_marginEnd="@dimen/spacing_larger"
     android:orientation="vertical">
 
     <ImageView

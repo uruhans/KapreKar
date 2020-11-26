@@ -7,9 +7,6 @@
 
     <import type="com.coloplast.olympus.R" />
 
-    <variable
-      name="toolbarSupport"
-      type="com.coloplast.olympus.ui.common.ToolbarSupportController" />
 
     <variable
       name="controller"
@@ -21,14 +18,6 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
-    <include
-      android:id="@+id/toolbar"
-      layout="@layout/view_toolbar"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent"
-      app:support="@{toolbarSupport}" />
-
     <androidx.constraintlayout.widget.Guideline
       android:id="@+id/guideline"
       android:layout_width="0dp"
@@ -39,12 +28,12 @@
     <com.coloplast.olympus.ui.common.widgets.MediaView
       android:layout_width="0dp"
       android:layout_height="0dp"
+      app:isLooping="@{controller.looping}"
       app:layout_constraintBottom_toTopOf="@+id/guideline"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"
-      app:resource="@{controller.resourceId}"
-      app:isLooping="@{controller.looping}" />
+      app:resource="@{controller.resourceId}" />
 
     <LinearLayout
       android:id="@+id/linearLayout"
@@ -86,13 +75,14 @@
       android:layout_width="56dp"
       android:layout_height="56dp"
       android:layout_marginEnd="@dimen/spacing_double"
+      android:contentDescription="@string/guide_faq_question_1"
       android:onClick="@{() -> controller.onQuestionClicked()}"
-      app:visibleOrGone="@{controller.showQuestionFab}"
       android:src="@drawable/ic_icon_questionmark"
       app:backgroundTint="@color/white"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintTop_toTopOf="parent" />
+      app:layout_constraintTop_toTopOf="parent"
+      app:visibleOrGone="@{controller.showQuestionFab}" />
 
     <com.coloplast.olympus.ui.common.widgets.CustomTabLayout
       android:layout_width="wrap_content"
@@ -110,6 +100,7 @@
       android:layout_height="56dp"
       android:layout_marginEnd="@dimen/spacing_larger"
       android:layout_marginBottom="@dimen/spacing_double"
+      android:contentDescription="@string/generic_yes"
       android:enabled="@{controller.nextEnabled}"
       android:onClick="@{() -> controller.onNextClicked()}"
       android:src="@drawable/ic_arrow"

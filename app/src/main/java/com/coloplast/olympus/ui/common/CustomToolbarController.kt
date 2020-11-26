@@ -37,7 +37,7 @@ abstract class CustomToolbarController<T : ViewDataBinding> : BaseController<T>,
       backButton.setImageResource(getNavigationIconResId())
       backButton.setOnClickListener { onBackClicked() }
     }
-    
+
     closeButton.setImageResource(R.drawable.main_sidemenu_close)
     closeButton.setOnClickListener { onCloseClicked() }
     
@@ -46,7 +46,11 @@ abstract class CustomToolbarController<T : ViewDataBinding> : BaseController<T>,
   
   @CallSuper
   override fun attachVariables(viewBinding: T) {
-    val success = viewBinding.setVariable(BR.toolbarSupport, ToolbarSupportController(listener = this))
+    val success = viewBinding.setVariable(BR.toolbarSupport, ToolbarSupportController(
+      listener = this,
+      backButtonVisibility = displayBackButton(),
+      closeButtonVisibility = displayCloseButton()
+    ))
     if (!success) {
       Timber.e("Tried to attach ToolbarSupportController to viewBinding, but was not successful")
     }
@@ -89,7 +93,16 @@ abstract class CustomToolbarController<T : ViewDataBinding> : BaseController<T>,
   open fun displayNavigationIcon(): Boolean {
     return true
   }
-  
+
+  /**
+   * Whether of not to show the back icon
+   */
+  open fun displayBackButton() : Boolean = true
+
+  /**
+   * Whether of not to show the close icon
+   */
+  open fun displayCloseButton() : Boolean = true
   /**
    * override to change the default id of the toolbar used in the layout
    * default: R.id.toolbar

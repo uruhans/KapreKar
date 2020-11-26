@@ -6,11 +6,12 @@ import com.coloplast.olympus.BR
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerStartupGuideIntro1Binding
 import com.coloplast.olympus.ui.common.BaseController
+import com.coloplast.olympus.ui.common.flow.TopMenuVisibilityListener
 import com.coloplast.olympus.ui.common.listeners.FlowListener
 import com.coloplast.olympus.ui.feature.transmitters.add.models.ChecklistItem
 import me.tatarka.bindingcollectionadapter2.itembindings.OnItemBindClass
 
-class SetupGuideIntroSGI1Controller : BaseController<ControllerStartupGuideIntro1Binding>() {
+class SetupGuideIntroSGI1Controller : BaseController<ControllerStartupGuideIntro1Binding>() , TopMenuVisibilityListener{
 
   val items = ObservableArrayList<Any>()
   val itemBinding: OnItemBindClass<Any> = OnItemBindClass<Any>()
@@ -40,6 +41,8 @@ class SetupGuideIntroSGI1Controller : BaseController<ControllerStartupGuideIntro
   override fun getLayout(): Int {
     return R.layout.controller_startup_guide_intro_1
   }
+
+  override fun showCloseButton(): Boolean = false
 
   companion object {
     private const val TAG_CONTROLLER = "setup_guide_intro_sgi_1"

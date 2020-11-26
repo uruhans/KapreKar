@@ -11,6 +11,7 @@ import com.coloplast.olympus.shared.models.CurrentUser
 import com.coloplast.olympus.shared.models.Transmitter
 import com.coloplast.olympus.ui.common.BaseViewModel
 import com.coloplast.olympus.ui.feature.transmitters.add.at9.model.SearchTransmitterUiModel
+import com.coloplast.olympus.ui.feature.transmitters.add.at9.model.TransmitterConnectionFailureException
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -89,16 +90,21 @@ class AddTransmitterAT9ViewModel(
                   .skipWhile { it == BleConnectionState.DISCONNECTED }
                   // we are only interested in fully connected
                   .filter { it == BleConnectionState.CONNECTED }
-                  .map { SearchTransmitterUiModel.ConnectionSuccessful(scanResult.macAddress) }
-                  .takeUntil(
-                    Observable.timer(20, TimeUnit.SECONDS)
-                      .flatMap {
-                        transmitterComponent.deleteTransmitter(scanResult.macAddress)
-                          .subscribeOn(Schedulers.io())
-                          .toSingle { SearchTransmitterUiModel.BondingFailed(scanResult.macAddress) }
-                          .toObservable()
-                      }
-                  )
+                  .map<SearchTransmitterUiModel> { SearchTransmitterUiModel.ConnectionSuccessful(scanResult.macAddress) }
+
+                  // if connection has not happened within a 30 second window, we assume something is wrong
+                  .takeUntil(Observable.timer(30, TimeUnit.SECONDS)
+                    .flatMap {
+                      // we therefore delete the transmitter from the database again
+                      transmitterComponent.deleteTransmitter(scanResult.macAddress)
+                        // convert the completable into an observable
+                        .toSingle { false }
+                        .toObservable()
+                        // and throw exception
+                        .map { throw TransmitterConnectionFailureException(scanResult.macAddress) }
+                    })
+                  // exception is caught here and a bonding failed is returned
+                  .onErrorReturn { SearchTransmitterUiModel.BondingFailed(scanResult.macAddress) }
               }
           }
       }

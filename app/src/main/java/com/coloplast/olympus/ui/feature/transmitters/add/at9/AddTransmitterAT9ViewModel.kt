@@ -29,36 +29,35 @@ class AddTransmitterAT9ViewModel(
   override fun bind(uiView: AddTransmitterAT9View): Disposable {
     val disposable = CompositeDisposable()
 
-    val scanResultObservable: Observable<SearchTransmitterUiModel> =
-      bluetoothManager.bluetoothStateObservable()
-        // only scan if we have a bluetooth state that is ready (enabled and permissions are set)
-        .filter { it == BluetoothState.READY }
-        .flatMap {
-          // scan for transmitters
-          bluetoothManager.scanBleDevices()
-            .doOnNext { Timber.d("ScanResult happened") }
-            // only return distinct items (based on macAddress)
-            .distinct { scanResult: ScanResult -> scanResult.macAddress }
-            // shut down the scanning after 14 seconds
-            // it's 14 (and not 15) because the buffer would stop a little bit before this
-            // which resulted in the buffer being emptied twice (which caused issues in the UI)
-            .takeUntil(Observable.interval(14, TimeUnit.SECONDS))
-            // timeout after 15 seconds
-            .timeout(15, TimeUnit.SECONDS)
-            // buffer *all* results for 15 seconds
-            // this allows the observable to onNext a list instead of single results
-            .buffer(15, TimeUnit.SECONDS)
-            .map {
-              if (it.isEmpty()) {
-                SearchTransmitterUiModel.NothingFound()
-              }
-              else {
-                SearchTransmitterUiModel.TransmittersFound(it)
-              }
+    val bluetoothStateReadyObservable = bluetoothManager.bluetoothStateObservable()
+      // only scan if we have a bluetooth state that is ready (enabled and permissions are set)
+      .filter { it == BluetoothState.READY }
+
+    val scanResultObservable = bluetoothStateReadyObservable
+      .flatMap {
+        bluetoothManager.scanBleDevices()
+          .doOnNext { Timber.d("ScanResult happened") }
+          // only return distinct items (based on macAddress)
+          .distinct { scanResult: ScanResult -> scanResult.macAddress }
+          // shut down the scanning after 14 seconds
+          // it's 14 (and not 15) because the buffer would stop a little bit before this
+          // which resulted in the buffer being emptied twice (which caused issues in the UI)
+          .takeUntil(Observable.interval(14, TimeUnit.SECONDS))
+          // timeout after 15 seconds
+          .timeout(15, TimeUnit.SECONDS)
+          // buffer *all* results for 15 seconds
+          // this allows the observable to onNext a list instead of single results
+          .buffer(15, TimeUnit.SECONDS)
+          .map {
+            if (it.isEmpty()) {
+              SearchTransmitterUiModel.NothingFound()
             }
-            .onErrorReturnItem(SearchTransmitterUiModel.NothingFound())
-        }
-        .startWith(SearchTransmitterUiModel.PendingUser())
+            else {
+              SearchTransmitterUiModel.TransmittersFound(it)
+            }
+          }
+          .onErrorReturnItem(SearchTransmitterUiModel.NothingFound())
+      }
 
     val addToDatabaseAndConnectionStateObservable = uiView.scanResultToConnect()
       .switchMap { scanResult ->
@@ -102,8 +101,8 @@ class AddTransmitterAT9ViewModel(
                         // and throw exception
                         .map { throw TransmitterConnectionFailureException(scanResult.macAddress) }
                     })
-                  // exception is caught here and a bonding failed is returned
-                  .onErrorReturn { SearchTransmitterUiModel.BondingFailed(scanResult.macAddress) }
+                  // exception is caught here and a nothing found is returned (allowing the user to retry the search)
+                  .onErrorReturn { SearchTransmitterUiModel.NothingFound() }
               }
           }
       }

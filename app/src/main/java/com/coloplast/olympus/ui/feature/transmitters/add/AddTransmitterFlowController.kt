@@ -8,6 +8,7 @@ import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import com.coloplast.olympus.bluetooth.businesslayer.BluetoothManager
+import com.coloplast.olympus.bluetooth.businesslayer.ServiceStateDispatcher
 import com.coloplast.olympus.ui.common.MediaGuideController
 import com.coloplast.olympus.ui.common.flow.FlowFactory
 import com.coloplast.olympus.ui.common.flow.TopMenuFlowFactoryController
@@ -16,6 +17,7 @@ import com.coloplast.olympus.ui.dialogs.CallHelpDialogController
 import com.coloplast.olympus.ui.feature.home.HomeController
 import com.coloplast.olympus.ui.feature.onboarding.setup.SetupGuideConnectionFlowController
 import com.coloplast.olympus.ui.feature.transmitters.TransmittersController
+import com.coloplast.olympus.ui.feature.transmitters.add.at9.AddTransmitterAT9Controller
 import com.coloplast.olympus.ui.feature.transmitters.add.models.AddTransmitterFlow
 import com.coloplast.olympus.ui.feature.transmitters.add.models.AddTransmitterModel
 import org.koin.core.inject
@@ -26,6 +28,7 @@ class AddTransmitterFlowController(args: Bundle) : TopMenuFlowFactoryController<
   private val startAtIndex = args.getInt(BUNDLE_START_FLOW_AT, 0)
   private val factory: AddTransmitterFactoryImpl by inject()
   private val bluetoothManager: BluetoothManager by inject()
+  private val serviceStateDispatcher: ServiceStateDispatcher by inject()
 
   private var callHelpDialogController: CallHelpDialogController? = null
 
@@ -94,6 +97,14 @@ class AddTransmitterFlowController(args: Bundle) : TopMenuFlowFactoryController<
     }
     super.onFlowCompleted(data)
 
+  }
+
+  override fun afterControllerPushed(topController: Controller) {
+    super.afterControllerPushed(topController)
+
+    if(topController is AddTransmitterAT9Controller) {
+      serviceStateDispatcher.serviceRelay.accept(ServiceStateDispatcher.ServiceState.START_SERVICE)
+    }
   }
 
   override fun afterControllerPopped(topController: Controller?) {

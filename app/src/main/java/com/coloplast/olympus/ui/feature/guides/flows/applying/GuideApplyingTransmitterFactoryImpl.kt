@@ -35,7 +35,7 @@ class GuideApplyingTransmitterFactoryImpl : FlowFactory<ApplyingFlowModel>() {
         totalCount = 12
       )
       GuideApplyingTransmitterFlow.GuideAG3 -> MediaGuideController.routerTransaction(
-        resourceId = R.raw.ag3_remove_release_liner,
+        resourceId = R.raw.sg_p2_changecoming,
         titleId = R.string.onboarding_chapter_preparing_removing_title,
         descriptionId = R.string.onboarding_chapter_preparing_removing_description,
         position = 2,
@@ -43,7 +43,7 @@ class GuideApplyingTransmitterFactoryImpl : FlowFactory<ApplyingFlowModel>() {
         totalCount = 12
       )
       GuideApplyingTransmitterFlow.GuideAG4 -> MediaGuideController.routerTransaction(
-        resourceId = R.raw.ag4_place_on_boilerplate,
+        resourceId = R.raw.sg_p3_placeslonbp,
         titleId = R.string.onboarding_chapter_preparing_place_sl_title,
         descriptionId = R.string.onboarding_chapter_preparing_place_sl_description,
         position = 3,
@@ -52,7 +52,7 @@ class GuideApplyingTransmitterFactoryImpl : FlowFactory<ApplyingFlowModel>() {
       )
 
       GuideApplyingTransmitterFlow.GuideAG5 -> MediaGuideController.routerTransaction(
-        resourceId = R.raw.ag5_press_down,
+        resourceId = R.raw.sg_p4_pressdownsl,
         titleId = R.string.onboarding_chapter_preparing_press_down_title,
         descriptionId = R.string.onboarding_chapter_preparing_press_down_description,
         position = 4,
@@ -60,7 +60,7 @@ class GuideApplyingTransmitterFactoryImpl : FlowFactory<ApplyingFlowModel>() {
         totalCount = 12
       )
       GuideApplyingTransmitterFlow.GuideAG6 -> MediaGuideController.routerTransaction(
-        resourceId = R.raw.ag6_ensure_secure_adhesion,
+        resourceId = R.raw.sg_p5_ensuresecureadhesion,
         titleId = R.string.onboarding_chapter_preparing_secure_title,
         descriptionId = R.string.onboarding_chapter_preparing_secure_description,
         position = 5,
@@ -68,7 +68,7 @@ class GuideApplyingTransmitterFactoryImpl : FlowFactory<ApplyingFlowModel>() {
         totalCount = 12
       )
       GuideApplyingTransmitterFlow.GuideAG7 -> MediaGuideController.routerTransaction(
-        resourceId = R.raw.ag7_remove_sensor_release_liner,
+        resourceId = R.raw.sg_a1_removeslreleaseliner,
         titleId = R.string.onboarding_chapter_applying_remove_sl_title,
         descriptionId = R.string.onboarding_chapter_applying_remove_sl_description,
         position = 6,
@@ -76,7 +76,7 @@ class GuideApplyingTransmitterFactoryImpl : FlowFactory<ApplyingFlowModel>() {
         totalCount = 12
       )
       GuideApplyingTransmitterFlow.GuideAG8 -> MediaGuideController.routerTransaction(
-        resourceId = R.raw.ag8_apply_body,
+        resourceId = R.raw.sg_a2_applytobody,
         titleId = R.string.onboarding_chapter_applying_apply_title,
         descriptionId = R.string.onboarding_chapter_applying_apply_description,
         position = 7,
@@ -84,7 +84,7 @@ class GuideApplyingTransmitterFactoryImpl : FlowFactory<ApplyingFlowModel>() {
         totalCount = 12
       )
       GuideApplyingTransmitterFlow.GuideAG9 -> MediaGuideController.routerTransaction(
-        resourceId = R.raw.ag9_lift_connector_flap,
+        resourceId = R.raw.sg_a3_liftconnectorflap,
         titleId = R.string.onboarding_chapter_applying_connector_flap_title,
         descriptionId = R.string.onboarding_chapter_applying_connector_flap_description,
         position = 8,
@@ -92,7 +92,7 @@ class GuideApplyingTransmitterFactoryImpl : FlowFactory<ApplyingFlowModel>() {
         totalCount = 12
       )
       GuideApplyingTransmitterFlow.GuideAG10 -> MediaGuideController.routerTransaction(
-        resourceId = R.raw.ag10_lift_transmitter_lid,
+        resourceId = R.raw.sg_a_tmh4_lifttmlid,
         titleId = R.string.onboarding_chapter_applying_lift_tm_lid_title,
         descriptionId = R.string.onboarding_chapter_applying_lift_tm_lid_description,
         position = 9,
@@ -100,7 +100,7 @@ class GuideApplyingTransmitterFactoryImpl : FlowFactory<ApplyingFlowModel>() {
         totalCount = 12
       )
       GuideApplyingTransmitterFlow.GuideAG11 -> MediaGuideController.routerTransaction(
-        resourceId = R.raw.ag11_identify_dark_grey_side,
+        resourceId = R.raw.sg_a7_identifyreverse,
         titleId = R.string.onboarding_chapter_applying_identify_dark_title,
         descriptionId = R.string.onboarding_chapter_applying_identify_dark_description,
         screenName = transitionTag,
@@ -108,7 +108,7 @@ class GuideApplyingTransmitterFactoryImpl : FlowFactory<ApplyingFlowModel>() {
         totalCount = 12
       )
       GuideApplyingTransmitterFlow.GuideAG12 -> MediaGuideController.routerTransaction(
-        resourceId = R.raw.ag12_locate_opening,
+        resourceId = R.raw.sg_a6_locatetmopening,
         titleId = R.string.onboarding_chapter_applying_locating_opening_title,
         descriptionId = R.string.onboarding_chapter_applying_locating_opening_description,
         screenName = transitionTag,
@@ -116,7 +116,7 @@ class GuideApplyingTransmitterFactoryImpl : FlowFactory<ApplyingFlowModel>() {
         totalCount = 12
       )
       GuideApplyingTransmitterFlow.GuideAG14 -> MediaGuideController.routerTransaction(
-        resourceId = R.raw.ag13_attach_transmitter,
+        resourceId = R.raw.sg_a12_attach_tm_flap,
         titleId = R.string.onboarding_chapter_applying_attach_title,
         descriptionId = R.string.onboarding_chapter_applying_attach_description,
         screenName = transitionTag,

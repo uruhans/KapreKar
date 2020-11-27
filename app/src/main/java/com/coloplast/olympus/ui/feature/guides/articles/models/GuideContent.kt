@@ -20,7 +20,7 @@ object GuideContent {
             subHeader = R.string.guide_da_subtitle
           ),
           ArticleItem(
-            image = R.drawable.guide_placeholder,
+            image = R.drawable.guide_dry_applying_tips,
             title = R.string.guide_da_article_1_header,
             description = R.string.guide_da_article_1_body
           )
@@ -114,12 +114,12 @@ object GuideContent {
             description = R.string.guide_dg_article_1_body
           ),
           ArticleItem(
-            image = R.drawable.guide_placeholder,
+            image = R.drawable.guide_article_image_1,
             title = R.string.guide_dg_article_2_header,
             description = R.string.guide_dg_article_2_body
           ),
           ArticleItem(
-            image = R.drawable.guide_placeholder,
+            image = R.drawable.guide_article_image_2,
             title = R.string.guide_dg_article_3_header,
             description = R.string.guide_dg_article_3_body
           )
@@ -207,12 +207,12 @@ object GuideContent {
           subHeader = R.string.guide_cb_subtitle
         ),
         ArticleItem(
-          image = R.drawable.guide_placeholder,
+          image = R.drawable.guide_check_battery_level,
           title = R.string.guide_cb_article_1_header,
           description = R.string.guide_cb_article_1_body
         ),
         ArticleItem(
-          image = R.drawable.guide_placeholder,
+          image = R.drawable.guide_view_attached_transmitter,
           title = R.string.guide_cb_article_2_header,
           description = R.string.guide_cb_article_2_body
         )
@@ -226,12 +226,12 @@ object GuideContent {
           description = R.string.guide_dt_article_1_body
         ),
         ArticleItem(
-          image = R.drawable.guide_placeholder,
+          image = R.drawable.guide_delete_transmitter,
           title = R.string.guide_dt_article_2_header,
           description = R.string.guide_dt_article_2_body
         ),
         ArticleItem(
-          image = R.drawable.guide_placeholder,
+          image = R.drawable.guide_delete_transmitter_second,
           title = R.string.guide_dt_article_3_header,
           description = R.string.guide_dt_article_3_body
         ),

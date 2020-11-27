@@ -6,13 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
 import androidx.annotation.AttrRes
+import androidx.annotation.StringRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.databinding.ObservableInt
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ViewPasswordInputLayoutBinding
-import com.coloplast.olympus.ui.common.extensions.hideKeyboard
+import com.coloplast.olympus.ui.common.extensions.hideSoftKeyboard
 import timber.log.Timber
 import kotlin.properties.Delegates
 
@@ -54,9 +55,11 @@ class PasswordView @JvmOverloads constructor(context: Context,
     var onValidityChanged: ((Boolean) -> Unit)? = null
     var shouldCheckValidity = true
 
+    var binding :  ViewPasswordInputLayoutBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.view_password_input_layout, this, true)
+
     init {
         orientation = VERTICAL
-        val binding = DataBindingUtil.inflate<ViewPasswordInputLayoutBinding>(LayoutInflater.from(context), R.layout.view_password_input_layout, this, true)
+
         binding.view = this
 
         onFocusChangeListener = OnFocusChangeListener(callback)
@@ -80,11 +83,15 @@ class PasswordView @JvmOverloads constructor(context: Context,
         showInvalidPasswordText.set(isValid.not())
     }
 
+    fun setHint(@StringRes resId: Int) {
+        binding.securityCodeEditText.hint = context.getString(resId)
+    }
+
     //Focus listener that on focus lost, will hide the keyboard and will notify the callback.
     inner class OnFocusChangeListener(private val focusLostCallback: (String) -> Boolean) : View.OnFocusChangeListener {
         override fun onFocusChange(v: View, hasFocus: Boolean) {
             if (!v.hasFocus()) {
-                v.hideKeyboard()
+                v.hideSoftKeyboard()
                 focusLostCallback.invoke(password)
             }
         }

@@ -4,8 +4,19 @@ import com.coloplast.olympus.bluetooth.businesslayer.models.BleDevice
 import com.coloplast.olympus.shared.moshi.MoshiSerializable
 import com.coloplast.olympus.ui.feature.statemachine.models.OverlayState
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
+import java.time.Instant
 
-data class StateChange(val state: UiState = UiState.NO_CHANGE, val overlayState: OverlayState = OverlayState.NONE, val bleDevice: BleDevice, var patchProbability: PatchProbability = PatchProbability.NOT_SET) : MoshiSerializable {
+data class StateChange(
+  val state: UiState = UiState.NO_CHANGE,
+  val overlayState: OverlayState = OverlayState.NONE,
+  val bleDevice: BleDevice,
+  var patchProbability: PatchProbability = PatchProbability.NOT_SET,
+  val timestamp: Long = Instant.now().epochSecond
+) : MoshiSerializable {
 
   fun getMacAddress() = bleDevice.macAddress
+
+  fun secondsSinceNow(): Int {
+    return (Instant.now().epochSecond - timestamp).toInt()
+  }
 }

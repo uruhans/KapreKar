@@ -8,6 +8,7 @@ import com.artemzin.rxui.RxUi
 import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.BR
 import com.coloplast.olympus.R
+import com.coloplast.olympus.bluetooth.businesslayer.exceptions.BondingFailedException
 import com.coloplast.olympus.bluetooth.businesslayer.models.ScanResult
 import com.coloplast.olympus.databinding.ControllerAddTransmitterAt9Binding
 import com.coloplast.olympus.ui.common.BaseController
@@ -127,6 +128,7 @@ class AddTransmitterAT9Controller(args: Bundle) :
         is SearchTransmitterUiModel.BondingFailed -> {
           Toast.makeText(applicationContext, R.string.guide_at10_pairing_error, Toast.LENGTH_SHORT).show()
           getListener(FlowListener::class.java)?.onPreviousClicked()
+          throw BondingFailedException(RuntimeException())
         }
       }
     }

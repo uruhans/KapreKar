@@ -105,15 +105,24 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   constructor() : super()
   constructor(args: Bundle?) : super(args)
 
+  override fun onActivityResumed(activity: Activity) {
+    super.onActivityResumed(activity)
+
+    // we want to force an update if we are coming from the background
+    if (currentUiState != UiState.INITIAL) {
+      changeUiState(currentUiState, true)
+    }
+  }
+
   override fun attachVariables(viewBinding: ControllerHomeBinding) {
     viewBinding.controller = this
   }
 
   override fun onViewBound(viewBinding: ControllerHomeBinding) {
     stateRouter = Conductor.attachRouter(activity!!, viewBinding.contentContainer, args)
-
     compositeDisposable.add(viewModel.bind(this))
 
+    // we want to force an update if we are coming from the background
     if (currentUiState != UiState.INITIAL) {
       changeUiState(currentUiState, true)
     }

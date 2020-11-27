@@ -16,6 +16,8 @@ import com.coloplast.olympus.notifications.NotificationScheduler
 import com.coloplast.olympus.notifications.OlympusNotificationManager
 import com.coloplast.olympus.shared.preferences.Preferences
 import com.coloplast.olympus.ui.feature.TransmitterManager
+import com.coloplast.olympus.ui.feature.guides.flows.applying.GuideApplyingTransmitterFactoryImpl
+import com.coloplast.olympus.ui.feature.about.AboutViewModel
 import com.coloplast.olympus.ui.feature.home.BreachesOccurred
 import com.coloplast.olympus.ui.feature.home.HomeViewModel
 import com.coloplast.olympus.ui.feature.onboarding.login.LoginViewModel
@@ -79,10 +81,11 @@ val koinModule = module {
   single { ForgotPasswordViewModel(get()) }
   single { SetupGuideLocationSGC4ViewModel(get()) }
   single { AddTransmitterAT7ViewModel(get()) }
-  single { ProfileViewModel(get(), get(), get()) }
+  single { ProfileViewModel(get(), get(), get(), get(), get()) }
   single { SignupViewModel(get(), get()) }
   single { FirmwareUpdateChargingViewModel() }
   single { FirmwareProgressViewModel(get()) }
+  single { AboutViewModel(get()) }
 
 
   /* Flows */
@@ -92,6 +95,7 @@ val koinModule = module {
   single { SetupGuideConnectionFactoryImpl() }
   single { SetupGuidePreparingFactoryImpl() }
   single { SetupGuideApplyingFactoryImpl() }
+  single { GuideApplyingTransmitterFactoryImpl() }
   single { ForgotPasswordFactoryImpl() }
   single { FirmwareUpdateFactoryImpl() }
 }

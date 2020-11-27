@@ -1,10 +1,7 @@
 package com.coloplast.olympus
 
 import android.app.Application
-import androidx.work.BackoffPolicy
-import androidx.work.ExistingPeriodicWorkPolicy
-import androidx.work.PeriodicWorkRequestBuilder
-import androidx.work.WorkManager
+import androidx.work.*
 import com.coloplast.olympus.koin.koinModule
 import com.coloplast.olympus.shared.AppSettings
 import com.coloplast.olympus.work.*
@@ -44,11 +41,12 @@ class CustomApplication : Application() {
     workManager.cancelAllWork()
 
     val periodicSyncRequest = PeriodicWorkRequestBuilder<SyncTransmitterPackagesWorker>(15, TimeUnit.MINUTES)
-//      .setConstraints(
-//        Constraints.Builder()
-//        .setRequiresCharging(true)
-//        .build()
-//      )
+      .setConstraints(
+        Constraints.Builder()
+        // requires internet to sync packages to server
+        .setRequiredNetworkType(NetworkType.CONNECTED)
+        .build()
+      )
       .setBackoffCriteria(BackoffPolicy.LINEAR, 10, TimeUnit.SECONDS)
       .build()
 

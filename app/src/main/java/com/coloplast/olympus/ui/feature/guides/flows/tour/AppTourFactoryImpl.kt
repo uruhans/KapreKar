@@ -4,19 +4,9 @@ import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.R
 import com.coloplast.olympus.ui.common.GenericConfirmationController
 import com.coloplast.olympus.ui.common.InfoPageController
+import com.coloplast.olympus.ui.common.MediaGuideController
 import com.coloplast.olympus.ui.common.flow.FlowFactory
 import com.coloplast.olympus.ui.common.models.flow.EmptyModel
-import com.coloplast.olympus.ui.feature.guides.flows.tour.ap10.AppTourAP10Controller
-import com.coloplast.olympus.ui.feature.guides.flows.tour.ap11.AppTourAP11Controller
-import com.coloplast.olympus.ui.feature.guides.flows.tour.ap12.AppTourAP12Controller
-import com.coloplast.olympus.ui.feature.guides.flows.tour.ap2.AppTourAP2Controller
-import com.coloplast.olympus.ui.feature.guides.flows.tour.ap3.AppTourAP3Controller
-import com.coloplast.olympus.ui.feature.guides.flows.tour.ap4.AppTourAP4Controller
-import com.coloplast.olympus.ui.feature.guides.flows.tour.ap5.AppTourAP5Controller
-import com.coloplast.olympus.ui.feature.guides.flows.tour.ap6.AppTourAP6Controller
-import com.coloplast.olympus.ui.feature.guides.flows.tour.ap7.AppTourAP7Controller
-import com.coloplast.olympus.ui.feature.guides.flows.tour.ap8.AppTourAP8Controller
-import com.coloplast.olympus.ui.feature.guides.flows.tour.ap9.AppTourAP9Controller
 
 
 /**
@@ -37,21 +27,85 @@ class AppTourFactoryImpl: FlowFactory<EmptyModel>() {
         iconId = R.drawable.ic_icon_guides,
         titleId = R.string.guide_ap1_title,
         descriptionId = R.string.guide_ap1_subtitle,
-        positiveButtonTextId = R.string.generic_continue,
-        showCloseButton = true,
-        showBackButton = true
+        positiveButtonTextId = R.string.generic_continue
       )
-      AppTourFlow.AppTourAP2 -> AppTourAP2Controller.routerTransaction()
-      AppTourFlow.AppTourAP3 -> AppTourAP3Controller.routerTransaction()
-      AppTourFlow.AppTourAP4 -> AppTourAP4Controller.routerTransaction()
-      AppTourFlow.AppTourAP5 -> AppTourAP5Controller.routerTransaction()
-      AppTourFlow.AppTourAP6 -> AppTourAP6Controller.routerTransaction()
-      AppTourFlow.AppTourAP7 -> AppTourAP7Controller.routerTransaction()
-      AppTourFlow.AppTourAP8 -> AppTourAP8Controller.routerTransaction()
-      AppTourFlow.AppTourAP9 -> AppTourAP9Controller.routerTransaction()
-      AppTourFlow.AppTourAP10 -> AppTourAP10Controller.routerTransaction()
-      AppTourFlow.AppTourAP11 -> AppTourAP11Controller.routerTransaction()
-      AppTourFlow.AppTourAP12 -> AppTourAP12Controller.routerTransaction()
+      AppTourFlow.AppTourAP2 -> MediaGuideController.routerTransaction(
+        resourceId = R.drawable.guide_app_tour_status_screen,
+        titleId = R.string.guide_ap2_title,
+        descriptionId = R.string.guide_ap2_subtitle,
+        position = 1,
+        totalCount = 11
+      )
+      AppTourFlow.AppTourAP3 -> MediaGuideController.routerTransaction(
+        resourceId = R.drawable.guide_app_tour_inner_sensor_leak_status,
+        titleId = R.string.guide_ap3_title,
+        descriptionId = R.string.guide_ap3_subtitle,
+        position = 2,
+        totalCount = 11
+      )
+      AppTourFlow.AppTourAP4 -> MediaGuideController.routerTransaction(
+        resourceId = R.drawable.guide_app_tour_outer_sensor_leak_status,
+        titleId = R.string.guide_ap4_title,
+        descriptionId = R.string.guide_ap3_subtitle,
+        position = 3,
+        totalCount = 11
+      )
+      AppTourFlow.AppTourAP5 -> MediaGuideController.routerTransaction(
+        resourceId = R.drawable.guide_app_tour_detailed_view,
+        titleId = R.string.guide_ap5_title,
+        descriptionId = R.string.guide_ap5_subtitle,
+        position = 4,
+        totalCount = 11
+      )
+      AppTourFlow.AppTourAP6 -> MediaGuideController.routerTransaction(
+        resourceId = R.drawable.guide_app_tour_transmitter_battery,
+        titleId = R.string.guide_ap6_title,
+        descriptionId = R.string.guide_ap6_subtitle,
+        position = 5,
+        totalCount = 11
+      )
+      AppTourFlow.AppTourAP7 -> MediaGuideController.routerTransaction(
+        resourceId = R.drawable.guide_app_tour_menu,
+        titleId = R.string.guide_ap7_title,
+        descriptionId = R.string.guide_ap7_subtitle,
+        position = 6,
+        totalCount = 11
+      )
+      AppTourFlow.AppTourAP8 -> MediaGuideController.routerTransaction(
+        resourceId = R.drawable.guide_app_tour_guides,
+        titleId = R.string.guide_ap8_title,
+        descriptionId = R.string.guide_ap8_subtitle,
+        position = 7,
+        totalCount = 11
+      )
+      AppTourFlow.AppTourAP9 -> MediaGuideController.routerTransaction(
+        resourceId = R.drawable.guide_app_tour_applying_guide,
+        titleId = R.string.guide_ap9_title,
+        descriptionId = R.string.guide_ap9_subtitle,
+        position = 8,
+        totalCount = 11
+      )
+      AppTourFlow.AppTourAP10 -> MediaGuideController.routerTransaction(
+        resourceId = R.drawable.guide_app_tour_settings_menu,
+        titleId = R.string.guide_ap10_title,
+        descriptionId = R.string.guide_ap10_subtitle,
+        position = 9,
+        totalCount = 11
+      )
+      AppTourFlow.AppTourAP11 -> MediaGuideController.routerTransaction(
+        resourceId = R.drawable.guide_app_tour_silent_mode,
+        titleId = R.string.guide_ap11_title,
+        descriptionId = R.string.guide_ap11_subtitle,
+        position = 10,
+        totalCount = 11
+      )
+      AppTourFlow.AppTourAP12 -> MediaGuideController.routerTransaction(
+        resourceId = R.drawable.guide_app_tour_schedule_bedtime,
+        titleId = R.string.guide_ap12_title,
+        descriptionId = R.string.guide_ap12_subtitle,
+        position = 11,
+        totalCount = 11
+      )
       AppTourFlow.AppTourAP13 -> GenericConfirmationController.routerTransaction(
         titleId = R.string.guide_ap13_title,
         descriptionId = R.string.guide_ap13_subtitle,

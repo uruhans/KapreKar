@@ -16,7 +16,7 @@ object PasswordViewAdapters {
     fun setPasswordValidityCallback(passwordView: PasswordView, callbackFunction: (Boolean) -> Unit) {
         passwordView.onValidityChanged = callbackFunction
     }
-    
+
     @BindingAdapter("checkValidity")
     @JvmStatic
     fun shouldCheckValidity(passwordView: PasswordView, shouldCheckValidity: Boolean) {

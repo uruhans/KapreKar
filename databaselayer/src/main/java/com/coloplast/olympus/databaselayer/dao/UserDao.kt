@@ -12,6 +12,9 @@ import java.util.*
 @Dao
 interface UserDao {
 
+  @Query("DELETE FROM DbUser")
+  fun deleteUser() : Single<Int>
+
   @Insert(onConflict = OnConflictStrategy.REPLACE)
   fun insertOrUpdate(dbUser: DbUser): Single<Long>
 

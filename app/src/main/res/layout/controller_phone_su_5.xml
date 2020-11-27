@@ -17,7 +17,7 @@
 
     <TextView
       android:id="@+id/title"
-      style="@style/TextStyle.Coloplast.Bold.DarkGrey.24"
+      style="@style/TextStyle.Coloplast.Bold.DarkGrey.32"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_margin="@dimen/spacing_larger"
@@ -29,7 +29,7 @@
       style="@style/TextStyle.Roboto.Regular.ClearGrey.18"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
-      android:layout_marginTop="@dimen/spacing_larger"
+      android:layout_marginTop="@dimen/spacing_half"
       android:layout_marginEnd="@dimen/spacing_larger"
       android:text="@string/onboarding_su5_description"
       app:layout_constraintEnd_toEndOf="parent"
@@ -60,7 +60,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/spacing_larger"
-        android:layout_marginTop="@dimen/spacing_half"
         android:layout_marginEnd="@dimen/spacing_larger">
 
         <!-- paddingEnd is defined to avoid the text overlapping the chevron.

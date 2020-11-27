@@ -27,7 +27,6 @@ class AddTransmitterAT2Controller : BaseController<ControllerAddTransmitterAt2Bi
         ChecklistItem(R.string.guide_at2_item2),
         ChecklistItem(R.string.guide_at2_item3),
         ChecklistItem(R.string.guide_at2_item4),
-        ChecklistItem(R.string.guide_at2_item5)
       )
     
       items.addAll(list)

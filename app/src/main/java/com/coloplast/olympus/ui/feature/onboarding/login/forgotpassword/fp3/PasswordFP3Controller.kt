@@ -4,6 +4,7 @@ import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerPasswordFp3Binding
 import com.coloplast.olympus.ui.common.BaseController
+import com.coloplast.olympus.ui.common.flow.TopMenuVisibilityListener
 import com.coloplast.olympus.ui.common.listeners.FlowListener
 
 
@@ -11,7 +12,7 @@ import com.coloplast.olympus.ui.common.listeners.FlowListener
  * Created by Kike Bodi (ebp@dawnhealth.com) on 15/07/2020.
  * Copyright by Dawn Health A/S. All rights reserved.
  */
-class PasswordFP3Controller: BaseController<ControllerPasswordFp3Binding>() {
+class PasswordFP3Controller: BaseController<ControllerPasswordFp3Binding>(), TopMenuVisibilityListener {
 
   private var password: String = ""
   private var validPassword: Boolean = false
@@ -39,6 +40,8 @@ class PasswordFP3Controller: BaseController<ControllerPasswordFp3Binding>() {
   }
 
   override fun getLayout(): Int = R.layout.controller_password_fp_3
+
+  override fun showCloseButton(): Boolean = false
 
   companion object{
     const val TAG_CONTROLLER = "password_fp_3_controller"

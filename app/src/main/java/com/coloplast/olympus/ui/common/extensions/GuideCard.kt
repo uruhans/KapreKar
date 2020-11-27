@@ -15,15 +15,15 @@ import com.coloplast.olympus.ui.feature.guides.models.GuideCard
   GuideCard.COMPONENT_GUIDE -> R.drawable.guide_co_thumbnail
   GuideCard.APP_TOUR -> R.drawable.guide_ap_thumbnail
   GuideCard.APPLYING_GUIDE -> R.drawable.guide_ag_thumbnail
-  GuideCard.DRY_APPLYING_TIPS -> R.drawable.guide_ag_thumbnail
+  GuideCard.DRY_APPLYING_TIPS -> R.drawable.guide_dry_applying_tips_thumbnail
   GuideCard.CONNECTION_GUIDE -> R.drawable.guide_cg_thumbnail
   GuideCard.CHARGING_GUIDE -> R.drawable.guide_ch_thumbnail
   GuideCard.LOCATION_GUIDE -> R.drawable.guide_lg_thumbnail
   GuideCard.CHECK_BATTERY_LEVEL -> R.drawable.guide_cb_thumbnail
   GuideCard.ADD_TRANSMITTER -> R.drawable.guide_at_thumbnail
   GuideCard.DELETE_TRANSMITTER -> R.drawable.guide_dt_thumbnail
-  GuideCard.CLEANING_GUIDE -> R.drawable.guide_thumbnail_placeholder
-  GuideCard.DRYING_GUIDE -> R.drawable.guide_thumbnail_placeholder
+  GuideCard.CLEANING_GUIDE -> R.drawable.guide_cleaning
+  GuideCard.DRYING_GUIDE -> R.drawable.guide_drying
 }
 
 @StringRes fun GuideCard.getTitle(): Int = when (this) {

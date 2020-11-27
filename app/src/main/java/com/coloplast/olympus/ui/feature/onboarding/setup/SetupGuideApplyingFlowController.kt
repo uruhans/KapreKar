@@ -10,9 +10,9 @@ import com.coloplast.olympus.ui.common.MediaGuideController
 import com.coloplast.olympus.ui.common.flow.FlowFactory
 import com.coloplast.olympus.ui.common.flow.TopMenuFlowFactoryController
 import com.coloplast.olympus.ui.dialogs.CallHelpDialogController
-import com.coloplast.olympus.ui.feature.onboarding.setup.applying.SetupGuideApplyingSGA6Controller
 import com.coloplast.olympus.ui.feature.onboarding.setup.model.ApplyingFlowModel
 import com.coloplast.olympus.ui.feature.onboarding.setup.model.SetupGuideApplyingFlow
+import com.coloplast.olympus.ui.feature.onboarding.setup.model.TransmitterCheckerSelectionType
 import org.koin.core.inject
 
 class SetupGuideApplyingFlowController : TopMenuFlowFactoryController<ApplyingFlowModel>(),
@@ -29,6 +29,20 @@ class SetupGuideApplyingFlowController : TopMenuFlowFactoryController<ApplyingFl
 
   override fun onStepCompleted(currentIndex: Int, data: ApplyingFlowModel): Boolean {
     when(SetupGuideApplyingFlow.fromIndex(currentIndex)) {
+      SetupGuideApplyingFlow.SetupGuideTransmitterCheckerSGA8 -> {
+        when (data.transmitterCheckerSelectionType ) {
+          TransmitterCheckerSelectionType.NOT_SET -> return true
+          TransmitterCheckerSelectionType.FIXED -> {
+            factory.skipUntil(SetupGuideApplyingFlow.SetupGuideReadyAttachSGA9.id)
+          }
+          TransmitterCheckerSelectionType.LOOSE -> {
+            factory.skipUntil(SetupGuideApplyingFlow.SetupGuideWaitSGATMH1.id)
+          }
+          TransmitterCheckerSelectionType.NOT_SURE -> {
+            factory.skipUntil(SetupGuideApplyingFlow.SetupGuideNoProblemSGATMH2.id)
+          }
+        }
+      }
       SetupGuideApplyingFlow.SetupGuideContinueSGATMH6 -> {
         if (data.SetupGuideContinueSGATMH6_Call_Support) {
           onQuestionClicked("CallSupport")
@@ -69,7 +83,7 @@ class SetupGuideApplyingFlowController : TopMenuFlowFactoryController<ApplyingFl
   override fun popUntil(currentIndex: Int) {
     if (currentIndex == SetupGuideApplyingFlow.SetupGuideEnsureClosedSGA6.id) {
       getFlowChildRouter().popToTag(
-        SetupGuideApplyingSGA6Controller.TAG_CONTROLLER,
+        SetupGuideApplyingFlow.SetupGuideEnsureClosedSGA6.name,
         HorizontalChangeHandler()
       )
     }

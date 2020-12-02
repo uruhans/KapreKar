@@ -59,6 +59,8 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
   }
 
   private fun startService(): Int {
+    isRunning = true
+
     IntentFilter().let {
       it.addAction(INTENT_FILTER_STOP_SERVICE)
       it.addAction(INTENT_FILTER_INITIATE_RESET)
@@ -74,6 +76,7 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
         .filter { it == ServiceStateDispatcher.ServiceState.STOP_SERVICE }
         .subscribe { killService() }
     )
+
     return START_STICKY
   }
 
@@ -204,6 +207,7 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
   }
 
   private fun killService() {
+    isRunning = false
     unregisterReceiver(intentReceiver)
     compositeDisposable.clear()
     stopForeground(true)
@@ -214,5 +218,7 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
     const val INTENT_FILTER_STOP_SERVICE = "${BuildConfig.APPLICATION_ID}.BLUETOOTH.STOP_SERVICE"
     const val INTENT_FILTER_INITIATE_RESET = "${BuildConfig.APPLICATION_ID}.BLUETOOTH.INTENT_FILTER_INITIATE_RESET"
     const val INTENT_FILTER_RESET_SERVICE = " ${BuildConfig.APPLICATION_ID}.BLUETOOTH.RESET_SERVICE"
+
+    var isRunning = false
   }
 }

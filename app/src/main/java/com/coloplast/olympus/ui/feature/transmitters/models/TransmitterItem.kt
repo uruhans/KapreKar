@@ -41,7 +41,6 @@ class TransmitterItem(val transmitter: Transmitter, val onEdit: ObservableBoolea
           && this.connectionState.get() == other.connectionState.get()
           && this.attached.get() == other.attached.get()
           && this.detectable.get() == other.detectable.get()
-          && this.onEdit.get() == other.onEdit.get()
     } ?: false
   }
 }

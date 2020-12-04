@@ -9,7 +9,6 @@ import com.artemzin.rxui.kotlin.bind
 import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import com.coloplast.olympus.Me
 import com.coloplast.olympus.R
-import com.coloplast.olympus.bluetooth.businesslayer.FirmwareManager
 import com.coloplast.olympus.bluetooth.businesslayer.ServiceStateDispatcher
 import com.coloplast.olympus.bluetooth.service.BluetoothConnectionService
 import com.coloplast.olympus.shared.models.CurrentUser
@@ -81,6 +80,7 @@ class MainActivity : AppCompatActivity() {
     compositeDisposable.add(
       serviceStateDispatcher.serviceStateObservable()
         .filter { it == ServiceStateDispatcher.ServiceState.START_SERVICE}
+        .filter { !BluetoothConnectionService.isRunning }
         .delay(500, TimeUnit.MILLISECONDS)
         .subscribe { startService() }
     )

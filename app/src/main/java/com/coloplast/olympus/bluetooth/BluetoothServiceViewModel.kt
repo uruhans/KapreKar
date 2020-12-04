@@ -15,7 +15,6 @@ import com.coloplast.olympus.ui.feature.statemachine.OverlayStateMachineImpl
 import com.coloplast.olympus.ui.feature.statemachine.UiStateMachineImpl
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
 import com.coloplast.olympus.utils.DeviceUtils
-import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -29,43 +28,15 @@ class BluetoothServiceViewModel(
   private val deviceConnection: DeviceConnection
 ) : ServiceViewModel<BluetoothServiceModel, BluetoothServiceResult<BluetoothServiceModel>>() {
 
-  private val connectedTransmittersRelay = PublishRelay.create<List<String>>()
-  private val connectedBleDevicesList = mutableListOf<String>()
-
   // the repeatIntervalObservable to determine when to repeat something
   private fun repeatIntervalObservable(seconds: Long) = Observable.interval(seconds, TimeUnit.SECONDS)
-
-  private fun removeConnectedDeviceAndNotify(macAddress: String) {
-    connectedBleDevicesList.remove(macAddress)
-    connectedTransmittersRelay.accept(connectedBleDevicesList)
-  }
 
   override fun bind(serviceResult: BluetoothServiceResult<BluetoothServiceModel>): Disposable {
     val compositeDisposable = CompositeDisposable()
 
-    val connectedBleDevicesObservable = connectedTransmittersRelay
-      .publish()
-      .refCount()
-      .startWith(connectedBleDevicesList)
-
     val currentBluetoothStateObservable = bluetoothManager
       .bluetoothStateObservable()
       .skip(1)
-
-    val bluetoothStateReadyObservable = currentBluetoothStateObservable
-      .map {
-        if(it == BluetoothState.BLUETOOTH_NOT_ENABLED) {
-          // if we suddenly get a disconnect (we shouldn't but there you go)
-          // we should disconnect all transmitters
-          connectedBleDevicesList.forEach { macAddress ->
-            ServiceDispatcher.dispatchEvent(ServiceEvent.DisconnectTransmitter(macAddress))
-          }
-        }
-
-        it
-      }
-      .filter { it == BluetoothState.READY }
-      .delay(5, TimeUnit.SECONDS)
 
     val databaseTransmittersObservable = transmitterComponent.getTransmitters()
       .subscribeOn(Schedulers.io())
@@ -81,10 +52,32 @@ class BluetoothServiceViewModel(
         }
       }
 
+    val bluetoothStateReadyObservable = currentBluetoothStateObservable
+      .map {
+        if(it == BluetoothState.BLUETOOTH_NOT_ENABLED) {
+          // if we suddenly get a disconnect (we shouldn't but there you go)
+          // we should disconnect all transmitters
+          dbTransmittersObservable.blockingFirst().forEach { transmitter ->
+            ServiceDispatcher.dispatchEvent(ServiceEvent.DisconnectTransmitter(transmitter.id))
+          }
+        }
+
+        it
+      }
+      .filter { it == BluetoothState.READY }
+      .delay(5, TimeUnit.SECONDS)
+
+    // get list of transmitters from database
     val allTransmittersConnectedObservable = dbTransmittersObservable
-      .flatMap { dbTransmitters ->
-        connectedBleDevicesObservable
-          .map { it.size == dbTransmitters.size }
+      .map { dbTransmitters ->
+        // convert list of transmitters into a List<Pair<Transmitter, isConnected>>
+        dbTransmitters.map { transmitter ->
+          Pair(transmitter, bluetoothManager.bleConnectionStateObservable(transmitter.id).blockingFirst() == BleConnectionState.CONNECTED)
+        }
+      }
+      // check to see if *all* transmitters are connected
+      .map { listOfTransmittersWithConnectedValue ->
+        listOfTransmittersWithConnectedValue.all { it.second }
       }
 
     // this observable handles scanning for beacons
@@ -93,10 +86,9 @@ class BluetoothServiceViewModel(
       .flatMap {
         // then we check if we are already connected to all
         allTransmittersConnectedObservable
-          // we dont want any more results from this guy unless the bluetoothstateReadyObservable hits *Ready* state again
-          .take(1)
+//          // we dont want any more results from this guy unless the bluetoothstateReadyObservable hits *Ready* state again
+//          .take(1)
           // if we are not connected to all, then continue
-          .filter { allConnected -> !allConnected }
           .flatMap {
             // scan for beacons
             bluetoothManager.scanBeacons()
@@ -107,7 +99,7 @@ class BluetoothServiceViewModel(
               .takeUntil(
                 Observable.merge(
                   // all transmitters are connected
-                  allTransmittersConnectedObservable.doOnNext { Timber.d("BEACON allConnected $it") }.filter { allConnected -> allConnected},
+                  allTransmittersConnectedObservable.doOnNext { Timber.d("BEACON allConnected $it") }.filter { it },
                   // bluetooth state no longer ready
                   currentBluetoothStateObservable.doOnNext { Timber.d("BEACON currentBluetoothState $it") }.filter { it != BluetoothState.READY }
                 ).doOnNext { Timber.d("BEACON Stopped Scanning") })
@@ -152,7 +144,6 @@ class BluetoothServiceViewModel(
     val disconnectTransmitterObservable = ServiceDispatcher.serviceEventObservable()
       .filter { it is ServiceEvent.DisconnectTransmitter }
       .map { it as ServiceEvent.DisconnectTransmitter }
-      .doOnNext { removeConnectedDeviceAndNotify(it.macAddress) }
       .delay(5, TimeUnit.SECONDS)
 
     // merging beacon scannings and database transmitters in order to
@@ -165,20 +156,9 @@ class BluetoothServiceViewModel(
       // add delay to each onNext to allow for device to be connected to not overload the BLE stack
       .zipWith(repeatIntervalObservable(5),
         { macAddress: String, _: Long -> macAddress })
-//      .flatMap { macAddress ->
-//        bluetoothManager.bleConnectionStateObservable(macAddress)
-//          .takeUntil(disconnectTransmitterObservable)
-//          .filter { it == BleConnectionState.DISCONNECTED }
-//          .filter { connectedBleDevicesList.none { address -> address == macAddress } }
-//          .take(1)
-//          .map { macAddress }
-//      }
 
     val connectTransmitterObservable = devicesToConnectToObservable
-      .doOnNext {
-        Timber.d("Try to connect to [$it]")
-//        connectedBleDevicesList.add(it)
-      }
+      .doOnNext { Timber.d("Try to connect to [$it]") }
       .filter { bluetoothManager.bleConnectionStateObservable(it).blockingFirst() == BleConnectionState.DISCONNECTED }
       .flatMap { connectObservable(it) }
 
@@ -209,8 +189,6 @@ class BluetoothServiceViewModel(
             BluetoothServiceModel.RawDataPackageUpdate(deviceResult.macAddress, deviceResult.rawDataPackage)
           }
           is DeviceResult.Error -> {
-            removeConnectedDeviceAndNotify(macAddress)
-
             // return a disconnect to the service
             BluetoothServiceModel.Disconnected(macAddress)
           }
@@ -223,7 +201,6 @@ class BluetoothServiceViewModel(
         }
       }
       .doOnError {
-        removeConnectedDeviceAndNotify(macAddress)
         ServiceDispatcher.dispatchEvent(ServiceEvent.DisconnectTransmitter(macAddress))
       }
       .onErrorReturn {

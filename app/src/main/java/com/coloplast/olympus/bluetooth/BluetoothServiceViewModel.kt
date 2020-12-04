@@ -159,6 +159,7 @@ class BluetoothServiceViewModel(
 
     val connectTransmitterObservable = devicesToConnectToObservable
       .doOnNext { Timber.d("Try to connect to [$it]") }
+      .filter { bluetoothManager.bleConnectionStateObservable(it).blockingFirst() == BleConnectionState.DISCONNECTED }
       .flatMap { connectObservable(it) }
 
     compositeDisposable.add(retryObservable.map<BluetoothServiceModel> { BluetoothServiceModel.ScanningStarted() }.bind(serviceResult.onResult()))

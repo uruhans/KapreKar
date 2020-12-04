@@ -21,6 +21,7 @@ class TransmitterItem(val transmitter: Transmitter, val onEdit: ObservableBoolea
   fun setStateChange(stateChange: StateChange){
     this.battery.set(stateChange.bleDevice.peripheral?.battery)
     attached.set(stateChange.bleDevice.isAttached())
+    detectable.set(stateChange.bleDevice.isConnected())
   }
 
   fun setConnectionState(connectionState: BleConnectionState){

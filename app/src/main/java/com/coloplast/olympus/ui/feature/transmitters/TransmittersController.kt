@@ -80,7 +80,7 @@ class TransmittersController(args: Bundle? = null) :
           transmitterList.clear()
           transmitterList.addAll(uiModel.devices.map { TransmitterItem(it, editEnabled, this) })
 
-          if(items.isEmpty()) {
+          if (items.isEmpty()) {
             updateDiffList()
           }
         }
@@ -151,7 +151,7 @@ class TransmittersController(args: Bundle? = null) :
     ).apply { show() }
   }
 
-  override fun onCloseClicked(requestCode: Int){
+  override fun onCloseClicked(requestCode: Int) {
     dialogController?.dismissDialog(false)
     dialogController = null
   }
@@ -160,6 +160,7 @@ class TransmittersController(args: Bundle? = null) :
     when (requestCode) {
       REQUEST_CODE_DELETE_TRANSMITTER -> {
         transmitterToDelete?.let {
+          editEnabled.set(false)
           deleteTransmitterRelay.accept(it.id)
         }
       }
@@ -184,7 +185,7 @@ class TransmittersController(args: Bundle? = null) :
   }
 
   fun onAddTransmitterClicked() {
-    when(canAddMoreTransmitters()){
+    when (canAddMoreTransmitters()) {
       true -> addTransmitterFlow()
       false -> {
         dialogController = ImageDialogController.create(
@@ -201,7 +202,7 @@ class TransmittersController(args: Bundle? = null) :
     }
   }
 
-  private fun addTransmitterFlow(){
+  private fun addTransmitterFlow() {
     router.pushController(
       AddTransmitterFlowController.routerTransaction(2)
         .pushChangeHandler(VerticalChangeHandler())
@@ -231,23 +232,29 @@ class TransmittersController(args: Bundle? = null) :
     return R.layout.controller_transmitters
   }
 
-  private fun updateDiffList(){
+  private fun updateDiffList() {
     val newList = mutableListOf<DiffListItem>()
 
-    // Add attached transmitters and Title header
+    // Add attached transmitters
     transmitterList.filter { it.attached.get() }.let {
-      if(it.isNotEmpty()){
-        newList.add(SmallHeaderItem(R.string.transmitters_attached))
+      if (it.isNotEmpty()) {
+        //newList.add(SmallHeaderItem(R.string.transmitters_attached))
         newList.addAll(it)
       }
     }
 
     // Add divider if necessary
-    if (newList.isNotEmpty()  && newList.size != transmitterList.size+1) newList.add(SectionDivider())
+    if (newList.isNotEmpty()) {
+      if(newList.size != transmitterList.size) {
+        newList.add(SectionDivider())
+      }
+
+      newList.add(0, SmallHeaderItem(R.string.transmitters_attached))
+    }
 
     // Add non-attached transmitters and Title header
     transmitterList.filter { !it.attached.get() }.let {
-      if(it.isNotEmpty()){
+      if (it.isNotEmpty()) {
         newList.add(SmallHeaderItem(R.string.transmitters_not_attached))
         newList.addAll(it)
       }

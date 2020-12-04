@@ -15,6 +15,7 @@ import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 class TransmittersViewModel(
@@ -30,42 +31,27 @@ class TransmittersViewModel(
       .subscribeOn(Schedulers.io())
       .map {
         if (it is DataResult.Success<*>) {
-          it.data as List<Transmitter>
+          TransmittersUiModel.TransmitterList(it.data as List<Transmitter>)
         }
         else {
-          emptyList()
-        }
-      }
-
-    // transforming the stored transmitters into UiModel to be displayed on the screen
-    val transformedTransmitters = transmittersOrEmptyObservable
-      .map {
-        if (it.isEmpty()) {
           TransmittersUiModel.Empty()
         }
-        else {
-          TransmittersUiModel.TransmitterList(it)
-        }
       }
-
-    // a delayed subscription (others should only subscribe once transmitters have been returned to the controller)
-    val delayedSubscriptionUntilCorrectReturnType =
-      transformedTransmitters.filter { it is TransmittersUiModel.TransmitterList }
 
     // get the connectionstate of the transmitters
     val bleConnectionStateObservable = transmittersOrEmptyObservable
-      .delaySubscription(delayedSubscriptionUntilCorrectReturnType)
-      .filter { it.isNotEmpty() }
-      .flatMapIterable { it }
+      .ofType(TransmittersUiModel.TransmitterList::class.java)
+      .flatMapIterable { it.devices }
       .map { it.id }
       .flatMap { macAddress ->
         bluetoothManager.bleConnectionStateObservable(macAddress)
+          .doOnNext { Timber.d("Device [$macAddress] is $it") }
           .map { TransmittersUiModel.TransmitterConnectionState(ConnectionState(macAddress, it)) }
       }
 
     // and return the latest update from the transmitters
     val latestStateObservable = StateDispatcher.stateChangeObservable()
-      .delaySubscription(delayedSubscriptionUntilCorrectReturnType)
+      .delaySubscription(bleConnectionStateObservable)
       .map { TransmittersUiModel.StateUpdate(it) }
 
     val deleteTransmitterObservable = uiView.requestDeleteTransmitter()
@@ -95,7 +81,7 @@ class TransmittersViewModel(
 
     disposable.add(
       Observable.merge(
-        transformedTransmitters,
+        transmittersOrEmptyObservable,
         bleConnectionStateObservable,
         latestStateObservable
       ).bind(uiView.render())

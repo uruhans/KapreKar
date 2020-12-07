@@ -3,18 +3,18 @@ package com.coloplast.olympus.datalayer.interceptors
 import okhttp3.Interceptor
 import okhttp3.Response
 
-class AzureAuthInterceptor(private val code: String)  : Interceptor {
+class AzureAuthInterceptor(private val secretAzureCode: String) : Interceptor {
+
+  private val queryAzureCode = "code"
+
   override fun intercept(chain: Interceptor.Chain): Response {
-    val url = chain.request().url
-    val requestBuilder = chain.request().newBuilder()
+    val request = chain.request()
+    val updatedUrl = request.url.newBuilder().addQueryParameter(queryAzureCode, secretAzureCode).build()
 
-    if(url.query.isNullOrBlank()) {
-      requestBuilder.url("$url?code=$code")
-    }
-    else {
-      requestBuilder.url("$url&code=$code")
-    }
-
-    return chain.proceed(requestBuilder.build())
+    return chain.proceed(
+      request.newBuilder()
+        .url(updatedUrl)
+        .build()
+    )
   }
 }

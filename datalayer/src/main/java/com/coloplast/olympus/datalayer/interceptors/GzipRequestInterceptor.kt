@@ -21,13 +21,13 @@ class GzipRequestInterceptor(private val secretAzureCode: String) : Interceptor 
       .addQueryParameter(queryCode, secretAzureCode)
       .build()
 
-    val requestBuilder = originalRequest.newBuilder().url(updatedUrl)
+    val updatedRequest = originalRequest.newBuilder().url(updatedUrl)
 
     if (originalRequest.body == null || originalRequest.header(headerContentEncoding) != null) {
-      return chain.proceed(requestBuilder.build())
+      return chain.proceed(updatedRequest.build())
     }
 
-    val compressedRequest = requestBuilder
+    val compressedRequest = updatedRequest
       .header(headerContentEncoding, gZipContentEncoding)
       .method(originalRequest.method, forceContentLength(gzip(originalRequest.body!!)))
       .build()

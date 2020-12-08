@@ -49,6 +49,7 @@ class GuideApplyingTransmitterFlowController : TopMenuFlowFactoryController<Appl
 
   override fun onFlowCompleted(data: ApplyingFlowModel) {
     preferences.setCurrentOnboardingProgression(OnboardingProgression.COMPLETED)
+    preferences.setOnboardingCompletedTimeStamp(System.currentTimeMillis())
     super.onFlowCompleted(data)
   }
 

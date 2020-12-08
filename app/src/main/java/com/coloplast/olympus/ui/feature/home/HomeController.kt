@@ -26,6 +26,7 @@ import com.coloplast.olympus.bluetooth.businesslayer.models.Patch
 import com.coloplast.olympus.bluetooth.model.PatchProbability
 import com.coloplast.olympus.bluetooth.model.ServiceEvent
 import com.coloplast.olympus.databinding.ControllerHomeBinding
+import com.coloplast.olympus.shared.preferences.OnboardingProgression
 import com.coloplast.olympus.shared.preferences.Preferences
 import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.common.DrawerState
@@ -52,6 +53,7 @@ import com.coloplast.olympus.ui.feature.statemachine.models.OverlayState
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
 import com.coloplast.olympus.ui.feature.transmitters.TransmittersController
 import com.coloplast.olympus.ui.feature.uistates.*
+import com.coloplast.olympus.ui.feature.welcome.WelcomeController
 import com.coloplast.olympus.utils.OSUtils
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
@@ -133,6 +135,13 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
 
       Timber.d("uiModel: $uiModel")
 
+//      preferences.didSeeWelcome = false
+      if (preferences.getCurrentOnboardingProgress() == OnboardingProgression.COMPLETED &&
+        !preferences.didSeeWelcome) {
+          preferences.didSeeWelcome = true
+        changeUiState(UiState.SHOW_WELCOME)
+      }
+      else {
       when (uiModel) {
         is HomeUiModel.ConnectionStateUpdate -> {
           isConnected.set(uiModel.connectionState == BleConnectionState.CONNECTED)
@@ -259,6 +268,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         }
       }
     }
+    }
   }
 
   private fun changeUiState(newState: UiState, forceUpdate: Boolean = false) {
@@ -271,6 +281,9 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
       val routerTransaction = when (newState) {
         UiState.FIRMWARE_AVAILABLE -> {
           FirmwareAvailableController.routerTransaction()
+        }
+        UiState.SHOW_WELCOME -> {
+          WelcomeController.routerTransaction()
         }
         UiState.APP_UPDATE_AVAILABLE -> {
           AppUpdateAvailableController.routerTransaction()

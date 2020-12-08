@@ -23,7 +23,9 @@ class Preferences(applicationContext: Context) {
   var bedtimeStart: LocalTime by bindSharedPreference(applicationContext, BEDTIME_ALERT_START, LocalTime.of(22,0))
   var bedtimeEnd: LocalTime by bindSharedPreference(applicationContext, BEDTIME_ALERT_END, LocalTime.of(8,0))
   var bedtimeAlertSensor: Sensors by bindSharedPreference(applicationContext, RINGING_ALERT_SENSOR, Sensors.ALL)
+  var didSeeWelcome: Boolean by bindSharedPreference(applicationContext, DID_SEE_WELCOME, false)
   var didSeeValueProposition: Boolean by bindSharedPreference(applicationContext, DID_SEE_VALUE_PROPOSITION, false)
+  private var onboardingCompletedTime: Long by bindSharedPreference(applicationContext, ONBOARDING_COMPLETED_TIMESTAMP, 0)
   private var currentOnboardingProgression : Int by bindSharedPreference(applicationContext, CURRENT_ONBOARDING_PROGRESSION, OnboardingProgression.NOT_STARTED.id)
 
   private var patchId: Int by bindSharedPreference(applicationContext, CURRENT_PATCH_ID, 0)
@@ -55,6 +57,14 @@ class Preferences(applicationContext: Context) {
 
   fun getCurrentOnboardingProgress(): OnboardingProgression {
     return OnboardingProgression.fromId(currentOnboardingProgression)
+  }
+
+  fun setOnboardingCompletedTimeStamp(timeStamp: Long) {
+    onboardingCompletedTime = timeStamp
+  }
+
+  fun getOnboardingCompletedTimeStamp(): Long {
+    return onboardingCompletedTime
   }
 
   fun incrementPatchId() {
@@ -94,6 +104,9 @@ class Preferences(applicationContext: Context) {
     private const val BEDTIME_ALERT_END: String = "BEDTIME_ALERT_END"
     private const val DID_SEE_VALUE_PROPOSITION: String = "DID_SEE_VALUE_PROPOSITION"
     private const val CURRENT_ONBOARDING_PROGRESSION: String = "CURRENT_ONBOARDING_PROGRESSION"
+    private const val ONBOARDING_COMPLETED_TIMESTAMP: String = "ONBOARDING_COMPLETED_TIMESTAMP"
+    private const val DID_SEE_APP_TOUR_GUIDE: String = "DID_SEE_APP_TOUR_GUIDE"
+    private const val DID_SEE_WELCOME: String = "DID_SEE_WELCOME"
     private const val CURRENT_PATCH_ID: String = "CURRENT_PATCH_ID"
     private const val CURRENT_DEVICE_ID: String = "CURRENT_DEVICE_ID"
 

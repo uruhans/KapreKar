@@ -29,7 +29,7 @@ class HomeViewModel(
   
   override fun bind(uiView: HomeView): Disposable {
     val disposable = CompositeDisposable()
-    
+
     val currentBluetoothStateObservable: Observable<BluetoothState> = bluetoothManager.bluetoothStateObservable()
     val bluetoothStateObservable: Observable<HomeUiModel> = currentBluetoothStateObservable
       .map<HomeUiModel> { HomeUiModel.BluetoothIssue(it) }

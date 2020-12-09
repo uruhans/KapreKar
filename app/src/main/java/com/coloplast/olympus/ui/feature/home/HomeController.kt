@@ -53,7 +53,7 @@ import com.coloplast.olympus.ui.feature.statemachine.models.OverlayState
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
 import com.coloplast.olympus.ui.feature.transmitters.TransmittersController
 import com.coloplast.olympus.ui.feature.uistates.*
-import com.coloplast.olympus.ui.feature.welcome.WelcomeController
+import com.coloplast.olympus.ui.feature.uistates.WelcomeController
 import com.coloplast.olympus.utils.OSUtils
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable

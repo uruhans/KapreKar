@@ -5,12 +5,21 @@ import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerStateInnerBreachBinding
 import com.coloplast.olympus.ui.feature.home.models.PatchVisible
 
-class InnerBreachController : BaseHomeUIController<ControllerStateInnerBreachBinding>(), PatchVisible {
+class InnerBreachController : BaseHomeUIControllerAppTour<ControllerStateInnerBreachBinding>(), PatchVisible {
   
   override fun onViewBound(viewBinding: ControllerStateInnerBreachBinding) {
     // no-op
   }
-  
+
+  fun onAppTourClicked() {
+    startAppTour()
+  }
+
+  override fun attachVariables(viewBinding: ControllerStateInnerBreachBinding) {
+    super.attachVariables(viewBinding)
+    viewBinding.controller = this
+  }
+
   override fun getLayout(): Int {
     return R.layout.controller_state_inner_breach
   }

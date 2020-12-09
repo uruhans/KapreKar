@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <data>
+    <variable
+      name="controller"
+      type="com.coloplast.olympus.ui.feature.uistates.InnerBreachController" />
+  </data>
 
   <LinearLayout
     android:id="@+id/innerleak_container"
@@ -25,6 +32,11 @@
       android:fontFamily="@font/coloplast"
       android:text="@string/status_inner_breach"
       android:textColor="@color/grey" />
+
+    <include layout="@layout/item_app_guide_button"
+      android:id="@+id/includeBtn"
+      app:visibleOrGone="@{controller.shouldShowAppTourButton}"
+      app:buttonClickListener="@{() -> controller.onAppTourClicked()}"/>
 
   </LinearLayout>
 </layout>

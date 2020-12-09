@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <data>
+    <variable
+      name="buttonClickListener"
+      type="android.view.View.OnClickListener" />
+  </data>
+  <androidx.cardview.widget.CardView
+    android:id="@+id/app_tour"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/cardview_button_height_default"
+    android:layout_marginStart="@dimen/spacing_standard"
+    android:layout_marginEnd="@dimen/spacing_standard"
+    android:layout_marginTop="@dimen/spacing_larger"
+    android:layout_marginBottom="@dimen/spacing_double"
+    android:foreground="?attr/selectableItemBackground"
+    android:onClick="@{buttonClickListener}"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="28dp"
+    app:cardElevation="4dp"
+    app:cardPreventCornerOverlap="true"
+    app:cardUseCompatPadding="false">
+
+    <ImageView
+      android:layout_width="28dp"
+      android:layout_height="28dp"
+      android:src="@drawable/ic_icon_guides"
+      android:layout_gravity="center_vertical"
+      android:layout_marginStart="@dimen/spacing_large"/>
+
+    <TextView
+      style="@style/Text.Medium"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:fontFamily="sans-serif-medium"
+      android:gravity="center"
+      android:text="@string/guide_ap1_title"
+      android:textSize="18sp" />
+  </androidx.cardview.widget.CardView>
+
+</layout>

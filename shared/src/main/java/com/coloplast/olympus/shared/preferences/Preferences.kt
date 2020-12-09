@@ -24,6 +24,7 @@ class Preferences(applicationContext: Context) {
   var bedtimeEnd: LocalTime by bindSharedPreference(applicationContext, BEDTIME_ALERT_END, LocalTime.of(8,0))
   var bedtimeAlertSensor: Sensors by bindSharedPreference(applicationContext, RINGING_ALERT_SENSOR, Sensors.ALL)
   var didSeeWelcome: Boolean by bindSharedPreference(applicationContext, DID_SEE_WELCOME, false)
+  var didSeeAppTourGuide: Boolean by bindSharedPreference(applicationContext, DID_SEE_APP_TOUR_GUIDE, false)
   var didSeeValueProposition: Boolean by bindSharedPreference(applicationContext, DID_SEE_VALUE_PROPOSITION, false)
   private var onboardingCompletedTime: Long by bindSharedPreference(applicationContext, ONBOARDING_COMPLETED_TIMESTAMP, 0)
   private var currentOnboardingProgression : Int by bindSharedPreference(applicationContext, CURRENT_ONBOARDING_PROGRESSION, OnboardingProgression.NOT_STARTED.id)

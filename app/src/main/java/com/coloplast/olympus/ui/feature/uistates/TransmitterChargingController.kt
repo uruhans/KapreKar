@@ -5,14 +5,19 @@ import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerStateTransmitterChargingBinding
 import com.coloplast.olympus.ui.feature.home.models.PatchVisible
 
-class TransmitterChargingController : BaseHomeUIController<ControllerStateTransmitterChargingBinding>(), PatchVisible {
+class TransmitterChargingController : BaseHomeUIControllerAppTour<ControllerStateTransmitterChargingBinding>(), PatchVisible {
   
   override fun onViewBound(viewBinding: ControllerStateTransmitterChargingBinding) {
     // no-op
   }
-  
-  fun onApplicationGuideClicked() {
-  
+
+  override fun attachVariables(viewBinding: ControllerStateTransmitterChargingBinding) {
+    super.attachVariables(viewBinding)
+    viewBinding.controller = this
+  }
+
+  fun onAppTourClicked() {
+    startAppTour()
   }
   
   override fun patchVisible(): Boolean {

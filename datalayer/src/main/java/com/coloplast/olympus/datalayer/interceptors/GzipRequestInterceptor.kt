@@ -11,6 +11,7 @@ import okio.buffer
 
 class GzipRequestInterceptor(private val secretAzureCode: String) : Interceptor {
 
+  private val headerExcludeInterceptor = "Exclude-Interceptor"
   private val headerContentEncoding = "Content-Encoding"
   private val gZipContentEncoding = "gzip"
   private val queryCode = "code"
@@ -22,6 +23,13 @@ class GzipRequestInterceptor(private val secretAzureCode: String) : Interceptor 
       .build()
 
     val updatedRequest = originalRequest.newBuilder().url(updatedUrl)
+
+    // if the current request contains a header to exclude the gzipping, we just proceed
+    // however we still want the updated URL, which is why we do it here
+    if(originalRequest.header(headerExcludeInterceptor) == GzipRequestInterceptor::class.java.simpleName) {
+      updatedRequest.removeHeader(headerExcludeInterceptor)
+      return chain.proceed(updatedRequest.build())
+    }
 
     if (originalRequest.body == null || originalRequest.header(headerContentEncoding) != null) {
       return chain.proceed(updatedRequest.build())

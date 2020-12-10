@@ -9,7 +9,6 @@ class OkController : BaseHomeUIControllerAppTour<ControllerStateOkBinding>(), Pa
   
   override fun onViewBound(viewBinding: ControllerStateOkBinding) {
     // no-op
-
   }
   
   override fun getLayout(): Int {

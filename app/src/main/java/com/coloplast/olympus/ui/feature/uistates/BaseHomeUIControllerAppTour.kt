@@ -14,15 +14,22 @@ abstract class BaseHomeUIControllerAppTour<T : ViewDataBinding>() : BaseHomeUICo
   val shouldShowAppTourButton = ObservableBoolean(false)
 
   init {
-    val onBoardedLessThan48Hours = (System.currentTimeMillis() - preferences.getOnboardingCompletedTimeStamp()) / (1000L * 60 * 60) < 48
+    val onBoardedLessThan48Hours = (System.currentTimeMillis() - preferences.getOnboardingCompletedTimeStamp()) / MILLIS_TO_HOURS < 48
     shouldShowAppTourButton.set(onBoardedLessThan48Hours && !preferences.didSeeAppTourGuide)
   }
 
   fun startAppTour() {
     preferences.didSeeAppTourGuide = true
     val (selectedRouter, routerTransaction) = Pair(getContentRouter(), AppTourFlowController.routerTransaction())
-    selectedRouter.pushController(routerTransaction
-      .pushChangeHandler(HorizontalChangeHandler())
-      .popChangeHandler(HorizontalChangeHandler()))
+    selectedRouter.pushController(
+      routerTransaction
+        .pushChangeHandler(HorizontalChangeHandler())
+        .popChangeHandler(HorizontalChangeHandler())
+    )
+  }
+
+  companion object {
+    private const val MILLIS_TO_HOURS = 1000L * 60 * 60
   }
 }
+

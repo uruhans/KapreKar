@@ -1,6 +1,5 @@
 package com.coloplast.olympus.ui.feature.uistates
 
-import android.view.View
 import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerStateTransmitterChargingBinding

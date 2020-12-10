@@ -448,6 +448,11 @@
 <string name="lock_service_notification_channel_description">Maintaining transmitter connection</string>
 <string name="lock_service_notification_channel_id">2</string>
 <string name="lock_service_notification_channel_name">Heylo™ Bluetooth Connection</string>
+<string name="main_screen_welcome_app_tour">Take the App Tour</string>
+<string name="main_screen_welcome_body1">This is your Status screen.</string>
+<string name="main_screen_welcome_body2">You\'ll be informed if anything changes.</string>
+<string name="main_screen_welcome_title1">Welcome.</string>
+<string name="main_screen_welcome_title2">Looking good.</string>
 <string name="menu_guides">Guides</string>
 <string name="menu_settings">Settings</string>
 <string name="menu_status">Status</string>

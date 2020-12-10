@@ -114,6 +114,12 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
     if (currentUiState != UiState.INITIAL) {
       changeUiState(currentUiState, true)
     }
+
+    checkForLocationGuideShown()
+  }
+
+  private fun checkForLocationGuideShown() {
+    TODO("Not yet implemented")
   }
 
   override fun attachVariables(viewBinding: ControllerHomeBinding) {

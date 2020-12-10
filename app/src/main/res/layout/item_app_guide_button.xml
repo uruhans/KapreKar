@@ -17,7 +17,6 @@
     android:layout_height="@dimen/cardview_button_height_default"
     android:layout_marginStart="@dimen/spacing_standard"
     android:layout_marginEnd="@dimen/spacing_standard"
-    android:layout_marginTop="@dimen/spacing_larger"
     android:layout_marginBottom="@dimen/spacing_double"
     android:foreground="?attr/selectableItemBackground"
     android:onClick="@{buttonClickListener}"
@@ -42,7 +41,7 @@
       android:layout_gravity="center"
       android:fontFamily="sans-serif-medium"
       android:gravity="center"
-      android:text="@string/guide_ap1_title"
+      android:text="@string/main_screen_welcome_app_tour"
       android:textSize="18sp" />
   </androidx.cardview.widget.CardView>
 

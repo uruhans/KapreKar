@@ -22,7 +22,7 @@
       android:layout_marginStart="@dimen/spacing_standard"
       android:layout_marginTop="@dimen/spacing_half"
       android:layout_marginEnd="@dimen/spacing_standard"
-      android:text="@string/onboarding_login_title" />
+      android:text="@string/main_screen_welcome_title1" />
 
     <TextView
       style="@style/Headline.Large"
@@ -32,7 +32,7 @@
       android:layout_marginEnd="@dimen/spacing_standard"
       android:layout_marginBottom="@dimen/spacing_double"
       android:fontFamily="@font/coloplast"
-      android:text="@string/guide_ap2_subtitle"
+      android:text="@string/main_screen_welcome_body1"
       android:textColor="@color/grey" />
 
     <include layout="@layout/item_app_guide_button"

@@ -10,7 +10,6 @@ class TransmitterChargingController : BaseHomeUIControllerAppTour<ControllerStat
   
   override fun onViewBound(viewBinding: ControllerStateTransmitterChargingBinding) {
     // no-op
-    viewBinding.includeBtn.appTourBtn.visibility = View.GONE
   }
 
   override fun attachVariables(viewBinding: ControllerStateTransmitterChargingBinding) {

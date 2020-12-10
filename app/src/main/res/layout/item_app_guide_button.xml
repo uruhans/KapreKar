@@ -21,7 +21,6 @@
     android:layout_marginBottom="@dimen/spacing_double"
     android:foreground="?attr/selectableItemBackground"
     android:onClick="@{buttonClickListener}"
-    android:visibility="gone"
     app:visibleOrGone="@{isVisible}"
     app:cardBackgroundColor="@color/white"
     app:cardCornerRadius="28dp"

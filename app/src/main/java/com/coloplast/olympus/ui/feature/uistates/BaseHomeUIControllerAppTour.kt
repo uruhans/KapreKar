@@ -14,16 +14,9 @@ abstract class BaseHomeUIControllerAppTour<T : ViewDataBinding>() : BaseHomeUICo
   val shouldShowAppTourButton = ObservableBoolean(false)
 
   init {
-    shouldShowAppTourButton.set(false)
-    //shouldShowAppTourButton.set(!preferences.didSeeAppTourGuide)
+    val onBoardedLessThan48Hours = (System.currentTimeMillis() - preferences.getOnboardingCompletedTimeStamp()) / (1000L * 60 * 60) < 48
+    shouldShowAppTourButton.set(onBoardedLessThan48Hours && !preferences.didSeeAppTourGuide)
   }
-
-//  val shouldShowAppTourButton: Boolean
-//    get() {
-//      return show
-//    }
-//    val onBoardedLessThan48Hours = (System.currentTimeMillis() - preferences.getOnboardingCompletedTimeStamp()) / (1000L * 60 * 60) < 48
-//    !preferences.didSeeAppTourGuide //&& !onBoardedLessThan48Hours
 
   fun startAppTour() {
     preferences.didSeeAppTourGuide = true

@@ -30,7 +30,7 @@
 
     <include layout="@layout/item_app_guide_button"
       android:id="@+id/includeBtn"
-      android:visibility="gone"
+      bind:isVisible="@{controller.shouldShowAppTourButton}"
       app:buttonClickListener="@{() -> controller.onAppTourClicked()}"/>
   </LinearLayout>
 </layout>

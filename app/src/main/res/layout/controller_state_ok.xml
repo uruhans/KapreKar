@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto">
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:bind="http://schemas.android.com/apk/res-auto">
 
   <data>
+    <import type="android.view.View"/>
     <variable
       name="controller"
       type="com.coloplast.olympus.ui.feature.uistates.OkController" />
@@ -28,7 +30,9 @@
 
     <include layout="@layout/item_app_guide_button"
       android:id="@+id/includeBtn"
-      app:visibleOrGone="@{controller.shouldShowAppTourButton}"
+      android:visibility="gone"
       app:buttonClickListener="@{() -> controller.onAppTourClicked()}"/>
   </LinearLayout>
 </layout>
+
+

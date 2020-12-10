@@ -1,5 +1,6 @@
 package com.coloplast.olympus.ui.feature.uistates
 
+import android.view.View
 import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerStateTransmitterChargingBinding
@@ -9,6 +10,7 @@ class TransmitterChargingController : BaseHomeUIControllerAppTour<ControllerStat
   
   override fun onViewBound(viewBinding: ControllerStateTransmitterChargingBinding) {
     // no-op
+    viewBinding.includeBtn.appTourBtn.visibility = View.GONE
   }
 
   override fun attachVariables(viewBinding: ControllerStateTransmitterChargingBinding) {

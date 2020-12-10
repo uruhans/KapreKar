@@ -278,6 +278,9 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
       Timber.d("Same state was hit [${newState}] - Skipping")
     }
     else {
+      Timber.d("State is [${newState}]")
+
+
       val routerTransaction = when (newState) {
         UiState.FIRMWARE_AVAILABLE -> {
           FirmwareAvailableController.routerTransaction()

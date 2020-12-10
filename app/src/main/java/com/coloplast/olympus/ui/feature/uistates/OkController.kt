@@ -9,6 +9,7 @@ class OkController : BaseHomeUIControllerAppTour<ControllerStateOkBinding>(), Pa
   
   override fun onViewBound(viewBinding: ControllerStateOkBinding) {
     // no-op
+
   }
   
   override fun getLayout(): Int {
@@ -23,7 +24,7 @@ class OkController : BaseHomeUIControllerAppTour<ControllerStateOkBinding>(), Pa
   fun onAppTourClicked() {
      startAppTour()
   }
-  
+
   companion object {
     private const val TAG_CONTROLLER = "state_ok_controller"
     fun routerTransaction() = RouterTransaction.with(OkController()).tag(TAG_CONTROLLER)

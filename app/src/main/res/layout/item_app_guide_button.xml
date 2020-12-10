@@ -3,12 +3,16 @@
   xmlns:app="http://schemas.android.com/apk/res-auto">
 
   <data>
+    <import type="android.view.View"/>
+    <variable
+      name="isVisible"
+      type="Boolean" />
     <variable
       name="buttonClickListener"
       type="android.view.View.OnClickListener" />
   </data>
   <androidx.cardview.widget.CardView
-    android:id="@+id/app_tour"
+    android:id="@+id/app_tour_btn"
     android:layout_width="match_parent"
     android:layout_height="@dimen/cardview_button_height_default"
     android:layout_marginStart="@dimen/spacing_standard"
@@ -17,6 +21,8 @@
     android:layout_marginBottom="@dimen/spacing_double"
     android:foreground="?attr/selectableItemBackground"
     android:onClick="@{buttonClickListener}"
+    android:visibility="gone"
+    app:visibleOrGone="@{isVisible}"
     app:cardBackgroundColor="@color/white"
     app:cardCornerRadius="28dp"
     app:cardElevation="4dp"

@@ -27,7 +27,7 @@ class WelcomeController : BaseHomeUIControllerAppTour<ControllerStateWelcomeBind
 
   override fun onViewBound(viewBinding: ControllerStateWelcomeBinding) {
     val (routerTransaction, delay) = Pair(HomeController.routerTransaction(), 5000L)
-      viewBinding.includeBtn.appTour.postDelayed({
+      viewBinding.includeBtn.appTourBtn.postDelayed({
         if (!appTourStarted) {
           router.setPopsLastView(true)
           router.popCurrentController()

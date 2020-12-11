@@ -180,7 +180,6 @@ class BluetoothManagerImpl(
         }
         return@BiFunction bleDevice.connectionState
       })
-      .doOnNext { Timber.e("ConnectionState: $it") }
       .publish()
       .refCount()
   }

@@ -42,8 +42,8 @@ class BluetoothServiceViewModel(
       // however, we dont really care about the result, we just want the ping
       .map { true }
 
-    // this is a continuous ping that notifies us every 30 seconds (but after 1 second the first time)
-    val continuousPingObservable = Observable.interval(1, 30, TimeUnit.SECONDS)
+    // this is a continuous ping that notifies us every 30 seconds
+    val continuousPingObservable = Observable.interval(30, TimeUnit.SECONDS)
       .map { true }
 
     // we merge these these pings, that will notify us that we want to try
@@ -71,10 +71,6 @@ class BluetoothServiceViewModel(
       .filter { it.connectionState == BleConnectionState.DISCONNECTED }
       // then map the txModel => transmitter
       .map { it.transmitter }
-      // this will cause a 5 second delay before continuing from here
-      // old left over, can possibly be removed
-      .zipWith(Observable.interval(5, TimeUnit.SECONDS),
-        { transmitter, _ -> transmitter })
       // then map the transmitter => macAddress
       .map { it.id }
       .publish()

@@ -51,6 +51,7 @@ import com.coloplast.olympus.ui.feature.home.models.HomeUiModel
 import com.coloplast.olympus.ui.feature.home.models.PatchVisible
 import com.coloplast.olympus.ui.feature.home.models.SideMenuType
 import com.coloplast.olympus.ui.feature.home.models.Stitch
+import com.coloplast.olympus.ui.feature.onboarding.setup.SetupGuideConnectionFlowController
 import com.coloplast.olympus.ui.feature.profile.ProfileController
 import com.coloplast.olympus.ui.feature.settings.SettingsFlowController
 import com.coloplast.olympus.ui.feature.statemachine.models.OverlayState
@@ -399,7 +400,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   }
 
   private fun checkForLocationGuideShown(): Boolean {
-    val onBoardedMoreThan5Hours = (System.currentTimeMillis() - preferences.getOnboardingCompletedTimeStamp()) / MILLIS_TO_HOURS > 5
+    val onBoardedMoreThan5Hours = (System.currentTimeMillis() - preferences.getOnboardingCompletedTimeStamp()) / MILLIS_TO_HOURS >= 1
     return onBoardedMoreThan5Hours
   }
 
@@ -506,6 +507,11 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         dialogController?.dismissDialog(withCallback = true)
       }
       REQUEST_CODE_PERMISSION_RATIONALE -> {
+        requestPermissionAgain(
+          this,
+          REQUEST_CODE_PERMISSION_LOCATION,
+          OSUtils.bleLocationPermission()
+        )
         imageDialogController?.dismissDialog(withCallback = true)
       }
       REQUEST_CODE_CONNECTION_LOST -> {
@@ -521,6 +527,11 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
       }
       REQUEST_CODE_PERMISSION_RATIONALE -> {
         requestPermissionAgain(this, REQUEST_CODE_PERMISSION_LOCATION, OSUtils.bleLocationPermission())
+
+        if (checkForLocationGuideShown()) {
+          startLocationGuide()
+        }
+
       }
       REQUEST_CODE_CONNECTION_LOST -> {
         router.pushController(
@@ -536,6 +547,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
 
   override fun onCloseClicked(requestCode: Int) {
     when (requestCode) {
+      REQUEST_CODE_PERMISSION_RATIONALE,
       REQUEST_CODE_CONNECTION_LOST,
       REQUEST_CODE_BATTERY_LOW -> {
         imageDialogController?.dismissDialog(false)
@@ -547,9 +559,6 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   override fun showPermissionRationale(requestCode: Int) {
     when (requestCode) {
       REQUEST_CODE_PERMISSION_LOCATION -> {
-        if (checkForLocationGuideShown()) {
-          startLocationGuide()
-        } else {
           imageDialogController = ImageDialogController.create(
             this,
             REQUEST_CODE_PERMISSION_RATIONALE,
@@ -561,7 +570,6 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
             dismissAllowed = true
           )
           imageDialogController?.show()
-        }
       }
     }
   }
@@ -591,7 +599,6 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
       R.string.dialog_permission_ask,
       dismissAllowed = false
     )
-
     dialogController?.show()
   }
 

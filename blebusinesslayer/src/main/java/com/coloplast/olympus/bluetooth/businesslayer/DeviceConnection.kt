@@ -20,7 +20,6 @@ class DeviceConnection(
     // connect to specific device or use the connection we already have
     val connectedBleDeviceObservable = bluetoothManager.bleConnectionStateObservable(macAddress)
       .take(1)
-      .delay(500, TimeUnit.MILLISECONDS)
       .flatMap { bleConnectionState ->
         if (bleConnectionState == BleConnectionState.DISCONNECTED) {
           // do actual connection to the new device

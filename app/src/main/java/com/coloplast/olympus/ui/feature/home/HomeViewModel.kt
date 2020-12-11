@@ -8,6 +8,7 @@ import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
 import com.coloplast.olympus.businesslayer.interfaces.TransmitterComponent
 import com.coloplast.olympus.businesslayer.interfaces.UserComponent
 import com.coloplast.olympus.shared.models.DataResult
+import com.coloplast.olympus.shared.preferences.OnboardingProgression
 import com.coloplast.olympus.shared.preferences.Preferences
 import com.coloplast.olympus.ui.feature.home.models.BaseHomeViewModel
 import com.coloplast.olympus.ui.feature.home.models.HomeUiModel

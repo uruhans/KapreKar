@@ -44,14 +44,11 @@ import com.coloplast.olympus.ui.feature.contact.ContactController
 import com.coloplast.olympus.ui.feature.guides.GuidesFlowController
 import com.coloplast.olympus.ui.feature.guides.SingleGuideFlowController
 import com.coloplast.olympus.ui.feature.guides.articles.models.GuideType
-import com.coloplast.olympus.ui.feature.guides.flows.location.LocationGuideFlow
 import com.coloplast.olympus.ui.feature.guides.flows.location.LocationGuideFlowController
-import com.coloplast.olympus.ui.feature.guides.flows.tour.AppTourFlowController
 import com.coloplast.olympus.ui.feature.home.models.HomeUiModel
 import com.coloplast.olympus.ui.feature.home.models.PatchVisible
 import com.coloplast.olympus.ui.feature.home.models.SideMenuType
 import com.coloplast.olympus.ui.feature.home.models.Stitch
-import com.coloplast.olympus.ui.feature.onboarding.setup.SetupGuideConnectionFlowController
 import com.coloplast.olympus.ui.feature.profile.ProfileController
 import com.coloplast.olympus.ui.feature.settings.SettingsFlowController
 import com.coloplast.olympus.ui.feature.statemachine.models.OverlayState
@@ -82,6 +79,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   private val requestConnectionStateRelay = PublishRelay.create<String>()
   private val stitchRelay = PublishRelay.create<Stitch>()
   private val resetRelay = PublishRelay.create<String>() // macAddress
+  private var showWelcome: Boolean = false
 
   private val connectionStateDisposable = CompositeDisposable()
 
@@ -133,16 +131,17 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
     if (currentUiState != UiState.INITIAL) {
       changeUiState(currentUiState, true)
     }
-    checkForWelcomeShown()
+    showWelcome = shouldShowWelcome()
   }
 
   override fun render(): Function<Observable<HomeUiModel>, Disposable> {
     return RxUi.ui { uiModel ->
       Timber.d("uiModel: $uiModel")
+      if (showWelcome) {
+        preferences.didSeeWelcome = true
+        changeUiState(UiState.SHOW_WELCOME)
+      } else {
       when (uiModel) {
-        is HomeUiModel.ShowWelcome -> {
-          changeUiState(UiState.SHOW_WELCOME)
-        }
         is HomeUiModel.ConnectionStateUpdate -> {
           isConnected.set(uiModel.connectionState == BleConnectionState.CONNECTED)
 
@@ -155,7 +154,8 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
             BluetoothState.BLUETOOTH_NOT_AVAILABLE -> {
             }
             BluetoothState.LOCATION_PERMISSION_NOT_GRANTED -> {
-              showPermissionDialog()
+            //This is only required when scanning for transmitter
+            //showPermissionDialog()
             }
             BluetoothState.BLUETOOTH_NOT_ENABLED -> {
               isConnected.set(false)
@@ -267,6 +267,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
           lastCheck.set(uiModel.lastUpdate)
         }
       }
+    }
     }
   }
 
@@ -391,12 +392,9 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
     }
   }
 
-  private fun checkForWelcomeShown() {
-    if (preferences.getCurrentOnboardingProgress() == OnboardingProgression.COMPLETED &&
-      !preferences.didSeeWelcome) {
-      preferences.didSeeWelcome = true
-      changeUiState(UiState.SHOW_WELCOME, true)
-    }
+  private fun shouldShowWelcome(): Boolean {
+    return  (preferences.getCurrentOnboardingProgress() == OnboardingProgression.COMPLETED &&
+      !preferences.didSeeWelcome)
   }
 
   private fun checkForLocationGuideShown(): Boolean {
@@ -527,11 +525,9 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
       }
       REQUEST_CODE_PERMISSION_RATIONALE -> {
         requestPermissionAgain(this, REQUEST_CODE_PERMISSION_LOCATION, OSUtils.bleLocationPermission())
-
         if (checkForLocationGuideShown()) {
           startLocationGuide()
         }
-
       }
       REQUEST_CODE_CONNECTION_LOST -> {
         router.pushController(

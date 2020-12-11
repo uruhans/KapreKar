@@ -28,32 +28,54 @@ class BluetoothServiceViewModel(
   override fun bind(serviceResult: BluetoothServiceResult<BluetoothServiceModel>): Disposable {
     val compositeDisposable = CompositeDisposable()
 
+    // this observable pings us when we want to retry a connection attempt
+    // and is usually started by the user elsewhere in the app
     val retryObservable = ServiceDispatcher.serviceEventObservable()
       .filter { it is ServiceEvent.RetryConnection }
       .map { true }
 
+    // this observable notifies us of changes occurring in the local database
+    // meaning, it pings us when transmitters are added and removed from database
+    // it is a *hot* observable, and will continue to notify us always
     val databaseTransmittersObservable = transmitterComponent.getTransmitters()
       .subscribeOn(Schedulers.io())
-      .doOnNext { Timber.d("databaseTransmittersObservable - change happened") }
+      // however, we dont really care about the result, we just want the ping
+      .map { true }
 
+    // this is a continuous ping that notifies us every 30 seconds (but after 1 second the first time)
+    val continuousPingObservable = Observable.interval(1, 30, TimeUnit.SECONDS)
+      .map { true }
+
+    // we merge these these pings, that will notify us that we want to try
+    // to connect to our transmitters
     val immediateConnectionObservable = Observable.merge(
-      Observable.interval(1, 30, TimeUnit.SECONDS).doOnNext { Timber.d("Hitting interval $it") }.map { true },
-      databaseTransmittersObservable.map { true },
+      continuousPingObservable,
+      databaseTransmittersObservable,
       retryObservable
     )
-      .doOnNext { Timber.d("Fetch transmitters") }
       .flatMap {
+        // here we get all transmitters stored locally in the database
+        // we are doing it as a single because we dont want it to notify us when database changes occur
         transmitterComponent.getTransmittersAsSingle()
           .toObservable()
       }
+      // only begin connection flow if we actually have some transmitters to connect to
       .filter { it.isNotEmpty() }
+      // split transmitters into single transmitters (if we have more than one)
       .flatMapIterable { it }
-      .map { Pair(it, bluetoothManager.bleConnectionStateObservable(it.id).blockingFirst()) }
-      .doOnNext { Timber.d("[${it.first.name}] - [${it.first.id}] - is ${it.second}") }
-      .filter { it.second == BleConnectionState.DISCONNECTED }
-      .map { it.first }
+      // get the current connection state of the transmitter immediately
+      .map { TxModel(it, bluetoothManager.bleConnectionStateObservable(it.id).blockingFirst()) }
+      // write it out to logcat
+      .doOnNext { Timber.d("[${it.transmitter.name}] - [${it.transmitter.id}] - is ${it.connectionState}") }
+      // only continue if the current transmitter is disconnected
+      .filter { it.connectionState == BleConnectionState.DISCONNECTED }
+      // then map the txModel => transmitter
+      .map { it.transmitter }
+      // this will cause a 5 second delay before continuing from here
+      // old left over, can possibly be removed
       .zipWith(Observable.interval(5, TimeUnit.SECONDS),
         { transmitter, _ -> transmitter })
+      // then map the transmitter => macAddress
       .map { it.id }
       .publish()
       .refCount()
@@ -63,8 +85,12 @@ class BluetoothServiceViewModel(
       .map { it as ServiceEvent.DisconnectTransmitter }
       .delay(5, TimeUnit.SECONDS)
 
+    // the observable that handles the connection
     val connectionObservable = immediateConnectionObservable
+      // just as a precaution, we check the connection state for the transmitter again
+      // must be disconnected
       .filter { bluetoothManager.bleConnectionStateObservable(it).blockingFirst() == BleConnectionState.DISCONNECTED }
+      // then we do the actual connection
       .flatMap { connectObservable(it) }
 
     compositeDisposable.add(connectionObservable.bind(serviceResult.onResult()))

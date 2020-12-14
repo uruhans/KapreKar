@@ -1,5 +1,7 @@
 package com.coloplast.olympus.ui.feature.uistates
 
+import androidx.core.view.doOnPreDraw
+import androidx.core.view.postDelayed
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.FadeChangeHandler
 import com.coloplast.olympus.R
@@ -14,6 +16,21 @@ class WelcomeController : BaseHomeUIControllerAppTour<ControllerStateWelcomeBind
   override fun attachVariables(viewBinding: ControllerStateWelcomeBinding) {
     super.attachVariables(viewBinding)
     viewBinding.controller = this
+
+    viewBinding.root.doOnPreDraw { closeAfterPeriod(viewBinding) }
+  }
+
+  private fun closeAfterPeriod(viewBinding: ControllerStateWelcomeBinding) {
+    viewBinding.root.postDelayed(MAX_VISIBLE_TIME) {
+      if (!appTourStarted) {
+        router.setPopsLastView(true)
+        router.popCurrentController()
+        router.setPopsLastView(false)
+        getContentRouter().pushController(
+          HomeController.routerTransaction().popChangeHandler(FadeChangeHandler())
+            .pushChangeHandler(FadeChangeHandler()))
+      }
+    }
   }
 
   fun onAppTourClicked() {
@@ -26,21 +43,12 @@ class WelcomeController : BaseHomeUIControllerAppTour<ControllerStateWelcomeBind
   }
 
   override fun onViewBound(viewBinding: ControllerStateWelcomeBinding) {
-    val (routerTransaction, delay) = Pair(HomeController.routerTransaction(), 5000L)
-      viewBinding.includeBtn.appTourBtn.postDelayed({
-        if (!appTourStarted) {
-          router.setPopsLastView(true)
-          router.popCurrentController()
-          router.setPopsLastView(false)
-          getContentRouter().pushController(
-            routerTransaction.popChangeHandler(FadeChangeHandler())
-              .pushChangeHandler(FadeChangeHandler()))
-        }
-      }, delay)
+
   }
 
   companion object {
     private const val TAG_CONTROLLER = "state_welcome_controller"
+    private const val MAX_VISIBLE_TIME = 5000L
     fun routerTransaction() = RouterTransaction.with(WelcomeController()).tag(TAG_CONTROLLER)
   }
 }

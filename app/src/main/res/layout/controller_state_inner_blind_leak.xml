@@ -23,7 +23,7 @@
       android:layout_marginStart="@dimen/spacing_standard"
       android:layout_marginTop="@dimen/spacing_half"
       android:layout_marginEnd="@dimen/spacing_standard"
-      android:text="@string/status_inner_blind_leak_L_title" />
+      android:text="@string/status_inner_blind_leak_l_title" />
 
     <TextView
       style="@style/Headline.Large"
@@ -33,7 +33,7 @@
       android:layout_marginEnd="@dimen/spacing_standard"
       android:layout_marginBottom="@dimen/spacing_double"
       android:fontFamily="@font/coloplast"
-      android:text="@string/status_inner_blind_leak_L"
+      android:text="@string/status_inner_blind_leak_l"
       android:textColor="@color/grey" />
 
     <androidx.cardview.widget.CardView

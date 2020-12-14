@@ -57,6 +57,7 @@ data class Patch(
       // PRIORITY 13
       outerSensor == SensorStatus.BLINDED -> PatchState.TOTAL_BLIND
       // PRIORITY 14
+      innerSensorBlinded.size >= 2 && outerSensor == SensorStatus.BREACH -> PatchState.INNER_BLIND_LEAK
       innerSensorBlinded.size >= 2 -> PatchState.INNER_BLIND
       // PRIORITY 15
       else -> PatchState.OK

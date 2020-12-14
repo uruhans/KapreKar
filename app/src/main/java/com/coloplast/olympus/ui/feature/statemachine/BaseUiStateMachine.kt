@@ -80,6 +80,9 @@ abstract class BaseUiStateMachine : UiStateMachine {
       UiState.CUTGUARD_DIRT_IN_TRANSMITTER_K -> {
         { cutguardDirtInTransmitter_K(it) }
       }
+      UiState.INNER_BLIND_LEAK_L -> {
+        { innerBlindLeak_L(it) }
+      }
       UiState.TRANSMITTER_DETACHED_V -> {
         { transmitterDetached_V(it) }
       }

@@ -67,7 +67,6 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
   val dataPolicyAccepted = ObservableBoolean()
 
   private lateinit var user: User
-
   private var infoChanged = false
   private var healthInfoChanged = false
   private var consentChanged = false
@@ -85,9 +84,7 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
             user.surgeryDateInterval != surgerySpinnerPosition.get() ||
             user.insuranceType != insuranceSpinnerPosition.get()
 
-
       userProfileChanged.set(infoChanged || healthInfoChanged || consentChanged)
-
     }
   }
 

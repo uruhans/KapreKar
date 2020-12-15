@@ -68,13 +68,11 @@
           android:layout_marginTop="@dimen/spacing_quarter"
           android:background="@drawable/edittext_background"
           android:enabled="@{controller.editingEnabled}"
-          android:focusable="false"
-          android:focusableInTouchMode="false"
           android:focusedByDefault="false"
           android:gravity="center_vertical"
           android:paddingStart="@dimen/spacing_standard"
           android:paddingEnd="@dimen/spacing_standard"
-          app:safeText="@{controller.firstName}" />
+          android:text="@={controller.firstName}" />
 
         <TextView
           style="@style/TextStyle.Roboto.Regular.ClearGrey.14"
@@ -90,13 +88,10 @@
           android:layout_marginTop="@dimen/spacing_quarter"
           android:background="@drawable/edittext_background"
           android:enabled="@{controller.editingEnabled}"
-          android:focusable="false"
-          android:focusableInTouchMode="false"
-          android:focusedByDefault="false"
           android:gravity="center_vertical"
           android:paddingStart="@dimen/spacing_standard"
           android:paddingEnd="@dimen/spacing_standard"
-          app:safeText="@{controller.lastName}" />
+          android:text="@={controller.lastName}" />
 
         <TextView
           style="@style/TextStyle.Roboto.Regular.ClearGrey.14"
@@ -112,13 +107,10 @@
           android:layout_marginTop="@dimen/spacing_quarter"
           android:background="@drawable/edittext_background"
           android:enabled="@{controller.editingEnabled}"
-          android:focusable="false"
-          android:focusableInTouchMode="false"
-          android:focusedByDefault="false"
           android:gravity="center_vertical"
           android:paddingStart="@dimen/spacing_standard"
           android:paddingEnd="@dimen/spacing_standard"
-          app:safeText="@{controller.phoneNumber}" />
+          android:text="@={controller.phoneNumber}" />
 
         <TextView
           style="@style/TextStyle.Roboto.Regular.ClearGrey.14"
@@ -134,13 +126,10 @@
           android:layout_marginTop="@dimen/spacing_quarter"
           android:background="@drawable/edittext_background"
           android:enabled="@{controller.editingEnabled}"
-          android:focusable="false"
-          android:focusableInTouchMode="false"
-          android:focusedByDefault="false"
           android:gravity="center_vertical"
           android:paddingStart="@dimen/spacing_standard"
           android:paddingEnd="@dimen/spacing_standard"
-          app:safeText="@{controller.email}" />
+          android:text="@={controller.email}" />
 
         <View
           android:layout_width="match_parent"
@@ -267,6 +256,7 @@
           android:layout_marginEnd="@dimen/spacing_none"
           android:layout_marginTop="@dimen/spacing_double"
           android:text="@string/generic_save_changes"
+          android:onClick="@{() -> controller.saveProfileClicked()}"
           app:visibleOrGone="@{controller.userProfileChanged}" />
 
         <Button
@@ -277,8 +267,8 @@
           android:layout_marginStart="@dimen/spacing_none"
           android:layout_marginEnd="@dimen/spacing_none"
           android:text="@string/generic_discard"
-          app:visibleOrGone="@{controller.userProfileChanged}"
-          android:onClick="@{() -> controller.discardChangesClicked()}" />
+          android:onClick="@{() -> controller.discardChangesClicked()}"
+          app:visibleOrGone="@{controller.userProfileChanged}"/>
 
         <View
           android:layout_width="match_parent"
@@ -289,7 +279,8 @@
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:layout_marginTop="@dimen/spacing_double"
-          android:layout_marginBottom="@dimen/spacing_standard">
+          android:layout_marginBottom="@dimen/spacing_standard"
+          tools:visibility="visible">
 
           <TextView
             android:id="@+id/data_policy_card_title"
@@ -398,6 +389,85 @@
         android:layout_marginTop="@dimen/spacing_small"
         android:layout_marginBottom="@dimen/spacing_small"
         android:text="@string/profile_pp_no_profile_description" />
+
+      <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_marginTop="@dimen/spacing_double"
+        android:layout_marginBottom="@dimen/spacing_standard">
+        <View
+          android:id="@+id/splitter"
+          android:layout_width="match_parent"
+          android:layout_height="1dp"
+          android:background="@color/ten_percent_transparent_black"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/data_policy_card_title2"
+            style="@style/TextStyle.Coloplast.Bold.DarkGrey.20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/onboarding_dc5_card_title"
+            android:layout_marginTop="@dimen/spacing_double"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/splitter"
+            />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/data_policy_card_switch2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="@={controller.dataPolicyAccepted}"
+            android:layout_marginTop="@dimen/spacing_double"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/splitter"
+            />
+
+        <TextView
+          android:id="@+id/consentTxt"
+          style="@style/TextStyle.Roboto.Regular.ClearGrey.18"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/spacing_standard"
+          android:layout_marginBottom="@dimen/spacing_small"
+          android:text="@string/profile_pp_no_profile_consent_description"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toBottomOf="@+id/data_policy_card_switch2"/>
+
+        <Button
+          android:id="@+id/policy_agreement_button2"
+          style="@style/Button.Borderless"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="@dimen/spacing_half"
+          android:onClick="@{() -> controller.onPolicyAgreementClicked()}"
+          android:text="@string/profile_pp_no_profile_consent_read_policy"
+          android:textAlignment="textStart"
+          android:textAllCaps="false"
+          android:textSize="@dimen/text_18"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toBottomOf="@+id/consentTxt"/>
+
+        <Button
+          style="@style/Button"
+          android:id="@+id/save_changes_btn2"
+          android:layout_height="wrap_content"
+          android:layout_width="match_parent"
+          android:layout_marginStart="@dimen/spacing_none"
+          android:layout_marginEnd="@dimen/spacing_none"
+          android:layout_marginTop="@dimen/spacing_double"
+          android:text="@string/profile_pp_no_profile_create_profile_button"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toBottomOf="@+id/policy_agreement_button2"/>
+
+      </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
 
     </LinearLayout>
 

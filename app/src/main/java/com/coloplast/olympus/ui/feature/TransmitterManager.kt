@@ -33,9 +33,6 @@ class TransmitterManager(
 
   // constants for automatic patch detection
   private val validDetachInterval = 60*60
-  private val aFrom = 1.0
-  private val aTo = 1.0
-  private val intercept = -10.2643
 
   init {
     preferences.latestStateFromActiveTx.let { latestStateFromActiveTx ->
@@ -173,13 +170,21 @@ class TransmitterManager(
       return PatchProbability.NOT_SET
     }
 
+    // Magic number is coming from Coloplast. For more information see Coloplast documentation on Auto patch detection.
+    val intercept = 10.2643
+
     return if(to < 10) {
+      // METHOD 0
+      // If the to value is less than 10, that means that the sensor layer in which the transmitter has been placed, is so new that even if a sensor is triggered it should still be reset.
+      // This is what "We" call a wet mount.
       Timber.d("calculateSplitCommand: to < 10")
       PatchProbability.NEW
     }
     else {
       if(from != null) {
-       val patchProbability = ((intercept + aTo * to.toDouble()) / -aFrom ) - from.toDouble()
+        // METHOD A
+        // For a deeper explanation of the equation please refer to the Coloplast documentation of APS.
+       val patchProbability = to.toDouble() - from.toDouble() + intercept
         if(patchProbability < 0) {
           Timber.d("calculateSplitCommand: patchProbability < 0")
           PatchProbability.NEW
@@ -190,12 +195,16 @@ class TransmitterManager(
         }
       }
       else {
-        if(to.toDouble() <= 23.1) {
-          Timber.d("calculateSplitCommand: to <= 23.1")
+        // "METHOD B
+        // If we for some reason do not have a from value, the command can be calculated using only the to value.
+        // This could be because of bluetooth disconnection.
+        // This magic number is determined on data analysis and was decided by Coloplast, please refer to the APS Coloplast documentation.
+        if(to.toDouble() <= 20.44) {
+          Timber.d("calculateSplitCommand: to <= 20.44")
           PatchProbability.NEW
         }
         else {
-          Timber.d("calculateSplitCommand: to > 23.1")
+          Timber.d("calculateSplitCommand: to > 20.44")
           PatchProbability.SAME
         }
       }

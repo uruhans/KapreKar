@@ -398,7 +398,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   }
 
   private fun checkForLocationGuideShown(): Boolean {
-    val onBoardedMoreThan5Hours = (System.currentTimeMillis() - preferences.getOnboardingCompletedTimeStamp()) / MILLIS_TO_HOURS >= 1
+    val onBoardedMoreThan5Hours = (System.currentTimeMillis() - preferences.getOnboardingCompletedTimeStamp()) / MILLIS_TO_HOURS >= 5
     return onBoardedMoreThan5Hours
   }
 
@@ -525,9 +525,10 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
       }
       REQUEST_CODE_PERMISSION_RATIONALE -> {
         requestPermissionAgain(this, REQUEST_CODE_PERMISSION_LOCATION, OSUtils.bleLocationPermission())
-        if (checkForLocationGuideShown()) {
-          startLocationGuide()
-        }
+        //TODO We wait for final decision about opening Location guide
+//        if (checkForLocationGuideShown()) {
+//          startLocationGuide()
+//        }
       }
       REQUEST_CODE_CONNECTION_LOST -> {
         router.pushController(

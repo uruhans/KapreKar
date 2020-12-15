@@ -71,15 +71,14 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
   private var infoChanged = false
   private var healthInfoChanged = false
   private var consentChanged = false
-  private var userProfileChanged = false
+  val userProfileChanged = ObservableBoolean(false)
 
   private val profileVarsChangedCallback = object : androidx.databinding.Observable.OnPropertyChangedCallback() {
     override fun onPropertyChanged(sender: androidx.databinding.Observable?, propertyId: Int) {
-      infoChanged =
-        user.firstName != firstName.get() ||
-            user.lastName != lastName.get() ||
-            user.phoneNumber != phoneNumber.get() ||
-            user.email != email.get()
+      infoChanged = user.firstName != firstName.get() ||
+          user.lastName != lastName.get() ||
+          user.phoneNumber != phoneNumber.get() ||
+          user.email != email.get()
 
       healthInfoChanged =
         user.stomaType != stomaSpinnerPosition.get() ||
@@ -87,7 +86,8 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
             user.insuranceType != insuranceSpinnerPosition.get()
 
 
-      userProfileChanged = infoChanged || healthInfoChanged || consentChanged
+      userProfileChanged.set(infoChanged || healthInfoChanged || consentChanged)
+
     }
   }
 
@@ -122,7 +122,7 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
   private fun changeConsent(consent: Boolean) {
     consentChanged = user.consent != consent
 
-    userProfileChanged = infoChanged || healthInfoChanged || consentChanged
+    userProfileChanged.set(infoChanged || healthInfoChanged || consentChanged)
 
     // TODO - this is temporary until we enable changes to all fields
     if(consentChanged) {
@@ -147,6 +147,7 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
       when (uiModel) {
         is ProfileUiModel.FetchedUser -> {
           user = uiModel.user
+          editingEnabled.set(true)
           updateUserData(user)
         }
         is ProfileUiModel.UserUpdated -> {
@@ -156,7 +157,7 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
           infoChanged = false
           healthInfoChanged = false
           consentChanged = false
-          userProfileChanged = false
+          userProfileChanged.set(false)
 
           updateUserData(user)
         }
@@ -258,7 +259,7 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
   }
 
   override fun handleBack(): Boolean {
-    if (userProfileChanged) {
+    if (userProfileChanged.get()) {
       imageDialogController = ImageDialogController.create(
         this,
         REQUEST_CODE_SAVE_CHANGES_DIALOG,

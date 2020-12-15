@@ -258,10 +258,31 @@
 
         </LinearLayout>
 
+        <Button
+          style="@style/Button"
+          android:id="@+id/save_changes_btn"
+          android:layout_height="wrap_content"
+          android:layout_width="match_parent"
+          android:layout_marginStart="@dimen/spacing_none"
+          android:layout_marginEnd="@dimen/spacing_none"
+          android:layout_marginTop="@dimen/spacing_double"
+          android:text="@string/generic_save_changes"
+          app:visibleOrGone="@{controller.userProfileChanged}" />
+
+        <Button
+          style="@style/Button.Secondary"
+          android:id="@+id/discard_changes_btn"
+          android:layout_height="wrap_content"
+          android:layout_width="match_parent"
+          android:layout_marginStart="@dimen/spacing_none"
+          android:layout_marginEnd="@dimen/spacing_none"
+          android:text="@string/generic_discard"
+          app:visibleOrGone="@{controller.userProfileChanged}"
+          android:onClick="@{() -> controller.discardChangesClicked()}" />
+
         <View
           android:layout_width="match_parent"
           android:layout_height="1dp"
-          android:layout_marginTop="@dimen/spacing_double"
           android:background="@color/ten_percent_transparent_black" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -331,8 +352,8 @@
           style="@style/Button.Secondary"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_marginStart="@dimen/spacing_none"
           android:layout_marginTop="@dimen/spacing_double"
+          android:layout_marginStart="@dimen/spacing_none"
           android:layout_marginEnd="@dimen/spacing_none"
           android:onClick="@{() -> controller.onLogoutClicked()}"
           android:text="@string/profile_pp_log_out_button" />

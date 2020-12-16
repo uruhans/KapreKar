@@ -20,6 +20,7 @@ interface UiStateMachine {
   fun cutguardBroken_I(newState: UiState): Boolean
   fun waterIngressDetection_J(newState: UiState): Boolean
   fun cutguardDirtInTransmitter_K(newState: UiState): Boolean
+  fun innerBlindLeak_L(newState: UiState): Boolean
   fun transmitterDetached_V(newState: UiState): Boolean
   fun transmitterBatteryCharging_W(newState: UiState): Boolean
   

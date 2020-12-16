@@ -121,6 +121,7 @@ class UiStateMachineImpl : BaseUiStateMachine() {
       UiState.CUTGUARD_BROKEN_I,
       UiState.TRANSMITTER_DETACHED_V,
       UiState.CUTGUARD_DIRT_IN_TRANSMITTER_K,
+      UiState.INNER_BLIND_LEAK_L,
       UiState.TRANSMITTER_BATTERY_CHARGING_W,
       UiState.DISCONNECTED -> {
         true
@@ -200,6 +201,26 @@ class UiStateMachineImpl : BaseUiStateMachine() {
       UiState.OK_A,
       UiState.TRANSMITTER_DETACHED_V,
       UiState.CUTGUARD_BROKEN_I,
+      UiState.DISCONNECTED -> {
+        true
+      }
+      else -> false
+    }
+  }
+
+  override fun innerBlindLeak_L(newState: UiState): Boolean {
+    return when (newState) {
+      UiState.BLUETOOTH_NOT_ENABLED,
+      UiState.SOMETHING_ELSE,
+      UiState.OK_A,
+      UiState.INNER_BREACH_B,
+      UiState.OUTER_BREACH_C,
+      UiState.TOTAL_BLIND_E,
+      UiState.PAY_ATTENTION_F,
+      UiState.CUTGUARD_BROKEN_I,
+      UiState.TRANSMITTER_DETACHED_V,
+      UiState.CUTGUARD_DIRT_IN_TRANSMITTER_K,
+      UiState.TRANSMITTER_BATTERY_CHARGING_W,
       UiState.DISCONNECTED -> {
         true
       }

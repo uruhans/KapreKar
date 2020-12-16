@@ -476,6 +476,7 @@
           app:layout_constraintTop_toBottomOf="@+id/policy_agreement_button2"/>
 
       </androidx.constraintlayout.widget.ConstraintLayout>
+
     </ScrollView>
 
   </LinearLayout>

@@ -68,7 +68,7 @@ class DbServiceImpl : DbService {
       .getTransmitters()
       .map { dbTransmitters ->
         if (dbTransmitters.isEmpty()) {
-          DataResult.Empty<List<Transmitter>>()
+          DataResult.Empty()
         }
         else {
           DataResult.Success(dbTransmitters.map { it.toTransmitter() })

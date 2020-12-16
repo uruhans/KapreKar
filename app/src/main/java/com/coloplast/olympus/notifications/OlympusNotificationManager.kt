@@ -64,7 +64,9 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
       UiState.CUTGUARD_BROKEN_I -> {
         NotificationPayload(state.notificationId(), R.string.lock_notification_broken)
       }
-      UiState.INNER_BLIND_D -> { null }
+      UiState.INNER_BLIND_D -> {
+        NotificationPayload(state.notificationId(), R.string.lock_notification_inner_blind)
+      }
       UiState.TOTAL_BLIND_E -> {
         NotificationPayload(state.notificationId(), R.string.lock_notification_total_blind)
       }
@@ -75,6 +77,9 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
       }
       UiState.CUTGUARD_DIRT_IN_TRANSMITTER_K -> {
         NotificationPayload(state.notificationId(), R.string.lock_notification_dirt)
+      }
+      UiState.INNER_BLIND_LEAK_L -> {
+        NotificationPayload(state.notificationId(), R.string.lock_notification_inner_blind_leak_l)
       }
       UiState.NO_BATTERY_R -> {
         NotificationPayload(state.notificationId(), R.string.lock_notification_disconnection_battery)

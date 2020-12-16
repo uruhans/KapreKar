@@ -353,56 +353,67 @@
 
     </ScrollView>
 
-    <LinearLayout
+    <ScrollView
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginStart="@dimen/spacing_larger"
-      android:layout_marginEnd="@dimen/spacing_larger"
       android:layout_marginBottom="@dimen/spacing_double"
       app:visibleOrGone="@{!controller.hasUserProfile}"
       android:orientation="vertical">
 
-      <TextView
-        style="@style/TextStyle.Coloplast.Bold.DarkGrey.32"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/profile_pp_title" />
-
-      <ImageView
-        android:layout_width="72dp"
-        android:layout_height="72dp"
-        android:layout_marginTop="@dimen/spacing_triple"
-        android:src="@drawable/ic_info_circle"
-        app:tint="@color/colorAccent" />
-
-      <TextView
-        style="@style/TextStyle.Coloplast.Bold.DarkGrey.24"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/spacing_standard"
-        android:text="@string/profile_pp_no_profile_title" />
-
-      <TextView
-        style="@style/TextStyle.Roboto.Regular.ClearGrey.18"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/spacing_small"
-        android:layout_marginBottom="@dimen/spacing_small"
-        android:text="@string/profile_pp_no_profile_description" />
-
       <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:layout_marginTop="@dimen/spacing_double"
-        android:layout_marginBottom="@dimen/spacing_standard">
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/spacing_larger"
+        android:layout_marginEnd="@dimen/spacing_larger"
+        android:layout_marginBottom="@dimen/spacing_double">
+
+        <TextView
+          android:id="@+id/profile_title"
+          style="@style/TextStyle.Coloplast.Bold.DarkGrey.32"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/profile_pp_title"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+          android:id="@+id/info_circle_imv"
+          android:layout_width="72dp"
+          android:layout_height="72dp"
+          android:layout_marginTop="@dimen/spacing_triple"
+          android:src="@drawable/ic_info_circle"
+          app:tint="@color/colorAccent"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toBottomOf="@+id/profile_title"/>
+
+        <TextView
+          android:id="@+id/no_profile_title"
+          style="@style/TextStyle.Coloplast.Bold.DarkGrey.24"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/spacing_standard"
+          android:text="@string/profile_pp_no_profile_title"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toBottomOf="@+id/info_circle_imv"/>
+
+        <TextView
+          android:id="@+id/no_profile_txt"
+          style="@style/TextStyle.Roboto.Regular.ClearGrey.18"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/spacing_small"
+          android:text="@string/profile_pp_no_profile_description"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toBottomOf="@+id/no_profile_title" />
+
         <View
           android:id="@+id/splitter"
           android:layout_width="match_parent"
           android:layout_height="1dp"
           android:background="@color/ten_percent_transparent_black"
+          android:layout_marginTop="@dimen/spacing_larger"
           app:layout_constraintStart_toStartOf="parent"
-          app:layout_constraintTop_toTopOf="parent" />
+          app:layout_constraintTop_toBottomOf="@+id/no_profile_txt" />
 
         <TextView
             android:id="@+id/data_policy_card_title2"
@@ -452,7 +463,7 @@
 
         <Button
           style="@style/Button"
-          android:id="@+id/save_changes_btn2"
+          android:id="@+id/create_profile_button"
           android:layout_height="wrap_content"
           android:layout_width="match_parent"
           android:layout_marginStart="@dimen/spacing_none"
@@ -464,12 +475,7 @@
 
       </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-
-
-
-
-    </LinearLayout>
+    </ScrollView>
 
   </LinearLayout>
 </layout>

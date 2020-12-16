@@ -215,7 +215,6 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
       .refCount()
   }
 
-  // TODO - add this to actual buttons in the xml when ready
   fun saveProfileClicked() {
     if (infoChanged) {
       user.firstName = firstName.get()

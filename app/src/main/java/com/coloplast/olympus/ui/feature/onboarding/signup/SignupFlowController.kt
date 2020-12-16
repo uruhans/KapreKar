@@ -1,5 +1,6 @@
 package com.coloplast.olympus.ui.feature.onboarding.signup
 
+import android.os.Bundle
 import com.artemzin.rxui.RxUi
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
@@ -25,11 +26,13 @@ import org.koin.core.inject
  * Created by Kike Bodi (ebp@dawnhealth.com) on 29/09/2020.
  * Copyright by Dawn Health A/S. All rights reserved.
  */
-class SignupFlowController : TopMenuFlowFactoryController<SignupFactoryModel>(),
+class SignupFlowController(args: Bundle) : TopMenuFlowFactoryController<SignupFactoryModel>(),
   SignupFlowView,
   BaseDialogController.Listener {
 
   private val factory by lazy { SignupFactoryImpl() }
+
+  private val signUpOrigin = args.getInt(BUNDLE_SIGN_UP_TYPE)
 
   private val preferences: Preferences by inject()
   private val viewModel: SignupViewModel by inject()
@@ -42,12 +45,21 @@ class SignupFlowController : TopMenuFlowFactoryController<SignupFactoryModel>(),
   override fun getFlowFactory(): FlowFactory<SignupFactoryModel> = factory
 
   override fun startFlow(flowChildRouter: Router) {
-    preferences.setCurrentOnboardingProgression(OnboardingProgression.SIGN_UP)
     super.startFlow(flowChildRouter)
+
+    if(signUpOrigin == NewUserFrom.SETTINGS_PROFIL.value) {
+      val data = factory.getData()
+      data.user.consent = true
+      onStepCompleted(SignupFlow.DataConsentDC5.id, data)
+    } else {
+      preferences.setCurrentOnboardingProgression(OnboardingProgression.SIGN_UP)
+    }
   }
 
   override fun onFlowCompleted(data: SignupFactoryModel) {
-    preferences.setCurrentOnboardingProgression(OnboardingProgression.SETUP_GUIDE_START)
+    if(signUpOrigin == NewUserFrom.ONBOARDING.value) {
+      preferences.setCurrentOnboardingProgression(OnboardingProgression.SETUP_GUIDE_START)
+    }
     super.onFlowCompleted(data)
   }
 
@@ -180,8 +192,18 @@ class SignupFlowController : TopMenuFlowFactoryController<SignupFactoryModel>(),
   companion object {
     private const val CONTROLLER_TAG = "sign_up_flow_controller"
     private const val REQUEST_ERROR_REQUEST_CODE = 1001
+    private const val BUNDLE_SIGN_UP_TYPE = "bundle_sign_up_type"
 
-    fun routerTransaction() = RouterTransaction.with(SignupFlowController())
-      .tag(CONTROLLER_TAG)
+    fun routerTransaction(origin: NewUserFrom = NewUserFrom.ONBOARDING): RouterTransaction {
+      with(Bundle()) {
+        putInt(BUNDLE_SIGN_UP_TYPE, origin.value)
+        return RouterTransaction.with(SignupFlowController(this)).tag(CONTROLLER_TAG)
+      }
+    }
+
+    enum class NewUserFrom(val value: Int) {
+      ONBOARDING(1),
+      SETTINGS_PROFIL(2)
+    }
   }
 }

@@ -15,6 +15,7 @@ import com.coloplast.olympus.ui.common.DrawerStateDispatcher
 import com.coloplast.olympus.ui.common.WebViewController
 import com.coloplast.olympus.ui.dialogs.ImageDialogController
 import com.coloplast.olympus.ui.feature.home.HomeController
+import com.coloplast.olympus.ui.feature.onboarding.signup.SignupFlowController
 import com.coloplast.olympus.ui.feature.onboarding.signup.createprofile.types.HealthInsurance
 import com.coloplast.olympus.ui.feature.onboarding.signup.createprofile.types.StomaSurgeryDate
 import com.coloplast.olympus.ui.feature.onboarding.signup.createprofile.types.StomaType
@@ -65,6 +66,7 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
   val insuranceSpinnerPosition = ObservableInt(-1)
 
   val dataPolicyAccepted = ObservableBoolean()
+  val noUserDataPolicyAccepted = ObservableBoolean()
 
   private lateinit var user: User
   private var infoChanged = false
@@ -193,6 +195,15 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
 
   fun onLogoutClicked() {
     logoutRelay.accept(Unit)
+  }
+
+  fun onCreateUserClicked() {
+    userProfileChanged.set(false)
+    getContentRouter().pushController(
+      SignupFlowController.routerTransaction(SignupFlowController.Companion.NewUserFrom.SETTINGS_PROFIL)
+        .popChangeHandler(VerticalChangeHandler())
+        .pushChangeHandler(VerticalChangeHandler())
+    )
   }
 
   fun onPolicyAgreementClicked() {

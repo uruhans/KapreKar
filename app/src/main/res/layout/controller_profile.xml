@@ -430,8 +430,8 @@
             android:id="@+id/data_policy_card_switch2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:checked="@={controller.dataPolicyAccepted}"
             android:layout_marginTop="@dimen/spacing_double"
+            android:checked="@={controller.noUserDataPolicyAccepted}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/splitter"
             />
@@ -462,7 +462,7 @@
           app:layout_constraintTop_toBottomOf="@+id/consentTxt"/>
 
         <Button
-          style="@style/Button"
+          style="@style/Button.Selectable"
           android:id="@+id/create_profile_button"
           android:layout_height="wrap_content"
           android:layout_width="match_parent"
@@ -470,6 +470,8 @@
           android:layout_marginEnd="@dimen/spacing_none"
           android:layout_marginTop="@dimen/spacing_double"
           android:text="@string/profile_pp_no_profile_create_profile_button"
+          android:enabled="@{controller.noUserDataPolicyAccepted}"
+          android:onClick="@{() -> controller.onCreateUserClicked()}"
           app:layout_constraintStart_toStartOf="parent"
           app:layout_constraintTop_toBottomOf="@+id/policy_agreement_button2"/>
 

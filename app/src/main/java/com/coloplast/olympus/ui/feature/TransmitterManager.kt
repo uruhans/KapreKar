@@ -45,6 +45,8 @@ class TransmitterManager(
           it.push(stateChange)
         }
       }
+
+      transmitterStateHistory.remove("")
     }
   }
 
@@ -61,54 +63,54 @@ class TransmitterManager(
     val otherConnectedAndAttached = isOtherConnectedAndAttached(stateChange.getMacAddress())
 
     if(!hasActiveTransmitter()) {
-      if(isCurrentlyAttached(stateChange)) {
+      return if(isCurrentlyAttached(stateChange)) {
         // change active tx to this one
         setActiveTransmitter(stateChange)
         // return it's state
-        return UpdatedStateChange(stateChange, true)
+        UpdatedStateChange(stateChange, true)
       }
       else {
         // we have no active tx - nor is the current on attached - force UiState DETACHED
-        return UpdatedStateChange(StateChange(UiState.TRANSMITTER_DETACHED_V, stateChange.overlayState, stateChange.bleDevice, stateChange.patchProbability, stateChange.timestamp))
+        UpdatedStateChange(StateChange(UiState.TRANSMITTER_DETACHED_V, stateChange.overlayState, stateChange.bleDevice, stateChange.patchProbability, stateChange.timestamp))
       }
     }
     else {
       // the incoming update is coming from the currently active tx
       if(isActiveTransmitter(stateChange.getMacAddress())) {
         // is it connected and attached AND is the other ALSO connected and attached
-        if(isConnectedAndAttached(stateChange.getMacAddress()) && otherConnectedAndAttached) {
+        return if(isConnectedAndAttached(stateChange.getMacAddress()) && otherConnectedAndAttached) {
           wasPreviousUiStateMultipleTx = true
-          return UpdatedStateChange(StateChange(UiState.MULTIPLE_TRANSMITTERS, stateChange.overlayState, stateChange.bleDevice, stateChange.patchProbability, stateChange.timestamp))
+          UpdatedStateChange(StateChange(UiState.MULTIPLE_TRANSMITTERS, stateChange.overlayState, stateChange.bleDevice, stateChange.patchProbability, stateChange.timestamp))
         }
         else {
           if(otherConnectedAndAttached) {
             val otherStateChange = latestStateFromOtherTransmitter(stateChange.getMacAddress())!!
             setActiveTransmitter(otherStateChange)
-            return UpdatedStateChange(otherStateChange, true)
+            UpdatedStateChange(otherStateChange, true)
           }
           else {
-            return UpdatedStateChange(stateChange)
+            UpdatedStateChange(stateChange)
           }
         }
       }
       else {
         if(isConnectedAndAttached(stateChange.getMacAddress())) {
-          if(otherConnectedAndAttached) {
+          return if(otherConnectedAndAttached) {
             wasPreviousUiStateMultipleTx = true
-            return UpdatedStateChange(StateChange(UiState.MULTIPLE_TRANSMITTERS, stateChange.overlayState, stateChange.bleDevice, stateChange.patchProbability, stateChange.timestamp))
+            UpdatedStateChange(StateChange(UiState.MULTIPLE_TRANSMITTERS, stateChange.overlayState, stateChange.bleDevice, stateChange.patchProbability, stateChange.timestamp))
           }
           else {
             setActiveTransmitter(stateChange)
-            return UpdatedStateChange(stateChange, true)
+            UpdatedStateChange(stateChange, true)
           }
         }
         else {
           val otherStateChange = latestStateFromOtherTransmitter(stateChange.getMacAddress())
-          if(otherStateChange != null) {
-            return UpdatedStateChange(otherStateChange)
+          return if(otherStateChange != null) {
+            UpdatedStateChange(otherStateChange)
           }
           else {
-            return UpdatedStateChange(stateChange)
+            UpdatedStateChange(stateChange)
           }
         }
       }

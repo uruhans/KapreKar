@@ -25,19 +25,19 @@ abstract class BaseUiStateMachine : UiStateMachine {
     }
     
     // invoke the current state with the new state as parameter
-    if (currentState.invoke(newState)) {
+    return if (currentState.invoke(newState)) {
       // the state was handled so update to new state
       Timber.d("Switching to new state: [$state] -> [$newState]")
       updateState(newState)
+      newState
     }
     else {
       // log that the state was not handled - for debugging purposes
       // it might not mean there is something wrong
       // but it'll make it easier for devs to determine if something is wrong or not
       Timber.e("State not handled: [$state] -> [$newState]")
+      state
     }
-    
-    return newState
   }
   
   /**

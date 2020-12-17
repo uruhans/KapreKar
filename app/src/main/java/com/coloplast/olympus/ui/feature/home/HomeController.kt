@@ -129,7 +129,9 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   override fun render(): Function<Observable<HomeUiModel>, Disposable> {
     return RxUi.ui { uiModel ->
 
-      Timber.d("uiModel: $uiModel")
+      if(uiModel !is HomeUiModel.RawDataPackageUpdate) {
+        Timber.d("uiModel: $uiModel")
+      }
 
       when (uiModel) {
         is HomeUiModel.ConnectionStateUpdate -> {
@@ -193,6 +195,9 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         is HomeUiModel.DeviceDisconnected -> {
           isConnected.set(false)
           changeUiState(UiState.CONNECTING)
+        }
+        is HomeUiModel.StitchOrResetComplete -> {
+          /* no-op */
         }
         is HomeUiModel.DeviceUpdate -> {
           val stateChange = uiModel.stateChange
@@ -444,7 +449,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
       return
     }
 
-    Timber.d("PatchProbability: [$stateChange.patchProbability]")
+    Timber.d("PatchProbability: [${stateChange.patchProbability}]")
 
     if (stateChange.patchProbability == PatchProbability.NEW) {
       preferences.incrementPatchId()

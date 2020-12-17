@@ -135,10 +135,7 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
 
   private fun changeConsent(consent: Boolean) {
     consentChanged = user.consent != consent
-
     userProfileChanged.set(infoChanged || healthInfoChanged || consentChanged)
-
-    // TODO - this is temporary until we enable changes to all fields
     if(consentChanged) {
       user.consent = dataPolicyAccepted.get()
       updateUserRelay.accept(user)
@@ -401,7 +398,7 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
     private const val REQUEST_CODE_LOGOUT_DIALOG = 4000
     private const val REQUEST_CODE_CONSENT_DIALOG = 3000
     private const val REQUEST_CODE_SAVE_CHANGES_DIALOG = 2000
-
+    
     fun routerTransaction() = RouterTransaction.with(ProfileController()).tag(HomeController.TAG_CONTROLLER)
   }
 }

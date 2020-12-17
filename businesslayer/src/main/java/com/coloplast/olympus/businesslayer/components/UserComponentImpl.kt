@@ -6,6 +6,7 @@ import com.coloplast.olympus.databaselayer.DbService
 import com.coloplast.olympus.databaselayer.DbServiceImpl
 import com.coloplast.olympus.datalayer.ApiService
 import com.coloplast.olympus.datalayer.ApiServiceImpl
+import com.coloplast.olympus.datalayer.models.UserDTO
 import com.coloplast.olympus.datalayer.models.UserResponseDTO
 import com.coloplast.olympus.shared.models.Credentials
 import com.coloplast.olympus.shared.models.CurrentUser
@@ -33,7 +34,15 @@ class UserComponentImpl(private val preferences: Preferences) : UserComponent {
       apiService.createAnonymousUser()
     }
     else {
-      apiService.createUser(user)
+      if(user.id != null) {
+        //TODO we dont handle if same user was created earlier (receive http-resp 409)
+        apiService.updateUser(user)
+          .toSingle { UserResponseDTO(preferences.getToken(), UserDTO.fromUser(user)) }
+          .toObservable()
+      }
+      else {
+        apiService.createUser(user)
+      }
     }.compose(SetTokenInsertOrUpdateUserAndReturnCurrentUser(database, preferences))
 
   override fun login(credentials: Credentials): Observable<CurrentUser> {

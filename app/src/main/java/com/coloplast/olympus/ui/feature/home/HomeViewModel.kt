@@ -54,16 +54,9 @@ class HomeViewModel(
     val rawPackageUpdateObservable = StateDispatcher.rawPackageUpdateObservable()
       .map { HomeUiModel.RawDataPackageUpdate(it) }
 
-    val resetTransmitterObservable = uiView.requestReset()
-      .switchMap { macAddress ->
-        bluetoothManager.resetTransmitter(macAddress)
-          .toSingle<HomeUiModel> { HomeUiModel.StitchOrResetComplete() }
-          .toObservable()
-      }
-
     val stitchTransmitterObservable = uiView.requestStitching()
       .switchMap { stitch ->
-        bluetoothManager.stitchTransmitter(stitch.macAddress, stitch.dataPackage)
+        bluetoothManager.stitchOrResetTransmitter(stitch.macAddress, stitch.dataPackage)
           .toSingle<HomeUiModel> { HomeUiModel.StitchOrResetComplete() }
           .toObservable()
       }
@@ -93,7 +86,7 @@ class HomeViewModel(
     disposable.add(syncUserObservable.subscribe())
 
     disposable.add(Observable.merge(stateUpdate, bluetoothStateObservable, rawPackageUpdateObservable).bind(uiView.render()))
-    disposable.add(Observable.merge(resetTransmitterObservable, stitchTransmitterObservable, scanningObservable, doUntil).bind(uiView.render()))
+    disposable.add(Observable.merge(stitchTransmitterObservable, scanningObservable, doUntil).bind(uiView.render()))
 
     return disposable
   }

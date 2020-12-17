@@ -1,6 +1,7 @@
 package com.coloplast.olympus.ui.feature
 
 import com.coloplast.olympus.bluetooth.businesslayer.BluetoothManager
+import com.coloplast.olympus.bluetooth.businesslayer.enums.Attached
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.bluetooth.businesslayer.services.OlympusWirelessProtocol
 import com.coloplast.olympus.bluetooth.model.PatchProbability
@@ -9,7 +10,7 @@ import com.coloplast.olympus.shared.moshi.deserialize
 import com.coloplast.olympus.shared.moshi.serialize
 import com.coloplast.olympus.shared.preferences.Preferences
 import com.coloplast.olympus.ui.common.Stack
-import com.coloplast.olympus.ui.feature.home.models.Stitch
+import com.coloplast.olympus.ui.feature.home.models.StitchOrResetObject
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
 import timber.log.Timber
 import java.time.Instant
@@ -41,7 +42,7 @@ class TransmitterManager(
       }
 
       latestStateFromActiveTx.deserialize<StateChange>()?.let { stateChange ->
-        transmitterStateHistory[activeTransmitter] = Stack<StateChange>(5).also {
+        transmitterStateHistory[activeTransmitter] = Stack<StateChange>(3).also {
           it.push(stateChange)
         }
       }
@@ -123,47 +124,77 @@ class TransmitterManager(
     return latestTxHistory?.firstOrNull { it.state == UiState.TRANSMITTER_DETACHED_V && it.timestamp > validTimeStamp }
   }
 
+  private fun getStitchOrResetArray(patchProbability: PatchProbability, stateChange: StateChange): ByteArray? {
+    return if(patchProbability == PatchProbability.SAME) {
+       stateChange.bleDevice.peripheral?.getStitchArray()
+    }
+    else {
+      byteArrayOf(
+        // sensors
+        -1, -1, -1, -1, -1, -1,
+        // wid
+        -1,
+        // attached
+        Attached.ATTACHED_ON_PATCH.id.toByte(),
+        // patchType
+        -1,
+        // compromised
+        -1,
+        // rotational angle
+        -1,
+        // batt pwr
+        -1,
+        // firmware warning/error
+        0, 0)
+    }
+  }
+
   fun determinePatchCommand(updatedStateChange: UpdatedStateChange) {
     var patchProbability = PatchProbability.NOT_SET
-    val stateChange = updatedStateChange.stateChange
+    val incomingPackage = updatedStateChange.stateChange
 
-    val incomingCompromised = stateChange.bleDevice.peripheral?.transmitter?.compromised
+    val incomingCompromised = incomingPackage.bleDevice.peripheral?.transmitter?.compromised
+    val otherPackage = latestStateFromOtherTransmitter(incomingPackage.getMacAddress())
 
-    if(stateChange.state != UiState.MULTIPLE_TRANSMITTERS && stateChange.bleDevice.isBlocked()) {
+    var packageToGetStitchArrayFrom = incomingPackage
+
+    if(incomingPackage.state != UiState.MULTIPLE_TRANSMITTERS && !incomingPackage.bleDevice.isBlocked()) {
       if(updatedStateChange.activeTransmitterChanged) {
-        val otherStateChange = latestStateFromOtherTransmitter(updatedStateChange.stateChange.getMacAddress())
 
         if(wasPreviousUiStateMultipleTx) {
-          val otherCompromised = otherStateChange?.bleDevice?.peripheral?.transmitter?.compromised
-          val from = if(stateChange.bleDevice.isBlocked()) incomingCompromised else null
+          val otherCompromised = otherPackage?.bleDevice?.peripheral?.transmitter?.compromised
+          val from = if(incomingPackage.bleDevice.isBlocked()) null else incomingCompromised
 
-          if(otherStateChange?.bleDevice?.isBlocked() == false) {
+          if(otherPackage?.bleDevice?.isBlocked() == false) {
             patchProbability = calculateSplitCommand(from, otherCompromised)
+            packageToGetStitchArrayFrom = otherPackage
           }
         }
         else {
-          if(otherStateChange?.bleDevice?.isBlocked() == false) {
-            val lastOtherValidDetachState = lastValidDetachState(otherStateChange.getMacAddress())
+          if(!incomingPackage.bleDevice.isBlocked()) {
+            val lastOtherValidDetachState = lastValidDetachState(otherPackage?.getMacAddress() ?: "")
 
-            val from = if(lastOtherValidDetachState?.bleDevice?.isBlocked() != false) lastOtherValidDetachState?.bleDevice?.peripheral?.transmitter?.compromised else null
+            val blocked = lastOtherValidDetachState?.bleDevice?.isBlocked() ?: true
+            val from = if(blocked) null else lastOtherValidDetachState?.bleDevice?.peripheral?.transmitter?.compromised
             patchProbability = calculateSplitCommand(from, incomingCompromised)
           }
         }
       }
       else {
-        val lastValidDetachState = lastValidDetachState(stateChange.getMacAddress())
+        val lastValidDetachState = lastValidDetachState(incomingPackage.getMacAddress())
 
-        if(stateChange.bleDevice.isAttached() && !stateChange.bleDevice.isBlocked() && lastValidDetachState != null) {
-          val from = if(lastValidDetachState.bleDevice.isBlocked()) lastValidDetachState.bleDevice.peripheral?.transmitter?.compromised else null
+        if(incomingPackage.bleDevice.isAttached() && !incomingPackage.bleDevice.isBlocked() && lastValidDetachState != null) {
+          val from = if(lastValidDetachState.bleDevice.isBlocked()) null else lastValidDetachState.bleDevice.peripheral?.transmitter?.compromised
           patchProbability = calculateSplitCommand(from, incomingCompromised)
         }
-        else if(stateChange.bleDevice.isAttachedOutsideBLE()) {
+        else if(incomingPackage.bleDevice.isAttachedOutsideBLE()) {
           patchProbability = calculateSplitCommand(null, incomingCompromised)
         }
       }
     }
 
     updatedStateChange.stateChange.patchProbability = patchProbability
+    updatedStateChange.stateChange.resetOrStitchCandidate = getStitchOrResetArray(patchProbability, packageToGetStitchArrayFrom)
   }
 
   private fun calculateSplitCommand(from: Int?, to: Int?) : PatchProbability {
@@ -230,14 +261,14 @@ class TransmitterManager(
    *  - if we do not have an 'other' transmitter - we return the stitch array from the same transmitter
    *  @return a Stitch object containing the actual stitching or a "Reset" package instead (first time the user is asked both answers do a reset)
    */
-  fun getStitchBytes() : Stitch {
+  fun getStitchBytes() : StitchOrResetObject {
     // see if we have the other transmitter
     val otherTxState = latestStateFromOtherTransmitter(activeTransmitter)
 
     // if we dont have the other transmitter take the latest from the active
     val state = otherTxState ?: transmitterStateHistory.entries.firstOrNull { it.key == activeTransmitter }?.value?.peek()
 
-    return Stitch(
+    return StitchOrResetObject(
       activeTransmitter,
       state?.bleDevice?.peripheral?.getStitchArray() ?: OlympusWirelessProtocol.Characteristics.RESET_STATUS_DATA)
   }
@@ -251,7 +282,7 @@ class TransmitterManager(
   }
 
   private fun addToHistory(stateChange: StateChange) {
-    val stack = transmitterStateHistory[stateChange.getMacAddress()] ?: Stack(5)
+    val stack = transmitterStateHistory[stateChange.getMacAddress()] ?: Stack(3)
     stack.push(stateChange)
     transmitterStateHistory[stateChange.getMacAddress()] = stack
   }

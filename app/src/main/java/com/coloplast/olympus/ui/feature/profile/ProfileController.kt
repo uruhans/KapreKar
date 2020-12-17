@@ -118,6 +118,21 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
     imageDialogController?.show()
   }
 
+  private fun showLogOutOverlay() {
+    imageDialogController = ImageDialogController.create(
+      this,
+      REQUEST_CODE_LOGOUT_DIALOG,
+      R.string.profile_pp_log_out_modal_title,
+      R.string.profile_pp_withdraw_consent_modal_description,
+      R.string.profile_pp_log_out_button,
+      R.string.generic_cancel,
+      R.drawable.ic_info_circle,
+      verticalButtonLayout = true,
+      dismissAllowed = false)
+
+    imageDialogController?.show()
+  }
+
   private fun changeConsent(consent: Boolean) {
     consentChanged = user.consent != consent
 
@@ -194,7 +209,7 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
   }
 
   fun onLogoutClicked() {
-    logoutRelay.accept(Unit)
+    showLogOutOverlay()
   }
 
   fun onCreateUserClicked() {
@@ -249,8 +264,8 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
     updateUserRelay.accept(user)
   }
 
-  // TODO - add this to actual buttons in the xml when ready
   fun discardChangesClicked() {
+    userProfileChanged.set(false)
     // remove callbacks so we dont get a million updates when we update user data later
     removeCallbacks()
     updateUserData(user)
@@ -301,6 +316,9 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
       REQUEST_CODE_CONSENT_DIALOG -> {
         imageDialogController?.dismissDialog(withCallback = true)
       }
+      REQUEST_CODE_LOGOUT_DIALOG -> {
+        imageDialogController?.dismissDialog(withCallback = true)
+      }
       else -> {
         super.onPositiveButtonClicked(requestCode)
       }
@@ -309,6 +327,7 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
 
   override fun onNegativeButtonClicked(requestCode: Int) {
     when(requestCode) {
+      REQUEST_CODE_LOGOUT_DIALOG,
       REQUEST_CODE_SAVE_CHANGES_DIALOG -> {
         imageDialogController?.dismissDialog(withCallback = false)
         imageDialogController = null
@@ -339,6 +358,9 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
         // remove callbacks so we dont get a million updates when we update user data later
         removeCallbacks()
         updateUserRelay.accept(user)
+      }
+      REQUEST_CODE_LOGOUT_DIALOG -> {
+        logoutRelay.accept(Unit)
       }
       else -> {
         super.onDialogDismissed(requestCode)
@@ -376,6 +398,7 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
   companion object {
     const val TAG_CONTROLLER = "profile_controller"
 
+    private const val REQUEST_CODE_LOGOUT_DIALOG = 4000
     private const val REQUEST_CODE_CONSENT_DIALOG = 3000
     private const val REQUEST_CODE_SAVE_CHANGES_DIALOG = 2000
 

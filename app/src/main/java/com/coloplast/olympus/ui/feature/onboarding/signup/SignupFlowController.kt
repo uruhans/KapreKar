@@ -26,7 +26,7 @@ import org.koin.core.inject
  * Created by Kike Bodi (ebp@dawnhealth.com) on 29/09/2020.
  * Copyright by Dawn Health A/S. All rights reserved.
  */
-class SignupFlowController(args: Bundle) : TopMenuFlowFactoryController<SignupFactoryModel>(),
+class SignupFlowController(args: Bundle): TopMenuFlowFactoryController<SignupFactoryModel>(),
   SignupFlowView,
   BaseDialogController.Listener {
 

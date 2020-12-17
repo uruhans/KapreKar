@@ -3,14 +3,12 @@ package com.coloplast.olympus.ui.feature
 import com.coloplast.olympus.bluetooth.businesslayer.BluetoothManager
 import com.coloplast.olympus.bluetooth.businesslayer.enums.Attached
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
-import com.coloplast.olympus.bluetooth.businesslayer.services.OlympusWirelessProtocol
 import com.coloplast.olympus.bluetooth.model.PatchProbability
 import com.coloplast.olympus.bluetooth.model.StateChange
 import com.coloplast.olympus.shared.moshi.deserialize
 import com.coloplast.olympus.shared.moshi.serialize
 import com.coloplast.olympus.shared.preferences.Preferences
 import com.coloplast.olympus.ui.common.Stack
-import com.coloplast.olympus.ui.feature.home.models.StitchOrResetObject
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
 import timber.log.Timber
 import java.time.Instant
@@ -251,26 +249,8 @@ class TransmitterManager(
   /**
    * @return active transmitter macAddress
    */
-  fun activeTransmitterMacAddress() : String {
+  private fun activeTransmitterMacAddress() : String {
     return activeTransmitter
-  }
-
-  /**
-   * get stitch bytes from transmitter (used when changing Tx onto the same patch)
-   *  - the other Tx being the one that is *not* active
-   *  - if we do not have an 'other' transmitter - we return the stitch array from the same transmitter
-   *  @return a Stitch object containing the actual stitching or a "Reset" package instead (first time the user is asked both answers do a reset)
-   */
-  fun getStitchBytes() : StitchOrResetObject {
-    // see if we have the other transmitter
-    val otherTxState = latestStateFromOtherTransmitter(activeTransmitter)
-
-    // if we dont have the other transmitter take the latest from the active
-    val state = otherTxState ?: transmitterStateHistory.entries.firstOrNull { it.key == activeTransmitter }?.value?.peek()
-
-    return StitchOrResetObject(
-      activeTransmitter,
-      state?.bleDevice?.peripheral?.getStitchArray() ?: OlympusWirelessProtocol.Characteristics.RESET_STATUS_DATA)
   }
 
   private fun setActiveTransmitter(stateChange: StateChange) {

@@ -2,12 +2,10 @@ package com.coloplast.olympus.bluetooth.businesslayer
 
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.bluetooth.businesslayer.models.DeviceResult
-import com.coloplast.olympus.bluetooth.businesslayer.services.CurrentTimeService
 import com.coloplast.olympus.businesslayer.interfaces.SystemUpdateComponent
 import com.coloplast.olympus.businesslayer.interfaces.TransmitterComponent
 import com.coloplast.olympus.shared.models.UpdateResult
 import io.reactivex.Observable
-import java.util.concurrent.TimeUnit
 
 class DeviceConnection(
   private val bluetoothManager: BluetoothManager,
@@ -20,7 +18,6 @@ class DeviceConnection(
     // connect to specific device or use the connection we already have
     val connectedBleDeviceObservable = bluetoothManager.bleConnectionStateObservable(macAddress)
       .take(1)
-      .delay(500, TimeUnit.MILLISECONDS)
       .flatMap { bleConnectionState ->
         if (bleConnectionState == BleConnectionState.DISCONNECTED) {
           // do actual connection to the new device

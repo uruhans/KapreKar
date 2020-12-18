@@ -25,6 +25,10 @@ class TransmitterComponentImpl(private val preferences: Preferences) : Transmitt
     return dbService.getTransmitters()
   }
 
+  override fun getTransmittersAsSingle(): Single<List<Transmitter>> {
+    return dbService.getTransmittersAsSingle()
+  }
+
   override fun getTransmitter(macAddress: String): Observable<DataResult<Transmitter>> {
     return dbService.getTransmitter(macAddress)
   }

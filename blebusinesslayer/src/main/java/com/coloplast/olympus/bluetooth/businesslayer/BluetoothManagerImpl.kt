@@ -180,7 +180,6 @@ class BluetoothManagerImpl(
         }
         return@BiFunction bleDevice.connectionState
       })
-      .doOnNext { Timber.e("ConnectionState: $it") }
       .publish()
       .refCount()
   }
@@ -386,11 +385,7 @@ class BluetoothManagerImpl(
     })
   }
 
-  override fun resetTransmitter(macAddress: String): Completable {
-    return writeCharacteristic(macAddress, OlympusWirelessProtocol.Characteristics.STATUS, OlympusWirelessProtocol.Characteristics.RESET_STATUS_DATA)
-  }
-
-  override fun stitchTransmitter(macAddress: String, data: ByteArray): Completable {
+  override fun stitchOrResetTransmitter(macAddress: String, data: ByteArray): Completable {
     return writeCharacteristic(macAddress, OlympusWirelessProtocol.Characteristics.STATUS, data)
   }
 

@@ -1,8 +1,7 @@
 package com.coloplast.olympus.datalayer
 
 import com.coloplast.olympus.datalayer.api.PackageApi
-import com.coloplast.olympus.datalayer.interceptors.AzureAuthInterceptor
-import com.coloplast.olympus.datalayer.interceptors.ServerResponseInterceptor
+import com.coloplast.olympus.datalayer.interceptors.GzipRequestInterceptor
 import com.coloplast.olympus.datalayer.models.adapters.InstantAdapter
 import com.coloplast.olympus.datalayer.models.adapters.TransmitterValueAdapter
 import com.coloplast.olympus.shared.AppSettings
@@ -30,8 +29,7 @@ object AzureRetrofit {
 
   private fun getOkHttpClient(): OkHttpClient {
     return OkHttpClient.Builder()
-      .addInterceptor(AzureAuthInterceptor(AppSettings.code))
-      .addInterceptor(ServerResponseInterceptor())
+      .addInterceptor(GzipRequestInterceptor(AppSettings.code))
       .addInterceptor(getHttpLoggingInterceptor())
       .connectTimeout(20, TimeUnit.SECONDS)
       .readTimeout(20, TimeUnit.SECONDS)

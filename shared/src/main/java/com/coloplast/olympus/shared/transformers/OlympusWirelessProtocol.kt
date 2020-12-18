@@ -11,7 +11,7 @@ import timber.log.Timber
 object OlympusWirelessProtocol {
 
   fun settingsTransformer(value: ByteArray): TransmitterSettings {
-    Timber.d("Settings: ${value.joinToString { it.toInt().toString() }}")
+    //Timber.d("Settings: ${value.joinToString { it.toInt().toString() }}")
 
     val wid_R_threshold = ValueInterpreter.getIntValue(value, ValueInterpreter.FORMAT_UINT16, 0).toUShort()
     val wid_R_hysteresis = ValueInterpreter.getIntValue(value, ValueInterpreter.FORMAT_UINT16, 2).toUShort()
@@ -34,7 +34,7 @@ object OlympusWirelessProtocol {
   }
 
   fun classifierSettingsTransformer(value: ByteArray): ClassifierSettings {
-    Timber.d("ClassifierSettings: ${value.joinToString { it.toInt().toString() }}")
+    //Timber.d("ClassifierSettings: ${value.joinToString { it.toInt().toString() }}")
 
     val ird_ll = ValueInterpreter.getIntValue(value, ValueInterpreter.FORMAT_UINT16, 0).toUShort()
     val dv_noise_ll = ValueInterpreter.getIntValue(value, ValueInterpreter.FORMAT_SINT16, 2).toShort()
@@ -85,7 +85,7 @@ object OlympusWirelessProtocol {
   }
 
   fun rawDataPackageTransformer(value: ByteArray): RawDataPackage {
-    Timber.d("RawPackage: ${value.joinToString { it.toInt().toString() }}")
+    //Timber.d("RawPackage: ${value.joinToString { it.toInt().toString() }}")
 
     val year = ValueInterpreter.getIntValue(value, ValueInterpreter.FORMAT_UINT16, 0).toUShort()
     val month = (value[2]).toUByte()

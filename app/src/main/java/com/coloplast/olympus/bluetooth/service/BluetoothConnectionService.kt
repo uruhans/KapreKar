@@ -124,17 +124,16 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
           }
         }
         is BluetoothServiceModel.Disconnected -> {
-          // we have a disconnect - get the latest statechange from other tx (if needed and if possible)
           val otherTxStateChange = transmitterManager.onTransmitterDisconnect(it.macAddress)
 
-          // this will be used to notify the Ui to change state (so we dont get stuck in multiple tx state or other state based on disconnected tx)
-
           if(otherTxStateChange != null) {
-            if (otherTxStateChange.overlayState == OverlayState.BLE_CONNECTION_LOST) {
+            val updatedStateChange = transmitterManager.determineCurrentlyActiveTransmitterAndReturnStateChangeFromIt(otherTxStateChange)
+
+            if (updatedStateChange.stateChange.overlayState == OverlayState.BLE_CONNECTION_LOST) {
               olympusNotificationManager.send(OverlayState.BLE_CONNECTION_LOST)
             }
 
-            StateDispatcher.dispatchStateForActiveTransmitter(otherTxStateChange)
+            StateDispatcher.dispatchStateForActiveTransmitter(updatedStateChange.stateChange)
           }
           else {
             val latestState = transmitterManager.getLatestState(it.macAddress)

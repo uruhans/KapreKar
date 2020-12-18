@@ -17,5 +17,4 @@ sealed class HomeUiModel : UiModel {
   data class ScanningStopped(val scanning: Unit = Unit) : HomeUiModel()
   data class Initial(val nothing: Unit = Unit) : HomeUiModel()
   data class DeviceDisconnected(private val disconnected: Unit = Unit) : HomeUiModel()
-  data class ShowWelcome(private val welcome: Unit = Unit) : HomeUiModel()
 }

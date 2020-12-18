@@ -23,8 +23,8 @@ data class Patch(
   
   // the list of inner sensors
   private val innerSensors = listOf(innerSensor1, innerSensor2, innerSensor3)
-  // a list of all sensors BUT the cutguard
-  private val allSensorsButCutGuard = listOf(innerSensors, wearSensor, outerSensor)
+  // a list of all sensors BUT the cutguard and wear
+  private val allSensorsButCutGuardAndWear = listOf(innerSensors, outerSensor)
 
   // do we have an inner sensor breach
   val innerSensorBreach: Boolean by lazy { innerSensors.any { it == SensorStatus.BREACH } }
@@ -34,7 +34,7 @@ data class Patch(
   private val innerSensorBlinded: List<SensorStatus> by lazy { innerSensors.filter { it == SensorStatus.BLINDED } }
   // figure out if *any* of the sensors are broken - if the cutguard sensor is < 17 OR 18 or any of the other sensors are set to CutGuardBroken Or CutGuardDirt
   private val isAnySensorsCutGuard: Boolean by lazy {
-    allSensorsButCutGuard.any { it == SensorStatus.CUT_GUARD_CUT_BROKEN || it == SensorStatus.CUT_GUARD_DIRT_IN_CONNECTOR }
+    allSensorsButCutGuardAndWear.any { it == SensorStatus.CUT_GUARD_CUT_BROKEN || it == SensorStatus.CUT_GUARD_DIRT_IN_CONNECTOR }
         || (cutguardSensor.id >= 0 && cutguardSensor.id < SensorStatus.CUT_GUARD_OK.id) || cutguardSensor == SensorStatus.CUT_GUARD_CUT_BROKEN }
   
   /**

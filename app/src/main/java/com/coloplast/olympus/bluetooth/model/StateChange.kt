@@ -11,7 +11,8 @@ data class StateChange(
   val overlayState: OverlayState = OverlayState.NONE,
   val bleDevice: BleDevice,
   var patchProbability: PatchProbability = PatchProbability.NOT_SET,
-  val timestamp: Long = Instant.now().epochSecond
+  val timestamp: Long = Instant.now().epochSecond,
+  var resetOrStitchCandidate: ByteArray? = null
 ) : MoshiSerializable {
 
   fun getMacAddress() = bleDevice.macAddress

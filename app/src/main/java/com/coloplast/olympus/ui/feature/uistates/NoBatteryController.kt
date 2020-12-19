@@ -17,10 +17,6 @@ class NoBatteryController : BaseHomeUIControllerAppTour<ControllerStateNoBattery
     viewBinding.controller = this
   }
 
-  fun onAppTourClicked() {
-    startAppTour()
-  }
-
   override fun patchInError(): Boolean {
     return true
   }

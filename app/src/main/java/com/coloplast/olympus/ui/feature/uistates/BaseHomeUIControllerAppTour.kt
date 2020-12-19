@@ -1,5 +1,6 @@
 package com.coloplast.olympus.ui.feature.uistates
 
+import android.view.View
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ViewDataBinding
 import com.bluelinelabs.conductor.changehandler.HorizontalChangeHandler
@@ -14,15 +15,14 @@ abstract class BaseHomeUIControllerAppTour<T : ViewDataBinding>() : BaseHomeUICo
   val shouldShowAppTourButton = ObservableBoolean(false)
 
   init {
-    val onBoardedLessThan48Hours = (System.currentTimeMillis() - preferences.getOnboardingCompletedTimeStamp()) / MILLIS_TO_HOURS < 48
+    val onBoardedLessThan48Hours = (System.currentTimeMillis() - preferences.onboardingCompletedTime) / MILLIS_TO_HOURS < 48
     shouldShowAppTourButton.set(onBoardedLessThan48Hours && !preferences.didSeeAppTourGuide)
   }
 
   fun startAppTour() {
     preferences.didSeeAppTourGuide = true
-    val (selectedRouter, routerTransaction) = Pair(getContentRouter(), AppTourFlowController.routerTransaction())
-    selectedRouter.pushController(
-      routerTransaction
+    getContentRouter().pushController(
+      AppTourFlowController.routerTransaction()
         .pushChangeHandler(HorizontalChangeHandler())
         .popChangeHandler(HorizontalChangeHandler())
     )

@@ -44,7 +44,7 @@
     <include layout="@layout/item_app_guide_button"
       android:id="@+id/includeBtn"
       bind:isVisible="@{controller.shouldShowAppTourButton}"
-      app:buttonClickListener="@{() -> controller.onAppTourClicked()}"/>
+      app:buttonClickListener="@{() -> controller.startAppTour()}"/>
 
   </LinearLayout>
 </layout>

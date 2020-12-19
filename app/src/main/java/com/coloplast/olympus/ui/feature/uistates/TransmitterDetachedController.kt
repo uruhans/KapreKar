@@ -1,6 +1,9 @@
 package com.coloplast.olympus.ui.feature.uistates
 
+import androidx.core.view.doOnPreDraw
+import androidx.core.view.postDelayed
 import com.bluelinelabs.conductor.RouterTransaction
+import com.bluelinelabs.conductor.changehandler.FadeChangeHandler
 import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerStateTransmitterDetachedBinding

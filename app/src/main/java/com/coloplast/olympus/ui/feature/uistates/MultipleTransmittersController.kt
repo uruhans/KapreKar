@@ -16,10 +16,6 @@ class MultipleTransmittersController : BaseHomeUIControllerAppTour<ControllerSta
     viewBinding.controller = this
   }
 
-  fun onAppTourClicked() {
-    startAppTour()
-  }
-
   override fun patchVisible(): Boolean {
     return true
   }

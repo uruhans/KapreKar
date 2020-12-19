@@ -11,10 +11,6 @@ class InnerBreachController : BaseHomeUIControllerAppTour<ControllerStateInnerBr
     // no-op
   }
 
-  fun onAppTourClicked() {
-    startAppTour()
-  }
-
   override fun attachVariables(viewBinding: ControllerStateInnerBreachBinding) {
     super.attachVariables(viewBinding)
     viewBinding.controller = this

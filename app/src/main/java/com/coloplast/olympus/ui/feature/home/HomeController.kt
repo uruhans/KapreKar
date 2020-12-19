@@ -13,7 +13,6 @@ import com.bluelinelabs.conductor.Conductor
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.FadeChangeHandler
-import com.bluelinelabs.conductor.changehandler.HorizontalChangeHandler
 import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import com.coloplast.olympus.R
 import com.coloplast.olympus.bluetooth.ServiceDispatcher
@@ -27,11 +26,9 @@ import com.coloplast.olympus.bluetooth.businesslayer.models.Patch
 import com.coloplast.olympus.bluetooth.model.PatchProbability
 import com.coloplast.olympus.bluetooth.model.ServiceEvent
 import com.coloplast.olympus.databinding.ControllerHomeBinding
-import com.coloplast.olympus.shared.preferences.OnboardingProgression
 import com.coloplast.olympus.shared.preferences.Preferences
 import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.common.DrawerState
-import com.coloplast.olympus.ui.common.PermissionHandler
 import com.coloplast.olympus.ui.common.conductor.ResizeChangeHandler
 import com.coloplast.olympus.ui.common.dialogs.BaseDialogController
 import com.coloplast.olympus.ui.common.dialogs.DialogController
@@ -44,7 +41,6 @@ import com.coloplast.olympus.ui.feature.contact.ContactController
 import com.coloplast.olympus.ui.feature.guides.GuidesFlowController
 import com.coloplast.olympus.ui.feature.guides.SingleGuideFlowController
 import com.coloplast.olympus.ui.feature.guides.articles.models.GuideType
-import com.coloplast.olympus.ui.feature.guides.flows.location.LocationGuideFlowController
 import com.coloplast.olympus.ui.feature.home.models.HomeUiModel
 import com.coloplast.olympus.ui.feature.home.models.PatchVisible
 import com.coloplast.olympus.ui.feature.home.models.SideMenuType
@@ -55,8 +51,6 @@ import com.coloplast.olympus.ui.feature.statemachine.models.OverlayState
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
 import com.coloplast.olympus.ui.feature.transmitters.TransmittersController
 import com.coloplast.olympus.ui.feature.uistates.*
-import com.coloplast.olympus.ui.feature.uistates.WelcomeController
-import com.coloplast.olympus.utils.OSUtils
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
@@ -67,7 +61,7 @@ import timber.log.Timber
 import java.time.LocalDateTime
 import java.time.LocalTime
 
-class HomeController : BaseController<ControllerHomeBinding>, HomeView, PermissionHandler, BaseDialogController.Listener,
+class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDialogController.Listener,
   ImageDialogController.Listener {
 
   private val viewModel: HomeViewModel by inject()
@@ -79,11 +73,9 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   private val requestConnectionStateRelay = PublishRelay.create<String>()
   private val stitchRelay = PublishRelay.create<Stitch>()
   private val resetRelay = PublishRelay.create<String>() // macAddress
-  private var showWelcome: Boolean = false
 
   private val connectionStateDisposable = CompositeDisposable()
 
-  private var dialogController: DialogController? = null
   private var imageDialogController: ImageDialogController? = null
 
   val updateAnimation = ObservableBoolean(false)
@@ -131,16 +123,11 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
     if (currentUiState != UiState.INITIAL) {
       changeUiState(currentUiState, true)
     }
-    showWelcome = shouldShowWelcome()
   }
 
   override fun render(): Function<Observable<HomeUiModel>, Disposable> {
     return RxUi.ui { uiModel ->
       Timber.d("uiModel: $uiModel")
-      if (showWelcome) {
-        preferences.didSeeWelcome = true
-        changeUiState(UiState.SHOW_WELCOME)
-      } else {
       when (uiModel) {
         is HomeUiModel.ConnectionStateUpdate -> {
           isConnected.set(uiModel.connectionState == BleConnectionState.CONNECTED)
@@ -268,7 +255,6 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         }
       }
     }
-    }
   }
 
   private fun changeUiState(newState: UiState, forceUpdate: Boolean = false) {
@@ -279,14 +265,9 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
     }
     else {
       Timber.d("State is [${newState}]")
-
-
       val routerTransaction = when (newState) {
         UiState.FIRMWARE_AVAILABLE -> {
           FirmwareAvailableController.routerTransaction()
-        }
-        UiState.SHOW_WELCOME -> {
-          WelcomeController.routerTransaction()
         }
         UiState.APP_UPDATE_AVAILABLE -> {
           AppUpdateAvailableController.routerTransaction()
@@ -392,26 +373,6 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
     }
   }
 
-  private fun shouldShowWelcome(): Boolean {
-    return  (preferences.getCurrentOnboardingProgress() == OnboardingProgression.COMPLETED &&
-      !preferences.didSeeWelcome)
-  }
-
-  private fun checkForLocationGuideShown(): Boolean {
-    val onBoardedMoreThan5Hours = (System.currentTimeMillis() - preferences.getOnboardingCompletedTimeStamp()) / MILLIS_TO_HOURS >= 5
-    return onBoardedMoreThan5Hours
-  }
-
-  fun startLocationGuide() {
-    preferences.didSeeAppTourGuide = true
-    val (selectedRouter, routerTransaction) = Pair(getContentRouter(), LocationGuideFlowController.routerTransaction())
-    selectedRouter.pushController(
-      routerTransaction
-        .pushChangeHandler(HorizontalChangeHandler())
-        .popChangeHandler(HorizontalChangeHandler())
-    )
-  }
-
   private fun changeOverlayState(overlayState: OverlayState) {
     if (currentOverlayState == overlayState) {
       return
@@ -501,17 +462,6 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
 
   override fun onPositiveButtonClicked(requestCode: Int) {
     when (requestCode) {
-      REQUEST_CODE_PERMISSION_LOCATION -> {
-        dialogController?.dismissDialog(withCallback = true)
-      }
-      REQUEST_CODE_PERMISSION_RATIONALE -> {
-        requestPermissionAgain(
-          this,
-          REQUEST_CODE_PERMISSION_LOCATION,
-          OSUtils.bleLocationPermission()
-        )
-        imageDialogController?.dismissDialog(withCallback = true)
-      }
       REQUEST_CODE_CONNECTION_LOST -> {
         imageDialogController?.dismissDialog(withCallback = true)
       }
@@ -520,16 +470,6 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
 
   override fun onDialogDismissed(requestCode: Int) {
     when (requestCode) {
-      REQUEST_CODE_PERMISSION_LOCATION -> {
-        requestPermission(this, REQUEST_CODE_PERMISSION_LOCATION, OSUtils.bleLocationPermission())
-      }
-      REQUEST_CODE_PERMISSION_RATIONALE -> {
-        requestPermissionAgain(this, REQUEST_CODE_PERMISSION_LOCATION, OSUtils.bleLocationPermission())
-        //TODO We wait for final decision about opening Location guide
-//        if (checkForLocationGuideShown()) {
-//          startLocationGuide()
-//        }
-      }
       REQUEST_CODE_CONNECTION_LOST -> {
         router.pushController(
           SingleGuideFlowController.routerTransaction(GuideType.CONNECTION)
@@ -544,59 +484,12 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
 
   override fun onCloseClicked(requestCode: Int) {
     when (requestCode) {
-      REQUEST_CODE_PERMISSION_RATIONALE,
       REQUEST_CODE_CONNECTION_LOST,
       REQUEST_CODE_BATTERY_LOW -> {
         imageDialogController?.dismissDialog(false)
         imageDialogController = null
       }
     }
-  }
-
-  override fun showPermissionRationale(requestCode: Int) {
-    when (requestCode) {
-      REQUEST_CODE_PERMISSION_LOCATION -> {
-          imageDialogController = ImageDialogController.create(
-            this,
-            REQUEST_CODE_PERMISSION_RATIONALE,
-            R.string.dialog_permission_rationale_location_title,
-            R.string.dialog_permission_rationale_location_message,
-            R.string.dialog_permission_rationale_location_ask_again,
-            topImage = R.drawable.ic_bluetooth,
-            verticalButtonLayout = true,
-            dismissAllowed = true
-          )
-          imageDialogController?.show()
-      }
-    }
-  }
-
-  override fun onPermissionGranted(requestCode: Int) {
-    when (requestCode) {
-      REQUEST_CODE_PERMISSION_LOCATION -> {
-        Timber.d("Permission was granted")
-      }
-    }
-  }
-
-  override fun onPermissionDenied(requestCode: Int) {
-    when (requestCode) {
-      REQUEST_CODE_PERMISSION_LOCATION -> {
-        showPermissionDialog()
-      }
-    }
-  }
-
-  private fun showPermissionDialog() {
-    dialogController = DialogController.create(
-      this,
-      REQUEST_CODE_PERMISSION_LOCATION,
-      R.string.dialog_permission_location_title,
-      R.string.dialog_permission_location_message,
-      R.string.dialog_permission_ask,
-      dismissAllowed = false
-    )
-    dialogController?.show()
   }
 
   fun onMenuClicked() {
@@ -698,12 +591,9 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   companion object {
     const val TAG_CONTROLLER = "home_controller"
 
-    private const val REQUEST_CODE_PERMISSION_LOCATION = 5001
-    private const val REQUEST_CODE_PERMISSION_RATIONALE = 5002
     private const val REQUEST_CODE_BATTERY_LOW = 6005
     private const val REQUEST_CODE_CONNECTION_LOST = 6010
     private const val REQUEST_CODE_PATCH_DETAILS = 7001
-    private const val MILLIS_TO_HOURS = 1000L * 60 * 60
 
     const val REQUEST_CODE_BLUETOOTH_ENABLE = 5005
 

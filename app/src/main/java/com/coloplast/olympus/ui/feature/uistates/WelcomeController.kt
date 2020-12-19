@@ -20,15 +20,19 @@ class WelcomeController : BaseHomeUIControllerAppTour<ControllerStateWelcomeBind
     viewBinding.root.doOnPreDraw { closeAfterPeriod(viewBinding) }
   }
 
+  override fun onViewBound(viewBinding: ControllerStateWelcomeBinding) {
+
+  }
+
   private fun closeAfterPeriod(viewBinding: ControllerStateWelcomeBinding) {
     viewBinding.root.postDelayed(MAX_VISIBLE_TIME) {
       if (!appTourStarted) {
-        router.setPopsLastView(true)
-        router.popCurrentController()
-        router.setPopsLastView(false)
-        getContentRouter().pushController(
-          HomeController.routerTransaction().popChangeHandler(FadeChangeHandler())
-            .pushChangeHandler(FadeChangeHandler()))
+        val shouldPopLastView = router.backstackSize == 1
+        if (shouldPopLastView) {
+          router.setPopsLastView(true)
+        }
+
+        router.popController(this)
       }
     }
   }
@@ -40,10 +44,6 @@ class WelcomeController : BaseHomeUIControllerAppTour<ControllerStateWelcomeBind
 
   override fun getLayout(): Int {
     return R.layout.controller_state_welcome
-  }
-
-  override fun onViewBound(viewBinding: ControllerStateWelcomeBinding) {
-
   }
 
   companion object {

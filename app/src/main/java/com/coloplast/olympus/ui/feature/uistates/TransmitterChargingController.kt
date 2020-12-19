@@ -16,11 +16,7 @@ class TransmitterChargingController : BaseHomeUIControllerAppTour<ControllerStat
     viewBinding.controller = this
   }
 
-  fun onAppTourClicked() {
-    startAppTour()
-  }
-  
-  override fun patchVisible(): Boolean {
+   override fun patchVisible(): Boolean {
     return false
   }
   

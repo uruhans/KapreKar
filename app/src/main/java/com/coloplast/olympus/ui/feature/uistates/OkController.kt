@@ -6,7 +6,7 @@ import com.coloplast.olympus.databinding.ControllerStateOkBinding
 import com.coloplast.olympus.ui.feature.home.models.PatchVisible
 
 class OkController : BaseHomeUIControllerAppTour<ControllerStateOkBinding>(), PatchVisible {
-  
+
   override fun onViewBound(viewBinding: ControllerStateOkBinding) {
     // no-op
   }
@@ -18,10 +18,6 @@ class OkController : BaseHomeUIControllerAppTour<ControllerStateOkBinding>(), Pa
   override fun attachVariables(viewBinding: ControllerStateOkBinding) {
     super.attachVariables(viewBinding)
     viewBinding.controller = this
-  }
-
-  fun onAppTourClicked() {
-     startAppTour()
   }
 
   companion object {

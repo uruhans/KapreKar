@@ -82,7 +82,7 @@ class LoginController: CustomToolbarController<ControllerLoginBinding>(),
         is GenericUiModel.Success<*> -> {
           if(uiModel.data == true){
             preferences.setCurrentOnboardingProgression(OnboardingProgression.COMPLETED)
-            preferences.setOnboardingCompletedTimeStamp(System.currentTimeMillis())
+            preferences.onboardingCompletedTime = System.currentTimeMillis()
 
             //Login successful
             getContentRouter().setRoot(HomeController.routerTransaction()

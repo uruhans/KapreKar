@@ -1,6 +1,8 @@
 package com.coloplast.olympus.ui.feature.onboarding
 
 import android.content.Context
+import androidx.core.view.doOnPreDraw
+import androidx.core.view.postDelayed
 import androidx.databinding.ObservableBoolean
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.FadeChangeHandler
@@ -19,6 +21,7 @@ import com.coloplast.olympus.ui.feature.onboarding.setup.SetupGuideIntroFlowCont
 import com.coloplast.olympus.ui.feature.onboarding.setup.SetupGuidePreparingFlowController
 import com.coloplast.olympus.ui.feature.onboarding.signup.SignupFlowController
 import com.coloplast.olympus.ui.feature.onboarding.valueproposition.ValuePropositionFlowController
+import com.coloplast.olympus.ui.feature.uistates.WelcomeController
 import org.koin.core.inject
 
 /**
@@ -29,6 +32,8 @@ class LandingController : BaseController<ControllerLandingBinding>() {
 
   private val preferences: Preferences by inject()
   private val serviceStateDispatcher: ServiceStateDispatcher by inject()
+
+  private var onboardingCompleted: Boolean = false
 
   val isVisible = ObservableBoolean(false) // by default, we hide the content of this view
 
@@ -82,13 +87,29 @@ class LandingController : BaseController<ControllerLandingBinding>() {
     isVisible.set(routerTransaction == null) // if there is no pending transaction we show the content of this view
 
     routerTransaction?.let {
-      viewBinding.logInButton.postDelayed({
+      viewBinding.root.postDelayed({
         getContentRouter().pushController(
           it.popChangeHandler(FadeChangeHandler())
             .pushChangeHandler(FadeChangeHandler())
         )
       }, delay)
+
+      if (it.tag() == HomeController.TAG_CONTROLLER && shouldShowWelcome()) {
+        viewBinding.root.postDelayed(delay + 1500L) {
+          preferences.didSeeWelcome = true
+          getContentRouter().pushController(
+            WelcomeController.routerTransaction()
+              .pushChangeHandler(FadeChangeHandler())
+              .popChangeHandler(FadeChangeHandler())
+          )
+        }
+      }
     }
+  }
+
+  private fun shouldShowWelcome(): Boolean {
+    return  (preferences.getCurrentOnboardingProgress() == OnboardingProgression.COMPLETED &&
+        !preferences.didSeeWelcome)
   }
 
   fun onCreateProfileClicked() {

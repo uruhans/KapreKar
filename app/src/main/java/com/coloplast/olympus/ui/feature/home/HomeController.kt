@@ -196,6 +196,11 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
           isConnected.set(false)
           changeUiState(UiState.CONNECTING)
         }
+        is HomeUiModel.NoTransmittersFound -> {
+          if (!uiModel.anyTransmitters) {
+            changeUiState(UiState.TRANSMITTERS_EMPTY)
+          }
+        }
         is HomeUiModel.StitchOrResetComplete -> {
           /* no-op */
         }
@@ -317,6 +322,9 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         }
         UiState.TRANSMITTER_BATTERY_CHARGING_W -> {
           TransmitterChargingController.routerTransaction()
+        }
+        UiState.TRANSMITTERS_EMPTY -> {
+          NoTransmittersController.routerTransaction()
         }
         UiState.BLUETOOTH_NOT_ENABLED -> {
           removeBleDisconnectOverlay = false

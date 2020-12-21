@@ -13,6 +13,7 @@ import com.bluelinelabs.conductor.Conductor
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.FadeChangeHandler
+import com.bluelinelabs.conductor.changehandler.HorizontalChangeHandler
 import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import com.coloplast.olympus.R
 import com.coloplast.olympus.bluetooth.ServiceDispatcher
@@ -41,6 +42,7 @@ import com.coloplast.olympus.ui.feature.contact.ContactController
 import com.coloplast.olympus.ui.feature.guides.GuidesFlowController
 import com.coloplast.olympus.ui.feature.guides.SingleGuideFlowController
 import com.coloplast.olympus.ui.feature.guides.articles.models.GuideType
+import com.coloplast.olympus.ui.feature.guides.flows.tour.AppTourFlowController
 import com.coloplast.olympus.ui.feature.home.models.HomeUiModel
 import com.coloplast.olympus.ui.feature.home.models.PatchVisible
 import com.coloplast.olympus.ui.feature.home.models.SideMenuType
@@ -144,7 +146,6 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
             }
             BluetoothState.LOCATION_PERMISSION_NOT_GRANTED -> {
             //This is only required when scanning for transmitter
-            //showPermissionDialog()
             }
             BluetoothState.BLUETOOTH_NOT_ENABLED -> {
               isConnected.set(false)
@@ -558,6 +559,20 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
     }
   }
 
+  fun shouldShowAppTour(): Boolean {
+    val onBoardedLessThan48Hours = (System.currentTimeMillis() - preferences.onboardingCompletedTime) / MILLIS_TO_HOURS < 48
+    return onBoardedLessThan48Hours && !preferences.didSeeAppTourGuide
+  }
+
+  fun startAppTour() {
+    preferences.didSeeAppTourGuide = true
+    getContentRouter().pushController(
+      AppTourFlowController.routerTransaction()
+        .pushChangeHandler(HorizontalChangeHandler())
+        .popChangeHandler(HorizontalChangeHandler())
+    )
+  }
+
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     when (requestCode) {
       REQUEST_CODE_BLUETOOTH_ENABLE -> {
@@ -595,6 +610,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
     private const val REQUEST_CODE_CONNECTION_LOST = 6010
     private const val REQUEST_CODE_PATCH_DETAILS = 7001
 
+    private const val MILLIS_TO_HOURS = 1000L * 60 * 60
     const val REQUEST_CODE_BLUETOOTH_ENABLE = 5005
 
     fun routerTransaction() = RouterTransaction.with(HomeController())

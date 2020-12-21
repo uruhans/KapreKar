@@ -1,19 +1,17 @@
 package com.coloplast.olympus.ui.feature
 
 import com.coloplast.olympus.bluetooth.businesslayer.BluetoothManager
-import com.coloplast.olympus.bluetooth.businesslayer.enums.SensorStatus
-import com.coloplast.olympus.bluetooth.businesslayer.enums.WaterIngressDetection
-import com.coloplast.olympus.bluetooth.businesslayer.services.OlympusWirelessProtocol
+import com.coloplast.olympus.bluetooth.businesslayer.enums.Attached
+import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.bluetooth.model.PatchProbability
 import com.coloplast.olympus.bluetooth.model.StateChange
 import com.coloplast.olympus.shared.moshi.deserialize
 import com.coloplast.olympus.shared.moshi.serialize
 import com.coloplast.olympus.shared.preferences.Preferences
 import com.coloplast.olympus.ui.common.Stack
-import com.coloplast.olympus.ui.feature.home.models.Stitch
-import com.coloplast.olympus.ui.feature.statemachine.models.OverlayState
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
 import timber.log.Timber
+import java.time.Instant
 
 /**
  * This manager determines which Tx is currently the *active* one (ie: the one whose state is being displayed on the status screen)
@@ -30,11 +28,10 @@ class TransmitterManager(
       preferences.activeTransmitter = value
     }
 
+  private var wasPreviousUiStateMultipleTx = false
+
   // constants for automatic patch detection
   private val validDetachInterval = 60*60
-  private val aFrom = -0.160133252649434
-  private val aTo = 0.25228545137611
-  private val intercept = 0.761724504394094
 
   init {
     preferences.latestStateFromActiveTx.let { latestStateFromActiveTx ->
@@ -43,10 +40,12 @@ class TransmitterManager(
       }
 
       latestStateFromActiveTx.deserialize<StateChange>()?.let { stateChange ->
-        transmitterStateHistory[activeTransmitter] = Stack<StateChange>(5).also {
+        transmitterStateHistory[activeTransmitter] = Stack<StateChange>(3).also {
           it.push(stateChange)
         }
       }
+
+      transmitterStateHistory.remove("")
     }
   }
 
@@ -58,54 +57,46 @@ class TransmitterManager(
   fun determineCurrentlyActiveTransmitterAndReturnStateChangeFromIt(stateChange: StateChange): UpdatedStateChange {
     addToHistory(stateChange)
 
-    // we verify that the currently active transmitter is actually connected
-    // there could be an edge case where it may not be connected - but we still have a history of it's states
-    // that may cause false positives
-    val isActiveTransmitterConnected = bluetoothManager.isConnected(activeTransmitter)
+    wasPreviousUiStateMultipleTx = false
 
-    if(!isActiveTransmitterConnected || activeTransmitter.isEmpty()) {
-      // we have no active transmitters
+    val otherConnectedAndAttached = isOtherConnectedAndAttached(stateChange.getMacAddress())
+
+    if(!hasActiveTransmitter()) {
       return if(isCurrentlyAttached(stateChange)) {
+        // change active tx to this one
         setActiveTransmitter(stateChange)
+        // return it's state
         UpdatedStateChange(stateChange, true)
       }
       else {
-        UpdatedStateChange(StateChange(UiState.TRANSMITTER_DETACHED_V, stateChange.overlayState, stateChange.bleDevice))
+        // we have no active tx - nor is the current on attached - force UiState DETACHED
+        UpdatedStateChange(StateChange(UiState.TRANSMITTER_DETACHED_V, stateChange.overlayState, stateChange.bleDevice, stateChange.patchProbability, stateChange.timestamp))
       }
     }
     else {
-      // we do have an active transmitter
+      // the incoming update is coming from the currently active tx
       if(isActiveTransmitter(stateChange.getMacAddress())) {
-        // the current tx is already active
-        if(isCurrentlyAttached(stateChange)) {
-          return if(isOtherTransmitterAttached(stateChange.getMacAddress())) {
-            // if other tx is also attached so we now have multiple transmitters
-            UpdatedStateChange(StateChange(UiState.MULTIPLE_TRANSMITTERS, stateChange.overlayState, stateChange.bleDevice))
-          }
-          else {
-            // this is the only attached tx
-            UpdatedStateChange(stateChange)
-          }
+        // is it connected and attached AND is the other ALSO connected and attached
+        return if(isConnectedAndAttached(stateChange.getMacAddress()) && otherConnectedAndAttached) {
+          wasPreviousUiStateMultipleTx = true
+          UpdatedStateChange(StateChange(UiState.MULTIPLE_TRANSMITTERS, stateChange.overlayState, stateChange.bleDevice, stateChange.patchProbability, stateChange.timestamp))
         }
         else {
-          // is the other transmitter on patch
-          return if(isOtherTransmitterAttached(stateChange.getMacAddress())) {
-            val otherTxState = latestStateFromOtherTransmitter(stateChange.getMacAddress())!!
-            setActiveTransmitter(otherTxState)
-            UpdatedStateChange(otherTxState, true)
+          if(otherConnectedAndAttached) {
+            val otherStateChange = latestStateFromOtherTransmitter(stateChange.getMacAddress())!!
+            setActiveTransmitter(otherStateChange)
+            UpdatedStateChange(otherStateChange, true)
           }
           else {
-            // no transmitters are currently on patch
             UpdatedStateChange(stateChange)
           }
         }
       }
       else {
-        // this is not the active transmitter, but it is attached
-        return if(isCurrentlyAttached(stateChange)) {
-          // is the other transmitter also attached?
-          if(isOtherTransmitterAttached(stateChange.getMacAddress())) {
-            UpdatedStateChange(StateChange(UiState.MULTIPLE_TRANSMITTERS, stateChange.overlayState, stateChange.bleDevice))
+        if(isConnectedAndAttached(stateChange.getMacAddress())) {
+          return if(otherConnectedAndAttached) {
+            wasPreviousUiStateMultipleTx = true
+            UpdatedStateChange(StateChange(UiState.MULTIPLE_TRANSMITTERS, stateChange.overlayState, stateChange.bleDevice, stateChange.patchProbability, stateChange.timestamp))
           }
           else {
             setActiveTransmitter(stateChange)
@@ -113,122 +104,153 @@ class TransmitterManager(
           }
         }
         else {
-          // no - this is not attached
-          val otherTxState = latestStateFromOtherTransmitter(stateChange.getMacAddress())!!
-          UpdatedStateChange(otherTxState)
+          val otherStateChange = latestStateFromOtherTransmitter(stateChange.getMacAddress())
+          return if(otherStateChange != null) {
+            UpdatedStateChange(otherStateChange)
+          }
+          else {
+            UpdatedStateChange(stateChange)
+          }
         }
       }
+    }
+  }
+
+  private fun lastValidDetachState(macAddress: String) : StateChange? {
+    val validTimeStamp = Instant.now().epochSecond - validDetachInterval
+    val latestTxHistory = transmitterStateHistory.entries.firstOrNull { it.key == macAddress }?.value
+    return latestTxHistory?.firstOrNull { it.state == UiState.TRANSMITTER_DETACHED_V && it.timestamp > validTimeStamp }
+  }
+
+  private fun getStitchOrResetArray(patchProbability: PatchProbability, stateChange: StateChange): ByteArray? {
+    return if(patchProbability == PatchProbability.SAME) {
+       stateChange.bleDevice.peripheral?.getStitchArray()
+    }
+    else {
+      byteArrayOf(
+        // sensors
+        -1, -1, -1, -1, -1, -1,
+        // wid
+        -1,
+        // attached
+        Attached.ATTACHED_ON_PATCH.id.toByte(),
+        // patchType
+        -1,
+        // compromised
+        -1,
+        // rotational angle
+        -1,
+        // batt pwr
+        -1,
+        // firmware warning/error
+        0, 0)
     }
   }
 
   fun determinePatchCommand(updatedStateChange: UpdatedStateChange) {
-    val activeTxAddress = activeTransmitterMacAddress()
+    var patchProbability = PatchProbability.NOT_SET
+    val incomingPackage = updatedStateChange.stateChange
 
-    val newUiState = updatedStateChange.stateChange.state
+    val incomingCompromised = incomingPackage.bleDevice.peripheral?.transmitter?.compromised
+    val otherPackage = latestStateFromOtherTransmitter(incomingPackage.getMacAddress())
 
-    val bleDevice = updatedStateChange.stateChange.bleDevice
-    val patch = bleDevice.peripheral?.patch
-    val transmitter = bleDevice.peripheral?.transmitter
+    var packageToGetStitchArrayFrom = incomingPackage
 
-    val patchProbability = if (newUiState != UiState.MULTIPLE_TRANSMITTERS &&
-      transmitter?.waterIngressDetection != WaterIngressDetection.WATER_INGRESS &&
-      transmitter?.compromised != -1 && transmitter?.compromised != 255 &&
-      (patch?.cutguardSensor != SensorStatus.CUT_GUARD_CUT_BROKEN ||
-          patch.cutguardSensor != SensorStatus.CUT_GUARD_DIRT_IN_CONNECTOR ||
-          patch.cutguardSensor != SensorStatus.CUT_GUARD_NOISE)
-    ) {
-
-      val incomingCompromised = transmitter?.compromised
-
+    if(incomingPackage.state != UiState.MULTIPLE_TRANSMITTERS && !incomingPackage.bleDevice.isBlocked()) {
       if(updatedStateChange.activeTransmitterChanged) {
-        val previousUiStateFromOther = latestStateFromOtherTransmitter(activeTransmitter)
-        val otherCompromised = previousUiStateFromOther?.bleDevice?.peripheral?.transmitter?.compromised
 
-        if(previousUiStateFromOther?.state == UiState.MULTIPLE_TRANSMITTERS) {
-          // CALCULATE SPLIT COMMAND
-          calculateSplitCommand(from = incomingCompromised, to = otherCompromised)
+        if(wasPreviousUiStateMultipleTx) {
+          val otherCompromised = otherPackage?.bleDevice?.peripheral?.transmitter?.compromised
+          val from = if(incomingPackage.bleDevice.isBlocked()) null else incomingCompromised
+
+          if(otherPackage?.bleDevice?.isBlocked() == false) {
+            patchProbability = calculateSplitCommand(from, otherCompromised)
+            packageToGetStitchArrayFrom = otherPackage
+          }
         }
         else {
-          calculateSplitCommand(from = otherCompromised, to = incomingCompromised)
+          if(!incomingPackage.bleDevice.isBlocked()) {
+            val lastOtherValidDetachState = lastValidDetachState(otherPackage?.getMacAddress() ?: "")
+
+            val blocked = lastOtherValidDetachState?.bleDevice?.isBlocked() ?: true
+            val from = if(blocked) null else lastOtherValidDetachState?.bleDevice?.peripheral?.transmitter?.compromised
+            patchProbability = calculateSplitCommand(from, incomingCompromised)
+          }
         }
       }
       else {
-        val firstDetachState = transmitterStateHistory[activeTxAddress]?.firstOrNull { it.state == UiState.TRANSMITTER_DETACHED_V }
-        if(firstDetachState == null) {
-          PatchProbability.NOT_SET
+        val lastValidDetachState = lastValidDetachState(incomingPackage.getMacAddress())
+
+        if(incomingPackage.bleDevice.isAttached() && !incomingPackage.bleDevice.isBlocked() && lastValidDetachState != null) {
+          val from = if(lastValidDetachState.bleDevice.isBlocked()) null else lastValidDetachState.bleDevice.peripheral?.transmitter?.compromised
+          patchProbability = calculateSplitCommand(from, incomingCompromised)
         }
-        else {
-          if (bleDevice.isAttachedOutsideBLE()) {
-            if (firstDetachState.secondsSinceNow() > validDetachInterval) {
-              PatchProbability.NOT_SET
-            }
-            else {
-              calculateSplitCommand(from = firstDetachState.bleDevice.peripheral?.transmitter?.compromised, to = incomingCompromised)
-            }
-          }
-          else if (bleDevice.isAttached()) {
-            calculateSplitCommand(from = firstDetachState.bleDevice.peripheral?.transmitter?.compromised, to = incomingCompromised)
-          }
-          else {
-            PatchProbability.NOT_SET
-          }
+        else if(incomingPackage.bleDevice.isAttachedOutsideBLE()) {
+          patchProbability = calculateSplitCommand(null, incomingCompromised)
         }
       }
     }
-    else {
-      PatchProbability.NOT_SET
-    }
 
     updatedStateChange.stateChange.patchProbability = patchProbability
+    updatedStateChange.stateChange.resetOrStitchCandidate = getStitchOrResetArray(patchProbability, packageToGetStitchArrayFrom)
   }
 
   private fun calculateSplitCommand(from: Int?, to: Int?) : PatchProbability {
     if(to == null) {
+      Timber.d("calculateSplitCommand: to is null")
       return PatchProbability.NOT_SET
     }
 
-    return if(from != null) {
-      val calculation = ((intercept.plus(aTo).times(to)).div(-aFrom)).minus(from)
-      if(calculation < 0) {
-        PatchProbability.NEW
-      }
-      else {
-        PatchProbability.SAME
-      }
+    // Magic number is coming from Coloplast. For more information see Coloplast documentation on Auto patch detection.
+    val intercept = 10.2643
+
+    return if(to < 10) {
+      // METHOD 0
+      // If the to value is less than 10, that means that the sensor layer in which the transmitter has been placed, is so new that even if a sensor is triggered it should still be reset.
+      // This is what "We" call a wet mount.
+      Timber.d("calculateSplitCommand: to < 10")
+      PatchProbability.NEW
     }
     else {
-      if(to < 23.1) {
-        PatchProbability.NEW
+      if(from != null) {
+        // METHOD A
+        // For a deeper explanation of the equation please refer to the Coloplast documentation of APS.
+       val patchProbability = to.toDouble() - from.toDouble() + intercept
+        if(patchProbability < 0) {
+          Timber.d("calculateSplitCommand: patchProbability < 0")
+          PatchProbability.NEW
+        }
+        else {
+          Timber.d("calculateSplitCommand: patchProbability >= 0")
+          PatchProbability.SAME
+        }
       }
       else {
-        PatchProbability.SAME
+        // "METHOD B
+        // If we for some reason do not have a from value, the command can be calculated using only the to value.
+        // This could be because of bluetooth disconnection.
+        // This magic number is determined on data analysis and was decided by Coloplast, please refer to the APS Coloplast documentation.
+        if(to.toDouble() <= 20.44) {
+          Timber.d("calculateSplitCommand: to <= 20.44")
+          PatchProbability.NEW
+        }
+        else {
+          Timber.d("calculateSplitCommand: to > 20.44")
+          PatchProbability.SAME
+        }
       }
     }
+  }
+
+  private fun hasActiveTransmitter() : Boolean {
+    return activeTransmitterMacAddress().isNotBlank()
   }
 
   /**
    * @return active transmitter macAddress
    */
-  fun activeTransmitterMacAddress() : String {
+  private fun activeTransmitterMacAddress() : String {
     return activeTransmitter
-  }
-
-  /**
-   * get stitch bytes from transmitter (used when changing Tx onto the same patch)
-   *  - the other Tx being the one that is *not* active
-   *  - if we do not have an 'other' transmitter - we return the stitch array from the same transmitter
-   *  @return a Stitch object containing the actual stitching or a "Reset" package instead (first time the user is asked both answers do a reset)
-   */
-  fun getStitchBytes() : Stitch {
-    // see if we have the other transmitter
-    val otherTxState = latestStateFromOtherTransmitter(activeTransmitter)
-
-    // if we dont have the other transmitter take the latest from the active
-    val state = otherTxState ?: transmitterStateHistory.entries.firstOrNull { it.key == activeTransmitter }?.value?.peek()
-
-    return Stitch(
-      activeTransmitter,
-      state?.bleDevice?.peripheral?.getStitchArray() ?: OlympusWirelessProtocol.Characteristics.RESET_STATUS_DATA)
   }
 
   private fun setActiveTransmitter(stateChange: StateChange) {
@@ -240,7 +262,7 @@ class TransmitterManager(
   }
 
   private fun addToHistory(stateChange: StateChange) {
-    val stack = transmitterStateHistory[stateChange.getMacAddress()] ?: Stack(5)
+    val stack = transmitterStateHistory[stateChange.getMacAddress()] ?: Stack(3)
     stack.push(stateChange)
     transmitterStateHistory[stateChange.getMacAddress()] = stack
   }
@@ -263,8 +285,27 @@ class TransmitterManager(
     return if(isConnected) otherTransmitter?.value?.peek() else null
   }
 
-  private fun isCurrentlyAttached(stateChange: StateChange) : Boolean {
-    return stateChange.bleDevice.isAttached()
+  private fun isCurrentlyAttached(macAddress: String) : Boolean {
+    return isCurrentlyAttached(getLatestState(macAddress))
+  }
+
+  private fun isCurrentlyAttached(stateChange: StateChange?) : Boolean {
+    return stateChange?.bleDevice?.isAttached() ?: false
+  }
+
+  private fun isConnectedAndAttached(macAddress: String) : Boolean {
+    val isConnected = bluetoothManager.bleConnectionStateObservable(macAddress).blockingFirst() == BleConnectionState.CONNECTED
+    val latestState = transmitterStateHistory.entries.firstOrNull { it.key == macAddress }?.value?.peek()
+
+    // it's either attached directly or attached outside BLE
+    val isAttached = latestState?.bleDevice?.isAttached() ?: false || latestState?.bleDevice?.isAttachedOutsideBLE() ?: false
+
+    return isConnected && isAttached
+  }
+
+  private fun isOtherConnectedAndAttached(thisTransmitterAddress: String) : Boolean {
+    val otherTransmitter = transmitterStateHistory.entries.firstOrNull { it.key != thisTransmitterAddress } ?: return false
+    return isConnectedAndAttached(otherTransmitter.key)
   }
 
   /**
@@ -280,37 +321,36 @@ class TransmitterManager(
 
   /**
    * Tell the manager that a Tx Disconnect occurred
+   *
+   * Will switch active transmitter if needed and return the latest state
    * @return latest State from other transmitter or NULL if we only have one Tx
    */
   fun onTransmitterDisconnect(disconnectedTransmitterMacAddress: String) : StateChange? {
-    var shouldDispatchOtherTxState = false
-
-    // if this is the currently active transmitter
+    // if the disconnected tx is currently the active tx
     if(isActiveTransmitter(disconnectedTransmitterMacAddress)) {
-      // set the current transmitter to nothing
-      activeTransmitter = ""
-
-      // check if the other transmitter is attached
+      // if the other tx is attached
       if(isOtherTransmitterAttached(disconnectedTransmitterMacAddress)) {
-        shouldDispatchOtherTxState = true
-      }
-      else {
-        // we need to send back a state where we tell the user that the transmitter has lost connection
-        transmitterStateHistory[disconnectedTransmitterMacAddress]?.peek()?.let {
-          return StateChange(UiState.NO_CHANGE, OverlayState.BLE_CONNECTION_LOST, it.bleDevice)
+        // get the other tx latest state
+        val otherTxStateChange = latestStateFromOtherTransmitter(disconnectedTransmitterMacAddress)
+        // if we have another state
+        if(otherTxStateChange != null) {
+          // return it
+          return otherTxStateChange
         }
       }
     }
     else {
-      val currentTxUpdate = transmitterStateHistory.entries.firstOrNull { it.key == disconnectedTransmitterMacAddress }
-      if(currentTxUpdate?.value?.peek()?.bleDevice?.isAttached() == true) {
-        shouldDispatchOtherTxState = true
+      // the disconnected tx is *not* the active one,
+      // but see if it *was* attached immediately before disconnect
+      if(isCurrentlyAttached(disconnectedTransmitterMacAddress)) {
+        // get the latest state from the other tx
+        val otherTxStateChange = latestStateFromOtherTransmitter(disconnectedTransmitterMacAddress)
+        // if there is another state
+        if(otherTxStateChange != null) {
+          //return it
+          return otherTxStateChange
+        }
       }
-    }
-
-    if(shouldDispatchOtherTxState) {
-      // return latest stateUpdate from the other transmitter
-      return latestStateFromOtherTransmitter(disconnectedTransmitterMacAddress)
     }
 
     return null

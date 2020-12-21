@@ -28,8 +28,7 @@ interface BluetoothManager {
   fun connectedDeviceObservable(macAddress: String): Observable<BleDevice>
   
   fun connectedDevicesObservable(): Observable<List<BleDevice>>
-  fun resetTransmitter(macAddress: String) : Completable
-  fun stitchTransmitter(macAddress: String, data: ByteArray) : Completable
+  fun stitchOrResetTransmitter(macAddress: String, data: ByteArray) : Completable
   fun writeCharacteristic(macAddress: String, characteristic: UUID, data: ByteArray) : Completable
 
   fun updateTransmitterTimestamp(macAddress: String) : Observable<String>

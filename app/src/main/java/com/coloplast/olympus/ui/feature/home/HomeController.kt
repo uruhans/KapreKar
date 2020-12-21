@@ -25,6 +25,7 @@ import com.coloplast.olympus.bluetooth.businesslayer.models.Battery
 import com.coloplast.olympus.bluetooth.businesslayer.models.Patch
 import com.coloplast.olympus.bluetooth.model.PatchProbability
 import com.coloplast.olympus.bluetooth.model.ServiceEvent
+import com.coloplast.olympus.bluetooth.model.StateChange
 import com.coloplast.olympus.databinding.ControllerHomeBinding
 import com.coloplast.olympus.shared.preferences.Preferences
 import com.coloplast.olympus.ui.common.BaseController
@@ -35,7 +36,6 @@ import com.coloplast.olympus.ui.common.dialogs.DialogController
 import com.coloplast.olympus.ui.common.widgets.PatchView
 import com.coloplast.olympus.ui.dialogs.ImageDialogController
 import com.coloplast.olympus.ui.dialogs.PatchDialogController
-import com.coloplast.olympus.ui.feature.TransmitterManager
 import com.coloplast.olympus.ui.feature.about.AboutController
 import com.coloplast.olympus.ui.feature.contact.ContactController
 import com.coloplast.olympus.ui.feature.guides.GuidesFlowController
@@ -44,7 +44,7 @@ import com.coloplast.olympus.ui.feature.guides.articles.models.GuideType
 import com.coloplast.olympus.ui.feature.home.models.HomeUiModel
 import com.coloplast.olympus.ui.feature.home.models.PatchVisible
 import com.coloplast.olympus.ui.feature.home.models.SideMenuType
-import com.coloplast.olympus.ui.feature.home.models.Stitch
+import com.coloplast.olympus.ui.feature.home.models.StitchOrResetObject
 import com.coloplast.olympus.ui.feature.profile.ProfileController
 import com.coloplast.olympus.ui.feature.settings.SettingsFlowController
 import com.coloplast.olympus.ui.feature.statemachine.models.OverlayState
@@ -66,13 +66,11 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
 
   private val viewModel: HomeViewModel by inject()
   private val preferences: Preferences by inject()
-  private val transmitterManager: TransmitterManager by inject()
   private val breachesOccurred: BreachesOccurred by inject()
   private val serviceStateDispatcher: ServiceStateDispatcher by inject()
 
   private val requestConnectionStateRelay = PublishRelay.create<String>()
-  private val stitchRelay = PublishRelay.create<Stitch>()
-  private val resetRelay = PublishRelay.create<String>() // macAddress
+  private val stitchOrResetRelay = PublishRelay.create<StitchOrResetObject>()
 
   private val connectionStateDisposable = CompositeDisposable()
 
@@ -127,7 +125,11 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
 
   override fun render(): Function<Observable<HomeUiModel>, Disposable> {
     return RxUi.ui { uiModel ->
-      Timber.d("uiModel: $uiModel")
+
+      if(uiModel !is HomeUiModel.RawDataPackageUpdate) {
+        Timber.d("uiModel: $uiModel")
+      }
+
       when (uiModel) {
         is HomeUiModel.ConnectionStateUpdate -> {
           isConnected.set(uiModel.connectionState == BleConnectionState.CONNECTED)
@@ -192,6 +194,9 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
           isConnected.set(false)
           changeUiState(UiState.CONNECTING)
         }
+        is HomeUiModel.StitchOrResetComplete -> {
+          /* no-op */
+        }
         is HomeUiModel.DeviceUpdate -> {
           val stateChange = uiModel.stateChange
 
@@ -239,9 +244,9 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
           changeUiState(stateToChangeTo)
           changeOverlayState(stateChange.overlayState)
 
-          determinePatchProbability(stateChange.patchProbability)
+          determinePatchProbability(stateChange)
 
-          if(stateChange.patchProbability != PatchProbability.NEW) {
+          if (stateChange.patchProbability != PatchProbability.NEW) {
             breachesOccurred.add(stateChange)
           }
           else {
@@ -299,6 +304,9 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
         }
         UiState.CUTGUARD_DIRT_IN_TRANSMITTER_K -> {
           DirtInTransmitterController.routerTransaction()
+        }
+        UiState.INNER_BLIND_LEAK_L -> {
+          InnerBlindLeakController.routerTransaction()
         }
         UiState.NO_BATTERY_R -> {
           NoBatteryController.routerTransaction()
@@ -363,7 +371,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
         }
       }
 
-      if(removeBleDisconnectOverlay && imageDialogController?.requestCode == REQUEST_CODE_CONNECTION_LOST) {
+      if (removeBleDisconnectOverlay && imageDialogController?.requestCode == REQUEST_CODE_CONNECTION_LOST) {
         onCloseClicked(REQUEST_CODE_CONNECTION_LOST)
       }
     }
@@ -416,12 +424,8 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
       .refCount()
   }
 
-  override fun requestStitching(): Observable<Stitch> {
-    return stitchRelay.publish().refCount()
-  }
-
-  override fun requestReset(): Observable<String> {
-    return resetRelay.publish().refCount()
+  override fun requestStitching(): Observable<StitchOrResetObject> {
+    return stitchOrResetRelay.publish().refCount()
   }
 
   val patchClickedListener = object : PatchView.Listener {
@@ -439,24 +443,20 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
     }
   }
 
-  private fun determinePatchProbability(patchProbability: PatchProbability) {
-    Timber.d("PatchProbability: [$patchProbability]")
+  private fun determinePatchProbability(stateChange: StateChange) {
+    if (stateChange.patchProbability == PatchProbability.NOT_SET) {
+      return
+    }
 
-    when (patchProbability) {
-      PatchProbability.NEW -> {
-        preferences.incrementPatchId()
-        patchChangeTime = LocalTime.now()
+    Timber.d("PatchProbability: [${stateChange.patchProbability}]")
 
-        resetRelay.accept(transmitterManager.activeTransmitterMacAddress())
-      }
-      PatchProbability.SAME -> {
-        transmitterManager.getStitchBytes().let {
-          stitchRelay.accept(it)
-        }
-      }
-      PatchProbability.NOT_SET -> {
-        /* no-op */
-      }
+    if (stateChange.patchProbability == PatchProbability.NEW) {
+      preferences.incrementPatchId()
+      patchChangeTime = LocalTime.now()
+    }
+
+    stateChange.resetOrStitchCandidate?.let {
+      stitchOrResetRelay.accept(StitchOrResetObject(stateChange.getMacAddress(), it))
     }
   }
 

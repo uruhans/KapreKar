@@ -35,7 +35,6 @@ class UserComponentImpl(private val preferences: Preferences) : UserComponent {
     }
     else {
       if(user.id != null) {
-        //TODO we dont handle if same user was created earlier (receive http-resp 409)
         apiService.updateUser(user)
           .toSingle { UserResponseDTO(preferences.getToken(), UserDTO.fromUser(user)) }
           .toObservable()

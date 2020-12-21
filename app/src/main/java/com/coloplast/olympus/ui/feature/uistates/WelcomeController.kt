@@ -3,10 +3,8 @@ package com.coloplast.olympus.ui.feature.uistates
 import androidx.core.view.doOnPreDraw
 import androidx.core.view.postDelayed
 import com.bluelinelabs.conductor.RouterTransaction
-import com.bluelinelabs.conductor.changehandler.FadeChangeHandler
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerStateWelcomeBinding
-import com.coloplast.olympus.ui.feature.home.HomeController
 import com.coloplast.olympus.ui.feature.home.models.PatchVisible
 
 class WelcomeController : BaseHomeUIControllerAppTour<ControllerStateWelcomeBinding>(), PatchVisible {
@@ -26,14 +24,7 @@ class WelcomeController : BaseHomeUIControllerAppTour<ControllerStateWelcomeBind
 
   private fun closeAfterPeriod(viewBinding: ControllerStateWelcomeBinding) {
     viewBinding.root.postDelayed(MAX_VISIBLE_TIME) {
-      if (!appTourStarted) {
-        val shouldPopLastView = router.backstackSize == 1
-        if (shouldPopLastView) {
-          router.setPopsLastView(true)
-        }
-
-        router.popController(this)
-      }
+      router.popController(this)
     }
   }
 

@@ -42,7 +42,11 @@ import com.coloplast.olympus.ui.feature.contact.ContactController
 import com.coloplast.olympus.ui.feature.guides.GuidesFlowController
 import com.coloplast.olympus.ui.feature.guides.SingleGuideFlowController
 import com.coloplast.olympus.ui.feature.guides.articles.models.GuideType
-import com.coloplast.olympus.ui.feature.home.models.*
+import com.coloplast.olympus.ui.feature.home.models.HomeUiModel
+import com.coloplast.olympus.ui.feature.home.models.LastCheckVisible
+import com.coloplast.olympus.ui.feature.home.models.PatchVisible
+import com.coloplast.olympus.ui.feature.home.models.SideMenuType
+import com.coloplast.olympus.ui.feature.home.models.StitchOrResetObject
 import com.coloplast.olympus.ui.feature.profile.ProfileController
 import com.coloplast.olympus.ui.feature.settings.SettingsFlowController
 import com.coloplast.olympus.ui.feature.statemachine.models.OverlayState

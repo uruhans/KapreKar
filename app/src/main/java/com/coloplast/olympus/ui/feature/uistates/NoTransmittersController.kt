@@ -3,25 +3,19 @@ package com.coloplast.olympus.ui.feature.uistates
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import com.coloplast.olympus.R
-import com.coloplast.olympus.databinding.ControllerStateTransmitterAddBinding
-import com.coloplast.olympus.ui.feature.guides.SingleGuideFlowController
-import com.coloplast.olympus.ui.feature.guides.articles.models.GuideType
+import com.coloplast.olympus.databinding.ControllerStateNoTransmittersBinding
 import com.coloplast.olympus.ui.feature.home.models.PatchVisible
+import com.coloplast.olympus.ui.feature.transmitters.add.AddTransmitterFlowController
 
-class NoTransmittersController : BaseHomeUIController<ControllerStateTransmitterAddBinding>(), PatchVisible {
+class NoTransmittersController : BaseHomeUIController<ControllerStateNoTransmittersBinding>(), PatchVisible {
 
-  override fun attachVariables(viewBinding: ControllerStateTransmitterAddBinding) {
-    super.attachVariables(viewBinding)
-    viewBinding.controller = this
-  }
-
-  override fun onViewBound(viewBinding: ControllerStateTransmitterAddBinding) {
+  override fun onViewBound(viewBinding: ControllerStateNoTransmittersBinding) {
     // no-op
   }
 
   fun onAddTransmitterClicked() {
     getContentRouter().pushController(
-      SingleGuideFlowController.routerTransaction(GuideType.GET_STARTED)
+      AddTransmitterFlowController.routerTransaction(2)
         .pushChangeHandler(VerticalChangeHandler())
         .popChangeHandler(VerticalChangeHandler())
     )
@@ -32,11 +26,11 @@ class NoTransmittersController : BaseHomeUIController<ControllerStateTransmitter
   }
 
   override fun getLayout(): Int {
-    return R.layout.controller_state_transmitter_add
+    return R.layout.controller_state_no_transmitters
   }
 
   companion object {
-    private const val TAG_CONTROLLER = "state_transmitter_detached_controller"
+    private const val TAG_CONTROLLER = "state_no_transmitters_controller"
     fun routerTransaction() = RouterTransaction.with(NoTransmittersController()).tag(TAG_CONTROLLER)
   }
 }

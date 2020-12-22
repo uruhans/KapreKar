@@ -198,6 +198,10 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         }
         is HomeUiModel.NoTransmittersFound -> {
           if (!uiModel.anyTransmitters) {
+            isConnected.set(true)
+            updateAnimation.set(true)
+            updateAnimation.notifyChange()
+            lastCheck.set(uiModel.lastUpdate)
             changeUiState(UiState.TRANSMITTERS_EMPTY)
           }
         }

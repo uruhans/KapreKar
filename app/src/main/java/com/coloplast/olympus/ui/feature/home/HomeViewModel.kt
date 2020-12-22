@@ -79,8 +79,8 @@ class HomeViewModel(
       .subscribeOn(Schedulers.io())
       .doOnNext { Timber.d("Sync Transmitters [$it]") }
 
-    val currentTransmitterObservable: Observable<List<Transmitter>> = transmitterComponent.getTransmittersAsSingle().toObservable()
-    val noTransmittersObservable: Observable<HomeUiModel> = currentTransmitterObservable
+    val transmittersObservable: Observable<List<Transmitter>> = transmitterComponent.getTransmittersAsSingle().toObservable()
+    val noTransmittersObservable: Observable<HomeUiModel> = transmittersObservable
       .subscribeOn(Schedulers.io())
       .map<HomeUiModel> {
         HomeUiModel.NoTransmittersFound(!it.isNullOrEmpty())

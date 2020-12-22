@@ -42,10 +42,7 @@ import com.coloplast.olympus.ui.feature.contact.ContactController
 import com.coloplast.olympus.ui.feature.guides.GuidesFlowController
 import com.coloplast.olympus.ui.feature.guides.SingleGuideFlowController
 import com.coloplast.olympus.ui.feature.guides.articles.models.GuideType
-import com.coloplast.olympus.ui.feature.home.models.HomeUiModel
-import com.coloplast.olympus.ui.feature.home.models.PatchVisible
-import com.coloplast.olympus.ui.feature.home.models.SideMenuType
-import com.coloplast.olympus.ui.feature.home.models.StitchOrResetObject
+import com.coloplast.olympus.ui.feature.home.models.*
 import com.coloplast.olympus.ui.feature.profile.ProfileController
 import com.coloplast.olympus.ui.feature.settings.SettingsFlowController
 import com.coloplast.olympus.ui.feature.statemachine.models.OverlayState
@@ -89,6 +86,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
   val rawRotationAngle = ObservableInt()
   val isPatchVisible = ObservableBoolean(false)
   val patchInErrorState = ObservableBoolean(false)
+  val isLastCheckVisible = ObservableBoolean(false)
 
   private var currentUiState = UiState.INITIAL
   private var currentOverlayState = OverlayState.NONE
@@ -198,9 +196,6 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
         }
         is HomeUiModel.NoTransmittersFound -> {
           if (!uiModel.anyTransmitters) {
-            isConnected.set(true)
-            updateAnimation.set(true)
-            updateAnimation.notifyChange()
             lastCheck.set(uiModel.lastUpdate)
             changeUiState(UiState.TRANSMITTERS_EMPTY)
           }
@@ -362,6 +357,10 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
       }
 
       routerTransaction?.let {
+        if (it.controller() is LastCheckVisible) {
+          isLastCheckVisible.set((it.controller() as LastCheckVisible).lastCheckVisible())
+        }
+
         if (it.controller() is PatchVisible) {
           it.popChangeHandler(ResizeChangeHandler())
             .pushChangeHandler(ResizeChangeHandler())
@@ -374,6 +373,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
             .pushChangeHandler(FadeChangeHandler())
 
           isPatchVisible.set(false)
+          isLastCheckVisible.set(false)
         }
 
         if (stateRouter?.hasRootController() == true) {

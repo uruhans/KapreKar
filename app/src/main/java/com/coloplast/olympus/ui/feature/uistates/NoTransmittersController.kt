@@ -4,13 +4,15 @@ import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerStateNoTransmittersBinding
+import com.coloplast.olympus.ui.feature.home.models.LastCheckVisible
 import com.coloplast.olympus.ui.feature.home.models.PatchVisible
 import com.coloplast.olympus.ui.feature.transmitters.add.AddTransmitterFlowController
 
-class NoTransmittersController : BaseHomeUIController<ControllerStateNoTransmittersBinding>(), PatchVisible {
+class NoTransmittersController : BaseHomeUIController<ControllerStateNoTransmittersBinding>(), PatchVisible, LastCheckVisible {
 
   override fun onViewBound(viewBinding: ControllerStateNoTransmittersBinding) {
-    // no-op
+    super.attachVariables(viewBinding)
+    viewBinding.controller = this
   }
 
   fun onAddTransmitterClicked() {
@@ -19,6 +21,10 @@ class NoTransmittersController : BaseHomeUIController<ControllerStateNoTransmitt
         .pushChangeHandler(VerticalChangeHandler())
         .popChangeHandler(VerticalChangeHandler())
     )
+  }
+
+  override fun lastCheckVisible(): Boolean {
+    return true
   }
 
   override fun patchInError(): Boolean {

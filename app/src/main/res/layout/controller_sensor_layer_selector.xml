@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+  <data>
+
+    <import type="com.coloplast.olympus.R" />
+
+    <variable
+      name="toolbarSupport"
+      type="com.coloplast.olympus.ui.common.ToolbarSupportController" />
+
+    <import type="com.coloplast.olympus.shared.types.Sensors" />
+    <variable
+      name="view"
+      type="com.coloplast.olympus.ui.common.widgets.SensorSelectorView" />
+  </data>
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/default_background">
+
+    <include
+      android:id="@+id/toolbar"
+      layout="@layout/view_toolbar"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:support="@{toolbarSupport}" />
+
+    <TextView
+      android:id="@+id/title"
+      style="@style/TextStyle.Coloplast.Bold.DarkGrey.32"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_margin="@dimen/spacing_larger"
+      android:text="@string/guide_co3_title"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
+    <TextView
+      android:id="@+id/description"
+      style="@style/TextStyle.Roboto.Regular.ClearGrey.30"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="@dimen/spacing_larger"
+      android:layout_marginTop="@dimen/spacing_half"
+      android:layout_marginEnd="@dimen/spacing_larger"
+      android:layout_marginBottom="@dimen/spacing_larger"
+      android:text="@string/lock_notification_inner_blind"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/title" />
+
+    <androidx.cardview.widget.CardView
+      android:id="@+id/sensor_size_40"
+      android:layout_width="160dp"
+      android:layout_height="144dp"
+      android:layout_weight="1"
+      android:layout_marginStart="@dimen/spacing_larger"
+      android:layout_marginTop="@dimen/spacing_double"
+      android:elevation="@dimen/cardview_elevation_default"
+      app:cardUseCompatPadding="true"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/description"
+      android:onClick="@{() -> view.onOptionClicked(Sensors.ALL)}"
+      android:background="@{view.allSensorsEnabled ? @drawable/cardview_selected_with_outline : @drawable/cardview_not_selected}" >
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center">
+        <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:paddingStart="@dimen/spacing_larger"
+          android:paddingEnd="@dimen/spacing_larger"
+          android:text="@integer/sensor_layer_size_40"
+          style="@style/TextStyle.Coloplast.Bold.DarkGrey.32"
+          android:textAlignment="center" />
+      </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+      android:id="@+id/sensor_size_50"
+      android:layout_width="160dp"
+      android:layout_height="144dp"
+      android:layout_weight="1"
+      android:layout_marginEnd="@dimen/spacing_larger"
+      android:elevation="@dimen/cardview_elevation_default"
+      app:cardUseCompatPadding="true"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toTopOf="@+id/sensor_size_40"
+      android:onClick="@{() -> view.onOptionClicked(Sensors.ALL)}"
+      android:background="@{view.allSensorsEnabled ? @drawable/cardview_selected_with_outline : @drawable/cardview_not_selected}" >
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center">
+        <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:paddingStart="@dimen/spacing_larger"
+          android:paddingEnd="@dimen/spacing_larger"
+          android:text="@integer/sensor_layer_size_50"
+          style="@style/TextStyle.Coloplast.Bold.DarkGrey.32"
+          android:textAlignment="center" />
+      </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+      android:id="@+id/sensor_size_60"
+      android:layout_width="160dp"
+      android:layout_height="144dp"
+      android:layout_weight="1"
+      android:elevation="@dimen/cardview_elevation_default"
+      android:layout_marginTop="@dimen/spacing_half"
+      app:cardUseCompatPadding="true"
+      app:layout_constraintStart_toStartOf="@+id/sensor_size_40"
+      app:layout_constraintTop_toBottomOf="@+id/sensor_size_40"
+      android:onClick="@{() -> view.onOptionClicked(Sensors.ALL)}"
+      android:background="@{view.allSensorsEnabled ? @drawable/cardview_selected_with_outline : @drawable/cardview_not_selected}" >
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center">
+        <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:paddingStart="@dimen/spacing_larger"
+          android:paddingEnd="@dimen/spacing_larger"
+          android:text="@integer/sensor_layer_size_60"
+          style="@style/TextStyle.Coloplast.Bold.DarkGrey.32"
+          android:textAlignment="center" />
+      </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+      android:id="@+id/sensor_size_70"
+      android:layout_width="160dp"
+      android:layout_height="144dp"
+      android:layout_weight="1"
+      android:elevation="@dimen/cardview_elevation_default"
+      android:layout_marginTop="@dimen/spacing_half"
+      app:cardUseCompatPadding="true"
+      app:layout_constraintEnd_toEndOf="@+id/sensor_size_50"
+      app:layout_constraintTop_toBottomOf="@+id/sensor_size_50"
+      android:onClick="@{() -> view.onOptionClicked(Sensors.ALL)}"
+      android:background="@{view.allSensorsEnabled ? @drawable/cardview_selected_with_outline : @drawable/cardview_not_selected}" >
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center">
+        <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:paddingStart="@dimen/spacing_larger"
+          android:paddingEnd="@dimen/spacing_larger"
+          android:text="@integer/sensor_layer_size_70"
+          style="@style/TextStyle.Coloplast.Bold.DarkGrey.32"
+          android:textAlignment="center" />
+      </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+      android:id="@+id/sensor_size_80"
+      android:layout_width="160dp"
+      android:layout_height="144dp"
+      android:layout_weight="1"
+      android:elevation="@dimen/cardview_elevation_default"
+      android:layout_marginTop="@dimen/spacing_half"
+      app:cardUseCompatPadding="true"
+      app:layout_constraintStart_toStartOf="@+id/sensor_size_40"
+      app:layout_constraintTop_toBottomOf="@+id/sensor_size_60"
+      android:onClick="@{() -> view.onOptionClicked(Sensors.ALL)}"
+      android:background="@{view.allSensorsEnabled ? @drawable/cardview_selected_with_outline : @drawable/cardview_not_selected}" >
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center">
+        <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:paddingStart="@dimen/spacing_larger"
+          android:paddingEnd="@dimen/spacing_larger"
+          android:text="@integer/sensor_layer_size_80"
+          style="@style/TextStyle.Coloplast.Bold.DarkGrey.32"
+          android:textAlignment="center" />
+      </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <Button
+      style="@style/Button"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="@dimen/spacing_larger"
+      android:layout_marginEnd="@dimen/spacing_larger"
+      android:onClick="@{() -> controller.onNextClicked() }"
+      android:text="@string/generic_confirm"
+      app:layout_constraintBottom_toBottomOf="parent" />
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</layout>

@@ -47,6 +47,7 @@ class SetupGuidePreparingFactoryImpl : FlowFactory<EmptyModel>() {
           showCloseButton = false
         )
       }
+      SetupGuidePreparingFlow.SetupGuideSelectSensorLayerSize -> SetupGuideSG4SensorLayerSize.routerTransaction()
       SetupGuidePreparingFlow.SetupGuideRemoveSGP2 -> MediaGuideController.routerTransaction(
         resourceId = R.raw.sg_p2_changecoming,
         titleId = R.string.onboarding_chapter_preparing_removing_title,

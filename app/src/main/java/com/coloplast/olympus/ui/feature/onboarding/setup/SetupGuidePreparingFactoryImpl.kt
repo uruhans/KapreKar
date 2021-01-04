@@ -49,8 +49,8 @@ class SetupGuidePreparingFactoryImpl : FlowFactory<EmptyModel>() {
       }
       SetupGuidePreparingFlow.SetupGuideIdentifySLSGP21 -> MediaGuideController.routerTransaction(
         resourceId = R.drawable.sg_p2_1_identify_sl_size,
-        titleId = R.string.onboarding_chapter_preparing_removing_title,
-        descriptionId = R.string.onboarding_chapter_preparing_removing_description,
+        titleId = R.string.onboarding_chapter_preparing_sl_size_identify_title,
+        descriptionId = R.string.onboarding_chapter_preparing_sl_size_identify_description,
         position = 1,
         totalCount = 6,
         showCloseButton = false
@@ -58,8 +58,8 @@ class SetupGuidePreparingFactoryImpl : FlowFactory<EmptyModel>() {
       SetupGuidePreparingFlow.SetupGuideSelectSensorLayerSize -> SetupGuideSG4SensorLayerSize.routerTransaction()
       SetupGuidePreparingFlow.SetupGuideLiftFlapSGP23 -> MediaGuideController.routerTransaction(
         resourceId = R.raw.sg_p2_3_lift_sl_connectorflap,
-        titleId = R.string.onboarding_chapter_preparing_removing_title,
-        descriptionId = R.string.onboarding_chapter_preparing_removing_description,
+        titleId = R.string.onboarding_chapter_preparing_sl_size_lift_title,
+        descriptionId = R.string.onboarding_chapter_preparing_sl_size_lift_description	,
         position = 2,
         totalCount = 6,
         showCloseButton = false

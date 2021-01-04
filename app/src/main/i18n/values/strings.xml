@@ -489,8 +489,8 @@
 <string name="onboarding_chapter_applying_check_lid_fixed_title">Check lid position is fixed</string>
 <string name="onboarding_chapter_applying_checklist_description">Let\'s now take a look at how to apply TestProduct to the body.</string>
 <string name="onboarding_chapter_applying_checklist_title">You\'re almost there!</string>
-<string name="onboarding_chapter_applying_connector_flap_description">Identify the connector flap on the sensor layer. Lift the flap away from your body to prepare it for attaching your transmitter.</string>
-<string name="onboarding_chapter_applying_connector_flap_title">Lift connector flap</string>
+<string name="onboarding_chapter_applying_connector_flap_description">Identify the connector flap on the sensor layer. Lift the flap away from your body to ensure it is prepared for attaching your transmitter.</string>
+<string name="onboarding_chapter_applying_connector_flap_title">Ensure connector flap is lifted</string>
 <string name="onboarding_chapter_applying_contact_to_skin_description">Next, you\'ll apply your baseplate with sensor layer to your body. To ensure proper functioning, no part of the sensor layer should be covered by accessories, such as rings or pastes.\n\nPlease also be aware that the sensor layer must be applied to intact peristomal skin.</string>
 <string name="onboarding_chapter_applying_contact_to_skin_title">The sensor layer must have full, direct contact to your skin</string>
 <string name="onboarding_chapter_applying_ensure_closed_description">Ensure the lid of the transmitter is fully closed before continuing. The lid should be level with front surface of the transmitter.</string>
@@ -600,6 +600,17 @@
 <string name="onboarding_chapter_preparing_removing_title">Remove release liner</string>
 <string name="onboarding_chapter_preparing_secure_description">Circle around the sensor layer firmly several times, especially around the turquoise ring, to ensure secure adhesion to your baseplate.</string>
 <string name="onboarding_chapter_preparing_secure_title">Ensure secure adhesion</string>
+<string name="onboarding_chapter_preparing_sl_size_40">40</string>
+<string name="onboarding_chapter_preparing_sl_size_50">50</string>
+<string name="onboarding_chapter_preparing_sl_size_60">60</string>
+<string name="onboarding_chapter_preparing_sl_size_70">70</string>
+<string name="onboarding_chapter_preparing_sl_size_80">80</string>
+<string name="onboarding_chapter_preparing_sl_size_identify_description">Take out a sensor layer. Identify the size of your sensor layer by reading the number in the grey circle on the sensor layer arm.</string>
+<string name="onboarding_chapter_preparing_sl_size_identify_title">Identify sensor layer size</string>
+<string name="onboarding_chapter_preparing_sl_size_lift_description">Place the sensor layer on a flat surface. Identify its connector flap and lift it firmly upwards. This prepares it for attaching your transmitter later.</string>
+<string name="onboarding_chapter_preparing_sl_size_lift_title">Lift connector flap</string>
+<string name="onboarding_chapter_preparing_sl_size_select_description">This helps HeyloTM to be more accurate.</string>
+<string name="onboarding_chapter_preparing_sl_size_select_title">Select sensor layer size</string>
 <string name="onboarding_complete_description">TestProduct will now keep you informed of any signs of leakage. You can return to this Setup Guide or learn more about TestProduct in the app\'s Guides, accessed in the app menu.</string>
 <string name="onboarding_complete_title">Setup complete</string>
 <string name="onboarding_confirmation_button">Continue</string>
@@ -775,6 +786,8 @@
 <string name="profile_pp_no_profile_create_profile_button">Create profile</string>
 <string name="profile_pp_no_profile_description">Create a profile to get all the benefits of TestProduct. Accept the Data Policy below and then hit \"Create Profile\".</string>
 <string name="profile_pp_no_profile_title">You haven\'t created a TestProduct profile yet.</string>
+<string name="profile_pp_sensor_layer_description">Sensor layer size</string>
+<string name="profile_pp_sensor_layer_title">Sensor layer</string>
 <string name="profile_pp_stoma_surgery_date">First stoma surgery data</string>
 <string name="profile_pp_stoma_type">Stoma type</string>
 <string name="profile_pp_telephone">Mobile phone number</string>

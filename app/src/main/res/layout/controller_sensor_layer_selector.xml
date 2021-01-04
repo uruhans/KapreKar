@@ -30,25 +30,25 @@
 
     <TextView
       android:id="@+id/title"
-      style="@style/TextStyle.Coloplast.Bold.DarkGrey.32"
+      style="@style/TextStyle.Coloplast.Bold.DarkGrey.24"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_margin="@dimen/spacing_larger"
-      android:text="@string/guide_co3_title"
+      android:text="@string/onboarding_chapter_preparing_sl_size_select_title"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
     <TextView
       android:id="@+id/description"
-      style="@style/TextStyle.Roboto.Regular.ClearGrey.30"
+      style="@style/TextStyle.Roboto.Regular.ClearGrey.18"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_marginStart="@dimen/spacing_larger"
       android:layout_marginTop="@dimen/spacing_half"
       android:layout_marginEnd="@dimen/spacing_larger"
       android:layout_marginBottom="@dimen/spacing_larger"
-      android:text="@string/lock_notification_inner_blind"
+      android:text="@string/onboarding_chapter_preparing_sl_size_select_description"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@id/title" />

@@ -13,6 +13,7 @@ class User(
   var surgeryDateInterval: Int? = null,
   var phoneNumber: String? = null,
   var insuranceType: Int? = null,
+  var sensorPatchSize: Int? = null,
   var consent: Boolean = false,
   var syncState: SyncState = SyncState.Pending
 )

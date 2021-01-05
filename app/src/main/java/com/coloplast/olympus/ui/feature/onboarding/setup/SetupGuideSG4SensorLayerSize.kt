@@ -9,7 +9,7 @@ import com.coloplast.olympus.BR
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerSensorLayerSelectorBinding
 import com.coloplast.olympus.shared.models.User
-import com.coloplast.olympus.ui.common.CustomToolbarController
+import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.common.flow.TopMenuVisibilityListener
 import com.coloplast.olympus.ui.common.listeners.FlowListener
 import com.coloplast.olympus.ui.feature.onboarding.setup.model.NumberedCard
@@ -22,7 +22,7 @@ import io.reactivex.functions.Function
 import me.tatarka.bindingcollectionadapter2.itembindings.OnItemBindClass
 import org.koin.core.inject
 
-class SetupGuideSG4SensorLayerSize : CustomToolbarController<ControllerSensorLayerSelectorBinding>(), TopMenuVisibilityListener, SetupGuideSG4SensorLayerSizeView {
+class SetupGuideSG4SensorLayerSize : BaseController<ControllerSensorLayerSelectorBinding>(), TopMenuVisibilityListener, SetupGuideSG4SensorLayerSizeView {
 
   val selectedSize = ObservableInt(SensorLayerSizeType.UNKNOWN.id)
 
@@ -35,12 +35,10 @@ class SetupGuideSG4SensorLayerSize : CustomToolbarController<ControllerSensorLay
   private lateinit var user: User
 
   override fun attachVariables(viewBinding: ControllerSensorLayerSelectorBinding) {
-    super.attachVariables(viewBinding)
     viewBinding.controller = this
   }
 
   override fun onViewBound(viewBinding: ControllerSensorLayerSelectorBinding) {
-    super.onViewBound(viewBinding)
     compositeDisposable.add(viewModel.bind(this))
   }
 

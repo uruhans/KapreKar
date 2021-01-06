@@ -106,6 +106,7 @@ class UserComponentImpl(private val preferences: Preferences) : UserComponent {
         phoneNumber = null
         email = null
         password = null
+        sensorPatchSize = null
       }
     }
 

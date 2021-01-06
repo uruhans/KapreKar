@@ -15,7 +15,7 @@ sealed class HomeUiModel : UiModel {
   data class StitchOrResetComplete(val complete: Boolean = true) : HomeUiModel()
   data class Scanning(val scanning: Unit = Unit) : HomeUiModel()
   data class ScanningStopped(val scanning: Unit = Unit) : HomeUiModel()
-  data class NoTransmittersFound(val anyTransmitters: Boolean = true, val lastUpdate: LocalDateTime = LocalDateTime.now()) : HomeUiModel()
+  data class NoTransmittersFound(val lastUpdate: LocalDateTime = LocalDateTime.now()) : HomeUiModel()
   data class Initial(val nothing: Unit = Unit) : HomeUiModel()
   data class DeviceDisconnected(private val disconnected: Unit = Unit) : HomeUiModel()
 }

@@ -82,10 +82,9 @@ class HomeViewModel(
     val transmittersObservable: Observable<List<Transmitter>> = transmitterComponent.getTransmittersAsSingle().toObservable()
     val noTransmittersObservable: Observable<HomeUiModel> = transmittersObservable
       .subscribeOn(Schedulers.io())
+      .filter { it.isEmpty() }
       .map<HomeUiModel> {
-        HomeUiModel.NoTransmittersFound(!it.isNullOrEmpty())
-      }.onErrorReturn {
-        HomeUiModel.NoTransmittersFound(true)
+        HomeUiModel.NoTransmittersFound()
       }
 
     val syncUserObservable = userComponent.syncUser(userId)

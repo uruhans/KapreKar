@@ -199,10 +199,8 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
           changeUiState(UiState.CONNECTING)
         }
         is HomeUiModel.NoTransmittersFound -> {
-          if (!uiModel.anyTransmitters) {
-            lastCheck.set(uiModel.lastUpdate)
-            changeUiState(UiState.TRANSMITTERS_EMPTY)
-          }
+          lastCheck.set(uiModel.lastUpdate)
+          changeUiState(UiState.TRANSMITTERS_EMPTY)
         }
         is HomeUiModel.StitchOrResetComplete -> {
           /* no-op */

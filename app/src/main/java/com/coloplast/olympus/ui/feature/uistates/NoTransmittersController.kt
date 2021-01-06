@@ -17,7 +17,7 @@ class NoTransmittersController : BaseHomeUIController<ControllerStateNoTransmitt
 
   fun onAddTransmitterClicked() {
     getContentRouter().pushController(
-      AddTransmitterFlowController.routerTransaction(2)
+      AddTransmitterFlowController.routerTransaction(1)
         .pushChangeHandler(VerticalChangeHandler())
         .popChangeHandler(VerticalChangeHandler())
     )

@@ -62,7 +62,7 @@
         android:layout_marginTop="@dimen/spacing_standard"
         android:layout_marginEnd="@dimen/spacing_standard"
         android:onClick="@{() -> controller.onLinkCLicked()}"
-        android:text="@string/onboarding_TU_link"
+        android:text="@string/onboarding_tu_link"
         android:textAlignment="textStart"
         android:textAllCaps="false"
         app:layout_constraintBottom_toBottomOf="parent"

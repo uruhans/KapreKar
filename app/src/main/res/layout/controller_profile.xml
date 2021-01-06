@@ -247,6 +247,54 @@
 
         </LinearLayout>
 
+        <View
+          android:layout_width="match_parent"
+          android:layout_height="1dp"
+          android:layout_marginTop="@dimen/spacing_double"
+          android:background="@color/ten_percent_transparent_black" />
+
+        <TextView
+          style="@style/TextStyle.Coloplast.Bold.DarkGrey.20"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/spacing_double"
+          android:text="@string/profile_pp_sensor_layer_title" />
+
+        <TextView
+          style="@style/TextStyle.Roboto.Regular.ClearGrey.14"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/spacing_standard"
+          android:text="@string/profile_pp_sensor_layer_description" />
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:background="@drawable/edittext_background"
+          android:orientation="horizontal">
+
+          <com.coloplast.olympus.ui.common.widgets.NoDefaultSpinner
+            android:layout_width="0dp"
+            android:layout_height="@dimen/cardview_button_height_default"
+            android:layout_weight="1"
+            android:clickable="@{controller.editingEnabled}"
+            android:enabled="@{controller.editingEnabled}"
+            android:entries="@{controller.sensorLayerSizeValues}"
+            android:prompt="@string/onboarding_insurance_hint"
+            android:selectedItemPosition="@={controller.sensorLayerSizeSpinnerPosition}"
+            android:spinnerMode="dialog" />
+
+          <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginEnd="@dimen/spacing_standard"
+            android:src="@drawable/ic_baseline_keyboard_arrow_down_24"
+            app:tintDrawable="@{R.color.chevron_dropdown}" />
+
+        </LinearLayout>
+
+
         <Button
           style="@style/Button"
           android:id="@+id/save_changes_btn"

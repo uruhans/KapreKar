@@ -1,5 +1,6 @@
 package com.coloplast.olympus.ui.feature.profile
 
+import SensorLayerSizeType
 import android.widget.Toast
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
@@ -37,6 +38,11 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
 
   val hasUserProfile = ObservableBoolean()
 
+  val sensorLayerSizeValues by lazy {
+    SensorLayerSizeType.values()
+      .map { applicationContext!!.getString(R.string.profile_pp_sensor_layer_size) +" "+ applicationContext!!.getString(it.stringId)}
+  }
+
   val stomaValues by lazy {
     StomaType.values()
       .map { applicationContext!!.getString(it.stringId) }
@@ -61,6 +67,7 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
 
   val showHealthInsurance = ObservableBoolean(false)
 
+  val sensorLayerSizeSpinnerPosition = ObservableInt(-1)
   val stomaSpinnerPosition = ObservableInt(-1)
   val surgerySpinnerPosition = ObservableInt(-1)
   val insuranceSpinnerPosition = ObservableInt(-1)
@@ -82,6 +89,7 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
           user.email != email.get()
 
       healthInfoChanged =
+        user.sensorPatchSize != sensorLayerSizeSpinnerPosition.get() ||
         user.stomaType != stomaSpinnerPosition.get() ||
             user.surgeryDateInterval != surgerySpinnerPosition.get() ||
             user.insuranceType != insuranceSpinnerPosition.get()
@@ -185,6 +193,11 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
     phoneNumber.set(user.phoneNumber)
     email.set(user.email)
 
+    user.sensorPatchSize?.let {
+
+      sensorLayerSizeSpinnerPosition.set(it)
+    }
+
     user.stomaType?.let {
       stomaSpinnerPosition.set(it)
     }
@@ -247,6 +260,7 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
     }
 
     if (healthInfoChanged) {
+      user.sensorPatchSize = sensorLayerSizeSpinnerPosition.get()
       user.stomaType = stomaSpinnerPosition.get()
       user.surgeryDateInterval = surgerySpinnerPosition.get()
       user.insuranceType = insuranceSpinnerPosition.get()
@@ -370,6 +384,7 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
     lastName.addOnPropertyChangedCallback(profileVarsChangedCallback)
     phoneNumber.addOnPropertyChangedCallback(profileVarsChangedCallback)
     email.addOnPropertyChangedCallback(profileVarsChangedCallback)
+    sensorLayerSizeSpinnerPosition.addOnPropertyChangedCallback(profileVarsChangedCallback)
     stomaSpinnerPosition.addOnPropertyChangedCallback(profileVarsChangedCallback)
     surgerySpinnerPosition.addOnPropertyChangedCallback(profileVarsChangedCallback)
     insuranceSpinnerPosition.addOnPropertyChangedCallback(profileVarsChangedCallback)
@@ -381,6 +396,7 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
     lastName.removeOnPropertyChangedCallback(profileVarsChangedCallback)
     phoneNumber.removeOnPropertyChangedCallback(profileVarsChangedCallback)
     email.removeOnPropertyChangedCallback(profileVarsChangedCallback)
+    sensorLayerSizeSpinnerPosition.removeOnPropertyChangedCallback(profileVarsChangedCallback)
     stomaSpinnerPosition.removeOnPropertyChangedCallback(profileVarsChangedCallback)
     surgerySpinnerPosition.removeOnPropertyChangedCallback(profileVarsChangedCallback)
     insuranceSpinnerPosition.removeOnPropertyChangedCallback(profileVarsChangedCallback)

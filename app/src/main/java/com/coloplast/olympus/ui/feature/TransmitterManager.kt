@@ -327,7 +327,6 @@ class TransmitterManager(
    * @return latest State from other transmitter or NULL if we only have one Tx
    */
   fun onTransmitterDisconnect(disconnectedTransmitterMacAddress: String) : StateChange? {
-
     if(isActiveTransmitter(disconnectedTransmitterMacAddress)) {
       if(isOtherTransmitterAttached(disconnectedTransmitterMacAddress)) {
         return latestStateFromOtherTransmitter(disconnectedTransmitterMacAddress)
@@ -346,39 +345,6 @@ class TransmitterManager(
     else {
       if(isCurrentlyAttached(disconnectedTransmitterMacAddress)) {
         return latestStateFromOtherTransmitter(disconnectedTransmitterMacAddress)
-      }
-    }
-
-    return null
-
-
-
-
-
-    // if the disconnected tx is currently the active tx
-    if(isActiveTransmitter(disconnectedTransmitterMacAddress)) {
-      // if the other tx is attached
-      if(isOtherTransmitterAttached(disconnectedTransmitterMacAddress)) {
-        // get the other tx latest state
-        val otherTxStateChange = latestStateFromOtherTransmitter(disconnectedTransmitterMacAddress)
-        // if we have another state
-        if(otherTxStateChange != null) {
-          // return it
-          return otherTxStateChange
-        }
-      }
-    }
-    else {
-      // the disconnected tx is *not* the active one,
-      // but see if it *was* attached immediately before disconnect
-      if(isCurrentlyAttached(disconnectedTransmitterMacAddress)) {
-        // get the latest state from the other tx
-        val otherTxStateChange = latestStateFromOtherTransmitter(disconnectedTransmitterMacAddress)
-        // if there is another state
-        if(otherTxStateChange != null) {
-          //return it
-          return otherTxStateChange
-        }
       }
     }
 

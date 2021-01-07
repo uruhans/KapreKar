@@ -68,13 +68,11 @@
           android:layout_marginTop="@dimen/spacing_quarter"
           android:background="@drawable/edittext_background"
           android:enabled="@{controller.editingEnabled}"
-          android:focusable="false"
-          android:focusableInTouchMode="false"
           android:focusedByDefault="false"
           android:gravity="center_vertical"
           android:paddingStart="@dimen/spacing_standard"
           android:paddingEnd="@dimen/spacing_standard"
-          app:safeText="@{controller.firstName}" />
+          android:text="@={controller.firstName}" />
 
         <TextView
           style="@style/TextStyle.Roboto.Regular.ClearGrey.14"
@@ -90,13 +88,10 @@
           android:layout_marginTop="@dimen/spacing_quarter"
           android:background="@drawable/edittext_background"
           android:enabled="@{controller.editingEnabled}"
-          android:focusable="false"
-          android:focusableInTouchMode="false"
-          android:focusedByDefault="false"
           android:gravity="center_vertical"
           android:paddingStart="@dimen/spacing_standard"
           android:paddingEnd="@dimen/spacing_standard"
-          app:safeText="@{controller.lastName}" />
+          android:text="@={controller.lastName}" />
 
         <TextView
           style="@style/TextStyle.Roboto.Regular.ClearGrey.14"
@@ -112,13 +107,10 @@
           android:layout_marginTop="@dimen/spacing_quarter"
           android:background="@drawable/edittext_background"
           android:enabled="@{controller.editingEnabled}"
-          android:focusable="false"
-          android:focusableInTouchMode="false"
-          android:focusedByDefault="false"
           android:gravity="center_vertical"
           android:paddingStart="@dimen/spacing_standard"
           android:paddingEnd="@dimen/spacing_standard"
-          app:safeText="@{controller.phoneNumber}" />
+          android:text="@={controller.phoneNumber}" />
 
         <TextView
           style="@style/TextStyle.Roboto.Regular.ClearGrey.14"
@@ -134,13 +126,10 @@
           android:layout_marginTop="@dimen/spacing_quarter"
           android:background="@drawable/edittext_background"
           android:enabled="@{controller.editingEnabled}"
-          android:focusable="false"
-          android:focusableInTouchMode="false"
-          android:focusedByDefault="false"
           android:gravity="center_vertical"
           android:paddingStart="@dimen/spacing_standard"
           android:paddingEnd="@dimen/spacing_standard"
-          app:safeText="@{controller.email}" />
+          android:text="@={controller.email}" />
 
         <View
           android:layout_width="match_parent"
@@ -264,11 +253,82 @@
           android:layout_marginTop="@dimen/spacing_double"
           android:background="@color/ten_percent_transparent_black" />
 
+        <TextView
+          style="@style/TextStyle.Coloplast.Bold.DarkGrey.20"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/spacing_double"
+          android:text="@string/profile_pp_sensor_layer_title" />
+
+        <TextView
+          style="@style/TextStyle.Roboto.Regular.ClearGrey.14"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/spacing_standard"
+          android:text="@string/profile_pp_sensor_layer_description" />
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:background="@drawable/edittext_background"
+          android:orientation="horizontal">
+
+          <com.coloplast.olympus.ui.common.widgets.NoDefaultSpinner
+            android:layout_width="0dp"
+            android:layout_height="@dimen/cardview_button_height_default"
+            android:layout_weight="1"
+            android:clickable="@{controller.editingEnabled}"
+            android:enabled="@{controller.editingEnabled}"
+            android:entries="@{controller.sensorLayerSizeValues}"
+            android:prompt="@string/onboarding_insurance_hint"
+            android:selectedItemPosition="@={controller.sensorLayerSizeSpinnerPosition}"
+            android:spinnerMode="dialog" />
+
+          <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginEnd="@dimen/spacing_standard"
+            android:src="@drawable/ic_baseline_keyboard_arrow_down_24"
+            app:tintDrawable="@{R.color.chevron_dropdown}" />
+
+        </LinearLayout>
+
+
+        <Button
+          style="@style/Button"
+          android:id="@+id/save_changes_btn"
+          android:layout_height="wrap_content"
+          android:layout_width="match_parent"
+          android:layout_marginStart="@dimen/spacing_none"
+          android:layout_marginEnd="@dimen/spacing_none"
+          android:layout_marginTop="@dimen/spacing_double"
+          android:text="@string/generic_save_changes"
+          android:onClick="@{() -> controller.saveProfileClicked()}"
+          app:visibleOrGone="@{controller.userProfileChanged}" />
+
+        <Button
+          style="@style/Button.Secondary"
+          android:id="@+id/discard_changes_btn"
+          android:layout_height="wrap_content"
+          android:layout_width="match_parent"
+          android:layout_marginStart="@dimen/spacing_none"
+          android:layout_marginEnd="@dimen/spacing_none"
+          android:text="@string/generic_discard"
+          android:onClick="@{() -> controller.discardChangesClicked()}"
+          app:visibleOrGone="@{controller.userProfileChanged}"/>
+
+        <View
+          android:layout_width="match_parent"
+          android:layout_height="1dp"
+          android:background="@color/ten_percent_transparent_black" />
+
         <androidx.constraintlayout.widget.ConstraintLayout
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:layout_marginTop="@dimen/spacing_double"
-          android:layout_marginBottom="@dimen/spacing_standard">
+          android:layout_marginBottom="@dimen/spacing_standard"
+          tools:visibility="visible">
 
           <TextView
             android:id="@+id/data_policy_card_title"
@@ -331,8 +391,8 @@
           style="@style/Button.Secondary"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_marginStart="@dimen/spacing_none"
           android:layout_marginTop="@dimen/spacing_double"
+          android:layout_marginStart="@dimen/spacing_none"
           android:layout_marginEnd="@dimen/spacing_none"
           android:onClick="@{() -> controller.onLogoutClicked()}"
           android:text="@string/profile_pp_log_out_button" />
@@ -341,44 +401,130 @@
 
     </ScrollView>
 
-    <LinearLayout
+    <ScrollView
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginStart="@dimen/spacing_larger"
-      android:layout_marginEnd="@dimen/spacing_larger"
       android:layout_marginBottom="@dimen/spacing_double"
       app:visibleOrGone="@{!controller.hasUserProfile}"
       android:orientation="vertical">
 
-      <TextView
-        style="@style/TextStyle.Coloplast.Bold.DarkGrey.32"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/profile_pp_title" />
-
-      <ImageView
-        android:layout_width="72dp"
-        android:layout_height="72dp"
-        android:layout_marginTop="@dimen/spacing_triple"
-        android:src="@drawable/ic_info_circle"
-        app:tint="@color/colorAccent" />
-
-      <TextView
-        style="@style/TextStyle.Coloplast.Bold.DarkGrey.24"
+      <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/spacing_standard"
-        android:text="@string/profile_pp_no_profile_title" />
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/spacing_larger"
+        android:layout_marginEnd="@dimen/spacing_larger"
+        android:layout_marginBottom="@dimen/spacing_double">
 
-      <TextView
-        style="@style/TextStyle.Roboto.Regular.ClearGrey.18"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/spacing_small"
-        android:layout_marginBottom="@dimen/spacing_small"
-        android:text="@string/profile_pp_no_profile_description" />
+        <TextView
+          android:id="@+id/profile_title"
+          style="@style/TextStyle.Coloplast.Bold.DarkGrey.32"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/profile_pp_title"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toTopOf="parent" />
 
-    </LinearLayout>
+        <ImageView
+          android:id="@+id/info_circle_imv"
+          android:layout_width="72dp"
+          android:layout_height="72dp"
+          android:layout_marginTop="@dimen/spacing_triple"
+          android:src="@drawable/ic_info_circle"
+          app:tint="@color/colorAccent"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toBottomOf="@+id/profile_title"/>
+
+        <TextView
+          android:id="@+id/no_profile_title"
+          style="@style/TextStyle.Coloplast.Bold.DarkGrey.24"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/spacing_standard"
+          android:text="@string/profile_pp_no_profile_title"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toBottomOf="@+id/info_circle_imv"/>
+
+        <TextView
+          android:id="@+id/no_profile_txt"
+          style="@style/TextStyle.Roboto.Regular.ClearGrey.18"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/spacing_small"
+          android:text="@string/profile_pp_no_profile_description"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toBottomOf="@+id/no_profile_title" />
+
+        <View
+          android:id="@+id/splitter"
+          android:layout_width="match_parent"
+          android:layout_height="1dp"
+          android:background="@color/ten_percent_transparent_black"
+          android:layout_marginTop="@dimen/spacing_larger"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toBottomOf="@+id/no_profile_txt" />
+
+        <TextView
+            android:id="@+id/data_policy_card_title2"
+            style="@style/TextStyle.Coloplast.Bold.DarkGrey.20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/onboarding_dc5_card_title"
+            android:layout_marginTop="@dimen/spacing_double"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/splitter"
+            />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/data_policy_card_switch2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_double"
+            android:checked="@={controller.noUserDataPolicyAccepted}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/splitter"
+            />
+
+        <TextView
+          android:id="@+id/consentTxt"
+          style="@style/TextStyle.Roboto.Regular.ClearGrey.18"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/spacing_standard"
+          android:layout_marginBottom="@dimen/spacing_small"
+          android:text="@string/profile_pp_no_profile_consent_description"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toBottomOf="@+id/data_policy_card_switch2"/>
+
+        <Button
+          android:id="@+id/policy_agreement_button2"
+          style="@style/Button.Borderless"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="@dimen/spacing_half"
+          android:onClick="@{() -> controller.onPolicyAgreementClicked()}"
+          android:text="@string/profile_pp_no_profile_consent_read_policy"
+          android:textAlignment="textStart"
+          android:textAllCaps="false"
+          android:textSize="@dimen/text_18"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toBottomOf="@+id/consentTxt"/>
+
+        <Button
+          style="@style/Button.Selectable"
+          android:id="@+id/create_profile_button"
+          android:layout_height="wrap_content"
+          android:layout_width="match_parent"
+          android:layout_marginStart="@dimen/spacing_none"
+          android:layout_marginEnd="@dimen/spacing_none"
+          android:layout_marginTop="@dimen/spacing_double"
+          android:text="@string/profile_pp_no_profile_create_profile_button"
+          android:enabled="@{controller.noUserDataPolicyAccepted}"
+          android:onClick="@{() -> controller.onCreateUserClicked()}"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toBottomOf="@+id/policy_agreement_button2"/>
+
+      </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 
   </LinearLayout>
 </layout>

@@ -16,6 +16,7 @@ data class UserDTO(
   val stomaSurgeryDateId: Int? = null,
   val phoneNumber: String? = null,
   val healthInsuranceId: Int? = null,
+  val sensorPatchSize: Int? = null,
   val consent: Boolean = false
 ) {
 
@@ -36,6 +37,7 @@ data class UserDTO(
       stomaSurgeryDateId,
       phoneNumber,
       healthInsuranceId,
+      sensorPatchSize,
       consent,
       SyncState.Uploaded
     )
@@ -53,6 +55,7 @@ data class UserDTO(
         user.surgeryDateInterval,
         user.phoneNumber,
         user.insuranceType,
+        user.sensorPatchSize,
         user.consent ?: false
       )
     }

@@ -33,7 +33,6 @@ import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.common.DrawerState
 import com.coloplast.olympus.ui.common.conductor.ResizeChangeHandler
 import com.coloplast.olympus.ui.common.dialogs.BaseDialogController
-import com.coloplast.olympus.ui.common.dialogs.DialogController
 import com.coloplast.olympus.ui.common.widgets.PatchView
 import com.coloplast.olympus.ui.dialogs.ImageDialogController
 import com.coloplast.olympus.ui.dialogs.PatchDialogController
@@ -559,13 +558,11 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
     }
   }
 
-  fun shouldShowAppTour(): Boolean {
-    val onBoardedLessThan48Hours = (System.currentTimeMillis() - preferences.onboardingCompletedTime) / MILLIS_TO_HOURS < 48
-    return onBoardedLessThan48Hours && !preferences.didSeeAppTourGuide
+  fun shouldShowAppTourButton(): Boolean {
+    return preferences.shouldShowAppTour()
   }
 
   fun startAppTour() {
-    preferences.didSeeAppTourGuide = true
     getContentRouter().pushController(
       AppTourFlowController.routerTransaction()
         .pushChangeHandler(HorizontalChangeHandler())
@@ -610,7 +607,6 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
     private const val REQUEST_CODE_CONNECTION_LOST = 6010
     private const val REQUEST_CODE_PATCH_DETAILS = 7001
 
-    private const val MILLIS_TO_HOURS = 1000L * 60 * 60
     const val REQUEST_CODE_BLUETOOTH_ENABLE = 5005
 
     fun routerTransaction() = RouterTransaction.with(HomeController())

@@ -2,17 +2,16 @@ package com.coloplast.olympus.ui.feature.uistates
 
 import androidx.core.view.doOnPreDraw
 import androidx.core.view.postDelayed
-import androidx.databinding.ObservableBoolean
 import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerStateWelcomeBinding
-import com.coloplast.olympus.ui.common.models.Navigation
-import com.coloplast.olympus.ui.feature.home.HomeController
+import com.coloplast.olympus.shared.preferences.Preferences
 import com.coloplast.olympus.ui.feature.home.models.PatchVisible
+import org.koin.core.inject
 
-class WelcomeController : BaseHomeUIController<ControllerStateWelcomeBinding>(), PatchVisible {
+class WelcomeController : BaseHomeUIControllerAppTour<ControllerStateWelcomeBinding>(), PatchVisible {
 
-  val shouldShowAppTourButton = ObservableBoolean(false)
+  private val preferences: Preferences by inject()
 
   private var appTourStarted = false
 
@@ -24,9 +23,8 @@ class WelcomeController : BaseHomeUIController<ControllerStateWelcomeBinding>(),
   }
 
   override fun onViewBound(viewBinding: ControllerStateWelcomeBinding) {
-    (Navigation.getContentRouter()?.getControllerWithTag(HomeController.TAG_CONTROLLER) as? HomeController).let {
-      it?.let { it1 -> shouldShowAppTourButton.set(it1.shouldShowAppTour()) }
-    }
+    preferences.didSeeWelcome = true
+    super.onViewBound(viewBinding)
   }
 
   private fun closeAfterPeriod(viewBinding: ControllerStateWelcomeBinding) {
@@ -35,11 +33,9 @@ class WelcomeController : BaseHomeUIController<ControllerStateWelcomeBinding>(),
     }
   }
 
-  fun startAppTour() {
-    (Navigation.getContentRouter()?.getControllerWithTag(HomeController.TAG_CONTROLLER) as? HomeController).let {
-      appTourStarted = true
-      it?.startAppTour()
-    }
+  override fun startAppTour() {
+    appTourStarted = true
+    super.startAppTour()
   }
 
   override fun getLayout(): Int {

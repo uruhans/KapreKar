@@ -26,7 +26,7 @@ class Preferences(applicationContext: Context) {
   var didSeeWelcome: Boolean by bindSharedPreference(applicationContext, DID_SEE_WELCOME, false)
   var didSeeAppTourGuide: Boolean by bindSharedPreference(applicationContext, DID_SEE_APP_TOUR_GUIDE, false)
   var didSeeValueProposition: Boolean by bindSharedPreference(applicationContext, DID_SEE_VALUE_PROPOSITION, false)
-  var onboardingCompletedTime: Long by bindSharedPreference(applicationContext, ONBOARDING_COMPLETED_TIMESTAMP, 0)
+  private var onboardingCompletedTimeStamp: Long by bindSharedPreference(applicationContext, ONBOARDING_COMPLETED_TIMESTAMP, 0)
   private var currentOnboardingProgression : Int by bindSharedPreference(applicationContext, CURRENT_ONBOARDING_PROGRESSION, OnboardingProgression.NOT_STARTED.id)
 
   private var patchId: Int by bindSharedPreference(applicationContext, CURRENT_PATCH_ID, 0)
@@ -58,6 +58,19 @@ class Preferences(applicationContext: Context) {
 
   fun getCurrentOnboardingProgress(): OnboardingProgression {
     return OnboardingProgression.fromId(currentOnboardingProgression)
+  }
+
+  fun setOnboardingCompletedTime() {
+    onboardingCompletedTimeStamp = System.currentTimeMillis()
+  }
+
+  fun getOnboardingCompletedTime(): Long {
+    return onboardingCompletedTimeStamp
+  }
+
+  fun shouldShowAppTour(): Boolean {
+    val onBoardedLessThan48Hours = (System.currentTimeMillis() - getOnboardingCompletedTime()) / MILLIS_TO_HOURS < 48
+    return onBoardedLessThan48Hours && !didSeeAppTourGuide
   }
 
   fun incrementPatchId() {
@@ -102,6 +115,7 @@ class Preferences(applicationContext: Context) {
     private const val DID_SEE_WELCOME: String = "DID_SEE_WELCOME"
     private const val CURRENT_PATCH_ID: String = "CURRENT_PATCH_ID"
     private const val CURRENT_DEVICE_ID: String = "CURRENT_DEVICE_ID"
+    private const val MILLIS_TO_HOURS = 1000L * 60 * 60
 
 //    @SuppressLint("StaticFieldLeak")
 //    private lateinit var preferences: Preferences

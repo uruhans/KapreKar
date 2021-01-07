@@ -1,9 +1,6 @@
 package com.coloplast.olympus.ui.feature.uistates
 
-import androidx.core.view.doOnPreDraw
-import androidx.core.view.postDelayed
 import com.bluelinelabs.conductor.RouterTransaction
-import com.bluelinelabs.conductor.changehandler.FadeChangeHandler
 import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerStateTransmitterDetachedBinding
@@ -11,15 +8,11 @@ import com.coloplast.olympus.ui.feature.guides.SingleGuideFlowController
 import com.coloplast.olympus.ui.feature.guides.articles.models.GuideType
 import com.coloplast.olympus.ui.feature.home.models.PatchVisible
 
-class TransmitterDetachedController : BaseHomeUIController<ControllerStateTransmitterDetachedBinding>(), PatchVisible {
+class TransmitterDetachedController : BaseHomeUIControllerAppTour<ControllerStateTransmitterDetachedBinding>(), PatchVisible {
 
   override fun attachVariables(viewBinding: ControllerStateTransmitterDetachedBinding) {
     super.attachVariables(viewBinding)
     viewBinding.controller = this
-  }
-
-  override fun onViewBound(viewBinding: ControllerStateTransmitterDetachedBinding) {
-    // no-op
   }
 
   fun onApplicationGuideClicked() {

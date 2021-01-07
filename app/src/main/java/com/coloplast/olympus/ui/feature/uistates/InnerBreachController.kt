@@ -1,28 +1,13 @@
 package com.coloplast.olympus.ui.feature.uistates
 
-import androidx.databinding.ObservableBoolean
 import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerStateInnerBreachBinding
-import com.coloplast.olympus.ui.common.models.Navigation
-import com.coloplast.olympus.ui.feature.home.HomeController
+import com.coloplast.olympus.shared.preferences.Preferences
 import com.coloplast.olympus.ui.feature.home.models.PatchVisible
+import org.koin.core.inject
 
-class InnerBreachController : BaseHomeUIController<ControllerStateInnerBreachBinding>(), PatchVisible {
-
-  val shouldShowAppTourButton = ObservableBoolean(false)
-
-  override fun onViewBound(viewBinding: ControllerStateInnerBreachBinding) {
-    (Navigation.getContentRouter()?.getControllerWithTag(HomeController.TAG_CONTROLLER) as? HomeController).let {
-      it?.let { it1 -> shouldShowAppTourButton.set(it1.shouldShowAppTour()) }
-    }
-  }
-
-  fun startAppTour() {
-    (Navigation.getContentRouter()?.getControllerWithTag(HomeController.TAG_CONTROLLER) as? HomeController).let {
-      it?.startAppTour()
-    }
-  }
+class InnerBreachController : BaseHomeUIControllerAppTour<ControllerStateInnerBreachBinding>(), PatchVisible {
 
   override fun attachVariables(viewBinding: ControllerStateInnerBreachBinding) {
     super.attachVariables(viewBinding)

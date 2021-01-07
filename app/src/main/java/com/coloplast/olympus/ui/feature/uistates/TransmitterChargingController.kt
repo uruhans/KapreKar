@@ -1,35 +1,18 @@
 package com.coloplast.olympus.ui.feature.uistates
 
-import androidx.databinding.ObservableBoolean
 import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerStateTransmitterChargingBinding
-import com.coloplast.olympus.ui.common.models.Navigation
-import com.coloplast.olympus.ui.feature.home.HomeController
 import com.coloplast.olympus.ui.feature.home.models.PatchVisible
 
-class TransmitterChargingController : BaseHomeUIController<ControllerStateTransmitterChargingBinding>(), PatchVisible {
-
-  val shouldShowAppTourButton = ObservableBoolean(false)
-
-  override fun onViewBound(viewBinding: ControllerStateTransmitterChargingBinding) {
-    (Navigation.getContentRouter()?.getControllerWithTag(HomeController.TAG_CONTROLLER) as? HomeController).let {
-      it?.let { it1 -> shouldShowAppTourButton.set(it1.shouldShowAppTour()) }
-    }
-  }
+class TransmitterChargingController : BaseHomeUIControllerAppTour<ControllerStateTransmitterChargingBinding>(), PatchVisible {
 
   override fun attachVariables(viewBinding: ControllerStateTransmitterChargingBinding) {
     super.attachVariables(viewBinding)
     viewBinding.controller = this
   }
 
-  fun startAppTour() {
-    (Navigation.getContentRouter()?.getControllerWithTag(HomeController.TAG_CONTROLLER) as? HomeController).let {
-      it?.startAppTour()
-    }
-  }
-
-   override fun patchVisible(): Boolean {
+  override fun patchVisible(): Boolean {
     return false
   }
   

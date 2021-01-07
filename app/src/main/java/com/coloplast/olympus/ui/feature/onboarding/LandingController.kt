@@ -96,7 +96,6 @@ class LandingController : BaseController<ControllerLandingBinding>() {
 
       if (it.tag() == HomeController.TAG_CONTROLLER && shouldShowWelcome()) {
         viewBinding.root.postDelayed(delay + 1500L) {
-          preferences.didSeeWelcome = true
           getContentRouter().pushController(
             WelcomeController.routerTransaction()
               .pushChangeHandler(FadeChangeHandler())

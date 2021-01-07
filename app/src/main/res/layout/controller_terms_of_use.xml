@@ -42,8 +42,7 @@
         android:layout_marginStart="@dimen/spacing_standard"
         android:layout_marginTop="@dimen/spacing_standard"
         android:layout_marginEnd="@dimen/spacing_standard"
-        android:text="@string/terms_of_use_tu_title"
-        tools:text="@string/guide_at3_title" />
+        android:text="@string/terms_of_use_tu_title" />
 
       <TextView
         style="@style/TextStyle.Roboto.Regular.ClearGrey.18"

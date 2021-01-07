@@ -599,6 +599,7 @@
 <string name="onboarding_chapter_preparing_removing_title">Remove release liner</string>
 <string name="onboarding_chapter_preparing_secure_description">Circle around the sensor layer firmly several times, especially around the turquoise ring, to ensure secure adhesion to your baseplate.</string>
 <string name="onboarding_chapter_preparing_secure_title">Ensure secure adhesion</string>
+<string name="onboarding_complete_description">TestProduct will now keep you informed of any signs of leakage. You can return to this Setup Guide or learn more about TestProduct in the app\'s Guides, accessed in the app menu.</string>
 <string name="onboarding_chapter_preparing_sl_size_40">40</string>
 <string name="onboarding_chapter_preparing_sl_size_50">50</string>
 <string name="onboarding_chapter_preparing_sl_size_60">60</string>
@@ -783,6 +784,8 @@
 <string name="profile_pp_no_profile_consent_description">Allow Coloplast to store and protect your data, in orter to improve the functionality of the product.</string>
 <string name="profile_pp_no_profile_consent_read_policy">Read Data Policy agreement</string>
 <string name="profile_pp_no_profile_create_profile_button">Create profile</string>
+<string name="profile_pp_no_profile_description">Create a profile to get all the benefits of TestProduct. Accept the Data Policy below and then hit \"Create Profile\".</string>
+<string name="profile_pp_no_profile_title">You haven\'t created a TestProduct profile yet.</string>
 <string name="profile_pp_no_profile_description">Create a profile to get all the benefits of TestProduct. Accept the Data Policy below and then hit \"Create Profile\".</string>
 <string name="profile_pp_no_profile_title">You haven\'t created a TestProduct profile yet.</string>
 <string name="profile_pp_sensor_layer_description">Sensor layer size</string>

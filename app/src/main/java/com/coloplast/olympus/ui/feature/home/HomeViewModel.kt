@@ -8,7 +8,7 @@ import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
 import com.coloplast.olympus.businesslayer.interfaces.TransmitterComponent
 import com.coloplast.olympus.businesslayer.interfaces.UserComponent
 import com.coloplast.olympus.shared.models.DataResult
-import com.coloplast.olympus.shared.preferences.OnboardingProgression
+import com.coloplast.olympus.shared.models.Transmitter
 import com.coloplast.olympus.shared.preferences.Preferences
 import com.coloplast.olympus.ui.feature.home.models.BaseHomeViewModel
 import com.coloplast.olympus.ui.feature.home.models.HomeUiModel
@@ -79,6 +79,14 @@ class HomeViewModel(
       .subscribeOn(Schedulers.io())
       .doOnNext { Timber.d("Sync Transmitters [$it]") }
 
+    val transmittersObservable: Observable<List<Transmitter>> = transmitterComponent.getTransmittersAsSingle().toObservable()
+    val noTransmittersObservable: Observable<HomeUiModel> = transmittersObservable
+      .subscribeOn(Schedulers.io())
+      .filter { it.isEmpty() }
+      .map<HomeUiModel> {
+        HomeUiModel.NoTransmittersFound()
+      }
+
     val syncUserObservable = userComponent.syncUser(userId)
       .subscribeOn(Schedulers.io())
       .doOnNext { Timber.d("Sync User [$it]") }
@@ -86,7 +94,7 @@ class HomeViewModel(
     disposable.add(syncTransmittersObservable.subscribe())
     disposable.add(syncUserObservable.subscribe())
 
-    disposable.add(Observable.merge(stateUpdate, bluetoothStateObservable, rawPackageUpdateObservable).bind(uiView.render()))
+    disposable.add(Observable.merge(stateUpdate, bluetoothStateObservable, rawPackageUpdateObservable, noTransmittersObservable).bind(uiView.render()))
     disposable.add(Observable.merge(stitchTransmitterObservable, scanningObservable, doUntil).bind(uiView.render()))
 
     return disposable

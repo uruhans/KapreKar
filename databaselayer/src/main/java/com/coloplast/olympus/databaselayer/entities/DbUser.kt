@@ -20,6 +20,7 @@ class DbUser(
   val surgeryDateInterval: Int?,
   val phoneNumber: String?,
   val insuranceType: Int?,
+  val sensorPatchSize: Int?,
   val consent: Boolean,
   @ColumnInfo(typeAffinity = ColumnInfo.INTEGER)
   var syncState: SyncState
@@ -36,6 +37,7 @@ class DbUser(
       surgeryDateInterval,
       phoneNumber,
       insuranceType,
+      sensorPatchSize,
       consent,
       syncState
     )
@@ -52,6 +54,7 @@ class DbUser(
         user.surgeryDateInterval,
         user.phoneNumber,
         user.insuranceType,
+        user.sensorPatchSize,
         user.consent,
         user.syncState
       )

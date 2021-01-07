@@ -24,6 +24,7 @@ class ApiServiceImpl : ApiService {
         user.surgeryDateInterval,
         user.phoneNumber,
         user.insuranceType,
+        user.sensorPatchSize,
         user.consent
       )
     )

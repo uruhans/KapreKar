@@ -49,6 +49,7 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
       UiState.MULTIPLE_TRANSMITTERS -> {
         NotificationPayload(state.notificationId(), R.string.lock_notification_multiple_transmitters)
       }
+      UiState.TRANSMITTERS_EMPTY -> { null }
       UiState.TRANSMITTER_NOT_FOUND -> { null }
       UiState.SOMETHING_ELSE,
       UiState.OK_A -> {

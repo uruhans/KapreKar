@@ -43,6 +43,7 @@ import com.coloplast.olympus.ui.feature.guides.SingleGuideFlowController
 import com.coloplast.olympus.ui.feature.guides.articles.models.GuideType
 import com.coloplast.olympus.ui.feature.guides.flows.tour.AppTourFlowController
 import com.coloplast.olympus.ui.feature.home.models.HomeUiModel
+import com.coloplast.olympus.ui.feature.home.models.LastCheckVisible
 import com.coloplast.olympus.ui.feature.home.models.PatchVisible
 import com.coloplast.olympus.ui.feature.home.models.SideMenuType
 import com.coloplast.olympus.ui.feature.home.models.StitchOrResetObject
@@ -87,6 +88,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
   val rawRotationAngle = ObservableInt()
   val isPatchVisible = ObservableBoolean(false)
   val patchInErrorState = ObservableBoolean(false)
+  val isLastCheckVisible = ObservableBoolean(false)
 
   private var currentUiState = UiState.INITIAL
   private var currentOverlayState = OverlayState.NONE
@@ -193,6 +195,10 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
         is HomeUiModel.DeviceDisconnected -> {
           isConnected.set(false)
           changeUiState(UiState.CONNECTING)
+        }
+        is HomeUiModel.NoTransmittersFound -> {
+          lastCheck.set(uiModel.lastUpdate)
+          changeUiState(UiState.TRANSMITTERS_EMPTY)
         }
         is HomeUiModel.StitchOrResetComplete -> {
           /* no-op */
@@ -317,6 +323,9 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
         UiState.TRANSMITTER_BATTERY_CHARGING_W -> {
           TransmitterChargingController.routerTransaction()
         }
+        UiState.TRANSMITTERS_EMPTY -> {
+          NoTransmittersController.routerTransaction()
+        }
         UiState.BLUETOOTH_NOT_ENABLED -> {
           removeBleDisconnectOverlay = false
           BluetoothNotEnabledController.routerTransaction()
@@ -349,6 +358,10 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
       }
 
       routerTransaction?.let {
+        if (it.controller() is LastCheckVisible) {
+          isLastCheckVisible.set((it.controller() as LastCheckVisible).lastCheckVisible())
+        }
+
         if (it.controller() is PatchVisible) {
           it.popChangeHandler(ResizeChangeHandler())
             .pushChangeHandler(ResizeChangeHandler())
@@ -361,6 +374,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
             .pushChangeHandler(FadeChangeHandler())
 
           isPatchVisible.set(false)
+          isLastCheckVisible.set(false)
         }
 
         if (stateRouter?.hasRootController() == true) {

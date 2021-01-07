@@ -141,7 +141,7 @@ class TransmittersController(args: Bundle? = null) :
     dialogController = ImageDialogController.create(
       this,
       REQUEST_CODE_DELETE_TRANSMITTER,
-      R.string.dialog_delete_transmitter_title,
+      R.string.dialog_transmitters_delete_message,
       R.string.empty,
       R.string.generic_yes,
       R.string.generic_no,

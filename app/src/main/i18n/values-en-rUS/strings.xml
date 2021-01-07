@@ -146,14 +146,14 @@
 <string name="guide_at2_item1">The transmitter you would like to add</string>
 <string name="guide_at2_item2">Your transitter charger and charger cable</string>
 <string name="guide_at2_item3">Access to a power socket</string>
-<string name="guide_at2_item4">A USB plug (e.g. iPhone charger plug)</string>
+<string name="guide_at2_item4">A USB plug (e.g. phone charger plug)</string>
 <string name="guide_at2_item5">guide_at2_item5</string>
 <string name="guide_at2_title">You will need ...</string>
 <string name="guide_at3_body">Look for the identification number on the darker grey reverse side of your transmitter.</string>
 <string name="guide_at3_title">Your transmitter code</string>
 <string name="guide_at4_body">Two letters followed by two numbers on the darker grey side of your transmitter</string>
 <string name="guide_at4_title">Enter your transmitter code</string>
-<string name="guide_at5_body">Insert the charger cable into the charger. Then, plug it into a USB adaptor plug (e.g. the one you use for your IPhone).</string>
+<string name="guide_at5_body">Insert the charger cable into the charger. Then, plug it into a USB adaptor plug (e.g. the one you use for your phone).</string>
 <string name="guide_at5_title">Insert cable into charger</string>
 <string name="guide_at6_body">Insert the charger into a power socket and turn the power on.</string>
 <string name="guide_at6_title">Connect to power</string>
@@ -552,7 +552,7 @@
 <string name="onboarding_chapter_intro_box_title">What\'s in the box?</string>
 <string name="onboarding_chapter_intro_bullet_item_1">A flat surface, like a table or worktop</string>
 <string name="onboarding_chapter_intro_bullet_item_2">Access to a power socket</string>
-<string name="onboarding_chapter_intro_bullet_item_3">A USB plug (e.g. iPhone charger plug)</string>
+<string name="onboarding_chapter_intro_bullet_item_3">A USB plug (e.g. your phone charger plug)</string>
 <string name="onboarding_chapter_intro_bullet_item_4">Everything you currently use in your change routine</string>
 <string name="onboarding_chapter_intro_bullet_list_description">As well as the TestProduct starter kit, you will also need:</string>
 <string name="onboarding_chapter_intro_bullet_list_title">Before you get started…</string>
@@ -787,6 +787,7 @@
 <string name="profile_pp_no_profile_description">Create a profile to get all the benefits of TestProduct. Accept the Data Policy below and then hit \"Create Profile\".</string>
 <string name="profile_pp_no_profile_title">You haven\'t created a TestProduct profile yet.</string>
 <string name="profile_pp_sensor_layer_description">Sensor layer size</string>
+<string name="profile_pp_sensor_layer_size">Size</string>
 <string name="profile_pp_sensor_layer_title">Sensor layer</string>
 <string name="profile_pp_stoma_surgery_date">First stoma surgery data</string>
 <string name="profile_pp_stoma_type">Stoma type</string>
@@ -806,7 +807,7 @@
 <string name="settings_alarm_title">Schedule bedtime alarm</string>
 <string name="settings_allow_notifications_body">[Missing translation]</string>
 <string name="settings_allow_notifications_title">Allow notifications</string>
-<string name="settings_bedtime_alerts_body">You\'ll receive vibrations with notifications if it is turned on in your iPhone settings.</string>
+<string name="settings_bedtime_alerts_body">You\'ll receive vibrations with notifications if it is turned on in your phone\'s settings.</string>
 <string name="settings_bedtime_alerts_header">Bedtime alarm</string>
 <string name="settings_bedtime_alerts_schedule">%1$s, daily.</string>
 <string name="settings_bedtime_alerts_schedule_button">Schedule bedtime alarm</string>

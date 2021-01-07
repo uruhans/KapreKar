@@ -787,6 +787,7 @@
 <string name="profile_pp_no_profile_description">profile_pp_no_profile_description</string>
 <string name="profile_pp_no_profile_title">profile_pp_no_profile_title</string>
 <string name="profile_pp_sensor_layer_description">Sensor layer size</string>
+<string name="profile_pp_sensor_layer_size">Size</string>
 <string name="profile_pp_sensor_layer_title">Sensor layer</string>
 <string name="profile_pp_stoma_surgery_date">profile_pp_stoma_surgery_date</string>
 <string name="profile_pp_stoma_type">profile_pp_stoma_type</string>

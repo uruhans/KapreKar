@@ -15,6 +15,8 @@ import com.coloplast.olympus.ui.common.DrawerStateDispatcher
 import com.coloplast.olympus.ui.common.WebViewController
 import com.coloplast.olympus.ui.dialogs.ImageDialogController
 import com.coloplast.olympus.ui.feature.home.HomeController
+import com.coloplast.olympus.ui.feature.onboarding.setup.model.SensorLayerSizeType
+import com.coloplast.olympus.ui.feature.onboarding.signup.SignupFlowController
 import com.coloplast.olympus.ui.feature.onboarding.signup.createprofile.types.HealthInsurance
 import com.coloplast.olympus.ui.feature.onboarding.signup.createprofile.types.StomaSurgeryDate
 import com.coloplast.olympus.ui.feature.onboarding.signup.createprofile.types.StomaType
@@ -35,6 +37,11 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
   private var imageDialogController: ImageDialogController? = null
 
   val hasUserProfile = ObservableBoolean()
+
+  val sensorLayerSizeValues by lazy {
+    SensorLayerSizeType.values()
+      .map {"${applicationContext!!.getString(R.string.profile_pp_sensor_layer_size)} ${applicationContext!!.getString(it.stringId)}"}
+  }
 
   val stomaValues by lazy {
     StomaType.values()
@@ -60,34 +67,34 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
 
   val showHealthInsurance = ObservableBoolean(false)
 
+  val sensorLayerSizeSpinnerPosition = ObservableInt(-1)
   val stomaSpinnerPosition = ObservableInt(-1)
   val surgerySpinnerPosition = ObservableInt(-1)
   val insuranceSpinnerPosition = ObservableInt(-1)
 
   val dataPolicyAccepted = ObservableBoolean()
+  val noUserDataPolicyAccepted = ObservableBoolean()
 
   private lateinit var user: User
-
   private var infoChanged = false
   private var healthInfoChanged = false
   private var consentChanged = false
-  private var userProfileChanged = false
+  val userProfileChanged = ObservableBoolean(false)
 
   private val profileVarsChangedCallback = object : androidx.databinding.Observable.OnPropertyChangedCallback() {
     override fun onPropertyChanged(sender: androidx.databinding.Observable?, propertyId: Int) {
-      infoChanged =
-        user.firstName != firstName.get() ||
-            user.lastName != lastName.get() ||
-            user.phoneNumber != phoneNumber.get() ||
-            user.email != email.get()
+      infoChanged = user.firstName != firstName.get() ||
+          user.lastName != lastName.get() ||
+          user.phoneNumber != phoneNumber.get() ||
+          user.email != email.get()
 
       healthInfoChanged =
+        user.sensorPatchSize != sensorLayerSizeSpinnerPosition.get() ||
         user.stomaType != stomaSpinnerPosition.get() ||
             user.surgeryDateInterval != surgerySpinnerPosition.get() ||
             user.insuranceType != insuranceSpinnerPosition.get()
 
-
-      userProfileChanged = infoChanged || healthInfoChanged || consentChanged
+      userProfileChanged.set(infoChanged || healthInfoChanged || consentChanged)
     }
   }
 
@@ -119,12 +126,24 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
     imageDialogController?.show()
   }
 
+  private fun showLogOutOverlay() {
+    imageDialogController = ImageDialogController.create(
+      this,
+      REQUEST_CODE_LOGOUT_DIALOG,
+      R.string.profile_pp_log_out_modal_title,
+      R.string.profile_pp_withdraw_consent_modal_description,
+      R.string.profile_pp_log_out_button,
+      R.string.generic_cancel,
+      R.drawable.ic_info_circle,
+      verticalButtonLayout = true,
+      dismissAllowed = false)
+
+    imageDialogController?.show()
+  }
+
   private fun changeConsent(consent: Boolean) {
     consentChanged = user.consent != consent
-
-    userProfileChanged = infoChanged || healthInfoChanged || consentChanged
-
-    // TODO - this is temporary until we enable changes to all fields
+    userProfileChanged.set(infoChanged || healthInfoChanged || consentChanged)
     if(consentChanged) {
       user.consent = dataPolicyAccepted.get()
       updateUserRelay.accept(user)
@@ -147,6 +166,7 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
       when (uiModel) {
         is ProfileUiModel.FetchedUser -> {
           user = uiModel.user
+          editingEnabled.set(true)
           updateUserData(user)
         }
         is ProfileUiModel.UserUpdated -> {
@@ -156,7 +176,7 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
           infoChanged = false
           healthInfoChanged = false
           consentChanged = false
-          userProfileChanged = false
+          userProfileChanged.set(false)
 
           updateUserData(user)
         }
@@ -172,6 +192,11 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
     lastName.set(user.lastName)
     phoneNumber.set(user.phoneNumber)
     email.set(user.email)
+
+    user.sensorPatchSize?.let {
+
+      sensorLayerSizeSpinnerPosition.set(it)
+    }
 
     user.stomaType?.let {
       stomaSpinnerPosition.set(it)
@@ -194,7 +219,16 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
   }
 
   fun onLogoutClicked() {
-    logoutRelay.accept(Unit)
+    showLogOutOverlay()
+  }
+
+  fun onCreateUserClicked() {
+    userProfileChanged.set(false)
+    getContentRouter().pushController(
+      SignupFlowController.routerTransaction(SignupFlowController.Companion.NewUserFrom.SETTINGS_PROFIL)
+        .popChangeHandler(VerticalChangeHandler())
+        .pushChangeHandler(VerticalChangeHandler())
+    )
   }
 
   fun onPolicyAgreementClicked() {
@@ -217,7 +251,6 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
       .refCount()
   }
 
-  // TODO - add this to actual buttons in the xml when ready
   fun saveProfileClicked() {
     if (infoChanged) {
       user.firstName = firstName.get()
@@ -227,6 +260,7 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
     }
 
     if (healthInfoChanged) {
+      user.sensorPatchSize = sensorLayerSizeSpinnerPosition.get()
       user.stomaType = stomaSpinnerPosition.get()
       user.surgeryDateInterval = surgerySpinnerPosition.get()
       user.insuranceType = insuranceSpinnerPosition.get()
@@ -241,8 +275,8 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
     updateUserRelay.accept(user)
   }
 
-  // TODO - add this to actual buttons in the xml when ready
   fun discardChangesClicked() {
+    userProfileChanged.set(false)
     // remove callbacks so we dont get a million updates when we update user data later
     removeCallbacks()
     updateUserData(user)
@@ -258,7 +292,7 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
   }
 
   override fun handleBack(): Boolean {
-    if (userProfileChanged) {
+    if (userProfileChanged.get()) {
       imageDialogController = ImageDialogController.create(
         this,
         REQUEST_CODE_SAVE_CHANGES_DIALOG,
@@ -293,6 +327,9 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
       REQUEST_CODE_CONSENT_DIALOG -> {
         imageDialogController?.dismissDialog(withCallback = true)
       }
+      REQUEST_CODE_LOGOUT_DIALOG -> {
+        imageDialogController?.dismissDialog(withCallback = true)
+      }
       else -> {
         super.onPositiveButtonClicked(requestCode)
       }
@@ -301,6 +338,7 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
 
   override fun onNegativeButtonClicked(requestCode: Int) {
     when(requestCode) {
+      REQUEST_CODE_LOGOUT_DIALOG,
       REQUEST_CODE_SAVE_CHANGES_DIALOG -> {
         imageDialogController?.dismissDialog(withCallback = false)
         imageDialogController = null
@@ -332,6 +370,9 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
         removeCallbacks()
         updateUserRelay.accept(user)
       }
+      REQUEST_CODE_LOGOUT_DIALOG -> {
+        logoutRelay.accept(Unit)
+      }
       else -> {
         super.onDialogDismissed(requestCode)
       }
@@ -343,6 +384,7 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
     lastName.addOnPropertyChangedCallback(profileVarsChangedCallback)
     phoneNumber.addOnPropertyChangedCallback(profileVarsChangedCallback)
     email.addOnPropertyChangedCallback(profileVarsChangedCallback)
+    sensorLayerSizeSpinnerPosition.addOnPropertyChangedCallback(profileVarsChangedCallback)
     stomaSpinnerPosition.addOnPropertyChangedCallback(profileVarsChangedCallback)
     surgerySpinnerPosition.addOnPropertyChangedCallback(profileVarsChangedCallback)
     insuranceSpinnerPosition.addOnPropertyChangedCallback(profileVarsChangedCallback)
@@ -354,6 +396,7 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
     lastName.removeOnPropertyChangedCallback(profileVarsChangedCallback)
     phoneNumber.removeOnPropertyChangedCallback(profileVarsChangedCallback)
     email.removeOnPropertyChangedCallback(profileVarsChangedCallback)
+    sensorLayerSizeSpinnerPosition.removeOnPropertyChangedCallback(profileVarsChangedCallback)
     stomaSpinnerPosition.removeOnPropertyChangedCallback(profileVarsChangedCallback)
     surgerySpinnerPosition.removeOnPropertyChangedCallback(profileVarsChangedCallback)
     insuranceSpinnerPosition.removeOnPropertyChangedCallback(profileVarsChangedCallback)
@@ -368,9 +411,10 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
   companion object {
     const val TAG_CONTROLLER = "profile_controller"
 
+    private const val REQUEST_CODE_LOGOUT_DIALOG = 4000
     private const val REQUEST_CODE_CONSENT_DIALOG = 3000
     private const val REQUEST_CODE_SAVE_CHANGES_DIALOG = 2000
-
+    
     fun routerTransaction() = RouterTransaction.with(ProfileController()).tag(HomeController.TAG_CONTROLLER)
   }
 }

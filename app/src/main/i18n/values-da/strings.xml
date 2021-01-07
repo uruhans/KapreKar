@@ -786,6 +786,7 @@
 <string name="profile_pp_no_profile_description">Create a profile to get all the benefits of TestProduct. Accept the Data Policy below and then hit \"Create Profile\".</string>
 <string name="profile_pp_no_profile_title">You haven\'t created a TestProduct profile yet.</string>
 <string name="profile_pp_sensor_layer_description">Sensor layer size</string>
+<string name="profile_pp_sensor_layer_size">Size</string>
 <string name="profile_pp_sensor_layer_title">Sensor layer</string>
 <string name="profile_pp_stoma_surgery_date">First stoma surgery data</string>
 <string name="profile_pp_stoma_type">Stoma type</string>

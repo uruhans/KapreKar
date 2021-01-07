@@ -111,7 +111,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/power_icon"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/power_icon"
-        app:visibleOrInvisibleFade="@{controller.isConnected}"
+        app:visibleOrInvisibleFade="@{controller.isConnected || controller.isLastCheckVisible()}"
         tools:text="@string/status_last_check" />
 
       <com.coloplast.olympus.ui.common.widgets.AnimatedProgressView

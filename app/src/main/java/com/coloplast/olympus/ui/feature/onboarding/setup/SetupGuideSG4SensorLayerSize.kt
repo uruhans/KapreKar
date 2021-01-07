@@ -24,7 +24,7 @@ import org.koin.core.inject
 
 class SetupGuideSG4SensorLayerSize : BaseController<ControllerSensorLayerSelectorBinding>(), TopMenuVisibilityListener, SetupGuideSG4SensorLayerSizeView {
 
-  val selectedSize = ObservableInt(SensorLayerSizeType.UNKNOWN.id)
+  val selectedSize = ObservableInt(0)
 
   val items = ObservableArrayList<Any>()
   val itemBinding: OnItemBindClass<Any> = OnItemBindClass<Any>()

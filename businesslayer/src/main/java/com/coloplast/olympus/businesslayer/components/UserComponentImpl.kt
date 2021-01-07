@@ -6,6 +6,7 @@ import com.coloplast.olympus.databaselayer.DbService
 import com.coloplast.olympus.databaselayer.DbServiceImpl
 import com.coloplast.olympus.datalayer.ApiService
 import com.coloplast.olympus.datalayer.ApiServiceImpl
+import com.coloplast.olympus.datalayer.models.UserDTO
 import com.coloplast.olympus.datalayer.models.UserResponseDTO
 import com.coloplast.olympus.shared.models.Credentials
 import com.coloplast.olympus.shared.models.CurrentUser
@@ -33,7 +34,14 @@ class UserComponentImpl(private val preferences: Preferences) : UserComponent {
       apiService.createAnonymousUser()
     }
     else {
-      apiService.createUser(user)
+      if(user.id != null) {
+        apiService.updateUser(user)
+          .toSingle { UserResponseDTO(preferences.getToken(), UserDTO.fromUser(user)) }
+          .toObservable()
+      }
+      else {
+        apiService.createUser(user)
+      }
     }.compose(SetTokenInsertOrUpdateUserAndReturnCurrentUser(database, preferences))
 
   override fun login(credentials: Credentials): Observable<CurrentUser> {
@@ -98,6 +106,7 @@ class UserComponentImpl(private val preferences: Preferences) : UserComponent {
         phoneNumber = null
         email = null
         password = null
+        sensorPatchSize = null
       }
     }
 

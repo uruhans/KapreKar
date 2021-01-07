@@ -230,7 +230,7 @@
       android:layout_marginEnd="@dimen/spacing_larger"
       android:onClick="@{() -> controller.onNextClicked() }"
       android:text="@string/generic_confirm"
-      app:visibleOrInvisibleFade="@{controller.selectedSize != SensorLayerSizeType.UNKNOWN.ordinal()}"
+      app:visibleOrInvisibleFade="@{controller.selectedSize != 0}"
       app:layout_constraintBottom_toBottomOf="parent" />
 
   </androidx.constraintlayout.widget.ConstraintLayout>

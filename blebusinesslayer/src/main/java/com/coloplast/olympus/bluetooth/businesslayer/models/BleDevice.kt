@@ -8,7 +8,7 @@ import com.coloplast.olympus.shared.moshi.MoshiSerializable
  *
  * if the peripheral exists it means we are currently connected to the
  */
-data class BleDevice(val name: String?, val macAddress: String, val connectionState: BleConnectionState, var peripheral: Peripheral? = null) :
+data class BleDevice(val name: String?, val macAddress: String, var connectionState: BleConnectionState, var peripheral: Peripheral? = null) :
   MoshiSerializable {
   fun isConnectedOrConnecting(): Boolean {
     return isConnected() || connectionState == BleConnectionState.CONNECTING

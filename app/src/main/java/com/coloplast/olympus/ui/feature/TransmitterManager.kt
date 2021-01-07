@@ -9,6 +9,7 @@ import com.coloplast.olympus.shared.moshi.deserialize
 import com.coloplast.olympus.shared.moshi.serialize
 import com.coloplast.olympus.shared.preferences.Preferences
 import com.coloplast.olympus.ui.common.Stack
+import com.coloplast.olympus.ui.feature.statemachine.models.OverlayState
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
 import timber.log.Timber
 import java.time.Instant
@@ -326,6 +327,34 @@ class TransmitterManager(
    * @return latest State from other transmitter or NULL if we only have one Tx
    */
   fun onTransmitterDisconnect(disconnectedTransmitterMacAddress: String) : StateChange? {
+
+    if(isActiveTransmitter(disconnectedTransmitterMacAddress)) {
+      if(isOtherTransmitterAttached(disconnectedTransmitterMacAddress)) {
+        return latestStateFromOtherTransmitter(disconnectedTransmitterMacAddress)
+      }
+      else {
+        if(isCurrentlyAttached(disconnectedTransmitterMacAddress)) {
+          val latestState = getLatestState(disconnectedTransmitterMacAddress)
+          latestState?.let {
+            it.bleDevice.connectionState = BleConnectionState.DISCONNECTED
+          }
+
+          return latestState
+        }
+      }
+    }
+    else {
+      if(isCurrentlyAttached(disconnectedTransmitterMacAddress)) {
+        return latestStateFromOtherTransmitter(disconnectedTransmitterMacAddress)
+      }
+    }
+
+    return null
+
+
+
+
+
     // if the disconnected tx is currently the active tx
     if(isActiveTransmitter(disconnectedTransmitterMacAddress)) {
       // if the other tx is attached

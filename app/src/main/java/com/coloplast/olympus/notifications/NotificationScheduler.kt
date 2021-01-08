@@ -16,8 +16,8 @@ class NotificationScheduler {
   @Suppress("PrivatePropertyName")
   private val SNOOZE_TIME_MILLIS = 15L * 60 * 1000 // 15 minutes
   
-  fun snoozeNotification(context: Context, notificationId: Int) {
-    val pendingIntent = createPendingAlarmIntent(context, notificationId)
+  fun snoozeNotification(context: Context, macAddress: String, notificationId: Int) {
+    val pendingIntent = createPendingAlarmIntent(context, macAddress, notificationId)
     val triggerAtMillis = System.currentTimeMillis() + SNOOZE_TIME_MILLIS
     
     // schedule the next alarm for this notification
@@ -41,11 +41,12 @@ class NotificationScheduler {
     }
   }
   
-  private fun createPendingAlarmIntent(context: Context, notificationId: Int): PendingIntent {
+  private fun createPendingAlarmIntent(context: Context, macAddress: String, notificationId: Int): PendingIntent {
     val intent = Intent().apply {
       action = NotificationCenter.INTENT_FILTER_SHOW_NOTIFICATION
       setClass(context, NotificationBroadcastReceiver::class.java)
       putExtra(NotificationCenter.SCHEDULED_NOTIFICATION_ID, notificationId)
+      putExtra(NotificationCenter.MACADDRESS, macAddress)
     }
     
     return PendingIntent.getBroadcast(context, notificationId, intent, PendingIntent.FLAG_ONE_SHOT)

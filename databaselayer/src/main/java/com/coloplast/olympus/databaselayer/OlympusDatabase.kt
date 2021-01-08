@@ -15,8 +15,9 @@ import com.coloplast.olympus.databaselayer.dao.UserDao
 import com.coloplast.olympus.databaselayer.entities.DbTransmitter
 import com.coloplast.olympus.databaselayer.entities.DbTransmitterPackage
 import com.coloplast.olympus.databaselayer.entities.DbUser
+import com.coloplast.olympus.databaselayer.migrations.DatabaseMigrations
 
-@Database(entities = [DbUser::class, DbTransmitter::class, DbTransmitterPackage::class], version = 3)
+@Database(entities = [DbUser::class, DbTransmitter::class, DbTransmitterPackage::class], version = 4)
 @TypeConverters(value = [UUIDConverter::class, InstantConverter::class, SyncStateConverter::class, PackageTypeConverter::class])
 abstract class OlympusDatabase : RoomDatabase() {
   
@@ -31,7 +32,7 @@ abstract class OlympusDatabase : RoomDatabase() {
     fun getDatabase(applicationContext: Context): OlympusDatabase {
       return INSTANCE ?: synchronized(OlympusDatabase::class) {
         Room.databaseBuilder(applicationContext, OlympusDatabase::class.java, "olympus-database")
-          //.addMigrations(DatabaseMigrations.MIGRATION_1_2)
+          .addMigrations(*DatabaseMigrations.migrations)
           .fallbackToDestructiveMigration()
           .build()
           .apply {

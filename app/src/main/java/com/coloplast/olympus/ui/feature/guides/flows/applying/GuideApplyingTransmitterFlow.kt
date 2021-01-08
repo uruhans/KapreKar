@@ -5,21 +5,22 @@ import com.coloplast.olympus.shared.types.TypeWithId
 enum class GuideApplyingTransmitterFlow(override val id: Int) : TypeWithId {
   GuideAG1(0),
   GuideAG2(1),
-  GuideAG3(2),
-  GuideAG4(3),
-  GuideAG5(4),
-  GuideAG6(5),
-  GuideAG7(6),
-  GuideAG8(7),
-  GuideAG9(8),
-  GuideAG10(9),
-  GuideAG11(10),
-  GuideAG12(11),
-  GuideAG14(12),
-  AwaitingConnection(13),
-  GuideAG15(14),
-  SetupCompleted(15),
-  Completed(16);
+  GuideAG2_5(2),
+  GuideAG3(3),
+  GuideAG4(4),
+  GuideAG5(5),
+  GuideAG6(6),
+  GuideAG7(7),
+  GuideAG8(8),
+  GuideAG9(9),
+  GuideAG10(10),
+  GuideAG11(11),
+  GuideAG12(12),
+  GuideAG14(13),
+  AwaitingConnection(14),
+  GuideAG15(15),
+  SetupCompleted(16),
+  Completed(17);
 
   companion object {
     fun fromIndex(id: Int): GuideApplyingTransmitterFlow {

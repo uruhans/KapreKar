@@ -47,36 +47,54 @@ class SetupGuidePreparingFactoryImpl : FlowFactory<EmptyModel>() {
           showCloseButton = false
         )
       }
+      SetupGuidePreparingFlow.SetupGuideIdentifySLSGP21 -> MediaGuideController.routerTransaction(
+        resourceId = R.drawable.sg_p2_1_identify_sl_size,
+        titleId = R.string.onboarding_chapter_preparing_sl_size_identify_title,
+        descriptionId = R.string.onboarding_chapter_preparing_sl_size_identify_description,
+        position = 1,
+        totalCount = 6,
+        showCloseButton = false
+      )
+      SetupGuidePreparingFlow.SetupGuideSelectSensorLayerSize -> SetupGuideSG4SensorLayerSize.routerTransaction()
+      SetupGuidePreparingFlow.SetupGuideLiftFlapSGP23 -> MediaGuideController.routerTransaction(
+        resourceId = R.raw.sg_p2_3_lift_sl_connectorflap,
+        titleId = R.string.onboarding_chapter_preparing_sl_size_lift_title,
+        descriptionId = R.string.onboarding_chapter_preparing_sl_size_lift_description	,
+        position = 2,
+        totalCount = 6,
+        showCloseButton = false
+      )
+
       SetupGuidePreparingFlow.SetupGuideRemoveSGP2 -> MediaGuideController.routerTransaction(
         resourceId = R.raw.sg_p2_changecoming,
         titleId = R.string.onboarding_chapter_preparing_removing_title,
         descriptionId = R.string.onboarding_chapter_preparing_removing_description,
-        position = 1,
-        totalCount = 4,
+        position = 3,
+        totalCount = 6,
         showCloseButton = false
       )
       SetupGuidePreparingFlow.SetupGuidePlaceSLSGP3 -> MediaGuideController.routerTransaction(
         resourceId = R.raw.sg_p3_placeslonbp,
         titleId = R.string.onboarding_chapter_preparing_place_sl_title,
         descriptionId = R.string.onboarding_chapter_preparing_place_sl_description,
-        position = 2,
-        totalCount = 4,
+        position = 4,
+        totalCount = 6,
         showCloseButton = false
       )
       SetupGuidePreparingFlow.SetupGuidePressDownSGP4 -> MediaGuideController.routerTransaction(
         resourceId = R.raw.sg_p4_pressdownsl,
         titleId = R.string.onboarding_chapter_preparing_press_down_title,
         descriptionId = R.string.onboarding_chapter_preparing_press_down_description,
-        position = 3,
-        totalCount = 4,
+        position = 5,
+        totalCount = 6,
         showCloseButton = false
       )
       SetupGuidePreparingFlow.SetupGuideSecureSGP5 -> MediaGuideController.routerTransaction(
         resourceId = R.raw.sg_p5_ensuresecureadhesion,
         titleId = R.string.onboarding_chapter_preparing_secure_title,
         descriptionId = R.string.onboarding_chapter_preparing_secure_description,
-        position = 4,
-        totalCount = 4,
+        position = 6,
+        totalCount = 6,
         showCloseButton = false
       )
       SetupGuidePreparingFlow.Completed -> null

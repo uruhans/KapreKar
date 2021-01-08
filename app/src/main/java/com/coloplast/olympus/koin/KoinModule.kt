@@ -23,10 +23,7 @@ import com.coloplast.olympus.ui.feature.home.HomeViewModel
 import com.coloplast.olympus.ui.feature.onboarding.login.LoginViewModel
 import com.coloplast.olympus.ui.feature.onboarding.login.forgotpassword.ForgotPasswordFactoryImpl
 import com.coloplast.olympus.ui.feature.onboarding.login.forgotpassword.ForgotPasswordViewModel
-import com.coloplast.olympus.ui.feature.onboarding.setup.SetupGuideApplyingFactoryImpl
-import com.coloplast.olympus.ui.feature.onboarding.setup.SetupGuideConnectionFactoryImpl
-import com.coloplast.olympus.ui.feature.onboarding.setup.SetupGuideIntroFactoryImpl
-import com.coloplast.olympus.ui.feature.onboarding.setup.SetupGuidePreparingFactoryImpl
+import com.coloplast.olympus.ui.feature.onboarding.setup.*
 import com.coloplast.olympus.ui.feature.onboarding.setup.applying.AwaitingConnectionViewModel
 import com.coloplast.olympus.ui.feature.onboarding.setup.connection.SetupGuideLocationSGC4ViewModel
 import com.coloplast.olympus.ui.feature.onboarding.signup.SignupViewModel
@@ -82,6 +79,7 @@ val koinModule = module {
   single { SetupGuideLocationSGC4ViewModel(get()) }
   single { AddTransmitterAT7ViewModel(get()) }
   single { ProfileViewModel(get(), get(), get(), get(), get()) }
+  single { SetupGuideSG4SensorLayerSizeViewModel(get(), get()) }
   single { SignupViewModel(get(), get()) }
   single { FirmwareUpdateChargingViewModel() }
   single { FirmwareProgressViewModel(get()) }

@@ -1,6 +1,5 @@
 package com.coloplast.olympus.ui.feature.profile
 
-import SensorLayerSizeType
 import android.widget.Toast
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
@@ -16,6 +15,7 @@ import com.coloplast.olympus.ui.common.DrawerStateDispatcher
 import com.coloplast.olympus.ui.common.WebViewController
 import com.coloplast.olympus.ui.dialogs.ImageDialogController
 import com.coloplast.olympus.ui.feature.home.HomeController
+import com.coloplast.olympus.ui.feature.onboarding.setup.model.SensorLayerSizeType
 import com.coloplast.olympus.ui.feature.onboarding.signup.SignupFlowController
 import com.coloplast.olympus.ui.feature.onboarding.signup.createprofile.types.HealthInsurance
 import com.coloplast.olympus.ui.feature.onboarding.signup.createprofile.types.StomaSurgeryDate
@@ -40,7 +40,7 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
 
   val sensorLayerSizeValues by lazy {
     SensorLayerSizeType.values()
-      .map {"${applicationContext!!.getString(R.string.profile_pp_sensor_layer_size)} ${applicationContext!!.getString(it.stringId)}"}
+      .map {"${applicationContext!!.getString(R.string.profile_pp_sensor_layer_size)} ${it.id}"}
   }
 
   val stomaValues by lazy {

@@ -34,6 +34,8 @@ object DatabaseMigrations {
         ),
         primaryKeys = listOf("id")
       )
+
+      database.execSQL("UPDATE DbUser SET sensorPatchSize = 0")
     }
   }
 

@@ -24,7 +24,7 @@ import org.koin.core.inject
 
 class SetupGuideSG4SensorLayerSize : BaseController<ControllerSensorLayerSelectorBinding>(), TopMenuVisibilityListener, SetupGuideSG4SensorLayerSizeView {
 
-  val selectedSize = ObservableInt(0)
+  val selectedSize = ObservableInt(SensorLayerSizeType.UNITIALIZED.id)
 
   val items = ObservableArrayList<Any>()
   val itemBinding: OnItemBindClass<Any> = OnItemBindClass<Any>()
@@ -67,7 +67,7 @@ class SetupGuideSG4SensorLayerSize : BaseController<ControllerSensorLayerSelecto
   }
 
   fun onSensorLayerClicked(sensorLayerSizeType: SensorLayerSizeType) {
-    selectedSize.set(sensorLayerSizeType.id)
+    selectedSize.set(sensorLayerSizeType.ordinal)
   }
 
   override fun showBackButton(): Boolean = true

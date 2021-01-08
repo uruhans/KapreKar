@@ -40,7 +40,7 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
 
   val sensorLayerSizeValues by lazy {
     SensorLayerSizeType.values()
-      .map {"${applicationContext!!.getString(R.string.profile_pp_sensor_layer_size)} ${applicationContext!!.getString(it.stringId)}"}
+      .map {"${applicationContext!!.getString(R.string.profile_pp_sensor_layer_size)} ${it.id}"}
   }
 
   val stomaValues by lazy {

@@ -288,5 +288,6 @@ class NotificationCenter(
 
     // the notification id that we wish to show
     const val SCHEDULED_NOTIFICATION_ID = "SCHEDULED_NOTIFICATION_ID"
+    const val MACADDRESS = "MACADDRESS"
   }
 }

@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+  <data>
+    <variable
+      name="controller"
+      type="com.coloplast.olympus.ui.feature.uistates.TransmitterChargingController" />
+  </data>
 
   <LinearLayout
     android:layout_width="match_parent"
@@ -32,6 +40,11 @@
       android:fontFamily="@font/coloplast"
       android:text="@string/status_charging"
       android:textColor="@color/grey" />
+
+    <include layout="@layout/item_app_guide_button"
+      android:id="@+id/includeBtn"
+      bind:isVisible="@{controller.shouldShowAppTourButton}"
+      app:buttonClickListener="@{() -> controller.startAppTour()}"/>
 
   </LinearLayout>
 </layout>

@@ -9,7 +9,6 @@ import com.coloplast.olympus.ui.common.MediaGuideController
 import com.coloplast.olympus.ui.common.flow.FlowFactory
 import com.coloplast.olympus.ui.common.flow.TopMenuFlowFactoryController
 import com.coloplast.olympus.ui.dialogs.CallHelpDialogController
-import com.coloplast.olympus.ui.feature.home.HomeController
 import com.coloplast.olympus.ui.feature.onboarding.setup.model.ApplyingFlowModel
 import org.koin.core.inject
 
@@ -49,6 +48,7 @@ class GuideApplyingTransmitterFlowController : TopMenuFlowFactoryController<Appl
 
   override fun onFlowCompleted(data: ApplyingFlowModel) {
     preferences.setCurrentOnboardingProgression(OnboardingProgression.COMPLETED)
+    preferences.setOnboardingCompletedTime()
     super.onFlowCompleted(data)
   }
 

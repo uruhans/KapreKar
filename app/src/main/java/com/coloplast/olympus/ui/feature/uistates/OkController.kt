@@ -5,18 +5,20 @@ import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerStateOkBinding
 import com.coloplast.olympus.ui.feature.home.models.PatchVisible
 
-class OkController : BaseHomeUIController<ControllerStateOkBinding>(), PatchVisible {
-  
-  override fun onViewBound(viewBinding: ControllerStateOkBinding) {
-    // no-op
+class OkController : BaseHomeUIControllerAppTour<ControllerStateOkBinding>(), PatchVisible {
+
+  override fun attachVariables(viewBinding: ControllerStateOkBinding) {
+    super.attachVariables(viewBinding)
+    viewBinding.controller = this
   }
-  
+
   override fun getLayout(): Int {
     return R.layout.controller_state_ok
   }
-  
+
   companion object {
     private const val TAG_CONTROLLER = "state_ok_controller"
+
     fun routerTransaction() = RouterTransaction.with(OkController()).tag(TAG_CONTROLLER)
   }
 }

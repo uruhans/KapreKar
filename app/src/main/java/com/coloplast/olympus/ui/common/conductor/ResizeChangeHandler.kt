@@ -25,6 +25,9 @@ class ResizeChangeHandler : AnimatorChangeHandler() {
       var newHeight = 0
       
       (to as? ViewGroup)?.children?.forEach {
+        if (it.visibility == View.GONE) {
+          return@forEach
+        }
         when (it) {
           is TextView -> {
             newHeight += it.lineHeight.times(it.lineCount)
@@ -57,6 +60,9 @@ class ResizeChangeHandler : AnimatorChangeHandler() {
       textAnimIn.addListener(object : AnimatorListenerImpl {
         override fun onAnimationStart(animation: Animator?, isReverse: Boolean) {
           (to as? ViewGroup)?.children?.forEach {
+            if (it.visibility == View.GONE) {
+              return@forEach
+            }
             it.visibility = View.VISIBLE
           }
         }
@@ -77,6 +83,9 @@ class ResizeChangeHandler : AnimatorChangeHandler() {
       textAnimOut.addListener(object: AnimatorListenerImpl {
         override fun onAnimationEnd(animation: Animator?) {
           (from as? ViewGroup)?.children?.forEach {
+            if (it.visibility == View.GONE) {
+              return@forEach
+            }
             it.visibility = View.INVISIBLE
           }
         }

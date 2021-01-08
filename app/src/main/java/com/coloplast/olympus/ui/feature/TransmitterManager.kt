@@ -9,6 +9,7 @@ import com.coloplast.olympus.shared.moshi.deserialize
 import com.coloplast.olympus.shared.moshi.serialize
 import com.coloplast.olympus.shared.preferences.Preferences
 import com.coloplast.olympus.ui.common.Stack
+import com.coloplast.olympus.ui.feature.statemachine.models.OverlayState
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
 import timber.log.Timber
 import java.time.Instant
@@ -326,30 +327,24 @@ class TransmitterManager(
    * @return latest State from other transmitter or NULL if we only have one Tx
    */
   fun onTransmitterDisconnect(disconnectedTransmitterMacAddress: String) : StateChange? {
-    // if the disconnected tx is currently the active tx
     if(isActiveTransmitter(disconnectedTransmitterMacAddress)) {
-      // if the other tx is attached
       if(isOtherTransmitterAttached(disconnectedTransmitterMacAddress)) {
-        // get the other tx latest state
-        val otherTxStateChange = latestStateFromOtherTransmitter(disconnectedTransmitterMacAddress)
-        // if we have another state
-        if(otherTxStateChange != null) {
-          // return it
-          return otherTxStateChange
+        return latestStateFromOtherTransmitter(disconnectedTransmitterMacAddress)
+      }
+      else {
+        if(isCurrentlyAttached(disconnectedTransmitterMacAddress)) {
+          val latestState = getLatestState(disconnectedTransmitterMacAddress)
+          latestState?.let {
+            it.bleDevice.connectionState = BleConnectionState.DISCONNECTED
+          }
+
+          return latestState
         }
       }
     }
     else {
-      // the disconnected tx is *not* the active one,
-      // but see if it *was* attached immediately before disconnect
       if(isCurrentlyAttached(disconnectedTransmitterMacAddress)) {
-        // get the latest state from the other tx
-        val otherTxStateChange = latestStateFromOtherTransmitter(disconnectedTransmitterMacAddress)
-        // if there is another state
-        if(otherTxStateChange != null) {
-          //return it
-          return otherTxStateChange
-        }
+        return latestStateFromOtherTransmitter(disconnectedTransmitterMacAddress)
       }
     }
 

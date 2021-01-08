@@ -8,15 +8,11 @@ import com.coloplast.olympus.ui.feature.guides.SingleGuideFlowController
 import com.coloplast.olympus.ui.feature.guides.articles.models.GuideType
 import com.coloplast.olympus.ui.feature.home.models.PatchVisible
 
-class TransmitterDetachedController : BaseHomeUIController<ControllerStateTransmitterDetachedBinding>(), PatchVisible {
+class TransmitterDetachedController : BaseHomeUIControllerAppTour<ControllerStateTransmitterDetachedBinding>(), PatchVisible {
 
   override fun attachVariables(viewBinding: ControllerStateTransmitterDetachedBinding) {
     super.attachVariables(viewBinding)
     viewBinding.controller = this
-  }
-
-  override fun onViewBound(viewBinding: ControllerStateTransmitterDetachedBinding) {
-    // no-op
   }
 
   fun onApplicationGuideClicked() {

@@ -3,11 +3,13 @@ package com.coloplast.olympus.ui.feature.guides.flows.tour
 import android.content.Intent
 import android.net.Uri
 import com.bluelinelabs.conductor.RouterTransaction
+import com.coloplast.olympus.shared.preferences.Preferences
 import com.coloplast.olympus.ui.common.MediaGuideController
 import com.coloplast.olympus.ui.common.flow.FlowFactory
 import com.coloplast.olympus.ui.common.flow.TopMenuFlowFactoryController
 import com.coloplast.olympus.ui.common.models.flow.EmptyModel
 import com.coloplast.olympus.ui.dialogs.CallHelpDialogController
+import org.koin.core.inject
 
 
 /**
@@ -18,8 +20,13 @@ class AppTourFlowController: TopMenuFlowFactoryController<EmptyModel>(),
   MediaGuideController.Listener,
   CallHelpDialogController.Listener{
 
+  private val preferences: Preferences by inject()
   private var callHelpDialogController: CallHelpDialogController? = null
   private val model: FlowFactory<EmptyModel> by lazy { AppTourFactoryImpl() }
+
+  init {
+    preferences.didSeeAppTourGuide = true
+  }
 
   override fun getFlowFactory(): FlowFactory<EmptyModel> = model
 

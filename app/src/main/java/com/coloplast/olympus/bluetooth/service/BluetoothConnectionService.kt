@@ -15,6 +15,7 @@ import com.coloplast.olympus.activities.MainActivity
 import com.coloplast.olympus.bluetooth.BluetoothServiceViewModel
 import com.coloplast.olympus.bluetooth.StateDispatcher
 import com.coloplast.olympus.bluetooth.businesslayer.ServiceStateDispatcher
+import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.bluetooth.model.BluetoothServiceModel
 import com.coloplast.olympus.bluetooth.model.BluetoothServiceResult
 import com.coloplast.olympus.bluetooth.model.StateChange
@@ -86,7 +87,7 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
 
       when (it) {
         is BluetoothServiceModel.FirmwareUpdateAvailable -> {
-          olympusNotificationManager.send(UiState.FIRMWARE_AVAILABLE)
+          olympusNotificationManager.send(it.statusChange.getMacAddress(), UiState.FIRMWARE_AVAILABLE)
           StateDispatcher.dispatchStateForActiveTransmitter(it.statusChange)
 
           // the reason we are dispatching this too, is because we might be in the onboarding flow
@@ -94,7 +95,7 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
           StateDispatcher.dispatch(it.statusChange)
         }
         is BluetoothServiceModel.AppUpdateAvailable -> {
-          olympusNotificationManager.send(UiState.APP_UPDATE_AVAILABLE)
+          olympusNotificationManager.send(it.statusChange.getMacAddress(), UiState.APP_UPDATE_AVAILABLE)
           StateDispatcher.dispatchStateForActiveTransmitter(it.statusChange)
 
           // the reason we are dispatching this too, is because we might be in the onboarding flow
@@ -113,7 +114,8 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
           transmitterManager.determinePatchCommand(updatedStateChange)
 
           // this will allow for notifications to be send when app is in the background
-          olympusNotificationManager.send(updatedStateChange.stateChange.state)
+          olympusNotificationManager.send(updatedStateChange.stateChange.getMacAddress(), updatedStateChange.stateChange.state)
+          StateDispatcher.dispatch(updatedStateChange.stateChange)
           StateDispatcher.dispatchStateForActiveTransmitter(updatedStateChange.stateChange)
         }
         is BluetoothServiceModel.RawDataPackageUpdate -> {
@@ -127,21 +129,40 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
           val otherTxStateChange = transmitterManager.onTransmitterDisconnect(it.macAddress)
 
           if(otherTxStateChange != null) {
-            val updatedStateChange = transmitterManager.determineCurrentlyActiveTransmitterAndReturnStateChangeFromIt(otherTxStateChange)
+            if(!otherTxStateChange.bleDevice.isConnected()) {
+              olympusNotificationManager.send(it.macAddress, OverlayState.BLE_CONNECTION_LOST)
+              val disconnectStateChange = StateChange(otherTxStateChange.state, OverlayState.BLE_CONNECTION_LOST, otherTxStateChange.bleDevice)
 
-            if (updatedStateChange.stateChange.overlayState == OverlayState.BLE_CONNECTION_LOST) {
-              olympusNotificationManager.send(OverlayState.BLE_CONNECTION_LOST)
+              StateDispatcher.dispatch(disconnectStateChange)
+              StateDispatcher.dispatchStateForActiveTransmitter(disconnectStateChange)
             }
-
-            StateDispatcher.dispatchStateForActiveTransmitter(updatedStateChange.stateChange)
+            else {
+              val updatedStateChange = transmitterManager.determineCurrentlyActiveTransmitterAndReturnStateChangeFromIt(otherTxStateChange)
+              StateDispatcher.dispatch(updatedStateChange.stateChange)
+              StateDispatcher.dispatchStateForActiveTransmitter(updatedStateChange.stateChange)
+            }
           }
           else {
             val latestState = transmitterManager.getLatestState(it.macAddress)
 
-            if(latestState != null) {
-              olympusNotificationManager.send(OverlayState.BLE_CONNECTION_LOST)
+            if(transmitterManager.isActiveTransmitter(it.macAddress)) {
+              latestState?.let { state ->
+                state.bleDevice.connectionState = BleConnectionState.DISCONNECTED
+                // so immediately send a notification
+                olympusNotificationManager.send(it.macAddress, OverlayState.BLE_CONNECTION_LOST)
+                // and dispatch for the active transmitter (so the UI can properly change)
 
-              StateDispatcher.dispatchStateForActiveTransmitter(StateChange(UiState.DISCONNECTED, OverlayState.BLE_CONNECTION_LOST, latestState.bleDevice))
+                val disconnectState = StateChange(state.state, OverlayState.BLE_CONNECTION_LOST, state.bleDevice)
+                StateDispatcher.dispatch(disconnectState)
+                StateDispatcher.dispatchStateForActiveTransmitter(disconnectState)
+              }
+            }
+            else {
+              latestState?.let { state ->
+                val updatedStateChange = transmitterManager.determineCurrentlyActiveTransmitterAndReturnStateChangeFromIt(state)
+                StateDispatcher.dispatch(updatedStateChange.stateChange)
+                StateDispatcher.dispatchStateForActiveTransmitter(updatedStateChange.stateChange)
+              }
             }
           }
         }

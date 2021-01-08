@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+  <data>
+    <import type="android.view.View"/>
+    <variable
+      name="controller"
+      type="com.coloplast.olympus.ui.feature.uistates.OkController" />
+  </data>
 
   <LinearLayout
     android:id="@+id/ok_container"
@@ -15,9 +24,23 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:fontFamily="@font/coloplast"
-      android:text="@string/status_all_ok"
-      android:textColor="@color/grey"
+      android:text="@string/main_screen_welcome_title2"
       android:transitionName="test" />
 
+    <TextView
+      style="@style/Headline.Large"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="@dimen/spacing_double"
+      android:fontFamily="@font/coloplast"
+      android:text="@string/main_screen_welcome_body2"
+      android:textColor="@color/grey" />
+
+    <include layout="@layout/item_app_guide_button"
+      android:id="@+id/includeBtn"
+      bind:isVisible="@{controller.shouldShowAppTourButton}"
+      app:buttonClickListener="@{() -> controller.startAppTour()}"/>
   </LinearLayout>
 </layout>
+
+

@@ -5,10 +5,11 @@ import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerStateMultipleTransmittersBinding
 import com.coloplast.olympus.ui.feature.home.models.PatchVisible
 
-class MultipleTransmittersController : BaseHomeUIController<ControllerStateMultipleTransmittersBinding>(), PatchVisible {
+class MultipleTransmittersController : BaseHomeUIControllerAppTour<ControllerStateMultipleTransmittersBinding>(), PatchVisible {
 
-  override fun onViewBound(viewBinding: ControllerStateMultipleTransmittersBinding) {
-    // no-op
+  override fun attachVariables(viewBinding: ControllerStateMultipleTransmittersBinding) {
+    super.attachVariables(viewBinding)
+    viewBinding.controller = this
   }
 
   override fun patchVisible(): Boolean {

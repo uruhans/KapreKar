@@ -12,24 +12,33 @@ import com.coloplast.olympus.ui.feature.statemachine.models.UiState
  * NOTICE: some notifications have not been implemented yet as they have not been implemented in the UI yet
  */
 class OlympusNotificationManager(private val notificationCenter: NotificationCenter) {
-  
+
+  private val latestState = mutableMapOf<String, Int>()
+
   /**
    * send a notification solely based on a notification id
    * - this will then try to figure out what type of notification it is, and then send the correct type (UiState, OverlayState)
    */
-  fun send(notificationId: Int) {
+  fun send(macAddress: String, notificationId: Int) {
     if(OverlayState.isOverlayState(notificationId)) {
-      send(OverlayState.fromNotificationId(notificationId))
+      send(macAddress, OverlayState.fromNotificationId(notificationId))
     }
     else {
-      send(UiState.fromNotificationId(notificationId))
+      send(macAddress, UiState.fromNotificationId(notificationId))
     }
   }
   
   /**
    * send notifications based on current UiState
    */
-  fun send(state: UiState) {
+  fun send(macAddress: String, state: UiState) {
+    // this will stop sending multiple notifications of same type immediately right after
+    if(latestState[macAddress] == state.notificationId()) {
+      return
+    }
+
+    latestState[macAddress] = state.notificationId()
+
     val payload = when (state) {
       UiState.FIRMWARE_AVAILABLE -> {
         NotificationPayload(state.notificationId(), R.string.lock_notification_firmware_update, title = R.string.lock_notification_firmware_update_title)
@@ -45,6 +54,7 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
       UiState.CONNECTING -> { null }
       UiState.SCANNING -> { null }
       UiState.DISCONNECTED -> { null }
+      UiState.SHOW_WELCOME -> { null }
       UiState.MULTIPLE_TRANSMITTERS -> {
         NotificationPayload(state.notificationId(), R.string.lock_notification_multiple_transmitters)
       }
@@ -100,7 +110,14 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
   /**
    * Send notification based on current OverlayState
    */
-  fun send(state: OverlayState) {
+  fun send(macAddress: String, state: OverlayState) {
+    // this will stop sending multiple notifications of same type immediately right after
+    if(latestState[macAddress] == state.notificationId()) {
+      return
+    }
+
+    latestState[macAddress] = state.notificationId()
+
     val payload = when(state) {
       OverlayState.NONE -> { null }
       OverlayState.BATTERY_LOW -> {

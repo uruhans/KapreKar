@@ -77,6 +77,7 @@ class SetupGuideApplyingFlowController : TopMenuFlowFactoryController<ApplyingFl
 
   override fun onFlowCompleted(data: ApplyingFlowModel) {
     preferences.setCurrentOnboardingProgression(OnboardingProgression.COMPLETED)
+    preferences.setOnboardingCompletedTime()
     super.onFlowCompleted(data)
   }
 

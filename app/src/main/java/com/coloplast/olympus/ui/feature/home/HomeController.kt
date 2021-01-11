@@ -246,6 +246,10 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
           if (stateChange.overlayState == OverlayState.BLE_CONNECTION_LOST) {
             isConnected.set(false)
           }
+          else if(stateChange.overlayState == OverlayState.NONE && imageDialogController?.requestCode == REQUEST_CODE_CONNECTION_LOST) {
+            imageDialogController?.dismissDialog(false)
+            imageDialogController = null
+          }
 
           changeUiState(stateToChangeTo)
           changeOverlayState(stateChange.overlayState)

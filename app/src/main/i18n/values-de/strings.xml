@@ -361,6 +361,16 @@
 <string name="guide_update_transmitter_4_action">[missing translation]</string>
 <string name="guide_update_transmitter_4_body">[missing translation]</string>
 <string name="guide_update_transmitter_4_title">[missing translation]</string>
+<string name="guide_us_body_1">[missing translation]</string>
+<string name="guide_us_body_4">[missing translation]</string>
+<string name="guide_us_body_5">[missing translation]</string>
+<string name="guide_us_body_link_1">[missing translation]</string>
+<string name="guide_us_body_link_2">[missing translation]</string>
+<string name="guide_us_subtitle_1">[missing translation]</string>
+<string name="guide_us_subtitle_2">[missing translation]</string>
+<string name="guide_us_subtitle_4">[missing translation]</string>
+<string name="guide_us_subtitle_5">[missing translation]</string>
+<string name="guide_us_title">[missing translation]</string>
 <string name="guide_wiping_1_image">guide_wiping_1_image</string>
 <string name="guide_wiping_1_text">guide_wiping_1_text</string>
 <string name="guide_wiping_2_image">guide_wiping_2_image</string>

@@ -361,6 +361,16 @@
 <string name="guide_update_transmitter_4_action">[missing translation]</string>
 <string name="guide_update_transmitter_4_body">[missing translation]</string>
 <string name="guide_update_transmitter_4_title">[missing translation]</string>
+<string name="guide_us_body_1">[missing translation]</string>
+<string name="guide_us_body_4">[missing translation]</string>
+<string name="guide_us_body_5">[missing translation]</string>
+<string name="guide_us_body_link_1">[missing translation]</string>
+<string name="guide_us_body_link_2">[missing translation]</string>
+<string name="guide_us_subtitle_1">[missing translation]</string>
+<string name="guide_us_subtitle_2">[missing translation]</string>
+<string name="guide_us_subtitle_4">[missing translation]</string>
+<string name="guide_us_subtitle_5">[missing translation]</string>
+<string name="guide_us_title">[missing translation]</string>
 <string name="guide_wiping_1_image">11_20190722_cleaning_picture_transmitter</string>
 <string name="guide_wiping_1_text">Sørg for at transmitteren altid er tør.</string>
 <string name="guide_wiping_2_image">Picture 1</string>
@@ -399,6 +409,8 @@
 <string name="guides_ct_title">Connection &amp; transmitter</string>
 <string name="guides_da_card_description">Keep skin and adhesive dry for the best TestProduct experience</string>
 <string name="guides_da_card_title">Dry applying tips</string>
+<string name="guides_da_us_description">What to do with sensor Status updates</string>
+<string name="guides_da_us_title">Understanding sensors</string>
 <string name="guides_dt_card_description">If your transmitter is lost or broken, this simple guide shows you how to delete it</string>
 <string name="guides_dt_card_title">Delete a transmitter</string>
 <string name="guides_faq_description">Answers to frequently asked question about TestProduct</string>

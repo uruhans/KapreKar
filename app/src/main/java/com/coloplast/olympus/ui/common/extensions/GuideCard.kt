@@ -16,6 +16,7 @@ import com.coloplast.olympus.ui.feature.guides.models.GuideCard
   GuideCard.APP_TOUR -> R.drawable.guide_ap_thumbnail
   GuideCard.APPLYING_GUIDE -> R.drawable.guide_ag_thumbnail
   GuideCard.DRY_APPLYING_TIPS -> R.drawable.guide_dry_applying_tips_thumbnail
+  GuideCard.UNDERSTANDING_SENSORS -> R.drawable.ic_understanding_sensor
   GuideCard.CONNECTION_GUIDE -> R.drawable.guide_cg_thumbnail
   GuideCard.CHARGING_GUIDE -> R.drawable.guide_ch_thumbnail
   GuideCard.LOCATION_GUIDE -> R.drawable.guide_lg_thumbnail
@@ -31,6 +32,7 @@ import com.coloplast.olympus.ui.feature.guides.models.GuideCard
   GuideCard.APP_TOUR -> R.string.guides_ap_card_title
   GuideCard.APPLYING_GUIDE -> R.string.guides_ag_card_title
   GuideCard.DRY_APPLYING_TIPS -> R.string.guides_da_card_title
+  GuideCard.UNDERSTANDING_SENSORS -> R.string.guides_da_us_title
   GuideCard.CONNECTION_GUIDE -> R.string.guides_cg_card_title
   GuideCard.CHARGING_GUIDE -> R.string.guides_ch_card_title
   GuideCard.LOCATION_GUIDE -> R.string.guides_lg_card_title
@@ -47,6 +49,7 @@ import com.coloplast.olympus.ui.feature.guides.models.GuideCard
   GuideCard.APP_TOUR -> R.string.guides_ap_card_description
   GuideCard.APPLYING_GUIDE -> R.string.guides_ag_card_description
   GuideCard.DRY_APPLYING_TIPS -> R.string.guides_da_card_description
+  GuideCard.UNDERSTANDING_SENSORS -> R.string.guides_da_us_description
   GuideCard.CONNECTION_GUIDE -> R.string.guides_cg_card_description
   GuideCard.CHARGING_GUIDE -> R.string.guides_ch_card_description
   GuideCard.LOCATION_GUIDE -> R.string.guides_lg_card_description

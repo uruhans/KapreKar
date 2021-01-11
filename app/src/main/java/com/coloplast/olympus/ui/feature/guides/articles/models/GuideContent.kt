@@ -7,7 +7,7 @@ object GuideContent {
 
   fun getGuideContent(
     guideType: GuideType,
-    buttonCallback: (ButtonType) -> Unit
+    buttonCallback: (ButtonType, Int) -> Unit
   ): List<Any> {
     return when (guideType) {
       GuideType.UNKNOWN -> {
@@ -101,6 +101,55 @@ object GuideContent {
             image = R.drawable.guide_cleaning_3,
             title = R.string.guide_cl_article_3_header,
             description = R.string.guide_cl_article_3_body
+          )
+        )
+      }
+      GuideType.UNDERSTANDING_SENSORS -> {
+        listOf(
+          HeaderItem(
+            header = R.string.guide_us_title,
+            subHeader = R.string.guide_us_subtitle_1
+          ),
+          ArticleItem(description = R.string.guide_us_body_1),
+          ArticleItem(
+            image = R.drawable.us1_there_might_be_a_problem,
+            title = R.string.guide_us_subtitle_2,
+            description = R.string.guide_us_body_2
+          ),
+          ButtonItem(
+            text = R.string.guide_us_body_link_1,
+            buttonType = ButtonType.LINK,
+            clickCallback = buttonCallback
+          ),
+          ArticleItem(
+            image = R.drawable.us2_sensors_worn_out,
+            title = R.string.guide_us_subtitle_3,
+            description = R.string.guide_us_body_3
+          ),
+          ButtonItem(
+            text = R.string.guide_us_body_link_1,
+            buttonType = ButtonType.LINK,
+            clickCallback = buttonCallback
+          ),
+          ArticleItem(
+            image = R.drawable.us3_sensor_or_skin_wet,
+            title = R.string.guide_us_subtitle_4,
+            description = R.string.guide_us_body_4
+          ),
+          ButtonItem(
+            text = R.string.guide_us_body_link_2,
+            buttonType = ButtonType.LINK,
+            clickCallback = buttonCallback
+          ),
+          ArticleItem(
+            image = R.drawable.us4_sensor_layer_damaged,
+            title = R.string.guide_us_subtitle_5,
+            description = R.string.guide_us_body_5
+          ),
+          ButtonItem(
+            text = R.string.guide_us_body_link_1,
+            buttonType = ButtonType.LINK,
+            clickCallback = buttonCallback
           )
         )
       }

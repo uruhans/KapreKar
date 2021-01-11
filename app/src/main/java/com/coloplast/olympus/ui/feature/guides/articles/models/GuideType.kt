@@ -14,6 +14,7 @@ enum class GuideType(override val id: Int): TypeWithId {
   DRYING(8),
   CHECK_BATTERY(9),
   DELETE_TRANSMITTER(10),
+  UNDERSTANDING_SENSORS(11),
   UNKNOWN(-1);
   
   companion object {

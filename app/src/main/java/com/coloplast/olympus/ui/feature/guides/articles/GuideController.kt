@@ -8,7 +8,9 @@ import com.coloplast.olympus.BR
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerGuideBinding
 import com.coloplast.olympus.ui.common.BaseController
+import com.coloplast.olympus.ui.feature.guides.SingleGuideFlowController
 import com.coloplast.olympus.ui.feature.guides.articles.models.*
+import com.coloplast.olympus.ui.feature.guides.flows.applying.GuideApplyingTransmitterFlowController
 import com.coloplast.olympus.ui.feature.guides.flows.location.LocationGuideFlowController
 import com.coloplast.olympus.ui.feature.guides.models.ButtonType
 import com.coloplast.olympus.ui.feature.transmitters.TransmittersController
@@ -24,7 +26,7 @@ class GuideController(args: Bundle) : BaseController<ControllerGuideBinding>(arg
 
   private var guideType = GuideType.fromId(args.getInt(BUNDLE_GUIDE_TYPE))
 
-  private val buttonCallback: (ButtonType) -> Unit = { buttonType ->
+  private val buttonCallback: (ButtonType, Int) -> Unit = { buttonType, linkRessource ->
     when (buttonType) {
       ButtonType.BACK -> handleBack()
       ButtonType.ACTION,
@@ -33,6 +35,13 @@ class GuideController(args: Bundle) : BaseController<ControllerGuideBinding>(arg
           GuideType.APPLICATION_TIPS -> routerTransaction(GuideType.APPLICATION)
           GuideType.CONNECTION -> LocationGuideFlowController.routerTransaction()
           GuideType.CLEANING -> routerTransaction(GuideType.DRYING)
+          GuideType.UNDERSTANDING_SENSORS -> {
+            when (linkRessource) {
+              R.string.guide_us_body_link_1 -> GuideApplyingTransmitterFlowController.routerTransaction()
+              R.string.guide_us_body_link_2 -> SingleGuideFlowController.routerTransaction(GuideType.DRY_APPLYING_TIPS)
+              else -> throw IllegalArgumentException("Unknown flow to launch")
+            }
+          }
           GuideType.DELETE_TRANSMITTER -> TransmittersController.routerTransaction()
           else -> throw IllegalArgumentException("This shouldn't happen")
         }

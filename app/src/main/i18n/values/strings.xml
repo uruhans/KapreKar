@@ -362,6 +362,18 @@
 <string name="guide_update_transmitter_4_action">Close</string>
 <string name="guide_update_transmitter_4_body">Thank you for updating. Your TestProduct transmitter is updated and ready for use.</string>
 <string name="guide_update_transmitter_4_title">Update Complete</string>
+<string name="guide_us_body_1">When applied to your skin under your baseplate, the Heylo™ sensor layer looks out\nfor signs of leakage – sending notifications to your phone via your transmitter.\n\nAs well as notifying you about leakages detected, Heylo™ may sometimes give you other notifications about what is happening on your sensor layer. Understanding a little more about what these messages mean can help you decide what action to take.</string>
+<string name="guide_us_body_3">Over time, your sensor layer might get exposed to moisture from your skin and/or your stoma. If too much moisture is absorbed by the sensor layer over time, the sensors can wear out and become unable to detect output and notify you if a leakage is developing. In this case, you will be notified that your sensor layer’s sensors are ‘worn out’.\n\nYour baseplate might still be adhering to your skin but the sensors are no longer active. To keep fully informed in this scenario, you might want to change your sensor layer.</string>
+<string name="guide_us_body_4">Due to coming into contact with wet skin or your stoma during application to the body, sensors are already ‘used’ and no longer able to detect leakage.\n\nIf your Status reads ‘Inner sensors are wet’, only the inner sensors have been affected and the outer sensors are still functioning.\n\nIf your Status reads ‘Your skin is wet’, all sensors have been affected – in which case you might want to change your sensor layer to stay informed.\n\nPay close attention to apply your baseplate and sensor layer to clean, dry skin. For helpful advice read ‘Dry applying tips’.</string>
+<string name="guide_us_body_5">Due to either an issue in production, transportation, storage or handling and application, the sensor layer you’ve applied is physically broken, and unable to either detect output or send notifications. Heylo™ won’t be able to keep you informed until you’ve changed to a functioning sensor layer.</string>
+<string name="guide_us_body_link_1">Go to the Applying guide</string>
+<string name="guide_us_body_link_2">Go to Dry applying tips</string>
+<string name="guide_us_subtitle_1">Understand more about Heylo™ sensor layers, and what to do with sensor Status updates</string>
+<string name="guide_us_subtitle_2">There \'might\' be a problem</string>
+<string name="guide_us_subtitle_3">Sensors \'worn out\'</string>
+<string name="guide_us_subtitle_4">Sensors or skin are \'wet\'</string>
+<string name="guide_us_subtitle_5">Sensors layer \'damaged\'</string>
+<string name="guide_us_title">Understanding sensors</string>
 <string name="guide_wiping_1_image">[English translation is missing]</string>
 <string name="guide_wiping_1_text">[English translation is missing]</string>
 <string name="guide_wiping_2_image">[English translation is missing]</string>
@@ -400,6 +412,8 @@
 <string name="guides_ct_title">Connection &amp; transmitter</string>
 <string name="guides_da_card_description">Keep skin and adhesive dry for the best TestProduct experience</string>
 <string name="guides_da_card_title">Dry applying tips</string>
+<string name="guides_da_us_description">What to do with sensor Status updates</string>
+<string name="guides_da_us_title">Understanding sensors</string>
 <string name="guides_dt_card_description">If your transmitter is lost or broken, this simple guide shows you how to delete it</string>
 <string name="guides_dt_card_title">Delete a transmitter</string>
 <string name="guides_faq_description">Answers to frequently asked question about TestProduct</string>
@@ -752,7 +766,7 @@
 <string name="onboarding_value_proposition_screen_3_description">TestProduct is connected to your smartphone view Bluetooth, and will notify discreetly when leakage is detected, it also allows you to discreetly check the status of your baseplate directly in the app.</string>
 <string name="onboarding_value_proposition_screen_3_title">Notifications directly to your smartphone</string>
 <string name="overlay_battery_critical">Charge now to stay informed.</string>
-<string name="overlay_battery_low_title">Transmitter battery empty.</string>
+<string name="overlay_battery_low_title">Transmitter battery low.</string>
 <string name="overlay_battery_second_transmitter_charged_title">Back-up transmitter fully charged.</string>
 <string name="overlay_battery_second_transmitter_charging_title">The other transmitter is charging.</string>
 <string name="overlay_ble_disconnected">Connect now to stay informed.</string>

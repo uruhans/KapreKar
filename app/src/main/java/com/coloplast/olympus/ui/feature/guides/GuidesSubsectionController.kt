@@ -37,6 +37,7 @@ class GuidesSubsectionController(args: Bundle): BaseController<ControllerGuidesS
       GuidesMenuSubsection.APPLYING_CHANGING -> {
         add(GuideCard.APPLYING_GUIDE)
         add(GuideCard.DRY_APPLYING_TIPS)
+        add(GuideCard.UNDERSTANDING_SENSORS)
       }
       GuidesMenuSubsection.CONNECTION_AND_TRANSMITTER -> {
         add(GuideCard.CONNECTION_GUIDE)
@@ -80,6 +81,7 @@ class GuidesSubsectionController(args: Bundle): BaseController<ControllerGuidesS
       GuideCard.APP_TOUR -> Pair(getContentRouter(), AppTourFlowController.routerTransaction())
       GuideCard.APPLYING_GUIDE -> Pair(getContentRouter(), GuideApplyingTransmitterFlowController.routerTransaction())
       GuideCard.DRY_APPLYING_TIPS -> Pair(router, GuideController.routerTransaction(GuideType.DRY_APPLYING_TIPS))
+      GuideCard.UNDERSTANDING_SENSORS -> Pair(router, GuideController.routerTransaction(GuideType.DRY_APPLYING_TIPS)) //TODO show guide https://jira.trifork.com/browse/CPO-1051
       GuideCard.CONNECTION_GUIDE -> Pair(router, GuideController.routerTransaction(GuideType.CONNECTION))
       GuideCard.CHARGING_GUIDE -> Pair(router, GuideController.routerTransaction(GuideType.CHARGING))
       GuideCard.LOCATION_GUIDE -> Pair(getContentRouter(), LocationGuideFlowController.routerTransaction())

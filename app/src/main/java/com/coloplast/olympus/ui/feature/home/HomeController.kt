@@ -337,9 +337,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
           removeBleDisconnectOverlay = false
           ConnectingController.routerTransaction()
         }
-        UiState.INITIAL -> {
-          UnknownController.routerTransaction()
-        }
+        UiState.INITIAL,
         UiState.CONNECTING -> {
           ConnectingController.routerTransaction()
         }

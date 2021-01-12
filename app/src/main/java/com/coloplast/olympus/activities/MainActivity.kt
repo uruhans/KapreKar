@@ -27,32 +27,32 @@ import org.koin.android.ext.android.inject
 import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
-  
+
   private lateinit var navigation: Navigation
-  
+
   private val currentUser: Me by inject()
   private val serviceStateDispatcher: ServiceStateDispatcher by inject()
   private val bluetoothManager: BluetoothManager by inject()
-  
+
   private val compositeDisposable = CompositeDisposable()
   private val changeNavigationRelay: PublishRelay<Int> = PublishRelay.create()
-  
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
-    
+
     // we find the top level of the android view hierarchy
     val contentFrameLayout: ContentFrameLayout = findViewById(android.R.id.content)
     // inflate a router and attach it to the top level view
     layoutInflater.inflate(R.layout.controller_content_overlay, contentFrameLayout, true)
-    
+
     // initialize routers
     initializeRouters(savedInstanceState)
-    
+
     if (!navigation.getContentRouter()!!.hasRootController()) {
       navigation.getContentRouter()!!.setRoot(SplashController.routerTransaction())
     }
-    
+
     // code to verify that the user is logged in, and if not display the LandingPage
     compositeDisposable.add(
       currentUser.currentUserObservable()
@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity() {
         .delay(500, TimeUnit.MILLISECONDS)
         .bind(openLoginScreen())
     )
-    
+
     // this observable listens to drawer state changes
     compositeDisposable.add(
       DrawerStateDispatcher.drawerStateObservable()
@@ -82,7 +82,7 @@ class MainActivity : AppCompatActivity() {
      */
     compositeDisposable.add(
       serviceStateDispatcher.serviceStateObservable()
-        .filter { it == ServiceStateDispatcher.ServiceState.START_SERVICE}
+        .filter { it == ServiceStateDispatcher.ServiceState.START_SERVICE }
         .filter { !BluetoothConnectionService.isRunning }
         .delay(500, TimeUnit.MILLISECONDS)
         .subscribe { startService() }
@@ -90,17 +90,17 @@ class MainActivity : AppCompatActivity() {
 
     compositeDisposable.add(
       bluetoothManager.bluetoothStateObservable()
-//        .map {
-//          @Suppress("NON_EXHAUSTIVE_WHEN")
-//          when(it) {
-////            BluetoothState.READY -> {
-////              serviceStateDispatcher.serviceRelay.accept(ServiceStateDispatcher.ServiceState.START_SERVICE)
-////            }
-////            BluetoothState.BLUETOOTH_NOT_ENABLED -> {
-////              serviceStateDispatcher.serviceRelay.accept(ServiceStateDispatcher.ServiceState.STOP_SERVICE)
-////            }
-//          }
-//        }
+        .map {
+          @Suppress("NON_EXHAUSTIVE_WHEN")
+          when (it) {
+            BluetoothState.READY -> {
+              serviceStateDispatcher.serviceRelay.accept(ServiceStateDispatcher.ServiceState.START_SERVICE)
+            }
+            BluetoothState.BLUETOOTH_NOT_ENABLED -> {
+              serviceStateDispatcher.serviceRelay.accept(ServiceStateDispatcher.ServiceState.STOP_SERVICE)
+            }
+          }
+        }
         .subscribe()
     )
 
@@ -110,40 +110,40 @@ class MainActivity : AppCompatActivity() {
   private fun startService() {
     startService(Intent(this, BluetoothConnectionService::class.java))
   }
-  
+
   private fun openLoginScreen(): io.reactivex.functions.Function<Observable<CurrentUser>, Disposable> {
     return RxUi.ui {
       navigation.getContentRouter()?.setRoot(
-            LandingController.routerTransaction()
-              .pushChangeHandler(VerticalChangeHandler())
-              .popChangeHandler(VerticalChangeHandler())
-          )
+        LandingController.routerTransaction()
+          .pushChangeHandler(VerticalChangeHandler())
+          .popChangeHandler(VerticalChangeHandler())
+      )
     }
   }
-  
+
   private fun initializeRouters(args: Bundle?) {
     navigation = Navigation.Builder()
       .addRouter(R.id.content_overlay_controller)
       .addRouter(R.id.main_navigation_controller_container)
       .build(this, args)
   }
-  
+
   override fun onBackPressed() {
     // fixed a case where a dialog controller could be shown on the overlay router, but
     // it was still possible to go back using hardware buttons
     if (navigation.getOverlayRouter()!!.handleBack()) {
       return
     }
-    
+
     // if the controller on the router doesn't handle back, let the activity handle back normally
     if (!navigation.getContentRouter()!!.handleBack()) {
       super.onBackPressed()
     }
   }
-  
+
   override fun onDestroy() {
     super.onDestroy()
-    
+
     if (!compositeDisposable.isDisposed) {
       compositeDisposable.dispose()
     }

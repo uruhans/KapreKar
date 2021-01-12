@@ -6,9 +6,9 @@ import com.coloplast.olympus.ui.feature.guides.models.ButtonType
 class ButtonItem(
   @StringRes val text: Int,
   val buttonType: ButtonType = ButtonType.BACK,
-  private val clickCallback: (ButtonType) -> Unit) {
+  private val clickCallback: (ButtonType, Int) -> Unit) {
 
   fun onButtonClicked() {
-    clickCallback.invoke(buttonType)
+    clickCallback.invoke(buttonType, text)
   }
 }

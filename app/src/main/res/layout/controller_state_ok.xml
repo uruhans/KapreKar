@@ -6,17 +6,27 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="bottom"
-    android:orientation="vertical"
-    android:paddingStart="@dimen/spacing_standard"
-    android:paddingEnd="@dimen/spacing_standard">
+    android:orientation="vertical">
 
     <TextView
-      style="@style/Headline.Large"
+      style="@style/TextStyle.Coloplast.Bold.DarkGrey.32"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:fontFamily="@font/coloplast"
-      android:text="@string/status_all_ok"
+      android:layout_marginStart="@dimen/spacing_standard"
+      android:layout_marginTop="@dimen/spacing_standard"
+      android:layout_marginEnd="@dimen/spacing_standard"
+      android:text="@string/status_all_ok_title" />
+
+    <TextView
+      style="@style/TextStyle.Coloplast.Regular.ClearGrey.30"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="@dimen/spacing_standard"
+      android:layout_marginTop="@dimen/spacing_half"
+      android:layout_marginEnd="@dimen/spacing_standard"
+      android:layout_marginBottom="@dimen/spacing_double"
       android:textColor="@color/grey"
+      android:text="@string/status_all_ok"
       android:transitionName="test" />
 
   </LinearLayout>

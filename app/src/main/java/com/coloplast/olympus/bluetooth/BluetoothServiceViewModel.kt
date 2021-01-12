@@ -4,6 +4,7 @@ import com.artemzin.rxui.kotlin.bind
 import com.coloplast.olympus.bluetooth.businesslayer.BluetoothManager
 import com.coloplast.olympus.bluetooth.businesslayer.DeviceConnection
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
+import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
 import com.coloplast.olympus.bluetooth.businesslayer.models.DeviceResult
 import com.coloplast.olympus.bluetooth.model.*
 import com.coloplast.olympus.businesslayer.interfaces.TransmitterComponent
@@ -57,6 +58,7 @@ class BluetoothServiceViewModel(
         // here we get all transmitters stored locally in the database
         // we are doing it as a single because we dont want it to notify us when database changes occur
         transmitterComponent.getTransmittersAsSingle()
+          .subscribeOn(Schedulers.io())
           .toObservable()
       }
       // only begin connection flow if we actually have some transmitters to connect to
@@ -95,7 +97,7 @@ class BluetoothServiceViewModel(
     return compositeDisposable
   }
 
-  private fun connectObservable(macAddress: String) : Observable<BluetoothServiceModel> {
+  private fun connectObservable(macAddress: String): Observable<BluetoothServiceModel> {
     val stateMachine = UiStateMachineImpl()
     val overlayStateMachine = OverlayStateMachineImpl()
 

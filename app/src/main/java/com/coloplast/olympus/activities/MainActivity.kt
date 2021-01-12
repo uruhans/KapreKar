@@ -9,7 +9,9 @@ import com.artemzin.rxui.kotlin.bind
 import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import com.coloplast.olympus.Me
 import com.coloplast.olympus.R
+import com.coloplast.olympus.bluetooth.businesslayer.BluetoothManager
 import com.coloplast.olympus.bluetooth.businesslayer.ServiceStateDispatcher
+import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
 import com.coloplast.olympus.bluetooth.service.BluetoothConnectionService
 import com.coloplast.olympus.shared.models.CurrentUser
 import com.coloplast.olympus.ui.common.DrawerStateDispatcher
@@ -30,6 +32,7 @@ class MainActivity : AppCompatActivity() {
   
   private val currentUser: Me by inject()
   private val serviceStateDispatcher: ServiceStateDispatcher by inject()
+  private val bluetoothManager: BluetoothManager by inject()
   
   private val compositeDisposable = CompositeDisposable()
   private val changeNavigationRelay: PublishRelay<Int> = PublishRelay.create()
@@ -83,6 +86,22 @@ class MainActivity : AppCompatActivity() {
         .filter { !BluetoothConnectionService.isRunning }
         .delay(500, TimeUnit.MILLISECONDS)
         .subscribe { startService() }
+    )
+
+    compositeDisposable.add(
+      bluetoothManager.bluetoothStateObservable()
+//        .map {
+//          @Suppress("NON_EXHAUSTIVE_WHEN")
+//          when(it) {
+////            BluetoothState.READY -> {
+////              serviceStateDispatcher.serviceRelay.accept(ServiceStateDispatcher.ServiceState.START_SERVICE)
+////            }
+////            BluetoothState.BLUETOOTH_NOT_ENABLED -> {
+////              serviceStateDispatcher.serviceRelay.accept(ServiceStateDispatcher.ServiceState.STOP_SERVICE)
+////            }
+//          }
+//        }
+        .subscribe()
     )
 
     startService()

@@ -151,7 +151,6 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
             BluetoothState.BLUETOOTH_NOT_ENABLED -> {
               isConnected.set(false)
               changeUiState(UiState.BLUETOOTH_NOT_ENABLED)
-              serviceStateDispatcher.serviceRelay.accept(ServiceStateDispatcher.ServiceState.STOP_SERVICE)
             }
             BluetoothState.LOCATION_SERVICES_NOT_ENABLED -> {
               changeUiState(UiState.LOCATION_SERVICES_NOT_ENABLED)
@@ -161,7 +160,6 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, Permissi
             }
             BluetoothState.READY -> {
               if (previousBleState == BluetoothState.BLUETOOTH_NOT_ENABLED || previousBleState == BluetoothState.LOCATION_SERVICES_NOT_ENABLED) {
-                serviceStateDispatcher.serviceRelay.accept(ServiceStateDispatcher.ServiceState.START_SERVICE)
                 ServiceDispatcher.dispatchEvent(ServiceEvent.RetryConnection())
               }
 

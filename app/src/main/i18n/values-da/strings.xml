@@ -454,7 +454,7 @@
 <string name="lock_notification_firmware_update">TestProduct won\'t be able to send you leakage notification until the software on your transmitter is updated.</string>
 <string name="lock_notification_firmware_update_title">Critical transmitter software update required</string>
 <string name="lock_notification_inner">Tjek snart.</string>
-<string name="lock_notification_inner_blind">Inerdste sensorer virker ikke.</string>
+<string name="lock_notification_inner_blind">Inderste sensorer virker ikke.</string>
 <string name="lock_notification_inner_blind_leak_l">lock_notification_inner_blind_leak_l</string>
 <string name="lock_notification_moisture">Sensorerne virker ikke.</string>
 <string name="lock_notification_multiple_transmitters">[Missing translation]</string>

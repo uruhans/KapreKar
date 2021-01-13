@@ -21,9 +21,13 @@ class BluetoothNotEnabledController : BaseHomeUIController<ControllerStateBlueto
   }
 
   override fun patchVisible(): Boolean {
-    return false
+    return true
   }
-  
+
+  override fun patchInError(): Boolean {
+    return true
+  }
+
   fun enableBluetoothClicked() {
     Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE).also {
       startActivityForResult(it, HomeController.REQUEST_CODE_BLUETOOTH_ENABLE)

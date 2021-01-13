@@ -28,6 +28,7 @@ import com.coloplast.olympus.bluetooth.model.PatchProbability
 import com.coloplast.olympus.bluetooth.model.ServiceEvent
 import com.coloplast.olympus.bluetooth.model.StateChange
 import com.coloplast.olympus.databinding.ControllerHomeBinding
+import com.coloplast.olympus.notifications.OlympusNotificationManager
 import com.coloplast.olympus.shared.preferences.Preferences
 import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.common.DrawerState
@@ -69,7 +70,8 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
   private val viewModel: HomeViewModel by inject()
   private val preferences: Preferences by inject()
   private val breachesOccurred: BreachesOccurred by inject()
-  private val serviceStateDispatcher: ServiceStateDispatcher by inject()
+
+  private val olympusNotificationManager: OlympusNotificationManager by inject()
 
   private val requestConnectionStateRelay = PublishRelay.create<String>()
   private val stitchOrResetRelay = PublishRelay.create<StitchOrResetObject>()
@@ -150,6 +152,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
             }
             BluetoothState.BLUETOOTH_NOT_ENABLED -> {
               isConnected.set(false)
+              olympusNotificationManager.send("", UiState.BLUETOOTH_NOT_ENABLED)
               changeUiState(UiState.BLUETOOTH_NOT_ENABLED)
             }
             BluetoothState.LOCATION_SERVICES_NOT_ENABLED -> {

@@ -27,7 +27,7 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
       send(macAddress, UiState.fromNotificationId(notificationId))
     }
   }
-  
+
   /**
    * send notifications based on current UiState
    */
@@ -37,7 +37,9 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
       return
     }
 
-    latestState[macAddress] = state.notificationId()
+    if(macAddress.isNotEmpty()) {
+      latestState[macAddress] = state.notificationId()
+    }
 
     val payload = when (state) {
       UiState.FIRMWARE_AVAILABLE -> {
@@ -49,7 +51,9 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
       UiState.NO_CHANGE -> { null }
       UiState.TRANSMITTER_DELETED -> { null }
       UiState.INITIAL -> { null }
-      UiState.BLUETOOTH_NOT_ENABLED -> { null }
+      UiState.BLUETOOTH_NOT_ENABLED -> {
+        NotificationPayload(state.notificationId(), R.string.lock_notification_ble_off)
+      }
       UiState.LOCATION_SERVICES_NOT_ENABLED -> { null }
       UiState.CONNECTING -> { null }
       UiState.SCANNING -> { null }
@@ -101,12 +105,12 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
         null
       }
     }
-    
+
     payload?.let {
       notificationCenter.show(it)
     }
   }
-  
+
   /**
    * Send notification based on current OverlayState
    */
@@ -128,12 +132,12 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
         NotificationPayload(state.notificationId(), R.string.lock_notification_ble_disconnected)
       }
     }
-  
+
     payload?.let {
       notificationCenter.show(it)
     }
   }
-  
+
   /**
    * cancel (remove) a specific notification
    */

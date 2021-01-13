@@ -4,7 +4,7 @@
   xmlns:bind="http://schemas.android.com/apk/res-auto">
 
   <data>
-    <import type="android.view.View"/>
+
     <variable
       name="controller"
       type="com.coloplast.olympus.ui.feature.uistates.OkController" />
@@ -20,27 +20,27 @@
     android:paddingEnd="@dimen/spacing_standard">
 
     <TextView
-      style="@style/Headline.Large"
+      style="@style/TextStyle.Coloplast.Bold.DarkGrey.32"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:fontFamily="@font/coloplast"
-      android:text="@string/main_screen_welcome_title2"
+      android:layout_marginTop="@dimen/spacing_standard"
+      android:text="@string/status_all_ok_title"
       android:transitionName="test" />
 
     <TextView
-      style="@style/Headline.Large"
+      style="@style/TextStyle.Coloplast.Regular.ClearGrey.30"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:layout_marginTop="@dimen/spacing_half"
       android:layout_marginBottom="@dimen/spacing_double"
-      android:fontFamily="@font/coloplast"
-      android:text="@string/main_screen_welcome_body2"
+      android:text="@string/status_all_ok"
       android:textColor="@color/grey" />
 
-    <include layout="@layout/item_app_guide_button"
+    <include
       android:id="@+id/includeBtn"
-      bind:isVisible="@{controller.shouldShowAppTourButton}"
-      app:buttonClickListener="@{() -> controller.startAppTour()}"/>
+      layout="@layout/item_app_guide_button"
+      app:buttonClickListener="@{() -> controller.startAppTour()}"
+      bind:isVisible="@{controller.shouldShowAppTourButton}" />
+
   </LinearLayout>
 </layout>
-
-

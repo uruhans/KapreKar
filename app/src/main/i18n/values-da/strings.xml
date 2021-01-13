@@ -339,7 +339,7 @@
 <string name="guide_lg7_subtitle_ios">The map shows where location data was used to reconnect your phone and transmitter. Coloplast will never actively track or record your location.</string>
 <string name="guide_lg7_title">Will it drain my phone battery?</string>
 <string name="guide_lg7_title_ios">What does the map show?</string>
-<string name="guide_lg8_subtitle">You now know the basics of how your location is used to reconnect your phoen and transmitter. Remember to keep your location settings to allow \'Always\' to keep informed at all times.</string>
+<string name="guide_lg8_subtitle">You now know the basics of how your location is used to reconnect your phoen and transmitter. Remember to keep your location settings to allow \'Always\' to keep informed at all time.</string>
 <string name="guide_lg8_subtitle_ios">Avoid setting location access to \'Only While Using\' or you will not be kept informed of leakage when the app is closed or your phone is locked.</string>
 <string name="guide_lg8_title">Guide complete</string>
 <string name="guide_lg8_title_ios">Avoid \'Only While Using\'</string>
@@ -442,7 +442,7 @@
 <string name="lock_notification_action_snooze">Snooze.</string>
 <string name="lock_notification_app_update">TestProduct will no longer be able to function until the app is updated.</string>
 <string name="lock_notification_app_update_title">Critical app update required</string>
-<string name="lock_notification_battery_critical">Transmitterens batteri er meget lavt.</string>
+<string name="lock_notification_battery_critical">Transmitterens batteri er lavt.</string>
 <string name="lock_notification_ble_disconnected">Ingen Bluetooth forbindelse.</string>
 <string name="lock_notification_ble_off">Bluetooth er slået fra.</string>
 <string name="lock_notification_broken">Beskadigede sensorer.</string>
@@ -450,11 +450,11 @@
 <string name="lock_notification_channel_id">1</string>
 <string name="lock_notification_channel_name">TestProduct Status Notifikationer</string>
 <string name="lock_notification_dirt">Blokeret transmitterforbindelse.</string>
-<string name="lock_notification_disconnection_battery">Transmitterens batteri er løbet tør. Oplad venligst nu.</string>
+<string name="lock_notification_disconnection_battery">Transmitterens batteri er løbet tør.</string>
 <string name="lock_notification_firmware_update">TestProduct won\'t be able to send you leakage notification until the software on your transmitter is updated.</string>
 <string name="lock_notification_firmware_update_title">Critical transmitter software update required</string>
 <string name="lock_notification_inner">Tjek snart.</string>
-<string name="lock_notification_inner_blind">Sensorerne virker ikke.</string>
+<string name="lock_notification_inner_blind">Inderste sensorer virker ikke.</string>
 <string name="lock_notification_inner_blind_leak_l">lock_notification_inner_blind_leak_l</string>
 <string name="lock_notification_moisture">Sensorerne virker ikke.</string>
 <string name="lock_notification_multiple_transmitters">[Missing translation]</string>

@@ -9,7 +9,6 @@ import com.coloplast.olympus.shared.moshi.deserialize
 import com.coloplast.olympus.shared.moshi.serialize
 import com.coloplast.olympus.shared.preferences.Preferences
 import com.coloplast.olympus.ui.common.Stack
-import com.coloplast.olympus.ui.feature.statemachine.models.OverlayState
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
 import timber.log.Timber
 import java.time.Instant
@@ -166,7 +165,6 @@ class TransmitterManager(
 
           if(otherPackage?.bleDevice?.isBlocked() == false) {
             patchProbability = calculateSplitCommand(from, otherCompromised)
-            packageToGetStitchArrayFrom = otherPackage
           }
         }
         else {
@@ -177,6 +175,10 @@ class TransmitterManager(
             val from = if(blocked) null else lastOtherValidDetachState?.bleDevice?.peripheral?.transmitter?.compromised
             patchProbability = calculateSplitCommand(from, incomingCompromised)
           }
+        }
+
+        otherPackage?.let {
+          packageToGetStitchArrayFrom = it
         }
       }
       else {

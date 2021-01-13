@@ -51,9 +51,9 @@ class HomeViewModel(
           HomeUiModel.DeviceUpdate(it)
         }
       }
-    
-    val rawPackageUpdateObservable = StateDispatcher.rawPackageUpdateObservable()
-      .map { HomeUiModel.RawDataPackageUpdate(it) }
+
+    val animationResetObservable = Observable.interval(1, 10, TimeUnit.SECONDS)
+      .map { HomeUiModel.AnimationReset() }
 
     val stitchTransmitterObservable = uiView.requestStitching()
       .switchMap { stitch ->
@@ -83,9 +83,7 @@ class HomeViewModel(
     val noTransmittersObservable: Observable<HomeUiModel> = transmittersObservable
       .subscribeOn(Schedulers.io())
       .filter { it.isEmpty() }
-      .map<HomeUiModel> {
-        HomeUiModel.NoTransmittersFound()
-      }
+      .map { HomeUiModel.NoTransmittersFound() }
 
     val syncUserObservable = userComponent.syncUser(userId)
       .subscribeOn(Schedulers.io())
@@ -94,7 +92,7 @@ class HomeViewModel(
     disposable.add(syncTransmittersObservable.subscribe())
     disposable.add(syncUserObservable.subscribe())
 
-    disposable.add(Observable.merge(stateUpdate, bluetoothStateObservable, rawPackageUpdateObservable, noTransmittersObservable).bind(uiView.render()))
+    disposable.add(Observable.merge(stateUpdate, bluetoothStateObservable, animationResetObservable, noTransmittersObservable).bind(uiView.render()))
     disposable.add(Observable.merge(stitchTransmitterObservable, scanningObservable, doUntil).bind(uiView.render()))
 
     return disposable

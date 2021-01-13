@@ -160,6 +160,11 @@ dependencies {
   implementation 'me.tatarka.bindingcollectionadapter2:bindingcollectionadapter:4.0.0'
   implementation 'me.tatarka.bindingcollectionadapter2:bindingcollectionadapter-recyclerview:4.0.0'
 
+  //Microsoft Analytics
+  def appCenterSdkVersion = '4.1.0'
+  implementation "com.microsoft.appcenter:appcenter-analytics:${appCenterSdkVersion}"
+  implementation "com.microsoft.appcenter:appcenter-crashes:${appCenterSdkVersion}"
+
   testImplementation 'junit:junit:4.13'
   testImplementation "org.koin:koin-test:$koin_version"
   androidTestImplementation 'androidx.test.ext:junit:1.1.2'

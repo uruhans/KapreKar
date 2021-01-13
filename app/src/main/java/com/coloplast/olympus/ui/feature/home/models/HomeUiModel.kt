@@ -10,7 +10,7 @@ sealed class HomeUiModel : UiModel {
   
   data class BluetoothIssue(val bluetoothState: BluetoothState) : HomeUiModel()
   data class DeviceUpdate(val stateChange: StateChange) : HomeUiModel()
-  data class RawDataPackageUpdate(val macAddress: String, val lastUpdate: LocalDateTime = LocalDateTime.now()) : HomeUiModel()
+  data class AnimationReset(val lastUpdate: LocalDateTime = LocalDateTime.now()) : HomeUiModel()
   data class ConnectionStateUpdate(val connectionState: BleConnectionState) : HomeUiModel()
   data class StitchOrResetComplete(val complete: Boolean = true) : HomeUiModel()
   data class Scanning(val scanning: Unit = Unit) : HomeUiModel()

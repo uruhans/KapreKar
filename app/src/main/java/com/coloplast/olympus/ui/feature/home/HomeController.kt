@@ -50,6 +50,7 @@ import com.coloplast.olympus.ui.feature.statemachine.models.OverlayState
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
 import com.coloplast.olympus.ui.feature.transmitters.TransmittersController
 import com.coloplast.olympus.ui.feature.uistates.*
+import com.coloplast.olympus.utils.Utils
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
@@ -106,7 +107,13 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
 
     // we want to force an update if we are coming from the background
     if (currentUiState != UiState.INITIAL) {
-      changeUiState(currentUiState, true)
+      if(currentUiState == UiState.LOCATION_SERVICES_NOT_ENABLED) {
+        compositeDisposable.clear()
+        compositeDisposable.add(viewModel.bind(this))
+      }
+      else {
+        changeUiState(currentUiState, true)
+      }
     }
   }
 
@@ -144,7 +151,10 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
             BluetoothState.BLUETOOTH_NOT_AVAILABLE -> {
             }
             BluetoothState.LOCATION_PERMISSION_NOT_GRANTED -> {
-            //This is only required when scanning for transmitter
+              //This is only required when scanning for transmitter
+              if(!Utils.locationEnabled()) {
+                changeUiState(UiState.LOCATION_SERVICES_NOT_ENABLED)
+              }
             }
             BluetoothState.BLUETOOTH_NOT_ENABLED -> {
               isConnected.set(false)
@@ -167,7 +177,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
                 currentUiState == UiState.LOCATION_SERVICES_NOT_ENABLED
               ) {
 
-                StateDispatcher.dispatchScanning()
+                //StateDispatcher.dispatchScanning()
                 changeUiState(UiState.CONNECTING)
               }
             }
@@ -194,8 +204,10 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
           changeUiState(UiState.CONNECTING)
         }
         is HomeUiModel.NoTransmittersFound -> {
-          lastCheck.set(uiModel.lastUpdate)
-          changeUiState(UiState.TRANSMITTERS_EMPTY)
+          if(Utils.locationEnabled()) {
+            lastCheck.set(uiModel.lastUpdate)
+            changeUiState(UiState.TRANSMITTERS_EMPTY)
+          }
         }
         is HomeUiModel.StitchOrResetComplete -> {
           /* no-op */

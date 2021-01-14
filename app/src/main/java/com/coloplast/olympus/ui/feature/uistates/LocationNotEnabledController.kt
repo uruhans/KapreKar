@@ -25,6 +25,7 @@ class LocationNotEnabledController : BaseHomeUIController<ControllerStateLocatio
 
   fun enableLocationClicked() {
     Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS).also {
+      it.flags = Intent.FLAG_ACTIVITY_NEW_TASK
       startActivity(it)
     }
   }

@@ -96,15 +96,14 @@ class MainActivity : AppCompatActivity() {
             BluetoothState.READY -> {
               serviceStateDispatcher.serviceRelay.accept(ServiceStateDispatcher.ServiceState.START_SERVICE)
             }
-            BluetoothState.BLUETOOTH_NOT_ENABLED -> {
+            BluetoothState.BLUETOOTH_NOT_ENABLED,
+            BluetoothState.LOCATION_PERMISSION_NOT_GRANTED-> {
               serviceStateDispatcher.serviceRelay.accept(ServiceStateDispatcher.ServiceState.STOP_SERVICE)
             }
           }
         }
         .subscribe()
     )
-
-    startService()
   }
 
   private fun startService() {

@@ -40,14 +40,14 @@ class AddTransmitterAT9ViewModel(
           // only return distinct items (based on macAddress)
           .distinct { scanResult: ScanResult -> scanResult.macAddress }
           // shut down the scanning after 14 seconds
-          // it's 14 (and not 15) because the buffer would stop a little bit before this
+          // it's 5 (and not 6) because the buffer would stop a little bit before this
           // which resulted in the buffer being emptied twice (which caused issues in the UI)
-          .takeUntil(Observable.interval(14, TimeUnit.SECONDS))
-          // timeout after 15 seconds
-          .timeout(15, TimeUnit.SECONDS)
-          // buffer *all* results for 15 seconds
+          .takeUntil(Observable.interval(5, TimeUnit.SECONDS))
+          // timeout after 6 seconds
+          .timeout(6, TimeUnit.SECONDS)
+          // buffer *all* results for 6 seconds
           // this allows the observable to onNext a list instead of single results
-          .buffer(15, TimeUnit.SECONDS)
+          .buffer(6, TimeUnit.SECONDS)
           .map {
             if (it.isEmpty()) {
               SearchTransmitterUiModel.NothingFound()
@@ -88,8 +88,8 @@ class AddTransmitterAT9ViewModel(
                   .skipWhile { it == BleConnectionState.DISCONNECTED }
                   // we are only interested in fully connected
                   .filter { it == BleConnectionState.CONNECTED }
+                  .delay(3, TimeUnit.SECONDS)
                   .map<SearchTransmitterUiModel> { SearchTransmitterUiModel.ConnectionSuccessful(scanResult.macAddress) }
-
                   // if a connection has not happened within a 30 second window, we assume something is wrong
                   .takeUntil(Observable.timer(30, TimeUnit.SECONDS)
                     .flatMap {

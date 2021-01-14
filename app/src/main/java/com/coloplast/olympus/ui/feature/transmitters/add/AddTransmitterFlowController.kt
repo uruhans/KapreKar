@@ -3,7 +3,6 @@ package com.coloplast.olympus.ui.feature.transmitters.add
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.provider.Settings
 import com.bluelinelabs.conductor.Controller
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
@@ -170,9 +169,6 @@ class AddTransmitterFlowController(args: Bundle) : TopMenuFlowFactoryController<
       DIALOG_CALL_HELP -> {
         callHelpDialogController = null
       }
-//      REQUEST_CODE_PERMISSION_LOCATION -> {
-//        requestPermission(this, REQUEST_CODE_PERMISSION_LOCATION, OSUtils.bleLocationPermission())
-//      }
       REQUEST_CODE_PERMISSION_RATIONALE -> {
         requestPermissionAgain(this, REQUEST_CODE_PERMISSION_LOCATION, OSUtils.bleLocationPermission())
       }

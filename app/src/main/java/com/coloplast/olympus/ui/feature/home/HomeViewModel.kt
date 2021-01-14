@@ -21,7 +21,6 @@ import timber.log.Timber
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-
 class HomeViewModel(
   private val bluetoothManager: BluetoothManager,
   private val transmitterComponent: TransmitterComponent,
@@ -63,32 +62,11 @@ class HomeViewModel(
           .toObservable()
       }
 
-//    val scanningObservable = StateDispatcher.scanningObservable()
-//      .map<HomeUiModel> { HomeUiModel.Scanning() }
-//      .startWith(HomeUiModel.Initial())
-
     val transmittersObservable = transmitterComponent.getTransmittersAsSingle()
       .subscribeOn(Schedulers.io())
       .toObservable()
       .filter { list -> list.isEmpty() }
 
-//    val doUntil = scanningObservable
-//      .switchMap {
-//        Observable.interval(5, TimeUnit.SECONDS)
-//          .flatMap {
-//            transmittersObservable
-//              .map {
-//                if (it.isEmpty()) {
-//                  HomeUiModel.NoTransmittersFound()
-//                }
-//                else {
-//                  HomeUiModel.ScanningStopped()
-//                }
-//              }
-//          }
-//          .take(1)
-//      }
-    
     val userId = UUID.fromString(preferences.userLoggedIn)
 
     val syncTransmittersObservable = transmitterComponent.syncTransmitters(userId)

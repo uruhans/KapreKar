@@ -104,8 +104,6 @@ class MainActivity : AppCompatActivity() {
         }
         .subscribe()
     )
-
-    //startService()
   }
 
   private fun startService() {

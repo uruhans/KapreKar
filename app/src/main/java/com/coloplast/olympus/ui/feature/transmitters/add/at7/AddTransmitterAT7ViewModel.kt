@@ -15,7 +15,7 @@ class AddTransmitterAT7ViewModel(private val bluetoothManager: BluetoothManager)
 
     val bluetoothStateObservable: Observable<AddTransmitterAT7UiModel> =
       bluetoothManager.bluetoothStateObservable()
-        .map<AddTransmitterAT7UiModel> { AddTransmitterAT7UiModel(it) }
+        .map { AddTransmitterAT7UiModel(it) }
 
     disposable.add(bluetoothStateObservable.bind(uiView.render()))
     return disposable

@@ -28,6 +28,7 @@ import com.coloplast.olympus.bluetooth.model.PatchProbability
 import com.coloplast.olympus.bluetooth.model.ServiceEvent
 import com.coloplast.olympus.bluetooth.model.StateChange
 import com.coloplast.olympus.databinding.ControllerHomeBinding
+import com.coloplast.olympus.notifications.OlympusNotificationManager
 import com.coloplast.olympus.shared.preferences.Preferences
 import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.common.DrawerState
@@ -42,17 +43,14 @@ import com.coloplast.olympus.ui.feature.guides.GuidesFlowController
 import com.coloplast.olympus.ui.feature.guides.SingleGuideFlowController
 import com.coloplast.olympus.ui.feature.guides.articles.models.GuideType
 import com.coloplast.olympus.ui.feature.guides.flows.tour.AppTourFlowController
-import com.coloplast.olympus.ui.feature.home.models.HomeUiModel
-import com.coloplast.olympus.ui.feature.home.models.LastCheckVisible
-import com.coloplast.olympus.ui.feature.home.models.PatchVisible
-import com.coloplast.olympus.ui.feature.home.models.SideMenuType
-import com.coloplast.olympus.ui.feature.home.models.StitchOrResetObject
+import com.coloplast.olympus.ui.feature.home.models.*
 import com.coloplast.olympus.ui.feature.profile.ProfileController
 import com.coloplast.olympus.ui.feature.settings.SettingsFlowController
 import com.coloplast.olympus.ui.feature.statemachine.models.OverlayState
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
 import com.coloplast.olympus.ui.feature.transmitters.TransmittersController
 import com.coloplast.olympus.ui.feature.uistates.*
+import com.coloplast.olympus.utils.Utils
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
@@ -69,7 +67,8 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
   private val viewModel: HomeViewModel by inject()
   private val preferences: Preferences by inject()
   private val breachesOccurred: BreachesOccurred by inject()
-  private val serviceStateDispatcher: ServiceStateDispatcher by inject()
+
+  private val olympusNotificationManager: OlympusNotificationManager by inject()
 
   private val requestConnectionStateRelay = PublishRelay.create<String>()
   private val stitchOrResetRelay = PublishRelay.create<StitchOrResetObject>()
@@ -108,7 +107,13 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
 
     // we want to force an update if we are coming from the background
     if (currentUiState != UiState.INITIAL) {
-      changeUiState(currentUiState, true)
+      if(currentUiState == UiState.LOCATION_SERVICES_NOT_ENABLED) {
+        compositeDisposable.clear()
+        compositeDisposable.add(viewModel.bind(this))
+      }
+      else {
+        changeUiState(currentUiState, true)
+      }
     }
   }
 
@@ -129,7 +134,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
   override fun render(): Function<Observable<HomeUiModel>, Disposable> {
     return RxUi.ui { uiModel ->
 
-      if(uiModel !is HomeUiModel.RawDataPackageUpdate) {
+      if(uiModel !is HomeUiModel.AnimationReset) {
         Timber.d("uiModel: $uiModel")
       }
 
@@ -146,10 +151,14 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
             BluetoothState.BLUETOOTH_NOT_AVAILABLE -> {
             }
             BluetoothState.LOCATION_PERMISSION_NOT_GRANTED -> {
-            //This is only required when scanning for transmitter
+              //This is only required when scanning for transmitter
+              if(!Utils.locationEnabled()) {
+                changeUiState(UiState.LOCATION_SERVICES_NOT_ENABLED)
+              }
             }
             BluetoothState.BLUETOOTH_NOT_ENABLED -> {
               isConnected.set(false)
+              olympusNotificationManager.send("", UiState.BLUETOOTH_NOT_ENABLED)
               changeUiState(UiState.BLUETOOTH_NOT_ENABLED)
             }
             BluetoothState.LOCATION_SERVICES_NOT_ENABLED -> {
@@ -168,7 +177,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
                 currentUiState == UiState.LOCATION_SERVICES_NOT_ENABLED
               ) {
 
-                StateDispatcher.dispatchScanning()
+                //StateDispatcher.dispatchScanning()
                 changeUiState(UiState.CONNECTING)
               }
             }
@@ -195,8 +204,10 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
           changeUiState(UiState.CONNECTING)
         }
         is HomeUiModel.NoTransmittersFound -> {
-          lastCheck.set(uiModel.lastUpdate)
-          changeUiState(UiState.TRANSMITTERS_EMPTY)
+          if(Utils.locationEnabled()) {
+            lastCheck.set(uiModel.lastUpdate)
+            changeUiState(UiState.TRANSMITTERS_EMPTY)
+          }
         }
         is HomeUiModel.StitchOrResetComplete -> {
           /* no-op */
@@ -261,7 +272,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
             breachesOccurred.clear()
           }
         }
-        is HomeUiModel.RawDataPackageUpdate -> {
+        is HomeUiModel.AnimationReset -> {
           updateAnimation.set(true)
           updateAnimation.notifyChange()
           lastCheck.set(uiModel.lastUpdate)

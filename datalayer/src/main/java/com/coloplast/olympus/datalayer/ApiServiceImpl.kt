@@ -85,7 +85,6 @@ class ApiServiceImpl : ApiService {
   override fun latestFirmware(): Observable<FirmwareContent> {
     return api.getLatestFirmwareVersion()
       .map { it.toFirmware() }
-      .retry(5)
   }
 
   override fun downloadFirmware(url: String): Observable<ByteArray> {
@@ -96,6 +95,5 @@ class ApiServiceImpl : ApiService {
   override fun latestAppVersion(): Observable<AppVersion> {
     return api.getLatestAppVersion()
       .map { it.toAppVersion() }
-      .retry(5)
   }
 }

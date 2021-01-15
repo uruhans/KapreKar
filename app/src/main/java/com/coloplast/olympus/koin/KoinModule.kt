@@ -71,9 +71,9 @@ val koinModule = module {
   single<AppStateComponent> { AppStateComponentImpl() }
 
   /* ViewModels */
-  factory { BluetoothServiceViewModel(get(), get(), get()) }
+  factory { BluetoothServiceViewModel(get(), get(), get(), get()) }
   single { SplashViewModel(get(), get()) }
-  single { HomeViewModel(get(), get(), get(), get(), get()) }
+  single { HomeViewModel(get(), get(), get(), get()) }
   single { TransmittersViewModel(get(), get()) }
   single { AddTransmitterAT9ViewModel(get(), get(), get()) }
   single { AwaitingConnectionViewModel(get()) }

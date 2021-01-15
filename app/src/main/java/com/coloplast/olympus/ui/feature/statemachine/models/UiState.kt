@@ -51,5 +51,26 @@ enum class UiState {
     fun fromNotificationId(notificationId: Int) : UiState {
       return values()[notificationId - MAGIC_NUMBER]
     }
+
+    fun uiStateToUiStateLetter(uiState: UiState): String {
+      when(uiState) {
+        OK_A -> return "A"
+        INNER_BREACH_B -> return "B"
+        OUTER_BREACH_C -> return "C"
+        INNER_BLIND_D -> return "D"
+        TOTAL_BLIND_E -> return "E"
+        PAY_ATTENTION_F -> return "F"
+        WET_MOUNT_G -> return "G"
+        CUTGUARD_BROKEN_I -> return "I"
+        WATER_INGRESS_DETECTION_J -> return "J"
+        CUTGUARD_DIRT_IN_TRANSMITTER_K -> return "K"
+        INNER_BLIND_LEAK_L -> return "L"
+        NO_BATTERY_R -> return "R"
+        TRANSMITTER_DETACHED_V -> return "V"
+        TRANSMITTER_BATTERY_CHARGING_W -> return "W"
+        else -> return ""
+      }
+    }
+
   }
 }

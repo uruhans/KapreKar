@@ -9,5 +9,4 @@ import io.reactivex.Observable
 interface HomeView : UiView<HomeUiModel> {
   fun requestConnectionState() : Observable<String>
   fun requestStitching() : Observable<StitchOrResetObject>
-  fun requestAppUiState() : Observable<AppUIStateObject>
 }

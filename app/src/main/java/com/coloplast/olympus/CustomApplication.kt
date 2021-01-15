@@ -1,6 +1,7 @@
 package com.coloplast.olympus
 
 import android.app.Application
+import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.work.*
 import com.coloplast.olympus.koin.koinModule
 import com.coloplast.olympus.shared.AppSettings
@@ -28,6 +29,11 @@ class CustomApplication : Application() {
       androidContext(this@CustomApplication)
       modules(koinModule)
     }
+
+    ProcessLifecycleOwner
+      .get()
+      .lifecycle
+      .addObserver(AppLifeCycleListener())
 
     if (BuildConfig.DEBUG) {
       scheduleWorkers()

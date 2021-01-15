@@ -13,9 +13,9 @@ class AppStateComponentImpl() : AppStateComponent {
 
   override fun insertAppStatePackage(
     appState: String,
-    internalAppState: String
+    appInBackground: Boolean
   ): Completable {
-    val appStatePackage = AppStatePackage(appState = appState, internalAppState = internalAppState)
+    val appStatePackage = if (appInBackground) AppStatePackage(appState = "", internalAppState = appState) else AppStatePackage(appState = appState, internalAppState = "")
 
     return dbService.insertAppStatePackage(appStatePackage)
   }

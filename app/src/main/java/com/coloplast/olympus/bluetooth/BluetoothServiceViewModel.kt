@@ -4,10 +4,11 @@ import com.artemzin.rxui.kotlin.bind
 import com.coloplast.olympus.bluetooth.businesslayer.BluetoothManager
 import com.coloplast.olympus.bluetooth.businesslayer.DeviceConnection
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
-import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
 import com.coloplast.olympus.bluetooth.businesslayer.models.DeviceResult
 import com.coloplast.olympus.bluetooth.model.*
+import com.coloplast.olympus.businesslayer.interfaces.AppStateComponent
 import com.coloplast.olympus.businesslayer.interfaces.TransmitterComponent
+import com.coloplast.olympus.shared.AppSettings
 import com.coloplast.olympus.ui.feature.home.models.StateTransformers
 import com.coloplast.olympus.ui.feature.statemachine.OverlayStateMachineImpl
 import com.coloplast.olympus.ui.feature.statemachine.UiStateMachineImpl
@@ -23,7 +24,8 @@ import java.util.concurrent.TimeUnit
 class BluetoothServiceViewModel(
   private val bluetoothManager: BluetoothManager,
   private val transmitterComponent: TransmitterComponent,
-  private val deviceConnection: DeviceConnection
+  private val deviceConnection: DeviceConnection,
+  private val appStateComponent: AppStateComponent
 ) : ServiceViewModel<BluetoothServiceModel, BluetoothServiceResult<BluetoothServiceModel>>() {
 
   override fun bind(serviceResult: BluetoothServiceResult<BluetoothServiceModel>): Disposable {
@@ -91,8 +93,18 @@ class BluetoothServiceViewModel(
       // then we do the actual connection
       .flatMap { connectObservable(it) }
 
+    val appStateDBObservable = StateDbUpdateDispatcher.uiStateChangeObservable()
+      .switchMap { uiStateLetter ->
+        appStateComponent.insertAppStatePackage(uiStateLetter, AppSettings.appInBackground)
+          .subscribeOn(Schedulers.io())
+          .doOnError { throwable -> Timber.e(throwable) }
+          .toSingle<BluetoothServiceModel> { BluetoothServiceModel.AppStateInsertComplete() }
+          .toObservable()
+      }
+
     compositeDisposable.add(connectionObservable.bind(serviceResult.onResult()))
     compositeDisposable.add(disconnectTransmitterObservable.subscribe())
+    compositeDisposable.add(appStateDBObservable.subscribe())
 
     return compositeDisposable
   }
@@ -107,6 +119,11 @@ class BluetoothServiceViewModel(
           is DeviceResult.DeviceUpdateResult -> {
             val stateModel = StateTransformers.bleToUiState(deviceResult)
             val newUiState = stateMachine.invoke(stateModel.state)
+
+            val uiStateLetter = UiState.uiStateToUiStateLetter(newUiState)
+            if (uiStateLetter.isNotEmpty()) {
+              StateDbUpdateDispatcher.dispatchUiStateChange(uiStateLetter)
+            }
 
             val overlayStateModel = StateTransformers.bleToOverlayState(deviceResult)
             val newOverlayState = overlayStateMachine.invoke(overlayStateModel.overlayState)
@@ -136,4 +153,5 @@ class BluetoothServiceViewModel(
         BluetoothServiceModel.Disconnected(macAddress)
       }
   }
+
 }

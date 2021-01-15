@@ -31,6 +31,8 @@ object AppSettings {
   }
 
   var userToken: String = ""
+
+  var appInBackground = true
   
   /**
    * usually you dont want to have a static reference to a context

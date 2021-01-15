@@ -70,7 +70,6 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
 
   private val requestConnectionStateRelay = PublishRelay.create<String>()
   private val stitchOrResetRelay = PublishRelay.create<StitchOrResetObject>()
-  private val appUiStateRelay = PublishRelay.create<AppUIStateObject>()
 
   private val connectionStateDisposable = CompositeDisposable()
 
@@ -288,7 +287,6 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
     }
     else {
       Timber.d("State is [${newState}]")
-      appUiStateRelay.accept(AppUIStateObject(newState.toString()))
 
       val routerTransaction = when (newState) {
         UiState.FIRMWARE_AVAILABLE -> {
@@ -452,10 +450,6 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
 
   override fun requestStitching(): Observable<StitchOrResetObject> {
     return stitchOrResetRelay.publish().refCount()
-  }
-
-  override fun requestAppUiState(): Observable<AppUIStateObject> {
-    return appUiStateRelay.publish().refCount()
   }
 
   val patchClickedListener = object : PatchView.Listener {

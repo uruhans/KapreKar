@@ -26,7 +26,6 @@ class HomeViewModel(
   private val transmitterComponent: TransmitterComponent,
   private val userComponent: UserComponent,
   private val preferences: Preferences,
-  private val appStateComponent: AppStateComponent
 ) : BaseHomeViewModel() {
 
   override fun bind(uiView: HomeView): Disposable {
@@ -63,15 +62,6 @@ class HomeViewModel(
           .toObservable()
       }
 
-    val appUiStateObservable = uiView.requestAppUiState()
-      .switchMap { uiState ->
-        appStateComponent.insertAppStatePackage(uiState.uiState, "")
-          .subscribeOn(Schedulers.io())
-          .doOnError { throwable -> Timber.e(throwable) }
-          .toSingle<HomeUiModel> { HomeUiModel.AppUiStateInsertComplete() }
-          .toObservable()
-      }
-
     val transmittersObservable = transmitterComponent.getTransmittersAsSingle()
       .subscribeOn(Schedulers.io())
       .toObservable()
@@ -105,7 +95,6 @@ class HomeViewModel(
 
     disposable.add(Observable.merge(stateUpdate, bluetoothStateObservable, animationResetObservable, noTransmittersObservable).bind(uiView.render()))
     disposable.add(stitchTransmitterObservable.bind(uiView.render()))
-    disposable.add(appUiStateObservable.bind(uiView.render()))
 
     return disposable
   }

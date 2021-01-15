@@ -17,8 +17,6 @@ import com.bluelinelabs.conductor.changehandler.HorizontalChangeHandler
 import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import com.coloplast.olympus.R
 import com.coloplast.olympus.bluetooth.ServiceDispatcher
-import com.coloplast.olympus.bluetooth.StateDispatcher
-import com.coloplast.olympus.bluetooth.businesslayer.ServiceStateDispatcher
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
 import com.coloplast.olympus.bluetooth.businesslayer.enums.SensorStatus
@@ -72,6 +70,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
 
   private val requestConnectionStateRelay = PublishRelay.create<String>()
   private val stitchOrResetRelay = PublishRelay.create<StitchOrResetObject>()
+  private val appUiStateRelay = PublishRelay.create<AppUIStateObject>()
 
   private val connectionStateDisposable = CompositeDisposable()
 
@@ -289,6 +288,8 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
     }
     else {
       Timber.d("State is [${newState}]")
+      appUiStateRelay.accept(AppUIStateObject(newState.toString()))
+
       val routerTransaction = when (newState) {
         UiState.FIRMWARE_AVAILABLE -> {
           FirmwareAvailableController.routerTransaction()
@@ -451,6 +452,10 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
 
   override fun requestStitching(): Observable<StitchOrResetObject> {
     return stitchOrResetRelay.publish().refCount()
+  }
+
+  override fun requestAppUiState(): Observable<AppUIStateObject> {
+    return appUiStateRelay.publish().refCount()
   }
 
   val patchClickedListener = object : PatchView.Listener {

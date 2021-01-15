@@ -1,11 +1,11 @@
 package com.coloplast.olympus.ui.feature.home
 
-import android.location.LocationManager
 import com.artemzin.rxui.kotlin.bind
 import com.coloplast.olympus.bluetooth.StateDispatcher
 import com.coloplast.olympus.bluetooth.businesslayer.BluetoothManager
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
+import com.coloplast.olympus.businesslayer.interfaces.AppStateComponent
 import com.coloplast.olympus.businesslayer.interfaces.TransmitterComponent
 import com.coloplast.olympus.businesslayer.interfaces.UserComponent
 import com.coloplast.olympus.shared.models.DataResult
@@ -25,7 +25,8 @@ class HomeViewModel(
   private val bluetoothManager: BluetoothManager,
   private val transmitterComponent: TransmitterComponent,
   private val userComponent: UserComponent,
-  private val preferences: Preferences
+  private val preferences: Preferences,
+  private val appStateComponent: AppStateComponent
 ) : BaseHomeViewModel() {
 
   override fun bind(uiView: HomeView): Disposable {
@@ -62,6 +63,15 @@ class HomeViewModel(
           .toObservable()
       }
 
+    val appUiStateObservable = uiView.requestAppUiState()
+      .switchMap { uiState ->
+        appStateComponent.insertAppStatePackage(uiState.uiState, "")
+          .subscribeOn(Schedulers.io())
+          .doOnError { throwable -> Timber.e(throwable) }
+          .toSingle<HomeUiModel> { HomeUiModel.AppUiStateInsertComplete() }
+          .toObservable()
+      }
+
     val transmittersObservable = transmitterComponent.getTransmittersAsSingle()
       .subscribeOn(Schedulers.io())
       .toObservable()
@@ -95,6 +105,7 @@ class HomeViewModel(
 
     disposable.add(Observable.merge(stateUpdate, bluetoothStateObservable, animationResetObservable, noTransmittersObservable).bind(uiView.render()))
     disposable.add(stitchTransmitterObservable.bind(uiView.render()))
+    disposable.add(appUiStateObservable.bind(uiView.render()))
 
     return disposable
   }

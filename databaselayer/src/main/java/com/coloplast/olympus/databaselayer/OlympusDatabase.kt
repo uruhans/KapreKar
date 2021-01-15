@@ -19,7 +19,7 @@ import com.coloplast.olympus.databaselayer.entities.DbTransmitterPackage
 import com.coloplast.olympus.databaselayer.entities.DbUser
 import com.coloplast.olympus.databaselayer.migrations.DatabaseMigrations
 
-@Database(entities = [DbUser::class, DbTransmitter::class, DbTransmitterPackage::class, DbAppStatePackage::class], version = 5)
+@Database(entities = [DbUser::class, DbTransmitter::class, DbTransmitterPackage::class, DbAppStatePackage::class], version = 4)
 @TypeConverters(value = [UUIDConverter::class, InstantConverter::class, SyncStateConverter::class, PackageTypeConverter::class])
 abstract class OlympusDatabase : RoomDatabase() {
   

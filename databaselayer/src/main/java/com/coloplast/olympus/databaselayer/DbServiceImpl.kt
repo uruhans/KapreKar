@@ -1,5 +1,6 @@
 package com.coloplast.olympus.databaselayer
 
+import com.coloplast.olympus.databaselayer.entities.DbAppStatePackage
 import com.coloplast.olympus.databaselayer.entities.DbTransmitter
 import com.coloplast.olympus.databaselayer.entities.DbTransmitterPackage
 import com.coloplast.olympus.databaselayer.entities.DbUser
@@ -7,10 +8,7 @@ import com.coloplast.olympus.databaselayer.exceptions.DeleteFailedException
 import com.coloplast.olympus.databaselayer.exceptions.InsertOrUpdateFailedException
 import com.coloplast.olympus.databaselayer.rx.RxHelper
 import com.coloplast.olympus.shared.AppSettings
-import com.coloplast.olympus.shared.models.DataResult
-import com.coloplast.olympus.shared.models.Transmitter
-import com.coloplast.olympus.shared.models.TransmitterPackage
-import com.coloplast.olympus.shared.models.User
+import com.coloplast.olympus.shared.models.*
 import com.coloplast.olympus.shared.types.PackageType
 import com.coloplast.olympus.shared.types.SyncState
 import io.reactivex.Completable
@@ -27,6 +25,7 @@ class DbServiceImpl : DbService {
     return db.transmitterPackageDao().deleteTransmitterPackages().ignoreElement()
       .andThen(db.transmitterDao().deleteAll().ignoreElement())
       .andThen(db.userDao().deleteUser().ignoreElement())
+      .andThen(db.appStatePackageDao().deletePackages().ignoreElement())
   }
 
   override fun insertOrUpdateUser(user: User): Observable<User> {
@@ -176,6 +175,16 @@ class DbServiceImpl : DbService {
     return db.transmitterPackageDao()
       .pendingPackagesRemaining(userId.toString(), packageType)
   }
+
+
+  override fun insertAppStatePackage(appStatePackage: AppStatePackage): Completable {
+    return db.appStatePackageDao()
+      .insertAppStatePackage(DbAppStatePackage.fromAppStatePackage(appStatePackage))
+      .flatMapCompletable { RxHelper.completeOrError(it.toInt(), InsertOrUpdateFailedException()) }
+  }
+
+
+
 
   override fun getPendingTransmitters(userId: UUID): Single<List<Transmitter>> {
     return db.transmitterDao()

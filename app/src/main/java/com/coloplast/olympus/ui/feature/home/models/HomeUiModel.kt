@@ -13,6 +13,7 @@ sealed class HomeUiModel : UiModel {
   data class AnimationReset(val lastUpdate: LocalDateTime = LocalDateTime.now()) : HomeUiModel()
   data class ConnectionStateUpdate(val connectionState: BleConnectionState) : HomeUiModel()
   data class StitchOrResetComplete(val complete: Boolean = true) : HomeUiModel()
+  data class AppUiStateInsertComplete(val complete: Boolean = true) : HomeUiModel()
   data class Scanning(val scanning: Unit = Unit) : HomeUiModel()
   data class ScanningStopped(val scanning: Unit = Unit) : HomeUiModel()
   data class NoTransmittersFound(val lastUpdate: LocalDateTime = LocalDateTime.now()) : HomeUiModel()

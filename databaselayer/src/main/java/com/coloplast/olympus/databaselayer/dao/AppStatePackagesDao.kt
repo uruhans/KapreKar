@@ -12,7 +12,7 @@ interface AppStatePackageDao {
   fun deletePackages() : Single<Int>
 
   @Insert(onConflict = OnConflictStrategy.REPLACE)
-  fun insertPackage(dbAppStatePackage: DbAppStatePackage) : Single<Long>
+  fun insertAppStatePackage(dbAppStatePackage: DbAppStatePackage) : Single<Long>
 
   @Query("" +
       "SELECT ASP.* FROM DbAppStatePackage AS ASP " +

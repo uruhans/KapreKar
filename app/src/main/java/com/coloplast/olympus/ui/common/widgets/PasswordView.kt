@@ -64,7 +64,7 @@ class PasswordView @JvmOverloads constructor(
   private val globalLayoutListener = ViewTreeObserver.OnGlobalLayoutListener {
     val insets = ViewCompat.getRootWindowInsets(this)
     val keyboardVisible = insets?.isVisible(WindowInsetsCompat.Type.ime()) ?: false
-    if (keyboardVisible) {
+    if (!keyboardVisible) {
       onKeyboardActionDoneClicked()
     }
   }

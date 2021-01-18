@@ -4,9 +4,12 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewTreeObserver
 import android.widget.LinearLayout
 import androidx.annotation.AttrRes
 import androidx.annotation.StringRes
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
@@ -55,6 +58,16 @@ class PasswordView @JvmOverloads constructor(context: Context,
     var onValidityChanged: ((Boolean) -> Unit)? = null
     var shouldCheckValidity = true
 
+    // in order for us to also validate when the user pressed "back" to remove the keyboard
+    // we need to validate the content again
+    private val globalLayoutListener = ViewTreeObserver.OnGlobalLayoutListener {
+        val insets = ViewCompat.getRootWindowInsets(this)
+        val keyboardVisible = insets?.isVisible(WindowInsetsCompat.Type.ime()) ?: false
+        if (keyboardVisible) {
+            onKeyboardActionDoneClicked()
+        }
+    }
+
     var binding :  ViewPasswordInputLayoutBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.view_password_input_layout, this, true)
 
     init {
@@ -65,6 +78,8 @@ class PasswordView @JvmOverloads constructor(context: Context,
         onFocusChangeListener = OnFocusChangeListener(callback)
         //Setting the default background drawable.
         passwordBackgroundDrawableResId.set(R.drawable.edittext_background)
+
+        viewTreeObserver.addOnGlobalLayoutListener(globalLayoutListener)
     }
 
     /**
@@ -95,5 +110,10 @@ class PasswordView @JvmOverloads constructor(context: Context,
                 focusLostCallback.invoke(password)
             }
         }
+    }
+
+    override fun onDetachedFromWindow() {
+        viewTreeObserver.removeOnGlobalLayoutListener(globalLayoutListener)
+        super.onDetachedFromWindow()
     }
 }

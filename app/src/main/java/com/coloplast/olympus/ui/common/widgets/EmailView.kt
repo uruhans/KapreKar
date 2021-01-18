@@ -58,14 +58,19 @@ class EmailView @JvmOverloads constructor(
   var onValidityChanged: ((Boolean) -> Unit)? = null
   var shouldCheckValidity = true
 
+  private var firstTime = true
+
   // in order for us to also validate when the user pressed "back" to remove the keyboard
   // we need to validate the content again
   private val globalLayoutListener = ViewTreeObserver.OnGlobalLayoutListener {
     val insets = ViewCompat.getRootWindowInsets(this)
+
     val keyboardVisible = insets?.isVisible(WindowInsetsCompat.Type.ime()) ?: false
-    if (!keyboardVisible) {
+    if (!keyboardVisible && !firstTime) {
       onKeyboardActionDoneClicked()
     }
+
+    firstTime = false
   }
 
   init {
@@ -76,8 +81,6 @@ class EmailView @JvmOverloads constructor(
     onFocusChangeListener = OnFocusChangeListener(callback)
     //Setting the default background drawable.
     emailBackgroundDrawableResId.set(R.drawable.edittext_background)
-
-    viewTreeObserver.addOnGlobalLayoutListener(globalLayoutListener)
   }
 
   /**
@@ -103,6 +106,10 @@ class EmailView @JvmOverloads constructor(
       if (!v.hasFocus()) {
         v.hideSoftKeyboard()
         focusLostCallback.invoke(email)
+      }
+      else {
+        viewTreeObserver.removeOnGlobalLayoutListener(globalLayoutListener)
+        viewTreeObserver.addOnGlobalLayoutListener(globalLayoutListener)
       }
     }
   }

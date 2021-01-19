@@ -95,7 +95,7 @@ class BluetoothServiceViewModel(
 
     val appStateDBObservable = StateDbUpdateDispatcher.uiStateChangeObservable()
       .switchMap { uiStateLetter ->
-        appStateComponent.insertAppStatePackage(uiStateLetter, AppSettings.appInBackground)
+        appStateComponent.insertAppState(uiStateLetter, AppSettings.appInBackground)
           .subscribeOn(Schedulers.io())
           .doOnError { throwable -> Timber.e(throwable) }
           .toSingle<BluetoothServiceModel> { BluetoothServiceModel.AppStateInsertComplete() }

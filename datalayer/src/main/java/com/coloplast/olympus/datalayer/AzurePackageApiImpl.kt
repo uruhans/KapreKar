@@ -1,6 +1,7 @@
 package com.coloplast.olympus.datalayer
 
 import com.coloplast.olympus.datalayer.models.*
+import com.coloplast.olympus.shared.models.AppState
 import com.coloplast.olympus.shared.models.Transmitter
 import com.coloplast.olympus.shared.models.TransmitterPackage
 import com.coloplast.olympus.shared.transformers.OlympusWirelessProtocol
@@ -76,5 +77,13 @@ class AzurePackageApiImpl : AzurePackageApi {
     return packageApi.syncTransmitter(
       transmitters.map { TransmitterDTO.fromTransmitter(userId, it) }
     )
+  }
+
+  override fun sendAppStates(userId: UUID, appStates: List<AppState>): Completable {
+    return packageApi.syncAppState(userId.toString(), getAppStateListDTO(appStates))
+  }
+
+  private fun getAppStateListDTO(appStates: List<AppState>): List<AppStateDTO> {
+    return appStates.map { AppStateDTO.fromAppState(it.appState, it.internalAppState, it.timestamp) }
   }
 }

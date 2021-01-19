@@ -3,12 +3,12 @@ package com.coloplast.olympus.databaselayer.entities
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.coloplast.olympus.shared.models.AppStatePackage
+import com.coloplast.olympus.shared.models.AppState
 import com.coloplast.olympus.shared.types.SyncState
 import java.time.Instant
 
 @Entity
-class DbAppStatePackage(
+class DbAppState(
   @PrimaryKey val id: Int?,
   @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
   val appState: String,
@@ -19,8 +19,8 @@ class DbAppStatePackage(
   var syncState: SyncState
 ) {
 
-  fun toAppStatePackage(): AppStatePackage {
-    return AppStatePackage(
+  fun toAppStatePackage(): AppState {
+    return AppState(
       id,
       appState,
       internalAppState,
@@ -31,13 +31,13 @@ class DbAppStatePackage(
 
   companion object {
 
-    fun fromAppStatePackage(appStatePackage: AppStatePackage): DbAppStatePackage {
-      return DbAppStatePackage(
-        appStatePackage.id,
-        appStatePackage.appState,
-        appStatePackage.internalAppState,
-        appStatePackage.timestamp,
-        appStatePackage.syncState
+    fun fromAppState(appState: AppState): DbAppState {
+      return DbAppState(
+        appState.id,
+        appState.appState,
+        appState.internalAppState,
+        appState.timestamp,
+        appState.syncState
       )
     }
   }

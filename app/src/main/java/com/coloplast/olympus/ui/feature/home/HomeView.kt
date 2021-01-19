@@ -1,7 +1,6 @@
 package com.coloplast.olympus.ui.feature.home
 
 import com.coloplast.olympus.ui.common.models.UiView
-import com.coloplast.olympus.ui.feature.home.models.AppUIStateObject
 import com.coloplast.olympus.ui.feature.home.models.HomeUiModel
 import com.coloplast.olympus.ui.feature.home.models.StitchOrResetObject
 import io.reactivex.Observable

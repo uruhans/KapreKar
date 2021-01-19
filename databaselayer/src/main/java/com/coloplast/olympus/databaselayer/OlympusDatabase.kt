@@ -9,24 +9,24 @@ import com.coloplast.olympus.databaselayer.converters.InstantConverter
 import com.coloplast.olympus.databaselayer.converters.PackageTypeConverter
 import com.coloplast.olympus.databaselayer.converters.SyncStateConverter
 import com.coloplast.olympus.databaselayer.converters.UUIDConverter
-import com.coloplast.olympus.databaselayer.dao.AppStatePackageDao
+import com.coloplast.olympus.databaselayer.dao.AppStateDao
 import com.coloplast.olympus.databaselayer.dao.TransmitterDao
 import com.coloplast.olympus.databaselayer.dao.TransmitterPackageDao
 import com.coloplast.olympus.databaselayer.dao.UserDao
-import com.coloplast.olympus.databaselayer.entities.DbAppStatePackage
+import com.coloplast.olympus.databaselayer.entities.DbAppState
 import com.coloplast.olympus.databaselayer.entities.DbTransmitter
 import com.coloplast.olympus.databaselayer.entities.DbTransmitterPackage
 import com.coloplast.olympus.databaselayer.entities.DbUser
 import com.coloplast.olympus.databaselayer.migrations.DatabaseMigrations
 
-@Database(entities = [DbUser::class, DbTransmitter::class, DbTransmitterPackage::class, DbAppStatePackage::class], version = 4)
+@Database(entities = [DbUser::class, DbTransmitter::class, DbTransmitterPackage::class, DbAppState::class], version = 4)
 @TypeConverters(value = [UUIDConverter::class, InstantConverter::class, SyncStateConverter::class, PackageTypeConverter::class])
 abstract class OlympusDatabase : RoomDatabase() {
   
   abstract fun userDao(): UserDao
   abstract fun transmitterDao(): TransmitterDao
   abstract fun transmitterPackageDao(): TransmitterPackageDao
-  abstract fun appStatePackageDao(): AppStatePackageDao
+  abstract fun appStateDao(): AppStateDao
 
   companion object {
     @Volatile

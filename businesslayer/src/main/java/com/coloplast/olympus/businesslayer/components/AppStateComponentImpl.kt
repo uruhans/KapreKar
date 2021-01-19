@@ -1,22 +1,81 @@
 package com.coloplast.olympus.businesslayer.components
 
 import com.coloplast.olympus.businesslayer.interfaces.AppStateComponent
+import com.coloplast.olympus.businesslayer.models.SyncResult
 import com.coloplast.olympus.databaselayer.DbServiceImpl
 import com.coloplast.olympus.datalayer.AzurePackageApiImpl
-import com.coloplast.olympus.shared.models.AppStatePackage
+import com.coloplast.olympus.shared.models.AppState
+import com.coloplast.olympus.shared.models.DataResult
+import com.coloplast.olympus.shared.types.SyncState
 import io.reactivex.Completable
+import io.reactivex.Observable
+import timber.log.Timber
+import java.util.*
 
 class AppStateComponentImpl() : AppStateComponent {
 
   private val dbService = DbServiceImpl()
   private val azureService = AzurePackageApiImpl()
 
-  override fun insertAppStatePackage(
+  override fun insertAppState(
     appState: String,
     appInBackground: Boolean
   ): Completable {
-    val appStatePackage = if (appInBackground) AppStatePackage(appState = "", internalAppState = appState) else AppStatePackage(appState = appState, internalAppState = "")
+    val appStatePackage = if (appInBackground) AppState(appState = "", internalAppState = appState) else AppState(appState = appState, internalAppState = "")
 
-    return dbService.insertAppStatePackage(appStatePackage)
+    return dbService.insertAppState(appStatePackage)
   }
+
+  override fun deleteAppStatesAlreadySynced(): Observable<SyncResult> {
+    return dbService.deleteAppStates()
+        .toSingle<SyncResult> { SyncResult.Completed() }
+        .toObservable()
+        .onErrorReturn { SyncResult.Error(SyncResult.Error.State.DELETE_FAILED) }
+  }
+
+  override fun syncAppStatesWithCloud(userId: UUID, forceSync: Boolean): Observable<SyncResult> {
+    return getPendingAppStates(userId)
+      .filter { it.isNotEmpty() }
+      .doOnNext { Timber.d("Number of appStates to sync: ${it.size}") }
+      .flatMap { appStates ->
+        azureService.sendAppStates(userId, appStates)
+          .toSingle { true }
+          .toObservable()
+          .flatMap {
+            dbService.updateSyncStateForAppStates(appStates, SyncState.Uploaded)
+              .toSingle<SyncResult> { SyncResult.Completed() }
+              .toObservable()
+              .flatMap {
+                if (it is SyncResult.Completed) {
+                  dbService.pendingAppStatesRemaining()
+                    .toObservable()
+                    .map<SyncResult> { count -> SyncResult.Completed(count) }
+                }
+                else {
+                  Observable.just(it)
+                }
+              }
+          }
+          .doOnError { Timber.e(it) }
+          .onErrorResumeNext(
+            dbService.updateSyncStateForAppStates(appStates, SyncState.Pending)
+              .toSingle<SyncResult> { SyncResult.Error() }
+              .toObservable()
+          )
+      }
+  }
+
+
+  private fun getPendingAppStates(userId: UUID): Observable<List<AppState>> {
+    return dbService.getPendingAppStates(userId)
+      .map {
+        if (it is DataResult.Success<*>) {
+          it.data as List<AppState>
+        }
+        else {
+          emptyList()
+        }
+      }
+  }
+
 }

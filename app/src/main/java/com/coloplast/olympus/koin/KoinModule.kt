@@ -47,7 +47,7 @@ val koinModule = module {
   /* Preferences */
   single { Preferences(androidContext()) }
   single { Me(get()) }
-  factory { SyncWorker(get(), get()) }
+  factory { SyncWorker(get(), get(), get()) }
 
   /* Notifications */
   single { androidContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }
@@ -73,7 +73,7 @@ val koinModule = module {
   /* ViewModels */
   factory { BluetoothServiceViewModel(get(), get(), get(), get()) }
   single { SplashViewModel(get(), get()) }
-  single { HomeViewModel(get(), get(), get(), get()) }
+  single { HomeViewModel(get(), get(), get(), get(), get()) }
   single { TransmittersViewModel(get(), get()) }
   single { AddTransmitterAT9ViewModel(get(), get(), get()) }
   single { AwaitingConnectionViewModel(get()) }

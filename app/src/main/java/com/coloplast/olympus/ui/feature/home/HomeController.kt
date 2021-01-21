@@ -17,8 +17,6 @@ import com.bluelinelabs.conductor.changehandler.HorizontalChangeHandler
 import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import com.coloplast.olympus.R
 import com.coloplast.olympus.bluetooth.ServiceDispatcher
-import com.coloplast.olympus.bluetooth.StateDispatcher
-import com.coloplast.olympus.bluetooth.businesslayer.ServiceStateDispatcher
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
 import com.coloplast.olympus.bluetooth.businesslayer.enums.SensorStatus
@@ -272,10 +270,12 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
             breachesOccurred.clear()
           }
         }
+        is HomeUiModel.RawDataPackageUpdate -> {
+          lastCheck.set(uiModel.lastUpdate)
+        }
         is HomeUiModel.AnimationReset -> {
           updateAnimation.set(true)
           updateAnimation.notifyChange()
-          lastCheck.set(uiModel.lastUpdate)
         }
       }
     }

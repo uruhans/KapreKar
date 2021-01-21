@@ -130,8 +130,17 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
 
           if(otherTxStateChange != null) {
             if(!otherTxStateChange.bleDevice.isConnected()) {
-              olympusNotificationManager.send(it.macAddress, OverlayState.BLE_CONNECTION_LOST)
-              val disconnectStateChange = StateChange(otherTxStateChange.state, OverlayState.BLE_CONNECTION_LOST, otherTxStateChange.bleDevice)
+
+              val disconnectStateChange = if(otherTxStateChange.bleDevice.isAttached()) {
+                olympusNotificationManager.send(it.macAddress, OverlayState.BLE_CONNECTION_LOST)
+                 StateChange(otherTxStateChange.state, OverlayState.BLE_CONNECTION_LOST, otherTxStateChange.bleDevice)
+              }
+              else {
+                StateChange(otherTxStateChange.state, OverlayState.NONE, otherTxStateChange.bleDevice)
+              }
+
+//              olympusNotificationManager.send(it.macAddress, OverlayState.BLE_CONNECTION_LOST)
+//              val disconnectStateChange = StateChange(otherTxStateChange.state, OverlayState.BLE_CONNECTION_LOST, otherTxStateChange.bleDevice)
 
               StateDispatcher.dispatch(disconnectStateChange)
               StateDispatcher.dispatchStateForActiveTransmitter(disconnectStateChange)
@@ -148,11 +157,16 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
             if(transmitterManager.isActiveTransmitter(it.macAddress)) {
               latestState?.let { state ->
                 state.bleDevice.connectionState = BleConnectionState.DISCONNECTED
-                // so immediately send a notification
-                olympusNotificationManager.send(it.macAddress, OverlayState.BLE_CONNECTION_LOST)
-                // and dispatch for the active transmitter (so the UI can properly change)
 
-                val disconnectState = StateChange(state.state, OverlayState.BLE_CONNECTION_LOST, state.bleDevice)
+                // we only want to display overlay and send notification if the disconnection occurred on the active transmitter
+                // and that transmitter was attached
+                if(state.bleDevice.isAttached()) {
+                  // so immediately send a notification
+                  olympusNotificationManager.send(it.macAddress, OverlayState.BLE_CONNECTION_LOST)
+                }
+
+                val disconnectState = StateChange(state.state, OverlayState.NONE, state.bleDevice)
+
                 StateDispatcher.dispatch(disconnectState)
                 StateDispatcher.dispatchStateForActiveTransmitter(disconnectState)
               }

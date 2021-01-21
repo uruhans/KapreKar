@@ -39,10 +39,10 @@ class SyncWorker(private val userComponent: UserComponent,
       .flatMapObservable { userId ->
         // sync all packages of all types and sync appStates
         Observable.zip(
-          syncAppStates(userId),
           syncPackages(PackageType.Raw, userId, forceSync),
           syncPackages(PackageType.Power, userId),
           syncPackages(PackageType.Status, userId),
+          syncAppStates(userId),
           { _, _, _, _ ->
             // if we get to here, we have a success, so we ignore any results from the observables, and override with success
             ListenableWorker.Result.success()
@@ -112,7 +112,8 @@ class SyncWorker(private val userComponent: UserComponent,
       .flatMap { deleteResult ->
         if (deleteResult is SyncResult.Completed) {
           // then start the syncing
-          appStateComponent.syncAppStatesWithCloud(userId, forceSync)
+          //appStateComponent.syncAppStatesWithCloud(userId)
+          appStateComponent.syncAppStatesWithCloud(userId, forceSync=true)
             .map { syncResult ->
               when (syncResult) {
                 // if sync is successful

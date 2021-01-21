@@ -93,18 +93,8 @@ class BluetoothServiceViewModel(
       // then we do the actual connection
       .flatMap { connectObservable(it) }
 
-    val appStateDBObservable = StateDbUpdateDispatcher.uiStateChangeObservable()
-      .switchMap { uiStateLetter ->
-        appStateComponent.insertAppState(uiStateLetter, AppSettings.appInBackground)
-          .subscribeOn(Schedulers.io())
-          .doOnError { throwable -> Timber.e(throwable) }
-          .toSingle<BluetoothServiceModel> { BluetoothServiceModel.AppStateInsertComplete() }
-          .toObservable()
-      }
-
     compositeDisposable.add(connectionObservable.bind(serviceResult.onResult()))
     compositeDisposable.add(disconnectTransmitterObservable.subscribe())
-    compositeDisposable.add(appStateDBObservable.subscribe())
 
     return compositeDisposable
   }
@@ -119,12 +109,6 @@ class BluetoothServiceViewModel(
           is DeviceResult.DeviceUpdateResult -> {
             val stateModel = StateTransformers.bleToUiState(deviceResult)
             val newUiState = stateMachine.invoke(stateModel.state)
-
-            val uiStateLetter = UiState.uiStateToUiStateLetter(newUiState)
-            if (uiStateLetter.isNotEmpty()) {
-              StateDbUpdateDispatcher.dispatchUiStateChange(uiStateLetter)
-            }
-
             val overlayStateModel = StateTransformers.bleToOverlayState(deviceResult)
             val newOverlayState = overlayStateMachine.invoke(overlayStateModel.overlayState)
 
@@ -143,6 +127,24 @@ class BluetoothServiceViewModel(
           is DeviceResult.AppUpdateAvailable -> {
             BluetoothServiceModel.AppUpdateAvailable(StateChange(UiState.APP_UPDATE_AVAILABLE, bleDevice = deviceResult.bleDevice))
           }
+        }
+      }
+      .doOnNext {
+        val uiState = when(it) {
+          is BluetoothServiceModel.Disconnected -> {
+            UiState.DISCONNECTED
+          }
+          is BluetoothServiceModel.DeviceUpdate -> {
+            it.statusChange.state
+          }
+          else -> null
+        }
+
+        uiState?.let { state ->
+          appStateComponent.insertAppState(state.toLetter(), AppSettings.appInBackground)
+            .subscribeOn(Schedulers.io())
+            .doOnError { throwable -> Timber.e(throwable) }
+            .blockingGet()
         }
       }
       .doOnError {

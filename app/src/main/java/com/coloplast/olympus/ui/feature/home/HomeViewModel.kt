@@ -1,7 +1,6 @@
 package com.coloplast.olympus.ui.feature.home
 
 import com.artemzin.rxui.kotlin.bind
-import com.coloplast.olympus.bluetooth.StateDbUpdateDispatcher
 import com.coloplast.olympus.bluetooth.StateDispatcher
 import com.coloplast.olympus.bluetooth.businesslayer.BluetoothManager
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
@@ -15,6 +14,7 @@ import com.coloplast.olympus.shared.models.DataResult
 import com.coloplast.olympus.shared.preferences.Preferences
 import com.coloplast.olympus.ui.feature.home.models.BaseHomeViewModel
 import com.coloplast.olympus.ui.feature.home.models.HomeUiModel
+import com.coloplast.olympus.ui.feature.statemachine.models.OverlayState
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
@@ -40,7 +40,6 @@ class HomeViewModel(
       .map<HomeUiModel> { HomeUiModel.BluetoothIssue(it) }
       .onErrorReturn {
         Timber.e(it)
-        StateDbUpdateDispatcher.dispatchUiStateChange(UiState.uiStateToUiStateLetter(UiState.DISCONNECTED))
         HomeUiModel.ConnectionStateUpdate(BleConnectionState.DISCONNECTED)
       }
 
@@ -53,6 +52,9 @@ class HomeViewModel(
           HomeUiModel.DeviceDisconnected()
         }
         else {
+          if (it.overlayState == OverlayState.BLE_CONNECTION_LOST) {
+            dbInsertAppState(UiState.DISCONNECTED).subscribe()
+          }
           HomeUiModel.DeviceUpdate(it)
         }
       }
@@ -83,26 +85,19 @@ class HomeViewModel(
         .filter { it != BluetoothState.UNDEFINED }
         .flatMap {
           if (it == BluetoothState.LOCATION_SERVICES_NOT_ENABLED || it == BluetoothState.BLUETOOTH_NOT_ENABLED) {
-            if (it == BluetoothState.BLUETOOTH_NOT_ENABLED) {
-               StateDbUpdateDispatcher.dispatchUiStateChange(UiState.uiStateToUiStateLetter(UiState.BLUETOOTH_NOT_ENABLED))
-            }
-            return@flatMap Observable.just(HomeUiModel.BluetoothIssue(it))
+            return@flatMap transmittersObservable
+              .map {
+                HomeUiModel.NoTransmittersFound() }
+              .doOnComplete { dbInsertAppState(UiState.BLUETOOTH_NOT_ENABLED).subscribe() }
           }
           else {
-            StateDbUpdateDispatcher.dispatchUiStateChange(UiState.uiStateToUiStateLetter(UiState.TRANSMITTER_NOT_FOUND))
             return@flatMap transmittersObservable
-              .map { HomeUiModel.NoTransmittersFound() }
+              .map {
+                HomeUiModel.NoTransmittersFound()
+              }
+              .doOnComplete { dbInsertAppState(UiState.TRANSMITTERS_EMPTY).subscribe() }
           }
         }
-
-    val appStateDBObservable = StateDbUpdateDispatcher.uiStateChangeObservable()
-      .switchMap { uiStateLetter ->
-        appStateComponent.insertAppState(uiStateLetter, AppSettings.appInBackground)
-          .subscribeOn(Schedulers.io())
-          .doOnError { throwable -> Timber.e(throwable) }
-          .toSingle<BluetoothServiceModel> { BluetoothServiceModel.AppStateInsertComplete() }
-          .toObservable()
-      }
 
     val syncUserObservable = userComponent.syncUser(userId)
       .subscribeOn(Schedulers.io())
@@ -110,12 +105,18 @@ class HomeViewModel(
 
     disposable.add(syncTransmittersObservable.subscribe())
     disposable.add(syncUserObservable.subscribe())
-    disposable.add(appStateDBObservable.subscribe())
-
     disposable.add(Observable.merge(stateUpdate, bluetoothStateObservable, animationResetObservable, noTransmittersObservable).bind(uiView.render()))
     disposable.add(stitchTransmitterObservable.bind(uiView.render()))
 
     return disposable
+  }
+
+  private fun dbInsertAppState(uiState: UiState): Observable<BluetoothServiceModel> {
+    return appStateComponent.insertAppState(uiState.toLetter(), AppSettings.appInBackground)
+      .subscribeOn(Schedulers.io())
+      .doOnError { throwable -> Timber.e(throwable) }
+      .toSingle<BluetoothServiceModel> { BluetoothServiceModel.AppStateInsertComplete() }
+      .toObservable()
   }
 
   override fun bindConnectionState(uiView: HomeView): Disposable {

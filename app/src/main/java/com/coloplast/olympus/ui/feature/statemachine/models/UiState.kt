@@ -41,7 +41,31 @@ enum class UiState {
   fun notificationId(): Int {
     return this.ordinal + MAGIC_NUMBER
   }
-  
+
+  fun toLetter() : String {
+    return when(this) {
+      OK_A -> "A"
+      INNER_BREACH_B -> "B"
+      OUTER_BREACH_C -> "C"
+      INNER_BLIND_D -> "D"
+      TOTAL_BLIND_E -> "E"
+      PAY_ATTENTION_F -> "F"
+      WET_MOUNT_G -> "G"
+      CUTGUARD_BROKEN_I -> "I"
+      WATER_INGRESS_DETECTION_J -> "J"
+      CUTGUARD_DIRT_IN_TRANSMITTER_K -> "K"
+      INNER_BLIND_LEAK_L -> "L"
+      DISCONNECTED -> "N"
+      BLUETOOTH_NOT_ENABLED -> "O"
+      TRANSMITTER_NOT_FOUND -> "P"
+      NO_BATTERY_R -> "R"
+      TRANSMITTER_DETACHED_V -> "V"
+      TRANSMITTER_BATTERY_CHARGING_W -> "W"
+      TRANSMITTERS_EMPTY -> "Z"
+      else -> ""
+    }
+  }
+
   companion object {
     private const val MAGIC_NUMBER = 100
   
@@ -50,30 +74,6 @@ enum class UiState {
      */
     fun fromNotificationId(notificationId: Int) : UiState {
       return values()[notificationId - MAGIC_NUMBER]
-    }
-
-    fun uiStateToUiStateLetter(uiState: UiState): String {
-      when(uiState) {
-        OK_A -> return "A"
-        INNER_BREACH_B -> return "B"
-        OUTER_BREACH_C -> return "C"
-        INNER_BLIND_D -> return "D"
-        TOTAL_BLIND_E -> return "E"
-        PAY_ATTENTION_F -> return "F"
-        WET_MOUNT_G -> return "G"
-        CUTGUARD_BROKEN_I -> return "I"
-        WATER_INGRESS_DETECTION_J -> return "J"
-        CUTGUARD_DIRT_IN_TRANSMITTER_K -> return "K"
-        INNER_BLIND_LEAK_L -> return "L"
-        DISCONNECTED -> return "N"
-        BLUETOOTH_NOT_ENABLED -> return "O"
-        TRANSMITTER_NOT_FOUND -> return "P"
-        NO_BATTERY_R -> return "R"
-        TRANSMITTER_DETACHED_V -> return "V"
-        TRANSMITTER_BATTERY_CHARGING_W -> return "W"
-        TRANSMITTERS_EMPTY -> return "Z"
-        else -> return ""
-      }
     }
   }
 }

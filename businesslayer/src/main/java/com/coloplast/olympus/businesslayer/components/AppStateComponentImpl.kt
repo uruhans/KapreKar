@@ -16,13 +16,20 @@ class AppStateComponentImpl() : AppStateComponent {
 
   private val dbService = DbServiceImpl()
   private val azureService = AzurePackageApiImpl()
+  private var lastAppState: String = ""
 
   override fun insertAppState(
     appState: String,
     appInBackground: Boolean
   ): Completable {
+    if (appState == lastAppState) {
+      return Completable.complete()
+    }
+    if (appState.isEmpty()) {
+      return Completable.complete()
+    }
+    lastAppState = appState
     val appStatePackage = if (appInBackground) AppState(appState = "", internalAppState = appState) else AppState(appState = appState, internalAppState = "")
-
     return dbService.insertAppState(appStatePackage)
   }
 
@@ -35,33 +42,37 @@ class AppStateComponentImpl() : AppStateComponent {
 
   override fun syncAppStatesWithCloud(userId: UUID, forceSync: Boolean): Observable<SyncResult> {
     return getPendingAppStates(userId)
-      .filter { it.isNotEmpty() }
       .doOnNext { Timber.d("Number of appStates to sync: ${it.size}") }
       .flatMap { appStates ->
-        azureService.sendAppStates(userId, appStates)
-          .toSingle { true }
-          .toObservable()
-          .flatMap {
-            dbService.updateSyncStateForAppStates(appStates, SyncState.Uploaded)
-              .toSingle<SyncResult> { SyncResult.Completed() }
-              .toObservable()
-              .flatMap {
-                if (it is SyncResult.Completed) {
-                  dbService.pendingAppStatesRemaining()
-                    .toObservable()
-                    .map<SyncResult> { count -> SyncResult.Completed(count) }
+        if (appStates.isEmpty()) {
+          return@flatMap Observable.just(SyncResult.Completed(0))
+        }
+        else {
+          azureService.sendAppStates(userId, appStates)
+            .toSingle { true }
+            .toObservable()
+            .flatMap {
+              dbService.updateSyncStateForAppStates(appStates, SyncState.Uploaded)
+                .toSingle<SyncResult> { SyncResult.Completed() }
+                .toObservable()
+                .flatMap {
+                  if (it is SyncResult.Completed) {
+                    dbService.pendingAppStatesRemaining()
+                      .toObservable()
+                      .map<SyncResult> { count -> SyncResult.Completed(count) }
+                  }
+                  else {
+                    Observable.just(it)
+                  }
                 }
-                else {
-                  Observable.just(it)
-                }
-              }
-          }
-          .doOnError { Timber.e(it) }
-          .onErrorResumeNext(
-            dbService.updateSyncStateForAppStates(appStates, SyncState.Pending)
-              .toSingle<SyncResult> { SyncResult.Error() }
-              .toObservable()
-          )
+            }
+            .doOnError { Timber.e(it) }
+            .onErrorResumeNext(
+              dbService.updateSyncStateForAppStates(appStates, SyncState.Pending)
+                .toSingle<SyncResult> { SyncResult.Error() }
+                .toObservable()
+            )
+        }
       }
   }
 

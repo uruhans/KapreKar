@@ -78,6 +78,7 @@ class DeviceConnection(
               else -> deviceUpdateResult
             }
           }
+          .onErrorReturn { deviceUpdateResult }
       }
 
     val rawDataPackageObservable = connectedBleDeviceObservable

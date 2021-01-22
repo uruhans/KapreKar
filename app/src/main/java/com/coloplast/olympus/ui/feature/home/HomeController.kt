@@ -270,10 +270,12 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
             breachesOccurred.clear()
           }
         }
+        is HomeUiModel.RawDataPackageUpdate -> {
+          lastCheck.set(uiModel.lastUpdate)
+        }
         is HomeUiModel.AnimationReset -> {
           updateAnimation.set(true)
           updateAnimation.notifyChange()
-          lastCheck.set(uiModel.lastUpdate)
         }
       }
     }

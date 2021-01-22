@@ -1,6 +1,7 @@
 package com.coloplast.olympus.ui.feature.home
 
 import com.artemzin.rxui.kotlin.bind
+import com.coloplast.olympus.Me
 import com.coloplast.olympus.bluetooth.StateDispatcher
 import com.coloplast.olympus.bluetooth.businesslayer.BluetoothManager
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
@@ -8,8 +9,8 @@ import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
 import com.coloplast.olympus.businesslayer.interfaces.AppStateComponent
 import com.coloplast.olympus.businesslayer.interfaces.TransmitterComponent
 import com.coloplast.olympus.businesslayer.interfaces.UserComponent
+import com.coloplast.olympus.shared.models.CurrentUser
 import com.coloplast.olympus.shared.models.DataResult
-import com.coloplast.olympus.shared.preferences.Preferences
 import com.coloplast.olympus.ui.feature.home.models.BaseHomeViewModel
 import com.coloplast.olympus.ui.feature.home.models.HomeUiModel
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
@@ -23,10 +24,10 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 class HomeViewModel(
+  private val me: Me,
   private val bluetoothManager: BluetoothManager,
   private val transmitterComponent: TransmitterComponent,
   private val userComponent: UserComponent,
-  private val preferences: Preferences,
   private val appStateComponent: AppStateComponent
 ) : BaseHomeViewModel() {
 
@@ -35,8 +36,7 @@ class HomeViewModel(
 
     val currentBluetoothStateObservable: Observable<BluetoothState> = bluetoothManager.bluetoothStateObservable()
     val bluetoothStateObservable: Observable<HomeUiModel> = currentBluetoothStateObservable
-      .map<HomeUiModel> {
-        HomeUiModel.BluetoothIssue(it) }
+      .map<HomeUiModel> { HomeUiModel.BluetoothIssue(it) }
       .onErrorReturn {
         Timber.e(it)
         HomeUiModel.ConnectionStateUpdate(BleConnectionState.DISCONNECTED)
@@ -62,12 +62,19 @@ class HomeViewModel(
               .toObservable()
           }
         }
-
         return@flatMap Observable.just(uiModel)
       }
 
     val animationResetObservable = Observable.interval(1, 10, TimeUnit.SECONDS)
       .map { HomeUiModel.AnimationReset() }
+
+    val rawPackageUpdateObservable = StateDispatcher.rawPackageUpdateObservable()
+      .map { HomeUiModel.RawDataPackageUpdate(it) }
+
+    val animationAndRawPackageObservable = Observable.merge(
+      animationResetObservable,
+      rawPackageUpdateObservable
+    )
 
     val stitchTransmitterObservable = uiView.requestStitching()
       .switchMap { stitch ->
@@ -80,11 +87,17 @@ class HomeViewModel(
       .subscribeOn(Schedulers.io())
       .toObservable()
 
-    val userId = UUID.fromString(preferences.userLoggedIn)
-
-    val syncTransmittersObservable = transmitterComponent.syncTransmitters(userId)
+    val synchronizeDataObservable = me.currentUserObservable()
+      .ofType(CurrentUser.LoggedIn::class.java)
+      .map { it.user.id }
+      .flatMap { userId ->
+        Observable.concat(
+          transmitterComponent.syncTransmitters(userId),
+          userComponent.syncUser(userId)
+        )
       .subscribeOn(Schedulers.io())
-      .doOnNext { Timber.d("Sync Transmitters [$it]") }
+      }
+      .ignoreElements()
 
     val noTransmittersObservable =
       currentBluetoothStateObservable
@@ -104,13 +117,8 @@ class HomeViewModel(
           }
         }
 
-    val syncUserObservable = userComponent.syncUser(userId)
-      .subscribeOn(Schedulers.io())
-      .doOnNext { Timber.d("Sync User [$it]") }
-
-    disposable.add(syncTransmittersObservable.subscribe())
-    disposable.add(syncUserObservable.subscribe())
-    disposable.add(Observable.merge(stateUpdate, bluetoothStateObservable, animationResetObservable, noTransmittersObservable).bind(uiView.render()))
+    disposable.add(synchronizeDataObservable.subscribe())
+    disposable.add(Observable.merge(stateUpdate, bluetoothStateObservable, animationAndRawPackageObservable, noTransmittersObservable).bind(uiView.render()))
     disposable.add(stitchTransmitterObservable.bind(uiView.render()))
 
     return disposable

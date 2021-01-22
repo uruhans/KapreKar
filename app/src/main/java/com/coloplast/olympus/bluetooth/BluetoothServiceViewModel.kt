@@ -8,7 +8,6 @@ import com.coloplast.olympus.bluetooth.businesslayer.models.DeviceResult
 import com.coloplast.olympus.bluetooth.model.*
 import com.coloplast.olympus.businesslayer.interfaces.AppStateComponent
 import com.coloplast.olympus.businesslayer.interfaces.TransmitterComponent
-import com.coloplast.olympus.shared.AppSettings
 import com.coloplast.olympus.ui.feature.home.models.StateTransformers
 import com.coloplast.olympus.ui.feature.statemachine.OverlayStateMachineImpl
 import com.coloplast.olympus.ui.feature.statemachine.UiStateMachineImpl
@@ -142,7 +141,7 @@ class BluetoothServiceViewModel(
         }
 
         uiState?.let { state ->
-          appStateComponent.insertAppState(state.toLetter(), AppSettings.appInBackground)
+          appStateComponent.insertAppState(state.toLetter())
             .subscribeOn(Schedulers.io())
             .doOnError { throwable -> Timber.e(throwable) }
             .blockingGet()

@@ -46,7 +46,7 @@ class CustomApplication : Application() {
     // cancel all previous work
     workManager.cancelAllWork()
 
-    val periodicSyncRequest = PeriodicWorkRequestBuilder<SyncTransmitterPackagesWorker>(2, TimeUnit.MINUTES)
+    val periodicSyncRequest = PeriodicWorkRequestBuilder<SyncTransmitterPackagesWorker>(15, TimeUnit.MINUTES)
       .setConstraints(
         Constraints.Builder()
         // requires internet to sync packages to server

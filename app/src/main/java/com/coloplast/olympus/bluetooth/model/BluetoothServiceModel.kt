@@ -11,5 +11,4 @@ sealed class BluetoothServiceModel {
   data class RawDataPackageUpdate(val macAddress: String, val rawDataPackage: RawDataPackage, val lastUpdate: LocalDateTime = LocalDateTime.now()) : BluetoothServiceModel()
   data class Disconnected(val macAddress: String) : BluetoothServiceModel()
   data class ScanningStarted(val ignored: Unit = Unit) : BluetoothServiceModel()
-  data class AppStateInsertComplete(val complete: Boolean = true) : BluetoothServiceModel()
 }

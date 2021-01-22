@@ -8,9 +8,7 @@ import java.util.*
 
 interface AppStateComponent {
 
-  fun insertAppState(appState: String, appInBackground: Boolean): Completable
+  fun insertAppState(appState: String): Completable
   fun deleteAppStatesAlreadySynced(): Observable<SyncResult>
   fun syncAppStatesWithCloud(userId: UUID, forceSync: Boolean = false) : Observable<SyncResult>
-//  fun pendingPackagesRemaining(userId: UUID, packageType: PackageType) : Single<Int>
-//
 }

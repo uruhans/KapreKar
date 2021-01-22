@@ -4,6 +4,7 @@ import com.coloplast.olympus.businesslayer.interfaces.AppStateComponent
 import com.coloplast.olympus.businesslayer.models.SyncResult
 import com.coloplast.olympus.databaselayer.DbServiceImpl
 import com.coloplast.olympus.datalayer.AzurePackageApiImpl
+import com.coloplast.olympus.shared.AppSettings
 import com.coloplast.olympus.shared.models.AppState
 import com.coloplast.olympus.shared.models.DataResult
 import com.coloplast.olympus.shared.types.SyncState
@@ -19,17 +20,13 @@ class AppStateComponentImpl() : AppStateComponent {
   private var lastAppState: String = ""
 
   override fun insertAppState(
-    appState: String,
-    appInBackground: Boolean
+    appState: String
   ): Completable {
-    if (appState == lastAppState) {
-      return Completable.complete()
-    }
-    if (appState.isEmpty()) {
+    if (appState.isEmpty() || appState == lastAppState) {
       return Completable.complete()
     }
     lastAppState = appState
-    val appStatePackage = if (appInBackground) AppState(appState = "", internalAppState = appState) else AppState(appState = appState, internalAppState = "")
+    val appStatePackage = if (AppSettings.appInBackground) AppState(appState = "", internalAppState = appState) else AppState(appState = appState, internalAppState = "")
     return dbService.insertAppState(appStatePackage)
   }
 

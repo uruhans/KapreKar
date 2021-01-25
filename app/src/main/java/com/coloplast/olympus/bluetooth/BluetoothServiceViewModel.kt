@@ -4,7 +4,6 @@ import com.artemzin.rxui.kotlin.bind
 import com.coloplast.olympus.bluetooth.businesslayer.BluetoothManager
 import com.coloplast.olympus.bluetooth.businesslayer.DeviceConnection
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
-import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
 import com.coloplast.olympus.bluetooth.businesslayer.models.DeviceResult
 import com.coloplast.olympus.bluetooth.model.*
 import com.coloplast.olympus.businesslayer.interfaces.TransmitterComponent
@@ -43,8 +42,8 @@ class BluetoothServiceViewModel(
       // however, we dont really care about the result, we just want the ping
       .map { true }
 
-    // this is a continuous ping that notifies us every 30 seconds
-    val continuousPingObservable = Observable.interval(30, TimeUnit.SECONDS)
+    // this is a continuous ping that notifies us every 6 seconds
+    val continuousPingObservable = Observable.interval(6, TimeUnit.SECONDS)
       .map { true }
 
     // we merge these these pings, that will notify us that we want to try
@@ -67,10 +66,11 @@ class BluetoothServiceViewModel(
       .flatMapIterable { it }
       // get the current connection state of the transmitter immediately
       .map { TxModel(it, bluetoothManager.bleConnectionStateObservable(it.id).blockingFirst()) }
-      // write it out to logcat
-      .doOnNext { Timber.d("[${it.transmitter.name}] - [${it.transmitter.id}] - is ${it.connectionState}") }
+//      // write it out to logcat
+//      .doOnNext { Timber.d("[${it.transmitter.name}] - [${it.transmitter.id}] - is ${it.connectionState}") }
       // only continue if the current transmitter is disconnected
       .filter { it.connectionState == BleConnectionState.DISCONNECTED }
+      .doOnNext { Timber.d("Trying to connect to [${it.transmitter.name}] with macAddress: [${it.transmitter.id}]") }
       // then map the txModel => transmitter
       .map { it.transmitter }
       // then map the transmitter => macAddress

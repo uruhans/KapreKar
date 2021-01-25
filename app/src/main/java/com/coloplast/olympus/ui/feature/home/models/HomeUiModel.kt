@@ -18,4 +18,6 @@ sealed class HomeUiModel : UiModel {
   data class NoTransmittersFound(val lastUpdate: LocalDateTime = LocalDateTime.now()) : HomeUiModel()
   data class Initial(val nothing: Unit = Unit) : HomeUiModel()
   data class DeviceDisconnected(private val disconnected: Unit = Unit) : HomeUiModel()
+  data class RawDataPackageUpdate(val macAddress: String, val lastUpdate: LocalDateTime = LocalDateTime.now()) : HomeUiModel()
+
 }

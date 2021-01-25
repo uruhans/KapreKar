@@ -125,14 +125,14 @@ class DbServiceImpl : DbService {
       .flatMapCompletable { RxHelper.completeOrError(it.toInt(), InsertOrUpdateFailedException()) }
   }
 
-  override fun getPendingTransmitterPackages(userId: UUID, packageType: PackageType, forceSync: Boolean): Observable<DataResult<List<TransmitterPackage>>> {
+  override fun getPendingTransmitterPackages(userId: UUID, packageType: PackageType): Observable<DataResult<List<TransmitterPackage>>> {
     return db.transmitterPackageDao()
       .getPendingPackagesOfType(userId.toString(), packageType)
       .toObservable()
       .doOnNext { Timber.d("Number of pending [$packageType] packages in database: ${it.size}") }
       .filter { it.isNotEmpty() }
       .flatMap { packages ->
-        if(!forceSync && packageType == PackageType.Raw && packages.size < 1000) {
+        if (packageType == PackageType.Raw && packages.size < 1000) {
           Timber.d("Skipping sync of [$packageType] - less than 1000 packages")
           Observable.just(DataResult.Empty())
         }
@@ -161,7 +161,7 @@ class DbServiceImpl : DbService {
       .ignoreElements()
   }
 
-  override fun updateSyncStateForPackages(packages: List<TransmitterPackage>, syncState: SyncState) : Completable {
+  override fun updateSyncStateForPackages(packages: List<TransmitterPackage>, syncState: SyncState): Completable {
     val dbList = packages.map { DbTransmitterPackage.fromTransmitterPackage(it) }
     dbList.forEach { it.syncState = syncState }
 
@@ -191,7 +191,7 @@ class DbServiceImpl : DbService {
       }
   }
 
-  override fun updateSyncStateForTransmitters(transmitters: List<Transmitter>, syncState: SyncState) : Completable {
+  override fun updateSyncStateForTransmitters(transmitters: List<Transmitter>, syncState: SyncState): Completable {
     val dbTransmitters: List<DbTransmitter> = transmitters.map { DbTransmitter.fromTransmitter(it) }
     dbTransmitters.forEach { it.syncState = syncState }
 

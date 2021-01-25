@@ -6,10 +6,11 @@ import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerStateWelcomeBinding
 import com.coloplast.olympus.shared.preferences.Preferences
+import com.coloplast.olympus.ui.feature.home.models.LastCheckVisible
 import com.coloplast.olympus.ui.feature.home.models.PatchVisible
 import org.koin.core.inject
 
-class WelcomeController : BaseHomeUIControllerAppTour<ControllerStateWelcomeBinding>(), PatchVisible {
+class WelcomeController : BaseHomeUIControllerAppTour<ControllerStateWelcomeBinding>(), PatchVisible, LastCheckVisible {
 
   private val preferences: Preferences by inject()
 
@@ -25,6 +26,10 @@ class WelcomeController : BaseHomeUIControllerAppTour<ControllerStateWelcomeBind
   override fun onViewBound(viewBinding: ControllerStateWelcomeBinding) {
     preferences.didSeeWelcome = true
     super.onViewBound(viewBinding)
+  }
+
+  override fun lastCheckVisible(): Boolean {
+    return true
   }
 
   private fun closeAfterPeriod(viewBinding: ControllerStateWelcomeBinding) {

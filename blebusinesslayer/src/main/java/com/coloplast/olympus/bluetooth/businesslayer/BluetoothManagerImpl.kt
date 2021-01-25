@@ -290,7 +290,7 @@ class BluetoothManagerImpl(
       // this filter will filter out any status vectors where *all* sensors are returning an invalid value
       // this occurs right after a reset, where the transmitter takes a little time to figure out it's actual state
       // so filter is added to remove any garbage callbacks
-      .filter { statusVector -> statusVector.toList().subList(0, 6).all { vector -> vector.toInt() != -1 } }
+      .filter { statusVector -> statusVector.toList().subList(0, 6).any { vector -> vector.toInt() > -1 } }
       // store in local database
       .flatMapSingle { statusVector ->
         transmitterComponent.insertStatusPackage(macAddress, statusVector)

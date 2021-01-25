@@ -58,15 +58,13 @@ class ProfileViewModel(
             .subscribeOn(Schedulers.io())
             // disconnect all transmitters
             .map { bluetoothManager.disconnectAllTransmitters() }
-            .delay(2, TimeUnit.SECONDS)
             // stop the service to make sure it doesn't try to automatically reconnect to any transmitters
             .map { serviceStateDispatcher.serviceRelay.accept(ServiceStateDispatcher.ServiceState.STOP_SERVICE) }
             // log out user -> will move user to landing page
             .map { me.logout(true) }
         }
-        .subscribe()
 
-    disposable.add(onLogoutRequested)
+    disposable.add(onLogoutRequested.subscribe())
     disposable.add(Observable.merge(onUserDataRequested, updateUserObservable).bind(uiView.render()))
     return disposable
   }

@@ -103,18 +103,19 @@ class HomeViewModel(
       currentBluetoothStateObservable
         .filter { it != BluetoothState.UNDEFINED }
         .flatMap {
-          if (it == BluetoothState.LOCATION_SERVICES_NOT_ENABLED || it == BluetoothState.BLUETOOTH_NOT_ENABLED) {
-            return@flatMap transmittersObservable
-              .flatMap { dbInsertAppState(UiState.BLUETOOTH_NOT_ENABLED).toObservable<BluetoothState>() }
-              .map { HomeUiModel.NoTransmittersFound() }
+          val state = if (it == BluetoothState.LOCATION_SERVICES_NOT_ENABLED || it == BluetoothState.BLUETOOTH_NOT_ENABLED) {
+            UiState.BLUETOOTH_NOT_ENABLED
           }
           else {
-            return@flatMap transmittersObservable
-              .flatMap { dbInsertAppState(UiState.TRANSMITTERS_EMPTY).toObservable<BluetoothState>() }
-              .map {
-                HomeUiModel.NoTransmittersFound()
-              }
+            UiState.TRANSMITTERS_EMPTY
           }
+
+          return@flatMap transmittersObservable
+            .flatMap {
+              dbInsertAppState(state)
+                .toSingle { HomeUiModel.NoTransmittersFound() }
+                .toObservable()
+            }
         }
 
     disposable.add(synchronizeDataObservable.subscribe())
@@ -125,10 +126,9 @@ class HomeViewModel(
   }
 
   private fun dbInsertAppState(uiState: UiState): Completable {
-    val completable =  appStateComponent.insertAppState(uiState.toLetter())
+    return appStateComponent.insertAppState(uiState.toLetter())
       .subscribeOn(Schedulers.io())
       .onErrorComplete()
-    return completable
   }
 
   override fun bindConnectionState(uiView: HomeView): Disposable {

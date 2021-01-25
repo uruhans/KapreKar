@@ -26,7 +26,7 @@ class AppStateComponentImpl() : AppStateComponent {
       return Completable.complete()
     }
     lastAppState = appState
-    val appStatePackage = if (AppSettings.appInBackground) AppState(appState = "", internalAppState = appState) else AppState(appState = appState, internalAppState = "")
+    val appStatePackage = if (AppSettings.appInBackground) AppState(internalAppState = appState) else AppState(appState = appState)
     return dbService.insertAppState(appStatePackage)
   }
 

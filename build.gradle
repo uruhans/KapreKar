@@ -12,6 +12,7 @@ buildscript {
   ext.room_version = '2.2.5'
   ext.work_version = '2.4.0'
   ext.desuger_lib = '1.0.10'
+  ext.appCenterSdkVersion = '4.1.0'
 
   repositories {
     google()

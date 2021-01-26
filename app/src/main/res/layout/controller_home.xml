@@ -39,6 +39,20 @@
         app:layout_constraintTop_toTopOf="parent"
         app:tintDrawable="@{controller.isConnected ? R.color.icon_enabled : R.color.icon_disabled}" />
 
+      <TextView
+        android:id="@+id/transmitter_name"
+        style="@style/Text.Large"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/spacing_half"
+        android:gravity="center_vertical"
+        android:textColor="@color/grey"
+        android:text="@{controller.transmitterName}"
+        app:visibleOrInvisible="@{controller.isConnected &amp;&amp; !controller.isProduction}"
+        app:layout_constraintBottom_toBottomOf="@+id/icon_bluetooth"
+        app:layout_constraintStart_toEndOf="@+id/icon_bluetooth"
+        app:layout_constraintTop_toTopOf="@+id/icon_bluetooth" />
+
       <com.coloplast.olympus.ui.common.widgets.ConnectionStateTextView
         android:id="@+id/connection_state_text"
         style="@style/Text.Large"
@@ -48,9 +62,9 @@
         android:gravity="center_vertical"
         android:textColor="@color/grey"
         app:animateText="@{controller.isConnected ? @string/status_connected : @string/status_disconnected}"
-        app:layout_constraintBottom_toBottomOf="@+id/icon_bluetooth"
-        app:layout_constraintStart_toEndOf="@+id/icon_bluetooth"
-        app:layout_constraintTop_toTopOf="@+id/icon_bluetooth" />
+        app:layout_constraintBottom_toBottomOf="@+id/transmitter_name"
+        app:layout_constraintStart_toEndOf="@+id/transmitter_name"
+        app:layout_constraintTop_toTopOf="@+id/transmitter_name" />
 
       <ImageView
         android:id="@+id/menu_icon"

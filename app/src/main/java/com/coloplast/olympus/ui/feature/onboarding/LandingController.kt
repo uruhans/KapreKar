@@ -107,6 +107,7 @@ class LandingController : BaseController<ControllerLandingBinding>() {
   }
 
   private fun shouldShowWelcome(): Boolean {
+    return true
     return  (preferences.getCurrentOnboardingProgress() == OnboardingProgression.COMPLETED &&
         !preferences.didSeeWelcome)
   }

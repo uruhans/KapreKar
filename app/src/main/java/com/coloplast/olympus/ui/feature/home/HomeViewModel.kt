@@ -111,10 +111,20 @@ class HomeViewModel(
           }
 
           return@flatMap transmittersObservable
-            .flatMap {
-              dbInsertAppState(state)
-                .toSingle { HomeUiModel.NoTransmittersFound() }
-                .toObservable()
+            .flatMap { list ->
+              if (state == UiState.BLUETOOTH_NOT_ENABLED) {
+                dbInsertAppState(state)
+                  .toSingle { HomeUiModel.BluetoothIssue(BluetoothState.BLUETOOTH_NOT_ENABLED) }
+                  .toObservable()
+              }
+              else if ((list.isEmpty() && state == UiState.TRANSMITTERS_EMPTY)) {
+                dbInsertAppState(state)
+                  .toSingle { HomeUiModel.NoTransmittersFound() }
+                  .toObservable()
+              }
+              else {
+                return@flatMap Observable.just(HomeUiModel.BluetoothIssue(it))
+              }
             }
         }
 

@@ -266,11 +266,11 @@ class BluetoothManagerImpl(
       .flatMap { it }
       .startWith(rxBleConnection.readCharacteristic(BatteryPowerService.Characteristics.POWER).toObservable())
       // store in local database
-      .doOnNext {
-        transmitterComponent.insertPowerPackage(macAddress, it)
+      .flatMapSingle { batteryPackage ->
+        transmitterComponent.insertPowerPackage(macAddress, batteryPackage)
           .subscribeOn(Schedulers.io())
-          .doOnError { throwable -> Timber.e(throwable) }
-          .subscribe()
+          .toSingle { batteryPackage }
+          .onErrorReturn { batteryPackage }
       }
       .compose(BatteryPowerService.transformer)
   }
@@ -290,13 +290,13 @@ class BluetoothManagerImpl(
       // this filter will filter out any status vectors where *all* sensors are returning an invalid value
       // this occurs right after a reset, where the transmitter takes a little time to figure out it's actual state
       // so filter is added to remove any garbage callbacks
-      .filter { statusVector -> statusVector.any { vector -> vector.toInt() != -1 } }
+      .filter { statusVector -> statusVector.toList().subList(0, 6).any { vector -> vector.toInt() > -1 } }
       // store in local database
-      .doOnNext {
-        transmitterComponent.insertStatusPackage(macAddress, it)
+      .flatMapSingle { statusVector ->
+        transmitterComponent.insertStatusPackage(macAddress, statusVector)
           .subscribeOn(Schedulers.io())
-          .doOnError { throwable -> Timber.e(throwable) }
-          .subscribe()
+          .toSingle { statusVector }
+          .onErrorReturn { statusVector }
       }
       .compose(OlympusWirelessProtocol.statusTransformer)
   }
@@ -317,13 +317,12 @@ class BluetoothManagerImpl(
     else {
       rxBleConnection.setupNotification(OlympusWirelessProtocol.Characteristics.RAW_SENSOR_DATA)
         .flatMap { it }
-        .startWith(rxBleConnection.readCharacteristic(OlympusWirelessProtocol.Characteristics.RAW_SENSOR_DATA).toObservable())
         // store in local database
-        .doOnNext {
-          transmitterComponent.insertRawPackage(macAddress, it)
+        .flatMapSingle { rawPackage ->
+          transmitterComponent.insertRawPackage(macAddress, rawPackage)
             .subscribeOn(Schedulers.io())
-            .doOnError { throwable -> Timber.e(throwable) }
-            .subscribe()
+            .toSingle { rawPackage }
+            .onErrorReturn { rawPackage }
         }
         .compose(OlympusWirelessProtocol.rawDataPackageTransformer)
     }

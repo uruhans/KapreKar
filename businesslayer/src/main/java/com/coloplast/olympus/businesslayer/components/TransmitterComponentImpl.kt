@@ -145,35 +145,39 @@ class TransmitterComponentImpl(private val preferences: Preferences) : Transmitt
     }
   }
 
-  override fun syncPackagesWithCloud(userId: UUID, packageType: PackageType, forceSync: Boolean): Observable<SyncResult> {
+  override fun syncPackagesWithCloud(userId: UUID, packageType: PackageType): Observable<SyncResult> {
     return getPendingPackages(userId, packageType)
-      .filter { it.isNotEmpty() }
       .doOnNext { Timber.d("Number of [$packageType] packages to sync: ${it.size}") }
       .flatMap { packages ->
-        azureService.sendPackages(userId, packageType, packages)
-          .toSingle { true }
-          .toObservable()
-          .flatMap {
-            dbService.updateSyncStateForPackages(packages, SyncState.Uploaded)
-              .toSingle<SyncResult> { SyncResult.Completed() }
-              .toObservable()
-              .flatMap {
-                if (it is SyncResult.Completed) {
-                  dbService.pendingPackagesRemaining(userId, packageType)
-                    .toObservable()
-                    .map<SyncResult> { count -> SyncResult.Completed(count) }
+        if(packages.isEmpty()) {
+          return@flatMap Observable.just(SyncResult.Completed(0))
+        }
+        else {
+          azureService.sendPackages(userId, packageType, packages)
+            .toSingle { true }
+            .toObservable()
+            .flatMap {
+              dbService.updateSyncStateForPackages(packages, SyncState.Uploaded)
+                .toSingle<SyncResult> { SyncResult.Completed() }
+                .toObservable()
+                .flatMap {
+                  if (it is SyncResult.Completed) {
+                    dbService.pendingPackagesRemaining(userId, packageType)
+                      .toObservable()
+                      .map<SyncResult> { count -> SyncResult.Completed(count) }
+                  }
+                  else {
+                    Observable.just(it)
+                  }
                 }
-                else {
-                  Observable.just(it)
-                }
-              }
-          }
-          .doOnError { Timber.e(it) }
-          .onErrorResumeNext(
-            dbService.updateSyncStateForPackages(packages, SyncState.Pending)
-              .toSingle<SyncResult> { SyncResult.Error() }
-              .toObservable()
-          )
+            }
+            .doOnError { Timber.e(it) }
+            .onErrorResumeNext(
+              dbService.updateSyncStateForPackages(packages, SyncState.Pending)
+                .toSingle<SyncResult> { SyncResult.Error() }
+                .toObservable()
+            )
+        }
       }
   }
 

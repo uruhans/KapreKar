@@ -1,44 +1,155 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
-  xmlns:bind="http://schemas.android.com/apk/res-auto">
+  xmlns:bind="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools">
 
   <data>
+
+    <import type="android.view.View" />
+
+    <import type="com.coloplast.olympus.R" />
+
     <variable
       name="controller"
       type="com.coloplast.olympus.ui.feature.uistates.WelcomeController" />
+
   </data>
 
-  <LinearLayout
+  <androidx.drawerlayout.widget.DrawerLayout
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="bottom"
-    android:orientation="vertical">
+    android:fitsSystemWindows="true">
 
-    <TextView
-      style="@style/Headline.Large"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginStart="@dimen/spacing_standard"
-      android:layout_marginTop="@dimen/spacing_half"
-      android:layout_marginEnd="@dimen/spacing_standard"
-      android:text="@string/main_screen_welcome_title1" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+      android:id="@+id/constraintLayout"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:background="@color/default_background">
 
-    <TextView
-      style="@style/Headline.Large"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginStart="@dimen/spacing_standard"
-      android:layout_marginEnd="@dimen/spacing_standard"
-      android:layout_marginBottom="@dimen/spacing_double"
-      android:fontFamily="@font/coloplast"
-      android:text="@string/main_screen_welcome_body1"
-      android:textColor="@color/grey" />
+      <ImageView
+        android:id="@+id/icon_bluetooth"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="@dimen/spacing_standard"
+        android:layout_marginTop="@dimen/spacing_standard"
+        android:padding="2dp"
+        android:src="@drawable/ic_bluetooth"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tintDrawable="@{controller.isConnected ? R.color.icon_enabled : R.color.icon_disabled}" />
 
-    <include layout="@layout/item_app_guide_button"
-      android:id="@+id/includeBtn"
-      bind:isVisible="@{controller.shouldShowAppTourButton}"
-      app:buttonClickListener="@{() -> controller.startAppTour()}"/>
+      <com.coloplast.olympus.ui.common.widgets.ConnectionStateTextView
+        android:id="@+id/connection_state_text"
+        style="@style/Text.Large"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/spacing_half"
+        android:gravity="center_vertical"
+        android:textColor="@color/grey"
+        app:animateText="@{controller.isConnected ? @string/status_connected : @string/status_disconnected}"
+        app:layout_constraintBottom_toBottomOf="@+id/icon_bluetooth"
+        app:layout_constraintStart_toEndOf="@+id/icon_bluetooth"
+        app:layout_constraintTop_toTopOf="@+id/icon_bluetooth" />
 
-  </LinearLayout>
+      <ImageView
+        android:id="@+id/menu_icon"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="@dimen/spacing_standard"
+        android:layout_marginEnd="@dimen/spacing_standard"
+        android:background="?attr/actionBarItemBackground"
+        android:src="@drawable/ic_menu_24dp"
+        app:tint="@color/darkgrey"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+      <com.coloplast.olympus.ui.common.widgets.PatchView
+        android:id="@+id/icon_patch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        app:error="@{controller.patchInErrorState}"
+        app:isDetailView="@{false}"
+        app:layout_constraintBottom_toTopOf="@+id/headline"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+
+      <TextView
+        android:id="@+id/headline"
+        style="@style/Headline.Large"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/subtitle"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="@dimen/spacing_standard"
+        android:layout_marginTop="@dimen/spacing_half"
+        android:layout_marginEnd="@dimen/spacing_standard"
+        android:text="@string/main_screen_welcome_title1" />
+
+      <TextView
+        android:id="@+id/subtitle"
+        style="@style/Headline.Large"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_standard"
+        android:layout_marginEnd="@dimen/spacing_standard"
+        android:layout_marginBottom="@dimen/spacing_double"
+        app:layout_constraintBottom_toTopOf="@+id/button"
+        app:layout_constraintStart_toStartOf="parent"
+        android:fontFamily="@font/coloplast"
+        android:text="@string/main_screen_welcome_body1"
+        android:textColor="@color/grey" />
+
+      <LinearLayout
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/power_icon"
+        app:layout_constraintStart_toStartOf="parent"
+        >
+        <include layout="@layout/item_app_guide_button"
+          android:id="@+id/includeBtn"
+          bind:isVisible="@{controller.shouldShowAppTourButton}"
+          app:buttonClickListener="@{() -> controller.startAppTour()}" />
+      </LinearLayout>
+
+
+      <ImageView
+        android:id="@+id/power_icon"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginBottom="@dimen/spacing_standard"
+        app:battery="@{controller.battery}"
+        app:layout_constraintBottom_toTopOf="@id/progress_animator"
+        app:layout_constraintStart_toStartOf="@+id/icon_bluetooth"
+        app:visibleOrInvisibleFade="@{controller.isConnected}" />
+
+      <TextView
+        android:id="@+id/lastcheck"
+        style="@style/Text.Large"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginEnd="@dimen/spacing_standard"
+        android:gravity="center_vertical"
+        android:textColor="@color/grey"
+        app:lastCheck="@{controller.lastCheck}"
+        app:layout_constraintBottom_toBottomOf="@+id/power_icon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/power_icon"
+        app:visibleOrInvisibleFade="@{controller.isConnected}"
+        tools:text="@string/status_last_check" />
+
+      <com.coloplast.olympus.ui.common.widgets.AnimatedProgressView
+        android:id="@+id/progress_animator"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/spacing_standard"
+        android:visibility="invisible"
+        android:background="@color/progress_animation_background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+  </androidx.drawerlayout.widget.DrawerLayout>
 </layout>

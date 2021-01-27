@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:bind="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools">
 
   <data>
@@ -110,6 +111,7 @@
         >
         <include layout="@layout/item_app_guide_button"
           android:id="@+id/includeBtn"
+          bind:isVisible="@{controller.shouldShowAppTourButton}"
           app:buttonClickListener="@{() -> controller.startAppTour()}" />
       </LinearLayout>
 
@@ -120,7 +122,7 @@
         android:layout_height="32dp"
         android:layout_marginBottom="@dimen/spacing_standard"
         app:battery="@{controller.battery}"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/progress_animator"
         app:layout_constraintStart_toStartOf="@+id/icon_bluetooth"
         app:visibleOrInvisibleFade="@{controller.isConnected}" />
 
@@ -138,6 +140,16 @@
         app:layout_constraintTop_toTopOf="@+id/power_icon"
         app:visibleOrInvisibleFade="@{controller.isConnected}"
         tools:text="@string/status_last_check" />
+
+      <com.coloplast.olympus.ui.common.widgets.AnimatedProgressView
+        android:id="@+id/progress_animator"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/spacing_standard"
+        android:visibility="invisible"
+        android:background="@color/progress_animation_background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
   </androidx.drawerlayout.widget.DrawerLayout>
 </layout>

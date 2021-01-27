@@ -3,7 +3,6 @@ package com.dawn.bluetooth
 import android.bluetooth.BluetoothDevice
 import android.content.Context
 import android.os.ParcelUuid
-import android.util.Log
 import com.polidea.rxandroidble2.*
 import com.polidea.rxandroidble2.scan.ScanFilter
 import com.polidea.rxandroidble2.scan.ScanResult
@@ -69,21 +68,8 @@ class BluetoothHandler(private val context: Context, isDebugging: Boolean) {
           .flatMap {
             BleDeviceBondingManager.createBond(context, rxBleDevice)
               .filter { rxBleDevice.bluetoothDevice.bondState == BluetoothDevice.BOND_BONDED }
-              .flatMapSingle { rxBleConnection.requestMtu(mtuSize) }
-              .flatMap {
-                rxBleConnection.discoverServices()
-                  .toObservable()
-                  .doOnNext { services ->
-                    if(BuildConfig.DEBUG) {
-                      services.bluetoothGattServices.forEach { service ->
-                        Log.d("BluetoothHandler", "Gatt Service: ${service.uuid}")
-                        service.characteristics.forEach { char ->
-                          Log.d("BluetoothHandler", "Characteristic ${char.uuid}")
-                        }
-                      }
-                    }
-                  }
-              }
+//              .flatMapSingle { rxBleConnection.requestMtu(mtuSize) }
+              .flatMapSingle { rxBleConnection.discoverServices() }
               // setup indication on the ServiceChanged characteristic
               .flatMap { rxBleConnection.setupIndication(serviceChangedUUID, NotificationSetupMode.DEFAULT) }
               .map { rxBleConnection }

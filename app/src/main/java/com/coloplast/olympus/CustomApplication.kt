@@ -6,6 +6,8 @@ import androidx.work.*
 import com.coloplast.olympus.koin.koinModule
 import com.coloplast.olympus.shared.AppSettings
 import com.coloplast.olympus.work.*
+import com.microsoft.appcenter.AppCenter
+import com.microsoft.appcenter.crashes.Crashes
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -38,6 +40,8 @@ class CustomApplication : Application() {
     if (BuildConfig.DEBUG) {
       scheduleWorkers()
     }
+
+    startAnalytics()
   }
 
   private fun scheduleWorkers() {
@@ -49,17 +53,23 @@ class CustomApplication : Application() {
     val periodicSyncRequest = PeriodicWorkRequestBuilder<SyncTransmitterPackagesWorker>(15, TimeUnit.MINUTES)
       .setConstraints(
         Constraints.Builder()
-        // requires internet to sync packages to server
-        .setRequiredNetworkType(NetworkType.CONNECTED)
-        .build()
+          // requires internet to sync packages to server
+          .setRequiredNetworkType(NetworkType.CONNECTED)
+          .build()
       )
       .setBackoffCriteria(BackoffPolicy.LINEAR, 10, TimeUnit.SECONDS)
       .build()
 
     workManager.enqueueUniquePeriodicWork(
-        "SyncTransmitterPackagesWorker",
-        ExistingPeriodicWorkPolicy.REPLACE,
-        periodicSyncRequest
-      )
+      "SyncTransmitterPackagesWorker",
+      ExistingPeriodicWorkPolicy.REPLACE,
+      periodicSyncRequest
+    )
+  }
+
+  private fun startAnalytics() {
+    AppCenter.start(
+      this, "b1dc9278-cd5e-4670-a328-5936c7343ce9", Crashes::class.java
+    )
   }
 }

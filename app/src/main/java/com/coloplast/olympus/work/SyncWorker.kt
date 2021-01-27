@@ -17,12 +17,10 @@ class SyncWorker(private val userComponent: UserComponent,
                  private val transmitterComponent: TransmitterComponent,
                  private val appStateComponent: AppStateComponent) {
 
-  fun doSyncWork(forUserId: UUID) : ListenableWorker.Result {
+  fun doSyncWork(forUserId: UUID): ListenableWorker.Result {
     Timber.d("[SyncWorker] Beginning Synchronization of transmitter packages")
 
     var result = ListenableWorker.Result.success()
-
-    var forceSync = false
 
     userComponent.getSingleLocalUser(forUserId)
       .subscribeOn(Schedulers.io())
@@ -39,7 +37,7 @@ class SyncWorker(private val userComponent: UserComponent,
       .flatMapObservable { userId ->
         // sync all packages of all types and sync appStates
         Observable.zip(
-          syncPackages(PackageType.Raw, userId, forceSync),
+          syncPackages(PackageType.Raw, userId),
           syncPackages(PackageType.Power, userId),
           syncPackages(PackageType.Status, userId),
           syncAppStates(userId),
@@ -52,7 +50,6 @@ class SyncWorker(private val userComponent: UserComponent,
       .retryWhen {
         it.flatMap { throwable ->
           if (throwable is RetryException) {
-            forceSync = true
             Timber.d("[SyncWorker] [${throwable.packageType}] - We still have pending packages [${throwable.tuplesRemaining}] - RETRYING")
             Observable.timer(1, TimeUnit.SECONDS)
           }
@@ -69,13 +66,13 @@ class SyncWorker(private val userComponent: UserComponent,
     return result
   }
 
-  private fun syncPackages(packageType: PackageType, userId: UUID, forceSync: Boolean = false) : Observable<ListenableWorker.Result> {
+  private fun syncPackages(packageType: PackageType, userId: UUID): Observable<ListenableWorker.Result> {
     // delete already synced packages
     return deletePackages(packageType)
       .flatMap { deleteResult ->
         if (deleteResult is SyncResult.Completed) {
           // then start the syncing
-          transmitterComponent.syncPackagesWithCloud(userId, packageType, forceSync)
+          transmitterComponent.syncPackagesWithCloud(userId, packageType)
             .map { syncResult ->
               when (syncResult) {
                 // if sync is successful
@@ -145,13 +142,7 @@ class SyncWorker(private val userComponent: UserComponent,
   }
 
   private fun deletePackages(packageType: PackageType): Observable<SyncResult> {
-    // only delete if we are in release mode
-    return if(BuildConfig.DEBUG || packageType != PackageType.Raw) {
-      Observable.just(SyncResult.Completed())
-    }
-    else {
-      transmitterComponent.deletePackagesAlreadySynced(packageType)
-    }
+    return transmitterComponent.deletePackagesAlreadySynced(packageType)
   }
 
   private fun deleteAppStates(): Observable<SyncResult> {

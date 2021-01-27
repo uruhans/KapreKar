@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.core.view.GravityCompat
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
@@ -15,6 +16,7 @@ import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.FadeChangeHandler
 import com.bluelinelabs.conductor.changehandler.HorizontalChangeHandler
 import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
+import com.coloplast.olympus.BuildConfig
 import com.coloplast.olympus.R
 import com.coloplast.olympus.bluetooth.ServiceDispatcher
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
@@ -27,6 +29,7 @@ import com.coloplast.olympus.bluetooth.model.ServiceEvent
 import com.coloplast.olympus.bluetooth.model.StateChange
 import com.coloplast.olympus.databinding.ControllerHomeBinding
 import com.coloplast.olympus.notifications.OlympusNotificationManager
+import com.coloplast.olympus.shared.AppSettings
 import com.coloplast.olympus.shared.preferences.Preferences
 import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.common.DrawerState
@@ -86,6 +89,9 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
   val isPatchVisible = ObservableBoolean(false)
   val patchInErrorState = ObservableBoolean(false)
   val isLastCheckVisible = ObservableBoolean(false)
+
+  val transmitterName = ObservableField<String>()
+  val isProduction = BuildConfig.Suffix.isEmpty()
 
   private var currentUiState = UiState.INITIAL
   private var currentOverlayState = OverlayState.NONE
@@ -209,9 +215,14 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
         }
         is HomeUiModel.StitchOrResetComplete -> {
           /* no-op */
+          if(!isProduction) {
+            Toast.makeText(AppSettings.applicationContext, "Reset Or Stitch sent", Toast.LENGTH_SHORT).show()
+          }
         }
         is HomeUiModel.DeviceUpdate -> {
           val stateChange = uiModel.stateChange
+
+          transmitterName.set(stateChange.bleDevice.name)
 
           stateChange.bleDevice.peripheral?.battery?.let { battery.set(it) }
           isConnected.set(stateChange.bleDevice.isConnected())

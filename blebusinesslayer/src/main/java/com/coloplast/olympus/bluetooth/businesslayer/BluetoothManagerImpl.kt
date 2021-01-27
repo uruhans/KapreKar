@@ -13,6 +13,7 @@ import com.coloplast.olympus.businesslayer.interfaces.TransmitterComponent
 import com.coloplast.olympus.shared.models.RawDataPackage
 import com.dawn.bluetooth.BluetoothHandler
 import com.jakewharton.rxrelay2.PublishRelay
+import com.microsoft.appcenter.crashes.Crashes
 import com.polidea.rxandroidble2.RxBleClient
 import com.polidea.rxandroidble2.RxBleConnection
 import com.polidea.rxandroidble2.RxBleDevice
@@ -61,6 +62,7 @@ class BluetoothManagerImpl(
      */
     RxJavaPlugins.setErrorHandler {
       Timber.e(it)
+      Crashes.trackError(it)
 
       when {
         // ignore if undeliverable (others should have received it first) - Rx issue ->

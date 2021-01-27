@@ -19,6 +19,7 @@ android {
     testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
     buildConfigField("Long", "BuildTime", System.currentTimeMillis() + "L")
+    buildConfigField("String", "AppCenterSecret", "\"b1dc9278-cd5e-4670-a328-5936c7343ce9\"")
   }
 
   sourceSets {

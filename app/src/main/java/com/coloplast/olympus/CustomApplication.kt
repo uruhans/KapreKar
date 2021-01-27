@@ -7,6 +7,7 @@ import com.coloplast.olympus.koin.koinModule
 import com.coloplast.olympus.shared.AppSettings
 import com.coloplast.olympus.work.*
 import com.microsoft.appcenter.AppCenter
+import com.microsoft.appcenter.analytics.Analytics
 import com.microsoft.appcenter.crashes.Crashes
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -33,10 +34,7 @@ class CustomApplication : Application() {
       modules(koinModule)
     }
 
-    if (BuildConfig.DEBUG) {
-      scheduleWorkers()
-    }
-
+    scheduleWorkers()
     startAnalytics()
   }
 
@@ -64,8 +62,10 @@ class CustomApplication : Application() {
   }
 
   private fun startAnalytics() {
-    AppCenter.start(
-      this, "b1dc9278-cd5e-4670-a328-5936c7343ce9", Crashes::class.java
-    )
+    AppCenter.start(this, BuildConfig.AppCenterSecret, Analytics::class.java, Crashes::class.java)
+
+    if(BuildConfig.DEBUG) {
+      AppCenter.setLogLevel(Log.VERBOSE)
+    }
   }
 }

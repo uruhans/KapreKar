@@ -11,6 +11,7 @@ import com.coloplast.olympus.businesslayer.interfaces.TransmitterComponent
 import com.coloplast.olympus.businesslayer.interfaces.UserComponent
 import com.coloplast.olympus.shared.models.CurrentUser
 import com.coloplast.olympus.shared.models.DataResult
+import com.coloplast.olympus.shared.models.Transmitter
 import com.coloplast.olympus.ui.feature.home.models.BaseHomeViewModel
 import com.coloplast.olympus.ui.feature.home.models.HomeUiModel
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
@@ -36,7 +37,19 @@ class HomeViewModel(
 
     val currentBluetoothStateObservable: Observable<BluetoothState> = bluetoothManager.bluetoothStateObservable()
     val bluetoothStateObservable: Observable<HomeUiModel> = currentBluetoothStateObservable
-      .map<HomeUiModel> { HomeUiModel.BluetoothIssue(it) }
+      .flatMap<HomeUiModel> {
+      return@flatMap currentBluetoothStateObservable
+          .flatMap {
+            if (it == BluetoothState.LOCATION_PERMISSION_NOT_GRANTED || it == BluetoothState.BLUETOOTH_NOT_ENABLED) {
+              dbInsertAppState(UiState.BLUETOOTH_NOT_ENABLED)
+                .toSingle { HomeUiModel.BluetoothIssue(BluetoothState.BLUETOOTH_NOT_ENABLED) }
+                .toObservable()
+            }
+            else {
+              return@flatMap Observable.just(HomeUiModel.BluetoothIssue(it))
+            }
+          }
+      }
       .onErrorReturn {
         Timber.e(it)
         HomeUiModel.ConnectionStateUpdate(BleConnectionState.DISCONNECTED)
@@ -83,10 +96,6 @@ class HomeViewModel(
           .toObservable()
       }
 
-    val transmittersObservable = transmitterComponent.getTransmittersAsSingle()
-      .subscribeOn(Schedulers.io())
-      .toObservable()
-
     val synchronizeDataObservable = me.currentUserObservable()
       .ofType(CurrentUser.LoggedIn::class.java)
       .map { it.user.id }
@@ -99,34 +108,17 @@ class HomeViewModel(
       }
       .ignoreElements()
 
-    val noTransmittersObservable =
-      currentBluetoothStateObservable
-        .filter { it != BluetoothState.UNDEFINED }
-        .flatMap {
-          val state = if (it == BluetoothState.LOCATION_SERVICES_NOT_ENABLED || it == BluetoothState.BLUETOOTH_NOT_ENABLED) {
-            UiState.BLUETOOTH_NOT_ENABLED
+    val transmittersObservable: Observable<List<Transmitter>> = transmitterComponent.getTransmittersAsSingle().toObservable()
+    val noTransmittersObservable: Observable<HomeUiModel> = transmittersObservable
+      .subscribeOn(Schedulers.io())
+      .filter { it.isEmpty() }
+      .flatMap {
+        return@flatMap transmittersObservable
+          .flatMap { dbInsertAppState(UiState.TRANSMITTERS_EMPTY)
+            .toSingle { HomeUiModel.NoTransmittersFound() }
+            .toObservable()
           }
-          else {
-            UiState.TRANSMITTERS_EMPTY
-          }
-
-          return@flatMap transmittersObservable
-            .flatMap { list ->
-              if (state == UiState.BLUETOOTH_NOT_ENABLED) {
-                dbInsertAppState(state)
-                  .toSingle { HomeUiModel.BluetoothIssue(BluetoothState.BLUETOOTH_NOT_ENABLED) }
-                  .toObservable()
-              }
-              else if ((list.isEmpty() && state == UiState.TRANSMITTERS_EMPTY)) {
-                dbInsertAppState(state)
-                  .toSingle { HomeUiModel.NoTransmittersFound() }
-                  .toObservable()
-              }
-              else {
-                return@flatMap Observable.just(HomeUiModel.BluetoothIssue(it))
-              }
-            }
-        }
+      }
 
     disposable.add(synchronizeDataObservable.subscribe())
     disposable.add(Observable.merge(stateUpdate, bluetoothStateObservable, animationAndRawPackageObservable, noTransmittersObservable).bind(uiView.render()))

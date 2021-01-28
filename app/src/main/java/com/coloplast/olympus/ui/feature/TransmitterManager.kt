@@ -348,6 +348,14 @@ class TransmitterManager(
       if(isCurrentlyAttached(disconnectedTransmitterMacAddress)) {
         return latestStateFromOtherTransmitter(disconnectedTransmitterMacAddress)
       }
+      else {
+        // this is not the currently active transmitter - nor is it attached - but we still need to update the disconnected state
+        val latestState = getLatestState(disconnectedTransmitterMacAddress)
+
+        latestState?.let {
+          it.bleDevice.connectionState = BleConnectionState.DISCONNECTED
+        }
+      }
     }
 
     return null

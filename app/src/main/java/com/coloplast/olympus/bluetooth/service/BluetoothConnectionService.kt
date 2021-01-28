@@ -139,9 +139,6 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
                 StateChange(otherTxStateChange.state, OverlayState.NONE, otherTxStateChange.bleDevice)
               }
 
-//              olympusNotificationManager.send(it.macAddress, OverlayState.BLE_CONNECTION_LOST)
-//              val disconnectStateChange = StateChange(otherTxStateChange.state, OverlayState.BLE_CONNECTION_LOST, otherTxStateChange.bleDevice)
-
               StateDispatcher.dispatch(disconnectStateChange)
               StateDispatcher.dispatchStateForActiveTransmitter(disconnectStateChange)
             }
@@ -175,7 +172,7 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
               latestState?.let { state ->
                 val updatedStateChange = transmitterManager.determineCurrentlyActiveTransmitterAndReturnStateChangeFromIt(state)
                 StateDispatcher.dispatch(updatedStateChange.stateChange)
-                StateDispatcher.dispatchStateForActiveTransmitter(updatedStateChange.stateChange)
+                // we dont want to send this state to the active transmitter dispatcher as we dont have any active transmitter here
               }
             }
           }

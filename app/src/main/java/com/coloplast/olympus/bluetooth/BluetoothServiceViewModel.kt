@@ -66,8 +66,6 @@ class BluetoothServiceViewModel(
       .flatMapIterable { it }
       // get the current connection state of the transmitter immediately
       .map { TxModel(it, bluetoothManager.bleConnectionStateObservable(it.id).blockingFirst()) }
-//      // write it out to logcat
-//      .doOnNext { Timber.d("[${it.transmitter.name}] - [${it.transmitter.id}] - is ${it.connectionState}") }
       // only continue if the current transmitter is disconnected
       .filter { it.connectionState == BleConnectionState.DISCONNECTED }
       .doOnNext { Timber.d("Trying to connect to [${it.transmitter.name}] with macAddress: [${it.transmitter.id}]") }
@@ -81,7 +79,7 @@ class BluetoothServiceViewModel(
     val disconnectTransmitterObservable = ServiceDispatcher.serviceEventObservable()
       .filter { it is ServiceEvent.DisconnectTransmitter }
       .map { it as ServiceEvent.DisconnectTransmitter }
-      .delay(5, TimeUnit.SECONDS)
+      .delay(2, TimeUnit.SECONDS)
 
     // the observable that handles the connection
     val connectionObservable = immediateConnectionObservable

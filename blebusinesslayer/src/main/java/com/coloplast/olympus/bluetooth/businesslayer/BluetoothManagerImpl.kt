@@ -13,6 +13,7 @@ import com.coloplast.olympus.businesslayer.interfaces.TransmitterComponent
 import com.coloplast.olympus.shared.models.RawDataPackage
 import com.dawn.bluetooth.BluetoothHandler
 import com.jakewharton.rxrelay2.PublishRelay
+import com.microsoft.appcenter.AppCenter
 import com.microsoft.appcenter.crashes.Crashes
 import com.polidea.rxandroidble2.RxBleClient
 import com.polidea.rxandroidble2.RxBleConnection
@@ -61,9 +62,6 @@ class BluetoothManagerImpl(
      * check here -> https://github.com/Polidea/RxAndroidBle/wiki/FAQ:-UndeliverableException
      */
     RxJavaPlugins.setErrorHandler {
-      Timber.e(it)
-      Crashes.trackError(it)
-
       when {
         // ignore if undeliverable (others should have received it first) - Rx issue ->
         // https://github.com/Polidea/RxAndroidBle/wiki/FAQ:-UndeliverableException
@@ -71,7 +69,10 @@ class BluetoothManagerImpl(
         it is UndeliverableException && it.cause is BleDisconnectedException -> throw DisconnectException(it)
         it is UndeliverableException && it.cause is BleGattCallbackTimeoutException -> throw GattCallbackTimeoutException(it)
         it is UndeliverableException && it.cause is BleGattException -> throw GattException(it)
-        else -> return@setErrorHandler //throw RuntimeException("Unexpected Throwable in RxJavaPlugins error handler", it)
+        else -> {
+          Crashes.trackError(it)
+          return@setErrorHandler
+        }
       }
     }
   }

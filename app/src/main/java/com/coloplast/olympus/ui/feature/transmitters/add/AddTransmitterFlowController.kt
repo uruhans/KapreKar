@@ -106,7 +106,7 @@ class AddTransmitterFlowController(args: Bundle) : TopMenuFlowFactoryController<
     super.afterControllerPushed(topController)
 
     if(topController is AddTransmitterAT9Controller) {
-      serviceStateDispatcher.serviceRelay.accept(ServiceStateDispatcher.ServiceState.START_SERVICE)
+      serviceStateDispatcher.startService()
     }
   }
 

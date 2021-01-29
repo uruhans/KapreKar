@@ -43,7 +43,7 @@ class FirmwareManagerImpl(
         // but this disconnect will notify proper channels that it has happened
         bluetoothManager.disconnectTransmitter(macAddress)
         // send a STOP_SERVICE request to the service, as we dont want it to try to reconnect
-        serviceStateDispatcher.serviceRelay.accept(ServiceStateDispatcher.ServiceState.STOP_SERVICE)
+        serviceStateDispatcher.stopService()
       }
       // delay to make sure that we are completely disconnected
       .delay(2, TimeUnit.SECONDS)
@@ -88,7 +88,7 @@ class FirmwareManagerImpl(
                 firmwareUpdateModel.updateState(FirmwareUpdateModel.State.COMPLETED)
                 // send a START_SERVICE request to start the BluetoothConnectionService
                 // to enable regular transmitter connection once again
-                serviceStateDispatcher.serviceRelay.accept(ServiceStateDispatcher.ServiceState.START_SERVICE)
+                serviceStateDispatcher.startService()
                 // return an error to stop the entire firmware upgrade flow
                 Observable.error(error)
               }

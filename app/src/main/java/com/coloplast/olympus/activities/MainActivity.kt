@@ -19,7 +19,6 @@ import com.coloplast.olympus.ui.common.models.Navigation
 import com.coloplast.olympus.ui.feature.home.HomeController
 import com.coloplast.olympus.ui.feature.onboarding.LandingController
 import com.coloplast.olympus.ui.feature.splash.SplashController
-import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -35,7 +34,6 @@ class MainActivity : AppCompatActivity() {
   private val bluetoothManager: BluetoothManager by inject()
 
   private val compositeDisposable = CompositeDisposable()
-  private val changeNavigationRelay: PublishRelay<Int> = PublishRelay.create()
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -94,11 +92,11 @@ class MainActivity : AppCompatActivity() {
           @Suppress("NON_EXHAUSTIVE_WHEN")
           when (it) {
             BluetoothState.READY -> {
-              serviceStateDispatcher.serviceRelay.accept(ServiceStateDispatcher.ServiceState.START_SERVICE)
+              serviceStateDispatcher.startService()
             }
             BluetoothState.BLUETOOTH_NOT_ENABLED,
-            BluetoothState.LOCATION_PERMISSION_NOT_GRANTED-> {
-              serviceStateDispatcher.serviceRelay.accept(ServiceStateDispatcher.ServiceState.STOP_SERVICE)
+            BluetoothState.LOCATION_PERMISSION_NOT_GRANTED -> {
+              serviceStateDispatcher.stopService()
             }
           }
         }

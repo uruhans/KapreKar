@@ -111,7 +111,7 @@ class TransmittersController(args: Bundle? = null) :
           hasTransmittersAdded.set(false)
 
           // TODO - verify this actually works properly
-          serviceStateDispatcher.serviceRelay.accept(ServiceStateDispatcher.ServiceState.STOP_SERVICE)
+          serviceStateDispatcher.stopService()
         }
         is TransmittersUiModel.RetryConnectToTransmitters -> {
           retryPressed.set(true)

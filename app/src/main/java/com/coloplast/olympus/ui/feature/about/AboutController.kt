@@ -29,7 +29,7 @@ class AboutController : CustomToolbarController<ControllerAboutBinding>(), Gener
 
   val nameTx1 = ObservableField<String>()
   val nameTx2 = ObservableField<String>()
-  val isClinicalBuild = ObservableField<Boolean>(false)
+  val isClinicalBuild = ObservableField<Boolean>(BuildConfig.FLAVOR == "cli")
 
   override fun attachVariables(viewBinding: ControllerAboutBinding) {
     super.attachVariables(viewBinding)
@@ -56,8 +56,6 @@ class AboutController : CustomToolbarController<ControllerAboutBinding>(), Gener
           secondTx?.let {
             nameTx2.set("${it.name} (v${it.firmwareVersion})")
           }
-
-          isClinicalBuild.set(BuildConfig.FLAVOR == "cli")
         }
       }
     }

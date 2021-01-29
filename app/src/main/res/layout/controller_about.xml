@@ -33,7 +33,7 @@
     <ScrollView
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      app:visibleOrGone="@{!controller.isClinicalBuild()}"
+      app:visibleOrGone="@{!controller.isClinicalBuild}"
       tools:visibility="gone"
       >
 
@@ -428,7 +428,7 @@
         android:layout_marginStart="@dimen/spacing_larger"
         android:layout_marginEnd="@dimen/spacing_larger"
         android:orientation="vertical"
-        app:visibleOrGone="@{controller.isClinicalBuild()}">
+        app:visibleOrGone="@{controller.isClinicalBuild}">
 
         <TextView
           style="@style/TextStyle.Coloplast.Bold.DarkGrey.32"

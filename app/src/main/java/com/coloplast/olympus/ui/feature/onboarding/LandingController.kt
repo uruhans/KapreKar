@@ -45,7 +45,7 @@ class LandingController : BaseController<ControllerLandingBinding>() {
     super.onContextAvailable(context)
     // make sure that the service is started at this point
     // if the user has just logged out, it will not be started
-    serviceStateDispatcher.serviceRelay.accept(ServiceStateDispatcher.ServiceState.START_SERVICE)
+    serviceStateDispatcher.startService()
   }
 
   override fun onViewBound(viewBinding: ControllerLandingBinding) {

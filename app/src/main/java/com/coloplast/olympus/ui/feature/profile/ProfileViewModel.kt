@@ -59,7 +59,7 @@ class ProfileViewModel(
             // disconnect all transmitters
             .map { bluetoothManager.disconnectAllTransmitters() }
             // stop the service to make sure it doesn't try to automatically reconnect to any transmitters
-            .map { serviceStateDispatcher.serviceRelay.accept(ServiceStateDispatcher.ServiceState.STOP_SERVICE) }
+            .map { serviceStateDispatcher.stopService() }
             // log out user -> will move user to landing page
             .map { me.logout(true) }
         }

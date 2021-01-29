@@ -32,7 +32,10 @@
 
     <ScrollView
       android:layout_width="match_parent"
-      android:layout_height="match_parent">
+      android:layout_height="match_parent"
+      app:visibleOrGone="@{!controller.isClinicalBuild()}"
+      tools:visibility="gone"
+      >
 
       <LinearLayout
         android:layout_width="match_parent"
@@ -418,6 +421,100 @@
       </LinearLayout>
 
     </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_larger"
+        android:layout_marginEnd="@dimen/spacing_larger"
+        android:orientation="vertical"
+        app:visibleOrGone="@{controller.isClinicalBuild()}">
+
+        <TextView
+          style="@style/TextStyle.Coloplast.Bold.DarkGrey.32"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/about_ap_title" />
+
+      <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_double"
+        android:src="@drawable/ic_coloplast_logo_big" />
+
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_half"
+        android:layout_marginTop="@dimen/spacing_large"
+        android:orientation="horizontal">
+
+        <ImageView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:src="@drawable/ic_manufacturer" />
+
+        <LinearLayout
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="@dimen/spacing_standard"
+          android:orientation="vertical">
+
+          <TextView
+            style="@style/TextStyle.Roboto.Medium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_small"
+            android:text="@string/settings_footer_company_name"
+            android:textSize="16sp" />
+
+          <TextView
+            style="@style/TextStyle.Roboto.Regular.ClearGrey.14"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/settings_footer_company_address" />
+        </LinearLayout>
+      </LinearLayout>
+
+      <TextView
+        style="@style/TextStyle.Roboto.Regular.ClearGrey.16"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_small"
+        android:text="@string/about_Clinical_paragraph" />
+
+      <TextView
+        style="@style/TextStyle.Roboto.Medium"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_large"
+        android:text="@string/settings_footer_app_version"
+        android:textSize="16sp" />
+
+      <TextView
+        style="@style/TextStyle.Roboto.Medium"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@{controller.appVersion}"
+        android:textColor="@color/grey"
+        tools:text="1.7.1 (2323)" />
+
+      <TextView
+        style="@style/TextStyle.Roboto.Medium"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_small"
+        android:text="@string/about_ap_transmitter_firmware_version"
+        android:textSize="16sp" />
+
+      <TextView
+        style="@style/TextStyle.Roboto.Medium"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@{controller.nameTx1}"
+        android:textColor="@color/grey"
+        tools:text="--01 (v1.7.1)" />
+    </LinearLayout>
 
   </LinearLayout>
 </layout>

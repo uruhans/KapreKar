@@ -39,10 +39,6 @@ class CustomApplication : Application() {
       .lifecycle
       .addObserver(AppLifeCycleListener())
 
-    if (BuildConfig.DEBUG) {
-      scheduleWorkers()
-    }
-
     scheduleWorkers()
     startAnalytics()
   }

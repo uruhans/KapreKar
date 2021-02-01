@@ -77,7 +77,7 @@
         android:layout_marginBottom="@dimen/spacing_standard"
         android:gravity="center"
         android:onClick="@{() -> controller.onNegativeButtonClicked()}"
-        app:visibleOrGone="@{controller.showNegativeButton}"
+        app:visibleOrInvisible="@{controller.showNegativeButton}"
         app:safeText="@{controller.negativeButtonTextId}" />
 
     </LinearLayout>

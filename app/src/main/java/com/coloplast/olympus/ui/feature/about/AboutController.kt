@@ -6,6 +6,7 @@ import androidx.databinding.ObservableField
 import com.artemzin.rxui.RxUi
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
+import com.coloplast.olympus.BuildConfig
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerAboutBinding
 import com.coloplast.olympus.shared.models.Transmitter
@@ -28,6 +29,7 @@ class AboutController : CustomToolbarController<ControllerAboutBinding>(), Gener
 
   val nameTx1 = ObservableField<String>()
   val nameTx2 = ObservableField<String>()
+  val isClinicalBuild = ObservableField<Boolean>(BuildConfig.FLAVOR == "cli")
 
   override fun attachVariables(viewBinding: ControllerAboutBinding) {
     super.attachVariables(viewBinding)

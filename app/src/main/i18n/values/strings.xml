@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+<string name="about_Clinical_paragraph">Only for use in clinical studies</string>
 <string name="about_ap_about_coloplast_description">At coloplast, we work to make life easier for people with intimate healthcare needs. By listening to the people who use our products - users as well as the nurses and specialists who care for them - we get a better understanding of their needs and challenges.\nThat knowledge inspires our innovation.</string>
 <string name="about_ap_about_coloplast_header">About Coloplast</string>
 <string name="about_ap_heylo_coloplast_website">Coloplast website</string>
@@ -74,6 +75,8 @@
 <string name="dialog_transmitters_not_available_message">Make sure you are within reach of your charged transmitter(s) and try again.</string>
 <string name="dialog_transmitters_not_available_search_again_button">Search again</string>
 <string name="dialog_transmitters_not_available_title">No available transmitters</string>
+<string name="error_SG_C8_2">Make sure your charger remains connected to power and your transmitter remains securely in the charger during pairing.</string>
+<string name="error_SG_C8_2_title">Pairing failed</string>
 <string name="error_connect_framework_error">Connected</string>
 <string name="error_data_corruption_">Data_corrpuption_Missing translation</string>
 <string name="error_disconnect_framework_error">Disconnected</string>
@@ -159,8 +162,8 @@
 <string name="guide_at6_title">Connect to power</string>
 <string name="guide_at7_body">Place your trasmitter into the cradle of the charger. Allow at least 30 minutes of charging before continuing with the next steps.</string>
 <string name="guide_at7_title">Place transmitter in charger</string>
-<string name="guide_at8_body">Press the button on the charger for 2 seconds to put the transmitter in pairing mode. Then, continue and select \'Pair\' when prompted.</string>
-<string name="guide_at8_title">Put transmitter in pairing mode</string>
+<string name="guide_at8_body">Press the turquoise button on the charger for 2 seconds. Then, press \'Continue\'.</string>
+<string name="guide_at8_title">Pairing youre transmitter</string>
 <string name="guide_at9_body">Searching for transmitters</string>
 <string name="guide_at9_title">Searching...</string>
 <string name="guide_ble_connection">Connection guide</string>

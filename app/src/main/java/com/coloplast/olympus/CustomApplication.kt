@@ -2,6 +2,7 @@ package com.coloplast.olympus
 
 import android.app.Application
 import android.util.Log
+import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.work.*
 import com.coloplast.olympus.koin.koinModule
 import com.coloplast.olympus.shared.AppSettings
@@ -15,7 +16,6 @@ import org.koin.core.context.startKoin
 import org.koin.core.logger.Level
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
-
 
 class CustomApplication : Application() {
 
@@ -33,6 +33,11 @@ class CustomApplication : Application() {
       androidContext(this@CustomApplication)
       modules(koinModule)
     }
+
+    ProcessLifecycleOwner
+      .get()
+      .lifecycle
+      .addObserver(AppLifeCycleListener())
 
     scheduleWorkers()
     startAnalytics()

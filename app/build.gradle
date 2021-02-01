@@ -161,6 +161,10 @@ dependencies {
   implementation 'me.tatarka.bindingcollectionadapter2:bindingcollectionadapter:4.0.0'
   implementation 'me.tatarka.bindingcollectionadapter2:bindingcollectionadapter-recyclerview:4.0.0'
 
+  //LifeCycle
+  implementation "androidx.lifecycle:lifecycle-runtime:2.2.0"
+  implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
+
   //Microsoft Analytics
   implementation "com.microsoft.appcenter:appcenter-analytics:${appCenterSdkVersion}"
   implementation "com.microsoft.appcenter:appcenter-crashes:${appCenterSdkVersion}"

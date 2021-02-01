@@ -1,5 +1,7 @@
 package com.coloplast.olympus.datalayer.api
 
+import com.coloplast.olympus.datalayer.models.AppStateDTO
+import com.coloplast.olympus.datalayer.models.AppStateListDTO
 import com.coloplast.olympus.datalayer.models.TransmitterDTO
 import com.coloplast.olympus.datalayer.models.TransmitterStreamDTO
 import io.reactivex.Completable
@@ -17,4 +19,6 @@ interface PackageApi {
   @POST("transmitter")
   fun syncTransmitter(@Body transmitterDTO: List<TransmitterDTO>) : Completable
 
+  @POST("appstate/compressed/user/{userId}")
+  fun syncAppState(@Path("userId") userId: String, @Body appStateListDTO: List<AppStateDTO>): Completable
 }

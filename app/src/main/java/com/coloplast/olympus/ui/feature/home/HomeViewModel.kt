@@ -6,6 +6,7 @@ import com.coloplast.olympus.bluetooth.StateDispatcher
 import com.coloplast.olympus.bluetooth.businesslayer.BluetoothManager
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
+import com.coloplast.olympus.businesslayer.interfaces.AppStateComponent
 import com.coloplast.olympus.businesslayer.interfaces.TransmitterComponent
 import com.coloplast.olympus.businesslayer.interfaces.UserComponent
 import com.coloplast.olympus.shared.models.CurrentUser
@@ -13,6 +14,7 @@ import com.coloplast.olympus.shared.models.DataResult
 import com.coloplast.olympus.ui.feature.home.models.BaseHomeViewModel
 import com.coloplast.olympus.ui.feature.home.models.HomeUiModel
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
+import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -25,7 +27,8 @@ class HomeViewModel(
   private val me: Me,
   private val bluetoothManager: BluetoothManager,
   private val transmitterComponent: TransmitterComponent,
-  private val userComponent: UserComponent
+  private val userComponent: UserComponent,
+  private val appStateComponent: AppStateComponent
 ) : BaseHomeViewModel() {
 
   override fun bind(uiView: HomeView): Disposable {
@@ -33,7 +36,19 @@ class HomeViewModel(
 
     val currentBluetoothStateObservable: Observable<BluetoothState> = bluetoothManager.bluetoothStateObservable()
     val bluetoothStateObservable: Observable<HomeUiModel> = currentBluetoothStateObservable
-      .map<HomeUiModel> { HomeUiModel.BluetoothIssue(it) }
+      .flatMap<HomeUiModel> {
+      return@flatMap currentBluetoothStateObservable
+          .flatMap {
+            if (it == BluetoothState.LOCATION_PERMISSION_NOT_GRANTED || it == BluetoothState.BLUETOOTH_NOT_ENABLED) {
+              dbInsertAppState(UiState.BLUETOOTH_NOT_ENABLED)
+                .toSingle { HomeUiModel.BluetoothIssue(BluetoothState.BLUETOOTH_NOT_ENABLED) }
+                .toObservable()
+            }
+            else {
+              return@flatMap Observable.just(HomeUiModel.BluetoothIssue(it))
+            }
+          }
+      }
       .onErrorReturn {
         Timber.e(it)
         HomeUiModel.ConnectionStateUpdate(BleConnectionState.DISCONNECTED)
@@ -50,6 +65,16 @@ class HomeViewModel(
         else {
           HomeUiModel.DeviceUpdate(it)
         }
+      }
+      .flatMap { uiModel ->
+        if(uiModel is HomeUiModel.DeviceUpdate) {
+          if(uiModel.stateChange.bleDevice.isConnected().not()) {
+            return@flatMap dbInsertAppState(UiState.DISCONNECTED)
+              .toSingle { uiModel }
+              .toObservable()
+          }
+        }
+        return@flatMap Observable.just(uiModel)
       }
 
     val animationResetObservable = Observable.interval(1, 10, TimeUnit.SECONDS)
@@ -75,7 +100,6 @@ class HomeViewModel(
       .toObservable()
       .filter { list -> list.isEmpty() }
 
-
     val synchronizeDataObservable = me.currentUserObservable()
       .ofType(CurrentUser.LoggedIn::class.java)
       .map { it.user.id }
@@ -96,8 +120,11 @@ class HomeViewModel(
             return@flatMap Observable.just(HomeUiModel.BluetoothIssue(it))
           }
           else {
-            return@flatMap transmittersObservable
-              .map { HomeUiModel.NoTransmittersFound() }
+             return@flatMap transmittersObservable
+                .flatMap { dbInsertAppState(UiState.TRANSMITTERS_EMPTY)
+                  .toSingle { HomeUiModel.NoTransmittersFound() }
+                  .toObservable()
+                }
           }
         }
 
@@ -106,6 +133,12 @@ class HomeViewModel(
     disposable.add(stitchTransmitterObservable.bind(uiView.render()))
 
     return disposable
+  }
+
+  private fun dbInsertAppState(uiState: UiState): Completable {
+    return appStateComponent.insertAppState(uiState.toLetter())
+      .subscribeOn(Schedulers.io())
+      .onErrorComplete()
   }
 
   override fun bindConnectionState(uiView: HomeView): Disposable {
@@ -121,3 +154,5 @@ class HomeViewModel(
     return disposable
   }
 }
+
+

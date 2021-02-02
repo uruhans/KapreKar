@@ -300,6 +300,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
     }
     else {
       Timber.d("State is [${newState}]")
+
       val routerTransaction = when (newState) {
         UiState.FIRMWARE_AVAILABLE -> {
           FirmwareAvailableController.routerTransaction()

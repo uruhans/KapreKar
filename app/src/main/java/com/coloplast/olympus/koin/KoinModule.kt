@@ -5,9 +5,11 @@ import android.content.Context
 import com.coloplast.olympus.Me
 import com.coloplast.olympus.bluetooth.BluetoothServiceViewModel
 import com.coloplast.olympus.bluetooth.businesslayer.*
+import com.coloplast.olympus.businesslayer.components.AppStateComponentImpl
 import com.coloplast.olympus.businesslayer.components.SystemUpdateComponentImpl
 import com.coloplast.olympus.businesslayer.components.TransmitterComponentImpl
 import com.coloplast.olympus.businesslayer.components.UserComponentImpl
+import com.coloplast.olympus.businesslayer.interfaces.AppStateComponent
 import com.coloplast.olympus.businesslayer.interfaces.SystemUpdateComponent
 import com.coloplast.olympus.businesslayer.interfaces.TransmitterComponent
 import com.coloplast.olympus.businesslayer.interfaces.UserComponent
@@ -46,7 +48,7 @@ val koinModule = module {
   /* Preferences */
   single { Preferences(androidContext()) }
   single { Me(get()) }
-  factory { SyncWorker(get(), get()) }
+  factory { SyncWorker(get(), get(), get()) }
 
   /* Notifications */
   single { androidContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }
@@ -67,11 +69,12 @@ val koinModule = module {
   single<TransmitterComponent> { TransmitterComponentImpl(get()) }
   single<UserComponent> { UserComponentImpl(get()) }
   single<SystemUpdateComponent> { SystemUpdateComponentImpl() }
+  single<AppStateComponent> { AppStateComponentImpl() }
 
   /* ViewModels */
-  factory { BluetoothServiceViewModel(get(), get(), get()) }
+  factory { BluetoothServiceViewModel(get(), get(), get(), get()) }
   single { SplashViewModel(get(), get()) }
-  single { HomeViewModel(get(), get(), get(), get()) }
+  single { HomeViewModel(get(), get(), get(), get(), get()) }
   single { TransmittersViewModel(get(), get(), get()) }
   single { AddTransmitterAT9ViewModel(get(), get(), get()) }
   single { AwaitingConnectionViewModel(get()) }

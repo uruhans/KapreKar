@@ -1,9 +1,6 @@
 package com.coloplast.olympus.databaselayer
 
-import com.coloplast.olympus.shared.models.DataResult
-import com.coloplast.olympus.shared.models.Transmitter
-import com.coloplast.olympus.shared.models.TransmitterPackage
-import com.coloplast.olympus.shared.models.User
+import com.coloplast.olympus.shared.models.*
 import com.coloplast.olympus.shared.types.PackageType
 import com.coloplast.olympus.shared.types.SyncState
 import io.reactivex.Completable
@@ -33,6 +30,14 @@ interface DbService {
   fun deleteTransmitterPackages(packageType: PackageType) : Completable
   fun updateSyncStateForPackages(packages: List<TransmitterPackage>, syncState: SyncState) : Completable
   fun pendingPackagesRemaining(userId: UUID, packageType: PackageType) : Single<Int>
+
+  /** AppState Packages **/
+  fun insertAppState(appState: AppState): Completable
+  fun getPendingAppStates(userId: UUID, forceSync: Boolean = false) : Observable<DataResult<List<AppState>>>
+  fun deleteAppStates() : Completable
+  fun updateSyncStateForAppStates(packages: List<AppState>, syncState: SyncState) : Completable
+  fun pendingAppStatesRemaining() : Single<Int>
+
 
   fun getPendingTransmitters(userId: UUID) : Single<List<Transmitter>>
   fun updateSyncStateForTransmitters(transmitters: List<Transmitter>, syncState: SyncState) : Completable

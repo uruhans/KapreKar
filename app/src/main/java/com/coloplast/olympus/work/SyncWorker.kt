@@ -1,6 +1,8 @@
 package com.coloplast.olympus.work
 
 import androidx.work.ListenableWorker
+import com.coloplast.olympus.BuildConfig
+import com.coloplast.olympus.businesslayer.interfaces.AppStateComponent
 import com.coloplast.olympus.businesslayer.interfaces.TransmitterComponent
 import com.coloplast.olympus.businesslayer.interfaces.UserComponent
 import com.coloplast.olympus.businesslayer.models.SyncResult
@@ -11,10 +13,9 @@ import timber.log.Timber
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-class SyncWorker(
-  private val userComponent: UserComponent,
-  private val transmitterComponent: TransmitterComponent
-) {
+class SyncWorker(private val userComponent: UserComponent,
+                 private val transmitterComponent: TransmitterComponent,
+                 private val appStateComponent: AppStateComponent) {
 
   fun doSyncWork(forUserId: UUID): ListenableWorker.Result {
     Timber.d("[SyncWorker] Beginning Synchronization of transmitter packages")
@@ -34,12 +35,13 @@ class SyncWorker(
       }
       .map { it.id }
       .flatMapObservable { userId ->
-        // sync all packages of all types
+        // sync all packages of all types and sync appStates
         Observable.zip(
           syncPackages(PackageType.Raw, userId),
           syncPackages(PackageType.Power, userId),
           syncPackages(PackageType.Status, userId),
-          { _, _, _ ->
+          syncAppStates(userId),
+          { _, _, _, _ ->
             // if we get to here, we have a success, so we ignore any results from the observables, and override with success
             ListenableWorker.Result.success()
           }
@@ -101,7 +103,54 @@ class SyncWorker(
       }
   }
 
+  private fun syncAppStates(userId: UUID, forceSync: Boolean = false) : Observable<ListenableWorker.Result> {
+    // delete already synced appStates
+    return deleteAppStates()
+      .flatMap { deleteResult ->
+        if (deleteResult is SyncResult.Completed) {
+          // then start the syncing
+          //appStateComponent.syncAppStatesWithCloud(userId)
+          appStateComponent.syncAppStatesWithCloud(userId, forceSync=true)
+            .map { syncResult ->
+              when (syncResult) {
+                // if sync is successful
+                is SyncResult.Completed -> {
+                  // And we still have more rows in database
+                  if (syncResult.tuplesRemaining > 0) {
+                    // we throw exception so our retryWhen will catch and retry the work again
+                    throw RetryException(PackageType.Status, syncResult.tuplesRemaining)
+                  }
+                  else {
+                    // we have successfully synced all tuples
+                    Timber.d("[SyncWorker] - we are successful")
+                    ListenableWorker.Result.success()
+                  }
+                }
+                is SyncResult.Error -> {
+                  Timber.d("[SyncWorker] - we failed")
+                  // we still return success here, allowing the work scheduler to continue the work in the next pass
+                  ListenableWorker.Result.success()
+                }
+              }
+            }
+        }
+        else {
+          Timber.d("[SyncWorker] - ${(deleteResult as SyncResult.Error).state}")
+          Observable.just(ListenableWorker.Result.success())
+        }
+      }
+  }
+
   private fun deletePackages(packageType: PackageType): Observable<SyncResult> {
     return transmitterComponent.deletePackagesAlreadySynced(packageType)
+  }
+
+  private fun deleteAppStates(): Observable<SyncResult> {
+    return if (BuildConfig.DEBUG) {
+      Observable.just(SyncResult.Completed())
+    }
+    else {
+      return appStateComponent.deleteAppStatesAlreadySynced()
+    }
   }
 }

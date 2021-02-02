@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+<string name="about_Clinical_paragraph">about_Clinical_paragraph</string>
 <string name="about_ap_about_coloplast_description">about_ap_about_coloplast_description</string>
 <string name="about_ap_about_coloplast_header">about_ap_about_coloplast_header</string>
 <string name="about_ap_heylo_coloplast_website">about_ap_heylo_coloplast_website</string>
@@ -74,6 +75,8 @@
 <string name="dialog_transmitters_not_available_message">dialog_transmitters_not_available_message</string>
 <string name="dialog_transmitters_not_available_search_again_button">dialog_transmitters_not_available_search_again_button</string>
 <string name="dialog_transmitters_not_available_title">dialog_transmitters_not_available_title</string>
+<string name="error_SG_C8_2">error_SG_C8_2</string>
+<string name="error_SG_C8_2_title">error_SG_C8_2_title</string>
 <string name="error_connect_framework_error">error_connect_framework_error</string>
 <string name="error_data_corruption_">error_data_corruption</string>
 <string name="error_disconnect_framework_error">error_disconnect_framework_error</string>

@@ -1,5 +1,6 @@
 package com.coloplast.olympus.databaselayer
 
+import com.coloplast.olympus.databaselayer.entities.DbAppState
 import com.coloplast.olympus.databaselayer.entities.DbTransmitter
 import com.coloplast.olympus.databaselayer.entities.DbTransmitterPackage
 import com.coloplast.olympus.databaselayer.entities.DbUser
@@ -7,10 +8,7 @@ import com.coloplast.olympus.databaselayer.exceptions.DeleteFailedException
 import com.coloplast.olympus.databaselayer.exceptions.InsertOrUpdateFailedException
 import com.coloplast.olympus.databaselayer.rx.RxHelper
 import com.coloplast.olympus.shared.AppSettings
-import com.coloplast.olympus.shared.models.DataResult
-import com.coloplast.olympus.shared.models.Transmitter
-import com.coloplast.olympus.shared.models.TransmitterPackage
-import com.coloplast.olympus.shared.models.User
+import com.coloplast.olympus.shared.models.*
 import com.coloplast.olympus.shared.types.PackageType
 import com.coloplast.olympus.shared.types.SyncState
 import io.reactivex.Completable
@@ -27,6 +25,7 @@ class DbServiceImpl : DbService {
     return db.transmitterPackageDao().deleteTransmitterPackages().ignoreElement()
       .andThen(db.transmitterDao().deleteAll().ignoreElement())
       .andThen(db.userDao().deleteUser().ignoreElement())
+      .andThen(db.appStateDao().deletePackages().ignoreElement())
   }
 
   override fun insertOrUpdateUser(user: User): Observable<User> {
@@ -175,6 +174,63 @@ class DbServiceImpl : DbService {
   override fun pendingPackagesRemaining(userId: UUID, packageType: PackageType): Single<Int> {
     return db.transmitterPackageDao()
       .pendingPackagesRemaining(userId.toString(), packageType)
+  }
+
+
+  override fun insertAppState(appState: AppState): Completable {
+    return db.appStateDao()
+      .insertAppStatePackage(DbAppState.fromAppState(appState))
+      .flatMapCompletable { RxHelper.completeOrError(it.toInt(), InsertOrUpdateFailedException()) }
+  }
+
+  override fun updateSyncStateForAppStates(packages: List<AppState>, syncState: SyncState) : Completable {
+    val dbList = packages.map { DbAppState.fromAppState(it) }
+    dbList.forEach { it.syncState = syncState }
+
+    return db.appStateDao()
+      .updateAppStates(dbList)
+      .toObservable()
+      .doOnNext { Timber.d("Number of packages updated to [$syncState]: $it") }
+      .ignoreElements()
+  }
+
+  override fun getPendingAppStates(userId: UUID, forceSync: Boolean): Observable<DataResult<List<AppState>>> {
+    return db.appStateDao()
+      .getPendingAppStates()
+      .toObservable()
+      .filter { it.isNotEmpty() }
+      .flatMap { appStates ->
+        if (!forceSync && appStates.size < 10) {
+          Timber.d("Skipping sync of appStates - less than 1000 packages")
+          Observable.just(DataResult.Empty())
+        }
+        else {
+          appStates.forEach { it.syncState = SyncState.Sending }
+          db.appStateDao()
+            .updateAppStates(appStates)
+            .toObservable()
+            .doOnNext { Timber.d("Number of appStates Updated from Pending -> Sending: $it") }
+            .map { appStates.map { it.toAppStatePackage() } }
+            .map<DataResult<List<AppState>>> { DataResult.Success(it) }
+        }
+      }
+      .onErrorReturn {
+        Timber.e(it)
+        DataResult.Empty()
+      }
+  }
+
+  override fun pendingAppStatesRemaining(): Single<Int> {
+    return db.appStateDao()
+      .pendingAppStatesRemaining()
+  }
+
+  override fun deleteAppStates(): Completable {
+    return db.appStateDao()
+      .deleteAppStatesAlreadySynced()
+      .toObservable()
+      .doOnNext { Timber.d("Number of appStates deleted: $it") }
+      .ignoreElements()
   }
 
   override fun getPendingTransmitters(userId: UUID): Single<List<Transmitter>> {

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+<string name="about_Clinical_paragraph">Kun til brug i kliniske studier</string>
 <string name="about_ap_about_coloplast_description">At coloplast, we work to make life easier for people with intimate healthcare needs. By listening to the people who use our products - users as well as the nurses and specialists who care for them - we get a better understanding of their needs and challenges.\nThat knowledge inspires our innovation.</string>
 <string name="about_ap_about_coloplast_header">About Coloplast</string>
 <string name="about_ap_heylo_coloplast_website">Coloplast website</string>
@@ -74,6 +75,8 @@
 <string name="dialog_transmitters_not_available_message">[Missing translation]</string>
 <string name="dialog_transmitters_not_available_search_again_button">[Missing translation]</string>
 <string name="dialog_transmitters_not_available_title">[Missing translation]</string>
+<string name="error_SG_C8_2">error_SG_C8_2</string>
+<string name="error_SG_C8_2_title">Parring Fejlede</string>
 <string name="error_connect_framework_error">Forbundet</string>
 <string name="error_data_corruption_">error_disconnect_framework_error</string>
 <string name="error_disconnect_framework_error">Ikke forbundet</string>

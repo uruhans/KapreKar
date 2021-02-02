@@ -38,6 +38,14 @@ android {
       buildConfigField("String", "AzureUrl", "\"https://cp-fc-dev.azurefd.net/api/\"")
       buildConfigField("String", "AzureCode", "\"1aiab34Rsqn2jSVcyXevoG9rvS0HjS9lqf5g8XsUV8BnzRVk3a9u1g==\"")
     }
+    cli {
+      applicationIdSuffix ".cli"
+      buildConfigField("String", "Suffix", "\" - CLI\"")
+
+      buildConfigField("String", "ServerUrl", "\"https://cp-fc-be-clinical.azurewebsites.net\"")
+      buildConfigField("String", "AzureUrl", "\"https://cp-fc-clinical.azurefd.net/api/\"")
+      buildConfigField("String", "AzureCode", "\"goQ2ylfRfYlgfIKf1uQ/F2C32bFyp9qVZsWwtxPupJYrvGxBiDaXPA==\"")
+    }
     tpa {
       applicationIdSuffix ".tpa"
       buildConfigField("String", "Suffix", "\" - TPA\"")
@@ -160,6 +168,10 @@ dependencies {
   // binding adapters
   implementation 'me.tatarka.bindingcollectionadapter2:bindingcollectionadapter:4.0.0'
   implementation 'me.tatarka.bindingcollectionadapter2:bindingcollectionadapter-recyclerview:4.0.0'
+
+  //LifeCycle
+  implementation "androidx.lifecycle:lifecycle-runtime:2.2.0"
+  implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
 
   //Microsoft Analytics
   implementation "com.microsoft.appcenter:appcenter-analytics:${appCenterSdkVersion}"

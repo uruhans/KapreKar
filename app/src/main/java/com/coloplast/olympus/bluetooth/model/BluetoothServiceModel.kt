@@ -1,6 +1,7 @@
 package com.coloplast.olympus.bluetooth.model
 
 import com.coloplast.olympus.shared.models.RawDataPackage
+import com.coloplast.olympus.ui.feature.home.models.HomeUiModel
 import java.time.LocalDateTime
 
 sealed class BluetoothServiceModel {

@@ -72,7 +72,7 @@
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:safeText="@{controller.negativeButtonTextId}"
-      app:visibleOrGone="@{controller.showNegativeButton}"
+      app:visibleOrInvisible="@{controller.showNegativeButton}"
       tools:text="Call to support" />
 
   </androidx.constraintlayout.widget.ConstraintLayout>

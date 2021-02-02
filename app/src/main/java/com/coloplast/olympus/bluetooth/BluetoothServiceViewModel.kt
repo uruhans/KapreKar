@@ -6,6 +6,7 @@ import com.coloplast.olympus.bluetooth.businesslayer.DeviceConnection
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.bluetooth.businesslayer.models.DeviceResult
 import com.coloplast.olympus.bluetooth.model.*
+import com.coloplast.olympus.businesslayer.interfaces.AppStateComponent
 import com.coloplast.olympus.businesslayer.interfaces.TransmitterComponent
 import com.coloplast.olympus.ui.feature.home.models.StateTransformers
 import com.coloplast.olympus.ui.feature.statemachine.OverlayStateMachineImpl
@@ -22,7 +23,8 @@ import java.util.concurrent.TimeUnit
 class BluetoothServiceViewModel(
   private val bluetoothManager: BluetoothManager,
   private val transmitterComponent: TransmitterComponent,
-  private val deviceConnection: DeviceConnection
+  private val deviceConnection: DeviceConnection,
+  private val appStateComponent: AppStateComponent
 ) : ServiceViewModel<BluetoothServiceModel, BluetoothServiceResult<BluetoothServiceModel>>() {
 
   override fun bind(serviceResult: BluetoothServiceResult<BluetoothServiceModel>): Disposable {
@@ -105,7 +107,6 @@ class BluetoothServiceViewModel(
           is DeviceResult.DeviceUpdateResult -> {
             val stateModel = StateTransformers.bleToUiState(deviceResult)
             val newUiState = stateMachine.invoke(stateModel.state)
-
             val overlayStateModel = StateTransformers.bleToOverlayState(deviceResult)
             val newOverlayState = overlayStateMachine.invoke(overlayStateModel.overlayState)
 
@@ -126,6 +127,24 @@ class BluetoothServiceViewModel(
           }
         }
       }
+      .doOnNext {
+        val uiState = when(it) {
+          is BluetoothServiceModel.Disconnected -> {
+            UiState.DISCONNECTED
+          }
+          is BluetoothServiceModel.DeviceUpdate -> {
+            it.statusChange.state
+          }
+          else -> null
+        }
+
+        uiState?.let { state ->
+          appStateComponent.insertAppState(state.toLetter())
+            .subscribeOn(Schedulers.io())
+            .doOnError { throwable -> Timber.e(throwable) }
+            .blockingGet()
+        }
+      }
       .doOnError {
         ServiceDispatcher.dispatchEvent(ServiceEvent.DisconnectTransmitter(macAddress))
       }
@@ -134,4 +153,5 @@ class BluetoothServiceViewModel(
         BluetoothServiceModel.Disconnected(macAddress)
       }
   }
+
 }

@@ -22,6 +22,7 @@ class BluetoothHandler(private val context: Context, isDebugging: Boolean) {
         .setMacAddressLogSetting(LogConstants.MAC_ADDRESS_FULL)
         .setUuidsLogSetting(LogConstants.UUIDS_FULL)
         .setShouldLogAttributeValues(true)
+        .setShouldLogScannedPeripherals(true)
         .build()
 
       RxBleClient.updateLogOptions(logOptions)
@@ -65,10 +66,10 @@ class BluetoothHandler(private val context: Context, isDebugging: Boolean) {
       .flatMap { rxBleConnection ->
         rxBleDeviceConnectionStateObservable(rxBleDevice)
           .filter { it == RxBleConnection.RxBleConnectionState.CONNECTED }
+          .flatMapSingle { rxBleConnection.requestMtu(mtuSize) }
           .flatMap {
             BleDeviceBondingManager.createBond(context, rxBleDevice)
               .filter { rxBleDevice.bluetoothDevice.bondState == BluetoothDevice.BOND_BONDED }
-//              .flatMapSingle { rxBleConnection.requestMtu(mtuSize) }
               .flatMapSingle { rxBleConnection.discoverServices() }
               // setup indication on the ServiceChanged characteristic
               .flatMap { rxBleConnection.setupIndication(serviceChangedUUID, NotificationSetupMode.DEFAULT) }

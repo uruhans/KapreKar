@@ -306,6 +306,14 @@ class TransmitterManager(
     return isConnected && isAttached
   }
 
+  fun isOnlyTransmitterAdded(macAddress: String) : Boolean {
+    return transmitterStateHistory[macAddress] != null && transmitterStateHistory.size == 1
+  }
+
+  fun deleteTransmitterHistory(macAddress: String) {
+    transmitterStateHistory.remove(macAddress)
+  }
+
   private fun isOtherConnectedAndAttached(thisTransmitterAddress: String) : Boolean {
     val otherTransmitter = transmitterStateHistory.entries.firstOrNull { it.key != thisTransmitterAddress } ?: return false
     return isConnectedAndAttached(otherTransmitter.key)

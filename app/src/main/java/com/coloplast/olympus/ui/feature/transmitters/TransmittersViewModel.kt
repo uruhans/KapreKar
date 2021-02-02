@@ -10,6 +10,7 @@ import com.coloplast.olympus.businesslayer.interfaces.TransmitterComponent
 import com.coloplast.olympus.shared.models.DataResult
 import com.coloplast.olympus.shared.models.Transmitter
 import com.coloplast.olympus.ui.common.BaseViewModel
+import com.coloplast.olympus.ui.feature.TransmitterManager
 import com.coloplast.olympus.ui.feature.transmitters.models.TransmittersUiModel
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
@@ -20,7 +21,8 @@ import java.util.concurrent.TimeUnit
 
 class TransmittersViewModel(
   private val bluetoothManager: BluetoothManager,
-  private val transmitterComponent: TransmitterComponent
+  private val transmitterComponent: TransmitterComponent,
+  private val transmitterManager: TransmitterManager
 ) : BaseViewModel<TransmittersUiModel, TransmittersView>() {
 
   override fun bind(uiView: TransmittersView): Disposable {
@@ -61,6 +63,7 @@ class TransmittersViewModel(
           .toSingle { true }
           .toObservable()
           .map {
+            transmitterManager.deleteTransmitterHistory(macAddress)
             ServiceDispatcher.dispatchEvent(ServiceEvent.DisconnectTransmitter(macAddress))
             StateDispatcher.clear(macAddress)
             bluetoothManager.disconnectTransmitter(macAddress)

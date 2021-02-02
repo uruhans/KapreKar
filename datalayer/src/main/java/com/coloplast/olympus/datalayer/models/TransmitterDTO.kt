@@ -16,7 +16,7 @@ class TransmitterDTO(
   companion object {
     fun fromTransmitter(userId: UUID, transmitter: Transmitter): TransmitterDTO {
       return TransmitterDTO(
-        UUID.randomUUID().toString(),
+        transmitter.id,
         userId.toString(),
         transmitter.name,
         transmitter.nickName,

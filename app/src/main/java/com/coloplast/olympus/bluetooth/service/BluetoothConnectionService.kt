@@ -174,7 +174,7 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
                 StateDispatcher.dispatch(updatedStateChange.stateChange)
                 // we dont want to send this state to the active transmitter dispatcher as we dont have any active transmitter here
 
-                // but we *do* want to send it if it's the only transmitter attached
+                // but we *do* want to send it if it's the only transmitter added to the system
                 if(transmitterManager.isOnlyTransmitterAdded(it.macAddress)) {
                   StateDispatcher.dispatchStateForActiveTransmitter(latestState)
                 }

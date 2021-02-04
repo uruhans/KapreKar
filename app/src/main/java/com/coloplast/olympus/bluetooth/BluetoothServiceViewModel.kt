@@ -89,7 +89,10 @@ class BluetoothServiceViewModel(
       // must be disconnected
       .filter { bluetoothManager.bleConnectionStateObservable(it).blockingFirst() == BleConnectionState.DISCONNECTED }
       // then we do the actual connection
-      .flatMap { connectObservable(it) }
+      .flatMap { connectObservable(it)
+        // added to be completely sure that we are terminating the connection
+        .onTerminateDetach()
+      }
 
     compositeDisposable.add(connectionObservable.bind(serviceResult.onResult()))
     compositeDisposable.add(disconnectTransmitterObservable.subscribe())

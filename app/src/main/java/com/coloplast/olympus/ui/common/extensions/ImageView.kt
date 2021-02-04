@@ -27,14 +27,14 @@ fun ImageView.setResource(@DrawableRes resource: Int?) {
 }
 
 @BindingAdapter("battery")
-fun ImageView.setBattery(battery: Battery?){
-  val drawableId = when(battery?.state){
+fun ImageView.setBattery(battery: Battery?) {
+  val drawableId = when (battery?.state) {
     BatteryState.CHARGING -> R.drawable.ic_battery_charging
     BatteryState.OK -> when (battery.powerLevel) {
       PowerLevel.HIGH -> R.drawable.ic_battery_full_24dp
-      PowerLevel.MEDIUM -> R.drawable.ic_battery_full_24dp
-      PowerLevel.LOW -> R.drawable.ic_battery_full_24dp
-      PowerLevel.EMPTY -> R.drawable.ic_battery_full_24dp
+      PowerLevel.MEDIUM -> R.drawable.ic_battery_medium_24dp
+      PowerLevel.LOW -> R.drawable.ic_battery_low_24dp
+      PowerLevel.EMPTY -> R.drawable.ic_battery_empty_24dp
       else -> R.drawable.empty
     }
     else -> R.drawable.empty
@@ -45,12 +45,12 @@ fun ImageView.setBattery(battery: Battery?){
 @BindingAdapter("tintDrawable")
 fun ImageView.tintDrawable(@ColorRes colorRes: Int?) {
   colorRes?.let {
-    if(colorRes == 0) {
+    if (colorRes == 0) {
       return
     }
 
     val color = ContextCompat.getColor(context, colorRes)
-    
+
     if (Build.VERSION.SDK_INT >= 29) {
       colorFilter = BlendModeColorFilter(color, BlendMode.SRC_ATOP)
     }
@@ -62,19 +62,20 @@ fun ImageView.tintDrawable(@ColorRes colorRes: Int?) {
 
 @BindingAdapter("safeResource")
 fun ImageView.setContent(content: Any?) {
-  when(content) {
+  when (content) {
     is Bitmap -> setImageBitmap(content)
     is Uri -> setImageURI(content)
     is Int -> setResource(content)
     is Drawable -> setImageDrawable(content)
   }
 }
+
 @BindingAdapter("startScaleAnimation")
 fun ImageView.startScaleAnimation(startScaleAnimation: Boolean = false) {
   if (startScaleAnimation) {
     val anim = ScaleAnimation(
       scaleX, 1.2f,  // Start and end values for the X axis scaling
-      scaleY,1.2f,  // Start and end values for the Y axis scaling
+      scaleY, 1.2f,  // Start and end values for the Y axis scaling
       Animation.RELATIVE_TO_SELF, 0.5f,
       Animation.RELATIVE_TO_SELF, 0.5f // Pivot point of Y scaling
     )
@@ -86,7 +87,7 @@ fun ImageView.startScaleAnimation(startScaleAnimation: Boolean = false) {
     startAnimation(anim)
   }
   else {
-    if(animation != null && animation.hasStarted()) {
+    if (animation != null && animation.hasStarted()) {
       animation.cancel()
       animation.reset()
     }

@@ -37,9 +37,12 @@ fun ImageView.setBattery(battery: Battery?){
       PowerLevel.EMPTY -> R.drawable.ic_battery_full_24dp
       else -> R.drawable.empty
     }
-    else -> R.drawable.empty
+    else -> null
   }
-  setImageResource(drawableId)
+
+  drawableId?.let {
+    setImageResource(it)
+  }
 }
 
 @BindingAdapter("tintDrawable")

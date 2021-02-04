@@ -6,6 +6,7 @@ import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.work.*
 import com.coloplast.olympus.koin.koinModule
 import com.coloplast.olympus.shared.AppSettings
+import com.coloplast.olympus.utils.FileLoggingTree
 import com.coloplast.olympus.work.*
 import com.microsoft.appcenter.AppCenter
 import com.microsoft.appcenter.analytics.Analytics
@@ -25,6 +26,7 @@ class CustomApplication : Application() {
     AppSettings.initialize(this, BuildConfig.ServerUrl, BuildConfig.AzureUrl, BuildConfig.AzureCode)
 
     Timber.plant(Timber.DebugTree())
+    Timber.plant(FileLoggingTree())
 
     startKoin {
       // currently a workaround for koin as not having Level.ERROR causes a runtime crash

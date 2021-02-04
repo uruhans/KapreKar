@@ -5,6 +5,7 @@ enum class SideMenuType {
   GUIDES,
   TRANSMITTERS,
   SETTINGS,
+  VERSION,
   PROFILE,
   ABOUT,
   CONTACT

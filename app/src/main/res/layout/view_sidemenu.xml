@@ -153,6 +153,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/spacing_triple"
         android:gravity="center_horizontal"
+        android:onClick="@{() -> controller.onSideMenuClicked(SideMenuType.VERSION)}"
         android:text="@{DeviceUtils.getAppVersion()}"
         tools:text="Olympus v1.0 (2323)" />
 

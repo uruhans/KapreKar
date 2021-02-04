@@ -40,6 +40,7 @@ import com.coloplast.olympus.ui.dialogs.ImageDialogController
 import com.coloplast.olympus.ui.dialogs.PatchDialogController
 import com.coloplast.olympus.ui.feature.about.AboutController
 import com.coloplast.olympus.ui.feature.contact.ContactController
+import com.coloplast.olympus.ui.feature.debug.LogsController
 import com.coloplast.olympus.ui.feature.guides.GuidesFlowController
 import com.coloplast.olympus.ui.feature.guides.SingleGuideFlowController
 import com.coloplast.olympus.ui.feature.guides.articles.models.GuideType
@@ -485,7 +486,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
       return
     }
 
-    Timber.d("PatchProbability: [${stateChange.patchProbability}]")
+    Timber.wtf("PatchProbability: [${stateChange.patchProbability}] on transmitter ${transmitterName.get()}")
 
     if (stateChange.patchProbability == PatchProbability.NEW) {
       preferences.incrementPatchId()
@@ -567,6 +568,13 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
       SideMenuType.SETTINGS -> {
         router.pushController(
           SettingsFlowController.routerTransaction()
+            .pushChangeHandler(VerticalChangeHandler())
+            .popChangeHandler(VerticalChangeHandler())
+        )
+      }
+      SideMenuType.VERSION -> {
+        getContentRouter().pushController(
+          LogsController.routerTransaction()
             .pushChangeHandler(VerticalChangeHandler())
             .popChangeHandler(VerticalChangeHandler())
         )

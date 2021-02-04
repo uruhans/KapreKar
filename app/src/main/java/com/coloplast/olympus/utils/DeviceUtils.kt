@@ -4,6 +4,7 @@ import android.os.Build
 import com.coloplast.olympus.BuildConfig
 import com.coloplast.olympus.R
 import com.coloplast.olympus.shared.AppSettings
+import java.io.File
 
 object DeviceUtils {
 
@@ -26,5 +27,9 @@ object DeviceUtils {
 
   fun screenWidth(): Int {
     return AppSettings.applicationContext.resources.displayMetrics.widthPixels
+  }
+
+  fun logDirectory() : File {
+    return File(AppSettings.applicationContext.filesDir.absolutePath, "log")
   }
 }

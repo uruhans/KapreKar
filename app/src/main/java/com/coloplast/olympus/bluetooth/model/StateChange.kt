@@ -20,4 +20,5 @@ data class StateChange(
   fun secondsSinceNow(): Int {
     return (Instant.now().epochSecond - timestamp).toInt()
   }
+
 }

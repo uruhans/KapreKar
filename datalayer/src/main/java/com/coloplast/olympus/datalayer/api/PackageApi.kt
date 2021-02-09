@@ -16,7 +16,7 @@ interface PackageApi {
   fun syncRawPackages(@Path("userId") userId: String, @Path("packageType") packageType: String, @Body streamDTO: List<TransmitterStreamDTO>): Completable
 
   @Headers("Exclude-Interceptor: GzipRequestInterceptor")
-  @POST("transmitter")
+  @POST("transmitter/ff")
   fun syncTransmitter(@Body transmitterDTO: List<TransmitterDTO>) : Completable
 
   @POST("appstate/compressed/user/{userId}")

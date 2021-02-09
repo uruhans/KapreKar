@@ -17,6 +17,7 @@ import com.coloplast.olympus.BuildConfig
 import com.coloplast.olympus.R
 import com.coloplast.olympus.activities.MainActivity
 import com.coloplast.olympus.notifications.models.NotificationPayload
+import com.coloplast.olympus.shared.AppSettings
 import com.coloplast.olympus.shared.preferences.Preferences
 import com.coloplast.olympus.shared.types.Sensors
 import com.coloplast.olympus.ui.feature.statemachine.models.OverlayState
@@ -92,7 +93,7 @@ class NotificationCenter(
       cancel(id)
     }
 
-    if(notificationManager.activeNotifications.any { it.id == payload.id }) {
+    if (notificationManager.activeNotifications.any { it.id == payload.id }) {
       return
     }
 
@@ -172,6 +173,8 @@ class NotificationCenter(
       .setPriority(NotificationCompat.PRIORITY_MAX)
       .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
       .setAutoCancel(false)
+      // NO SOUND when we are in the app
+      .setSilent(AppSettings.appInBackground.not())
       .addAction(
         R.drawable.ic_baseline_snooze_24,
         context.getString(R.string.lock_notification_action_snooze),
@@ -207,6 +210,8 @@ class NotificationCenter(
       .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
       // Set the intent that will fire when the user taps the notification
       .setContentIntent(getPendingIntent())
+      // NO SOUND when we are in the app
+      .setSilent(AppSettings.appInBackground.not())
       .setAutoCancel(false)
       .addAction(
         R.drawable.ic_baseline_snooze_24,

@@ -43,7 +43,7 @@
       android:layout_marginEnd="@dimen/spacing_standard"
       android:layout_marginBottom="@dimen/spacing_double"
       android:foreground="?attr/selectableItemBackground"
-      android:onClick="@{() -> controller.onApplicationGuideClicked()}"
+      android:onClick="@{() -> controller.onConnectionGuideClicked()}"
       app:cardBackgroundColor="@color/white"
       app:cardCornerRadius="28dp"
       app:cardElevation="4dp"
@@ -57,7 +57,7 @@
         android:layout_gravity="center"
         android:fontFamily="sans-serif-medium"
         android:gravity="center"
-        android:text="@string/guide_get_started"
+        android:text="@string/guide_cg_title"
         android:textSize="18sp" />
 
     </androidx.cardview.widget.CardView>

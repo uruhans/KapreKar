@@ -448,7 +448,7 @@
 <string name="lock_no_info_v">No transmitter attached.</string>
 <string name="lock_not_found_p">Transmitter not found.</string>
 <string name="lock_notification_action_snooze">Snooze</string>
-<string name="lock_notification_app_update">HeyloTM won\'t be able to send you leakage notifications until the app is updated.</string>
+<string name="lock_notification_app_update">Heylo™ won\'t be able to send you leakage notifications until the app is updated.</string>
 <string name="lock_notification_app_update_title">Critical app update required.</string>
 <string name="lock_notification_battery_critical">Transmitter battery low.</string>
 <string name="lock_notification_ble_disconnected">Bluetooth connection lost.</string>
@@ -456,10 +456,10 @@
 <string name="lock_notification_broken">Sensor layer damaged.</string>
 <string name="lock_notification_channel_description">Notifies you of status changes on your patch and transmitter connection</string>
 <string name="lock_notification_channel_id">1</string>
-<string name="lock_notification_channel_name">HeyloTM Status Notifications</string>
+<string name="lock_notification_channel_name">Heylo™ Status Notifications.</string>
 <string name="lock_notification_dirt">Blocked transmitter connection.</string>
 <string name="lock_notification_disconnection_battery">Transmitter battery empty.</string>
-<string name="lock_notification_firmware_update">HeyloTM won\'t be able to send you leakage notifications until the software on your transmitter is updated.</string>
+<string name="lock_notification_firmware_update">Heylo™ won\'t be able to send you leakage notifications until the software on your transmitter is updated.</string>
 <string name="lock_notification_firmware_update_title">Critical transmitter software update required.</string>
 <string name="lock_notification_inner">There\'s a problem.</string>
 <string name="lock_notification_inner_blind">Inner sensors worn out.</string>
@@ -479,7 +479,7 @@
 <string name="lock_ringing_alarm_notification_channel_name">Ringing alerts</string>
 <string name="lock_service_notification_channel_description">Maintaining transmitter connection</string>
 <string name="lock_service_notification_channel_id">2</string>
-<string name="lock_service_notification_channel_name">HeyloTM Bluetooth Connection</string>
+<string name="lock_service_notification_channel_name">Heylo™ Bluetooth Connection</string>
 <string name="main_screen_welcome_app_tour">Take the App Tour</string>
 <string name="main_screen_welcome_body1">This is your Status screen.</string>
 <string name="main_screen_welcome_body2">You\'ll be informed if anything changes.</string>
@@ -888,14 +888,14 @@
 <string name="status_ble_turned_off_title">Bluetooth disconnected.</string>
 <string name="status_broken_sensors">To stay informed, you might want to change your sensor layer.</string>
 <string name="status_broken_sensors_title">Sensor layer damaged.</string>
-<string name="status_charging">HeyloTM is not currently checking for leakage.</string>
+<string name="status_charging">Heylo™ is not currently checking for leakage.</string>
 <string name="status_charging_title">Transmitter charging.</string>
 <string name="status_connected">Connected</string>
 <string name="status_connecting">Connecting...</string>
 <string name="status_critical_firmware_update">You won\'t receive notifications until it\'s updated. Update now to stay informed.</string>
 <string name="status_critical_firmware_update_title">Your transmitter needs a critical update.</string>
 <string name="status_critical_update">You won\'t receive notifications until it\'s updated. Update now to stay informed.</string>
-<string name="status_critical_update_title">HeyloTM app needs a critical update.</string>
+<string name="status_critical_update_title">Heylo™ app needs a critical update.</string>
 <string name="status_dirt_connector">To stay informed, open up your transmitter fully and clean it.</string>
 <string name="status_dirt_connector_title">Blocked transmitter connection.</string>
 <string name="status_disconnected">Disconnected</string>
@@ -912,7 +912,7 @@
 <string name="status_moisture_connector_title">Moisture in connector and transmitter.</string>
 <string name="status_moisture_detected">It\'s unclear if it\'s a leak, sweat or something else.</string>
 <string name="status_moisture_detected_title">Something\'s happening.</string>
-<string name="status_multiple_transmitters">Both are trying to connect with the HeyloTM app. To stay informed detach the transmitter that is not on your body.</string>
+<string name="status_multiple_transmitters">Both are trying to connect with the Heylo™ app. To stay informed detach the transmitter that is not on your body.</string>
 <string name="status_multiple_transmitters_title">Two transmitters attached to sensor layers.</string>
 <string name="status_no_con_battery">Charge now to stay informed.</string>
 <string name="status_no_con_battery_title">Transmitter battery empty.</string>

@@ -20,7 +20,7 @@ class TransmitterDTO(
         userId.toString(),
         transmitter.name,
         transmitter.nickName,
-        TransmitterInformationDTO.fromTransmitter(transmitter)
+        TransmitterInformationDTO.fromTransmitter(userId, transmitter)
       )
     }
   }

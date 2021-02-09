@@ -15,9 +15,9 @@ class TransmitterDetachedController : BaseHomeUIControllerAppTour<ControllerStat
     viewBinding.controller = this
   }
 
-  fun onApplicationGuideClicked() {
+  fun onConnectionGuideClicked() {
     getContentRouter().pushController(
-      SingleGuideFlowController.routerTransaction(GuideType.GET_STARTED)
+      SingleGuideFlowController.routerTransaction(GuideType.CONNECTION)
         .pushChangeHandler(VerticalChangeHandler())
         .popChangeHandler(VerticalChangeHandler())
     )

@@ -103,14 +103,14 @@ class SyncWorker(private val userComponent: UserComponent,
       }
   }
 
-  private fun syncAppStates(userId: UUID, forceSync: Boolean = false) : Observable<ListenableWorker.Result> {
+  private fun syncAppStates(userId: UUID) : Observable<ListenableWorker.Result> {
     // delete already synced appStates
     return deleteAppStates()
       .flatMap { deleteResult ->
         if (deleteResult is SyncResult.Completed) {
           // then start the syncing
           //appStateComponent.syncAppStatesWithCloud(userId)
-          appStateComponent.syncAppStatesWithCloud(userId, forceSync=true)
+          appStateComponent.syncAppStatesWithCloud(userId)
             .map { syncResult ->
               when (syncResult) {
                 // if sync is successful

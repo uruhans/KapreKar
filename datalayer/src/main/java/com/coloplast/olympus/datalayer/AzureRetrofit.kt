@@ -47,7 +47,6 @@ object AzureRetrofit {
   fun getMoshi(): Moshi {
     return Moshi.Builder()
       .add(KotlinJsonAdapterFactory())
-      .add(InstantAdapter())
       .add(TransmitterValueAdapter())
       .build()
   }

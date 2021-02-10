@@ -4,7 +4,7 @@ import com.coloplast.olympus.shared.models.ClassifierSettings
 import java.time.Instant
 
 class ClassifierSettingsDTO(
-  val timeStamp: Instant,
+  val timeStamp: Long,
   val ird_ll: Int,
   val dv_noise_ll: Int,
   val ird_spike_ll: Int,
@@ -27,7 +27,7 @@ class ClassifierSettingsDTO(
   companion object {
     fun fromClassifierSettings(classifierSettings: ClassifierSettings): ClassifierSettingsDTO {
       return ClassifierSettingsDTO(
-        Instant.now(),
+        Instant.now().epochSecond,
         classifierSettings.ird_ll.toInt(),
         classifierSettings.dv_noise_ll.toInt(),
         classifierSettings.ird_spike_ll.toInt(),

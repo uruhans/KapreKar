@@ -101,6 +101,7 @@ class HomeViewModel(
       .filter { list -> list.isEmpty() }
 
     val synchronizeDataObservable = me.currentUserObservable()
+      .subscribeOn(Schedulers.io())
       .ofType(CurrentUser.LoggedIn::class.java)
       .map { it.user.id }
       .flatMap { userId ->
@@ -108,7 +109,6 @@ class HomeViewModel(
           transmitterComponent.syncTransmitters(userId),
           userComponent.syncUser(userId)
         )
-          .subscribeOn(Schedulers.io())
       }
       .ignoreElements()
 

@@ -4,7 +4,7 @@ import com.coloplast.olympus.shared.models.TransmitterSettings
 import java.time.Instant
 
 class SettingsDTO(
-  val timeStamp: Instant,
+  val timeStamp: Long,
   val widRthreshold: Int,
   val widRHysterises: Int,
   val widCThreshold: Int,
@@ -24,7 +24,7 @@ class SettingsDTO(
   companion object {
     fun fromSettings(settings: TransmitterSettings): SettingsDTO {
       return SettingsDTO(
-        Instant.now(),
+        Instant.now().epochSecond,
         settings.widRthreshold.toInt(),
         settings.widRHysterises.toInt(),
         settings.widCThreshold.toInt(),

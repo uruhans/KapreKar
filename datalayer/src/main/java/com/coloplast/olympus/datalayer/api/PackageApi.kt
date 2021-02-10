@@ -16,7 +16,7 @@ interface PackageApi {
 
   @Headers("Exclude-Interceptor: GzipRequestInterceptor")
   @POST("transmitter/ff")
-  fun syncTransmitter(@Body transmitterDTO: Collection<TransmitterDTO>) : Completable
+  fun syncTransmitter(@Body transmitterDTO: List<TransmitterDTO>) : Completable
 
   @POST("appstate/compressed/user/{userId}")
   fun syncAppState(@Path("userId") userId: String, @Body appStateListDTO: List<AppStateDTO>): Completable

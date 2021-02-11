@@ -1,4 +1,4 @@
-package com.coloplast.olympus
+package com.coloplast.olympus.aps.models
 
 import com.coloplast.olympus.bluetooth.businesslayer.enums.*
 import com.coloplast.olympus.bluetooth.businesslayer.models.BleDevice
@@ -6,21 +6,16 @@ import com.coloplast.olympus.bluetooth.businesslayer.models.Patch
 import com.coloplast.olympus.bluetooth.businesslayer.models.Peripheral
 import com.coloplast.olympus.bluetooth.businesslayer.models.Transmitter
 import com.coloplast.olympus.bluetooth.model.StateChange
-import org.junit.Test
 
-class AutoPatchSplitTest {
+object Data {
 
-  @Test
-  fun Test1() {
-
-  }
-
-  private fun getMockStateChange(
+  fun stateChange(
     connectionState: BleConnectionState = BleConnectionState.CONNECTED,
     attached: Attached = Attached.ATTACHED_ON_PATCH
-  ) : StateChange {
+  ): StateChange {
     return StateChange(
-      bleDevice = BleDevice("Mock", "AA:BB:CC:DD:EE:FF", connectionState,
+      bleDevice = BleDevice(
+        "Mock", "AA:BB:CC:DD:EE:FF", connectionState,
         Peripheral(
           Patch(
             SensorStatus.CUT_GUARD_OK,
@@ -45,6 +40,4 @@ class AutoPatchSplitTest {
       )
     )
   }
-
-
 }

@@ -38,4 +38,13 @@ data class BleDevice(val name: String?, val macAddress: String, var connectionSt
         peripheral?.patch?.cutguardSensor == SensorStatus.CUT_GUARD_DIRT_IN_CONNECTOR ||
         peripheral?.patch?.cutguardSensor == SensorStatus.CUT_GUARD_NOISE
   }
+
+  fun isUnknownPatchState(): Boolean {
+    return peripheral?.patch?.cutguardSensor == SensorStatus.UNKNOWN &&
+        peripheral?.patch?.innerSensor1 == SensorStatus.UNKNOWN &&
+        peripheral?.patch?.innerSensor2 == SensorStatus.UNKNOWN &&
+        peripheral?.patch?.innerSensor3 == SensorStatus.UNKNOWN &&
+        peripheral?.patch?.outerSensor == SensorStatus.UNKNOWN &&
+        peripheral?.patch?.wearSensor == SensorStatus.UNKNOWN
+  }
 }

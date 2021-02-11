@@ -40,7 +40,7 @@ class TransmitterManager(
       }
 
       latestStateFromActiveTx.deserialize<StateChange>()?.let { stateChange ->
-        transmitterStateHistory[activeTransmitter] = Stack<StateChange>(3).also {
+        transmitterStateHistory[activeTransmitter] = Stack<StateChange>(2).also {
           it.push(stateChange)
         }
       }
@@ -123,27 +123,33 @@ class TransmitterManager(
   }
 
   private fun getStitchOrResetArray(patchProbability: PatchProbability, stateChange: StateChange): ByteArray? {
-    return if(patchProbability == PatchProbability.SAME) {
-       stateChange.bleDevice.peripheral?.getStitchArray()
-    }
-    else {
-      byteArrayOf(
-        // sensors
-        -1, -1, -1, -1, -1, -1,
-        // wid
-        -1,
-        // attached
-        Attached.ATTACHED_ON_PATCH.id.toByte(),
-        // patchType
-        -1,
-        // compromised
-        -1,
-        // rotational angle
-        -1,
-        // batt pwr
-        -1,
-        // firmware warning/error
-        0, 0)
+    return when (patchProbability) {
+      PatchProbability.SAME -> {
+        stateChange.bleDevice.peripheral?.getStitchArray()
+      }
+      PatchProbability.NEW -> {
+        // replace with olympusWirelessprotocol resetVector
+        byteArrayOf(
+          // sensors
+          -1, -1, -1, -1, -1, -1,
+          // wid
+          -1,
+          // attached
+          Attached.ATTACHED_ON_PATCH.id.toByte(),
+          // patchType
+          -1,
+          // compromised
+          -1,
+          // rotational angle
+          -1,
+          // batt pwr
+          -1,
+          // firmware warning/error
+          0, 0)
+      }
+      else -> {
+        null
+      }
     }
   }
 
@@ -265,7 +271,7 @@ class TransmitterManager(
   }
 
   private fun addToHistory(stateChange: StateChange) {
-    val stack = transmitterStateHistory[stateChange.getMacAddress()] ?: Stack(3)
+    val stack = transmitterStateHistory[stateChange.getMacAddress()] ?: Stack(2)
     stack.push(stateChange)
     transmitterStateHistory[stateChange.getMacAddress()] = stack
   }

@@ -1,7 +1,6 @@
 package com.coloplast.olympus.aps
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.coloplast.olympus.BaseKoinTest
 import com.coloplast.olympus.bluetooth.businesslayer.BluetoothManager
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.shared.preferences.Preferences

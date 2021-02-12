@@ -1,6 +1,5 @@
-package com.coloplast.olympus
+package com.coloplast.olympus.aps
 
-import com.coloplast.olympus.aps.koinModule
 import org.junit.After
 import org.junit.Before
 import org.koin.core.context.loadKoinModules
@@ -18,5 +17,4 @@ open class BaseKoinTest : KoinTest {
   fun tearDown() {
     unloadKoinModules(koinModule)
   }
-
 }

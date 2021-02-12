@@ -1,6 +1,5 @@
-package com.coloplast.olympus.aps
+package com.coloplast.olympus.bluetooth.businesslayer
 
-import com.coloplast.olympus.bluetooth.businesslayer.BluetoothManager
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
 import com.coloplast.olympus.bluetooth.businesslayer.models.AdditionalDeviceInfo
@@ -12,7 +11,21 @@ import io.reactivex.Completable
 import io.reactivex.Observable
 import java.util.*
 
-class MockBluetoothManagerImpl : BluetoothManager {
+/**
+ * Only used for testing Automatic Patch Split v2
+ */
+class MockApsBluetoothManagerImpl : BluetoothManager {
+
+  override fun bleConnectionStateObservable(macAddress: String): Observable<BleConnectionState> {
+    return Observable.just(BleConnectionState.CONNECTED)
+  }
+
+  override fun isConnected(macAddress: String): Boolean {
+    return true
+  }
+
+  // region not used
+
   override fun scanBeacons(): Observable<String> {
     TODO("Not yet implemented")
   }
@@ -43,10 +56,6 @@ class MockBluetoothManagerImpl : BluetoothManager {
 
   override fun bleDisconnectedObservable(macAddress: String): Observable<BleConnectionState> {
     TODO("Not yet implemented")
-  }
-
-  override fun bleConnectionStateObservable(macAddress: String): Observable<BleConnectionState> {
-    return Observable.just(BleConnectionState.CONNECTED)
   }
 
   override fun bleDeviceResultObservable(macAddress: String): Observable<BleDevice> {
@@ -85,10 +94,6 @@ class MockBluetoothManagerImpl : BluetoothManager {
     TODO("Not yet implemented")
   }
 
-  override fun isConnected(macAddress: String): Boolean {
-    return true
-  }
-
   override fun disconnectTransmitter(macAddress: String) {
     TODO("Not yet implemented")
   }
@@ -96,4 +101,6 @@ class MockBluetoothManagerImpl : BluetoothManager {
   override fun disconnectAllTransmitters() {
     TODO("Not yet implemented")
   }
+
+  //endregion
 }

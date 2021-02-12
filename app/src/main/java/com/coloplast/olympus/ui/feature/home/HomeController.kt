@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.core.view.GravityCompat
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
@@ -29,7 +28,6 @@ import com.coloplast.olympus.bluetooth.model.ServiceEvent
 import com.coloplast.olympus.bluetooth.model.StateChange
 import com.coloplast.olympus.databinding.ControllerHomeBinding
 import com.coloplast.olympus.notifications.OlympusNotificationManager
-import com.coloplast.olympus.shared.AppSettings
 import com.coloplast.olympus.shared.preferences.Preferences
 import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.common.DrawerState
@@ -60,6 +58,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Function
 import org.koin.core.inject
 import timber.log.Timber
+import java.time.Instant
 import java.time.LocalDateTime
 import java.time.LocalTime
 
@@ -103,6 +102,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
   private var patchChangeTime: LocalTime? = null
 
   private var previousBleState: BluetoothState = BluetoothState.UNDEFINED
+  private var lastResetOrStitch: Instant? = null
 
   constructor() : super()
   constructor(args: Bundle?) : super(args)
@@ -499,8 +499,17 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
       patchChangeTime = LocalTime.now()
     }
 
-    stateChange.resetOrStitchCandidate?.let {
-      stitchOrResetRelay.accept(StitchOrResetObject(stateChange.getMacAddress(), it))
+    var timeSinceLast = 100L
+
+    if(lastResetOrStitch != null) {
+      timeSinceLast = Instant.now().epochSecond - lastResetOrStitch!!.epochSecond
+    }
+
+    if(lastResetOrStitch == null || timeSinceLast > 12) {
+      stateChange.resetOrStitchCandidate?.let {
+        lastResetOrStitch = Instant.now()
+        stitchOrResetRelay.accept(StitchOrResetObject(stateChange.getMacAddress(), it))
+      }
     }
   }
 

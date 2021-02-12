@@ -11,12 +11,12 @@ import java.util.*
  * However, in this case, we store it as this class needs to be alive only when the application is alive,
  * and will be killed off once the application dies
  */
-class Preferences(applicationContext: Context) {
+class Preferences(applicationContext: Context) : IPreferences {
 
   var userLoggedIn: String by bindSharedPreference(applicationContext, USER_LOGGED_IN, "")
   private var userToken: String by bindSharedPreference(applicationContext, USER_TOKEN, "")
-  var activeTransmitter: String by bindSharedPreference(applicationContext, ACTIVE_TRANSMITTER, "")
-  var latestStateFromActiveTx: String by bindSharedPreference(applicationContext, LATEST_STATE_FROM_ACTIVE_TRANSMITTER, "")
+  override var activeTransmitter: String by bindSharedPreference(applicationContext, ACTIVE_TRANSMITTER, "")
+  override var latestStateFromActiveTx: String by bindSharedPreference(applicationContext, LATEST_STATE_FROM_ACTIVE_TRANSMITTER, "")
   var leaks: String by bindSharedPreference(applicationContext, LEAKS, "")
   var areRingingAlertsEnabled: Boolean by bindSharedPreference(applicationContext, RINGING_ALERTS_ENABLED, true)
   var ringingAlertSensor: Sensors by bindSharedPreference(applicationContext, RINGING_ALERT_SENSOR, Sensors.ALL)

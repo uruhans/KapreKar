@@ -16,6 +16,7 @@ import com.coloplast.olympus.businesslayer.interfaces.UserComponent
 import com.coloplast.olympus.notifications.NotificationCenter
 import com.coloplast.olympus.notifications.NotificationScheduler
 import com.coloplast.olympus.notifications.OlympusNotificationManager
+import com.coloplast.olympus.shared.preferences.IPreferences
 import com.coloplast.olympus.shared.preferences.Preferences
 import com.coloplast.olympus.ui.feature.TransmitterManager
 import com.coloplast.olympus.ui.feature.guides.flows.applying.GuideApplyingTransmitterFactoryImpl
@@ -46,7 +47,7 @@ import org.koin.dsl.module
 
 val koinModule = module {
   /* Preferences */
-  single { Preferences(androidContext()) }
+  single<IPreferences> { Preferences(androidContext()) }
   single { Me(get()) }
   factory { SyncWorker(get(), get(), get()) }
 

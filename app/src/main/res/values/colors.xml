@@ -22,6 +22,9 @@
 
   <color name="statusBarV21">#c7c7c7</color>
 
+  <color name="pinkishRed">#e20f3a</color>
+  <color name="lightGrey">#aaaaaa</color>
+
   <color name="transparent_black">#75000000</color>
   <color name="five_percent_transparent_black">#0D000000</color>
   <color name="ten_percent_transparent_black">#1A000000</color>

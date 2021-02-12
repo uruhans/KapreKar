@@ -1,4 +1,4 @@
-package com.coloplast.olympus.patchsplit
+package com.coloplast.olympus.patchsplit.models
 
 sealed class ApsAction {
   data class Reset(val newPatch: Boolean = false) : ApsAction()

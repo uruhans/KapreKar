@@ -1,4 +1,4 @@
-package com.coloplast.olympus.patchsplit
+package com.coloplast.olympus.patchsplit.models
 
 import com.coloplast.olympus.ui.common.Stack
 

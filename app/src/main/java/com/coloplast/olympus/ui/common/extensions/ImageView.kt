@@ -30,19 +30,16 @@ fun ImageView.setResource(@DrawableRes resource: Int?) {
 fun ImageView.setBattery(battery: Battery?) {
   val drawableId = when (battery?.state) {
     BatteryState.CHARGING -> R.drawable.ic_battery_charging
-    BatteryState.OK -> when (battery.powerLevel) {
+    else -> when (battery?.powerLevel) {
       PowerLevel.HIGH -> R.drawable.ic_battery_full_24dp
       PowerLevel.MEDIUM -> R.drawable.ic_battery_medium_24dp
       PowerLevel.LOW -> R.drawable.ic_battery_low_24dp
       PowerLevel.EMPTY -> R.drawable.ic_battery_empty_24dp
       else -> R.drawable.empty
     }
-    else -> null
   }
 
-  drawableId?.let {
-    setImageResource(it)
-  }
+  setImageResource(drawableId)
 }
 
 @BindingAdapter("tintDrawable")

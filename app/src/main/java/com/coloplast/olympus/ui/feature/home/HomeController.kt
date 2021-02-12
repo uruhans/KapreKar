@@ -216,9 +216,9 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
         }
         is HomeUiModel.StitchOrResetComplete -> {
           /* no-op */
-          if(!isProduction) {
-            Toast.makeText(AppSettings.applicationContext, "Reset Or Stitch sent", Toast.LENGTH_SHORT).show()
-          }
+//          if(!isProduction) {
+//            Toast.makeText(AppSettings.applicationContext, "Reset Or Stitch sent", Toast.LENGTH_SHORT).show()
+//          }
         }
         is HomeUiModel.DeviceUpdate -> {
           val stateChange = uiModel.stateChange

@@ -89,6 +89,7 @@ class HomeViewModel(
     )
 
     val stitchTransmitterObservable = uiView.requestStitching()
+      .doOnNext { obj -> Timber.wtf("ResetOrStitch: [${obj.dataPackage.joinToString { it.toInt().toString() }}]") }
       .switchMap { stitch ->
         bluetoothManager.stitchOrResetTransmitter(stitch.macAddress, stitch.dataPackage)
           .toSingle<HomeUiModel> { HomeUiModel.StitchOrResetComplete() }
@@ -101,6 +102,7 @@ class HomeViewModel(
       .filter { list -> list.isEmpty() }
 
     val synchronizeDataObservable = me.currentUserObservable()
+      .subscribeOn(Schedulers.io())
       .ofType(CurrentUser.LoggedIn::class.java)
       .map { it.user.id }
       .flatMap { userId ->
@@ -108,7 +110,6 @@ class HomeViewModel(
           transmitterComponent.syncTransmitters(userId),
           userComponent.syncUser(userId)
         )
-          .subscribeOn(Schedulers.io())
       }
       .ignoreElements()
 

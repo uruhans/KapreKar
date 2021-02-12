@@ -30,6 +30,7 @@ class AboutController : CustomToolbarController<ControllerAboutBinding>(), Gener
   val nameTx1 = ObservableField<String>()
   val nameTx2 = ObservableField<String>()
   val isClinicalBuild = ObservableField<Boolean>(BuildConfig.FLAVOR == "cli")
+  val isInternalBuild = ObservableField<Boolean>(BuildConfig.FLAVOR == "internal")
 
   override fun attachVariables(viewBinding: ControllerAboutBinding) {
     super.attachVariables(viewBinding)

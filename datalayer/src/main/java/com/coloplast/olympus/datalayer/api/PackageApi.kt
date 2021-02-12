@@ -1,7 +1,6 @@
 package com.coloplast.olympus.datalayer.api
 
 import com.coloplast.olympus.datalayer.models.AppStateDTO
-import com.coloplast.olympus.datalayer.models.AppStateListDTO
 import com.coloplast.olympus.datalayer.models.TransmitterDTO
 import com.coloplast.olympus.datalayer.models.TransmitterStreamDTO
 import io.reactivex.Completable
@@ -16,7 +15,7 @@ interface PackageApi {
   fun syncRawPackages(@Path("userId") userId: String, @Path("packageType") packageType: String, @Body streamDTO: List<TransmitterStreamDTO>): Completable
 
   @Headers("Exclude-Interceptor: GzipRequestInterceptor")
-  @POST("transmitter")
+  @POST("transmitter/ff")
   fun syncTransmitter(@Body transmitterDTO: List<TransmitterDTO>) : Completable
 
   @POST("appstate/compressed/user/{userId}")

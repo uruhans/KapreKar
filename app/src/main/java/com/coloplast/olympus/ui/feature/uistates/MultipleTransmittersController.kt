@@ -3,9 +3,10 @@ package com.coloplast.olympus.ui.feature.uistates
 import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerStateMultipleTransmittersBinding
+import com.coloplast.olympus.ui.feature.home.models.LastCheckVisible
 import com.coloplast.olympus.ui.feature.home.models.PatchVisible
 
-class MultipleTransmittersController : BaseHomeUIControllerAppTour<ControllerStateMultipleTransmittersBinding>(), PatchVisible {
+class MultipleTransmittersController : BaseHomeUIControllerAppTour<ControllerStateMultipleTransmittersBinding>(), PatchVisible, LastCheckVisible {
 
   override fun attachVariables(viewBinding: ControllerStateMultipleTransmittersBinding) {
     super.attachVariables(viewBinding)
@@ -17,6 +18,10 @@ class MultipleTransmittersController : BaseHomeUIControllerAppTour<ControllerSta
   }
 
   override fun patchInError(): Boolean {
+    return true
+  }
+
+  override fun lastCheckVisible(): Boolean {
     return true
   }
 

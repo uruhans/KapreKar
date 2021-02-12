@@ -313,7 +313,8 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_marginTop="@dimen/spacing_double"
-          android:orientation="horizontal">
+          android:orientation="horizontal"
+          app:visibleOrGone="@{!controller.isInternalBuild}">
 
           <ImageView
             android:layout_width="wrap_content"
@@ -380,7 +381,8 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_marginTop="@dimen/spacing_standard"
-          android:orientation="horizontal">
+          android:orientation="horizontal"
+          app:visibleOrGone="@{!controller.isInternalBuild}">
 
           <ImageView
             android:layout_width="wrap_content"
@@ -414,7 +416,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/spacing_large"
-            android:src="@drawable/ic_ce_mark" />
+            android:src="@drawable/ic_ce_mark"
+            app:visibleOrGone="@{!controller.isInternalBuild}"/>
 
         </LinearLayout>
 

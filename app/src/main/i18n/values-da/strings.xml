@@ -624,7 +624,7 @@
 <string name="onboarding_chapter_preparing_sl_size_identify_title">Identify sensor layer size</string>
 <string name="onboarding_chapter_preparing_sl_size_lift_description">Place the sensor layer on a flat surface. Identify its connector flap and lift it firmly upwards. This prepares it for attaching your transmitter later.</string>
 <string name="onboarding_chapter_preparing_sl_size_lift_title">Lift connector flap</string>
-<string name="onboarding_chapter_preparing_sl_size_select_description">This helps HeyloTM to be more accurate.</string>
+<string name="onboarding_chapter_preparing_sl_size_select_description">This helps TestProductTM to be more accurate.</string>
 <string name="onboarding_chapter_preparing_sl_size_select_title">Select sensor layer size</string>
 <string name="onboarding_complete_description">TestProduct will now keep you informed of any signs of leakage. You can return to this Setup Guide or learn more about TestProduct in the app\'s Guides, accessed in the app menu.</string>
 <string name="onboarding_complete_title">Setup complete</string>

@@ -37,7 +37,7 @@ class AppStateComponentImpl() : AppStateComponent {
         .onErrorReturn { SyncResult.Error(SyncResult.Error.State.DELETE_FAILED) }
   }
 
-  override fun syncAppStatesWithCloud(userId: UUID, forceSync: Boolean): Observable<SyncResult> {
+  override fun syncAppStatesWithCloud(userId: UUID): Observable<SyncResult> {
     return getPendingAppStates(userId)
       .doOnNext { Timber.d("Number of appStates to sync: ${it.size}") }
       .flatMap { appStates ->

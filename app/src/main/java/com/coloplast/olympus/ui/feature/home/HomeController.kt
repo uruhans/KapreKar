@@ -492,8 +492,6 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
       return
     }
 
-    Timber.wtf("PatchProbability: [${stateChange.patchProbability}] on transmitter ${transmitterName.get()}")
-
     if (stateChange.patchProbability == PatchProbability.NEW) {
       preferences.incrementPatchId()
       patchChangeTime = LocalTime.now()
@@ -506,6 +504,8 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
     }
 
     if(lastResetOrStitch == null || timeSinceLast > 12) {
+      Timber.wtf("PatchProbability: [${stateChange.patchProbability}] on transmitter ${transmitterName.get()}")
+
       stateChange.resetOrStitchCandidate?.let {
         lastResetOrStitch = Instant.now()
         stitchOrResetRelay.accept(StitchOrResetObject(stateChange.getMacAddress(), it))

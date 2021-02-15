@@ -41,7 +41,7 @@ open class TransmitterManager(
       }
 
       latestStateFromActiveTx.deserialize<StateChange>()?.let { stateChange ->
-        transmitterStateHistory[activeTransmitter] = Stack<StateChange>(2).also {
+        transmitterStateHistory[activeTransmitter] = Stack<StateChange>(3).also {
           it.push(stateChange)
         }
       }
@@ -272,7 +272,7 @@ open class TransmitterManager(
   }
 
   private fun addToHistory(stateChange: StateChange) {
-    val stack = transmitterStateHistory[stateChange.getMacAddress()] ?: Stack(2)
+    val stack = transmitterStateHistory[stateChange.getMacAddress()] ?: Stack(3)
     stack.push(stateChange)
     transmitterStateHistory[stateChange.getMacAddress()] = stack
   }

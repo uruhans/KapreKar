@@ -8,7 +8,7 @@ import com.coloplast.olympus.ui.feature.TransmitterManager
 import org.koin.dsl.module
 
 val koinModule = module(override = true) {
-  single<IPreferences> { MockPreferences() }
-  single<BluetoothManager> { MockApsBluetoothManagerImpl() }
-  single { TransmitterManager(get(), get()) }
+  //single<IPreferences> { MockPreferences() }
+  //single<BluetoothManager> { MockApsBluetoothManagerImpl() }
+  //single { TransmitterManager(get(), get()) }
 }

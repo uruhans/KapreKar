@@ -249,10 +249,26 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
           // if we get a wet mount or outer leak within 4 minutes (240 seconds)
           // we override the ui state to wet mount
           val timeBetween = LocalTime.now().minusNanos(patchChangeTime?.toNanoOfDay() ?: 0)
-          if (timeBetween.toSecondOfDay() <= 240) {
+
+          if (timeBetween.toSecondOfDay() <= 320) {
             val outerSensorState = stateChange.bleDevice.peripheral?.patch?.outerSensor
-            if (outerSensorState == SensorStatus.BREACH || outerSensorState == SensorStatus.SOME_SWEAT || outerSensorState == SensorStatus.BLINDED) {
+            if (hasSensorBreachOrSweatOrIsBlinded(outerSensorState)) {
               stateToChangeTo = UiState.WET_MOUNT_G
+            }
+            else {
+              var innerSensorBreachOrSweatOrIsBlindedCount = 0
+
+              val inner1SensorState = stateChange.bleDevice.peripheral?.patch?.innerSensor1
+              val inner2SensorState = stateChange.bleDevice.peripheral?.patch?.innerSensor2
+              val inner3SensorState = stateChange.bleDevice.peripheral?.patch?.innerSensor3
+
+              if (hasSensorBreachOrSweatOrIsBlinded(inner1SensorState)) { innerSensorBreachOrSweatOrIsBlindedCount++ }
+              if (hasSensorBreachOrSweatOrIsBlinded(inner2SensorState)) { innerSensorBreachOrSweatOrIsBlindedCount++ }
+              if (hasSensorBreachOrSweatOrIsBlinded(inner3SensorState)) { innerSensorBreachOrSweatOrIsBlindedCount++ }
+
+              if (innerSensorBreachOrSweatOrIsBlindedCount > 1) {
+                stateToChangeTo = UiState.WET_MOUNT_X
+              }
             }
             // clear the variable so we dont hit this wet mount again the next time
             patchChangeTime = null
@@ -299,6 +315,10 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
     }
   }
 
+  private fun hasSensorBreachOrSweatOrIsBlinded(sensorStatus: SensorStatus?): Boolean {
+    return (sensorStatus == SensorStatus.BREACH || sensorStatus == SensorStatus.SOME_SWEAT || sensorStatus == SensorStatus.BLINDED)
+  }
+
   private fun changeUiState(newState: UiState, forceUpdate: Boolean = false) {
     var removeBleDisconnectOverlay = true
 
@@ -332,7 +352,10 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
           TotalBlindController.routerTransaction()
         }
         UiState.WET_MOUNT_G -> {
-          WetMountController.routerTransaction()
+          WetMountController.routerTransaction(true)
+        }
+        UiState.WET_MOUNT_X -> {
+          WetMountController.routerTransaction(false)
         }
         UiState.CUTGUARD_BROKEN_I -> {
           CutGuardController.routerTransaction()

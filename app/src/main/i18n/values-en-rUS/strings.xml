@@ -902,6 +902,8 @@
 <string name="status_error_title_">status_error_title</string>
 <string name="status_inner_blind_leak_l">Leak detected on outer sensors. Inner sensors are still not functioning. Check for leakage.</string>
 <string name="status_inner_blind_leak_l_title">There\'s a problem and it\'s spreading.</string>
+<string name="status_inner_blind_mount_description">Inner sensors are unable to detect any possible leakage. Outer sensors are still functioning. You\'ll be informed if leakage is detected.</string>
+<string name="status_inner_blind_mount_title">Inner sensors are wet.</string>
 <string name="status_inner_breach">Look out for signs of leakage.</string>
 <string name="status_inner_breach_title">There\'s a problem.</string>
 <string name="status_last_check">Last check</string>
@@ -927,8 +929,9 @@
 <string name="status_not_in_use_title">No transmitter attached.</string>
 <string name="status_outer_breach">A leak could be imminent.</string>
 <string name="status_outer_breach_title">The problem\'s spreading.</string>
+<string name="status_read_more">Read more</string>
 <string name="status_searching">Searching</string>
-<string name="status_wet_mount">To stay informed, you might want to change your sensor layer.</string>
+<string name="status_wet_mount">Sensors are unable to detect any possible leakage. To stay informed you might want to change sensor layer.</string>
 <string name="status_wet_mount_title">Your skin is wet.</string>
 <string name="terms_of_use_link">https://www.coloplast.us/global/legal-aspects/</string>
 <string name="terms_of_use_link_text">Read full Terms of Use</string>

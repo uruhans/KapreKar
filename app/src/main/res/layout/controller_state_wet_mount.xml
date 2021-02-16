@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto">
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools">
 
   <data>
 
@@ -23,7 +24,8 @@
       android:layout_marginStart="@dimen/spacing_standard"
       android:layout_marginTop="@dimen/spacing_half"
       android:layout_marginEnd="@dimen/spacing_standard"
-      android:text="@string/status_wet_mount_title" />
+      android:text="@{controller.headLineTxt}"
+      tools:text="@string/status_wet_mount_title"/>
 
     <TextView
       style="@style/TextStyle.Coloplast.Regular.ClearGrey.30"
@@ -32,7 +34,8 @@
       android:layout_marginStart="@dimen/spacing_standard"
       android:layout_marginEnd="@dimen/spacing_standard"
       android:layout_marginBottom="@dimen/spacing_double"
-      android:text="@string/status_wet_mount" />
+      android:text="@{controller.descriptionTxt}"
+      tools:text="@string/status_wet_mount"/>
 
     <androidx.cardview.widget.CardView
       android:layout_width="match_parent"

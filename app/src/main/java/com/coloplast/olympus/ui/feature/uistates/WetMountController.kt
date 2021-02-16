@@ -1,25 +1,36 @@
 package com.coloplast.olympus.ui.feature.uistates
 
 import android.os.Bundle
+import androidx.databinding.ObservableField
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import com.coloplast.olympus.R
-import com.coloplast.olympus.databinding.ControllerStateWetMountGBinding
+import com.coloplast.olympus.databinding.ControllerStateWetMountBinding
 import com.coloplast.olympus.ui.feature.guides.SingleGuideFlowController
 import com.coloplast.olympus.ui.feature.guides.articles.models.GuideType
 import com.coloplast.olympus.ui.feature.home.models.PatchVisible
 
-class WetMountController(args: Bundle) : BaseHomeUIController<ControllerStateWetMountGBinding>(), PatchVisible {
+class WetMountController(args: Bundle) : BaseHomeUIController<ControllerStateWetMountBinding>(), PatchVisible {
+
+  val headLineTxt = ObservableField<String>()
+  val descriptionTxt = ObservableField<String>()
 
   private var isWetMountTypeG = args.getBoolean(BUNDLE_WET_MOUNT_TYPE)
 
-  override fun attachVariables(viewBinding: ControllerStateWetMountGBinding) {
+  override fun attachVariables(viewBinding: ControllerStateWetMountBinding) {
     super.attachVariables(viewBinding)
     viewBinding.controller = this
   }
 
-  override fun onViewBound(viewBinding: ControllerStateWetMountGBinding) {
-    // no-op
+  override fun onViewBound(viewBinding: ControllerStateWetMountBinding) {
+    if (isWetMountTypeG) {
+      headLineTxt.set(getString(R.string.status_wet_mount_title) as String?)
+      descriptionTxt.set(getString(R.string.status_wet_mount) as String?)
+    }
+    else {
+      headLineTxt.set(getString(R.string.status_inner_blind_mount_title) as String?)
+      descriptionTxt.set(getString(R.string.status_inner_blind_mount_description) as String?)
+    }
   }
 
   fun onGuideClicked() {
@@ -35,12 +46,7 @@ class WetMountController(args: Bundle) : BaseHomeUIController<ControllerStateWet
   }
 
   override fun getLayout(): Int {
-    if (isWetMountTypeG) {
-      return R.layout.controller_state_wet_mount_g
-    }
-    else {
-      return R.layout.controller_state_wet_mount_x
-    }
+    return R.layout.controller_state_wet_mount
   }
 
   companion object {

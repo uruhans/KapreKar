@@ -1,4 +1,4 @@
-package com.coloplast.olympus.aps.models
+package com.coloplast.olympus.aps.data
 
 import com.coloplast.olympus.bluetooth.businesslayer.enums.*
 import com.coloplast.olympus.bluetooth.businesslayer.models.*

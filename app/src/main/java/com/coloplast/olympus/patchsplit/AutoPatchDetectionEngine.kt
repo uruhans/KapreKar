@@ -1,74 +1,113 @@
 package com.coloplast.olympus.patchsplit
 
-import com.coloplast.olympus.patchsplit.models.ApsAction
-import com.coloplast.olympus.patchsplit.models.CompromisedVault
+import com.coloplast.olympus.patchsplit.models.*
 import com.coloplast.olympus.ui.feature.UpdatedStateChange
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 
 class AutoPatchDetectionEngine(private val compromisedVault: CompromisedVault) {
 
-  private val detachedVectorExpirationTime: Long = -60 * 60 // 1 hour
+//  private val detachedVectorExpirationTime: Long = -60 * 60 // 1 hour
   private val entryExpirationTime: Long = 60 * 60 * 2 // 2 hours
   private val autoSplitInternal: Long = 60 * 60 * 12 // 12 hours
 
   private var last: Long? = null
 
-  fun determineAttachCycle(updatedStateChange: UpdatedStateChange, isDetachVectorValid: Boolean) : Boolean {
+  private var wasPreviousUiStateMultipleTx: Boolean = false
+
+  fun determineAttachCycle(
+    updatedStateChange: UpdatedStateChange,
+    isDetachVectorValid: Boolean
+  ): CycleResult {
     val incomingPackage = updatedStateChange.stateChange
+    val incomingCompromised = incomingPackage.bleDevice.peripheral?.transmitter?.compromised
 
-    if(incomingPackage.state == UiState.MULTIPLE_TRANSMITTERS) {
-      if(updatedStateChange.activeTransmitterChanged) {
-        return true
-      }
-      else {
-        if(isDetachVectorValid && incomingPackage.bleDevice.isAttached()) {
-          return true
+    if (incomingPackage.state != UiState.MULTIPLE_TRANSMITTERS) {
+      if (!incomingPackage.bleDevice.isBlocked()) {
+        if (updatedStateChange.activeTransmitterChanged) {
+          if (wasPreviousUiStateMultipleTx) {
+            wasPreviousUiStateMultipleTx = false
+            return CycleResult.Success(AttachCycleType.ComingFromMultipleTransmitters(incomingCompromised))
+          }
+          wasPreviousUiStateMultipleTx = false
+          return CycleResult.Success(AttachCycleType.Standard(incomingCompromised))
         }
-        else if(incomingPackage.bleDevice.isAttachedOutsideBLE()) {
-          return true
+        else {
+          wasPreviousUiStateMultipleTx = false
+          return if (isDetachVectorValid && incomingPackage.bleDevice.isAttached()) {
+            CycleResult.Success(AttachCycleType.Standard(incomingCompromised))
+          }
+          else if (incomingPackage.bleDevice.isAttachedOutsideBLE()) {
+            CycleResult.Success(AttachCycleType.OutOfRange(incomingCompromised))
+          }
+          else {
+            CycleResult.Failure(AttachCycleError.NoDetach)
+          }
         }
       }
+      /// We have had a Att. Cycle, but we cannot act on. Do we set a flag that we need to act on once the vector is valid again?
+      return CycleResult.Failure(AttachCycleError.Untrusted)
     }
-    return false
+
+    wasPreviousUiStateMultipleTx = true
+    return CycleResult.Failure(AttachCycleError.MultipleTransmittersAttached)
   }
 
-  fun determineApsAction() : ApsAction {
-    val fromEntry = compromisedVault.previous()
-    val toEntry = compromisedVault.last()
-
-    if(last != null && last!! > autoSplitInternal) {
-      return ApsAction.Reset(newPatch = true)
-    }
-    else if(toEntry != null && toEntry.timestamp < entryExpirationTime) {
-      if(fromEntry != null && fromEntry.timestamp < entryExpirationTime) {
-        return calculateSplitCommand(fromEntry.running, toEntry.locked)
+  fun determineApsAction(attachCycleType: AttachCycleType): ApsAction {
+    val calculationValues = when (attachCycleType) {
+      is AttachCycleType.ComingFromMultipleTransmitters -> {
+        CalculationValues(attachCycleType.compromised, compromisedVault.get())
+      }
+      is AttachCycleType.OutOfRange -> {
+        CalculationValues(compromisedVault.getIfValid(entryExpirationTime), attachCycleType.compromised)
+      }
+      is AttachCycleType.Standard -> {
+        CalculationValues(compromisedVault.getIfValid(entryExpirationTime), attachCycleType.compromised)
       }
     }
 
-    return ApsAction.None()
-  }
-
-  private fun calculateSplitCommand(from: Int?, to: Int?): ApsAction {
-    if (to == null) {
-      return ApsAction.None()
+    if (calculationValues.to == null) {
+      return ApsAction.Nothing()
     }
 
-    // Magic number is coming from Coloplast. For more information see Coloplast documentation on Auto patch detection.
+    val action = if (last != null && LocalDateTime.now().toEpochSecond(ZoneOffset.UTC) - last!! > autoSplitInternal) {
+      ApsAction.Split()
+    }
+    else {
+      calculateSplitCommand(calculationValues.from, calculationValues.to)
+    }
+
+    if (action is ApsAction.Split) {
+      last = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)
+    }
+
+    return action
+  }
+
+  private fun calculateSplitCommand(from: Int?, to: Int): ApsAction {
+    /// Magic number is coming from Coloplast. For more information see Coloplast documentation on Auto patch detection.
     val intercept = 10.2643
 
-    return if (to < 10) {
-      // METHOD 0
-      // If the to value is less than 10, that means that the sensor layer in which the transmitter has been placed, is so new that even if a sensor is triggered it should still be reset.
-      // This is what "We" call a wet mount.
-      ApsAction.Reset(newPatch = true)
+    // METHOD C
+    // If the to value is less than 10, that means that the sensor layer in which the transmitter has been placed, is so new that even if a sensor is triggered it should still be reset.
+    // This is what "We" call a wet mount.
+    if (to < 10) {
+      // METHOD D
+      return if (to < 1) {
+        ApsAction.Split()
+      }
+      else {
+        ApsAction.Reset()
+      }
     }
     else {
       if (from != null) {
         // METHOD A
         // For a deeper explanation of the equation please refer to the Coloplast documentation of APS.
         val patchProbability = to.toDouble() - from.toDouble() + intercept
-        if (patchProbability < 0) {
-          ApsAction.Reset(newPatch = true)
+        return if (patchProbability < 0) {
+          ApsAction.Split()
         }
         else {
           ApsAction.Stitch()
@@ -79,8 +118,8 @@ class AutoPatchDetectionEngine(private val compromisedVault: CompromisedVault) {
         // If we for some reason do not have a from value, the command can be calculated using only the to value.
         // This could be because of bluetooth disconnection.
         // This magic number is determined on data analysis and was decided by Coloplast, please refer to the APS Coloplast documentation.
-        if (to.toDouble() <= 20.44) {
-          ApsAction.Reset(newPatch = true)
+        return if (to.toDouble() <= 20.44) {
+          ApsAction.Split()
         }
         else {
           ApsAction.Stitch()

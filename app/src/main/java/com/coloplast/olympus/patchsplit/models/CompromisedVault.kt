@@ -1,21 +1,31 @@
 package com.coloplast.olympus.patchsplit.models
 
-import com.coloplast.olympus.ui.common.Stack
+import timber.log.Timber
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 
 class CompromisedVault {
 
-  private val vault = Stack<CompromisedPackage>(5)
+  private var running: Int = Int.MIN_VALUE
+  private var timestamp: LocalDateTime = LocalDateTime.MIN
 
-  fun add(compromisedPackage: CompromisedPackage) {
-    vault.push(compromisedPackage)
+  fun set(compromised: Int) {
+    if (compromised != 255) {
+      Timber.d("Setting new running compromised value: [$compromised]")
+      timestamp = LocalDateTime.now()
+      running = compromised
+    }
   }
 
-  fun last() : CompromisedPackage? {
-    return vault.peek()
+  fun get(): Int {
+    return running
   }
 
-  fun previous() : CompromisedPackage? {
-    return vault.peekPrevious()
-  }
+  fun getIfValid(expirationTime: Long): Int? {
+    if (timestamp.toEpochSecond(ZoneOffset.UTC) - LocalDateTime.now().toEpochSecond(ZoneOffset.UTC) < expirationTime) {
+      return running
+    }
 
+    return null
+  }
 }

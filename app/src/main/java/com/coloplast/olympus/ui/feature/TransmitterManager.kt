@@ -117,7 +117,7 @@ open class TransmitterManager(
     }
   }
 
-  private fun lastValidDetachState(macAddress: String) : StateChange? {
+  fun lastValidDetachState(macAddress: String) : StateChange? {
     val validTimeStamp = Instant.now().epochSecond - validDetachInterval
     val latestTxHistory = transmitterStateHistory.entries.firstOrNull { it.key == macAddress }?.value
     return latestTxHistory?.firstOrNull { it.state == UiState.TRANSMITTER_DETACHED_V && it.timestamp > validTimeStamp }

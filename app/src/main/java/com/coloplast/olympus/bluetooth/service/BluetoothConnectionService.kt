@@ -20,6 +20,8 @@ import com.coloplast.olympus.bluetooth.model.BluetoothServiceModel
 import com.coloplast.olympus.bluetooth.model.BluetoothServiceResult
 import com.coloplast.olympus.bluetooth.model.StateChange
 import com.coloplast.olympus.notifications.OlympusNotificationManager
+import com.coloplast.olympus.patchsplit.AutoPatchDetectionEngine
+import com.coloplast.olympus.patchsplit.models.CompromisedVault
 import com.coloplast.olympus.ui.feature.TransmitterManager
 import com.coloplast.olympus.ui.feature.UpdatedStateChange
 import com.coloplast.olympus.ui.feature.statemachine.models.OverlayState

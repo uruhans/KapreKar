@@ -5,13 +5,13 @@ import com.coloplast.olympus.ui.feature.UpdatedStateChange
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
 import java.time.LocalDateTime
 import java.time.ZoneOffset
+import kotlin.random.Random
 
 class AutoPatchDetectionEngine(private val compromisedVault: CompromisedVault) {
 
 //  private val detachedVectorExpirationTime: Long = -60 * 60 // 1 hour
   private val entryExpirationTime: Long = 60 * 60 * 2 // 2 hours
   private val autoSplitInternal: Long = 60 * 60 * 12 // 12 hours
-
   private var last: Long? = null
 
   private var wasPreviousUiStateMultipleTx: Boolean = false
@@ -57,6 +57,7 @@ class AutoPatchDetectionEngine(private val compromisedVault: CompromisedVault) {
   fun determineApsAction(attachCycleType: AttachCycleType): ApsAction {
     val calculationValues = when (attachCycleType) {
       is AttachCycleType.ComingFromMultipleTransmitters -> {
+        // ==> method b if between 2=>12
         CalculationValues(attachCycleType.compromised, compromisedVault.get())
       }
       is AttachCycleType.OutOfRange -> {
@@ -86,6 +87,16 @@ class AutoPatchDetectionEngine(private val compromisedVault: CompromisedVault) {
   }
 
   private fun calculateSplitCommand(from: Int?, to: Int): ApsAction {
+    if(from != null && from == 0 && to == 0) {
+      val random = Random.nextInt(0, 1000)
+      if(random < 430) {
+        // RESET Tx + patch++
+        return ApsAction.Split()
+      }
+      // Reset Tx
+      return ApsAction.Reset()
+    }
+
     /// Magic number is coming from Coloplast. For more information see Coloplast documentation on Auto patch detection.
     val intercept = 10.2643
 

@@ -7,7 +7,6 @@ import com.coloplast.olympus.bluetooth.model.PatchProbability
 import com.coloplast.olympus.bluetooth.model.StateChange
 import com.coloplast.olympus.shared.moshi.deserialize
 import com.coloplast.olympus.shared.moshi.serialize
-import com.coloplast.olympus.shared.preferences.IPreferences
 import com.coloplast.olympus.shared.preferences.Preferences
 import com.coloplast.olympus.ui.common.Stack
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
@@ -18,7 +17,7 @@ import java.time.Instant
  * This manager determines which Tx is currently the *active* one (ie: the one whose state is being displayed on the status screen)
  */
 open class TransmitterManager(
-  private val preferences: IPreferences,
+  private val preferences: Preferences,
   val bluetoothManager: BluetoothManager
 ) {
 

@@ -6,7 +6,7 @@ import com.coloplast.olympus.bluetooth.businesslayer.BluetoothManager
 import com.coloplast.olympus.bluetooth.businesslayer.ServiceStateDispatcher
 import com.coloplast.olympus.businesslayer.interfaces.UserComponent
 import com.coloplast.olympus.shared.models.User
-import com.coloplast.olympus.shared.preferences.Preferences
+import com.coloplast.olympus.shared.preferences.PreferencesImpl
 import com.coloplast.olympus.ui.common.BaseViewModel
 import com.coloplast.olympus.ui.common.rx.DelayedLoadingTransformer
 import com.coloplast.olympus.ui.feature.profile.model.ProfileUiModel
@@ -15,10 +15,9 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import java.util.*
-import java.util.concurrent.TimeUnit
 
 class ProfileViewModel(
-  private val preferences: Preferences,
+  private val preferences: PreferencesImpl,
   private val userComponent: UserComponent,
   private val me: Me,
   private val bluetoothManager: BluetoothManager,

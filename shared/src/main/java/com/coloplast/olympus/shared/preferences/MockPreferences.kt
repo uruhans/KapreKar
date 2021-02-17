@@ -1,6 +1,6 @@
 package com.coloplast.olympus.shared.preferences
 
-class MockPreferences : IPreferences {
+class MockPreferences : Preferences {
   override var activeTransmitter: String = ""
   override var latestStateFromActiveTx = ""
 }

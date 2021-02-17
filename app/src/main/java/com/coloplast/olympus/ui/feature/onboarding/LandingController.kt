@@ -1,7 +1,6 @@
 package com.coloplast.olympus.ui.feature.onboarding
 
 import android.content.Context
-import androidx.core.view.doOnPreDraw
 import androidx.core.view.postDelayed
 import androidx.databinding.ObservableBoolean
 import com.bluelinelabs.conductor.RouterTransaction
@@ -11,7 +10,7 @@ import com.coloplast.olympus.R
 import com.coloplast.olympus.bluetooth.businesslayer.ServiceStateDispatcher
 import com.coloplast.olympus.databinding.ControllerLandingBinding
 import com.coloplast.olympus.shared.preferences.OnboardingProgression
-import com.coloplast.olympus.shared.preferences.Preferences
+import com.coloplast.olympus.shared.preferences.PreferencesImpl
 import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.feature.home.HomeController
 import com.coloplast.olympus.ui.feature.onboarding.login.LoginController
@@ -30,7 +29,7 @@ import org.koin.core.inject
  */
 class LandingController : BaseController<ControllerLandingBinding>() {
 
-  private val preferences: Preferences by inject()
+  private val preferences: PreferencesImpl by inject()
   private val serviceStateDispatcher: ServiceStateDispatcher by inject()
 
   private var onboardingCompleted: Boolean = false

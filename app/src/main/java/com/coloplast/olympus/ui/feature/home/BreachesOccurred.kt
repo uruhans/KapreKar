@@ -7,12 +7,12 @@ import com.coloplast.olympus.bluetooth.model.StateChange
 import com.coloplast.olympus.shared.moshi.MoshiSerializable
 import com.coloplast.olympus.shared.moshi.deserializeList
 import com.coloplast.olympus.shared.moshi.serializeList
-import com.coloplast.olympus.shared.preferences.Preferences
+import com.coloplast.olympus.shared.preferences.PreferencesImpl
 import com.coloplast.olympus.ui.common.extensions.toMillis
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
 import java.time.LocalDateTime
 
-class BreachesOccurred(private val preferences: Preferences) {
+class BreachesOccurred(private val preferences: PreferencesImpl) {
 
   private val breaches = mutableListOf<Breach>()
 

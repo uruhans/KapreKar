@@ -11,7 +11,7 @@ import java.util.*
  * However, in this case, we store it as this class needs to be alive only when the application is alive,
  * and will be killed off once the application dies
  */
-class Preferences(applicationContext: Context) : IPreferences {
+class PreferencesImpl(applicationContext: Context) : Preferences {
 
   var userLoggedIn: String by bindSharedPreference(applicationContext, USER_LOGGED_IN, "")
   private var userToken: String by bindSharedPreference(applicationContext, USER_TOKEN, "")

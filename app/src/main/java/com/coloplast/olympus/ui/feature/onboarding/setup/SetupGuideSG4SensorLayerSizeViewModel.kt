@@ -3,7 +3,7 @@ package com.coloplast.olympus.ui.feature.onboarding.setup
 import com.artemzin.rxui.kotlin.bind
 import com.coloplast.olympus.businesslayer.interfaces.UserComponent
 import com.coloplast.olympus.shared.models.User
-import com.coloplast.olympus.shared.preferences.Preferences
+import com.coloplast.olympus.shared.preferences.PreferencesImpl
 import com.coloplast.olympus.ui.common.BaseViewModel
 import com.coloplast.olympus.ui.common.rx.DelayedLoadingTransformer
 import com.coloplast.olympus.ui.feature.onboarding.setup.model.SetupGuideSGC4SensorLayerSizeUiModel
@@ -14,7 +14,7 @@ import io.reactivex.schedulers.Schedulers
 import java.util.UUID
 
 class SetupGuideSG4SensorLayerSizeViewModel(
-  private val preferences: Preferences,
+  private val preferences: PreferencesImpl,
   private val userComponent: UserComponent
 ) : BaseViewModel<SetupGuideSGC4SensorLayerSizeUiModel, SetupGuideSG4SensorLayerSizeView>() {
 

@@ -1,7 +1,7 @@
 package com.coloplast.olympus.ui.feature.onboarding.valueproposition
 
 import com.bluelinelabs.conductor.RouterTransaction
-import com.coloplast.olympus.shared.preferences.Preferences
+import com.coloplast.olympus.shared.preferences.PreferencesImpl
 import com.coloplast.olympus.ui.common.flow.FlowFactory
 import com.coloplast.olympus.ui.common.flow.TopMenuFlowFactoryController
 import org.koin.core.inject
@@ -14,7 +14,7 @@ import org.koin.core.inject
 class ValuePropositionFlowController: TopMenuFlowFactoryController<ValuePropositionModel>() {
 
   private val model: ValuePropositionFactoryImpl by inject()
-  private val preferences: Preferences by inject()
+  private val preferences: PreferencesImpl by inject()
 
   override fun getFlowFactory(): FlowFactory<ValuePropositionModel> =  model
 

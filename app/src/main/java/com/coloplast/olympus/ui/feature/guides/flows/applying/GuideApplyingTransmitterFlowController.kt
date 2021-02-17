@@ -4,7 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.shared.preferences.OnboardingProgression
-import com.coloplast.olympus.shared.preferences.Preferences
+import com.coloplast.olympus.shared.preferences.PreferencesImpl
 import com.coloplast.olympus.ui.common.MediaGuideController
 import com.coloplast.olympus.ui.common.flow.FlowFactory
 import com.coloplast.olympus.ui.common.flow.TopMenuFlowFactoryController
@@ -17,7 +17,7 @@ class GuideApplyingTransmitterFlowController : TopMenuFlowFactoryController<Appl
   CallHelpDialogController.Listener {
 
   private val factory: GuideApplyingTransmitterFactoryImpl by inject()
-  private val preferences: Preferences by inject()
+  private val preferences: PreferencesImpl by inject()
   private var callHelpDialogController: CallHelpDialogController? = null
 
   override fun getFlowFactory(): FlowFactory<ApplyingFlowModel> {

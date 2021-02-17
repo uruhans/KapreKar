@@ -5,7 +5,7 @@ import androidx.databinding.ObservableBoolean
 import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerSettingsBinding
-import com.coloplast.olympus.shared.preferences.Preferences
+import com.coloplast.olympus.shared.preferences.PreferencesImpl
 import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.dialogs.ImageDialogController
 import com.coloplast.olympus.utils.OSUtils
@@ -19,7 +19,7 @@ class SettingsController: BaseController<ControllerSettingsBinding>(), ImageDial
     fun chooseSensors()
   }
 
-  private val preferences: Preferences by inject()
+  private val preferences: PreferencesImpl by inject()
 
   private var imageDialogController : ImageDialogController? = null
 

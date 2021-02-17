@@ -6,7 +6,7 @@ import androidx.databinding.ObservableField
 import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerBedtimeAlarmBinding
-import com.coloplast.olympus.shared.preferences.Preferences
+import com.coloplast.olympus.shared.preferences.PreferencesImpl
 import com.coloplast.olympus.shared.types.Sensors
 import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.common.dialogs.TimePickerDialogController
@@ -22,7 +22,7 @@ import java.time.LocalTime
 class BedtimeAlarmController: BaseController<ControllerBedtimeAlarmBinding>(),
   TimePickerDialogController.Listener {
 
-  private val preferences: Preferences by inject()
+  private val preferences: PreferencesImpl by inject()
 
   private var dialog: TimePickerDialogController? = null
 

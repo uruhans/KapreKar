@@ -28,7 +28,7 @@ import com.coloplast.olympus.bluetooth.model.ServiceEvent
 import com.coloplast.olympus.bluetooth.model.StateChange
 import com.coloplast.olympus.databinding.ControllerHomeBinding
 import com.coloplast.olympus.notifications.OlympusNotificationManager
-import com.coloplast.olympus.shared.preferences.Preferences
+import com.coloplast.olympus.shared.preferences.PreferencesImpl
 import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.common.DrawerState
 import com.coloplast.olympus.ui.common.conductor.ResizeChangeHandler
@@ -66,7 +66,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
   ImageDialogController.Listener {
 
   private val viewModel: HomeViewModel by inject()
-  private val preferences: Preferences by inject()
+  private val preferences: PreferencesImpl by inject()
   private val breachesOccurred: BreachesOccurred by inject()
 
   private val olympusNotificationManager: OlympusNotificationManager by inject()

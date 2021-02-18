@@ -1,9 +1,6 @@
 package com.coloplast.olympus.shared.transformers
 
-import com.coloplast.olympus.shared.models.ClassifierSettings
-import com.coloplast.olympus.shared.models.RawDataPackage
-import com.coloplast.olympus.shared.models.StatusPackage
-import com.coloplast.olympus.shared.models.TransmitterSettings
+import com.coloplast.olympus.shared.models.*
 import timber.log.Timber
 
 @ExperimentalUnsignedTypes
@@ -28,9 +25,11 @@ object OlympusWirelessProtocol {
     val sampleInterval = value[22].toUByte()
     val filterType = value[23].toUByte()
 
-    return TransmitterSettings(wid_R_threshold, wid_R_hysteresis, threshold_cs0, threshold_cs1,
+    return TransmitterSettings(
+      wid_R_threshold, wid_R_hysteresis, threshold_cs0, threshold_cs1,
       threshold_cs2, threshold_cs3, threshold_cs4, threshold_cs5, wid_C_threshold, csHysteresis,
-      batterythreshold, batteryhysteresis, sampleInterval, filterType)
+      batterythreshold, batteryhysteresis, sampleInterval, filterType
+    )
   }
 
   fun classifierSettingsTransformer(value: ByteArray): ClassifierSettings {
@@ -54,9 +53,11 @@ object OlympusWirelessProtocol {
     val noise_count_ul = value[28].toUByte()
     val no_noise_count_ul = value[29].toUByte()
 
-    return ClassifierSettings(ird_ll, dv_noise_ll, ird_spike_ll, ird_leak_ul, ird_pa_ul,
+    return ClassifierSettings(
+      ird_ll, dv_noise_ll, ird_spike_ll, ird_leak_ul, ird_pa_ul,
       signal_sweat_ll, signal_blinded_ll, c_lsl_0, c_lsl_1, c_lsl_2, c_lsl_3, c_lsl_4, c_lsl_5,
-      state_hold, hist_size, noise_count_ul, no_noise_count_ul)
+      state_hold, hist_size, noise_count_ul, no_noise_count_ul
+    )
   }
 
   fun statusPackageTransformer(value: ByteArray): StatusPackage {
@@ -80,8 +81,10 @@ object OlympusWirelessProtocol {
     val fwWarning = value[12].toInt()
     val fwError = value[13].toInt()
 
-    return StatusPackage(sensor0, sensor1, sensor2, sensor3, sensor4, sensor5, waterIngressDetection,
-      attached, patchType, compromised, rawRotationalAngle, batteryState, fwWarning, fwError)
+    return StatusPackage(
+      sensor0, sensor1, sensor2, sensor3, sensor4, sensor5, waterIngressDetection,
+      attached, patchType, compromised, rawRotationalAngle, batteryState, fwWarning, fwError
+    )
   }
 
   fun rawDataPackageTransformer(value: ByteArray): RawDataPackage {
@@ -129,10 +132,19 @@ object OlympusWirelessProtocol {
     val angleRaw = value[49].toInt()
     val battPower = value[50].toInt()
 
-    return RawDataPackage(year, month, day, hour, minute, seconds, seconds256, widR, s0SensorData,
+    return RawDataPackage(
+      year, month, day, hour, minute, seconds, seconds256, widR, s0SensorData,
       s1SensorData, s2SensorData, s3SensorData, s4SensorData, s5SensorData, cs0Data, cs1Data,
       cs2Data, cs3Data, cs4Data, cs5Data, widC, battMv, battLevel, bleDisconnected, classifierReset,
-      accX, accY, accZ, activity, wid, attach, patchId, compromised, angleRaw, battPower)
+      accX, accY, accZ, activity, wid, attach, patchId, compromised, angleRaw, battPower
+    )
+  }
+
+  /**
+   * Might be overkill (or completely unnecessary) to do it this way - but its dont because of consistency
+   */
+  fun compromisedPackageTransformer(value: ByteArray): CompromisedPackage {
+    return CompromisedPackage(value[0].toInt())
   }
 
 }

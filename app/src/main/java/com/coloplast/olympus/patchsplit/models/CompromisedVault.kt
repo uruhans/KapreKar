@@ -1,4 +1,4 @@
-package com.coloplast.olympus.patchsplit.models
+package com.coloplast.olympus.bluetooth.businesslayer
 
 import timber.log.Timber
 import java.time.LocalDateTime
@@ -9,10 +9,10 @@ class CompromisedVault {
   private var running: Int = Int.MIN_VALUE
   private var timestamp: LocalDateTime = LocalDateTime.MIN
 
-  fun set(compromised: Int) {
+  fun set(compromised: Int, timestamp: LocalDateTime = LocalDateTime.now()) {
     if (compromised != 255) {
       Timber.d("Setting new running compromised value: [$compromised]")
-      timestamp = LocalDateTime.now()
+      this.timestamp = timestamp
       running = compromised
     }
   }

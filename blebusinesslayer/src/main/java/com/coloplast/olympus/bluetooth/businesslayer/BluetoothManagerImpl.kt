@@ -10,6 +10,7 @@ import com.coloplast.olympus.bluetooth.businesslayer.exceptions.GattException
 import com.coloplast.olympus.bluetooth.businesslayer.models.*
 import com.coloplast.olympus.bluetooth.businesslayer.services.*
 import com.coloplast.olympus.businesslayer.interfaces.TransmitterComponent
+import com.coloplast.olympus.shared.models.CompromisedPackage
 import com.coloplast.olympus.shared.models.RawDataPackage
 import com.dawn.bluetooth.BluetoothHandler
 import com.jakewharton.rxrelay2.PublishRelay
@@ -48,6 +49,7 @@ class BluetoothManagerImpl(
 
   // a cached version of the ble connections that we are currently connected to
   private val bleConnections = mutableMapOf<String, RxBleConnection>()
+  private val currentPowerLevel = mutableMapOf<String, Int>()
 
   private val bleDeviceRelay = PublishRelay.create<List<BleDevice>>()
   private val bleConnectionRelay = PublishRelay.create<Map<String, RxBleConnection>>()
@@ -251,8 +253,10 @@ class BluetoothManagerImpl(
       setupOlympusStatusVectorNotifications(macAddress),
       setupBatteryPowerNotifications(macAddress),
       { statusVector: StatusVector, powerLevel: PowerLevel ->
-        Peripheral(statusVector.patch, statusVector.transmitter, powerLevel)
+        val isBatteryUpdate = powerLevel.percentage != currentPowerLevel[macAddress]
+        Peripheral(statusVector.patch, statusVector.transmitter, powerLevel, isBatteryUpdate)
       })
+      .doOnNext { currentPowerLevel[macAddress] = it.battery.powerLevel.percentage }
   }
 
   /**
@@ -323,6 +327,27 @@ class BluetoothManagerImpl(
             .onErrorReturn { rawPackage }
         }
         .compose(OlympusWirelessProtocol.rawDataPackageTransformer)
+    }
+  }
+
+  override fun setupOlympusRunningCompromisedNotifications(macAddress: String) : Observable<CompromisedPackage> {
+    // fetch the ongoing connection based on the macAddress
+    val rxBleConnection = bleConnections[macAddress]
+
+    return if (rxBleConnection == null) {
+      Observable.empty()
+    }
+    else {
+      rxBleConnection.setupNotification(OlympusWirelessProtocol.Characteristics.COMPROMISED)
+        .flatMap { it }
+        // store in local database
+//        .flatMapSingle { rawPackage ->
+//          transmitterComponent.insertRawPackage(macAddress, rawPackage)
+//            .subscribeOn(Schedulers.io())
+//            .toSingle { rawPackage }
+//            .onErrorReturn { rawPackage }
+//        }
+        .compose(OlympusWirelessProtocol.compromisedTransformer)
     }
   }
 

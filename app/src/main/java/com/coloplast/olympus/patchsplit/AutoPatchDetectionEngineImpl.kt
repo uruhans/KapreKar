@@ -1,5 +1,6 @@
 package com.coloplast.olympus.patchsplit
 
+import com.coloplast.olympus.patchsplit.models.CompromisedVault
 import com.coloplast.olympus.patchsplit.models.*
 import com.coloplast.olympus.ui.feature.UpdatedStateChange
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
@@ -7,12 +8,12 @@ import java.time.LocalDateTime
 import java.time.ZoneOffset
 import kotlin.random.Random
 
-class AutoPatchDetectionEngine(private val compromisedVault: CompromisedVault) {
+class AutoPatchDetectionEngine(private val compromisedVault: CompromisedVault, private val randomizer: Random = Random(10000)) {
 
 //  private val detachedVectorExpirationTime: Long = -60 * 60 // 1 hour
   private val entryExpirationTime: Long = 60 * 60 * 2 // 2 hours
   private val autoSplitInternal: Long = 60 * 60 * 12 // 12 hours
-  private var last: Long? = null
+  private var lastSplit: Long? = null
 
   private var wasPreviousUiStateMultipleTx: Boolean = false
 
@@ -72,7 +73,7 @@ class AutoPatchDetectionEngine(private val compromisedVault: CompromisedVault) {
       return ApsAction.Nothing()
     }
 
-    val action = if (last != null && LocalDateTime.now().toEpochSecond(ZoneOffset.UTC) - last!! > autoSplitInternal) {
+    val action = if (lastSplit != null && LocalDateTime.now().toEpochSecond(ZoneOffset.UTC) - lastSplit!! > autoSplitInternal) {
       ApsAction.Split()
     }
     else {
@@ -80,7 +81,7 @@ class AutoPatchDetectionEngine(private val compromisedVault: CompromisedVault) {
     }
 
     if (action is ApsAction.Split) {
-      last = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)
+      lastSplit = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)
     }
 
     return action
@@ -88,7 +89,7 @@ class AutoPatchDetectionEngine(private val compromisedVault: CompromisedVault) {
 
   private fun calculateSplitCommand(from: Int?, to: Int): ApsAction {
     if(from != null && from == 0 && to == 0) {
-      val random = Random.nextInt(0, 1000)
+      val random = randomizer.nextInt(0, 1000)
       if(random < 430) {
         // RESET Tx + patch++
         return ApsAction.Split()

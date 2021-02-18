@@ -56,7 +56,6 @@ class DeviceConnection(
     val systemUpdateObservable = systemUpdateComponent.systemUpdateAvailable(currentAppVersion)
       .cacheWithInitialCapacity(1)
 
-
     val notificationSubscriptionObservable = connectedBleDeviceObservable
       // this one subscribes to notifications and returns a peripheral object containing the latest state of the device
       .flatMap {
@@ -75,10 +74,14 @@ class DeviceConnection(
               is UpdateResult.FirmwareUpdateAvailable -> {
                 DeviceResult.FirmwareAvailable(updateResult, deviceUpdateResult.bleDevice)
               }
-              else -> deviceUpdateResult
+              else -> {
+                deviceUpdateResult
+              }
             }
           }
-          .onErrorReturn { deviceUpdateResult }
+          .onErrorReturn {
+            deviceUpdateResult
+          }
       }
 
     val rawDataPackageObservable = connectedBleDeviceObservable
@@ -90,10 +93,20 @@ class DeviceConnection(
       // and map to a raw data result
       .map { DeviceResult.RawDataPackageResult(macAddress, it) }
 
+    val compromisedPackageObservable = connectedBleDeviceObservable
+      // subscribe to raw data packages
+      .flatMap {
+        bluetoothManager.setupOlympusRunningCompromisedNotifications(macAddress)
+          .retryWhen { it }
+      }
+      // and map to a raw data result
+      .map { DeviceResult.CompromisedPackageResult(macAddress, it) }
+
     // finally merge and return result
     return Observable.merge(
       notificationSubscriptionObservable,
-      rawDataPackageObservable
+      rawDataPackageObservable,
+      compromisedPackageObservable
     )
   }
 }

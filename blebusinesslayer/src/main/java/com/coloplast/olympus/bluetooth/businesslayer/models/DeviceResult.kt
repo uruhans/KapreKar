@@ -1,5 +1,6 @@
 package com.coloplast.olympus.bluetooth.businesslayer.models
 
+import com.coloplast.olympus.shared.models.CompromisedPackage
 import com.coloplast.olympus.shared.models.RawDataPackage
 import com.coloplast.olympus.shared.models.UpdateResult
 
@@ -9,6 +10,7 @@ sealed class DeviceResult {
   data class FirmwareAvailable(val updateResult: UpdateResult.FirmwareUpdateAvailable, val bleDevice: BleDevice) : DeviceResult()
   data class AppUpdateAvailable(val updateResult: UpdateResult.AppUpdateAvailable, val bleDevice: BleDevice) : DeviceResult()
   data class RawDataPackageResult(val macAddress: String, val rawDataPackage: RawDataPackage) : DeviceResult()
+  data class CompromisedPackageResult(val macAddress: String, val compromisedPackage: CompromisedPackage) : DeviceResult()
   data class Error(val throwable: Throwable? = null) : DeviceResult()
   
 }

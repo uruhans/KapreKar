@@ -5,10 +5,8 @@ import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.bluetooth.businesslayer.models.BleDevice
 import com.coloplast.olympus.bluetooth.businesslayer.models.DeviceResult
 import com.coloplast.olympus.bluetooth.model.StateChange
-import com.coloplast.olympus.patchsplit.AutoPatchDetectionEngine
-import com.coloplast.olympus.patchsplit.models.ApsAction
+import com.coloplast.olympus.patchsplit.AutoPatchDetectionEngineImpl
 import com.coloplast.olympus.patchsplit.models.CompromisedVault
-import com.coloplast.olympus.patchsplit.models.CycleResult
 import com.coloplast.olympus.shared.preferences.MockPreferences
 import com.coloplast.olympus.ui.feature.TransmitterManager
 import com.coloplast.olympus.ui.feature.UpdatedStateChange
@@ -18,13 +16,15 @@ import com.coloplast.olympus.ui.feature.statemachine.UiStateMachineImpl
 import io.reactivex.Observable
 import org.junit.Assert
 import org.mockito.Mockito
+import org.mockito.Mockito.mock
+import kotlin.random.Random
 
-class MockViewModelV2(compromisedVault: CompromisedVault) {
+class MockViewModelV2(compromisedVault: CompromisedVault, randomizer: Random? = null) {
 
   private val preferences = MockPreferences()
-  private val engine = AutoPatchDetectionEngine(compromisedVault)
+  private val apsEngine = if(randomizer == null) AutoPatchDetectionEngineImpl(compromisedVault) else AutoPatchDetectionEngineImpl(compromisedVault, randomizer)
 
-  private val bluetoothManager = Mockito.mock(BluetoothManager::class.java)
+  private val bluetoothManager = mock(BluetoothManager::class.java)
   private val transmitterManager = TransmitterManager(preferences, bluetoothManager)
 
   private val stateMachine = UiStateMachineImpl()
@@ -53,16 +53,13 @@ class MockViewModelV2(compromisedVault: CompromisedVault) {
   private fun runService(stateChange: StateChange) : UpdatedStateChange {
     val updatedStateChange = transmitterManager.determineCurrentlyActiveTransmitterAndReturnStateChangeFromIt(stateChange)
     val lastValidDetach = transmitterManager.lastValidDetachState(updatedStateChange.stateChange.getMacAddress())
-    val result = engine.determineAttachCycle(updatedStateChange, lastValidDetach != null)
+    val cycleResult = apsEngine.determineAttachCycle(updatedStateChange, lastValidDetach != null)
 
-    val action = if(result is CycleResult.Success) {
-      engine.determineApsAction(result.attachCycleType)
-    }
-    else {
-      ApsAction.Nothing()
-    }
+    val apsAction = apsEngine.determineApsAction(cycleResult)
 
-    updatedStateChange.action = action
+    updatedStateChange.stateChange.apsAction = apsAction
+    updatedStateChange.stateChange.resetOrStitchCandidate = apsEngine.resetOrStitchCandidate(apsAction, lastValidDetach)
+
     return updatedStateChange
   }
 

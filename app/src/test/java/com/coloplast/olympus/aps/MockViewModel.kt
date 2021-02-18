@@ -48,7 +48,7 @@ class MockViewModel() {
 
   private fun runService(stateChange: StateChange) : UpdatedStateChange {
     val updatedStateChange = transmitterManager.determineCurrentlyActiveTransmitterAndReturnStateChangeFromIt(stateChange)
-    transmitterManager.determinePatchCommand(updatedStateChange)
+    //transmitterManager.determinePatchCommand(updatedStateChange)
     return updatedStateChange
   }
 

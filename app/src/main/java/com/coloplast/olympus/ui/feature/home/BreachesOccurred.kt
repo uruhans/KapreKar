@@ -28,7 +28,7 @@ class BreachesOccurred(private val preferences: PreferencesImpl) {
     }
   }
 
-  fun add(stateChange: StateChange) {
+  fun determineBreach(stateChange: StateChange) {
     if(isBreach(stateChange)) {
       breaches.add(Breach(LocalDateTime.now().toMillis(), stateChange.bleDevice.peripheral?.patch!!))
       updateStore()

@@ -21,9 +21,9 @@ import com.coloplast.olympus.bluetooth.model.BluetoothServiceResult
 import com.coloplast.olympus.bluetooth.model.StateChange
 import com.coloplast.olympus.notifications.OlympusNotificationManager
 import com.coloplast.olympus.patchsplit.AutoPatchDetectionEngine
+import com.coloplast.olympus.patchsplit.models.ApsAction
 import com.coloplast.olympus.patchsplit.models.CompromisedVault
 import com.coloplast.olympus.ui.feature.TransmitterManager
-import com.coloplast.olympus.ui.feature.UpdatedStateChange
 import com.coloplast.olympus.ui.feature.statemachine.models.OverlayState
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
 import io.reactivex.Observable
@@ -46,6 +46,8 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
   private val olympusNotificationManager: OlympusNotificationManager = get()
   private val transmitterManager: TransmitterManager by inject()
   private val serviceStateDispatcher: ServiceStateDispatcher by inject()
+  private val compromisedVault: CompromisedVault by inject()
+  private val apsEngine: AutoPatchDetectionEngine by inject()
 
   private val compositeDisposable = CompositeDisposable()
 
@@ -106,26 +108,46 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
           StateDispatcher.dispatch(it.statusChange)
         }
         is BluetoothServiceModel.DeviceUpdate -> {
-          if(it.statusChange.bleDevice.peripheral?.transmitter?.compromised == -1 || it.statusChange.bleDevice.peripheral?.transmitter?.compromised == 255) {
-            return@ui
-          }
+//          if(it.statusChange.bleDevice.peripheral?.transmitter?.compromised == -1 || it.statusChange.bleDevice.peripheral?.transmitter?.compromised == 255) {
+//            return@ui
+//          }
 
           // this will dispatch the state change to any who observes it (none if app is in background)
           StateDispatcher.dispatch(it.statusChange)
 
           val updatedStateChange = transmitterManager.determineCurrentlyActiveTransmitterAndReturnStateChangeFromIt(it.statusChange)
-          transmitterManager.determinePatchCommand(updatedStateChange)
+          val lastValidDetach = transmitterManager.lastValidDetachState(updatedStateChange.stateChange.getMacAddress())
+          val cycleResult = apsEngine.determineAttachCycle(updatedStateChange, lastValidDetach != null)
+          val apsAction = apsEngine.determineApsAction(cycleResult)
+
+          updatedStateChange.stateChange.apsAction = apsAction
+          updatedStateChange.stateChange.resetOrStitchCandidate = apsEngine.resetOrStitchCandidate(apsAction, lastValidDetach)
+
 
           // this will allow for notifications to be send when app is in the background
           olympusNotificationManager.send(updatedStateChange.stateChange.getMacAddress(), updatedStateChange.stateChange.state)
           StateDispatcher.dispatch(updatedStateChange.stateChange)
           StateDispatcher.dispatchStateForActiveTransmitter(updatedStateChange.stateChange)
         }
+        is BluetoothServiceModel.BatteryUpdate -> {
+          StateDispatcher.dispatch(it.statusChange)
+
+          if(transmitterManager.isActiveTransmitter(it.statusChange.getMacAddress())) {
+            StateDispatcher.dispatchStateForActiveTransmitter(it.statusChange)
+          }
+        }
         is BluetoothServiceModel.RawDataPackageUpdate -> {
           val activeTransmitter = transmitterManager.isActiveTransmitter(it.macAddress)
 
           if (activeTransmitter) {
             StateDispatcher.dispatch(it.macAddress)
+          }
+        }
+        is BluetoothServiceModel.CompromisedPackageUpdate -> {
+          // only add the running compromised value to the vault if it's coming from
+          // the currently active transmitter
+          if(transmitterManager.isActiveTransmitter(it.macAddress)) {
+            compromisedVault.set(it.compromisedPackage.running, it.lastUpdate)
           }
         }
         is BluetoothServiceModel.Disconnected -> {

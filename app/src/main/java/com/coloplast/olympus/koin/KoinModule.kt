@@ -16,6 +16,9 @@ import com.coloplast.olympus.businesslayer.interfaces.UserComponent
 import com.coloplast.olympus.notifications.NotificationCenter
 import com.coloplast.olympus.notifications.NotificationScheduler
 import com.coloplast.olympus.notifications.OlympusNotificationManager
+import com.coloplast.olympus.patchsplit.AutoPatchDetectionEngine
+import com.coloplast.olympus.patchsplit.AutoPatchDetectionEngineImpl
+import com.coloplast.olympus.patchsplit.models.CompromisedVault
 import com.coloplast.olympus.shared.preferences.Preferences
 import com.coloplast.olympus.shared.preferences.PreferencesImpl
 import com.coloplast.olympus.ui.feature.TransmitterManager
@@ -48,6 +51,7 @@ import org.koin.dsl.module
 val koinModule = module {
   /* Preferences */
   single { PreferencesImpl(androidContext()) }
+  // a workaround to prevent the code from breaking after creating an interface for the old Preferences class used for testing
   single<Preferences> { get<PreferencesImpl>() }
 
   single { Me(get()) }
@@ -64,6 +68,8 @@ val koinModule = module {
   factory { DeviceConnection(get(), get(), get()) }
   single<FirmwareManager> { FirmwareManagerImpl(get(), get(), get()) }
 
+  single { CompromisedVault() }
+  single<AutoPatchDetectionEngine> { AutoPatchDetectionEngineImpl(get()) }
   single { TransmitterManager(get(), get()) }
   single { BreachesOccurred(get()) }
   single { ServiceStateDispatcher() }

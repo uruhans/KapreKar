@@ -1,6 +1,7 @@
 package com.coloplast.olympus.patchsplit
 
-import com.coloplast.olympus.patchsplit.models.CompromisedVault
+import com.coloplast.olympus.bluetooth.businesslayer.enums.Attached
+import com.coloplast.olympus.bluetooth.model.StateChange
 import com.coloplast.olympus.patchsplit.models.*
 import com.coloplast.olympus.ui.feature.UpdatedStateChange
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
@@ -8,7 +9,7 @@ import java.time.LocalDateTime
 import java.time.ZoneOffset
 import kotlin.random.Random
 
-class AutoPatchDetectionEngine(private val compromisedVault: CompromisedVault, private val randomizer: Random = Random(10000)) {
+class AutoPatchDetectionEngineImpl(private val compromisedVault: CompromisedVault, private val randomizer: Random = Random(10000)) : AutoPatchDetectionEngine {
 
 //  private val detachedVectorExpirationTime: Long = -60 * 60 // 1 hour
   private val entryExpirationTime: Long = 60 * 60 * 2 // 2 hours
@@ -17,7 +18,7 @@ class AutoPatchDetectionEngine(private val compromisedVault: CompromisedVault, p
 
   private var wasPreviousUiStateMultipleTx: Boolean = false
 
-  fun determineAttachCycle(
+  override fun determineAttachCycle(
     updatedStateChange: UpdatedStateChange,
     isDetachVectorValid: Boolean
   ): CycleResult {
@@ -55,8 +56,12 @@ class AutoPatchDetectionEngine(private val compromisedVault: CompromisedVault, p
     return CycleResult.Failure(AttachCycleError.MultipleTransmittersAttached)
   }
 
-  fun determineApsAction(attachCycleType: AttachCycleType): ApsAction {
-    val calculationValues = when (attachCycleType) {
+  override fun determineApsAction(cycleResult: CycleResult): ApsAction {
+    if(cycleResult is CycleResult.Failure) {
+      return ApsAction.Nothing
+    }
+
+    val calculationValues = when (val attachCycleType = (cycleResult as CycleResult.Success).attachCycleType) {
       is AttachCycleType.ComingFromMultipleTransmitters -> {
         // ==> method b if between 2=>12
         CalculationValues(attachCycleType.compromised, compromisedVault.get())
@@ -70,17 +75,17 @@ class AutoPatchDetectionEngine(private val compromisedVault: CompromisedVault, p
     }
 
     if (calculationValues.to == null) {
-      return ApsAction.Nothing()
+      return ApsAction.Nothing
     }
 
     val action = if (lastSplit != null && LocalDateTime.now().toEpochSecond(ZoneOffset.UTC) - lastSplit!! > autoSplitInternal) {
-      ApsAction.Split()
+      ApsAction.Split
     }
     else {
       calculateSplitCommand(calculationValues.from, calculationValues.to)
     }
 
-    if (action is ApsAction.Split) {
+    if (action == ApsAction.Split) {
       lastSplit = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)
     }
 
@@ -90,12 +95,7 @@ class AutoPatchDetectionEngine(private val compromisedVault: CompromisedVault, p
   private fun calculateSplitCommand(from: Int?, to: Int): ApsAction {
     if(from != null && from == 0 && to == 0) {
       val random = randomizer.nextInt(0, 1000)
-      if(random < 430) {
-        // RESET Tx + patch++
-        return ApsAction.Split()
-      }
-      // Reset Tx
-      return ApsAction.Reset()
+      return if(random < 430) ApsAction.Split else ApsAction.Reset
     }
 
     /// Magic number is coming from Coloplast. For more information see Coloplast documentation on Auto patch detection.
@@ -107,10 +107,10 @@ class AutoPatchDetectionEngine(private val compromisedVault: CompromisedVault, p
     if (to < 10) {
       // METHOD D
       return if (to < 1) {
-        ApsAction.Split()
+        ApsAction.Split
       }
       else {
-        ApsAction.Reset()
+        ApsAction.Reset
       }
     }
     else {
@@ -119,10 +119,10 @@ class AutoPatchDetectionEngine(private val compromisedVault: CompromisedVault, p
         // For a deeper explanation of the equation please refer to the Coloplast documentation of APS.
         val patchProbability = to.toDouble() - from.toDouble() + intercept
         return if (patchProbability < 0) {
-          ApsAction.Split()
+          ApsAction.Split
         }
         else {
-          ApsAction.Stitch()
+          ApsAction.Stitch
         }
       }
       else {
@@ -131,12 +131,47 @@ class AutoPatchDetectionEngine(private val compromisedVault: CompromisedVault, p
         // This could be because of bluetooth disconnection.
         // This magic number is determined on data analysis and was decided by Coloplast, please refer to the APS Coloplast documentation.
         return if (to.toDouble() <= 20.44) {
-          ApsAction.Split()
+          ApsAction.Split
         }
         else {
-          ApsAction.Stitch()
+          ApsAction.Stitch
         }
       }
     }
+  }
+
+  override fun resetOrStitchCandidate(apsAction: ApsAction, lastValidDetach: StateChange?): ByteArray? {
+    if(apsAction == ApsAction.Stitch && lastValidDetach != null) {
+      return stitchArray(lastValidDetach)
+    }
+    else if(apsAction == ApsAction.Split || apsAction == ApsAction.Reset) {
+      return resetArray()
+    }
+
+    return null
+  }
+
+  private fun resetArray() : ByteArray {
+    return byteArrayOf(
+      // sensors
+      -1, -1, -1, -1, -1, -1,
+      // wid
+      -1,
+      // attached
+      Attached.ATTACHED_ON_PATCH.id.toByte(),
+      // patchType
+      -1,
+      // compromised
+      -1,
+      // rotational angle
+      -1,
+      // batt pwr
+      -1,
+      // firmware warning/error
+      0, 0)
+  }
+
+  private fun stitchArray(stateChange: StateChange) : ByteArray {
+    return stateChange.bleDevice.peripheral?.getStitchArray() ?: byteArrayOf(0)
   }
 }

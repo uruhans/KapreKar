@@ -113,7 +113,22 @@ class BluetoothServiceViewModel(
             val overlayStateModel = StateTransformers.bleToOverlayState(deviceResult)
             val newOverlayState = overlayStateMachine.invoke(overlayStateModel.overlayState)
 
-            BluetoothServiceModel.DeviceUpdate(StateChange(newUiState, newOverlayState, deviceResult.bleDevice))
+            val stateChange = StateChange(newUiState, newOverlayState, deviceResult.bleDevice)
+
+            /**
+             * The reason for doing this is to try to mitigate multiple callbacks
+             * that will seem like a "real" statusVector, but in fact is only a battery update (containing the old statusVector)
+             * which could go and mess things up for the APS system (but we still want to send the battery updates to the screens)
+             */
+            if(deviceResult.bleDevice.peripheral?.isBatteryUpdate == true) {
+              BluetoothServiceModel.BatteryUpdate(stateChange)
+            }
+            else {
+              BluetoothServiceModel.DeviceUpdate(stateChange)
+            }
+          }
+          is DeviceResult.CompromisedPackageResult -> {
+            BluetoothServiceModel.CompromisedPackageUpdate(deviceResult.macAddress, deviceResult.compromisedPackage)
           }
           is DeviceResult.RawDataPackageResult -> {
             BluetoothServiceModel.RawDataPackageUpdate(deviceResult.macAddress, deviceResult.rawDataPackage)

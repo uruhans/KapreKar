@@ -28,6 +28,10 @@ data class Patch(
 
   // do we have an inner sensor breach
   val innerSensorBreach = innerSensors.any { it == SensorStatus.BREACH }
+  //check if more than 1 inner sensor has breach or some sweat or is blinded
+  val isInnerSensorsWet = innerSensors.filter { it == SensorStatus.BREACH || it == SensorStatus.SOME_SWEAT || it == SensorStatus.BLINDED }.count() > 1
+  //check outer sensor has breach or some sweat or is blinded
+  val isOuterSensorWet =  outerSensor == SensorStatus.BREACH || outerSensor == SensorStatus.SOME_SWEAT || outerSensor == SensorStatus.BLINDED
   // do any of the inner sensors have a state of PAY_ATTENTION
   private val innerSensorPayAttention = innerSensors.any { it == SensorStatus.PAY_ATTENTION }
   // a list of inner sensors that are currently in the BLINDED state
@@ -69,4 +73,5 @@ data class Patch(
         && innerSensor3.id == otherPatch.innerSensor3.id
         && outerSensor.id == otherPatch.outerSensor.id
   }
+
 }

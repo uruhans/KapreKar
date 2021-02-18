@@ -12,26 +12,15 @@ import com.coloplast.olympus.ui.feature.home.models.PatchVisible
 
 class WetMountController(args: Bundle) : BaseHomeUIController<ControllerStateWetMountBinding>(), PatchVisible {
 
-  val headLineTxt = ObservableField<String>()
-  val descriptionTxt = ObservableField<String>()
-
-  private var isWetMountTypeG = args.getBoolean(BUNDLE_WET_MOUNT_TYPE)
+  val headLineTxt = ObservableField<String>(args.getString(BUNDLE_HEADLINE_STRING_ID))
+  val descriptionTxt = ObservableField<String>(args.getString(BUNDLE_DESCRIPTION_STRING_ID))
 
   override fun attachVariables(viewBinding: ControllerStateWetMountBinding) {
     super.attachVariables(viewBinding)
     viewBinding.controller = this
   }
 
-  override fun onViewBound(viewBinding: ControllerStateWetMountBinding) {
-    if (isWetMountTypeG) {
-      headLineTxt.set(getString(R.string.status_wet_mount_title) as String?)
-      descriptionTxt.set(getString(R.string.status_wet_mount) as String?)
-    }
-    else {
-      headLineTxt.set(getString(R.string.status_inner_blind_mount_title) as String?)
-      descriptionTxt.set(getString(R.string.status_inner_blind_mount_description) as String?)
-    }
-  }
+  override fun onViewBound(viewBinding: ControllerStateWetMountBinding) {  }
 
   fun onGuideClicked() {
     getContentRouter().pushController(
@@ -51,11 +40,13 @@ class WetMountController(args: Bundle) : BaseHomeUIController<ControllerStateWet
 
   companion object {
     private const val TAG_CONTROLLER = "state_wet_mount_controller"
-    private const val BUNDLE_WET_MOUNT_TYPE = "bundle_wet_mount_type"
+    private const val BUNDLE_HEADLINE_STRING_ID = "bundle_headline_string_id"
+    private const val BUNDLE_DESCRIPTION_STRING_ID = "bundle_description_string_id"
 
-    fun routerTransaction(isWetMountTypeG: Boolean): RouterTransaction {
+    fun routerTransaction(headline: String, description: String): RouterTransaction {
       Bundle().apply {
-        putBoolean(BUNDLE_WET_MOUNT_TYPE, isWetMountTypeG)
+        putString(BUNDLE_HEADLINE_STRING_ID, headline)
+        putString(BUNDLE_DESCRIPTION_STRING_ID, description)
       }
         .also {
           return RouterTransaction.with(

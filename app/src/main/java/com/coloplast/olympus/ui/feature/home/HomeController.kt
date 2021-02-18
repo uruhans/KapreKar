@@ -251,22 +251,12 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
           val timeBetween = LocalTime.now().minusNanos(patchChangeTime?.toNanoOfDay() ?: 0)
 
           if (timeBetween.toSecondOfDay() <= 320) {
-            val outerSensorState = stateChange.bleDevice.peripheral?.patch?.outerSensor
-            if (hasSensorBreachOrSweatOrIsBlinded(outerSensorState)) {
-              stateToChangeTo = UiState.WET_MOUNT_G
-            }
-            else {
-              var innerSensorBreachOrSweatOrIsBlindedCount = 0
-
-              val inner1SensorState = stateChange.bleDevice.peripheral?.patch?.innerSensor1
-              val inner2SensorState = stateChange.bleDevice.peripheral?.patch?.innerSensor2
-              val inner3SensorState = stateChange.bleDevice.peripheral?.patch?.innerSensor3
-
-              if (hasSensorBreachOrSweatOrIsBlinded(inner1SensorState)) { innerSensorBreachOrSweatOrIsBlindedCount++ }
-              if (hasSensorBreachOrSweatOrIsBlinded(inner2SensorState)) { innerSensorBreachOrSweatOrIsBlindedCount++ }
-              if (hasSensorBreachOrSweatOrIsBlinded(inner3SensorState)) { innerSensorBreachOrSweatOrIsBlindedCount++ }
-
-              if (innerSensorBreachOrSweatOrIsBlindedCount > 1) {
+            val patch = stateChange.bleDevice.peripheral?.patch
+            if (patch != null) {
+              if (patch.isOuterSensorWet) {
+                stateToChangeTo = UiState.WET_MOUNT_G
+              }
+              else if (patch.isInnerSensorsWet) {
                 stateToChangeTo = UiState.WET_MOUNT_X
               }
             }
@@ -352,10 +342,10 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
           TotalBlindController.routerTransaction()
         }
         UiState.WET_MOUNT_G -> {
-          WetMountController.routerTransaction(true)
+          WetMountController.routerTransaction(getString(R.string.status_wet_mount_title) as String,  getString(R.string.status_wet_mount) as String)
         }
         UiState.WET_MOUNT_X -> {
-          WetMountController.routerTransaction(false)
+          WetMountController.routerTransaction(getString(R.string.status_inner_blind_mount_title) as String, getString(R.string.status_inner_blind_mount_description) as String)
         }
         UiState.CUTGUARD_BROKEN_I -> {
           CutGuardController.routerTransaction()

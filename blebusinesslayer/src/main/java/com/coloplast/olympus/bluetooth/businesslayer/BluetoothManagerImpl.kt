@@ -259,11 +259,9 @@ class BluetoothManagerImpl(
           isBatteryUpdate = if(currentPowerLevel[macAddress] == null) false else powerLevel.percentage != currentPowerLevel[macAddress]
         }
 
-          Peripheral(statusVector.patch, statusVector.transmitter, powerLevel, isBatteryUpdate)
+        Peripheral(statusVector.patch, statusVector.transmitter, powerLevel, isBatteryUpdate)
       })
       .doOnNext {
-        Timber.d("Setting new Percentage: [${it.battery.powerLevel.percentage}] for [$macAddress]")
-
         synchronized(currentPowerLevel) {
           currentPowerLevel[macAddress] = it.battery.powerLevel.percentage
         }

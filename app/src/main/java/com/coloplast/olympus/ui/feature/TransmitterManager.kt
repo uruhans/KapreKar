@@ -1,9 +1,7 @@
 package com.coloplast.olympus.ui.feature
 
 import com.coloplast.olympus.bluetooth.businesslayer.BluetoothManager
-import com.coloplast.olympus.bluetooth.businesslayer.enums.Attached
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
-import com.coloplast.olympus.bluetooth.model.PatchProbability
 import com.coloplast.olympus.bluetooth.model.StateChange
 import com.coloplast.olympus.shared.moshi.deserialize
 import com.coloplast.olympus.shared.moshi.serialize
@@ -70,7 +68,7 @@ open class TransmitterManager(
       }
       else {
         // we have no active tx - nor is the current on attached - force UiState DETACHED
-        UpdatedStateChange(StateChange(UiState.TRANSMITTER_DETACHED_V, stateChange.overlayState, stateChange.bleDevice, stateChange.patchProbability, stateChange.timestamp))
+        UpdatedStateChange(StateChange(UiState.TRANSMITTER_DETACHED_V, stateChange.overlayState, stateChange.bleDevice, timestamp = stateChange.timestamp))
       }
     }
     else {
@@ -79,7 +77,7 @@ open class TransmitterManager(
         // is it connected and attached AND is the other ALSO connected and attached
         return if(isConnectedAndAttached(stateChange.getMacAddress()) && otherConnectedAndAttached) {
           wasPreviousUiStateMultipleTx = true
-          UpdatedStateChange(StateChange(UiState.MULTIPLE_TRANSMITTERS, stateChange.overlayState, stateChange.bleDevice, stateChange.patchProbability, stateChange.timestamp))
+          UpdatedStateChange(StateChange(UiState.MULTIPLE_TRANSMITTERS, stateChange.overlayState, stateChange.bleDevice, timestamp = stateChange.timestamp))
         }
         else {
           if(otherConnectedAndAttached) {
@@ -96,7 +94,7 @@ open class TransmitterManager(
         if(isConnectedAndAttached(stateChange.getMacAddress())) {
           return if(otherConnectedAndAttached) {
             wasPreviousUiStateMultipleTx = true
-            UpdatedStateChange(StateChange(UiState.MULTIPLE_TRANSMITTERS, stateChange.overlayState, stateChange.bleDevice, stateChange.patchProbability, stateChange.timestamp))
+            UpdatedStateChange(StateChange(UiState.MULTIPLE_TRANSMITTERS, stateChange.overlayState, stateChange.bleDevice, timestamp = stateChange.timestamp))
           }
           else {
             setActiveTransmitter(stateChange)
@@ -122,134 +120,102 @@ open class TransmitterManager(
     return latestTxHistory?.firstOrNull { it.state == UiState.TRANSMITTER_DETACHED_V && it.timestamp > validTimeStamp }
   }
 
-  private fun getStitchOrResetArray(patchProbability: PatchProbability, stateChange: StateChange): ByteArray? {
-    return when (patchProbability) {
-      PatchProbability.SAME -> {
-        stateChange.bleDevice.peripheral?.getStitchArray()
-      }
-      PatchProbability.NEW -> {
-        // replace with olympusWirelessprotocol resetVector
-        byteArrayOf(
-          // sensors
-          -1, -1, -1, -1, -1, -1,
-          // wid
-          -1,
-          // attached
-          Attached.ATTACHED_ON_PATCH.id.toByte(),
-          // patchType
-          -1,
-          // compromised
-          -1,
-          // rotational angle
-          -1,
-          // batt pwr
-          -1,
-          // firmware warning/error
-          0, 0)
-      }
-      else -> {
-        null
-      }
-    }
-  }
+//  fun determinePatchCommand(updatedStateChange: UpdatedStateChange) {
+//    var patchProbability = PatchProbability.NOT_SET
+//    val incomingPackage = updatedStateChange.stateChange
+//
+//    val incomingCompromised = incomingPackage.bleDevice.peripheral?.transmitter?.compromised
+//    val otherPackage = latestStateFromOtherTransmitter(incomingPackage.getMacAddress())
+//
+//    var packageToGetStitchArrayFrom = incomingPackage
+//
+//    if(incomingPackage.state != UiState.MULTIPLE_TRANSMITTERS && !incomingPackage.bleDevice.isBlocked()) {
+//      if(updatedStateChange.activeTransmitterChanged) {
+//
+//        if(wasPreviousUiStateMultipleTx) {
+//          val otherCompromised = otherPackage?.bleDevice?.peripheral?.transmitter?.compromised
+//          val from = if(incomingPackage.bleDevice.isBlocked()) null else incomingCompromised
+//
+//          if(otherPackage?.bleDevice?.isBlocked() == false) {
+//            patchProbability = calculateSplitCommand(from, otherCompromised)
+//          }
+//        }
+//        else {
+//          if(!incomingPackage.bleDevice.isBlocked()) {
+//            val lastOtherValidDetachState = lastValidDetachState(otherPackage?.getMacAddress() ?: "")
+//
+//            val blocked = lastOtherValidDetachState?.bleDevice?.isBlocked() ?: true
+//            val from = if(blocked) null else lastOtherValidDetachState?.bleDevice?.peripheral?.transmitter?.compromised
+//            patchProbability = calculateSplitCommand(from, incomingCompromised)
+//          }
+//        }
+//
+//        otherPackage?.let {
+//          packageToGetStitchArrayFrom = it
+//        }
+//      }
+//      else {
+//        val lastValidDetachState = lastValidDetachState(incomingPackage.getMacAddress())
+//
+//        if(incomingPackage.bleDevice.isAttached() && !incomingPackage.bleDevice.isBlocked() && lastValidDetachState != null) {
+//          val from = if(lastValidDetachState.bleDevice.isBlocked()) null else lastValidDetachState.bleDevice.peripheral?.transmitter?.compromised
+//          patchProbability = calculateSplitCommand(from, incomingCompromised)
+//        }
+//        else if(incomingPackage.bleDevice.isAttachedOutsideBLE()) {
+//          patchProbability = calculateSplitCommand(null, incomingCompromised)
+//        }
+//      }
+//    }
+//
+//    updatedStateChange.stateChange.resetOrStitchCandidate = getStitchOrResetArray(patchProbability, packageToGetStitchArrayFrom)
+//  }
 
-  fun determinePatchCommand(updatedStateChange: UpdatedStateChange) {
-    var patchProbability = PatchProbability.NOT_SET
-    val incomingPackage = updatedStateChange.stateChange
-
-    val incomingCompromised = incomingPackage.bleDevice.peripheral?.transmitter?.compromised
-    val otherPackage = latestStateFromOtherTransmitter(incomingPackage.getMacAddress())
-
-    var packageToGetStitchArrayFrom = incomingPackage
-
-    if(incomingPackage.state != UiState.MULTIPLE_TRANSMITTERS && !incomingPackage.bleDevice.isBlocked()) {
-      if(updatedStateChange.activeTransmitterChanged) {
-
-        if(wasPreviousUiStateMultipleTx) {
-          val otherCompromised = otherPackage?.bleDevice?.peripheral?.transmitter?.compromised
-          val from = if(incomingPackage.bleDevice.isBlocked()) null else incomingCompromised
-
-          if(otherPackage?.bleDevice?.isBlocked() == false) {
-            patchProbability = calculateSplitCommand(from, otherCompromised)
-          }
-        }
-        else {
-          if(!incomingPackage.bleDevice.isBlocked()) {
-            val lastOtherValidDetachState = lastValidDetachState(otherPackage?.getMacAddress() ?: "")
-
-            val blocked = lastOtherValidDetachState?.bleDevice?.isBlocked() ?: true
-            val from = if(blocked) null else lastOtherValidDetachState?.bleDevice?.peripheral?.transmitter?.compromised
-            patchProbability = calculateSplitCommand(from, incomingCompromised)
-          }
-        }
-
-        otherPackage?.let {
-          packageToGetStitchArrayFrom = it
-        }
-      }
-      else {
-        val lastValidDetachState = lastValidDetachState(incomingPackage.getMacAddress())
-
-        if(incomingPackage.bleDevice.isAttached() && !incomingPackage.bleDevice.isBlocked() && lastValidDetachState != null) {
-          val from = if(lastValidDetachState.bleDevice.isBlocked()) null else lastValidDetachState.bleDevice.peripheral?.transmitter?.compromised
-          patchProbability = calculateSplitCommand(from, incomingCompromised)
-        }
-        else if(incomingPackage.bleDevice.isAttachedOutsideBLE()) {
-          patchProbability = calculateSplitCommand(null, incomingCompromised)
-        }
-      }
-    }
-
-    updatedStateChange.stateChange.patchProbability = patchProbability
-    updatedStateChange.stateChange.resetOrStitchCandidate = getStitchOrResetArray(patchProbability, packageToGetStitchArrayFrom)
-  }
-
-  private fun calculateSplitCommand(from: Int?, to: Int?) : PatchProbability {
-    if(to == null) {
-      Timber.d("calculateSplitCommand: to is null")
-      return PatchProbability.NOT_SET
-    }
-
-    // Magic number is coming from Coloplast. For more information see Coloplast documentation on Auto patch detection.
-    val intercept = 10.2643
-
-    return if(to < 10) {
-      // METHOD 0
-      // If the to value is less than 10, that means that the sensor layer in which the transmitter has been placed, is so new that even if a sensor is triggered it should still be reset.
-      // This is what "We" call a wet mount.
-      Timber.d("calculateSplitCommand: to < 10")
-      PatchProbability.NEW
-    }
-    else {
-      if(from != null) {
-        // METHOD A
-        // For a deeper explanation of the equation please refer to the Coloplast documentation of APS.
-       val patchProbability = to.toDouble() - from.toDouble() + intercept
-        if(patchProbability < 0) {
-          Timber.d("calculateSplitCommand: patchProbability < 0")
-          PatchProbability.NEW
-        }
-        else {
-          Timber.d("calculateSplitCommand: patchProbability >= 0")
-          PatchProbability.SAME
-        }
-      }
-      else {
-        // "METHOD B
-        // If we for some reason do not have a from value, the command can be calculated using only the to value.
-        // This could be because of bluetooth disconnection.
-        // This magic number is determined on data analysis and was decided by Coloplast, please refer to the APS Coloplast documentation.
-        if(to.toDouble() <= 20.44) {
-          Timber.d("calculateSplitCommand: to <= 20.44")
-          PatchProbability.NEW
-        }
-        else {
-          Timber.d("calculateSplitCommand: to > 20.44")
-          PatchProbability.SAME
-        }
-      }
-    }
-  }
+//  private fun calculateSplitCommand(from: Int?, to: Int?) : PatchProbability {
+//    if(to == null) {
+//      Timber.d("calculateSplitCommand: to is null")
+//      return PatchProbability.NOT_SET
+//    }
+//
+//    // Magic number is coming from Coloplast. For more information see Coloplast documentation on Auto patch detection.
+//    val intercept = 10.2643
+//
+//    return if(to < 10) {
+//      // METHOD 0
+//      // If the to value is less than 10, that means that the sensor layer in which the transmitter has been placed, is so new that even if a sensor is triggered it should still be reset.
+//      // This is what "We" call a wet mount.
+//      Timber.d("calculateSplitCommand: to < 10")
+//      PatchProbability.NEW
+//    }
+//    else {
+//      if(from != null) {
+//        // METHOD A
+//        // For a deeper explanation of the equation please refer to the Coloplast documentation of APS.
+//       val patchProbability = to.toDouble() - from.toDouble() + intercept
+//        if(patchProbability < 0) {
+//          Timber.d("calculateSplitCommand: patchProbability < 0")
+//          PatchProbability.NEW
+//        }
+//        else {
+//          Timber.d("calculateSplitCommand: patchProbability >= 0")
+//          PatchProbability.SAME
+//        }
+//      }
+//      else {
+//        // "METHOD B
+//        // If we for some reason do not have a from value, the command can be calculated using only the to value.
+//        // This could be because of bluetooth disconnection.
+//        // This magic number is determined on data analysis and was decided by Coloplast, please refer to the APS Coloplast documentation.
+//        if(to.toDouble() <= 20.44) {
+//          Timber.d("calculateSplitCommand: to <= 20.44")
+//          PatchProbability.NEW
+//        }
+//        else {
+//          Timber.d("calculateSplitCommand: to > 20.44")
+//          PatchProbability.SAME
+//        }
+//      }
+//    }
+//  }
 
   private fun hasActiveTransmitter() : Boolean {
     return activeTransmitterMacAddress().isNotBlank()

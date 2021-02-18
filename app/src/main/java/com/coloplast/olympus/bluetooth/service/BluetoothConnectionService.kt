@@ -21,7 +21,6 @@ import com.coloplast.olympus.bluetooth.model.BluetoothServiceResult
 import com.coloplast.olympus.bluetooth.model.StateChange
 import com.coloplast.olympus.notifications.OlympusNotificationManager
 import com.coloplast.olympus.patchsplit.AutoPatchDetectionEngine
-import com.coloplast.olympus.patchsplit.models.ApsAction
 import com.coloplast.olympus.patchsplit.models.CompromisedVault
 import com.coloplast.olympus.ui.feature.TransmitterManager
 import com.coloplast.olympus.ui.feature.statemachine.models.OverlayState
@@ -123,7 +122,6 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
           updatedStateChange.stateChange.apsAction = apsAction
           updatedStateChange.stateChange.resetOrStitchCandidate = apsEngine.resetOrStitchCandidate(apsAction, lastValidDetach)
 
-
           // this will allow for notifications to be send when app is in the background
           olympusNotificationManager.send(updatedStateChange.stateChange.getMacAddress(), updatedStateChange.stateChange.state)
           StateDispatcher.dispatch(updatedStateChange.stateChange)
@@ -131,6 +129,7 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
         }
         is BluetoothServiceModel.BatteryUpdate -> {
           StateDispatcher.dispatch(it.statusChange)
+          //transmitterManager.determineCurrentlyActiveTransmitterAndReturnStateChangeFromIt(it.statusChange)
 
           if(transmitterManager.isActiveTransmitter(it.statusChange.getMacAddress())) {
             StateDispatcher.dispatchStateForActiveTransmitter(it.statusChange)

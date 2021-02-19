@@ -107,10 +107,6 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
           StateDispatcher.dispatch(it.statusChange)
         }
         is BluetoothServiceModel.DeviceUpdate -> {
-//          if(it.statusChange.bleDevice.peripheral?.transmitter?.compromised == -1 || it.statusChange.bleDevice.peripheral?.transmitter?.compromised == 255) {
-//            return@ui
-//          }
-
           // this will dispatch the state change to any who observes it (none if app is in background)
           StateDispatcher.dispatch(it.statusChange)
 
@@ -130,7 +126,6 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
         }
         is BluetoothServiceModel.BatteryUpdate -> {
           StateDispatcher.dispatch(it.statusChange)
-          //transmitterManager.determineCurrentlyActiveTransmitterAndReturnStateChangeFromIt(it.statusChange)
 
           if(transmitterManager.isActiveTransmitter(it.statusChange.getMacAddress())) {
             StateDispatcher.dispatchStateForActiveTransmitter(it.statusChange)

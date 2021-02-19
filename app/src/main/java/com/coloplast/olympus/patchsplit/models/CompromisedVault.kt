@@ -17,15 +17,11 @@ class CompromisedVault {
     }
   }
 
-  fun get(): Int {
+  fun getRunningCompromised(): Int {
     return running
   }
 
-  fun getIfValid(expirationTime: Long): Int? {
-    if (timestamp.toEpochSecond(ZoneOffset.UTC) - LocalDateTime.now().toEpochSecond(ZoneOffset.UTC) < expirationTime) {
-      return running
-    }
-
-    return null
+  fun getTimeSinceLast() : Long  {
+    return LocalDateTime.now().toEpochSecond(ZoneOffset.UTC) - timestamp.toEpochSecond(ZoneOffset.UTC)
   }
 }

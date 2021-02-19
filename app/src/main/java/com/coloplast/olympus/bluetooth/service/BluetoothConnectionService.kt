@@ -117,7 +117,8 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
           val updatedStateChange = transmitterManager.determineCurrentlyActiveTransmitterAndReturnStateChangeFromIt(it.statusChange)
           val lastValidDetach = transmitterManager.lastValidDetachState(updatedStateChange.stateChange.getMacAddress())
           val cycleResult = apsEngine.determineAttachCycle(updatedStateChange, lastValidDetach != null)
-          val apsAction = apsEngine.determineApsAction(cycleResult)
+          val apsMethod = apsEngine.determineApsMethod(cycleResult)
+          val apsAction = apsEngine.determineApsAction(apsMethod)
 
           updatedStateChange.stateChange.apsAction = apsAction
           updatedStateChange.stateChange.resetOrStitchCandidate = apsEngine.resetOrStitchCandidate(apsAction, lastValidDetach)

@@ -349,13 +349,6 @@ class BluetoothManagerImpl(
     else {
       rxBleConnection.setupNotification(OlympusWirelessProtocol.Characteristics.COMPROMISED)
         .flatMap { it }
-        // store in local database
-//        .flatMapSingle { rawPackage ->
-//          transmitterComponent.insertRawPackage(macAddress, rawPackage)
-//            .subscribeOn(Schedulers.io())
-//            .toSingle { rawPackage }
-//            .onErrorReturn { rawPackage }
-//        }
         .compose(OlympusWirelessProtocol.compromisedTransformer)
     }
   }

@@ -16,11 +16,11 @@ import com.coloplast.olympus.bluetooth.BluetoothServiceViewModel
 import com.coloplast.olympus.bluetooth.StateDispatcher
 import com.coloplast.olympus.bluetooth.businesslayer.ServiceStateDispatcher
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
+import com.coloplast.olympus.bluetooth.model.BluetoothServiceHelper
 import com.coloplast.olympus.bluetooth.model.BluetoothServiceModel
 import com.coloplast.olympus.bluetooth.model.BluetoothServiceResult
 import com.coloplast.olympus.bluetooth.model.StateChange
 import com.coloplast.olympus.notifications.OlympusNotificationManager
-import com.coloplast.olympus.patchsplit.AutoPatchDetectionEngine
 import com.coloplast.olympus.patchsplit.models.CompromisedVault
 import com.coloplast.olympus.ui.feature.TransmitterManager
 import com.coloplast.olympus.ui.feature.statemachine.models.OverlayState
@@ -46,7 +46,7 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
   private val transmitterManager: TransmitterManager by inject()
   private val serviceStateDispatcher: ServiceStateDispatcher by inject()
   private val compromisedVault: CompromisedVault by inject()
-  private val apsEngine: AutoPatchDetectionEngine by inject()
+  private val bluetoothServiceHelper: BluetoothServiceHelper by inject()
 
   private val compositeDisposable = CompositeDisposable()
 
@@ -110,19 +110,18 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
           // this will dispatch the state change to any who observes it (none if app is in background)
           StateDispatcher.dispatch(it.statusChange)
 
-          val updatedStateChange = transmitterManager.determineCurrentlyActiveTransmitterAndReturnStateChangeFromIt(it.statusChange)
-          val lastValidDetach = transmitterManager.lastValidDetachState(updatedStateChange.stateChange.getMacAddress())
-          val cycleResult = apsEngine.determineAttachCycle(updatedStateChange, lastValidDetach != null)
-          val apsMethod = apsEngine.determineApsMethod(cycleResult)
-          val apsAction = apsEngine.determineApsAction(apsMethod)
-
-          updatedStateChange.stateChange.apsAction = apsAction
-          updatedStateChange.stateChange.resetOrStitchCandidate = apsEngine.resetOrStitchCandidate(apsAction, lastValidDetach)
+          val updatedStateChange = bluetoothServiceHelper.handleTransmitterUpdate(it.statusChange)
 
           // this will allow for notifications to be send when app is in the background
           olympusNotificationManager.send(updatedStateChange.stateChange.getMacAddress(), updatedStateChange.stateChange.state)
-          StateDispatcher.dispatch(updatedStateChange.stateChange)
-          StateDispatcher.dispatchStateForActiveTransmitter(updatedStateChange.stateChange)
+
+          if(updatedStateChange.stateChange != updatedStateChange.stateChange) {
+            StateDispatcher.dispatch(updatedStateChange.stateChange)
+          }
+
+          if(transmitterManager.isActiveTransmitter(updatedStateChange.stateChange.bleDevice.macAddress)) {
+            StateDispatcher.dispatchStateForActiveTransmitter(updatedStateChange.stateChange)
+          }
         }
         is BluetoothServiceModel.BatteryUpdate -> {
           StateDispatcher.dispatch(it.statusChange)

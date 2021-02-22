@@ -4,6 +4,7 @@ import com.coloplast.olympus.aps.data.DataBleDevice
 import com.coloplast.olympus.aps.data.MockVector
 import com.coloplast.olympus.bluetooth.businesslayer.enums.Attached
 import com.coloplast.olympus.patchsplit.models.ApsAction
+import com.coloplast.olympus.patchsplit.models.ApsMethod
 import com.coloplast.olympus.patchsplit.models.CompromisedVault
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
 import org.junit.Assert
@@ -28,7 +29,7 @@ class ApsVersion2Test {
     val okDevice = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.OK_VECTOR_NEW())
     var updatedStateChange = viewModel.run(okDevice)
 
-    Assert.assertTrue(updatedStateChange.stateChange.state == UiState.OK_A)
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.OK_A)
 
     compromisedVault.set(10)
     compromisedVault.set(20)
@@ -42,13 +43,14 @@ class ApsVersion2Test {
     val detach = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.OK_VECTOR_DETACHED())
     updatedStateChange = viewModel.run(detach)
 
-    Assert.assertTrue(updatedStateChange.stateChange.state == UiState.TRANSMITTER_DETACHED_V)
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.TRANSMITTER_DETACHED_V)
 
     val okDevice2 = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.OK_VECTOR_NEW())
     updatedStateChange = viewModel.run(okDevice2)
 
-    Assert.assertTrue(updatedStateChange.stateChange.state == UiState.OK_A)
-    Assert.assertTrue(updatedStateChange.stateChange.apsAction == ApsAction.Split)
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.OK_A)
+    Assert.assertTrue("ApsMethod was [${updatedStateChange.apsMethod}]", updatedStateChange.apsMethod is ApsMethod.A)
+    Assert.assertTrue("ApsAction was [${updatedStateChange.stateChange.apsAction}]", updatedStateChange.stateChange.apsAction == ApsAction.Split)
     Assert.assertTrue(viewModel.isActiveTransmitter(tx1))
   }
 
@@ -62,7 +64,7 @@ class ApsVersion2Test {
     val okDevice = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.OK_VECTOR_NEW())
     var updatedStateChange = viewModel.run(okDevice)
 
-    Assert.assertTrue(updatedStateChange.stateChange.state == UiState.OK_A)
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.OK_A)
 
     compromisedVault.set(0)
 
@@ -78,13 +80,14 @@ class ApsVersion2Test {
     val detach = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.OK_VECTOR_DETACHED())
     updatedStateChange = viewModel.run(detach)
 
-    Assert.assertTrue(updatedStateChange.stateChange.state == UiState.TRANSMITTER_DETACHED_V)
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.TRANSMITTER_DETACHED_V)
 
     val okDevice2 = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.dynamicVector(60, Attached.ATTACHED_ON_PATCH))
     updatedStateChange = viewModel.run(okDevice2)
 
-    Assert.assertTrue(updatedStateChange.stateChange.state == UiState.OK_A)
-    Assert.assertTrue(updatedStateChange.stateChange.apsAction == ApsAction.Split)
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.OK_A)
+    Assert.assertTrue("ApsMethod was [${updatedStateChange.apsMethod}]", updatedStateChange.apsMethod is ApsMethod.A)
+    Assert.assertTrue("ApsAction was [${updatedStateChange.stateChange.apsAction}]", updatedStateChange.stateChange.apsAction == ApsAction.Split)
     Assert.assertTrue(viewModel.isActiveTransmitter(tx1))
   }
 
@@ -98,20 +101,21 @@ class ApsVersion2Test {
     val okDevice = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.OK_VECTOR_NEW())
     var updatedStateChange = viewModel.run(okDevice)
 
-    Assert.assertTrue(updatedStateChange.stateChange.state == UiState.OK_A)
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.OK_A)
 
     compromisedVault.set(0)
 
     val detach = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.OK_VECTOR_DETACHED())
     updatedStateChange = viewModel.run(detach)
 
-    Assert.assertTrue(updatedStateChange.stateChange.state == UiState.TRANSMITTER_DETACHED_V)
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.TRANSMITTER_DETACHED_V)
 
     val okDevice2 = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.dynamicVector(100, Attached.ATTACHED_ON_PATCH))
     updatedStateChange = viewModel.run(okDevice2)
 
-    Assert.assertTrue(updatedStateChange.stateChange.state == UiState.OK_A)
-    Assert.assertTrue(updatedStateChange.stateChange.apsAction == ApsAction.Stitch)
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.OK_A)
+    Assert.assertTrue("ApsMethod was [${updatedStateChange.apsMethod}]", updatedStateChange.apsMethod is ApsMethod.A)
+    Assert.assertTrue("ApsAction was [${updatedStateChange.stateChange.apsAction}]", updatedStateChange.stateChange.apsAction == ApsAction.Stitch)
     Assert.assertTrue(viewModel.isActiveTransmitter(tx1))
   }
 
@@ -128,20 +132,21 @@ class ApsVersion2Test {
     val okDevice = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.OK_VECTOR_NEW())
     var updatedStateChange = viewModel.run(okDevice)
 
-    Assert.assertTrue(updatedStateChange.stateChange.state == UiState.OK_A)
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.OK_A)
 
     compromisedVault.set(0)
 
     val detach = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.OK_VECTOR_DETACHED())
     updatedStateChange = viewModel.run(detach)
 
-    Assert.assertTrue(updatedStateChange.stateChange.state == UiState.TRANSMITTER_DETACHED_V)
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.TRANSMITTER_DETACHED_V)
 
     val okDevice2 = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.OK_VECTOR_NEW())
     updatedStateChange = viewModel.run(okDevice2)
 
-    Assert.assertTrue(updatedStateChange.stateChange.state == UiState.OK_A)
-    Assert.assertTrue(updatedStateChange.stateChange.apsAction == ApsAction.Split)
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.OK_A)
+    Assert.assertTrue("ApsMethod was [${updatedStateChange.apsMethod}]", updatedStateChange.apsMethod is ApsMethod.A)
+    Assert.assertTrue("ApsAction was [${updatedStateChange.stateChange.apsAction}]", updatedStateChange.stateChange.apsAction == ApsAction.Split)
     Assert.assertTrue(viewModel.isActiveTransmitter(tx1))
   }
 
@@ -158,20 +163,21 @@ class ApsVersion2Test {
     val okDevice = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.OK_VECTOR_NEW())
     var updatedStateChange = viewModel.run(okDevice)
 
-    Assert.assertTrue(updatedStateChange.stateChange.state == UiState.OK_A)
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.OK_A)
 
     compromisedVault.set(0)
 
     val detach = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.OK_VECTOR_DETACHED())
     updatedStateChange = viewModel.run(detach)
 
-    Assert.assertTrue(updatedStateChange.stateChange.state == UiState.TRANSMITTER_DETACHED_V)
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.TRANSMITTER_DETACHED_V)
 
     val okDevice2 = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.OK_VECTOR_NEW())
     updatedStateChange = viewModel.run(okDevice2)
 
-    Assert.assertTrue(updatedStateChange.stateChange.state == UiState.OK_A)
-    Assert.assertTrue(updatedStateChange.stateChange.apsAction == ApsAction.Reset)
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.OK_A)
+    Assert.assertTrue("ApsMethod was [${updatedStateChange.apsMethod}]", updatedStateChange.apsMethod is ApsMethod.A)
+    Assert.assertTrue("ApsAction was [${updatedStateChange.stateChange.apsAction}]", updatedStateChange.stateChange.apsAction == ApsAction.Reset)
     Assert.assertTrue(viewModel.isActiveTransmitter(tx1))
   }
 
@@ -185,7 +191,7 @@ class ApsVersion2Test {
     val okDevice = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.OK_VECTOR_NEW())
     var updatedStateChange = viewModel.run(okDevice)
 
-    Assert.assertTrue(updatedStateChange.stateChange.state == UiState.OK_A)
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.OK_A)
 
     compromisedVault.set(10)
     compromisedVault.set(20)
@@ -195,13 +201,14 @@ class ApsVersion2Test {
     val detach = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.OK_VECTOR_DETACHED())
     updatedStateChange = viewModel.run(detach)
 
-    Assert.assertTrue(updatedStateChange.stateChange.state == UiState.TRANSMITTER_DETACHED_V)
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.TRANSMITTER_DETACHED_V)
 
     val okDevice2 = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.dynamicVector(40, Attached.ATTACHED_ON_PATCH))
     updatedStateChange = viewModel.run(okDevice2)
 
-    Assert.assertTrue(updatedStateChange.stateChange.state == UiState.OK_A)
-    Assert.assertTrue(updatedStateChange.stateChange.apsAction == ApsAction.Stitch)
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.OK_A)
+    Assert.assertTrue("ApsMethod was [${updatedStateChange.apsMethod}]", updatedStateChange.apsMethod is ApsMethod.A)
+    Assert.assertTrue("ApsAction was [${updatedStateChange.stateChange.apsAction}]", updatedStateChange.stateChange.apsAction == ApsAction.Stitch)
     Assert.assertTrue(viewModel.isActiveTransmitter(tx1))
   }
 
@@ -215,7 +222,7 @@ class ApsVersion2Test {
     val okDevice = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.OK_VECTOR_NEW())
     var updatedStateChange = viewModel.run(okDevice)
 
-    Assert.assertTrue(updatedStateChange.stateChange.state == UiState.OK_A)
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.OK_A)
 
     compromisedVault.set(10)
     compromisedVault.set(20)
@@ -223,13 +230,14 @@ class ApsVersion2Test {
     val detach = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.OK_VECTOR_DETACHED())
     updatedStateChange = viewModel.run(detach)
 
-    Assert.assertTrue(updatedStateChange.stateChange.state == UiState.TRANSMITTER_DETACHED_V)
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.TRANSMITTER_DETACHED_V)
 
     val okDevice2 = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.dynamicVector(60, Attached.ATTACHED_ON_PATCH))
     updatedStateChange = viewModel.run(okDevice2)
 
-    Assert.assertTrue(updatedStateChange.stateChange.state == UiState.OK_A)
-    Assert.assertTrue(updatedStateChange.stateChange.apsAction == ApsAction.Stitch)
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.OK_A)
+    Assert.assertTrue("ApsMethod was [${updatedStateChange.apsMethod}]", updatedStateChange.apsMethod is ApsMethod.A)
+    Assert.assertTrue("ApsAction was [${updatedStateChange.stateChange.apsAction}]", updatedStateChange.stateChange.apsAction == ApsAction.Stitch)
     Assert.assertTrue(viewModel.isActiveTransmitter(tx1))
   }
 
@@ -243,20 +251,21 @@ class ApsVersion2Test {
     val okDevice = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.OK_VECTOR_NEW())
     var updatedStateChange = viewModel.run(okDevice)
 
-    Assert.assertTrue(updatedStateChange.stateChange.state == UiState.OK_A)
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.OK_A)
 
     compromisedVault.set(5)
 
     val detach = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.OK_VECTOR_DETACHED())
     updatedStateChange = viewModel.run(detach)
 
-    Assert.assertTrue(updatedStateChange.stateChange.state == UiState.TRANSMITTER_DETACHED_V)
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.TRANSMITTER_DETACHED_V)
 
     val okDevice2 = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.dynamicVector(5, Attached.ATTACHED_ON_PATCH))
     updatedStateChange = viewModel.run(okDevice2)
 
-    Assert.assertTrue(updatedStateChange.stateChange.state == UiState.OK_A)
-    Assert.assertTrue(updatedStateChange.stateChange.apsAction == ApsAction.Reset)
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.OK_A)
+    Assert.assertTrue("ApsMethod was [${updatedStateChange.apsMethod}]", updatedStateChange.apsMethod is ApsMethod.A)
+    Assert.assertTrue("ApsAction was [${updatedStateChange.stateChange.apsAction}]", updatedStateChange.stateChange.apsAction == ApsAction.Reset)
     Assert.assertTrue(viewModel.isActiveTransmitter(tx1))
   }
 
@@ -270,7 +279,7 @@ class ApsVersion2Test {
     val okDevice = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.OK_VECTOR_NEW())
     var updatedStateChange = viewModel.run(okDevice)
 
-    Assert.assertTrue(updatedStateChange.stateChange.state == UiState.OK_A)
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.OK_A)
 
     compromisedVault.set(5)
     compromisedVault.set(10)
@@ -279,13 +288,14 @@ class ApsVersion2Test {
     val detach = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.OK_VECTOR_DETACHED())
     updatedStateChange = viewModel.run(detach)
 
-    Assert.assertTrue(updatedStateChange.stateChange.state == UiState.TRANSMITTER_DETACHED_V)
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.TRANSMITTER_DETACHED_V)
 
     val okDevice2 = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.dynamicVector(0, Attached.ATTACHED_ON_PATCH))
     updatedStateChange = viewModel.run(okDevice2)
 
-    Assert.assertTrue(updatedStateChange.stateChange.state == UiState.OK_A)
-    Assert.assertTrue(updatedStateChange.stateChange.apsAction == ApsAction.Split)
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.OK_A)
+    Assert.assertTrue("ApsMethod was [${updatedStateChange.apsMethod}]", updatedStateChange.apsMethod is ApsMethod.A)
+    Assert.assertTrue("ApsAction was [${updatedStateChange.stateChange.apsAction}]", updatedStateChange.stateChange.apsAction == ApsAction.Split)
     Assert.assertTrue(viewModel.isActiveTransmitter(tx1))
   }
 
@@ -299,7 +309,7 @@ class ApsVersion2Test {
     val okDevice = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.OK_VECTOR_NEW())
     var updatedStateChange = viewModel.run(okDevice)
 
-    Assert.assertTrue(updatedStateChange.stateChange.state == UiState.OK_A)
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.OK_A)
 
     compromisedVault.set(5)
     compromisedVault.set(10)
@@ -312,13 +322,14 @@ class ApsVersion2Test {
     val detach = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.OK_VECTOR_DETACHED())
     updatedStateChange = viewModel.run(detach)
 
-    Assert.assertTrue(updatedStateChange.stateChange.state == UiState.TRANSMITTER_DETACHED_V)
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.TRANSMITTER_DETACHED_V)
 
     val okDevice2 = DataBleDevice.bleDevice(tx2, statusVectorBytes = MockVector.dynamicVector(0, Attached.ATTACHED_ON_PATCH))
     updatedStateChange = viewModel.run(okDevice2)
 
-    Assert.assertTrue(updatedStateChange.stateChange.state == UiState.OK_A)
-    Assert.assertTrue(updatedStateChange.stateChange.apsAction == ApsAction.Split)
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.OK_A)
+    Assert.assertTrue("ApsMethod was [${updatedStateChange.apsMethod}]", updatedStateChange.apsMethod is ApsMethod.A)
+    Assert.assertTrue("ApsAction was [${updatedStateChange.stateChange.apsAction}]", updatedStateChange.stateChange.apsAction == ApsAction.Split)
     Assert.assertTrue(viewModel.isActiveTransmitter(tx2))
   }
 
@@ -332,7 +343,7 @@ class ApsVersion2Test {
     val okDevice = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.OK_VECTOR_NEW())
     var updatedStateChange = viewModel.run(okDevice)
 
-    Assert.assertTrue(updatedStateChange.stateChange.state == UiState.OK_A)
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.OK_A)
 
     compromisedVault.set(5)
     compromisedVault.set(10)
@@ -345,13 +356,14 @@ class ApsVersion2Test {
     val detach = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.OK_VECTOR_DETACHED())
     updatedStateChange = viewModel.run(detach)
 
-    Assert.assertTrue(updatedStateChange.stateChange.state == UiState.TRANSMITTER_DETACHED_V)
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.TRANSMITTER_DETACHED_V)
 
     val okDevice2 = DataBleDevice.bleDevice(tx2, statusVectorBytes = MockVector.dynamicVector(60, Attached.ATTACHED_ON_PATCH))
     updatedStateChange = viewModel.run(okDevice2)
 
-    Assert.assertTrue(updatedStateChange.stateChange.state == UiState.OK_A)
-    Assert.assertTrue(updatedStateChange.stateChange.apsAction == ApsAction.Split)
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.OK_A)
+    Assert.assertTrue("ApsMethod was [${updatedStateChange.apsMethod}]", updatedStateChange.apsMethod is ApsMethod.A)
+    Assert.assertTrue("ApsAction was [${updatedStateChange.stateChange.apsAction}]", updatedStateChange.stateChange.apsAction == ApsAction.Split)
     Assert.assertTrue(viewModel.isActiveTransmitter(tx2))
   }
 
@@ -365,20 +377,21 @@ class ApsVersion2Test {
     val okDevice = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.OK_VECTOR_NEW())
     var updatedStateChange = viewModel.run(okDevice)
 
-    Assert.assertTrue(updatedStateChange.stateChange.state == UiState.OK_A)
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.OK_A)
 
     compromisedVault.set(0)
 
     val detach = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.OK_VECTOR_DETACHED())
     updatedStateChange = viewModel.run(detach)
 
-    Assert.assertTrue(updatedStateChange.stateChange.state == UiState.TRANSMITTER_DETACHED_V)
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.TRANSMITTER_DETACHED_V)
 
     val okDevice2 = DataBleDevice.bleDevice(tx2, statusVectorBytes = MockVector.dynamicVector(100, Attached.ATTACHED_ON_PATCH))
     updatedStateChange = viewModel.run(okDevice2)
 
-    Assert.assertTrue(updatedStateChange.stateChange.state == UiState.OK_A)
-    Assert.assertTrue(updatedStateChange.stateChange.apsAction == ApsAction.Stitch)
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.OK_A)
+    Assert.assertTrue("ApsMethod was [${updatedStateChange.apsMethod}]", updatedStateChange.apsMethod is ApsMethod.A)
+    Assert.assertTrue("ApsAction was [${updatedStateChange.stateChange.apsAction}]", updatedStateChange.stateChange.apsAction == ApsAction.Stitch)
     Assert.assertTrue(viewModel.isActiveTransmitter(tx2))
   }
 
@@ -395,20 +408,21 @@ class ApsVersion2Test {
     val okDevice = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.OK_VECTOR_NEW())
     var updatedStateChange = viewModel.run(okDevice)
 
-    Assert.assertTrue(updatedStateChange.stateChange.state == UiState.OK_A)
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.OK_A)
 
     compromisedVault.set(0)
 
     val detach = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.OK_VECTOR_DETACHED())
     updatedStateChange = viewModel.run(detach)
 
-    Assert.assertTrue(updatedStateChange.stateChange.state == UiState.TRANSMITTER_DETACHED_V)
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.TRANSMITTER_DETACHED_V)
 
     val okDevice2 = DataBleDevice.bleDevice(tx2, statusVectorBytes = MockVector.dynamicVector(0, Attached.ATTACHED_ON_PATCH))
     updatedStateChange = viewModel.run(okDevice2)
 
-    Assert.assertTrue(updatedStateChange.stateChange.state == UiState.OK_A)
-    Assert.assertTrue(updatedStateChange.stateChange.apsAction == ApsAction.Split)
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.OK_A)
+    Assert.assertTrue("ApsMethod was [${updatedStateChange.apsMethod}]", updatedStateChange.apsMethod is ApsMethod.A)
+    Assert.assertTrue("ApsAction was [${updatedStateChange.stateChange.apsAction}]", updatedStateChange.stateChange.apsAction == ApsAction.Split)
     Assert.assertTrue(viewModel.isActiveTransmitter(tx2))
   }
 
@@ -425,20 +439,21 @@ class ApsVersion2Test {
     val okDevice = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.OK_VECTOR_NEW())
     var updatedStateChange = viewModel.run(okDevice)
 
-    Assert.assertTrue(updatedStateChange.stateChange.state == UiState.OK_A)
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.OK_A)
 
     compromisedVault.set(0)
 
     val detach = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.OK_VECTOR_DETACHED())
     updatedStateChange = viewModel.run(detach)
 
-    Assert.assertTrue(updatedStateChange.stateChange.state == UiState.TRANSMITTER_DETACHED_V)
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.TRANSMITTER_DETACHED_V)
 
     val okDevice2 = DataBleDevice.bleDevice(tx2, statusVectorBytes = MockVector.dynamicVector(0, Attached.ATTACHED_ON_PATCH))
     updatedStateChange = viewModel.run(okDevice2)
 
-    Assert.assertTrue(updatedStateChange.stateChange.state == UiState.OK_A)
-    Assert.assertTrue(updatedStateChange.stateChange.apsAction == ApsAction.Reset)
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.OK_A)
+    Assert.assertTrue("ApsMethod was [${updatedStateChange.apsMethod}]", updatedStateChange.apsMethod is ApsMethod.A)
+    Assert.assertTrue("ApsAction was [${updatedStateChange.stateChange.apsAction}]", updatedStateChange.stateChange.apsAction == ApsAction.Reset)
     Assert.assertTrue(viewModel.isActiveTransmitter(tx2))
   }
 
@@ -452,7 +467,7 @@ class ApsVersion2Test {
     val okDevice = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.OK_VECTOR_NEW())
     var updatedStateChange = viewModel.run(okDevice)
 
-    Assert.assertTrue(updatedStateChange.stateChange.state == UiState.OK_A)
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.OK_A)
 
     compromisedVault.set(10)
     compromisedVault.set(20)
@@ -462,13 +477,14 @@ class ApsVersion2Test {
     val detach = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.OK_VECTOR_DETACHED())
     updatedStateChange = viewModel.run(detach)
 
-    Assert.assertTrue(updatedStateChange.stateChange.state == UiState.TRANSMITTER_DETACHED_V)
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.TRANSMITTER_DETACHED_V)
 
     val okDevice2 = DataBleDevice.bleDevice(tx2, statusVectorBytes = MockVector.dynamicVector(40, Attached.ATTACHED_ON_PATCH))
     updatedStateChange = viewModel.run(okDevice2)
 
-    Assert.assertTrue(updatedStateChange.stateChange.state == UiState.OK_A)
-    Assert.assertTrue(updatedStateChange.stateChange.apsAction == ApsAction.Stitch)
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.OK_A)
+    Assert.assertTrue("ApsMethod was [${updatedStateChange.apsMethod}]", updatedStateChange.apsMethod is ApsMethod.A)
+    Assert.assertTrue("ApsAction was [${updatedStateChange.stateChange.apsAction}]", updatedStateChange.stateChange.apsAction == ApsAction.Stitch)
     Assert.assertTrue(viewModel.isActiveTransmitter(tx2))
   }
 
@@ -482,7 +498,7 @@ class ApsVersion2Test {
     val okDevice = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.OK_VECTOR_NEW())
     var updatedStateChange = viewModel.run(okDevice)
 
-    Assert.assertTrue(updatedStateChange.stateChange.state == UiState.OK_A)
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.OK_A)
 
     compromisedVault.set(10)
     compromisedVault.set(20)
@@ -490,13 +506,14 @@ class ApsVersion2Test {
     val detach = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.OK_VECTOR_DETACHED())
     updatedStateChange = viewModel.run(detach)
 
-    Assert.assertTrue(updatedStateChange.stateChange.state == UiState.TRANSMITTER_DETACHED_V)
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.TRANSMITTER_DETACHED_V)
 
     val okDevice2 = DataBleDevice.bleDevice(tx2, statusVectorBytes = MockVector.dynamicVector(60, Attached.ATTACHED_ON_PATCH))
     updatedStateChange = viewModel.run(okDevice2)
 
-    Assert.assertTrue(updatedStateChange.stateChange.state == UiState.OK_A)
-    Assert.assertTrue(updatedStateChange.stateChange.apsAction == ApsAction.Stitch)
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.OK_A)
+    Assert.assertTrue("ApsMethod was [${updatedStateChange.apsMethod}]", updatedStateChange.apsMethod is ApsMethod.A)
+    Assert.assertTrue("ApsAction was [${updatedStateChange.stateChange.apsAction}]", updatedStateChange.stateChange.apsAction == ApsAction.Stitch)
     Assert.assertTrue(viewModel.isActiveTransmitter(tx2))
   }
 
@@ -510,20 +527,21 @@ class ApsVersion2Test {
     val okDevice = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.OK_VECTOR_NEW())
     var updatedStateChange = viewModel.run(okDevice)
 
-    Assert.assertTrue(updatedStateChange.stateChange.state == UiState.OK_A)
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.OK_A)
 
     compromisedVault.set(5)
 
     val detach = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.OK_VECTOR_DETACHED())
     updatedStateChange = viewModel.run(detach)
 
-    Assert.assertTrue(updatedStateChange.stateChange.state == UiState.TRANSMITTER_DETACHED_V)
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.TRANSMITTER_DETACHED_V)
 
     val okDevice2 = DataBleDevice.bleDevice(tx2, statusVectorBytes = MockVector.dynamicVector(5, Attached.ATTACHED_ON_PATCH))
     updatedStateChange = viewModel.run(okDevice2)
 
-    Assert.assertTrue(updatedStateChange.stateChange.state == UiState.OK_A)
-    Assert.assertTrue(updatedStateChange.stateChange.apsAction == ApsAction.Reset)
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.OK_A)
+    Assert.assertTrue("ApsMethod was [${updatedStateChange.apsMethod}]", updatedStateChange.apsMethod is ApsMethod.A)
+    Assert.assertTrue("ApsAction was [${updatedStateChange.stateChange.apsAction}]", updatedStateChange.stateChange.apsAction == ApsAction.Reset)
     Assert.assertTrue(viewModel.isActiveTransmitter(tx2))
   }
 
@@ -537,7 +555,7 @@ class ApsVersion2Test {
     val okDevice = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.OK_VECTOR_NEW())
     var updatedStateChange = viewModel.run(okDevice)
 
-    Assert.assertTrue(updatedStateChange.stateChange.state == UiState.OK_A)
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.OK_A)
 
     compromisedVault.set(5)
     compromisedVault.set(10)
@@ -546,13 +564,14 @@ class ApsVersion2Test {
     val detach = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.OK_VECTOR_DETACHED())
     updatedStateChange = viewModel.run(detach)
 
-    Assert.assertTrue(updatedStateChange.stateChange.state == UiState.TRANSMITTER_DETACHED_V)
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.TRANSMITTER_DETACHED_V)
 
     val okDevice2 = DataBleDevice.bleDevice(tx2, statusVectorBytes = MockVector.dynamicVector(0, Attached.ATTACHED_ON_PATCH))
     updatedStateChange = viewModel.run(okDevice2)
 
-    Assert.assertTrue(updatedStateChange.stateChange.state == UiState.OK_A)
-    Assert.assertTrue(updatedStateChange.stateChange.apsAction == ApsAction.Split)
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.OK_A)
+    Assert.assertTrue("ApsMethod was [${updatedStateChange.apsMethod}]", updatedStateChange.apsMethod is ApsMethod.A)
+    Assert.assertTrue("ApsAction was [${updatedStateChange.stateChange.apsAction}]", updatedStateChange.stateChange.apsAction == ApsAction.Split)
     Assert.assertTrue(viewModel.isActiveTransmitter(tx2))
   }
 
@@ -566,23 +585,100 @@ class ApsVersion2Test {
     val okDevice = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.OK_VECTOR_NEW())
     var updatedStateChange = viewModel.run(okDevice)
 
-    Assert.assertTrue(updatedStateChange.stateChange.state == UiState.OK_A)
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.OK_A)
 
     compromisedVault.set(5)
     compromisedVault.set(10)
     compromisedVault.set(20)
     compromisedVault.set(50)
     compromisedVault.set(80)
+    compromisedVault.set(100)
+
+    viewModel.overrideBluetoothManager(false)
+
+    // detach occurs but we dont know about it
+    // val detach = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.OK_VECTOR_DETACHED())
+
     compromisedVault.set(100, LocalDateTime.now().minusHours(3))
 
-
     val newPatchOutOfRange = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.dynamicVector(0, Attached.ATTACHED_BODY_BLE))
+
+    viewModel.overrideBluetoothManager(true)
+
     updatedStateChange = viewModel.run(newPatchOutOfRange)
 
-    Assert.assertTrue(updatedStateChange.stateChange.state == UiState.OK_A)
-    Assert.assertTrue(updatedStateChange.stateChange.apsAction == ApsAction.Split)
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.OK_A)
+    Assert.assertTrue("ApsMethod was [${updatedStateChange.apsMethod}]", updatedStateChange.apsMethod is ApsMethod.B)
+    Assert.assertTrue("ApsAction was [${updatedStateChange.stateChange.apsAction}]", updatedStateChange.stateChange.apsAction == ApsAction.Split)
     Assert.assertTrue(viewModel.isActiveTransmitter(tx1))
   }
 
+  @Test
+  fun testVar2_From80To60_BLE_OOR_resultStitch() {
+    val compromisedVault = CompromisedVault()
+    val viewModel = MockViewModelV2(compromisedVault)
+
+    // TEST
+    // OK
+    val okDevice = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.OK_VECTOR_NEW())
+    var updatedStateChange = viewModel.run(okDevice)
+
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.OK_A)
+
+    compromisedVault.set(5)
+    compromisedVault.set(10)
+    compromisedVault.set(20)
+    compromisedVault.set(50)
+    compromisedVault.set(80)
+
+    viewModel.overrideBluetoothManager(false)
+
+    // detach occurs but we dont know about it
+    // val detach = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.OK_VECTOR_DETACHED())
+
+    compromisedVault.set(80, LocalDateTime.now().minusHours(3))
+
+    val newPatchOutOfRange = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.dynamicVector(60, Attached.ATTACHED_BODY_BLE))
+
+    viewModel.overrideBluetoothManager(true)
+
+    updatedStateChange = viewModel.run(newPatchOutOfRange)
+
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.OK_A)
+    Assert.assertTrue("ApsMethod was [${updatedStateChange.apsMethod}]", updatedStateChange.apsMethod is ApsMethod.B)
+    Assert.assertTrue("ApsAction was [${updatedStateChange.stateChange.apsAction}]", updatedStateChange.stateChange.apsAction == ApsAction.Stitch)
+    Assert.assertTrue(viewModel.isActiveTransmitter(tx1))
+  }
+
+  @Test
+  fun testVar3_From0To100_BLE_OOR_resultStitch() {
+    val compromisedVault = CompromisedVault()
+    val viewModel = MockViewModelV2(compromisedVault)
+
+    // TEST
+    // OK
+    val okDevice = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.OK_VECTOR_NEW())
+    var updatedStateChange = viewModel.run(okDevice)
+
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.OK_A)
+
+    viewModel.overrideBluetoothManager(false)
+
+    // detach occurs but we dont know about it
+    // val detach = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.OK_VECTOR_DETACHED())
+
+    compromisedVault.set(0, LocalDateTime.now().minusHours(3))
+
+    val newPatchOutOfRange = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.dynamicVector(100, Attached.ATTACHED_BLE_OFF))
+
+    viewModel.overrideBluetoothManager(true)
+
+    updatedStateChange = viewModel.run(newPatchOutOfRange)
+
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.OK_A)
+    Assert.assertTrue("ApsMethod was [${updatedStateChange.apsMethod}]", updatedStateChange.apsMethod is ApsMethod.B)
+    Assert.assertTrue("ApsAction was [${updatedStateChange.stateChange.apsAction}]", updatedStateChange.stateChange.apsAction == ApsAction.Stitch)
+    Assert.assertTrue(viewModel.isActiveTransmitter(tx1))
+  }
 
 }

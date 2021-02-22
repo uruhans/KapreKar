@@ -27,11 +27,9 @@ class MockViewModel() {
   private val overlayStateMachine = OverlayStateMachineImpl()
 
   init {
-    Mockito.`when`(bluetoothManager.bleConnectionStateObservable(Mockito.anyString())).thenReturn(Observable.just(BleConnectionState.CONNECTED))
     Mockito.`when`(bluetoothManager.isConnected(Mockito.anyString())).thenReturn(true)
 
     Assert.assertTrue(bluetoothManager.isConnected(""))
-    Assert.assertTrue(bluetoothManager.bleConnectionStateObservable("").blockingFirst() == BleConnectionState.CONNECTED)
     Assert.assertNotNull(transmitterManager)
   }
 

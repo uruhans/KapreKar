@@ -5,6 +5,7 @@ import android.content.Context
 import com.coloplast.olympus.Me
 import com.coloplast.olympus.bluetooth.BluetoothServiceViewModel
 import com.coloplast.olympus.bluetooth.businesslayer.*
+import com.coloplast.olympus.bluetooth.model.BluetoothServiceHelper
 import com.coloplast.olympus.businesslayer.components.AppStateComponentImpl
 import com.coloplast.olympus.businesslayer.components.SystemUpdateComponentImpl
 import com.coloplast.olympus.businesslayer.components.TransmitterComponentImpl
@@ -73,6 +74,8 @@ val koinModule = module {
   single { TransmitterManager(get(), get()) }
   single { BreachesOccurred(get()) }
   single { ServiceStateDispatcher() }
+
+  single { BluetoothServiceHelper(get(), get()) }
 
   /* Components */
   single<TransmitterComponent> { TransmitterComponentImpl(get()) }

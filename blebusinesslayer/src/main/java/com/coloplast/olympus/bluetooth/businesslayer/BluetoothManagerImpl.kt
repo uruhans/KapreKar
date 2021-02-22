@@ -469,11 +469,7 @@ class BluetoothManagerImpl(
   }
 
   override fun isConnected(macAddress: String): Boolean {
-    if (macAddress.isEmpty()) {
-      return false
-    }
-
-    return bleConnections[macAddress] != null
+    return bleConnectionStateObservable(macAddress).blockingFirst() == BleConnectionState.CONNECTED
   }
 
   override fun disconnectTransmitter(macAddress: String) {

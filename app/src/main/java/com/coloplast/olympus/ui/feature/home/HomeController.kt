@@ -515,6 +515,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
 
   override fun onPositiveButtonClicked(requestCode: Int) {
     when (requestCode) {
+      REQUEST_CODE_BATTERY_LOW,
       REQUEST_CODE_CONNECTION_LOST -> {
         imageDialogController?.dismissDialog(withCallback = true)
       }
@@ -526,6 +527,13 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
       REQUEST_CODE_CONNECTION_LOST -> {
         router.pushController(
           SingleGuideFlowController.routerTransaction(GuideType.CONNECTION)
+            .pushChangeHandler(VerticalChangeHandler())
+            .popChangeHandler(VerticalChangeHandler())
+        )
+      }
+      REQUEST_CODE_BATTERY_LOW -> {
+        router.pushController(
+          SingleGuideFlowController.routerTransaction(GuideType.CHARGING)
             .pushChangeHandler(VerticalChangeHandler())
             .popChangeHandler(VerticalChangeHandler())
         )

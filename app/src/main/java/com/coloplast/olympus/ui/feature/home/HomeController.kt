@@ -342,10 +342,10 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
           TotalBlindController.routerTransaction()
         }
         UiState.WET_MOUNT_G -> {
-          WetMountController.routerTransaction(getString(R.string.status_wet_mount_title) as String,  getString(R.string.status_wet_mount) as String)
+          WetMountController.routerTransaction(R.string.status_wet_mount_title,  R.string.status_wet_mount)
         }
         UiState.WET_MOUNT_X -> {
-          WetMountController.routerTransaction(getString(R.string.status_inner_blind_mount_title) as String, getString(R.string.status_inner_blind_mount_description) as String)
+          WetMountController.routerTransaction(R.string.status_inner_blind_mount_title, R.string.status_inner_blind_mount_description)
         }
         UiState.CUTGUARD_BROKEN_I -> {
           CutGuardController.routerTransaction()

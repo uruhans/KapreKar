@@ -24,7 +24,7 @@
       android:layout_marginStart="@dimen/spacing_standard"
       android:layout_marginTop="@dimen/spacing_half"
       android:layout_marginEnd="@dimen/spacing_standard"
-      android:text="@{controller.headLineTxt}"
+      app:safeText="@{controller.headLineTxt}"
       tools:text="@string/status_wet_mount_title"/>
 
     <TextView
@@ -34,7 +34,7 @@
       android:layout_marginStart="@dimen/spacing_standard"
       android:layout_marginEnd="@dimen/spacing_standard"
       android:layout_marginBottom="@dimen/spacing_double"
-      android:text="@{controller.descriptionTxt}"
+      app:safeText="@{controller.descriptionTxt}"
       tools:text="@string/status_wet_mount"/>
 
     <androidx.cardview.widget.CardView

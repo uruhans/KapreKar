@@ -1,7 +1,6 @@
 package com.coloplast.olympus.ui.feature.uistates
 
 import android.os.Bundle
-import androidx.databinding.ObservableField
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import com.coloplast.olympus.R
@@ -12,8 +11,8 @@ import com.coloplast.olympus.ui.feature.home.models.PatchVisible
 
 class WetMountController(args: Bundle) : BaseHomeUIController<ControllerStateWetMountBinding>(), PatchVisible {
 
-  val headLineTxt = ObservableField<String>(args.getString(BUNDLE_HEADLINE_STRING_ID))
-  val descriptionTxt = ObservableField<String>(args.getString(BUNDLE_DESCRIPTION_STRING_ID))
+  val headLineTxt = args.getInt(BUNDLE_HEADLINE_STRING_ID)
+  val descriptionTxt = args.getInt(BUNDLE_DESCRIPTION_STRING_ID)
 
   override fun attachVariables(viewBinding: ControllerStateWetMountBinding) {
     super.attachVariables(viewBinding)
@@ -43,10 +42,10 @@ class WetMountController(args: Bundle) : BaseHomeUIController<ControllerStateWet
     private const val BUNDLE_HEADLINE_STRING_ID = "bundle_headline_string_id"
     private const val BUNDLE_DESCRIPTION_STRING_ID = "bundle_description_string_id"
 
-    fun routerTransaction(headline: String, description: String): RouterTransaction {
+    fun routerTransaction(headline: Int, description: Int): RouterTransaction {
       Bundle().apply {
-        putString(BUNDLE_HEADLINE_STRING_ID, headline)
-        putString(BUNDLE_DESCRIPTION_STRING_ID, description)
+        putInt(BUNDLE_HEADLINE_STRING_ID, headline)
+        putInt(BUNDLE_DESCRIPTION_STRING_ID, description)
       }
         .also {
           return RouterTransaction.with(

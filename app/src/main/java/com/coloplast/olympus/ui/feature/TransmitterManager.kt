@@ -55,11 +55,10 @@ open class TransmitterManager(
   fun determineCurrentlyActiveTransmitterAndReturnStateChangeFromIt(stateChange: StateChange): UpdatedStateChange {
     addToHistory(stateChange)
 
-    wasPreviousUiStateMultipleTx = false
-
     val otherConnectedAndAttached = isOtherConnectedAndAttached(stateChange.getMacAddress())
 
     if(!hasActiveTransmitter()) {
+      wasPreviousUiStateMultipleTx = false
       return if(isCurrentlyAttached(stateChange)) {
         // change active tx to this one
         setActiveTransmitter(stateChange)
@@ -80,6 +79,7 @@ open class TransmitterManager(
           UpdatedStateChange(StateChange(UiState.MULTIPLE_TRANSMITTERS, stateChange.overlayState, stateChange.bleDevice, timestamp = stateChange.timestamp))
         }
         else {
+          wasPreviousUiStateMultipleTx = false
           if(otherConnectedAndAttached) {
             val otherStateChange = latestStateFromOtherTransmitter(stateChange.getMacAddress())!!
             setActiveTransmitter(otherStateChange)
@@ -93,21 +93,27 @@ open class TransmitterManager(
       else {
         if(isConnectedAndAttached(stateChange.getMacAddress())) {
           return if(otherConnectedAndAttached) {
+            val latestStateFromOther = getLatestState(activeTransmitterMacAddress())
             wasPreviousUiStateMultipleTx = true
-            UpdatedStateChange(StateChange(UiState.MULTIPLE_TRANSMITTERS, stateChange.overlayState, stateChange.bleDevice, timestamp = stateChange.timestamp))
+            UpdatedStateChange(StateChange(UiState.MULTIPLE_TRANSMITTERS, stateChange.overlayState, latestStateFromOther!!.bleDevice, timestamp = latestStateFromOther.timestamp))
           }
           else {
+            wasPreviousUiStateMultipleTx = false
             setActiveTransmitter(stateChange)
             UpdatedStateChange(stateChange, true)
           }
         }
         else {
+          wasPreviousUiStateMultipleTx = false
           val otherStateChange = latestStateFromOtherTransmitter(stateChange.getMacAddress())
           return if(otherStateChange != null) {
             UpdatedStateChange(otherStateChange)
           }
           else {
-            UpdatedStateChange(stateChange)
+            // we set the active transmitter
+            // this case might occur when the currently active transmitter is DISCONNECTED
+            setActiveTransmitter(stateChange)
+            UpdatedStateChange(stateChange, true)
           }
         }
       }
@@ -172,7 +178,7 @@ open class TransmitterManager(
   }
 
   private fun isConnectedAndAttached(macAddress: String) : Boolean {
-    val isConnected = bluetoothManager.bleConnectionStateObservable(macAddress).blockingFirst() == BleConnectionState.CONNECTED
+    val isConnected = bluetoothManager.isConnected(macAddress)
     val latestState = transmitterStateHistory.entries.firstOrNull { it.key == macAddress }?.value?.peek()
 
     // it's either attached directly or attached outside BLE

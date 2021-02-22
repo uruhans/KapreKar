@@ -16,6 +16,7 @@ import com.coloplast.olympus.bluetooth.BluetoothServiceViewModel
 import com.coloplast.olympus.bluetooth.StateDispatcher
 import com.coloplast.olympus.bluetooth.businesslayer.ServiceStateDispatcher
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
+import com.coloplast.olympus.bluetooth.businesslayer.enums.PowerLevel
 import com.coloplast.olympus.bluetooth.model.BluetoothServiceModel
 import com.coloplast.olympus.bluetooth.model.BluetoothServiceResult
 import com.coloplast.olympus.bluetooth.model.StateChange
@@ -116,6 +117,7 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
 
           // this will allow for notifications to be send when app is in the background
           olympusNotificationManager.send(updatedStateChange.stateChange.getMacAddress(), updatedStateChange.stateChange.state)
+          olympusNotificationManager.send(updatedStateChange.stateChange.getMacAddress(), updatedStateChange.stateChange.overlayState)
           StateDispatcher.dispatch(updatedStateChange.stateChange)
           StateDispatcher.dispatchStateForActiveTransmitter(updatedStateChange.stateChange)
         }

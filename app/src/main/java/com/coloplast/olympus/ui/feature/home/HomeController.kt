@@ -435,7 +435,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
         imageDialogController = ImageDialogController.create(
           this,
           REQUEST_CODE_BATTERY_LOW,
-          R.string.status_no_con_battery_title,
+          R.string.overlay_battery_low_title,
           R.string.status_no_con_battery,
           R.string.guide_charge,
           topImage = R.drawable.ic_battery_low_24dp,

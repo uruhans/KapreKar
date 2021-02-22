@@ -17,8 +17,8 @@ class CompromisedVault {
     }
   }
 
-  fun getRunningCompromised(): Int {
-    return running
+  fun getRunningCompromised(): Int? {
+    return if(running != Int.MIN_VALUE) running else null
   }
 
   fun getTimeSinceLast() : Long  {

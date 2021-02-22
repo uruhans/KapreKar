@@ -9,10 +9,7 @@ import kotlin.random.Random
 
 class AutoPatchDetectionEngineImpl(private val compromisedVault: CompromisedVault, private val randomizer: Random = Random(10000)) : AutoPatchDetectionEngine {
 
-//  private val detachedVectorExpirationTime: Long = -60 * 60 // 1 hour
-  private val entryExpirationTime: Long = 60 * 60 * 2 // 2 hours
   private val autoSplitInternal: Long = 60 * 60 * 12 // 12 hours
-
   private var wasPreviousUiStateMultipleTx: Boolean = false
 
   override fun determineAttachCycle(
@@ -79,9 +76,14 @@ class AutoPatchDetectionEngineImpl(private val compromisedVault: CompromisedVaul
     val vaultTimeSinceLastUpdate = compromisedVault.getTimeSinceLast()
 
     if(vaultTimeSinceLastUpdate > autoSplitInternal) return ApsMethod.C()
-    if(vaultTimeSinceLastUpdate > entryExpirationTime) return ApsMethod.B(incomingCompromised)
 
-    return ApsMethod.A(compromisedVault.getRunningCompromised(), incomingCompromised)
+    val runningCompromised = compromisedVault.getRunningCompromised()
+    return if(runningCompromised != null) {
+      ApsMethod.A(runningCompromised, incomingCompromised)
+    }
+    else {
+      ApsMethod.B(incomingCompromised)
+    }
   }
 
   override fun determineApsAction(apsMethod: ApsMethod): ApsAction {

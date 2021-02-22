@@ -30,7 +30,8 @@ enum class UiState {
   NO_BATTERY_R,
   TRANSMITTER_DETACHED_V,
   TRANSMITTER_BATTERY_CHARGING_W,
-  MULTIPLE_TRANSMITTERS;
+  MULTIPLE_TRANSMITTERS,
+  WET_MOUNT_X;
 
   /**
    * return a notificationId based on the UiState
@@ -62,6 +63,7 @@ enum class UiState {
       TRANSMITTER_DETACHED_V -> "V"
       TRANSMITTER_BATTERY_CHARGING_W -> "W"
       TRANSMITTERS_EMPTY -> "Z"
+      WET_MOUNT_X -> "X"
       else -> ""
     }
   }

@@ -1,5 +1,6 @@
 package com.coloplast.olympus.ui.feature.uistates
 
+import android.os.Bundle
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import com.coloplast.olympus.R
@@ -8,20 +9,21 @@ import com.coloplast.olympus.ui.feature.guides.SingleGuideFlowController
 import com.coloplast.olympus.ui.feature.guides.articles.models.GuideType
 import com.coloplast.olympus.ui.feature.home.models.PatchVisible
 
-class WetMountController : BaseHomeUIController<ControllerStateWetMountBinding>(), PatchVisible {
+class WetMountController(args: Bundle) : BaseHomeUIController<ControllerStateWetMountBinding>(), PatchVisible {
+
+  val headLineTxt = args.getInt(BUNDLE_HEADLINE_STRING_ID)
+  val descriptionTxt = args.getInt(BUNDLE_DESCRIPTION_STRING_ID)
 
   override fun attachVariables(viewBinding: ControllerStateWetMountBinding) {
     super.attachVariables(viewBinding)
     viewBinding.controller = this
   }
 
-  override fun onViewBound(viewBinding: ControllerStateWetMountBinding) {
-    // no-op
-  }
+  override fun onViewBound(viewBinding: ControllerStateWetMountBinding) {  }
 
   fun onGuideClicked() {
     getContentRouter().pushController(
-      SingleGuideFlowController.routerTransaction(GuideType.APPLICATION_TIPS)
+      SingleGuideFlowController.routerTransaction(GuideType.UNDERSTANDING_SENSORS)
         .pushChangeHandler(VerticalChangeHandler())
         .popChangeHandler(VerticalChangeHandler())
     )
@@ -37,6 +39,21 @@ class WetMountController : BaseHomeUIController<ControllerStateWetMountBinding>(
 
   companion object {
     private const val TAG_CONTROLLER = "state_wet_mount_controller"
-    fun routerTransaction() = RouterTransaction.with(WetMountController()).tag(TAG_CONTROLLER)
+    private const val BUNDLE_HEADLINE_STRING_ID = "bundle_headline_string_id"
+    private const val BUNDLE_DESCRIPTION_STRING_ID = "bundle_description_string_id"
+
+    fun routerTransaction(headline: Int, description: Int): RouterTransaction {
+      Bundle().apply {
+        putInt(BUNDLE_HEADLINE_STRING_ID, headline)
+        putInt(BUNDLE_DESCRIPTION_STRING_ID, description)
+      }
+        .also {
+          return RouterTransaction.with(
+            WetMountController(
+              it
+            )
+          ).tag(TAG_CONTROLLER)
+        }
+    }
   }
 }

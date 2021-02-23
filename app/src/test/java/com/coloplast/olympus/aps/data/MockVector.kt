@@ -441,6 +441,29 @@ object MockVector {
     ).toByteArray()
   }
 
+  fun CUTGUARD_NOISE(): ByteArray {
+    return StatusVector(
+      Patch(
+        SensorStatus.CUT_GUARD_NOISE,
+        SensorStatus.OK,
+        SensorStatus.OK,
+        SensorStatus.OK,
+        SensorStatus.OK,
+        SensorStatus.OK,
+      ),
+      Transmitter(
+        WaterIngressDetection.OK,
+        Attached.ATTACHED_ON_PATCH,
+        PatchType.PATCH_0,
+        0,
+        0,
+        BatteryState.OK,
+        0,
+        0
+      )
+    ).toByteArray()
+  }
+
   fun CHARGING_VECTOR(): ByteArray {
     return StatusVector(
       Patch(

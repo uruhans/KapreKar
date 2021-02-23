@@ -22,6 +22,7 @@ class CompromisedVault {
   }
 
   fun getTimeSinceLast() : Long  {
+    if(timestamp == LocalDateTime.MIN) return 0
     return LocalDateTime.now().toEpochSecond(ZoneOffset.UTC) - timestamp.toEpochSecond(ZoneOffset.UTC)
   }
 }

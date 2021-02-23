@@ -38,4 +38,8 @@ data class BleDevice(val name: String?, val macAddress: String, var connectionSt
         peripheral?.patch?.cutguardSensor == SensorStatus.CUT_GUARD_DIRT_IN_CONNECTOR ||
         peripheral?.patch?.cutguardSensor == SensorStatus.CUT_GUARD_NOISE
   }
+
+  fun isDetached(): Boolean {
+    return peripheral?.transmitter?.attached == Attached.DETACHED
+  }
 }

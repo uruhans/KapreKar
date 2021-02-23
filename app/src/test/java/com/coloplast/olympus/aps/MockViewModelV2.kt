@@ -1,7 +1,6 @@
 package com.coloplast.olympus.aps
 
 import com.coloplast.olympus.bluetooth.businesslayer.BluetoothManager
-import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.bluetooth.businesslayer.models.BleDevice
 import com.coloplast.olympus.bluetooth.businesslayer.models.DeviceResult
 import com.coloplast.olympus.bluetooth.model.BluetoothServiceHelper
@@ -14,7 +13,6 @@ import com.coloplast.olympus.ui.feature.UpdatedStateChange
 import com.coloplast.olympus.ui.feature.home.models.StateTransformers
 import com.coloplast.olympus.ui.feature.statemachine.OverlayStateMachineImpl
 import com.coloplast.olympus.ui.feature.statemachine.UiStateMachineImpl
-import io.reactivex.Observable
 import org.junit.Assert
 import org.mockito.Mockito
 import org.mockito.Mockito.`when`
@@ -58,20 +56,6 @@ class MockViewModelV2(compromisedVault: CompromisedVault, randomizer: Random? = 
 
   private fun runService(stateChange: StateChange) : UpdatedStateChange {
     return bluetoothServiceHelper.handleTransmitterUpdate(stateChange)
-
-
-
-//    val updatedStateChange = transmitterManager.determineCurrentlyActiveTransmitterAndReturnStateChangeFromIt(stateChange)
-//    val lastValidDetach = transmitterManager.lastValidDetachState(updatedStateChange.stateChange.getMacAddress())
-//    val cycleResult = apsEngine.determineAttachCycle(updatedStateChange, lastValidDetach != null)
-//    val apsMethod = apsEngine.determineApsMethod(cycleResult)
-//    val apsAction = apsEngine.determineApsAction(apsMethod)
-//
-//    updatedStateChange.apsMethod = apsMethod
-//    updatedStateChange.stateChange.apsAction = apsAction
-//    updatedStateChange.stateChange.resetOrStitchCandidate = apsEngine.resetOrStitchCandidate(apsAction, lastValidDetach)
-//
-//    return updatedStateChange
   }
 
   fun isActiveTransmitter(macAddress: String) : Boolean {

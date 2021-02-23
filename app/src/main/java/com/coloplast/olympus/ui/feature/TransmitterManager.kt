@@ -3,6 +3,7 @@ package com.coloplast.olympus.ui.feature
 import com.coloplast.olympus.bluetooth.businesslayer.BluetoothManager
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.bluetooth.model.StateChange
+import com.coloplast.olympus.patchsplit.models.LatestDetachVector
 import com.coloplast.olympus.shared.moshi.deserialize
 import com.coloplast.olympus.shared.moshi.serialize
 import com.coloplast.olympus.shared.preferences.Preferences
@@ -10,6 +11,8 @@ import com.coloplast.olympus.ui.common.Stack
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
 import timber.log.Timber
 import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 
 /**
  * This manager determines which Tx is currently the *active* one (ie: the one whose state is being displayed on the status screen)
@@ -18,6 +21,8 @@ open class TransmitterManager(
   private val preferences: Preferences,
   val bluetoothManager: BluetoothManager
 ) {
+
+  private var latestDetachVector: LatestDetachVector? = null
 
   private val transmitterStateHistory = mutableMapOf<String, Stack<StateChange>>()
   private var activeTransmitter
@@ -28,8 +33,6 @@ open class TransmitterManager(
 
   private var wasPreviousUiStateMultipleTx = false
 
-  // constants for automatic patch detection
-  private val validDetachInterval = 60*60
 
   init {
     preferences.latestStateFromActiveTx.let { latestStateFromActiveTx ->
@@ -44,6 +47,14 @@ open class TransmitterManager(
       }
 
       transmitterStateHistory.remove("")
+    }
+
+    preferences.latestDetach.let { latestDetach ->
+      if(latestDetach.isEmpty()) {
+        return@let
+      }
+
+      latestDetachVector = latestDetach.deserialize()
     }
   }
 
@@ -119,11 +130,15 @@ open class TransmitterManager(
       }
     }
   }
+//
+//  fun lastValidDetachState(macAddress: String) : StateChange? {
+//    val validTimeStamp = Instant.now().epochSecond - validDetachInterval
+//    val latestTxHistory = transmitterStateHistory.entries.firstOrNull { it.key == macAddress }?.value
+//    return latestTxHistory?.firstOrNull { it.state == UiState.TRANSMITTER_DETACHED_V && it.timestamp > validTimeStamp }
+//  }
 
-  fun lastValidDetachState(macAddress: String) : StateChange? {
-    val validTimeStamp = Instant.now().epochSecond - validDetachInterval
-    val latestTxHistory = transmitterStateHistory.entries.firstOrNull { it.key == macAddress }?.value
-    return latestTxHistory?.firstOrNull { it.state == UiState.TRANSMITTER_DETACHED_V && it.timestamp > validTimeStamp }
+  fun latestDetach() : LatestDetachVector? {
+    return latestDetachVector
   }
 
   private fun hasActiveTransmitter() : Boolean {
@@ -149,6 +164,11 @@ open class TransmitterManager(
     val stack = transmitterStateHistory[stateChange.getMacAddress()] ?: Stack(3)
     stack.push(stateChange)
     transmitterStateHistory[stateChange.getMacAddress()] = stack
+
+    if(isActiveTransmitter(stateChange.getMacAddress()) && stateChange.bleDevice.isDetached()) {
+      latestDetachVector = LatestDetachVector(stateChange, LocalDateTime.now().toEpochSecond(ZoneOffset.UTC))
+      preferences.latestDetach = latestDetachVector?.serialize() ?: ""
+    }
   }
 
   private fun isOtherTransmitterAttached(thisTransmitterAddress: String): Boolean {
@@ -209,6 +229,10 @@ open class TransmitterManager(
 
   fun getLatestState(macAddress: String) : StateChange? {
     return transmitterStateHistory[macAddress]?.peek()
+  }
+
+  fun previousState(macAddress: String) : StateChange? {
+    return transmitterStateHistory[macAddress]?.peekPrevious()
   }
 
   /**

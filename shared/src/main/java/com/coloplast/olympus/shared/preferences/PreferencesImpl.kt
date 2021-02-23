@@ -17,6 +17,7 @@ class PreferencesImpl(applicationContext: Context) : Preferences {
   private var userToken: String by bindSharedPreference(applicationContext, USER_TOKEN, "")
   override var activeTransmitter: String by bindSharedPreference(applicationContext, ACTIVE_TRANSMITTER, "")
   override var latestStateFromActiveTx: String by bindSharedPreference(applicationContext, LATEST_STATE_FROM_ACTIVE_TRANSMITTER, "")
+  override var latestDetach: String by bindSharedPreference(applicationContext, LATEST_DETACH, "")
   var leaks: String by bindSharedPreference(applicationContext, LEAKS, "")
   var areRingingAlertsEnabled: Boolean by bindSharedPreference(applicationContext, RINGING_ALERTS_ENABLED, true)
   var ringingAlertSensor: Sensors by bindSharedPreference(applicationContext, RINGING_ALERT_SENSOR, Sensors.ALL)
@@ -103,6 +104,7 @@ class PreferencesImpl(applicationContext: Context) : Preferences {
     private const val USER_TOKEN: String = "USER_TOKEN"
     private const val ACTIVE_TRANSMITTER: String = "ACTIVE_TRANSMITTER"
     private const val LATEST_STATE_FROM_ACTIVE_TRANSMITTER: String = "LATEST_STATE_FROM_ACTIVE_TRANSMITTER"
+    private const val LATEST_DETACH: String = "LATEST_DETACH"
     private const val LEAKS: String = "LEAKS"
     private const val RINGING_ALERTS_ENABLED: String = "RINGING_ALERTS_ENABLED"
     private const val RINGING_ALERT_SENSOR: String = "RINGING_ALERT_SENSOR"

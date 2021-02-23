@@ -11,14 +11,15 @@ class BluetoothServiceHelper(
 
   fun handleTransmitterUpdate(stateChange: StateChange) : UpdatedStateChange {
     val updatedStateChange = transmitterManager.determineCurrentlyActiveTransmitterAndReturnStateChangeFromIt(stateChange)
-    val lastValidDetach = transmitterManager.lastValidDetachState(updatedStateChange.stateChange.getMacAddress())
-    val cycleResult = apsEngine.determineAttachCycle(updatedStateChange, lastValidDetach != null)
+    val lastValidDetach = transmitterManager.latestDetach()
+    val previousStatusVector = transmitterManager.previousState(updatedStateChange.stateChange.getMacAddress())
+    val cycleResult = apsEngine.determineAttachCycle(updatedStateChange, lastValidDetach?.isValid() ?: false, previousStatusVector?.bleDevice?.isBlocked() ?: false)
     val apsMethod = apsEngine.determineApsMethod(cycleResult)
     val apsAction = apsEngine.determineApsAction(apsMethod)
 
     updatedStateChange.apsMethod = apsMethod
     updatedStateChange.stateChange.apsAction = apsAction
-    updatedStateChange.stateChange.resetOrStitchCandidate = apsEngine.resetOrStitchCandidate(apsAction, lastValidDetach)
+    updatedStateChange.stateChange.resetOrStitchCandidate = apsEngine.resetOrStitchCandidate(apsAction, lastValidDetach?.stateChange)
 
     return updatedStateChange
   }

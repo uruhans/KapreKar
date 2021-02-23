@@ -7,4 +7,5 @@ package com.coloplast.olympus.shared.preferences
 interface Preferences {
   var activeTransmitter: String
   var latestStateFromActiveTx: String
+  var latestDetach: String
 }

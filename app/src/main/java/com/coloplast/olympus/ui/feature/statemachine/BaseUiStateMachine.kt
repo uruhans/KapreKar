@@ -83,6 +83,9 @@ abstract class BaseUiStateMachine : UiStateMachine {
       UiState.INNER_BLIND_LEAK_L -> {
         { innerBlindLeak_L(it) }
       }
+      UiState.NO_BATTERY_R -> {
+        { noBattery_R(it) }
+      }
       UiState.TRANSMITTER_DETACHED_V -> {
         { transmitterDetached_V(it) }
       }

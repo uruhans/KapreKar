@@ -20,6 +20,7 @@ import com.coloplast.olympus.R
 import com.coloplast.olympus.bluetooth.ServiceDispatcher
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
+import com.coloplast.olympus.bluetooth.businesslayer.enums.PowerLevel
 import com.coloplast.olympus.bluetooth.businesslayer.enums.SensorStatus
 import com.coloplast.olympus.bluetooth.businesslayer.models.Battery
 import com.coloplast.olympus.bluetooth.businesslayer.models.Patch
@@ -276,6 +277,11 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
             imageDialogController = null
           }
 
+          if (stateChange.bleDevice.peripheral?.battery?.powerLevel == PowerLevel.EMPTY) {
+            olympusNotificationManager.send(stateChange.getMacAddress(), UiState.NO_BATTERY_R)
+            stateToChangeTo = UiState.NO_BATTERY_R
+          }
+
           // this was added to prevent "blinking" ui when "switching" between OK_A and SOMETHING_ELSE
           if(stateToChangeTo == UiState.SOMETHING_ELSE) {
             Timber.d("Overriding [$stateToChangeTo] => [OK_A]")
@@ -303,10 +309,6 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
         }
       }
     }
-  }
-
-  private fun hasSensorBreachOrSweatOrIsBlinded(sensorStatus: SensorStatus?): Boolean {
-    return (sensorStatus == SensorStatus.BREACH || sensorStatus == SensorStatus.SOME_SWEAT || sensorStatus == SensorStatus.BLINDED)
   }
 
   private fun changeUiState(newState: UiState, forceUpdate: Boolean = false) {

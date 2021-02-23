@@ -16,13 +16,11 @@ import com.coloplast.olympus.bluetooth.BluetoothServiceViewModel
 import com.coloplast.olympus.bluetooth.StateDispatcher
 import com.coloplast.olympus.bluetooth.businesslayer.ServiceStateDispatcher
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
-import com.coloplast.olympus.bluetooth.businesslayer.enums.PowerLevel
 import com.coloplast.olympus.bluetooth.model.BluetoothServiceModel
 import com.coloplast.olympus.bluetooth.model.BluetoothServiceResult
 import com.coloplast.olympus.bluetooth.model.StateChange
 import com.coloplast.olympus.notifications.OlympusNotificationManager
 import com.coloplast.olympus.ui.feature.TransmitterManager
-import com.coloplast.olympus.ui.feature.UpdatedStateChange
 import com.coloplast.olympus.ui.feature.statemachine.models.OverlayState
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
 import io.reactivex.Observable

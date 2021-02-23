@@ -249,10 +249,16 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
           // if we get a wet mount or outer leak within 4 minutes (240 seconds)
           // we override the ui state to wet mount
           val timeBetween = LocalTime.now().minusNanos(patchChangeTime?.toNanoOfDay() ?: 0)
-          if (timeBetween.toSecondOfDay() <= 240) {
-            val outerSensorState = stateChange.bleDevice.peripheral?.patch?.outerSensor
-            if (outerSensorState == SensorStatus.BREACH || outerSensorState == SensorStatus.SOME_SWEAT || outerSensorState == SensorStatus.BLINDED) {
-              stateToChangeTo = UiState.WET_MOUNT_G
+
+          if (timeBetween.toSecondOfDay() <= 320) {
+            val patch = stateChange.bleDevice.peripheral?.patch
+            if (patch != null) {
+              if (patch.isOuterSensorWet) {
+                stateToChangeTo = UiState.WET_MOUNT_G
+              }
+              else if (patch.isInnerSensorsWet) {
+                stateToChangeTo = UiState.WET_MOUNT_X
+              }
             }
             // clear the variable so we dont hit this wet mount again the next time
             patchChangeTime = null
@@ -299,6 +305,10 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
     }
   }
 
+  private fun hasSensorBreachOrSweatOrIsBlinded(sensorStatus: SensorStatus?): Boolean {
+    return (sensorStatus == SensorStatus.BREACH || sensorStatus == SensorStatus.SOME_SWEAT || sensorStatus == SensorStatus.BLINDED)
+  }
+
   private fun changeUiState(newState: UiState, forceUpdate: Boolean = false) {
     var removeBleDisconnectOverlay = true
 
@@ -332,7 +342,10 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
           TotalBlindController.routerTransaction()
         }
         UiState.WET_MOUNT_G -> {
-          WetMountController.routerTransaction()
+          WetMountController.routerTransaction(R.string.status_wet_mount_title,  R.string.status_wet_mount)
+        }
+        UiState.WET_MOUNT_X -> {
+          WetMountController.routerTransaction(R.string.status_inner_blind_mount_title, R.string.status_inner_blind_mount_description)
         }
         UiState.CUTGUARD_BROKEN_I -> {
           CutGuardController.routerTransaction()
@@ -515,6 +528,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
 
   override fun onPositiveButtonClicked(requestCode: Int) {
     when (requestCode) {
+      REQUEST_CODE_BATTERY_LOW,
       REQUEST_CODE_CONNECTION_LOST -> {
         imageDialogController?.dismissDialog(withCallback = true)
       }
@@ -526,6 +540,13 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
       REQUEST_CODE_CONNECTION_LOST -> {
         router.pushController(
           SingleGuideFlowController.routerTransaction(GuideType.CONNECTION)
+            .pushChangeHandler(VerticalChangeHandler())
+            .popChangeHandler(VerticalChangeHandler())
+        )
+      }
+      REQUEST_CODE_BATTERY_LOW -> {
+        router.pushController(
+          SingleGuideFlowController.routerTransaction(GuideType.CHARGING)
             .pushChangeHandler(VerticalChangeHandler())
             .popChangeHandler(VerticalChangeHandler())
         )

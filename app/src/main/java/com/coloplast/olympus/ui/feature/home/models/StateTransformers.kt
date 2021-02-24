@@ -14,26 +14,31 @@ object StateTransformers {
     
     return when (deviceResult.bleDevice.isConnected() && peripheral != null) {
       true -> {
-        val uiState = when (peripheral.transmitter.getState()) {
-          TransmitterState.WATER_INGRESS_DETECTION -> UiState.WATER_INGRESS_DETECTION_J
-          TransmitterState.DETACHED -> UiState.TRANSMITTER_DETACHED_V
-          TransmitterState.BATTERY_SHUTTING_DOWN -> UiState.NO_BATTERY_R
-          TransmitterState.BATTERY_CHARGING -> UiState.TRANSMITTER_BATTERY_CHARGING_W
-          TransmitterState.OK -> {
-            when (peripheral.patch.getState()) {
-              PatchState.OK -> UiState.OK_A
-              PatchState.INNER_LEAK -> UiState.INNER_BREACH_B
-              PatchState.OUTER_LEAK -> UiState.OUTER_BREACH_C
-              PatchState.INNER_BLIND -> UiState.INNER_BLIND_D
-              PatchState.TOTAL_BLIND -> UiState.TOTAL_BLIND_E
-              PatchState.PAY_ATTENTION_10,
-              PatchState.PAY_ATTENTION_12 -> UiState.PAY_ATTENTION_F
-              PatchState.CUTGUARD_CUT_BROKEN -> UiState.CUTGUARD_BROKEN_I
-              PatchState.CUTGUARD_DIRT_IN_TRANSMITTER -> UiState.CUTGUARD_DIRT_IN_TRANSMITTER_K
-              else -> UiState.SOMETHING_ELSE
+        val uiState = if(peripheral.battery.powerLevel == PowerLevel.EMPTY) {
+          UiState.NO_BATTERY_R
+        }
+        else {
+          when (peripheral.transmitter.getState()) {
+            TransmitterState.WATER_INGRESS_DETECTION -> UiState.WATER_INGRESS_DETECTION_J
+            TransmitterState.DETACHED -> UiState.TRANSMITTER_DETACHED_V
+            TransmitterState.BATTERY_SHUTTING_DOWN -> UiState.NO_BATTERY_R
+            TransmitterState.BATTERY_CHARGING -> UiState.TRANSMITTER_BATTERY_CHARGING_W
+            TransmitterState.OK -> {
+              when (peripheral.patch.getState()) {
+                PatchState.OK -> UiState.OK_A
+                PatchState.INNER_LEAK -> UiState.INNER_BREACH_B
+                PatchState.OUTER_LEAK -> UiState.OUTER_BREACH_C
+                PatchState.INNER_BLIND -> UiState.INNER_BLIND_D
+                PatchState.TOTAL_BLIND -> UiState.TOTAL_BLIND_E
+                PatchState.PAY_ATTENTION_10,
+                PatchState.PAY_ATTENTION_12 -> UiState.PAY_ATTENTION_F
+                PatchState.CUTGUARD_CUT_BROKEN -> UiState.CUTGUARD_BROKEN_I
+                PatchState.CUTGUARD_DIRT_IN_TRANSMITTER -> UiState.CUTGUARD_DIRT_IN_TRANSMITTER_K
+                else -> UiState.SOMETHING_ELSE
+              }
             }
+            else -> UiState.SOMETHING_ELSE
           }
-          else -> UiState.SOMETHING_ELSE
         }
         
         UiStateModel(uiState, deviceResult.bleDevice)

@@ -7,7 +7,7 @@ import com.coloplast.olympus.patchsplit.models.CycleResult
 import com.coloplast.olympus.ui.feature.UpdatedStateChange
 
 interface AutoPatchDetectionEngine {
-  fun determineAttachCycle(updatedStateChange: UpdatedStateChange, isDetachVectorValid: Boolean, previouslyBlocked: Boolean): CycleResult
+  fun determineAttachCycle(updatedStateChange: UpdatedStateChange, isDetachVectorValid: Boolean, previouslyInWidOrCutguard: Boolean): CycleResult
   fun determineApsMethod(cycleResult: CycleResult): ApsMethod
   fun determineApsAction(apsMethod: ApsMethod): ApsAction
   fun resetOrStitchCandidate(apsAction: ApsAction, lastValidDetach: StateChange?) : ByteArray?

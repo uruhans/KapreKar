@@ -15,7 +15,7 @@ class AutoPatchDetectionEngineImpl(private val compromisedVault: CompromisedVaul
   override fun determineAttachCycle(
     updatedStateChange: UpdatedStateChange,
     isDetachVectorValid: Boolean,
-    previouslyBlocked: Boolean
+    previouslyInWidOrCutguard: Boolean
   ): CycleResult {
     val incomingPackage = updatedStateChange.stateChange
     val incomingCompromised = incomingPackage.bleDevice.peripheral?.transmitter?.compromised
@@ -40,7 +40,7 @@ class AutoPatchDetectionEngineImpl(private val compromisedVault: CompromisedVaul
       wasPreviousUiStateMultipleTx = false
 
       // previouslyBlocked = maybe previous vector was in WID or CUTGUARD - but magically returned to other state
-      return if ((isDetachVectorValid || previouslyBlocked) && incomingPackage.bleDevice.isAttached()) {
+      return if ((isDetachVectorValid || previouslyInWidOrCutguard) && incomingPackage.bleDevice.isAttached()) {
         CycleResult.Success(AttachCycleType.Standard(incomingCompromised))
       }
       else if (incomingPackage.bleDevice.isAttachedOutsideBLE()) {

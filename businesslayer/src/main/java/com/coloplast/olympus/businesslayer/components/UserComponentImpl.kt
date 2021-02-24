@@ -47,6 +47,7 @@ class UserComponentImpl(private val preferences: PreferencesImpl) : UserComponen
   override fun login(credentials: Credentials): Observable<CurrentUser> {
     return apiService.login(credentials)
       .compose(SetTokenInsertOrUpdateUserAndReturnCurrentUser(database, preferences))
+      .onErrorReturn { CurrentUser.Empty() }
   }
 
   override fun automaticLogin(userId: UUID): Observable<CurrentUser> {

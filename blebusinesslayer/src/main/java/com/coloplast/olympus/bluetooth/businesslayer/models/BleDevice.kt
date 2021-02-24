@@ -31,13 +31,18 @@ data class BleDevice(val name: String?, val macAddress: String, var connectionSt
   }
 
   fun isBlocked(): Boolean {
-    return peripheral?.transmitter?.waterIngressDetection == WaterIngressDetection.WATER_INGRESS ||
+    return isWidOrCutguardBlocked() ||
         peripheral?.transmitter?.compromised == -1 ||
-        peripheral?.transmitter?.compromised == 255 ||
+        peripheral?.transmitter?.compromised == 255
+  }
+
+  fun isWidOrCutguardBlocked(): Boolean {
+    return peripheral?.transmitter?.waterIngressDetection == WaterIngressDetection.WATER_INGRESS ||
         peripheral?.patch?.cutguardSensor == SensorStatus.CUT_GUARD_CUT_BROKEN ||
         peripheral?.patch?.cutguardSensor == SensorStatus.CUT_GUARD_DIRT_IN_CONNECTOR ||
         peripheral?.patch?.cutguardSensor == SensorStatus.CUT_GUARD_NOISE
   }
+
 
   fun isDetached(): Boolean {
     return peripheral?.transmitter?.attached == Attached.DETACHED

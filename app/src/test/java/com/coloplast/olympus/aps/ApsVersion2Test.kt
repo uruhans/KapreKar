@@ -1265,7 +1265,7 @@ class ApsVersion2Test {
 
     compromisedVault.set(40)
 
-    val okDevice2 = DataBleDevice.bleDevice(tx2, statusVectorBytes = MockVector.OK_VECTOR_NEW())
+    val okDevice2 = DataBleDevice.bleDevice(tx2, statusVectorBytes = MockVector.dynamicVector(60, Attached.ATTACHED_ON_PATCH))
     updatedStateChange = viewModel.run(okDevice2)
     Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.MULTIPLE_TRANSMITTERS)
     Assert.assertTrue("ApsMethod was [${updatedStateChange.apsMethod}]", updatedStateChange.apsMethod is ApsMethod.D)

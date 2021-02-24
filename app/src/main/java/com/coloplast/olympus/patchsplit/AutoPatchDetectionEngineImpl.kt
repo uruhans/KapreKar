@@ -25,20 +25,18 @@ class AutoPatchDetectionEngineImpl(private val compromisedVault: CompromisedVaul
     }
 
     if (incomingPackage.state == UiState.MULTIPLE_TRANSMITTERS) {
+      wasPreviousUiStateMultipleTx = true
       return CycleResult.Failure(AttachCycleError.MultipleTransmittersAttached)
     }
 
     if (updatedStateChange.activeTransmitterChanged) {
       if (wasPreviousUiStateMultipleTx) {
         wasPreviousUiStateMultipleTx = false
-        return CycleResult.Success(AttachCycleType.ComingFromMultipleTransmitters(incomingCompromised))
+        return CycleResult.Success(AttachCycleType.ComingFromMultipleTransmitters())
       }
-      wasPreviousUiStateMultipleTx = false
       return CycleResult.Success(AttachCycleType.Standard(incomingCompromised))
     }
     else {
-      wasPreviousUiStateMultipleTx = false
-
       // previouslyBlocked = maybe previous vector was in WID or CUTGUARD - but magically returned to other state
       return if ((isDetachVectorValid || previouslyInWidOrCutguard) && incomingPackage.bleDevice.isAttached()) {
         CycleResult.Success(AttachCycleType.Standard(incomingCompromised))
@@ -59,7 +57,7 @@ class AutoPatchDetectionEngineImpl(private val compromisedVault: CompromisedVaul
 
     return when (val attachCycleType = (cycleResult as CycleResult.Success).attachCycleType) {
       is AttachCycleType.ComingFromMultipleTransmitters -> {
-        determineApsMethodAfterMultipleTransmitters(attachCycleType.compromised,  compromisedVault.getRunningCompromised())
+        ApsMethod.C()
       }
       is AttachCycleType.OutOfRange -> {
         determineApsMethod(attachCycleType.compromised)
@@ -68,11 +66,6 @@ class AutoPatchDetectionEngineImpl(private val compromisedVault: CompromisedVaul
         determineApsMethod(attachCycleType.compromised)
       }
     }
-  }
-
-  private fun determineApsMethodAfterMultipleTransmitters(from: Int, runningValue: Int?): ApsMethod {
-    if(runningValue == null) return ApsMethod.D()
-    return ApsMethod.A(from, runningValue)
   }
 
   private fun determineApsMethod(incomingCompromised: Int) : ApsMethod {

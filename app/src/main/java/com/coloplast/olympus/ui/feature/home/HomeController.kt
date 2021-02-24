@@ -20,6 +20,7 @@ import com.coloplast.olympus.R
 import com.coloplast.olympus.bluetooth.ServiceDispatcher
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
+import com.coloplast.olympus.bluetooth.businesslayer.enums.PowerLevel
 import com.coloplast.olympus.bluetooth.businesslayer.enums.SensorStatus
 import com.coloplast.olympus.bluetooth.businesslayer.models.Battery
 import com.coloplast.olympus.bluetooth.businesslayer.models.Patch
@@ -305,10 +306,6 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
     }
   }
 
-  private fun hasSensorBreachOrSweatOrIsBlinded(sensorStatus: SensorStatus?): Boolean {
-    return (sensorStatus == SensorStatus.BREACH || sensorStatus == SensorStatus.SOME_SWEAT || sensorStatus == SensorStatus.BLINDED)
-  }
-
   private fun changeUiState(newState: UiState, forceUpdate: Boolean = false) {
     var removeBleDisconnectOverlay = true
 
@@ -448,7 +445,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
         imageDialogController = ImageDialogController.create(
           this,
           REQUEST_CODE_BATTERY_LOW,
-          R.string.status_no_con_battery_title,
+          R.string.overlay_battery_low_title,
           R.string.status_no_con_battery,
           R.string.guide_charge,
           topImage = R.drawable.ic_battery_low_24dp,

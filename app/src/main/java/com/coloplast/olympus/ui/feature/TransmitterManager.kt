@@ -280,18 +280,26 @@ class TransmitterManager(
     val otherTransmitter =
       transmitterStateHistory.entries.firstOrNull { it.key != thisTransmitterAddress }
 
-    // verify that the *other* transmitter is actually connected
-    val isConnected = bluetoothManager.isConnected(otherTransmitter?.key ?: "")
-    return isConnected && otherTransmitter?.value?.peek()?.bleDevice?.isAttached() ?: false
+    otherTransmitter?.let {
+      // verify that the *other* transmitter is actually connected
+      val isConnected = bluetoothManager.isConnected(it.key)
+      return isConnected && it.value.peek()?.bleDevice?.isAttached() ?: false
+    }
+
+    return false
   }
 
   private fun latestStateFromOtherTransmitter(thisTransmitterAddress: String): StateChange? {
     val otherTransmitter =
       transmitterStateHistory.entries.firstOrNull { it.key != thisTransmitterAddress }
 
-    // verify that the *other* transmitter is actually connected
-    val isConnected = bluetoothManager.isConnected(otherTransmitter?.key ?: "")
-    return if(isConnected) otherTransmitter?.value?.peek() else null
+    otherTransmitter?.let {
+      // verify that the *other* transmitter is actually connected
+      val isConnected = bluetoothManager.isConnected(it.key)
+      return if(isConnected) it.value.peek() else null
+    }
+
+    return null
   }
 
   private fun isCurrentlyAttached(macAddress: String) : Boolean {

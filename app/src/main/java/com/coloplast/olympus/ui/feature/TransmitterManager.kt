@@ -141,6 +141,11 @@ open class TransmitterManager(
     return latestDetachVector
   }
 
+  fun clearLatestDetach() {
+    latestDetachVector = null
+    preferences.latestDetach = ""
+  }
+
   private fun hasActiveTransmitter() : Boolean {
     return activeTransmitterMacAddress().isNotBlank()
   }

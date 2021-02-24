@@ -30,11 +30,16 @@ class LoginViewModel(private val userComponent: UserComponent, private val me: M
           userComponent.login(credentials)
             .subscribeOn(Schedulers.io())
             .map {
-              me.setCurrentUser(it, true)
-              return@map it is CurrentUser.LoggedIn
+              if(it is CurrentUser.LoggedIn) {
+                me.setCurrentUser(it, true)
+                return@map true
+              }
+
+              return@map false
             }
-            .compose(DelayedLoadingTransformer<Boolean>())
+            .compose(DelayedLoadingTransformer())
             .compose(GenericUiModelTransformer())
+            .onErrorReturn { GenericUiModel.Success(false) }
         }
 
     disposable.add(onLoginRequested.bind(uiView.render()))

@@ -8,8 +8,10 @@ import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import com.coloplast.olympus.R
+import com.coloplast.olympus.bluetooth.ServiceDispatcher
 import com.coloplast.olympus.bluetooth.businesslayer.BluetoothManager
 import com.coloplast.olympus.bluetooth.businesslayer.ServiceStateDispatcher
+import com.coloplast.olympus.bluetooth.model.ServiceEvent
 import com.coloplast.olympus.ui.common.MediaGuideController
 import com.coloplast.olympus.ui.common.PermissionHandler
 import com.coloplast.olympus.ui.common.dialogs.BaseDialogController
@@ -59,6 +61,9 @@ class AddTransmitterFlowController(args: Bundle) : TopMenuFlowFactoryController<
         factory.skipUntil(AddTransmitterFlow.AddTransmitterAT8.index)
       }
     }
+    if (AddTransmitterFlow.fromIndex(currentIndex) == AddTransmitterFlow.AddTransmitterAT8) {
+      ServiceDispatcher.dispatchEvent(ServiceEvent.ReconnectionAttempt(false))
+    }
 
     return false
   }
@@ -83,6 +88,8 @@ class AddTransmitterFlowController(args: Bundle) : TopMenuFlowFactoryController<
   }
 
   override fun onFlowCompleted(data: AddTransmitterModel) {
+    ServiceDispatcher.dispatchEvent(ServiceEvent.ReconnectionAttempt(true))
+
     if (args.getBoolean(FINISH_FLOW_TO_TRANSMITTER_CONTROLLER)) {
       with(getContentRouter()) {
         popToTag(HomeController.TAG_CONTROLLER)

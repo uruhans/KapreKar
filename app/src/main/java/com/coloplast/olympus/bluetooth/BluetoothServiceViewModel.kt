@@ -19,6 +19,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
+import java.util.concurrent.atomic.AtomicBoolean
 
 class BluetoothServiceViewModel(
   private val bluetoothManager: BluetoothManager,
@@ -27,11 +28,11 @@ class BluetoothServiceViewModel(
   private val appStateComponent: AppStateComponent
 ) : ServiceViewModel<BluetoothServiceModel, BluetoothServiceResult<BluetoothServiceModel>>() {
 
+  private val reversed = AtomicBoolean(false)
+
   override fun bind(serviceResult: BluetoothServiceResult<BluetoothServiceModel>): Disposable {
     val compositeDisposable = CompositeDisposable()
-
-    var reversed: Boolean = false
-
+    
     // this observable pings us when we want to retry a connection attempt
     // and is usually started by the user elsewhere in the app
     val retryObservable = ServiceDispatcher.serviceEventObservable()
@@ -61,10 +62,10 @@ class BluetoothServiceViewModel(
         // here we get all transmitters stored locally in the database
         // we are doing it as a single because we dont want it to notify us when database changes occur
         transmitterComponent.getTransmittersAsSingle()
-          .map { if (reversed) it.reversed() else it }  
+          .map { if (reversed.get()) it.reversed() else it }
           .subscribeOn(Schedulers.io())
           .toObservable()
-          .doOnNext { reversed = !reversed }
+          .doOnNext { reversed.set(!reversed.get()) }
       }
       // only begin connection flow if we actually have some transmitters to connect to
       .filter { it.isNotEmpty() }

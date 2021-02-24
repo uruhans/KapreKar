@@ -103,10 +103,6 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
           StateDispatcher.dispatch(it.statusChange)
         }
         is BluetoothServiceModel.DeviceUpdate -> {
-          if(it.statusChange.bleDevice.peripheral?.transmitter?.compromised == -1 || it.statusChange.bleDevice.peripheral?.transmitter?.compromised == 255) {
-            return@ui
-          }
-
           // this will dispatch the state change to any who observes it (none if app is in background)
           StateDispatcher.dispatch(it.statusChange)
 

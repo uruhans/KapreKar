@@ -141,12 +141,12 @@ class BluetoothServiceViewModel(
             UiState.DISCONNECTED
           }
           is BluetoothServiceModel.DeviceUpdate -> {
-            if (it.statusChange.bleDevice.peripheral?.battery?.powerLevel == PowerLevel.EMPTY) {
-              UiState.NO_BATTERY_R
-            }
-            else {
+//            if (it.statusChange.bleDevice.peripheral?.battery?.powerLevel == PowerLevel.EMPTY) {
+//              UiState.NO_BATTERY_R
+//            }
+//            else {
               it.statusChange.state
-            }
+//            }
           }
           else -> null
         }

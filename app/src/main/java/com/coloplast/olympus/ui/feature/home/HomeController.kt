@@ -277,11 +277,6 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
             imageDialogController = null
           }
 
-//          if (stateChange.bleDevice.peripheral?.battery?.powerLevel == PowerLevel.EMPTY) {
-//            olympusNotificationManager.send(stateChange.getMacAddress(), UiState.NO_BATTERY_R)
-//            stateToChangeTo = UiState.NO_BATTERY_R
-//          }
-
           // this was added to prevent "blinking" ui when "switching" between OK_A and SOMETHING_ELSE
           if(stateToChangeTo == UiState.SOMETHING_ELSE) {
             Timber.d("Overriding [$stateToChangeTo] => [OK_A]")

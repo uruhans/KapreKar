@@ -29,6 +29,7 @@ class BluetoothServiceViewModel(
 ) : ServiceViewModel<BluetoothServiceModel, BluetoothServiceResult<BluetoothServiceModel>>() {
 
   private val reversed = AtomicBoolean(false)
+  private val shouldReconnect = AtomicBoolean(true)
 
   override fun bind(serviceResult: BluetoothServiceResult<BluetoothServiceModel>): Disposable {
     val compositeDisposable = CompositeDisposable()
@@ -58,6 +59,9 @@ class BluetoothServiceViewModel(
       databaseTransmittersObservable,
       retryObservable
     )
+      // only attempt reconnect if we want to
+      .doOnNext { Timber.d("shouldReconnect [${shouldReconnect.get()}]") }
+      .filter { shouldReconnect.get() }
       .flatMap {
         // here we get all transmitters stored locally in the database
         // we are doing it as a single because we dont want it to notify us when database changes occur
@@ -83,6 +87,17 @@ class BluetoothServiceViewModel(
       .publish()
       .refCount()
 
+    /**
+     * There is a case where the reconnection attempts are preventing users from adding a 2nd transmitter.
+     *
+     * This occurs when the 1st transmitter is disconnected, and we try to reconnect every 6 seconds, so
+     * this observable was created in an attempt to stop reconnection when the user wants to add a new transmitter
+     */
+    val reconnectionAttemptsObservable = ServiceDispatcher.serviceEventObservable()
+      .ofType(ServiceEvent.ReconnectionAttempt::class.java)
+      .doOnNext { Timber.d("reconnectionAttemptsObservable was hit shouldReconnect=[${it.shouldReconnect}]") }
+      .doOnNext { shouldReconnect.set(it.shouldReconnect) }
+
     val disconnectTransmitterObservable = ServiceDispatcher.serviceEventObservable()
       .filter { it is ServiceEvent.DisconnectTransmitter }
       .map { it as ServiceEvent.DisconnectTransmitter }
@@ -101,6 +116,7 @@ class BluetoothServiceViewModel(
 
     compositeDisposable.add(connectionObservable.bind(serviceResult.onResult()))
     compositeDisposable.add(disconnectTransmitterObservable.subscribe())
+    compositeDisposable.add(reconnectionAttemptsObservable.subscribe())
 
     return compositeDisposable
   }

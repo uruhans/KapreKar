@@ -34,7 +34,6 @@ import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.time.LocalDateTime
 import java.util.*
-import java.util.concurrent.TimeUnit
 
 class BluetoothManagerImpl(
   private val transmitterComponent: TransmitterComponent,
@@ -351,7 +350,6 @@ class BluetoothManagerImpl(
       rxBleConnection.setupNotification(OlympusWirelessProtocol.Characteristics.COMPROMISED)
         .flatMap { it }
         .compose(OlympusWirelessProtocol.compromisedTransformer)
-        .delay(200, TimeUnit.MILLISECONDS)
     }
   }
 

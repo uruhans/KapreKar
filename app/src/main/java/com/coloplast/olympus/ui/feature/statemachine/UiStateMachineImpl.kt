@@ -25,6 +25,7 @@ class UiStateMachineImpl : BaseUiStateMachine() {
       UiState.WATER_INGRESS_DETECTION_J,
       UiState.CUTGUARD_DIRT_IN_TRANSMITTER_K,
       UiState.INNER_BLIND_LEAK_L,
+      UiState.NO_BATTERY_R,
       UiState.TRANSMITTER_DETACHED_V,
       UiState.TRANSMITTER_BATTERY_CHARGING_W,
       UiState.DISCONNECTED,
@@ -47,6 +48,7 @@ class UiStateMachineImpl : BaseUiStateMachine() {
       UiState.CUTGUARD_BROKEN_I,
       UiState.WATER_INGRESS_DETECTION_J,
       UiState.CUTGUARD_DIRT_IN_TRANSMITTER_K,
+      UiState.NO_BATTERY_R,
       UiState.TRANSMITTER_DETACHED_V,
       UiState.TRANSMITTER_BATTERY_CHARGING_W,
       UiState.DISCONNECTED -> {
@@ -68,6 +70,7 @@ class UiStateMachineImpl : BaseUiStateMachine() {
       UiState.CUTGUARD_BROKEN_I,
       UiState.WATER_INGRESS_DETECTION_J,
       UiState.CUTGUARD_DIRT_IN_TRANSMITTER_K,
+      UiState.NO_BATTERY_R,
       UiState.TRANSMITTER_DETACHED_V,
       UiState.TRANSMITTER_BATTERY_CHARGING_W,
       UiState.DISCONNECTED -> {
@@ -86,6 +89,7 @@ class UiStateMachineImpl : BaseUiStateMachine() {
       UiState.PAY_ATTENTION_F,
       UiState.CUTGUARD_BROKEN_I,
       UiState.CUTGUARD_DIRT_IN_TRANSMITTER_K,
+      UiState.NO_BATTERY_R,
       UiState.TRANSMITTER_BATTERY_CHARGING_W,
       UiState.TRANSMITTER_DETACHED_V,
       UiState.DISCONNECTED -> {
@@ -103,6 +107,7 @@ class UiStateMachineImpl : BaseUiStateMachine() {
       UiState.INNER_BREACH_B,
       UiState.CUTGUARD_BROKEN_I,
       UiState.CUTGUARD_DIRT_IN_TRANSMITTER_K,
+      UiState.NO_BATTERY_R,
       UiState.TRANSMITTER_DETACHED_V,
       UiState.TRANSMITTER_BATTERY_CHARGING_W,
       UiState.DISCONNECTED -> {
@@ -124,6 +129,7 @@ class UiStateMachineImpl : BaseUiStateMachine() {
       UiState.CUTGUARD_BROKEN_I,
       UiState.TRANSMITTER_DETACHED_V,
       UiState.CUTGUARD_DIRT_IN_TRANSMITTER_K,
+      UiState.NO_BATTERY_R,
       UiState.INNER_BLIND_LEAK_L,
       UiState.TRANSMITTER_BATTERY_CHARGING_W,
       UiState.DISCONNECTED -> {
@@ -143,6 +149,7 @@ class UiStateMachineImpl : BaseUiStateMachine() {
       UiState.PAY_ATTENTION_F,
       UiState.CUTGUARD_BROKEN_I,
       UiState.CUTGUARD_DIRT_IN_TRANSMITTER_K,
+      UiState.NO_BATTERY_R,
       UiState.TRANSMITTER_DETACHED_V,
       UiState.DISCONNECTED -> {
         true
@@ -159,6 +166,7 @@ class UiStateMachineImpl : BaseUiStateMachine() {
       UiState.INNER_BREACH_B,
       UiState.OUTER_BREACH_C,
       UiState.TRANSMITTER_DETACHED_V,
+      UiState.NO_BATTERY_R,
       UiState.CUTGUARD_BROKEN_I,
       UiState.CUTGUARD_DIRT_IN_TRANSMITTER_K,
       UiState.DISCONNECTED -> {
@@ -173,6 +181,7 @@ class UiStateMachineImpl : BaseUiStateMachine() {
       UiState.BLUETOOTH_NOT_ENABLED,
       UiState.SOMETHING_ELSE,
       UiState.TRANSMITTER_DETACHED_V,
+      UiState.NO_BATTERY_R,
       UiState.OK_A,
       UiState.DISCONNECTED -> {
         true
@@ -189,6 +198,7 @@ class UiStateMachineImpl : BaseUiStateMachine() {
       UiState.TRANSMITTER_DETACHED_V,
       UiState.CUTGUARD_BROKEN_I,
       UiState.CUTGUARD_DIRT_IN_TRANSMITTER_K,
+      UiState.NO_BATTERY_R,
       UiState.OK_A,
       UiState.DISCONNECTED -> {
         true
@@ -204,6 +214,7 @@ class UiStateMachineImpl : BaseUiStateMachine() {
       UiState.OK_A,
       UiState.TRANSMITTER_DETACHED_V,
       UiState.CUTGUARD_BROKEN_I,
+      UiState.NO_BATTERY_R,
       UiState.DISCONNECTED -> {
         true
       }
@@ -223,6 +234,7 @@ class UiStateMachineImpl : BaseUiStateMachine() {
       UiState.CUTGUARD_BROKEN_I,
       UiState.TRANSMITTER_DETACHED_V,
       UiState.CUTGUARD_DIRT_IN_TRANSMITTER_K,
+      UiState.NO_BATTERY_R,
       UiState.TRANSMITTER_BATTERY_CHARGING_W,
       UiState.DISCONNECTED -> {
         true
@@ -242,7 +254,29 @@ class UiStateMachineImpl : BaseUiStateMachine() {
       UiState.INNER_BLIND_D,
       UiState.CUTGUARD_BROKEN_I,
       UiState.CUTGUARD_DIRT_IN_TRANSMITTER_K,
+      UiState.NO_BATTERY_R,
       UiState.WATER_INGRESS_DETECTION_J,
+      UiState.TRANSMITTER_BATTERY_CHARGING_W,
+      UiState.DISCONNECTED -> {
+        true
+      }
+      else -> false
+    }
+  }
+
+  override fun noBattery_R(newState: UiState): Boolean {
+    return when (newState) {
+      UiState.BLUETOOTH_NOT_ENABLED,
+      UiState.SOMETHING_ELSE,
+      UiState.OK_A,
+      UiState.INNER_BREACH_B,
+      UiState.OUTER_BREACH_C,
+      UiState.TOTAL_BLIND_E,
+      UiState.INNER_BLIND_D,
+      UiState.CUTGUARD_BROKEN_I,
+      UiState.CUTGUARD_DIRT_IN_TRANSMITTER_K,
+      UiState.WATER_INGRESS_DETECTION_J,
+      UiState.TRANSMITTER_DETACHED_V,
       UiState.TRANSMITTER_BATTERY_CHARGING_W,
       UiState.DISCONNECTED -> {
         true

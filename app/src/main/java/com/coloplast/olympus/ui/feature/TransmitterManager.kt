@@ -16,7 +16,7 @@ import java.time.ZoneOffset
 /**
  * This manager determines which Tx is currently the *active* one (ie: the one whose state is being displayed on the status screen)
  */
-open class TransmitterManager(
+class TransmitterManager(
   private val preferences: Preferences,
   val bluetoothManager: BluetoothManager
 ) {
@@ -129,12 +129,6 @@ open class TransmitterManager(
       }
     }
   }
-//
-//  fun lastValidDetachState(macAddress: String) : StateChange? {
-//    val validTimeStamp = Instant.now().epochSecond - validDetachInterval
-//    val latestTxHistory = transmitterStateHistory.entries.firstOrNull { it.key == macAddress }?.value
-//    return latestTxHistory?.firstOrNull { it.state == UiState.TRANSMITTER_DETACHED_V && it.timestamp > validTimeStamp }
-//  }
 
   fun latestDetach() : LatestDetachVector? {
     return latestDetachVector
@@ -194,7 +188,7 @@ open class TransmitterManager(
 
     otherTransmitter?.let {
       // verify that the *other* transmitter is actually connected
-      val isConnected = bluetoothManager.isConnected(it.key ?: "")
+      val isConnected = bluetoothManager.isConnected(it.key)
       return if(isConnected) it.value.peek() else null
     }
 

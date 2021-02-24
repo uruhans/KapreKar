@@ -35,7 +35,7 @@ object StateTransformers {
           }
           else -> UiState.SOMETHING_ELSE
         }
-        
+
         UiStateModel(uiState, deviceResult.bleDevice)
       }
       false -> {

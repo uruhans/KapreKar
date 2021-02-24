@@ -4,6 +4,7 @@ import com.artemzin.rxui.kotlin.bind
 import com.coloplast.olympus.bluetooth.businesslayer.BluetoothManager
 import com.coloplast.olympus.bluetooth.businesslayer.DeviceConnection
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
+import com.coloplast.olympus.bluetooth.businesslayer.enums.PowerLevel
 import com.coloplast.olympus.bluetooth.businesslayer.models.DeviceResult
 import com.coloplast.olympus.bluetooth.model.*
 import com.coloplast.olympus.businesslayer.interfaces.AppStateComponent
@@ -172,7 +173,7 @@ class BluetoothServiceViewModel(
             UiState.DISCONNECTED
           }
           is BluetoothServiceModel.DeviceUpdate -> {
-            it.statusChange.state
+              it.statusChange.state
           }
           else -> null
         }

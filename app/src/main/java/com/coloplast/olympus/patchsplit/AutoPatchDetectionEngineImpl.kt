@@ -32,7 +32,7 @@ class AutoPatchDetectionEngineImpl(private val compromisedVault: CompromisedVaul
     if (updatedStateChange.activeTransmitterChanged) {
       if (wasPreviousUiStateMultipleTx) {
         wasPreviousUiStateMultipleTx = false
-        return CycleResult.Success(AttachCycleType.ComingFromMultipleTransmitters())
+        return CycleResult.Success(AttachCycleType.ComingFromMultipleWithTxChange())
       }
       return CycleResult.Success(AttachCycleType.Standard(incomingCompromised))
     }
@@ -56,7 +56,7 @@ class AutoPatchDetectionEngineImpl(private val compromisedVault: CompromisedVaul
     }
 
     return when (val attachCycleType = (cycleResult as CycleResult.Success).attachCycleType) {
-      is AttachCycleType.ComingFromMultipleTransmitters -> {
+      is AttachCycleType.ComingFromMultipleWithTxChange -> {
         ApsMethod.C()
       }
       is AttachCycleType.OutOfRange -> {
@@ -94,7 +94,6 @@ class AutoPatchDetectionEngineImpl(private val compromisedVault: CompromisedVaul
         }
 
         if (to < 10) {
-          // METHOD D
           return if (to < 1) {
             ApsAction.Split
           }
@@ -115,7 +114,6 @@ class AutoPatchDetectionEngineImpl(private val compromisedVault: CompromisedVaul
 
       }
       is ApsMethod.B -> {
-        // "METHOD B
         // If we for some reason do not have a from value, the command can be calculated using only the to value.
         // This could be because of bluetooth disconnection.
         // This magic number is determined on data analysis and was decided by Coloplast, please refer to the APS Coloplast documentation.

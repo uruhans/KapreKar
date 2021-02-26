@@ -11,6 +11,7 @@ import com.coloplast.olympus.businesslayer.interfaces.TransmitterComponent
 import com.coloplast.olympus.ui.feature.home.models.StateTransformers
 import com.coloplast.olympus.ui.feature.statemachine.OverlayStateMachineImpl
 import com.coloplast.olympus.ui.feature.statemachine.UiStateMachineImpl
+import com.coloplast.olympus.ui.feature.statemachine.models.OverlayState
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
 import com.coloplast.olympus.utils.DeviceUtils
 import io.reactivex.Observable
@@ -169,18 +170,22 @@ class BluetoothServiceViewModel(
         }
       }
       .doOnNext {
-        val uiState = when(it) {
+        val stateLetter = when(it) {
           is BluetoothServiceModel.Disconnected -> {
-            UiState.DISCONNECTED
+            UiState.DISCONNECTED.toLetter()
           }
           is BluetoothServiceModel.DeviceUpdate -> {
-              it.statusChange.state
+            if (it.statusChange.overlayState == OverlayState.BATTERY_LOW) {
+               OverlayState.BATTERY_LOW.toLetter()
+            } else {
+              it.statusChange.state.toLetter()
+            }
           }
           else -> null
         }
 
-        uiState?.let { state ->
-          appStateComponent.insertAppState(state.toLetter())
+        stateLetter?.let { stateLetter ->
+          appStateComponent.insertAppState(stateLetter)
             .subscribeOn(Schedulers.io())
             .doOnError { throwable -> Timber.e(throwable) }
             .blockingGet()

@@ -175,11 +175,10 @@ class BluetoothServiceViewModel(
             UiState.DISCONNECTED.toLetter()
           }
           is BluetoothServiceModel.DeviceUpdate -> {
-            if (it.statusChange.overlayState == OverlayState.BATTERY_LOW) {
-               OverlayState.BATTERY_LOW.toLetter()
-            } else {
-              it.statusChange.state.toLetter()
-            }
+            it.statusChange.state.toLetter()
+          }
+          is BluetoothServiceModel.BatteryUpdate -> {
+            it.statusChange.overlayState.toLetter()
           }
           else -> null
         }

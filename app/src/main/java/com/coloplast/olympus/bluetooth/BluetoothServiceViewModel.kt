@@ -101,7 +101,7 @@ class BluetoothServiceViewModel(
     val disconnectTransmitterObservable = ServiceDispatcher.serviceEventObservable()
       .filter { it is ServiceEvent.DisconnectTransmitter }
       .map { it as ServiceEvent.DisconnectTransmitter }
-      .delay(2, TimeUnit.SECONDS)
+      //.delay(2, TimeUnit.SECONDS)
 
     // the observable that handles the connection
     val connectionObservable = immediateConnectionObservable
@@ -109,13 +109,18 @@ class BluetoothServiceViewModel(
       // must be disconnected
       .filter { bluetoothManager.bleConnectionStateObservable(it).blockingFirst() == BleConnectionState.DISCONNECTED }
       // then we do the actual connection
-      .flatMap { connectObservable(it)
+      .flatMap { macAddress ->
+        connectObservable(macAddress)
+        .takeUntil(
+          disconnectTransmitterObservable
+            .filter { it.macAddress == macAddress }
+        )
         // added to be completely sure that we are terminating the connection
         .onTerminateDetach()
       }
 
     compositeDisposable.add(connectionObservable.bind(serviceResult.onResult()))
-    compositeDisposable.add(disconnectTransmitterObservable.subscribe())
+//    compositeDisposable.add(disconnectTransmitterObservable.subscribe())
     compositeDisposable.add(reconnectionAttemptsObservable.subscribe())
 
     return compositeDisposable

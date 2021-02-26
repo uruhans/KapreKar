@@ -4,7 +4,6 @@ import com.artemzin.rxui.kotlin.bind
 import com.coloplast.olympus.bluetooth.businesslayer.BluetoothManager
 import com.coloplast.olympus.bluetooth.businesslayer.DeviceConnection
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
-import com.coloplast.olympus.bluetooth.businesslayer.enums.PowerLevel
 import com.coloplast.olympus.bluetooth.businesslayer.models.DeviceResult
 import com.coloplast.olympus.bluetooth.model.*
 import com.coloplast.olympus.businesslayer.interfaces.AppStateComponent
@@ -101,7 +100,6 @@ class BluetoothServiceViewModel(
     val disconnectTransmitterObservable = ServiceDispatcher.serviceEventObservable()
       .filter { it is ServiceEvent.DisconnectTransmitter }
       .map { it as ServiceEvent.DisconnectTransmitter }
-      //.delay(2, TimeUnit.SECONDS)
 
     // the observable that handles the connection
     val connectionObservable = immediateConnectionObservable
@@ -120,7 +118,6 @@ class BluetoothServiceViewModel(
       }
 
     compositeDisposable.add(connectionObservable.bind(serviceResult.onResult()))
-//    compositeDisposable.add(disconnectTransmitterObservable.subscribe())
     compositeDisposable.add(reconnectionAttemptsObservable.subscribe())
 
     return compositeDisposable

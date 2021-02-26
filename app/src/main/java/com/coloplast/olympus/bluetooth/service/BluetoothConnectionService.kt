@@ -120,9 +120,7 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
             StateDispatcher.dispatch(updatedStateChange.stateChange)
           }
 
-          if(transmitterManager.isActiveTransmitter(updatedStateChange.stateChange.bleDevice.macAddress)) {
-            StateDispatcher.dispatchStateForActiveTransmitter(updatedStateChange.stateChange)
-          }
+          StateDispatcher.dispatchStateForActiveTransmitter(updatedStateChange.stateChange)
         }
         is BluetoothServiceModel.BatteryUpdate -> {
           StateDispatcher.dispatch(it.statusChange)

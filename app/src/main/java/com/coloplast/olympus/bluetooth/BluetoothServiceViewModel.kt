@@ -61,7 +61,6 @@ class BluetoothServiceViewModel(
       retryObservable
     )
       // only attempt reconnect if we want to
-      .doOnNext { Timber.d("shouldReconnect [${shouldReconnect.get()}]") }
       .filter { shouldReconnect.get() }
       .flatMap {
         // here we get all transmitters stored locally in the database

@@ -114,7 +114,6 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
 
           // this will allow for notifications to be send when app is in the background
           olympusNotificationManager.send(updatedStateChange.stateChange.getMacAddress(), updatedStateChange.stateChange.state)
-          olympusNotificationManager.send(updatedStateChange.stateChange.getMacAddress(), updatedStateChange.stateChange.overlayState)
 
           if(updatedStateChange.stateChange != it.statusChange) {
             StateDispatcher.dispatch(updatedStateChange.stateChange)
@@ -126,6 +125,9 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
           StateDispatcher.dispatch(it.statusChange)
 
           if(transmitterManager.isActiveTransmitter(it.statusChange.getMacAddress())) {
+            val updatedStateChange = bluetoothServiceHelper.handleTransmitterUpdate(it.statusChange)
+            olympusNotificationManager.send(updatedStateChange.stateChange.getMacAddress(), updatedStateChange.stateChange.state)
+            olympusNotificationManager.send(updatedStateChange.stateChange.getMacAddress(), updatedStateChange.stateChange.overlayState)
             StateDispatcher.dispatchStateForActiveTransmitter(it.statusChange)
           }
         }

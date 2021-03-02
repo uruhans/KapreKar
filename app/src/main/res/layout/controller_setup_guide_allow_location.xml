@@ -35,16 +35,16 @@
       android:orientation="horizontal"
       app:layout_constraintGuide_percent=".5" />
 
-    <ImageView
+    <com.coloplast.olympus.ui.common.widgets.MediaView
       android:layout_width="match_parent"
       android:layout_height="0dp"
       android:contentDescription="@string/onboarding_chapter_connecting_allow_location_title"
-      android:src="@drawable/sg_l4_location_header"
-      android:scaleType="centerCrop"
       app:layout_constraintBottom_toTopOf="@+id/guideline"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent" />
+      app:layout_constraintTop_toTopOf="parent"
+      app:resource="@{R.raw.sg_c4_alwaysallow_android}"
+      app:isLooping="@{true}" />
 
     <LinearLayout
       android:id="@+id/linearLayout"

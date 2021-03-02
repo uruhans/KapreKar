@@ -125,9 +125,8 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
           StateDispatcher.dispatch(it.statusChange)
 
           if(transmitterManager.isActiveTransmitter(it.statusChange.getMacAddress())) {
-            val updatedStateChange = bluetoothServiceHelper.handleTransmitterUpdate(it.statusChange)
-            olympusNotificationManager.send(updatedStateChange.stateChange.getMacAddress(), updatedStateChange.stateChange.state)
-            olympusNotificationManager.send(updatedStateChange.stateChange.getMacAddress(), updatedStateChange.stateChange.overlayState)
+            olympusNotificationManager.send(it.statusChange.getMacAddress(), it.statusChange.state)
+            olympusNotificationManager.send(it.statusChange.getMacAddress(), it.statusChange.overlayState)
             StateDispatcher.dispatchStateForActiveTransmitter(it.statusChange)
           }
         }

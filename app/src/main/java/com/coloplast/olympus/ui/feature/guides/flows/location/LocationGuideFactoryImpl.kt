@@ -45,7 +45,7 @@ class LocationGuideFactoryImpl : FlowFactory<LocationGuideEmptyModel>() {
         totalCount = 6
       )
       LocationGuideFlow.LocationGuideLG4 -> MediaGuideController.routerTransaction(
-        resourceId = R.drawable.location_guide_reconnection,
+        resourceId = R.raw.sg_c4_alwaysallow_android,
         titleId = R.string.guide_lg4_title,
         descriptionId = R.string.guide_lg4_subtitle,
         showQuestionFab = false,

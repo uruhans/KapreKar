@@ -73,7 +73,7 @@ class ApsVersion2Test {
   }
 
   @Test
-  fun test1_From100To0_resultSplit() {
+  fun grp1_1_1() {
     val compromisedVault = CompromisedVault()
     val viewModel = MockViewModelV2(compromisedVault)
 
@@ -113,7 +113,7 @@ class ApsVersion2Test {
   }
 
   @Test
-  fun test2_From80To60_resultSplit() {
+  fun grp1_1_2() {
     val compromisedVault = CompromisedVault()
     val viewModel = MockViewModelV2(compromisedVault)
 
@@ -155,7 +155,7 @@ class ApsVersion2Test {
   }
 
   @Test
-  fun test3_From0To100_resultStitch() {
+  fun grp1_1_3() {
     val compromisedVault = CompromisedVault()
     val viewModel = MockViewModelV2(compromisedVault)
 
@@ -188,7 +188,7 @@ class ApsVersion2Test {
   }
 
   @Test
-  fun test4_From0To0_resultSplit() {
+  fun grp1_1_4_split() {
     val randomizer = mock(Random::class.java)
     Mockito.`when`(randomizer.nextInt(0, 1000)).thenReturn(23)
 
@@ -224,7 +224,7 @@ class ApsVersion2Test {
   }
 
   @Test
-  fun test4_From0To0_resultReset() {
+  fun grp1_1_4_reset() {
     val randomizer = mock(Random::class.java)
     Mockito.`when`(randomizer.nextInt(0, 1000)).thenReturn(634)
 
@@ -260,7 +260,7 @@ class ApsVersion2Test {
   }
 
   @Test
-  fun test5_From40To40_resultStitch() {
+  fun grp1_1_5() {
     val compromisedVault = CompromisedVault()
     val viewModel = MockViewModelV2(compromisedVault)
 
@@ -296,7 +296,7 @@ class ApsVersion2Test {
   }
 
   @Test
-  fun test6_From20To60_resultStitch() {
+  fun grp1_1_6() {
     val compromisedVault = CompromisedVault()
     val viewModel = MockViewModelV2(compromisedVault)
 
@@ -330,7 +330,7 @@ class ApsVersion2Test {
   }
 
   @Test
-  fun test7_From20To60_resultReset() {
+  fun grp1_1_7() {
     val compromisedVault = CompromisedVault()
     val viewModel = MockViewModelV2(compromisedVault)
 
@@ -363,7 +363,7 @@ class ApsVersion2Test {
   }
 
   @Test
-  fun test8_From20To0_resultSplit() {
+  fun grp1_1_8() {
     val compromisedVault = CompromisedVault()
     val viewModel = MockViewModelV2(compromisedVault)
 
@@ -398,7 +398,7 @@ class ApsVersion2Test {
   }
 
   @Test
-  fun test9_From100To0_newTx_resultSplit() {
+  fun grp1_2_1() {
     val compromisedVault = CompromisedVault()
     val viewModel = MockViewModelV2(compromisedVault)
 
@@ -437,7 +437,7 @@ class ApsVersion2Test {
   }
 
   @Test
-  fun test10_From80To60_newTx_resultSplit() {
+  fun grp1_2_2() {
     val compromisedVault = CompromisedVault()
     val viewModel = MockViewModelV2(compromisedVault)
 
@@ -476,7 +476,7 @@ class ApsVersion2Test {
   }
 
   @Test
-  fun test11_From0To100_newTx_resultStitch() {
+  fun grp1_2_3() {
     val compromisedVault = CompromisedVault()
     val viewModel = MockViewModelV2(compromisedVault)
 
@@ -509,7 +509,7 @@ class ApsVersion2Test {
   }
 
   @Test
-  fun test12_From0To0_newTx_resultSplit() {
+  fun grp1_2_4_split() {
     val randomizer = mock(Random::class.java)
     Mockito.`when`(randomizer.nextInt(0, 1000)).thenReturn(429)
 
@@ -545,7 +545,7 @@ class ApsVersion2Test {
   }
 
   @Test
-  fun test12_From0To0_newTx_resultReset() {
+  fun grp1_2_4_reset() {
     val randomizer = mock(Random::class.java)
     Mockito.`when`(randomizer.nextInt(0, 1000)).thenReturn(999)
 
@@ -581,7 +581,7 @@ class ApsVersion2Test {
   }
 
   @Test
-  fun test13_From40To40_newTx_resultStitch() {
+  fun grp1_2_5() {
     val compromisedVault = CompromisedVault()
     val viewModel = MockViewModelV2(compromisedVault)
 
@@ -618,7 +618,7 @@ class ApsVersion2Test {
   }
 
   @Test
-  fun test14_From20To60_newTx_resultStitch() {
+  fun grp1_2_6() {
     val compromisedVault = CompromisedVault()
     val viewModel = MockViewModelV2(compromisedVault)
 
@@ -652,7 +652,7 @@ class ApsVersion2Test {
   }
 
   @Test
-  fun test15_From5To5_newTx_resultReset() {
+  fun grp1_2_7() {
     val compromisedVault = CompromisedVault()
     val viewModel = MockViewModelV2(compromisedVault)
 
@@ -685,7 +685,7 @@ class ApsVersion2Test {
   }
 
   @Test
-  fun test16_From20To0_newTx_resultSplit() {
+  fun grp1_2_8() {
     val compromisedVault = CompromisedVault()
     val viewModel = MockViewModelV2(compromisedVault)
 
@@ -720,7 +720,7 @@ class ApsVersion2Test {
   }
 
   @Test
-  fun testVar9_From100To0_result_C_Split() {
+  fun grp2_1() {
     val compromisedVault = CompromisedVault()
     val viewModel = MockViewModelV2(compromisedVault)
 
@@ -754,7 +754,7 @@ class ApsVersion2Test {
   }
 
   @Test
-  fun testVar10_From80To60_result_C_Split() {
+  fun grp2_2() {
     val compromisedVault = CompromisedVault()
     val viewModel = MockViewModelV2(compromisedVault)
 
@@ -788,7 +788,7 @@ class ApsVersion2Test {
   }
 
   @Test
-  fun testVar11_From0To100_result_C_Split() {
+  fun grp2_3() {
     val compromisedVault = CompromisedVault()
     val viewModel = MockViewModelV2(compromisedVault)
 
@@ -821,8 +821,11 @@ class ApsVersion2Test {
     Assert.assertTrue(viewModel.isActiveTransmitter(tx1))
   }
 
+  /**
+   * Not necessary to test the random in this test, as the +12 hour timeout happens
+   */
   @Test
-  fun testVar12_From0To0_result_C_Split() {
+  fun grp2_4() {
     val compromisedVault = CompromisedVault()
     val viewModel = MockViewModelV2(compromisedVault)
 
@@ -855,7 +858,7 @@ class ApsVersion2Test {
   }
 
   @Test
-  fun testVar13_From40To40_result_C_Split() {
+  fun grp2_5() {
     val compromisedVault = CompromisedVault()
     val viewModel = MockViewModelV2(compromisedVault)
 
@@ -887,7 +890,7 @@ class ApsVersion2Test {
   }
 
   @Test
-  fun testVar14_From20To60_result_C_Split() {
+  fun grp2_6() {
     val compromisedVault = CompromisedVault()
     val viewModel = MockViewModelV2(compromisedVault)
 
@@ -919,7 +922,7 @@ class ApsVersion2Test {
   }
 
   @Test
-  fun testVar15_From5To5_result_C_Split() {
+  fun grp2_7() {
     val compromisedVault = CompromisedVault()
     val viewModel = MockViewModelV2(compromisedVault)
 
@@ -951,7 +954,7 @@ class ApsVersion2Test {
   }
 
   @Test
-  fun testVar16_From20To0_result_C_Split() {
+  fun grp2_8() {
     val compromisedVault = CompromisedVault()
     val viewModel = MockViewModelV2(compromisedVault)
 
@@ -983,7 +986,7 @@ class ApsVersion2Test {
   }
 
   @Test
-  fun testGroup3_WID_From100To0_result_D_Nothing_Then_Split() {
+  fun grp3_1_2() {
     val compromisedVault = CompromisedVault()
     val viewModel = MockViewModelV2(compromisedVault)
 
@@ -1011,7 +1014,7 @@ class ApsVersion2Test {
   }
 
   @Test
-  fun testGroup3_CG_BROKEN_From80To60_result_D_Nothing_Then_Split() {
+  fun grp3_2_2() {
     val compromisedVault = CompromisedVault()
     val viewModel = MockViewModelV2(compromisedVault)
 
@@ -1039,35 +1042,7 @@ class ApsVersion2Test {
   }
 
   @Test
-  fun testGroup3_CG_DIRTY_From0To100_result_D_Nothing_Then_Stitch() {
-    val compromisedVault = CompromisedVault()
-    val viewModel = MockViewModelV2(compromisedVault)
-
-    val detached = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.OK_VECTOR_DETACHED())
-    var updatedStateChange = viewModel.run(detached)
-
-    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.TRANSMITTER_DETACHED_V)
-
-    // TEST
-    // OK
-    val okDevice = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.DIRTY_VECTOR())
-    updatedStateChange = viewModel.run(okDevice)
-    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.CUTGUARD_DIRT_IN_TRANSMITTER_K)
-    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.apsMethod is ApsMethod.D)
-
-    compromisedVault.set(0)
-
-    val newPatch = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.dynamicVector(100, Attached.ATTACHED_ON_PATCH))
-    updatedStateChange = viewModel.run(newPatch)
-
-    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.OK_A)
-    Assert.assertTrue("ApsMethod was [${updatedStateChange.apsMethod}]", updatedStateChange.apsMethod is ApsMethod.A)
-    Assert.assertTrue("ApsAction was [${updatedStateChange.stateChange.apsAction}]", updatedStateChange.stateChange.apsAction == ApsAction.Stitch)
-    Assert.assertTrue(viewModel.isActiveTransmitter(tx1))
-  }
-
-  @Test
-  fun testGroup3_CG_NOISE_From0To0_result_D_Nothing_Then_Split() {
+  fun grp3_4_2_split() {
     val randomizer = mock(Random::class.java)
     Mockito.`when`(randomizer.nextInt(0, 1000)).thenReturn(23)
 
@@ -1098,7 +1073,7 @@ class ApsVersion2Test {
   }
 
   @Test
-  fun testGroup3_CG_NOISE_From0To0_result_D_Nothing_Then_Reset() {
+  fun grp3_4_2_reset() {
     val randomizer = mock(Random::class.java)
     Mockito.`when`(randomizer.nextInt(0, 1000)).thenReturn(600)
 
@@ -1129,7 +1104,7 @@ class ApsVersion2Test {
   }
 
   @Test
-  fun testGroup3_WID_From40To40_result_D_Nothing_Then_Stitch() {
+  fun grp3_5_2() {
     val compromisedVault = CompromisedVault()
     val viewModel = MockViewModelV2(compromisedVault)
 
@@ -1157,7 +1132,7 @@ class ApsVersion2Test {
   }
 
   @Test
-  fun testGroup3_CG_BROKEN_From20To60_result_D_Nothing_Then_Stitch() {
+  fun grp3_6_2() {
     val compromisedVault = CompromisedVault()
     val viewModel = MockViewModelV2(compromisedVault)
 
@@ -1185,7 +1160,7 @@ class ApsVersion2Test {
   }
 
   @Test
-  fun testGroup3_CG_DIRTY_From5To5_result_D_Nothing_Then_Reset() {
+  fun grp3_7_2() {
     val compromisedVault = CompromisedVault()
     val viewModel = MockViewModelV2(compromisedVault)
 
@@ -1213,7 +1188,7 @@ class ApsVersion2Test {
   }
 
   @Test
-  fun testGroup3_CG_NOISE_From20To0_result_D_Nothing_Then_Split() {
+  fun grp3_8_2() {
     val compromisedVault = CompromisedVault()
     val viewModel = MockViewModelV2(compromisedVault)
 
@@ -1241,7 +1216,7 @@ class ApsVersion2Test {
   }
 
   @Test
-  fun testGroup3_MT_From40To60_then_take_A_off_result_D_Nothing_Then_Split() {
+  fun grp3_9_2() {
     val compromisedVault = CompromisedVault()
     val viewModel = MockViewModelV2(compromisedVault)
 
@@ -1258,7 +1233,7 @@ class ApsVersion2Test {
     Assert.assertTrue("ApsMethod was [${updatedStateChange.apsMethod}]", updatedStateChange.apsMethod is ApsMethod.B)
     Assert.assertTrue("ApsAction was [${updatedStateChange.stateChange.apsAction}]", updatedStateChange.stateChange.apsAction == ApsAction.Split)
 
-    compromisedVault.set(40)
+    compromisedVault.set(20)
 
     val okDevice2 = DataBleDevice.bleDevice(tx2, statusVectorBytes = MockVector.dynamicVector(60, Attached.ATTACHED_ON_PATCH))
     updatedStateChange = viewModel.run(okDevice2)
@@ -1275,7 +1250,109 @@ class ApsVersion2Test {
   }
 
   @Test
-  fun testGroup3_MT_From40To40_then_take_B_off_result_D_Nothing_Then_Nothing() {
+  fun grp3_9_3() {
+    val compromisedVault = CompromisedVault()
+    val viewModel = MockViewModelV2(compromisedVault)
+
+    val detached = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.OK_VECTOR_DETACHED())
+    var updatedStateChange = viewModel.run(detached)
+
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.TRANSMITTER_DETACHED_V)
+
+    // TEST
+    // OK
+    val okDevice = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.OK_VECTOR_NEW())
+    updatedStateChange = viewModel.run(okDevice)
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.OK_A)
+    Assert.assertTrue("ApsMethod was [${updatedStateChange.apsMethod}]", updatedStateChange.apsMethod is ApsMethod.B)
+    Assert.assertTrue("ApsAction was [${updatedStateChange.stateChange.apsAction}]", updatedStateChange.stateChange.apsAction == ApsAction.Split)
+
+    compromisedVault.set(60)
+
+    val okDevice2 = DataBleDevice.bleDevice(tx2, statusVectorBytes = MockVector.dynamicVector(40, Attached.ATTACHED_ON_PATCH))
+    updatedStateChange = viewModel.run(okDevice2)
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.MULTIPLE_TRANSMITTERS)
+    Assert.assertTrue("ApsMethod was [${updatedStateChange.apsMethod}]", updatedStateChange.apsMethod is ApsMethod.D)
+
+    val newPatch = DataBleDevice.bleDevice(tx2, statusVectorBytes = MockVector.OK_VECTOR_DETACHED())
+    updatedStateChange = viewModel.run(newPatch)
+
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.OK_A)
+    Assert.assertTrue("ApsMethod was [${updatedStateChange.apsMethod}]", updatedStateChange.apsMethod is ApsMethod.D)
+    Assert.assertTrue("ApsAction was [${updatedStateChange.stateChange.apsAction}]", updatedStateChange.stateChange.apsAction == ApsAction.Nothing)
+    Assert.assertTrue(viewModel.isActiveTransmitter(tx1))
+  }
+
+  @Test
+  fun grp3_9_4() {
+    val compromisedVault = CompromisedVault()
+    val viewModel = MockViewModelV2(compromisedVault)
+
+    val detached = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.OK_VECTOR_DETACHED())
+    var updatedStateChange = viewModel.run(detached)
+
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.TRANSMITTER_DETACHED_V)
+
+    // TEST
+    // OK
+    val okDevice = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.OK_VECTOR_NEW())
+    updatedStateChange = viewModel.run(okDevice)
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.OK_A)
+    Assert.assertTrue("ApsMethod was [${updatedStateChange.apsMethod}]", updatedStateChange.apsMethod is ApsMethod.B)
+    Assert.assertTrue("ApsAction was [${updatedStateChange.stateChange.apsAction}]", updatedStateChange.stateChange.apsAction == ApsAction.Split)
+
+    compromisedVault.set(0)
+
+    val okDevice2 = DataBleDevice.bleDevice(tx2, statusVectorBytes = MockVector.dynamicVector(0, Attached.ATTACHED_ON_PATCH))
+    updatedStateChange = viewModel.run(okDevice2)
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.MULTIPLE_TRANSMITTERS)
+    Assert.assertTrue("ApsMethod was [${updatedStateChange.apsMethod}]", updatedStateChange.apsMethod is ApsMethod.D)
+
+    val newPatch = DataBleDevice.bleDevice(tx2, statusVectorBytes = MockVector.OK_VECTOR_DETACHED())
+    updatedStateChange = viewModel.run(newPatch)
+
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.OK_A)
+    Assert.assertTrue("ApsMethod was [${updatedStateChange.apsMethod}]", updatedStateChange.apsMethod is ApsMethod.D)
+    Assert.assertTrue("ApsAction was [${updatedStateChange.stateChange.apsAction}]", updatedStateChange.stateChange.apsAction == ApsAction.Nothing)
+    Assert.assertTrue(viewModel.isActiveTransmitter(tx1))
+  }
+
+  @Test
+  fun grp3_9_5() {
+    val compromisedVault = CompromisedVault()
+    val viewModel = MockViewModelV2(compromisedVault)
+
+    val detached = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.OK_VECTOR_DETACHED())
+    var updatedStateChange = viewModel.run(detached)
+
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.TRANSMITTER_DETACHED_V)
+
+    // TEST
+    // OK
+    val okDevice = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.OK_VECTOR_NEW())
+    updatedStateChange = viewModel.run(okDevice)
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.OK_A)
+    Assert.assertTrue("ApsMethod was [${updatedStateChange.apsMethod}]", updatedStateChange.apsMethod is ApsMethod.B)
+    Assert.assertTrue("ApsAction was [${updatedStateChange.stateChange.apsAction}]", updatedStateChange.stateChange.apsAction == ApsAction.Split)
+
+    compromisedVault.set(5)
+
+    val okDevice2 = DataBleDevice.bleDevice(tx2, statusVectorBytes = MockVector.dynamicVector(5, Attached.ATTACHED_ON_PATCH))
+    updatedStateChange = viewModel.run(okDevice2)
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.MULTIPLE_TRANSMITTERS)
+    Assert.assertTrue("ApsMethod was [${updatedStateChange.apsMethod}]", updatedStateChange.apsMethod is ApsMethod.D)
+
+    val newPatch = DataBleDevice.bleDevice(tx2, statusVectorBytes = MockVector.OK_VECTOR_DETACHED())
+    updatedStateChange = viewModel.run(newPatch)
+
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.OK_A)
+    Assert.assertTrue("ApsMethod was [${updatedStateChange.apsMethod}]", updatedStateChange.apsMethod is ApsMethod.D)
+    Assert.assertTrue("ApsAction was [${updatedStateChange.stateChange.apsAction}]", updatedStateChange.stateChange.apsAction == ApsAction.Nothing)
+    Assert.assertTrue(viewModel.isActiveTransmitter(tx1))
+  }
+
+  @Test
+  fun grp3_9_6() {
     val compromisedVault = CompromisedVault()
     val viewModel = MockViewModelV2(compromisedVault)
 
@@ -1307,6 +1384,5 @@ class ApsVersion2Test {
     Assert.assertTrue("ApsAction was [${updatedStateChange.stateChange.apsAction}]", updatedStateChange.stateChange.apsAction == ApsAction.Nothing)
     Assert.assertTrue(viewModel.isActiveTransmitter(tx1))
   }
-
 
 }

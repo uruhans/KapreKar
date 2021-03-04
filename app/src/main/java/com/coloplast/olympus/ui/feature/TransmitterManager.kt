@@ -218,6 +218,10 @@ class TransmitterManager(
   }
 
   fun deleteTransmitterHistory(macAddress: String) {
+    if(isActiveTransmitter(macAddress)) {
+      activeTransmitter = ""
+    }
+
     transmitterStateHistory.remove(macAddress)
   }
 

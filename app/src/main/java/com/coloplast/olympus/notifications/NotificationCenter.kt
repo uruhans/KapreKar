@@ -113,6 +113,7 @@ class NotificationCenter(
     )
 
     when (payload.id) {
+      OverlayState.BATTERY_LOW.notificationId(),
       OverlayState.BLE_CONNECTION_LOST.notificationId(),
       UiState.NO_BATTERY_R.notificationId(),
       UiState.CUTGUARD_BROKEN_I.notificationId(),

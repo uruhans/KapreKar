@@ -14,7 +14,14 @@ enum class OverlayState {
   fun notificationId(): Int {
     return this.ordinal + MAGIC_NUMBER
   }
-  
+
+  fun toLetter() : String {
+    return when(this) {
+      BATTERY_LOW -> "U"
+      else -> ""
+    }
+  }
+
   companion object {
     private const val MAGIC_NUMBER = 500
   

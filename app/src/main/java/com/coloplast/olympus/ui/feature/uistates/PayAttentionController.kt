@@ -29,7 +29,7 @@ class PayAttentionController : BaseHomeUIController<ControllerStatePayAttentionB
   }
 
   override fun getLayout(): Int {
-    return R.layout.controller_state_inner_blind
+    return R.layout.controller_state_pay_attention
   }
 
   companion object {

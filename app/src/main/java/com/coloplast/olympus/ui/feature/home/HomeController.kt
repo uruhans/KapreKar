@@ -338,11 +338,11 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
         UiState.TOTAL_BLIND_E -> {
           TotalBlindController.routerTransaction()
         }
+        UiState.PAY_ATTENTION_F -> {
+          PayAttentionController.routerTransaction()
+        }
         UiState.WET_MOUNT_G -> {
           WetMountController.routerTransaction(R.string.status_wet_mount_title,  R.string.status_wet_mount)
-        }
-        UiState.WET_MOUNT_X -> {
-          WetMountController.routerTransaction(R.string.status_inner_blind_mount_title, R.string.status_inner_blind_mount_description)
         }
         UiState.CUTGUARD_BROKEN_I -> {
           CutGuardController.routerTransaction()
@@ -364,6 +364,9 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
         }
         UiState.TRANSMITTER_BATTERY_CHARGING_W -> {
           TransmitterChargingController.routerTransaction()
+        }
+        UiState.WET_MOUNT_X -> {
+          WetMountController.routerTransaction(R.string.status_inner_blind_mount_title, R.string.status_inner_blind_mount_description)
         }
         UiState.TRANSMITTERS_EMPTY -> {
           NoTransmittersController.routerTransaction()

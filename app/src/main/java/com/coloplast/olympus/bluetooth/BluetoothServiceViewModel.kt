@@ -101,6 +101,7 @@ class BluetoothServiceViewModel(
     val disconnectTransmitterObservable = ServiceDispatcher.serviceEventObservable()
       .filter { it is ServiceEvent.DisconnectTransmitter }
       .map { it as ServiceEvent.DisconnectTransmitter }
+      .delay(200, TimeUnit.MILLISECONDS)
 
     // the observable that handles the connection
     val connectionObservable = immediateConnectionObservable

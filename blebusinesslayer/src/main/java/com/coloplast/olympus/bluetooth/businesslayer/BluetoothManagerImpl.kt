@@ -104,7 +104,6 @@ class BluetoothManagerImpl(
           }
         }
       }
-      .startWith(BluetoothState.UNDEFINED)
   }
 
   override fun scanBeacons(): Observable<String> {

@@ -34,8 +34,8 @@ class AppStateComponentImpl() : AppStateComponent {
       else if (AppSettings.appInBackground) AppState(internalAppState = appState)
       else AppState(appState = appState, internalAppState = appState)
 
-    val isDoublicate = ((appStatePackage.appState != lastAppState?.appState) || (appStatePackage.internalAppState != lastAppState?.internalAppState)).not()
-    if (isDoublicate) {
+    val isDuplicate = ((appStatePackage.appState == lastAppState?.appState) && (appStatePackage.internalAppState == lastAppState?.internalAppState))
+    if (isDuplicate) {
       return Completable.complete()
     }
 

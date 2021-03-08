@@ -68,7 +68,7 @@ class BluetoothServiceViewModel(
       databaseTransmittersObservable,
       retryObservable
     )
-      .filter { bluetoothManager.bluetoothStateObservable().blockingFirst() != BluetoothState.BLUETOOTH_NOT_ENABLED}
+      .filter { bluetoothManager.bluetoothStateObservable().blockingFirst() == BluetoothState.READY}
       // only attempt reconnect if we want to
       .filter { shouldReconnect.get() }
       .flatMap {

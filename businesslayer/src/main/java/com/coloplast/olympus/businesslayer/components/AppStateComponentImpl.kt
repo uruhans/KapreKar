@@ -28,20 +28,19 @@ class AppStateComponentImpl() : AppStateComponent {
       return Completable.complete()
     }
 
-    val appStatePackage = if (!AppSettings.appInBackground && !logFromService)
-      //appState from foreground
-      AppState(appState = appState, internalAppState = appState)
-    else
-      (if (AppSettings.appInBackground) AppState(internalAppState = appState) else AppState(appState = appState, internalAppState = appState))
+    val fromForeground = !AppSettings.appInBackground && !logFromService
+    val appStatePackage =
+      if (fromForeground) AppState(appState = appState, internalAppState = appState)
+      else if (AppSettings.appInBackground) AppState(internalAppState = appState)
+      else AppState(appState = appState, internalAppState = appState)
 
-    if ((appStatePackage.appState != lastAppState?.appState) || (appStatePackage.internalAppState != lastAppState?.internalAppState)) {
-      lastAppState = appStatePackage
-      return dbService.insertAppState(appStatePackage)
-    }
-    else {
-      //Do not insert doublicates
+    val isDoublicate = ((appStatePackage.appState != lastAppState?.appState) || (appStatePackage.internalAppState != lastAppState?.internalAppState)).not()
+    if (isDoublicate) {
       return Completable.complete()
     }
+
+    lastAppState = appStatePackage
+    return dbService.insertAppState(appStatePackage)
   }
 
   override fun deleteAppStatesAlreadySynced(): Observable<SyncResult> {

@@ -38,10 +38,9 @@ class BluetoothServiceViewModel(
     val compositeDisposable = CompositeDisposable()
 
     val bluetoothStateObservable = bluetoothManager.bluetoothStateObservable()
+      .filter { it == BluetoothState.BLUETOOTH_NOT_ENABLED }
       .doOnNext {
-        if (it == BluetoothState.BLUETOOTH_NOT_ENABLED ) {
           insertAppStateInDb(UiState.BLUETOOTH_NOT_ENABLED.toLetter())
-        }
       }
 
     // this observable pings us when we want to retry a connection attempt
@@ -69,6 +68,7 @@ class BluetoothServiceViewModel(
       databaseTransmittersObservable,
       retryObservable
     )
+      .filter { bluetoothManager.bluetoothStateObservable().blockingFirst() != BluetoothState.BLUETOOTH_NOT_ENABLED}
       // only attempt reconnect if we want to
       .filter { shouldReconnect.get() }
       .flatMap {
@@ -116,7 +116,6 @@ class BluetoothServiceViewModel(
     val connectionObservable = immediateConnectionObservable
       // just as a precaution, we check the connection state for the transmitter again
       // must be disconnected
-      .filter { bluetoothManager.bluetoothStateObservable().blockingFirst() != BluetoothState.BLUETOOTH_NOT_ENABLED}
       .filter { bluetoothManager.bleConnectionStateObservable(it).blockingFirst() == BleConnectionState.DISCONNECTED }
       // then we do the actual connection
       .flatMap { macAddress ->

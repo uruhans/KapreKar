@@ -10,7 +10,7 @@ import com.coloplast.olympus.R
 import com.coloplast.olympus.bluetooth.businesslayer.models.Battery
 import com.coloplast.olympus.bluetooth.model.StateChange
 import com.coloplast.olympus.databinding.ControllerStateWelcomeBinding
-import com.coloplast.olympus.shared.preferences.Preferences
+import com.coloplast.olympus.shared.preferences.PreferencesImpl
 import com.coloplast.olympus.ui.common.models.GenericUiModel
 import com.coloplast.olympus.ui.common.models.GenericView
 import com.coloplast.olympus.ui.feature.home.models.LastCheckVisible
@@ -30,7 +30,7 @@ class WelcomeController : BaseHomeUIControllerAppTour<ControllerStateWelcomeBind
   val battery = ObservableField<Battery>()
   val lastCheck = ObservableField<LocalDateTime>()
 
-  private val preferences: Preferences by inject()
+  private val preferences: PreferencesImpl by inject()
   private var appTourStarted = false
 
   override fun attachVariables(viewBinding: ControllerStateWelcomeBinding) {

@@ -6,7 +6,7 @@ import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerSplashBinding
 import com.coloplast.olympus.shared.preferences.OnboardingProgression
-import com.coloplast.olympus.shared.preferences.Preferences
+import com.coloplast.olympus.shared.preferences.PreferencesImpl
 import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.common.extensions.fadeIn
 import com.coloplast.olympus.ui.common.extensions.rotate360
@@ -27,7 +27,7 @@ import java.util.*
 class SplashController : BaseController<ControllerSplashBinding>(), SplashView {
 
   private val viewModel: SplashViewModel by inject()
-  private val preferences: Preferences by inject()
+  private val preferences: PreferencesImpl by inject()
 
   private val userIdRelay = PublishRelay.create<UUID>()
 

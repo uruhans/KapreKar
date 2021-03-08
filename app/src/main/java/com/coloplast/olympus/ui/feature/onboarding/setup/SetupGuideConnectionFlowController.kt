@@ -8,7 +8,7 @@ import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.HorizontalChangeHandler
 import com.coloplast.olympus.databinding.ControllerFlowBinding
 import com.coloplast.olympus.shared.preferences.OnboardingProgression
-import com.coloplast.olympus.shared.preferences.Preferences
+import com.coloplast.olympus.shared.preferences.PreferencesImpl
 import com.coloplast.olympus.ui.common.MediaGuideController
 import com.coloplast.olympus.ui.common.PermissionHandler
 import com.coloplast.olympus.ui.common.flow.FlowFactory
@@ -26,7 +26,7 @@ class SetupGuideConnectionFlowController : TopMenuFlowFactoryController<EmptyMod
   CallHelpDialogController.Listener {
 
   private val factory: SetupGuideConnectionFactoryImpl by inject()
-  private val preferences: Preferences by inject()
+  private val preferences: PreferencesImpl by inject()
   private var callHelpDialogController: CallHelpDialogController? = null
 
   override fun getFlowFactory(): FlowFactory<EmptyModel> {

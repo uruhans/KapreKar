@@ -10,6 +10,7 @@ import com.coloplast.olympus.bluetooth.businesslayer.exceptions.GattException
 import com.coloplast.olympus.bluetooth.businesslayer.models.*
 import com.coloplast.olympus.bluetooth.businesslayer.services.*
 import com.coloplast.olympus.businesslayer.interfaces.TransmitterComponent
+import com.coloplast.olympus.shared.models.CompromisedPackage
 import com.coloplast.olympus.shared.models.RawDataPackage
 import com.dawn.bluetooth.BluetoothHandler
 import com.jakewharton.rxrelay2.PublishRelay
@@ -48,6 +49,7 @@ class BluetoothManagerImpl(
 
   // a cached version of the ble connections that we are currently connected to
   private val bleConnections = mutableMapOf<String, RxBleConnection>()
+  private val currentPowerLevel = mutableMapOf<String, Int>()
 
   private val bleDeviceRelay = PublishRelay.create<List<BleDevice>>()
   private val bleConnectionRelay = PublishRelay.create<Map<String, RxBleConnection>>()
@@ -102,7 +104,6 @@ class BluetoothManagerImpl(
           }
         }
       }
-      .startWith(BluetoothState.UNDEFINED)
   }
 
   override fun scanBeacons(): Observable<String> {
@@ -251,8 +252,19 @@ class BluetoothManagerImpl(
       setupOlympusStatusVectorNotifications(macAddress),
       setupBatteryPowerNotifications(macAddress),
       { statusVector: StatusVector, powerLevel: PowerLevel ->
-        Peripheral(statusVector.patch, statusVector.transmitter, powerLevel)
+        var isBatteryUpdate: Boolean
+
+        synchronized(currentPowerLevel) {
+          isBatteryUpdate = if(currentPowerLevel[macAddress] == null) false else powerLevel.percentage != currentPowerLevel[macAddress]
+        }
+
+        Peripheral(statusVector.patch, statusVector.transmitter, powerLevel, isBatteryUpdate)
       })
+      .doOnNext {
+        synchronized(currentPowerLevel) {
+          currentPowerLevel[macAddress] = it.battery.powerLevel.percentage
+        }
+      }
   }
 
   /**
@@ -323,6 +335,20 @@ class BluetoothManagerImpl(
             .onErrorReturn { rawPackage }
         }
         .compose(OlympusWirelessProtocol.rawDataPackageTransformer)
+    }
+  }
+
+  override fun setupOlympusRunningCompromisedNotifications(macAddress: String) : Observable<CompromisedPackage> {
+    // fetch the ongoing connection based on the macAddress
+    val rxBleConnection = bleConnections[macAddress]
+
+    return if (rxBleConnection == null) {
+      Observable.empty()
+    }
+    else {
+      rxBleConnection.setupNotification(OlympusWirelessProtocol.Characteristics.COMPROMISED)
+        .flatMap { it }
+        .compose(OlympusWirelessProtocol.compromisedTransformer)
     }
   }
 
@@ -440,11 +466,7 @@ class BluetoothManagerImpl(
   }
 
   override fun isConnected(macAddress: String): Boolean {
-    if (macAddress.isEmpty()) {
-      return false
-    }
-
-    return bleConnections[macAddress] != null
+    return bleConnectionStateObservable(macAddress).blockingFirst() == BleConnectionState.CONNECTED
   }
 
   override fun disconnectTransmitter(macAddress: String) {

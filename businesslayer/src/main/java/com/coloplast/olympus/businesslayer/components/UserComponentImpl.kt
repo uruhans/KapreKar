@@ -11,13 +11,13 @@ import com.coloplast.olympus.datalayer.models.UserResponseDTO
 import com.coloplast.olympus.shared.models.Credentials
 import com.coloplast.olympus.shared.models.CurrentUser
 import com.coloplast.olympus.shared.models.User
-import com.coloplast.olympus.shared.preferences.Preferences
+import com.coloplast.olympus.shared.preferences.PreferencesImpl
 import com.coloplast.olympus.shared.types.SyncState
 import io.reactivex.*
 import io.reactivex.Observable
 import java.util.*
 
-class UserComponentImpl(private val preferences: Preferences) : UserComponent {
+class UserComponentImpl(private val preferences: PreferencesImpl) : UserComponent {
 
   private val apiService: ApiService = ApiServiceImpl()
   private val database: DbService = DbServiceImpl()
@@ -47,6 +47,7 @@ class UserComponentImpl(private val preferences: Preferences) : UserComponent {
   override fun login(credentials: Credentials): Observable<CurrentUser> {
     return apiService.login(credentials)
       .compose(SetTokenInsertOrUpdateUserAndReturnCurrentUser(database, preferences))
+      .onErrorReturn { CurrentUser.Empty() }
   }
 
   override fun automaticLogin(userId: UUID): Observable<CurrentUser> {
@@ -163,7 +164,7 @@ class UserComponentImpl(private val preferences: Preferences) : UserComponent {
    */
   class SetTokenInsertOrUpdateUserAndReturnCurrentUser(
     private val database: DbService,
-    private val preferences: Preferences
+    private val preferences: PreferencesImpl
   ) : ObservableTransformer<UserResponseDTO, CurrentUser> {
 
     override fun apply(upstream: Observable<UserResponseDTO>): ObservableSource<CurrentUser> {

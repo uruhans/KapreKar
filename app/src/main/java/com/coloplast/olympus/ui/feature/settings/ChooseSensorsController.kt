@@ -4,7 +4,7 @@ import androidx.databinding.ObservableBoolean
 import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerChooseSensorsBinding
-import com.coloplast.olympus.shared.preferences.Preferences
+import com.coloplast.olympus.shared.preferences.PreferencesImpl
 import com.coloplast.olympus.shared.types.Sensors
 import com.coloplast.olympus.ui.common.BaseController
 import org.koin.core.inject
@@ -16,7 +16,7 @@ import org.koin.core.inject
  */
 class ChooseSensorsController: BaseController<ControllerChooseSensorsBinding>() {
 
-  private val preferences: Preferences by inject()
+  private val preferences: PreferencesImpl by inject()
   val allSensorsSelected = ObservableBoolean(preferences.ringingAlertSensor == Sensors.ALL)
 
   override fun attachVariables(viewBinding: ControllerChooseSensorsBinding) {

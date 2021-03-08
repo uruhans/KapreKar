@@ -7,7 +7,7 @@ import com.coloplast.olympus.datalayer.AzurePackageApiImpl
 import com.coloplast.olympus.shared.models.DataResult
 import com.coloplast.olympus.shared.models.Transmitter
 import com.coloplast.olympus.shared.models.TransmitterPackage
-import com.coloplast.olympus.shared.preferences.Preferences
+import com.coloplast.olympus.shared.preferences.PreferencesImpl
 import com.coloplast.olympus.shared.types.PackageType
 import com.coloplast.olympus.shared.types.SyncState
 import io.reactivex.Completable
@@ -16,7 +16,7 @@ import io.reactivex.Single
 import timber.log.Timber
 import java.util.*
 
-class TransmitterComponentImpl(private val preferences: Preferences) : TransmitterComponent {
+class TransmitterComponentImpl(private val preferences: PreferencesImpl) : TransmitterComponent {
 
   private val dbService = DbServiceImpl()
   private val azureService = AzurePackageApiImpl()

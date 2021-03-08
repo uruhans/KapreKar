@@ -2,10 +2,12 @@ package com.coloplast.olympus.ui.feature.transmitters.add.at9
 
 import com.artemzin.rxui.kotlin.bind
 import com.coloplast.olympus.Me
+import com.coloplast.olympus.bluetooth.ServiceDispatcher
 import com.coloplast.olympus.bluetooth.businesslayer.BluetoothManager
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
 import com.coloplast.olympus.bluetooth.businesslayer.models.ScanResult
+import com.coloplast.olympus.bluetooth.model.ServiceEvent
 import com.coloplast.olympus.businesslayer.interfaces.TransmitterComponent
 import com.coloplast.olympus.shared.models.CurrentUser
 import com.coloplast.olympus.shared.models.Transmitter
@@ -60,6 +62,7 @@ class AddTransmitterAT9ViewModel(
       }
 
     val addToDatabaseAndConnectionStateObservable = uiView.scanResultToConnect()
+      .doOnNext { ServiceDispatcher.dispatchEvent(ServiceEvent.ReconnectionAttempt(true)) }
       .switchMap { scanResult ->
 
         me.currentUserObservable()

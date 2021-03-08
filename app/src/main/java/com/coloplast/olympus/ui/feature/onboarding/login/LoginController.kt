@@ -9,7 +9,7 @@ import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerLoginBinding
 import com.coloplast.olympus.shared.models.Credentials
 import com.coloplast.olympus.shared.preferences.OnboardingProgression
-import com.coloplast.olympus.shared.preferences.Preferences
+import com.coloplast.olympus.shared.preferences.PreferencesImpl
 import com.coloplast.olympus.ui.common.CustomToolbarController
 import com.coloplast.olympus.ui.common.LoadingController
 import com.coloplast.olympus.ui.common.dialogs.BaseDialogController
@@ -33,7 +33,7 @@ class LoginController: CustomToolbarController<ControllerLoginBinding>(),
   BaseDialogController.Listener {
 
   private val viewModel: LoginViewModel by inject()
-  private val preferences: Preferences by inject()
+  private val preferences: PreferencesImpl by inject()
 
   private val loginRelay: PublishRelay<Credentials> = PublishRelay.create()
 

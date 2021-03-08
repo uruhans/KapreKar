@@ -16,10 +16,12 @@ import com.coloplast.olympus.bluetooth.BluetoothServiceViewModel
 import com.coloplast.olympus.bluetooth.StateDispatcher
 import com.coloplast.olympus.bluetooth.businesslayer.ServiceStateDispatcher
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
+import com.coloplast.olympus.bluetooth.model.BluetoothServiceHelper
 import com.coloplast.olympus.bluetooth.model.BluetoothServiceModel
 import com.coloplast.olympus.bluetooth.model.BluetoothServiceResult
 import com.coloplast.olympus.bluetooth.model.StateChange
 import com.coloplast.olympus.notifications.OlympusNotificationManager
+import com.coloplast.olympus.patchsplit.models.CompromisedVault
 import com.coloplast.olympus.ui.feature.TransmitterManager
 import com.coloplast.olympus.ui.feature.statemachine.models.OverlayState
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
@@ -43,6 +45,8 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
   private val olympusNotificationManager: OlympusNotificationManager = get()
   private val transmitterManager: TransmitterManager by inject()
   private val serviceStateDispatcher: ServiceStateDispatcher by inject()
+  private val compromisedVault: CompromisedVault by inject()
+  private val bluetoothServiceHelper: BluetoothServiceHelper by inject()
 
   private val compositeDisposable = CompositeDisposable()
 
@@ -106,20 +110,38 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
           // this will dispatch the state change to any who observes it (none if app is in background)
           StateDispatcher.dispatch(it.statusChange)
 
-          val updatedStateChange = transmitterManager.determineCurrentlyActiveTransmitterAndReturnStateChangeFromIt(it.statusChange)
-          transmitterManager.determinePatchCommand(updatedStateChange)
+          val updatedStateChange = bluetoothServiceHelper.handleTransmitterUpdate(it.statusChange)
 
           // this will allow for notifications to be send when app is in the background
           olympusNotificationManager.send(updatedStateChange.stateChange.getMacAddress(), updatedStateChange.stateChange.state)
-          olympusNotificationManager.send(updatedStateChange.stateChange.getMacAddress(), updatedStateChange.stateChange.overlayState)
-          StateDispatcher.dispatch(updatedStateChange.stateChange)
+
+          if(updatedStateChange.stateChange != it.statusChange) {
+            StateDispatcher.dispatch(updatedStateChange.stateChange)
+          }
+
           StateDispatcher.dispatchStateForActiveTransmitter(updatedStateChange.stateChange)
+        }
+        is BluetoothServiceModel.BatteryUpdate -> {
+          StateDispatcher.dispatch(it.statusChange)
+
+          if(transmitterManager.isActiveTransmitter(it.statusChange.getMacAddress())) {
+            olympusNotificationManager.send(it.statusChange.getMacAddress(), it.statusChange.state)
+            olympusNotificationManager.send(it.statusChange.getMacAddress(), it.statusChange.overlayState)
+            StateDispatcher.dispatchStateForActiveTransmitter(it.statusChange)
+          }
         }
         is BluetoothServiceModel.RawDataPackageUpdate -> {
           val activeTransmitter = transmitterManager.isActiveTransmitter(it.macAddress)
 
           if (activeTransmitter) {
             StateDispatcher.dispatch(it.macAddress)
+          }
+        }
+        is BluetoothServiceModel.CompromisedPackageUpdate -> {
+          // only add the running compromised value to the vault if it's coming from
+          // the currently active transmitter
+          if(transmitterManager.isActiveTransmitter(it.macAddress)) {
+            compromisedVault.set(it.compromisedPackage.running, it.lastUpdate)
           }
         }
         is BluetoothServiceModel.Disconnected -> {

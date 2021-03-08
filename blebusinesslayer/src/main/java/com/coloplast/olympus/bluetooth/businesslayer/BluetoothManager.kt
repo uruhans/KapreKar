@@ -2,12 +2,13 @@ package com.coloplast.olympus.bluetooth.businesslayer
 
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
-import com.polidea.rxandroidble2.RxBleConnection
 import com.coloplast.olympus.bluetooth.businesslayer.models.AdditionalDeviceInfo
 import com.coloplast.olympus.bluetooth.businesslayer.models.BleDevice
 import com.coloplast.olympus.bluetooth.businesslayer.models.DeviceInfo
 import com.coloplast.olympus.bluetooth.businesslayer.models.ScanResult
+import com.coloplast.olympus.shared.models.CompromisedPackage
 import com.coloplast.olympus.shared.models.RawDataPackage
+import com.polidea.rxandroidble2.RxBleConnection
 import io.reactivex.Completable
 import io.reactivex.Observable
 import java.util.*
@@ -25,6 +26,7 @@ interface BluetoothManager {
   fun bleConnectionStateObservable(macAddress: String): Observable<BleConnectionState>
   fun bleDeviceResultObservable(macAddress: String): Observable<BleDevice>
   fun setupOlympusRawDataPackageNotifications(macAddress: String): Observable<RawDataPackage>
+  fun setupOlympusRunningCompromisedNotifications(macAddress: String) : Observable<CompromisedPackage>
   fun connectedDeviceObservable(macAddress: String): Observable<BleDevice>
   
   fun connectedDevicesObservable(): Observable<List<BleDevice>>

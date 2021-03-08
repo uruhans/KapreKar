@@ -18,7 +18,7 @@ import com.coloplast.olympus.R
 import com.coloplast.olympus.activities.MainActivity
 import com.coloplast.olympus.notifications.models.NotificationPayload
 import com.coloplast.olympus.shared.AppSettings
-import com.coloplast.olympus.shared.preferences.Preferences
+import com.coloplast.olympus.shared.preferences.PreferencesImpl
 import com.coloplast.olympus.shared.types.Sensors
 import com.coloplast.olympus.ui.feature.statemachine.models.OverlayState
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
@@ -31,7 +31,7 @@ import java.time.LocalTime
 class NotificationCenter(
   private val context: Context,
   private val notificationManager: NotificationManager,
-  private val preferences: Preferences
+  private val preferences: PreferencesImpl
 ) {
 
   private val statusNotificationsChannelId: String =
@@ -113,6 +113,7 @@ class NotificationCenter(
     )
 
     when (payload.id) {
+      OverlayState.BATTERY_LOW.notificationId(),
       OverlayState.BLE_CONNECTION_LOST.notificationId(),
       UiState.NO_BATTERY_R.notificationId(),
       UiState.CUTGUARD_BROKEN_I.notificationId(),

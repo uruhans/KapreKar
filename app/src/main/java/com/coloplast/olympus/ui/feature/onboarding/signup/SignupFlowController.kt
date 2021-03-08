@@ -8,7 +8,7 @@ import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerFlowBinding
 import com.coloplast.olympus.shared.models.User
 import com.coloplast.olympus.shared.preferences.OnboardingProgression
-import com.coloplast.olympus.shared.preferences.Preferences
+import com.coloplast.olympus.shared.preferences.PreferencesImpl
 import com.coloplast.olympus.ui.common.LoadingController
 import com.coloplast.olympus.ui.common.dialogs.BaseDialogController
 import com.coloplast.olympus.ui.common.dialogs.DialogController
@@ -34,7 +34,7 @@ class SignupFlowController(args: Bundle): TopMenuFlowFactoryController<SignupFac
 
   private val signUpOrigin = args.getInt(BUNDLE_SIGN_UP_TYPE)
 
-  private val preferences: Preferences by inject()
+  private val preferences: PreferencesImpl by inject()
   private val viewModel: SignupViewModel by inject()
 
   private val registrationRelay: PublishRelay<User> = PublishRelay.create()

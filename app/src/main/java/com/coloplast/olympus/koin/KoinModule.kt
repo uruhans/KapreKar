@@ -5,6 +5,7 @@ import android.content.Context
 import com.coloplast.olympus.Me
 import com.coloplast.olympus.bluetooth.BluetoothServiceViewModel
 import com.coloplast.olympus.bluetooth.businesslayer.*
+import com.coloplast.olympus.bluetooth.model.BluetoothServiceHelper
 import com.coloplast.olympus.businesslayer.components.AppStateComponentImpl
 import com.coloplast.olympus.businesslayer.components.SystemUpdateComponentImpl
 import com.coloplast.olympus.businesslayer.components.TransmitterComponentImpl
@@ -16,7 +17,11 @@ import com.coloplast.olympus.businesslayer.interfaces.UserComponent
 import com.coloplast.olympus.notifications.NotificationCenter
 import com.coloplast.olympus.notifications.NotificationScheduler
 import com.coloplast.olympus.notifications.OlympusNotificationManager
+import com.coloplast.olympus.patchsplit.AutoPatchDetectionEngine
+import com.coloplast.olympus.patchsplit.AutoPatchDetectionEngineImpl
+import com.coloplast.olympus.patchsplit.models.CompromisedVault
 import com.coloplast.olympus.shared.preferences.Preferences
+import com.coloplast.olympus.shared.preferences.PreferencesImpl
 import com.coloplast.olympus.ui.feature.TransmitterManager
 import com.coloplast.olympus.ui.feature.guides.flows.applying.GuideApplyingTransmitterFactoryImpl
 import com.coloplast.olympus.ui.feature.about.AboutViewModel
@@ -46,7 +51,10 @@ import org.koin.dsl.module
 
 val koinModule = module {
   /* Preferences */
-  single { Preferences(androidContext()) }
+  single { PreferencesImpl(androidContext()) }
+  // a workaround to prevent the code from breaking after creating an interface for the old Preferences class used for testing
+  single<Preferences> { get<PreferencesImpl>() }
+
   single { Me(get()) }
   factory { SyncWorker(get(), get(), get()) }
 
@@ -61,9 +69,13 @@ val koinModule = module {
   factory { DeviceConnection(get(), get(), get()) }
   single<FirmwareManager> { FirmwareManagerImpl(get(), get(), get()) }
 
+  single { CompromisedVault() }
+  single<AutoPatchDetectionEngine> { AutoPatchDetectionEngineImpl(get()) }
   single { TransmitterManager(get(), get()) }
   single { BreachesOccurred(get()) }
   single { ServiceStateDispatcher() }
+
+  single { BluetoothServiceHelper(get(), get()) }
 
   /* Components */
   single<TransmitterComponent> { TransmitterComponentImpl(get()) }

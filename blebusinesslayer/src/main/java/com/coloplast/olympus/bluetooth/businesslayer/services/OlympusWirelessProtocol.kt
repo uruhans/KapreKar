@@ -5,6 +5,7 @@ import com.coloplast.olympus.bluetooth.businesslayer.extensions.asUUID
 import com.coloplast.olympus.bluetooth.businesslayer.models.Patch
 import com.coloplast.olympus.bluetooth.businesslayer.models.StatusVector
 import com.coloplast.olympus.bluetooth.businesslayer.models.Transmitter
+import com.coloplast.olympus.shared.models.CompromisedPackage
 import com.coloplast.olympus.shared.models.RawDataPackage
 import com.coloplast.olympus.shared.transformers.OlympusWirelessProtocol
 import io.reactivex.ObservableTransformer
@@ -17,6 +18,7 @@ object OlympusWirelessProtocol {
     val SETTINGS = "3dfc3caf-37fa-47c6-8ca0-b6c0ab4a8202".asUUID()
     val CLASSIFIER_SETTINGS = "3120464a-9be2-11e9-a2a3-2a2ae2dbcce4".asUUID()
     val RAW_SENSOR_DATA = "e2fa0108-b177-4e96-a550-4a47e40adcb7".asUUID()
+    val COMPROMISED = "b9bf73cf-a804-41b8-bf40-a87c93219d92".asUUID()
   }
   
   /**
@@ -75,6 +77,10 @@ object OlympusWirelessProtocol {
   
   val rawDataPackageTransformer = ObservableTransformer<ByteArray, RawDataPackage> { upstream ->
     upstream.map { OlympusWirelessProtocol.rawDataPackageTransformer(it) }
+  }
+
+  val compromisedTransformer = ObservableTransformer<ByteArray, CompromisedPackage> { upstream ->
+    upstream.map { OlympusWirelessProtocol.compromisedPackageTransformer(it) }
   }
 
 }

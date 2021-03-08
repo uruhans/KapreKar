@@ -3,7 +3,7 @@ package com.coloplast.olympus.work
 import android.content.Context
 import androidx.work.Worker
 import androidx.work.WorkerParameters
-import com.coloplast.olympus.shared.preferences.Preferences
+import com.coloplast.olympus.shared.preferences.PreferencesImpl
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import java.util.*
@@ -12,7 +12,7 @@ class SyncTransmitterPackagesWorker(applicationContext: Context, workerParams: W
   Worker(applicationContext, workerParams), KoinComponent {
 
   private val syncWorker: SyncWorker by inject()
-  private val preferences: Preferences by inject()
+  private val preferences: PreferencesImpl by inject()
 
   override fun doWork(): Result {
     if(preferences.userLoggedIn.isEmpty()) {

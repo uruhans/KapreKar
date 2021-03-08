@@ -3,9 +3,7 @@ package com.coloplast.olympus.ui.feature.uistates
 import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerStateInnerBreachBinding
-import com.coloplast.olympus.shared.preferences.Preferences
 import com.coloplast.olympus.ui.feature.home.models.PatchVisible
-import org.koin.core.inject
 
 class InnerBreachController : BaseHomeUIControllerAppTour<ControllerStateInnerBreachBinding>(), PatchVisible {
 

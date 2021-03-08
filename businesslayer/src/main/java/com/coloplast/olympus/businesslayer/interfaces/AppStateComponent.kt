@@ -7,7 +7,7 @@ import java.util.*
 
 interface AppStateComponent {
 
-  fun insertAppState(appState: String): Completable
+  fun insertAppState(appState: String, logFromService: Boolean = false): Completable
   fun deleteAppStatesAlreadySynced(): Observable<SyncResult>
   fun syncAppStatesWithCloud(userId: UUID) : Observable<SyncResult>
 }

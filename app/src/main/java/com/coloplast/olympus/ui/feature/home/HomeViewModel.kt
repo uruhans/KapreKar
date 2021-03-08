@@ -68,11 +68,14 @@ class HomeViewModel(
       }
       .flatMap { uiModel ->
         if(uiModel is HomeUiModel.DeviceUpdate) {
-          if(uiModel.stateChange.bleDevice.isConnected().not()) {
-            return@flatMap dbInsertAppState(UiState.DISCONNECTED)
+          val state = if(uiModel.stateChange.bleDevice.isConnected().not()) {
+            UiState.DISCONNECTED
+          } else {
+            uiModel.stateChange.state
+          }
+          return@flatMap dbInsertAppState(state)
               .toSingle { uiModel }
               .toObservable()
-          }
         }
         return@flatMap Observable.just(uiModel)
       }

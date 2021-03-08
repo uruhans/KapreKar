@@ -17,17 +17,31 @@ class AppStateComponentImpl() : AppStateComponent {
 
   private val dbService = DbServiceImpl()
   private val azureService = AzurePackageApiImpl()
-  private var lastAppState: String = ""
+  private var lastAppState: AppState? = null
 
   override fun insertAppState(
-    appState: String
+    appState: String,
+    logFromService: Boolean
   ): Completable {
-    if (appState.isEmpty() || appState == lastAppState) {
+
+    if (appState.isBlank()) {
       return Completable.complete()
     }
-    lastAppState = appState
-    val appStatePackage = if (AppSettings.appInBackground) AppState(internalAppState = appState) else AppState(appState = appState)
-    return dbService.insertAppState(appStatePackage)
+
+    val appStatePackage = if (!AppSettings.appInBackground && !logFromService)
+      //appState from foreground
+      AppState(appState = appState, internalAppState = appState)
+    else
+      (if (AppSettings.appInBackground) AppState(internalAppState = appState) else AppState(appState = appState, internalAppState = appState))
+
+    if ((appStatePackage.appState != lastAppState?.appState) || (appStatePackage.internalAppState != lastAppState?.internalAppState)) {
+      lastAppState = appStatePackage
+      return dbService.insertAppState(appStatePackage)
+    }
+    else {
+      //Do not insert doublicates
+      return Completable.complete()
+    }
   }
 
   override fun deleteAppStatesAlreadySynced(): Observable<SyncResult> {

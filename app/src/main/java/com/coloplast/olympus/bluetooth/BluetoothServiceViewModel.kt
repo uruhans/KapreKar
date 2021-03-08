@@ -4,6 +4,7 @@ import com.artemzin.rxui.kotlin.bind
 import com.coloplast.olympus.bluetooth.businesslayer.BluetoothManager
 import com.coloplast.olympus.bluetooth.businesslayer.DeviceConnection
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
+import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
 import com.coloplast.olympus.bluetooth.businesslayer.models.DeviceResult
 import com.coloplast.olympus.bluetooth.model.*
 import com.coloplast.olympus.businesslayer.interfaces.AppStateComponent
@@ -14,6 +15,7 @@ import com.coloplast.olympus.ui.feature.statemachine.UiStateMachineImpl
 import com.coloplast.olympus.ui.feature.statemachine.models.OverlayState
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
 import com.coloplast.olympus.utils.DeviceUtils
+import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -34,7 +36,14 @@ class BluetoothServiceViewModel(
 
   override fun bind(serviceResult: BluetoothServiceResult<BluetoothServiceModel>): Disposable {
     val compositeDisposable = CompositeDisposable()
-    
+
+    val bluetoothStateObservable = bluetoothManager.bluetoothStateObservable()
+      .doOnNext {
+        if (it == BluetoothState.BLUETOOTH_NOT_ENABLED ) {
+          insertAppStateInDb(UiState.BLUETOOTH_NOT_ENABLED.toLetter())
+        }
+      }
+
     // this observable pings us when we want to retry a connection attempt
     // and is usually started by the user elsewhere in the app
     val retryObservable = ServiceDispatcher.serviceEventObservable()
@@ -107,6 +116,7 @@ class BluetoothServiceViewModel(
     val connectionObservable = immediateConnectionObservable
       // just as a precaution, we check the connection state for the transmitter again
       // must be disconnected
+      .filter { bluetoothManager.bluetoothStateObservable().blockingFirst() != BluetoothState.BLUETOOTH_NOT_ENABLED}
       .filter { bluetoothManager.bleConnectionStateObservable(it).blockingFirst() == BleConnectionState.DISCONNECTED }
       // then we do the actual connection
       .flatMap { macAddress ->
@@ -117,8 +127,14 @@ class BluetoothServiceViewModel(
         )
         // added to be completely sure that we are terminating the connection
         .onTerminateDetach()
+        // log disconnected state
+        .doOnNext {
+          if (it is BluetoothServiceModel.Disconnected) {
+            insertAppStateInDb(UiState.DISCONNECTED.toLetter())
+          }
+        }
       }
-
+    compositeDisposable.add(bluetoothStateObservable.subscribe())
     compositeDisposable.add(connectionObservable.bind(serviceResult.onResult()))
     compositeDisposable.add(reconnectionAttemptsObservable.subscribe())
 
@@ -172,9 +188,6 @@ class BluetoothServiceViewModel(
       }
       .doOnNext {
         val stateLetter = when(it) {
-          is BluetoothServiceModel.Disconnected -> {
-            UiState.DISCONNECTED.toLetter()
-          }
           is BluetoothServiceModel.DeviceUpdate -> {
             it.statusChange.state.toLetter()
           }
@@ -184,11 +197,8 @@ class BluetoothServiceViewModel(
           else -> null
         }
 
-        stateLetter?.let { stateLetter ->
-          appStateComponent.insertAppState(stateLetter)
-            .subscribeOn(Schedulers.io())
-            .doOnError { throwable -> Timber.e(throwable) }
-            .blockingGet()
+        stateLetter?.let { letter ->
+          insertAppStateInDb(letter)
         }
       }
       .doOnError {
@@ -199,5 +209,15 @@ class BluetoothServiceViewModel(
         BluetoothServiceModel.Disconnected(macAddress)
       }
   }
+
+  private fun insertAppStateInDb(stateLetter: String): Throwable? {
+    return appStateComponent.insertAppState(stateLetter, logFromService = true)
+      .subscribeOn(Schedulers.io())
+        //LifecycleObserver has a 700 ms delay
+      .delay(800, TimeUnit.MILLISECONDS)
+      .doOnError { throwable -> Timber.e(throwable) }
+      .blockingGet()
+  }
+
 
 }

@@ -19,7 +19,7 @@ class PreferencesImpl(applicationContext: Context) : Preferences {
   override var latestStateFromActiveTx: String by bindSharedPreference(applicationContext, LATEST_STATE_FROM_ACTIVE_TRANSMITTER, "")
   override var latestDetach: String by bindSharedPreference(applicationContext, LATEST_DETACH, "")
   var leaks: String by bindSharedPreference(applicationContext, LEAKS, "")
-  var areRingingAlertsEnabled: Boolean by bindSharedPreference(applicationContext, RINGING_ALERTS_ENABLED, true)
+  var areRingingAlertsEnabled: Boolean by bindSharedPreference(applicationContext, RINGING_ALERTS_ENABLED, false)
   var ringingAlertSensor: Sensors by bindSharedPreference(applicationContext, RINGING_ALERT_SENSOR, Sensors.ALL)
   var bedtimeStart: LocalTime by bindSharedPreference(applicationContext, BEDTIME_ALERT_START, LocalTime.of(22,0))
   var bedtimeEnd: LocalTime by bindSharedPreference(applicationContext, BEDTIME_ALERT_END, LocalTime.of(8,0))

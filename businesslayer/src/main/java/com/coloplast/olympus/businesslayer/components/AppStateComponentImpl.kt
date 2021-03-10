@@ -30,9 +30,8 @@ class AppStateComponentImpl() : AppStateComponent {
 
     val fromForeground = !AppSettings.appInBackground && !logFromService
     val appStatePackage =
-      if (fromForeground) AppState(appState = appState, internalAppState = appState)
-      else if (AppSettings.appInBackground) AppState(internalAppState = appState)
-      else AppState(appState = appState, internalAppState = appState)
+      if (fromForeground) AppState(appState = appState)
+      else AppState(internalAppState = appState)
 
     val isDuplicate = ((appStatePackage.appState == lastAppState?.appState) && (appStatePackage.internalAppState == lastAppState?.internalAppState))
     if (isDuplicate) {

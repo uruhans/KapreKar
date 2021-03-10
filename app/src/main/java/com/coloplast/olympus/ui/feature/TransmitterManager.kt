@@ -214,7 +214,7 @@ class TransmitterManager(
   }
 
   fun isOnlyTransmitterAdded(macAddress: String) : Boolean {
-    return transmitterStateHistory[macAddress] != null && transmitterStateHistory.size == 1
+    return transmitterStateHistory[macAddress] == null || (transmitterStateHistory[macAddress] != null && transmitterStateHistory.size == 1)
   }
 
   fun deleteTransmitterHistory(macAddress: String) {

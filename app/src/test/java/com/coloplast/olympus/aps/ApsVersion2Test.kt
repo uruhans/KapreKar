@@ -990,8 +990,13 @@ class ApsVersion2Test {
     val compromisedVault = CompromisedVault()
     val viewModel = MockViewModelV2(compromisedVault)
 
+    val attach = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.OK_VECTOR_NEW())
+    var updatedStateChange = viewModel.run(attach)
+
+    compromisedVault.set(100)
+
     val detached = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.OK_VECTOR_DETACHED())
-    var updatedStateChange = viewModel.run(detached)
+    updatedStateChange = viewModel.run(detached)
 
     Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.TRANSMITTER_DETACHED_V)
 
@@ -1000,9 +1005,8 @@ class ApsVersion2Test {
     val okDevice = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.WID_VECTOR())
     updatedStateChange = viewModel.run(okDevice)
     Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.WATER_INGRESS_DETECTION_J)
-    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.apsMethod is ApsMethod.D)
+    Assert.assertTrue("ApsMethod was [${updatedStateChange.apsMethod}]", updatedStateChange.apsMethod is ApsMethod.D)
 
-    compromisedVault.set(100)
 
     val newPatch = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.OK_VECTOR_NEW())
     updatedStateChange = viewModel.run(newPatch)
@@ -1028,7 +1032,7 @@ class ApsVersion2Test {
     val okDevice = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.BROKEN_VECTOR())
     updatedStateChange = viewModel.run(okDevice)
     Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.CUTGUARD_BROKEN_I)
-    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.apsMethod is ApsMethod.D)
+    Assert.assertTrue("ApsMethod was [${updatedStateChange.apsMethod}]", updatedStateChange.apsMethod is ApsMethod.D)
 
     compromisedVault.set(80)
 
@@ -1090,7 +1094,7 @@ class ApsVersion2Test {
     val okDevice = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.CUTGUARD_NOISE())
     updatedStateChange = viewModel.run(okDevice)
     Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.OK_A)
-    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.apsMethod is ApsMethod.D)
+    Assert.assertTrue("ApsMethod was [${updatedStateChange.apsMethod}]", updatedStateChange.apsMethod is ApsMethod.D)
 
     compromisedVault.set(0)
 
@@ -1118,7 +1122,7 @@ class ApsVersion2Test {
     val okDevice = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.WID_VECTOR())
     updatedStateChange = viewModel.run(okDevice)
     Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.WATER_INGRESS_DETECTION_J)
-    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.apsMethod is ApsMethod.D)
+    Assert.assertTrue("ApsMethod was [${updatedStateChange.apsMethod}]", updatedStateChange.apsMethod is ApsMethod.D)
 
     compromisedVault.set(40)
 
@@ -1146,7 +1150,7 @@ class ApsVersion2Test {
     val okDevice = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.BROKEN_VECTOR())
     updatedStateChange = viewModel.run(okDevice)
     Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.CUTGUARD_BROKEN_I)
-    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.apsMethod is ApsMethod.D)
+    Assert.assertTrue("ApsMethod was [${updatedStateChange.apsMethod}]", updatedStateChange.apsMethod is ApsMethod.D)
 
     compromisedVault.set(20)
 
@@ -1174,7 +1178,7 @@ class ApsVersion2Test {
     val okDevice = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.DIRTY_VECTOR())
     updatedStateChange = viewModel.run(okDevice)
     Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.CUTGUARD_DIRT_IN_TRANSMITTER_K)
-    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.apsMethod is ApsMethod.D)
+    Assert.assertTrue("ApsMethod was [${updatedStateChange.apsMethod}]", updatedStateChange.apsMethod is ApsMethod.D)
 
     compromisedVault.set(5)
 

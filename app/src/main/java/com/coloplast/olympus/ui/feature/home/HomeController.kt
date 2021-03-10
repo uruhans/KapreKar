@@ -20,8 +20,6 @@ import com.coloplast.olympus.R
 import com.coloplast.olympus.bluetooth.ServiceDispatcher
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
-import com.coloplast.olympus.bluetooth.businesslayer.enums.PowerLevel
-import com.coloplast.olympus.bluetooth.businesslayer.enums.SensorStatus
 import com.coloplast.olympus.bluetooth.businesslayer.models.Battery
 import com.coloplast.olympus.bluetooth.businesslayer.models.Patch
 import com.coloplast.olympus.bluetooth.model.ServiceEvent
@@ -217,9 +215,6 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
         }
         is HomeUiModel.StitchOrResetComplete -> {
           /* no-op */
-//          if(!isProduction) {
-//            Toast.makeText(AppSettings.applicationContext, "Reset Or Stitch sent", Toast.LENGTH_SHORT).show()
-//          }
         }
         is HomeUiModel.DeviceUpdate -> {
           val stateChange = uiModel.stateChange
@@ -281,6 +276,9 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
           if(stateToChangeTo == UiState.SOMETHING_ELSE) {
             Timber.d("Overriding [$stateToChangeTo] => [OK_A]")
             stateToChangeTo = UiState.OK_A
+          }
+          else if(currentUiState == UiState.TRANSMITTER_NOT_FOUND && isConnected.get().not()) {
+            return@ui
           }
 
           changeUiState(stateToChangeTo)

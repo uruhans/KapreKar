@@ -16,6 +16,7 @@ import com.coloplast.olympus.bluetooth.BluetoothServiceViewModel
 import com.coloplast.olympus.bluetooth.StateDispatcher
 import com.coloplast.olympus.bluetooth.businesslayer.ServiceStateDispatcher
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
+import com.coloplast.olympus.bluetooth.businesslayer.models.BleDevice
 import com.coloplast.olympus.bluetooth.model.BluetoothServiceHelper
 import com.coloplast.olympus.bluetooth.model.BluetoothServiceModel
 import com.coloplast.olympus.bluetooth.model.BluetoothServiceResult
@@ -54,6 +55,8 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
   private val bluetoothConnectionChannelName: String by lazy { applicationContext.getString(R.string.lock_service_notification_channel_name) }
   private val bluetoothConnectionChannelDescription: String by lazy { applicationContext.getString(R.string.lock_service_notification_channel_description) }
 
+  private val connectionAttempts = mutableMapOf<String, Int>()
+
   override fun onBind(intent: Intent?): IBinder? {
     // we are not binding to this service, so just return null
     return null
@@ -91,16 +94,21 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
 
       when (it) {
         is BluetoothServiceModel.FirmwareUpdateAvailable -> {
-          olympusNotificationManager.send(it.statusChange.getMacAddress(), UiState.FIRMWARE_AVAILABLE)
-          StateDispatcher.dispatchStateForActiveTransmitter(it.statusChange)
+          if(transmitterManager.isActiveTransmitter(it.statusChange.getMacAddress())) {
+            olympusNotificationManager.send(it.statusChange.getMacAddress(), UiState.FIRMWARE_AVAILABLE)
+            StateDispatcher.dispatchStateForActiveTransmitter(it.statusChange)
+          }
 
           // the reason we are dispatching this too, is because we might be in the onboarding flow
           // which will prevent the user from getting to the status screen if this isn't here
           StateDispatcher.dispatch(it.statusChange)
         }
         is BluetoothServiceModel.AppUpdateAvailable -> {
-          olympusNotificationManager.send(it.statusChange.getMacAddress(), UiState.APP_UPDATE_AVAILABLE)
-          StateDispatcher.dispatchStateForActiveTransmitter(it.statusChange)
+          if(transmitterManager.isActiveTransmitter(it.statusChange.getMacAddress())) {
+
+            olympusNotificationManager.send(it.statusChange.getMacAddress(), UiState.APP_UPDATE_AVAILABLE)
+            StateDispatcher.dispatchStateForActiveTransmitter(it.statusChange)
+          }
 
           // the reason we are dispatching this too, is because we might be in the onboarding flow
           // which will prevent the user from getting to the status screen if this isn't here
@@ -145,6 +153,16 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
           }
         }
         is BluetoothServiceModel.Disconnected -> {
+          connectionAttempts[it.macAddress] = connectionAttempts[it.macAddress]?.plus(1) ?: 1
+
+          if((transmitterManager.isActiveTransmitter(it.macAddress) || transmitterManager.isOnlyTransmitterAdded(it.macAddress)) && connectionAttempts[it.macAddress]!! >= 3) {
+            connectionAttempts[it.macAddress] = 0
+            val latestState = transmitterManager.getLatestState(it.macAddress)
+            val bleDevice = latestState?.bleDevice ?: BleDevice("", it.macAddress, BleConnectionState.DISCONNECTED)
+            StateDispatcher.dispatchStateForActiveTransmitter(StateChange(UiState.TRANSMITTER_NOT_FOUND, bleDevice = bleDevice))
+            return@ui
+          }
+
           val otherTxStateChange = transmitterManager.onTransmitterDisconnect(it.macAddress)
 
           if(otherTxStateChange != null) {

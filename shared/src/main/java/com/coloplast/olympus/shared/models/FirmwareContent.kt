@@ -9,7 +9,7 @@ class FirmwareContent(
 ) {
 
   fun isNewer(currentFirmwareVersion: String) : Boolean {
-    return currentFirmwareVersion < firmwareVersion
+    return currentFirmwareVersion.isNotBlank() && currentFirmwareVersion < firmwareVersion
   }
 
   fun isMinimumAndroidVersion(currentAppVersion: String) : Boolean {

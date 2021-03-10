@@ -84,6 +84,7 @@ class BluetoothServiceViewModel(
       .filter { it.isNotEmpty() }
       // split transmitters into single transmitters (if we have more than one)
       .flatMapIterable { it }
+      .throttleLatest(5, TimeUnit.SECONDS)
       // get the current connection state of the transmitter immediately
       .map { TxModel(it, bluetoothManager.bleConnectionStateObservable(it.id).blockingFirst()) }
       // only continue if the current transmitter is disconnected

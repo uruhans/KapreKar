@@ -33,7 +33,8 @@ data class BleDevice(val name: String?, val macAddress: String, var connectionSt
   fun isBlocked(): Boolean {
     return isWidOrCutguardBlocked() ||
         peripheral?.transmitter?.compromised == -1 ||
-        peripheral?.transmitter?.compromised == 255
+        peripheral?.transmitter?.compromised == 255 ||
+        peripheral?.transmitter?.waterIngressDetection == WaterIngressDetection.UNKNOWN
   }
 
   fun isWidOrCutguardBlocked(): Boolean {

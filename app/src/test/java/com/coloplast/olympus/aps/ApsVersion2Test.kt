@@ -3,6 +3,7 @@ package com.coloplast.olympus.aps
 import com.coloplast.olympus.aps.data.DataBleDevice
 import com.coloplast.olympus.aps.data.MockVector
 import com.coloplast.olympus.bluetooth.businesslayer.enums.Attached
+import com.coloplast.olympus.bluetooth.businesslayer.enums.WaterIngressDetection
 import com.coloplast.olympus.patchsplit.models.ApsAction
 import com.coloplast.olympus.patchsplit.models.ApsMethod
 import com.coloplast.olympus.patchsplit.models.CompromisedVault
@@ -739,7 +740,7 @@ class ApsVersion2Test {
     compromisedVault.set(100, LocalDateTime.now().minusHours(13))
 
     // detach occurs but we dont know about it
-     val detach = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.OK_VECTOR_DETACHED())
+    val detach = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.OK_VECTOR_DETACHED())
     updatedStateChange = viewModel.run(detach)
 
 
@@ -1000,16 +1001,18 @@ class ApsVersion2Test {
 
     Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.TRANSMITTER_DETACHED_V)
 
-    // TEST
-    // OK
-    val okDevice = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.WID_VECTOR())
-    updatedStateChange = viewModel.run(okDevice)
+    val blockedWID = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.WID_VECTOR(WaterIngressDetection.UNKNOWN))
+    updatedStateChange = viewModel.run(blockedWID)
+    Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.OK_A)
+    Assert.assertTrue("ApsMethod was [${updatedStateChange.apsMethod}]", updatedStateChange.apsMethod is ApsMethod.D)
+
+    val okWID = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.WID_VECTOR(WaterIngressDetection.WATER_INGRESS))
+    updatedStateChange = viewModel.run(okWID)
     Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.WATER_INGRESS_DETECTION_J)
     Assert.assertTrue("ApsMethod was [${updatedStateChange.apsMethod}]", updatedStateChange.apsMethod is ApsMethod.D)
 
-
-    val newPatch = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.OK_VECTOR_NEW())
-    updatedStateChange = viewModel.run(newPatch)
+    val backToOkPatch = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.WID_VECTOR(WaterIngressDetection.OK))
+    updatedStateChange = viewModel.run(backToOkPatch)
 
     Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.OK_A)
     Assert.assertTrue("ApsMethod was [${updatedStateChange.apsMethod}]", updatedStateChange.apsMethod is ApsMethod.A)
@@ -1119,7 +1122,7 @@ class ApsVersion2Test {
 
     // TEST
     // OK
-    val okDevice = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.WID_VECTOR())
+    val okDevice = DataBleDevice.bleDevice(tx1, statusVectorBytes = MockVector.WID_VECTOR(WaterIngressDetection.WATER_INGRESS))
     updatedStateChange = viewModel.run(okDevice)
     Assert.assertTrue("UiState was [${updatedStateChange.stateChange.state}]", updatedStateChange.stateChange.state == UiState.WATER_INGRESS_DETECTION_J)
     Assert.assertTrue("ApsMethod was [${updatedStateChange.apsMethod}]", updatedStateChange.apsMethod is ApsMethod.D)

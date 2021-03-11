@@ -349,7 +349,7 @@ object MockVector {
     ).toByteArray()
   }
 
-  fun WID_VECTOR(): ByteArray {
+  fun WID_VECTOR(waterIngressDetection: WaterIngressDetection): ByteArray {
     return StatusVector(
       Patch(
         SensorStatus.CUT_GUARD_OK,
@@ -360,7 +360,7 @@ object MockVector {
         SensorStatus.OK,
       ),
       Transmitter(
-        WaterIngressDetection.WATER_INGRESS,
+        waterIngressDetection,
         Attached.ATTACHED_ON_PATCH,
         PatchType.PATCH_0,
         0,

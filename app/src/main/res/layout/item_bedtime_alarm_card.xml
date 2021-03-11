@@ -6,6 +6,10 @@
     <variable
       name="buttonClickListener"
       type="android.view.View.OnClickListener" />
+
+    <variable
+      name="bedTimeAlertsEnabled"
+      type="Boolean" />
   </data>
 
   <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -25,14 +29,32 @@
       android:layout_marginEnd="@dimen/spacing_larger"
       android:orientation="vertical">
 
-      <TextView
-        style="@style/TextStyle.Coloplast.Bold.DarkGrey.24"
+      <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:drawableStart="@drawable/ic_clock"
-        android:drawablePadding="@dimen/spacing_half"
-        android:gravity="center_vertical"
-        android:text="@string/settings_bedtime_alerts_header" />
+        android:layout_marginTop="@dimen/spacing_large"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <TextView
+          style="@style/TextStyle.Coloplast.Bold.DarkGrey.24"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:drawableStart="@drawable/ic_clock"
+          android:drawablePadding="@dimen/spacing_half"
+          android:gravity="center_vertical"
+          android:text="@string/settings_bedtime_alerts_header" />
+
+        <Switch
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_weight="0"
+          android:visibility="visible"
+          android:checked="@={bedTimeAlertsEnabled}"
+          />
+
+      </LinearLayout>
 
       <TextView
         style="@style/TextStyle.Roboto.Regular.ClearGrey.16"

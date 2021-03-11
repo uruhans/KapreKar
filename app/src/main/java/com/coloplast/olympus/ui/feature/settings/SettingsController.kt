@@ -24,6 +24,7 @@ class SettingsController: BaseController<ControllerSettingsBinding>(), ImageDial
   private var imageDialogController : ImageDialogController? = null
 
   val ringingAlertsEnabled = ObservableBoolean()
+  val bedTimeAlertsEnabled = ObservableBoolean()
 
   override fun attachVariables(viewBinding: ControllerSettingsBinding) {
     viewBinding.controller = this
@@ -31,8 +32,9 @@ class SettingsController: BaseController<ControllerSettingsBinding>(), ImageDial
 
   override fun onViewBound(viewBinding: ControllerSettingsBinding) {
     ringingAlertsEnabled.set(preferences.areRingingAlertsEnabled)
-
     ringingAlertsEnabled.addOnPropertyChangedCallback(ringingAlertsChanged)
+
+    bedTimeAlertsEnabled.set(true)
   }
 
   private val ringingAlertsChanged = object: Observable.OnPropertyChangedCallback() {

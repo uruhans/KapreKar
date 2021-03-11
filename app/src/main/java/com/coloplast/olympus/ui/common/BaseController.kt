@@ -29,7 +29,7 @@ abstract class BaseController<T : ViewDataBinding> : Controller, KoinComponent {
    *
    * @return the view which will be added to the router
    */
-  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
+  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup, bundle: Bundle?): View {
     // inflate the layout
     viewBinding = DataBindingUtil.inflate(inflater, getLayout(), container, false)
     

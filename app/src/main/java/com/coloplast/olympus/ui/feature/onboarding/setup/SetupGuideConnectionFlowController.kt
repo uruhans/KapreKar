@@ -124,8 +124,8 @@ class SetupGuideConnectionFlowController : TopMenuFlowFactoryController<EmptyMod
   }
 
   override fun next(routerTransaction: RouterTransaction) {
-    if (routerTransaction.controller() is AddTransmitterFlowController) {
-      routerTransaction.controller().targetController = this
+    if (routerTransaction.controller is AddTransmitterFlowController) {
+      routerTransaction.controller.targetController = this
 
       getContentRouter().pushController(
         routerTransaction
@@ -139,7 +139,7 @@ class SetupGuideConnectionFlowController : TopMenuFlowFactoryController<EmptyMod
   }
 
   override fun handleBack(): Boolean {
-    return if (getContentRouter().backstack.lastOrNull()?.controller() is AddTransmitterFlowController) {
+    return if (getContentRouter().backstack.lastOrNull()?.controller is AddTransmitterFlowController) {
       getFlowFactory().previous()
       getContentRouter().handleBack()
       true

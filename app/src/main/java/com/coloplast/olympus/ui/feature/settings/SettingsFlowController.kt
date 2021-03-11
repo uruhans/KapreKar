@@ -23,7 +23,7 @@ class SettingsFlowController(args: Bundle? = null): BaseFlowController(args),
   }
 
   private fun getInitialController(): RouterTransaction = SettingsController.routerTransaction().apply{
-    controller().targetController = this@SettingsFlowController
+    controller.targetController = this@SettingsFlowController
   }
 
   override fun setBedtimeAlarm() {

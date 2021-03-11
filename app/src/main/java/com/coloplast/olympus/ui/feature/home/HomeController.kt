@@ -399,16 +399,16 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
       }
 
       routerTransaction?.let {
-        if (it.controller() is LastCheckVisible) {
-          isLastCheckVisible.set((it.controller() as LastCheckVisible).lastCheckVisible())
+        if (it.controller is LastCheckVisible) {
+          isLastCheckVisible.set((it.controller as LastCheckVisible).lastCheckVisible())
         }
 
-        if (it.controller() is PatchVisible) {
+        if (it.controller is PatchVisible) {
           it.popChangeHandler(ResizeChangeHandler())
             .pushChangeHandler(ResizeChangeHandler())
 
-          patchInErrorState.set((it.controller() as PatchVisible).patchInError())
-          isPatchVisible.set((it.controller() as PatchVisible).patchVisible())
+          patchInErrorState.set((it.controller as PatchVisible).patchInError())
+          isPatchVisible.set((it.controller as PatchVisible).patchVisible())
         }
         else {
           it.popChangeHandler(FadeChangeHandler())
@@ -485,7 +485,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
 
   val patchClickedListener = object : PatchView.Listener {
     override fun onPatchClicked() {
-      val controllerAsPatchVisible = stateRouter?.backstack?.first()?.controller() as? PatchVisible
+      val controllerAsPatchVisible = stateRouter?.backstack?.first()?.controller as? PatchVisible
 
       patchDialog = PatchDialogController.create(
         this@HomeController,

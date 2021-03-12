@@ -23,9 +23,19 @@ abstract class BaseUiStateMachine : UiStateMachine {
       Timber.d("Skipping state - we are already in [$newState]")
       return newState
     }
-    
+
+    /**
+     * Update 2021-03-12
+     * During APS v2, a lot of stateMachine progressions were missing - and it's not the first time either
+     * nor will it be the last - i am forcing a state update here no matter where we come from and go to
+     * in order to mitigate a lot of "bugs" being reported
+     *
+     * I still think the stateMachine is the proper way to go about it, but seeing as requirements keep changing and
+     * we keep forgetting to add these steps - i feel its better to go about it this way, and leave the changing of UiState
+     * to the transmitter - and not us.
+     */
     // invoke the current state with the new state as parameter
-    return if (currentState.invoke(newState)) {
+    return if (true) {//currentState.invoke(newState)) {
       // the state was handled so update to new state
       Timber.d("Switching to new state: [$state] -> [$newState]")
       updateState(newState)

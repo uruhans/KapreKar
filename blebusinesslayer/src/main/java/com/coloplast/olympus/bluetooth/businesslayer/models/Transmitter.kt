@@ -22,11 +22,11 @@ data class Transmitter(
    */
   fun getState(): TransmitterState {
     return when {
-      patchType == PatchType.UNKNOWN -> TransmitterState.PATCH_BROKEN
       waterIngressDetection == WaterIngressDetection.WATER_INGRESS -> TransmitterState.WATER_INGRESS_DETECTION
       batteryState == BatteryState.SHUTTING_DOWN -> TransmitterState.BATTERY_SHUTTING_DOWN
       batteryState == BatteryState.CHARGING -> TransmitterState.BATTERY_CHARGING
       attached == Attached.DETACHED -> TransmitterState.DETACHED
+      patchType == PatchType.UNKNOWN -> TransmitterState.PATCH_BROKEN
       (waterIngressDetection == WaterIngressDetection.OK || waterIngressDetection == WaterIngressDetection.UNKNOWN) && (attached != Attached.UNKNOWN && attached != Attached.DETACHED) -> TransmitterState.OK
       else -> TransmitterState.UNKNOWN
     }

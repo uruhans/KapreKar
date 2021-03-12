@@ -200,10 +200,19 @@ class UiStateMachineImpl : BaseUiStateMachine() {
     return when (newState) {
       UiState.BLUETOOTH_NOT_ENABLED,
       UiState.SOMETHING_ELSE,
-      UiState.TRANSMITTER_DETACHED_V,
-      UiState.NO_BATTERY_R,
       UiState.OK_A,
-      UiState.DISCONNECTED -> {
+      UiState.INNER_BREACH_B,
+      UiState.OUTER_BREACH_C,
+      UiState.TOTAL_BLIND_E,
+      UiState.PAY_ATTENTION_F,
+      UiState.CUTGUARD_BROKEN_I,
+      UiState.TRANSMITTER_DETACHED_V,
+      UiState.CUTGUARD_DIRT_IN_TRANSMITTER_K,
+      UiState.NO_BATTERY_R,
+      UiState.INNER_BLIND_LEAK_L,
+      UiState.TRANSMITTER_BATTERY_CHARGING_W,
+      UiState.WET_MOUNT_X,
+      UiState.DISCONNECTED  -> {
         true
       }
       else -> false

@@ -15,11 +15,11 @@ object StateTransformers {
     return when (deviceResult.bleDevice.isConnected() && peripheral != null) {
       true -> {
         val uiState = when (peripheral.transmitter.getState()) {
-          TransmitterState.PATCH_BROKEN -> UiState.CUTGUARD_BROKEN_I
           TransmitterState.WATER_INGRESS_DETECTION -> UiState.WATER_INGRESS_DETECTION_J
           TransmitterState.DETACHED -> UiState.TRANSMITTER_DETACHED_V
           TransmitterState.BATTERY_SHUTTING_DOWN -> UiState.NO_BATTERY_R
           TransmitterState.BATTERY_CHARGING -> UiState.TRANSMITTER_BATTERY_CHARGING_W
+          TransmitterState.PATCH_BROKEN -> UiState.CUTGUARD_BROKEN_I
           TransmitterState.OK -> {
             when (peripheral.patch.getState()) {
               PatchState.OK -> UiState.OK_A

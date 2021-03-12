@@ -75,7 +75,8 @@
 
       <include layout="@layout/item_bedtime_alarm_card"
         app:buttonClickListener="@{() -> controller.setBedtimeAlarmClicked()}"
-        app:bedTimeAlertsEnabled="@={controller.bedTimeAlertsEnabled}"/>
+        app:bedTimeAlertsEnabled="@={controller.bedTimeAlertsEnabled}"
+        app:bedTimePeriode="@={controller.bedTimePeriode}"/>
 
     </LinearLayout>
   </ScrollView>

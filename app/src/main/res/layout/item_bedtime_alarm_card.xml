@@ -10,6 +10,11 @@
     <variable
       name="bedTimeAlertsEnabled"
       type="Boolean" />
+
+    <variable
+      name="bedTimePeriode"
+      type="String" />
+
   </data>
 
   <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -26,6 +31,7 @@
       android:layout_height="wrap_content"
       android:layout_marginStart="@dimen/spacing_larger"
       android:layout_marginTop="@dimen/spacing_larger"
+      android:layout_marginBottom="@dimen/spacing_small"
       android:layout_marginEnd="@dimen/spacing_larger"
       android:orientation="vertical">
 
@@ -64,12 +70,41 @@
         android:layout_marginBottom="@dimen/spacing_small"
         android:text="@string/settings_bedtime_alerts_body" />
 
-      <Button
+      <TextView
+        style="@style/TextStyle.Roboto.Regular.DarkGrey.18"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/spacing_small"
+        android:gravity="center_vertical"
+        android:text="@string/settings_bedtime_alerts_schedule_title"
+        app:visibleOrGoneFade="@{bedTimeAlertsEnabled}"/>
+
+      <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/Button"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingTop="@dimen/spacing_quarter"
+        android:paddingBottom="@dimen/spacing_small"
+        android:focusable="true"
         android:onClick="@{buttonClickListener}"
-        android:text="@string/settings_bedtime_alerts_schedule_button" />
+        app:visibleOrGoneFade="@{bedTimeAlertsEnabled}">
+        <TextView
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:text="@{bedTimePeriode}"
+          android:gravity="center_vertical"
+          style="@style/TextStyle.Roboto.Medium.Turquoise.18"
+          android:background="?attr/selectableItemBackground"/>
+        <ImageView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_weight="0"
+          android:gravity="center_vertical"
+          android:src="@drawable/ic_chevron_right"
+          />
+      </LinearLayout>
 
     </LinearLayout>
 

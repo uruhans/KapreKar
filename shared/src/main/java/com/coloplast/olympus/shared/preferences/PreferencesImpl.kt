@@ -21,6 +21,7 @@ class PreferencesImpl(applicationContext: Context) : Preferences {
   var leaks: String by bindSharedPreference(applicationContext, LEAKS, "")
   var areRingingAlertsEnabled: Boolean by bindSharedPreference(applicationContext, RINGING_ALERTS_ENABLED, false)
   var ringingAlertSensor: Sensors by bindSharedPreference(applicationContext, RINGING_ALERT_SENSOR, Sensors.ALL)
+  var areBedTimeAlertsEnabled: Boolean by bindSharedPreference(applicationContext, BEDTIME_ALERTS_ENABLED, false)
   var bedtimeStart: LocalTime by bindSharedPreference(applicationContext, BEDTIME_ALERT_START, LocalTime.of(22,0))
   var bedtimeEnd: LocalTime by bindSharedPreference(applicationContext, BEDTIME_ALERT_END, LocalTime.of(8,0))
   var bedtimeAlertSensor: Sensors by bindSharedPreference(applicationContext, RINGING_ALERT_SENSOR, Sensors.ALL)
@@ -108,6 +109,7 @@ class PreferencesImpl(applicationContext: Context) : Preferences {
     private const val LEAKS: String = "LEAKS"
     private const val RINGING_ALERTS_ENABLED: String = "RINGING_ALERTS_ENABLED"
     private const val RINGING_ALERT_SENSOR: String = "RINGING_ALERT_SENSOR"
+    private const val BEDTIME_ALERTS_ENABLED: String = "BEDTIME_ALERTS_ENABLED"
     private const val BEDTIME_ALERT_START: String = "BEDTIME_ALERT_START"
     private const val BEDTIME_ALERT_END: String = "BEDTIME_ALERT_END"
     private const val DID_SEE_VALUE_PROPOSITION: String = "DID_SEE_VALUE_PROPOSITION"

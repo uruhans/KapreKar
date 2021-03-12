@@ -2,6 +2,7 @@ package com.coloplast.olympus.ui.feature.settings
 
 import androidx.databinding.Observable
 import androidx.databinding.ObservableBoolean
+import androidx.databinding.ObservableField
 import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerSettingsBinding
@@ -25,6 +26,7 @@ class SettingsController: BaseController<ControllerSettingsBinding>(), ImageDial
 
   val ringingAlertsEnabled = ObservableBoolean()
   val bedTimeAlertsEnabled = ObservableBoolean()
+  val bedTimePeriode = ObservableField<String>()
 
   override fun attachVariables(viewBinding: ControllerSettingsBinding) {
     viewBinding.controller = this
@@ -34,7 +36,9 @@ class SettingsController: BaseController<ControllerSettingsBinding>(), ImageDial
     ringingAlertsEnabled.set(preferences.areRingingAlertsEnabled)
     ringingAlertsEnabled.addOnPropertyChangedCallback(ringingAlertsChanged)
 
-    bedTimeAlertsEnabled.set(true)
+    bedTimeAlertsEnabled.set(preferences.areBedTimeAlertsEnabled)
+    bedTimePeriode.set("${preferences.bedtimeStart} - ${preferences.bedtimeEnd}")
+    bedTimeAlertsEnabled.addOnPropertyChangedCallback(bedTimeAlertsChanged)
   }
 
   private val ringingAlertsChanged = object: Observable.OnPropertyChangedCallback() {
@@ -44,6 +48,12 @@ class SettingsController: BaseController<ControllerSettingsBinding>(), ImageDial
       }
 
       preferences.areRingingAlertsEnabled = ringingAlertsEnabled.get()
+    }
+  }
+
+  private val bedTimeAlertsChanged = object: Observable.OnPropertyChangedCallback() {
+    override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
+      preferences.areBedTimeAlertsEnabled = bedTimeAlertsEnabled.get()
     }
   }
 
@@ -90,6 +100,7 @@ class SettingsController: BaseController<ControllerSettingsBinding>(), ImageDial
   override fun onUnbind(viewBinding: ControllerSettingsBinding) {
     super.onUnbind(viewBinding)
     ringingAlertsEnabled.removeOnPropertyChangedCallback(ringingAlertsChanged)
+    bedTimeAlertsEnabled.removeOnPropertyChangedCallback(bedTimeAlertsChanged)
   }
 
   companion object{

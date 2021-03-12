@@ -87,7 +87,7 @@ class NotificationCenter(
   /**
    * show a notification based on the payload coming in
    */
-  fun show(payload: NotificationPayload, macAddress: String = "") {
+  fun show(payload: NotificationPayload, macAddress: String) {
     // first remove all notifications that are specified in the payload (if any)
     payload.notificationsToRemove.forEach { id ->
       cancel(id)
@@ -134,7 +134,7 @@ class NotificationCenter(
         if ((isItNightTime() && preferences.bedtimeAlertSensor == Sensors.ALL)
           || (preferences.areRingingAlertsEnabled && preferences.ringingAlertSensor == Sensors.ALL)
         ) {
-          triggerRingingAlarmNotification(payload, snoozePendingIntent)
+          triggerRingingAlarmNotification(payload, snoozePendingIntent, macAddress)
         }
         else {
           // only outer sensors enabled. Send regular notification.
@@ -153,7 +153,7 @@ class NotificationCenter(
   private fun triggerRingingAlarmNotification(
     payload: NotificationPayload,
     snoozePendingIntent: PendingIntent,
-    macAddress: String = ""
+    macAddress: String
   ) {
     val dismissIntent = Intent().apply {
       action = INTENT_FILTER_ACTION_DISMISS

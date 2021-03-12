@@ -12,7 +12,8 @@ import android.os.Build
  * snooze time is 15 minutes
  */
 class NotificationScheduler {
-  
+  private val SNOOZE_TIME_MILLIS = 15L * 60 * 1000 // 15 minutes
+
   fun snoozeNotification(context: Context, macAddress: String, notificationId: Int) {
     val pendingIntent = createPendingAlarmIntent(context, macAddress, notificationId)
     val triggerAtMillis = System.currentTimeMillis() + SNOOZE_TIME_MILLIS
@@ -49,7 +50,4 @@ class NotificationScheduler {
     return PendingIntent.getBroadcast(context, notificationId, intent, PendingIntent.FLAG_ONE_SHOT)
   }
 
-  companion object {
-      const val SNOOZE_TIME_MILLIS = 15L * 60 * 1000 // 15 minutes
-  }
 }

@@ -1,11 +1,9 @@
 package com.coloplast.olympus.notifications
 
 import com.coloplast.olympus.R
-import com.coloplast.olympus.notifications.NotificationScheduler.Companion.SNOOZE_TIME_MILLIS
 import com.coloplast.olympus.notifications.models.NotificationPayload
 import com.coloplast.olympus.ui.feature.statemachine.models.OverlayState
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
-import timber.log.Timber
 import java.time.Instant
 
 /**
@@ -37,7 +35,7 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
    */
   fun send(macAddress: String, state: UiState) {
     // this will stop sending multiple notifications of same type immediately right after
-    if(isSameIdAndSnoozing(macAddress, state.notificationId())) {
+    if(latestState[macAddress] == state.notificationId()) {
       return
     }
 
@@ -128,7 +126,7 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
    */
   fun send(macAddress: String, state: OverlayState) {
     // this will stop sending multiple notifications of same type immediately right after
-    if(isSameIdAndSnoozing(macAddress, state.notificationId())) {
+    if(latestState[macAddress] == state.notificationId()) {
        return
     }
 
@@ -146,19 +144,9 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
     }
 
     payload?.let {
-      notificationCenter.show(it)
+      notificationCenter.show(it, macAddress)
       lastNotification = Instant.now()
     }
-  }
-
-  private fun isSameIdAndSnoozing(macAddress: String, notificationId: Int): Boolean {
-    if(latestState[macAddress] == notificationId) {
-      lastNotification?.let {
-        val snoozing = (Instant.now().toEpochMilli() - it.toEpochMilli()) <= SNOOZE_TIME_MILLIS
-        return snoozing
-      }
-    }
-    return false
   }
 
   /**

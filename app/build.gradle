@@ -163,7 +163,7 @@ dependencies {
   implementation "org.koin:koin-android:$koin_version"
 
   // Conductor
-  implementation 'com.bluelinelabs:conductor:3.0.0'
+  implementation 'com.bluelinelabs:conductor:3.0.1'
 
   // binding adapters
   implementation 'me.tatarka.bindingcollectionadapter2:bindingcollectionadapter:4.0.0'

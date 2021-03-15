@@ -3,10 +3,8 @@ package com.coloplast.olympus.ui.feature.uistates
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.VerticalChangeHandler
 import com.coloplast.olympus.R
-import com.coloplast.olympus.databinding.ControllerStateInnerBlindBinding
 import com.coloplast.olympus.databinding.ControllerStatePayAttentionBinding
-import com.coloplast.olympus.ui.feature.guides.SingleGuideFlowController
-import com.coloplast.olympus.ui.feature.guides.articles.models.GuideType
+import com.coloplast.olympus.ui.feature.guides.flows.applying.GuideApplyingTransmitterFlowController
 import com.coloplast.olympus.ui.feature.home.models.PatchVisible
 
 class PayAttentionController : BaseHomeUIController<ControllerStatePayAttentionBinding>(), PatchVisible {
@@ -22,10 +20,9 @@ class PayAttentionController : BaseHomeUIController<ControllerStatePayAttentionB
 
   fun onApplicationGuideClicked() {
     getContentRouter().pushController(
-      SingleGuideFlowController.routerTransaction(GuideType.APPLICATION)
+      GuideApplyingTransmitterFlowController.routerTransaction()
         .pushChangeHandler(VerticalChangeHandler())
-        .popChangeHandler(VerticalChangeHandler())
-    )
+        .popChangeHandler(VerticalChangeHandler()))
   }
 
   override fun getLayout(): Int {

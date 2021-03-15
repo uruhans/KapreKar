@@ -4,6 +4,7 @@ import com.coloplast.olympus.patchsplit.AutoPatchDetectionEngine
 import com.coloplast.olympus.patchsplit.models.ApsAction
 import com.coloplast.olympus.ui.feature.TransmitterManager
 import com.coloplast.olympus.ui.feature.UpdatedStateChange
+import timber.log.Timber
 
 class BluetoothServiceHelper(
   private val transmitterManager: TransmitterManager,
@@ -16,6 +17,9 @@ class BluetoothServiceHelper(
     val previousStatusVector = transmitterManager.previousState(updatedStateChange.stateChange.getMacAddress())
     val cycleResult = apsEngine.determineAttachCycle(updatedStateChange, lastValidDetach?.isValid() ?: false, previousStatusVector?.bleDevice?.isWidOrCutguardBlocked() ?: false)
     val apsMethod = apsEngine.determineApsMethod(cycleResult)
+
+    Timber.wtf("Aps Method [$apsMethod]")
+
     val apsAction = apsEngine.determineApsAction(apsMethod)
 
     updatedStateChange.apsMethod = apsMethod

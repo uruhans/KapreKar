@@ -4,6 +4,7 @@ import com.coloplast.olympus.R
 import com.coloplast.olympus.notifications.models.NotificationPayload
 import com.coloplast.olympus.ui.feature.statemachine.models.OverlayState
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
+import java.time.Instant
 
 /**
  * A manager to send notifications to the user
@@ -14,6 +15,7 @@ import com.coloplast.olympus.ui.feature.statemachine.models.UiState
 class OlympusNotificationManager(private val notificationCenter: NotificationCenter) {
 
   private val latestState = mutableMapOf<String, Int>()
+  private var lastNotification: Instant? = null
 
   /**
    * send a notification solely based on a notification id
@@ -114,7 +116,8 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
     }
 
     payload?.let {
-      notificationCenter.show(it)
+      notificationCenter.show(it, macAddress)
+      lastNotification = Instant.now()
     }
   }
 
@@ -124,7 +127,7 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
   fun send(macAddress: String, state: OverlayState) {
     // this will stop sending multiple notifications of same type immediately right after
     if(latestState[macAddress] == state.notificationId()) {
-      return
+       return
     }
 
     latestState[macAddress] = state.notificationId()
@@ -141,7 +144,8 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
     }
 
     payload?.let {
-      notificationCenter.show(it)
+      notificationCenter.show(it, macAddress)
+      lastNotification = Instant.now()
     }
   }
 

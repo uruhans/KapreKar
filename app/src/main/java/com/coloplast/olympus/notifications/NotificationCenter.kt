@@ -87,7 +87,7 @@ class NotificationCenter(
   /**
    * show a notification based on the payload coming in
    */
-  fun show(payload: NotificationPayload) {
+  fun show(payload: NotificationPayload, macAddress: String) {
     // first remove all notifications that are specified in the payload (if any)
     payload.notificationsToRemove.forEach { id ->
       cancel(id)
@@ -102,6 +102,7 @@ class NotificationCenter(
       action = INTENT_FILTER_ACTION_SNOOZE
       setClass(context, NotificationBroadcastReceiver::class.java)
       putExtra(SCHEDULED_NOTIFICATION_ID, payload.id)
+      putExtra(MACADDRESS, macAddress)
     }
 
     // put the intent into a pending intent that can be used in the action
@@ -123,7 +124,7 @@ class NotificationCenter(
       UiState.PAY_ATTENTION_F.notificationId(),
       UiState.OUTER_BREACH_C.notificationId() -> {
         if (isItNightTime() || preferences.areRingingAlertsEnabled) {
-          triggerRingingAlarmNotification(payload, snoozePendingIntent)
+          triggerRingingAlarmNotification(payload, snoozePendingIntent, macAddress)
         }
         else {
           triggerRegularNotification(payload, snoozePendingIntent)
@@ -133,7 +134,7 @@ class NotificationCenter(
         if ((isItNightTime() && preferences.bedtimeAlertSensor == Sensors.ALL)
           || (preferences.areRingingAlertsEnabled && preferences.ringingAlertSensor == Sensors.ALL)
         ) {
-          triggerRingingAlarmNotification(payload, snoozePendingIntent)
+          triggerRingingAlarmNotification(payload, snoozePendingIntent, macAddress)
         }
         else {
           // only outer sensors enabled. Send regular notification.
@@ -151,12 +152,14 @@ class NotificationCenter(
 
   private fun triggerRingingAlarmNotification(
     payload: NotificationPayload,
-    snoozePendingIntent: PendingIntent
+    snoozePendingIntent: PendingIntent,
+    macAddress: String
   ) {
     val dismissIntent = Intent().apply {
       action = INTENT_FILTER_ACTION_DISMISS
       setClass(context, NotificationBroadcastReceiver::class.java)
       putExtra(SCHEDULED_NOTIFICATION_ID, payload.id)
+      putExtra(MACADDRESS, macAddress)
     }
 
     val dismissPendingIntent = PendingIntent.getBroadcast(

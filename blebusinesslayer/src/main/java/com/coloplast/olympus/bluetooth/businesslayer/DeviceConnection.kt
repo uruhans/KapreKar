@@ -61,15 +61,16 @@ class DeviceConnection(
       .flatMap {
         bluetoothManager.bleDeviceResultObservable(macAddress)
           .retryWhen { it }
-          .filter {
-            it.peripheral?.patch?.cutguardSensor != SensorStatus.UNKNOWN &&
-            it.peripheral?.patch?.innerSensor1 != SensorStatus.UNKNOWN &&
-            it.peripheral?.patch?.innerSensor2 != SensorStatus.UNKNOWN &&
-            it.peripheral?.patch?.innerSensor3 != SensorStatus.UNKNOWN &&
-            it.peripheral?.patch?.wearSensor != SensorStatus.UNKNOWN &&
-            it.peripheral?.patch?.outerSensor != SensorStatus.UNKNOWN &&
-            it.peripheral?.transmitter?.waterIngressDetection != WaterIngressDetection.UNKNOWN
-            it.peripheral?.transmitter?.patchType != PatchType.UNKNOWN }
+          .filter {(
+              it.peripheral?.patch?.cutguardSensor == SensorStatus.UNKNOWN &&
+              it.peripheral?.patch?.innerSensor1 == SensorStatus.UNKNOWN &&
+              it.peripheral?.patch?.innerSensor2 == SensorStatus.UNKNOWN &&
+              it.peripheral?.patch?.innerSensor3 == SensorStatus.UNKNOWN &&
+              it.peripheral?.patch?.wearSensor == SensorStatus.UNKNOWN &&
+              it.peripheral?.patch?.outerSensor == SensorStatus.UNKNOWN &&
+              it.peripheral?.transmitter?.rawRotationalAngle == -1
+            ).not()
+          }
       }
       .map { DeviceResult.DeviceUpdateResult(it) }
       .flatMap { deviceUpdateResult ->

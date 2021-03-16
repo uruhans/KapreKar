@@ -56,7 +56,7 @@ class AzurePackageApiImpl : AzurePackageApi {
           StatusPackageDTO.fromStatusPackage(
             tPackage.id!!,
             tPackage.timestamp,
-            OlympusWirelessProtocol.statusPackageTransformer(tPackage.value)
+            OlympusWirelessProtocol.statusPackageTransformer(tPackage.value, false)
           )
         }
         PackageType.Raw -> {

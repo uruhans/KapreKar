@@ -21,7 +21,7 @@ class WaterIngressDetectionController : BaseHomeUIController<ControllerStateWate
 
   fun onApplicationGuideClicked() {
     getContentRouter().pushController(
-      SingleGuideFlowController.routerTransaction(GuideType.CLEANING)
+      SingleGuideFlowController.routerTransaction(GuideType.DRYING)
         .pushChangeHandler(VerticalChangeHandler())
         .popChangeHandler(VerticalChangeHandler())
     )

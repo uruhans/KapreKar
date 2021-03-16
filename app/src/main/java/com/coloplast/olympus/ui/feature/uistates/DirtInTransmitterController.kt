@@ -21,7 +21,7 @@ class DirtInTransmitterController : BaseHomeUIController<ControllerStateDirtInTr
 
   fun onGuideClicked() {
     getContentRouter().pushController(
-      SingleGuideFlowController.routerTransaction(GuideType.APPLICATION)
+      SingleGuideFlowController.routerTransaction(GuideType.CLEANING)
         .pushChangeHandler(VerticalChangeHandler())
         .popChangeHandler(VerticalChangeHandler())
     )

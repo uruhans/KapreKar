@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
   <string name="about_Clinical_paragraph">Only for use in clinical studies</string>
-  <string name="about_ap_about_coloplast_description">At coloplast, we work to make life easier for people with intimate healthcare needs. By listening to the people who use our products - users as well as the nurses and specialists who care for them - we get a better understanding of their needs and challenges.
-That knowledge inspires our innovation.</string>
+  <string name="about_ap_about_coloplast_description">At Coloplast, we work to make life easier for people with intimate healthcare needs. By listening to the people who use our products - users as well as the nurses and specialists who care for them - we get a better understanding of their needs and challenges.\nThat knowledge inspires our innovation.</string>
   <string name="about_ap_about_coloplast_header">About Coloplast</string>
   <string name="about_ap_heylo_coloplast_website">Coloplast website</string>
   <string name="about_ap_heylo_compatible_phones_link">https://countrysite.coloplast.com/en-GB/landingpages/heylo/</string>
@@ -17,19 +16,12 @@ That knowledge inspires our innovation.</string>
   <string name="about_ap_legal_title">Legal</string>
   <string name="about_ap_manufacturer">Manufacturer</string>
   <string name="about_ap_manufacturer_header">Coloplast A/S</string>
-  <string name="about_ap_manufacturer_test">Holtedam 1 
-3050 Humlebaek 
-Denmark</string>
-  <string name="about_ap_section1_description">For the latest version of the TestProduct Instructions For Use, please visit our website. Here you will also find the following information:
--	Overview of compatible smartphone models
--	Complete overview of app screens
--	Updated FAQ and Troubleshooting guide</string>
+  <string name="about_ap_manufacturer_test">Holtedam 1 \n3050 Humlebaek \nDenmark</string>
+  <string name="about_ap_section1_description">For the latest version of the TestProduct Instructions For Use, please visit our website. Here you will also find the following information:\n-	Overview of compatible smartphone models\n-	Complete overview of app screens\n-	Updated FAQ and Troubleshooting guide</string>
   <string name="about_ap_section1_header">Instructions for Use (IFU)</string>
   <string name="about_ap_section1_link">https://www.coloplast.com/about-coloplast/</string>
   <string name="about_ap_section1_link_text">Coloplast® IFU</string>
-  <string name="about_ap_section2_description">TestProduct is a leakage notification system that detects and notifies you about leakage - giving you the peace of mind to get on with being you. 
-
-Designed to be used together with your ostomy appliance, TestProduct is connected to your smartphone via Bluetooth and will notify you discreetly if leakage is detected, it also allows you to check the status of your baseplate directly in the app.</string>
+  <string name="about_ap_section2_description">TestProduct is a leakage notification system that detects and notifies you about leakage - giving you the peace of mind to get on with being you. \n\nDesigned to be used together with your ostomy appliance, TestProduct is connected to your smartphone via Bluetooth and will notify you discreetly if leakage is detected. It also allows you to check the status of your baseplate directly in the app.</string>
   <string name="about_ap_section2_header">About TestProduct</string>
   <string name="about_ap_section2_link">https://www.coloplast.co.uk/global/terms-and-conditions/</string>
   <string name="about_ap_section2_link_text">Coloplast® Terms and conditions</string>
@@ -44,8 +36,7 @@ Designed to be used together with your ostomy appliance, TestProduct is connecte
   <string name="bluetooth_start_scanning">Start</string>
   <string name="contact_cp_call_button_text">Call support</string>
   <string name="contact_cp_hours_header">Opening hours:</string>
-  <string name="contact_cp_hours_text">Monday - Friday
-09.00 - 17.00</string>
+  <string name="contact_cp_hours_text">Monday - Friday\n09.00 - 17.00</string>
   <string name="contact_cp_phone_header">Phone number:</string>
   <string name="contact_cp_phone_number">0800 783 1434</string>
   <string name="contact_cp_subtitle">Please don’t hesitate to contact us about any product related issues.</string>
@@ -184,25 +175,13 @@ Designed to be used together with your ostomy appliance, TestProduct is connecte
   <string name="guide_cb_subtitle">How to check the battery level of your transmitter</string>
   <string name="guide_cb_title">Checking battery level</string>
   <string name="guide_cg_button_text">Read the Location guide</string>
-  <string name="guide_cg_subsection_1_body">Your transmitter relies on Bluetooth to communicate with your smartphone. This means that you need to keep your phone\'s Bluetooth turned on and to keep your phone nearby to stay informed.
-
-Bluetooth connection can be disrupted by distance, thick walls, or the presence of too many other Bluetooth connected devices.
-
-In the top left corner of your Status screen there is a bluetooth symbol. The symbol glows turquoise when your phone and transmitter are connected.</string>
+  <string name="guide_cg_subsection_1_body">Your transmitter relies on Bluetooth to communicate with your smartphone. This means that you need to keep your phone\'s Bluetooth turned on and to keep your phone nearby to stay informed.\n\nBluetooth connection can be disrupted by distance, thick walls, or the presence of too many other Bluetooth connected devices.\n\nIn the top left corner of your Status screen there is a bluetooth symbol. The symbol glows turquoise when your phone and transmitter are connected.</string>
   <string name="guide_cg_subsection_1_header">Bluetooth connection keeps you informed</string>
-  <string name="guide_cg_subsection_2_body">When your transmitter loses connection, it has the ability to broadcast its location to your smartphone, so that they can reconnect automatically when they come back into range.
-
-To ensure the most reliable connection to keep you informed, it is recommended to set location access for TestProduct to \'Always\' in your phones settings.
-
-To read more about how TestProduct uses location data and what to do with reoccuring popups asking for you to confirm your location preference, you may wish to read the Location guide:</string>
+  <string name="guide_cg_subsection_2_body">When your transmitter loses connection, it has the ability to broadcast its location to your smartphone, so that they can reconnect automatically when they come back into range.\n\nTo ensure the most reliable connection to keep you informed, it is recommended to set location access for TestProduct to \'Always\' in your phones settings.\n\nTo read more about how TestProduct uses location data and what to do with reoccuring popups asking for you to confirm your location preference, you may wish to read the Location guide:</string>
   <string name="guide_cg_subsection_2_header">Allowing location access can help improve your connection</string>
   <string name="guide_cg_subtitle">Tips for keeping TestProduct connected to stay informed</string>
   <string name="guide_cg_title">Connection guide</string>
-  <string name="guide_ch_article_1_body">Place the transmitter into the cradle of the charger. Insert the supplied cable into the charger. Insert the other end of the cable into a USB power plug – for example, like the one you normally use to charge your phone – and connect to power.
-
-When the status light is blinking, the transmitter is charging. When the status light is constantly on, the transmitter is fully charged. When the status light is off, the charger is not connected to power.
-
-You can charge your transmitter fully within 3 hours. A full charge will last about 2 days.</string>
+  <string name="guide_ch_article_1_body">Place the transmitter into the cradle of the charger. Insert the supplied cable into the charger. Insert the other end of the cable into a USB power plug – for example, like the one you normally use to charge your phone – and connect to power.\n\nWhen the status light is blinking, the transmitter is charging. When the status light is constantly on, the transmitter is fully charged. When the status light is off, the charger is not connected to power.\n\nYou can charge your transmitter fully within 3 hours. A full charge will last about 2 days.</string>
   <string name="guide_ch_article_1_header">How to charge your transmitter</string>
   <string name="guide_ch_subtitle">Everything you need to know about charging your transmitter</string>
   <string name="guide_ch_title">Charging guide</string>
@@ -231,24 +210,14 @@ You can charge your transmitter fully within 3 hours. A full charge will last ab
   <string name="guide_charging_1_text">[English translation is missing]</string>
   <string name="guide_charging_title">[English translation is missing]</string>
   <string name="guide_cl_article_1_body">It is important to keep your transmitter and charger clean so that they function properly.</string>
-  <string name="guide_cl_article_2_body">Disengage your transmitter lid by pulling the lid firmly until it is opened up. You should be able to see the metal connector pins inside the transmitter.
-
-Clean the transmitter regularly using a soft cloth. You can clean it using water or cleaning agents like mild soap or alcohol. 
-
-Wipe the transmitter with a dry cloth after cleaning, making sure the metal connector pins, lid and sides (inside and outside) are completely dry. 
-
-Remember to close the disengaged lid fully, before attempting attaching again.
-
-For more on drying your transmitter, take a look at the Drying guide:</string>
+  <string name="guide_cl_article_2_body">Disengage your transmitter lid by pulling the lid firmly until it is opened up. You should be able to see the metal connector pins inside the transmitter.\n\nClean the transmitter regularly using a soft cloth. You can clean it using water or cleaning agents like mild soap or alcohol. \n\nWipe the transmitter with a dry cloth after cleaning, making sure the metal connector pins, lid and sides (inside and outside) are completely dry. \n\nRemember to close the disengaged lid fully, before attempting attaching again.\n\nFor more on drying your transmitter, take a look at the Drying guide:</string>
   <string name="guide_cl_article_2_header">Cleaning your transmitter</string>
-  <string name="guide_cl_article_3_body">You can clean your charger using a dry cloth. 
-
-Do not use water or cleaning agents.</string>
+  <string name="guide_cl_article_3_body">You can clean your charger using a dry cloth. \n\nDo not use water or cleaning agents.</string>
   <string name="guide_cl_article_3_header">Cleaning your charger</string>
   <string name="guide_cl_button_text">Read the Drying Guide</string>
   <string name="guide_cl_card_description">Everything you need to know about cleaning the parts of your TestProduct system</string>
   <string name="guide_cl_card_title">Cleaning guide</string>
-  <string name="guide_cl_subtitle">Everything you need to know about cleaning the parts of your TestProduct system </string>
+  <string name="guide_cl_subtitle">Everything you need to know about cleaning the parts of your TestProduct system</string>
   <string name="guide_cl_title">Cleaning guide</string>
   <string name="guide_cleaning">Cleaning guide</string>
   <string name="guide_cleaning_1_text">[English translation is missing]</string>
@@ -275,8 +244,7 @@ Do not use water or cleaning agents.</string>
   <string name="guide_co14_title">Guide complete</string>
   <string name="guide_co1_description">Get to know all the parts of TestProduct system</string>
   <string name="guide_co1_title">Component guide</string>
-  <string name="guide_co2_description">Yout TestProduct starter kit contains three components.
- Next, you\'ll take a look at them one by one.</string>
+  <string name="guide_co2_description">Yout TestProduct starter kit contains three components.\n Next, you\'ll take a look at them one by one.</string>
   <string name="guide_co2_title">What\'s in the box?</string>
   <string name="guide_co3_description">This is a TestProduct sensor layer. It is applied to your ostomy appliance to help you detect leakage. You\'ll learn how to apply this later.</string>
   <string name="guide_co3_title">Sensor layer</string>
@@ -295,28 +263,14 @@ Do not use water or cleaning agents.</string>
   <string name="guide_connection">Connection guide</string>
   <string name="guide_critical_app_update_title">Update Now</string>
   <string name="guide_critical_firmware_update_title">Update Now</string>
-  <string name="guide_da_article_1_body">If your baseplate and/or sensor layer adhesive becomes wet during application you may experience poor adhesion to the skin, and TestProduct may not be able to monitor for leakage.
-
-Make sure you carefully wipe both your ostomy and surrounding skin dry immediately before applying a new baseplate/adhesive with sensor layer attached. 
-
-Make sure your supporting products are completely dry before attaching your baseplate/adhesive.
-
-Try not to touch the ostomy with the centre hole of the baseplate/adhesive whilst applying to the body.</string>
+  <string name="guide_da_article_1_body">If your baseplate and/or sensor layer adhesive becomes wet during application you may experience poor adhesion to the skin, and TestProduct may not be able to monitor for leakage.\n\nMake sure you carefully wipe both your ostomy and surrounding skin dry immediately before applying a new baseplate/adhesive with sensor layer attached. \n\nMake sure your supporting products are completely dry before attaching your baseplate/adhesive.\n\nTry not to touch the ostomy with the centre hole of the baseplate/adhesive whilst applying to the body.</string>
   <string name="guide_da_article_1_header">Dry application of TestProduct is essential to enable monitoring</string>
   <string name="guide_da_subtitle">Keeping skin and adheseive dry for the best testProduct experience</string>
   <string name="guide_da_title">Dry applying tips</string>
   <string name="guide_dg_article_1_body">If the connection between your transmitter and sensor layer connector flap becomes wet, TestProduct may struggle to keep you informed. It is important to dry these parts when needed, for example, after showering.</string>
-  <string name="guide_dg_article_2_body">It is recommended to remove your transmitter before swimming. You may leave it on for showering/bathing but you should dry out the transmitter (and sensor layer – see below) afterwards.
-
-To dry off your transmitter, first disengage the lid by pulling the lid firmly until it is opened up. You should be able to see the metal connector pins inside the transmitter. 
-
-Dry the transmitter using a soft cloth. Make sure the metal connector pins, lid and sides (inside and outside) are completely dry before attempting to attach to a sensor layer. 
-
-Remember to close the disengaged lid fully (so the lid is level with the surface of the transmitter) before proceeding to lift the lid to a fixed, lifted position for attaching.</string>
+  <string name="guide_dg_article_2_body">It is recommended to remove your transmitter before swimming. You may leave it on for showering/bathing but you should dry out the transmitter (and sensor layer – see below) afterwards.\n\nTo dry off your transmitter, first disengage the lid by pulling the lid firmly until it is opened up. You should be able to see the metal connector pins inside the transmitter. \n\nDry the transmitter using a soft cloth. Make sure the metal connector pins, lid and sides (inside and outside) are completely dry before attempting to attach to a sensor layer. \n\nRemember to close the disengaged lid fully (so the lid is level with the surface of the transmitter) before proceeding to lift the lid to a fixed, lifted position for attaching.</string>
   <string name="guide_dg_article_2_header">Drying your transmitter</string>
-  <string name="guide_dg_article_3_body">After showering, bathing or swimming, thoroughly dry the connector flap on your sensor layer before reattaching your transmitter. 
-
-Place a thin cotton cloth or absorbing paper (e.g. toilet paper or kitchen paper towel) between the white flap and the sensor layer and press down. This will ensure that any moisture is removed.</string>
+  <string name="guide_dg_article_3_body">After showering, bathing or swimming, thoroughly dry the connector flap on your sensor layer before reattaching your transmitter. \n\nPlace a thin cotton cloth or absorbing paper (e.g. toilet paper or kitchen paper towel) between the white flap and the sensor layer and press down. This will ensure that any moisture is removed.</string>
   <string name="guide_dg_article_3_header">Drying your sensor layer</string>
   <string name="guide_dg_card_description">Everything you need to know about drying your transmitter and sensor layer</string>
   <string name="guide_dg_card_title">Drying guide</string>
@@ -374,7 +328,7 @@ Place a thin cotton cloth or absorbing paper (e.g. toilet paper or kitchen paper
   <string name="guide_lg2_title">Location for reconnecting</string>
   <string name="guide_lg3_subtitle">If you and your transmitter move too far away from your phone (for example, when taking the bins out), connection can be lost.</string>
   <string name="guide_lg3_title">Disconnection can happen</string>
-  <string name="guide_lg4_subtitle">However, if desconnected, your transmitter can broadcast it\'s location to your phone so they can reconnect automatically when back in range.</string>
+  <string name="guide_lg4_subtitle">However, if disconnected, your transmitter can broadcast it\'s location to your phone so they can reconnect automatically when back in range.</string>
   <string name="guide_lg4_title">Seamless reconnection</string>
   <string name="guide_lg5_subtitle">During setup, you turned location access \'On\' to allow your phone and transmitter to connect.</string>
   <string name="guide_lg5_subtitle_ios">During setup, you learned it is recommended that you set location access to allow \'Always\' in your phones settings, to ensure connection.</string>
@@ -411,23 +365,10 @@ Place a thin cotton cloth or absorbing paper (e.g. toilet paper or kitchen paper
   <string name="guide_update_transmitter_4_action">Close</string>
   <string name="guide_update_transmitter_4_body">Thank you for updating. Your TestProduct transmitter is updated and ready for use.</string>
   <string name="guide_update_transmitter_4_title">Update Complete</string>
-  <string name="guide_us_body_1">When applied to your skin under your baseplate, the TestProduct sensor layer looks out
-for signs of leakage – sending notifications to your phone via your transmitter.
-
-As well as notifying you about leakages detected, TestProduct may sometimes give you other notifications about what is happening on your sensor layer. Understanding a little more about what these messages mean can help you decide what action to take.</string>
-  <string name="guide_us_body_2">TestProduct will detect change under your baseplate, but won’t always be able to tell for certain if it’s output, sweat or something else. In this case, you’ll be notified that there ‘might’ be a leak developing.
-
-TestProduct will still seek to keep you informed of any further developments – for example, notifying you if leakage is detected for certain on other parts of your baseplate. However, it is important to bear in mind that the sensors which detected the initial possible leakage are now ‘used’ and unlikely to be able to detect any further leakage. To keep fully informed in this scenario, and have the full protection of all the available sensors, you might want to change your sensor layer.</string>
-  <string name="guide_us_body_3">Over time, your sensor layer might get exposed to moisture from your skin and/or your stoma. If too much moisture is absorbed by the sensor layer over time, the sensors can wear out and become unable to detect output and notify you if a leakage is developing. In this case, you will be notified that your sensor layer’s sensors are ‘worn out’.
-
-Your baseplate might still be adhering to your skin but the sensors are no longer active. To keep fully informed in this scenario, you might want to change your sensor layer.</string>
-  <string name="guide_us_body_4">Due to coming into contact with wet skin or your stoma during application to the body, sensors are already ‘used’ and no longer able to detect leakage.
-
-If your Status reads ‘Inner sensors are wet’, only the inner sensors have been affected and the outer sensors are still functioning.
-
-If your Status reads ‘Your skin is wet’, all sensors have been affected – in which case you might want to change your sensor layer to stay informed.
-
-Pay close attention to apply your baseplate and sensor layer to clean, dry skin. For helpful advice read ‘Dry applying tips’.</string>
+  <string name="guide_us_body_1">When applied to your skin under your baseplate, the TestProduct sensor layer looks out\nfor signs of leakage – sending notifications to your phone via your transmitter.\n\nAs well as notifying you about leakages detected, TestProduct may sometimes give you other notifications about what is happening on your sensor layer. Understanding a little more about what these messages mean can help you decide what action to take.</string>
+  <string name="guide_us_body_2">TestProduct will detect change under your baseplate, but won’t always be able to tell for certain if it’s output, sweat or something else. In this case, you’ll be notified that there ‘might’ be a leak developing.\n\nTestProduct will still seek to keep you informed of any further developments – for example, notifying you if leakage is detected for certain on other parts of your baseplate. However, it is important to bear in mind that the sensors which detected the initial possible leakage are now ‘used’ and unlikely to be able to detect any further leakage. To keep fully informed in this scenario, and have the full protection of all the available sensors, you might want to change your sensor layer.</string>
+  <string name="guide_us_body_3">Over time, your sensor layer might get exposed to moisture from your skin and/or your stoma. If too much moisture is absorbed by the sensor layer over time, the sensors can wear out and become unable to detect output and notify you if a leakage is developing. In this case, you will be notified that your sensor layer’s sensors are ‘worn out’.\n\nYour baseplate might still be adhering to your skin but the sensors are no longer active. To keep fully informed in this scenario, you might want to change your sensor layer.</string>
+  <string name="guide_us_body_4">Due to coming into contact with wet skin or your stoma during application to the body, sensors are already ‘used’ and no longer able to detect leakage.\n\nIf your Status reads ‘Inner sensors are wet’, only the inner sensors have been affected and the outer sensors are still functioning.\n\nIf your Status reads ‘Your skin is wet’, all sensors have been affected – in which case you might want to change your sensor layer to stay informed.\n\nPay close attention to apply your baseplate and sensor layer to clean, dry skin. For helpful advice read ‘Dry applying tips’.</string>
   <string name="guide_us_body_5">Due to either an issue in production, transportation, storage or handling and application, the sensor layer you’ve applied is physically broken, and unable to either detect output or send notifications. TestProduct won’t be able to keep you informed until you’ve changed to a functioning sensor layer.</string>
   <string name="guide_us_body_link_1">Go to the Applying guide</string>
   <string name="guide_us_body_link_2">Go to Dry applying tips</string>
@@ -458,7 +399,7 @@ Pay close attention to apply your baseplate and sensor layer to clean, dry skin.
   <string name="guides_ag_card_title">Applying guide</string>
   <string name="guides_ap_card_description">Get to know all the parts of the TestProduct system</string>
   <string name="guides_ap_card_title">App tour</string>
-  <string name="guides_at_card_description">A step-by-step guides to setting up a new transmitter</string>
+  <string name="guides_at_card_description">A step-by-step guide to setting up a new transmitter</string>
   <string name="guides_at_card_title">Add a transmitter</string>
   <string name="guides_cb_card_description">How to check the battery level of your transmitter</string>
   <string name="guides_cb_card_title">Check battery level</string>
@@ -570,9 +511,7 @@ Pay close attention to apply your baseplate and sensor layer to clean, dry skin.
   <string name="onboarding_chapter_applying_checklist_title">You\'re almost there!</string>
   <string name="onboarding_chapter_applying_connector_flap_description">Identify the connector flap on the sensor layer. Lift the flap away from your body to ensure it is prepared for attaching your transmitter.</string>
   <string name="onboarding_chapter_applying_connector_flap_title">Ensure connector flap is lifted</string>
-  <string name="onboarding_chapter_applying_contact_to_skin_description">Next, you\'ll apply your baseplate with sensor layer to your body. To ensure proper functioning, no part of the sensor layer should be covered by accessories, such as rings or pastes.
-
-Please also be aware that the sensor layer must be applied to intact peristomal skin.</string>
+  <string name="onboarding_chapter_applying_contact_to_skin_description">Next, you\'ll apply your baseplate with sensor layer to your body. To ensure proper functioning, no part of the sensor layer should be covered by accessories, such as rings or pastes.\n\nPlease also be aware that the sensor layer must be applied to intact peristomal skin.</string>
   <string name="onboarding_chapter_applying_contact_to_skin_title">The sensor layer must have full, direct contact to your skin</string>
   <string name="onboarding_chapter_applying_ensure_closed_description">Ensure the lid of the transmitter is fully closed before continuing. The lid should be level with front surface of the transmitter.</string>
   <string name="onboarding_chapter_applying_ensure_closed_title">Ensure transmitter lid is closed</string>
@@ -605,8 +544,7 @@ Please also be aware that the sensor layer must be applied to intact peristomal 
   <string name="onboarding_chapter_applying_tm_not_attached_description">The TestProduct system is struggling to establish connection. Please try and attach the transmitter again or give the TestProduct support team a call.</string>
   <string name="onboarding_chapter_applying_tm_not_attached_title">Your transmitter is not attached correctly</string>
   <string name="onboarding_chapter_applying_transmitter_checker_button">I\'m not sure</string>
-  <string name="onboarding_chapter_applying_transmitter_checker_description">To check you\'re on the right track - 
-Which position is your transmitter lid in?</string>
+  <string name="onboarding_chapter_applying_transmitter_checker_description">To check you\'re on the right track - \nWhich position is your transmitter lid in?</string>
   <string name="onboarding_chapter_applying_transmitter_checker_option_1_description">Lid can only wiggle slightly.</string>
   <string name="onboarding_chapter_applying_transmitter_checker_option_1_title">Lifted and fixed</string>
   <string name="onboarding_chapter_applying_transmitter_checker_option_2_description">Lid able to swing open easily.</string>
@@ -617,9 +555,7 @@ Which position is your transmitter lid in?</string>
   <string name="onboarding_chapter_applying_wait_title">Wait. Don\'t let a loose lid break your connection.</string>
   <string name="onboarding_chapter_connecting_allow_location_description">To continue, go to your phone settings to turn location \'on\' for TestProduct</string>
   <string name="onboarding_chapter_connecting_allow_location_title">Turn location on</string>
-  <string name="onboarding_chapter_connecting_avoid_leaks_description">Coloplast will not track your location at any time. Non-continuous location should not drain your battery. 
-
-Your transmitter broadcasts its location to your phone so they can find each other and reconnect when Bluetooth connection is lost. Bluetooth connection is critical for TestProduct to keep you informed at all times.</string>
+  <string name="onboarding_chapter_connecting_avoid_leaks_description">Coloplast will not track your location at any time. Non-continuous location should not drain your battery. \n\nYour transmitter broadcasts its location to your phone so they can find each other and reconnect when Bluetooth connection is lost. Bluetooth connection is critical for TestProduct to keep you informed at all times.</string>
   <string name="onboarding_chapter_connecting_avoid_leaks_title">TestProduct needs location so you never miss a leak</string>
   <string name="onboarding_chapter_connecting_ble_activated_description">Your phone is now ready to pair with your transmitter.</string>
   <string name="onboarding_chapter_connecting_ble_activated_title">Bluetooth activated</string>
@@ -628,9 +564,7 @@ Your transmitter broadcasts its location to your phone so they can find each oth
   <string name="onboarding_chapter_connecting_ble_disabled_title">Bluetooth deactivated</string>
   <string name="onboarding_chapter_connecting_checklist_description">Now we\'ve covered the basics, let\'s connect to your transmitter.</string>
   <string name="onboarding_chapter_connecting_checklist_title">Let\'s get started</string>
-  <string name="onboarding_chapter_intro_bluetooth_description">TestProduct connects to your phone and communicates with it via Bluetooth. Keep Bluetooth on at all times to stay informed.
-
-You\'ll be asked to turn your Bluetooth on if it\'s not on already. Your phone will also ask you to allow Bluetooth use.</string>
+  <string name="onboarding_chapter_intro_bluetooth_description">TestProduct connects to your phone and communicates with it via Bluetooth. Keep Bluetooth on at all times to stay informed.\n\nYou\'ll be asked to turn your Bluetooth on if it\'s not on already. Your phone will also ask you to allow Bluetooth use.</string>
   <string name="onboarding_chapter_intro_bluetooth_header">TestProduct needs Bluetooth to keep you informed</string>
   <string name="onboarding_chapter_intro_bluetooth_settings_alert_message">Go to Settings to turn on Bluetooth. Then, come back to the app to continue setup.</string>
   <string name="onboarding_chapter_intro_bluetooth_settings_alert_title">Turn on Bluetooth to Allow \"TestProduct\" to Connect to Accessories.</string>
@@ -676,9 +610,7 @@ You\'ll be asked to turn your Bluetooth on if it\'s not on already. Your phone w
   <string name="onboarding_chapter_preparing_come_back_later_button">I\'m ready now</string>
   <string name="onboarding_chapter_preparing_come_back_later_description">Simply come back to the app when you\'re ready to change your ostomy appliance. Your progress will be saved and you can pick up where you left off.</string>
   <string name="onboarding_chapter_preparing_come_back_later_title">Take your time. Your setup guide will be waiting for you.</string>
-  <string name="onboarding_chapter_preparing_direct_contact_description">In the next steps, you\'ll be applying a sensor layer to your baseplate. It is important that nothing is placed between any part of them.
-
-Do not apply any accessories to your baseplate yet. If you need to cut or warm your baseplate, do so now before continuing.</string>
+  <string name="onboarding_chapter_preparing_direct_contact_description">In the next steps, you\'ll be applying a sensor layer to your baseplate. It is important that nothing is placed between any part of them.\n\nDo not apply any accessories to your baseplate yet. If you need to cut or warm your baseplate, do so now before continuing.</string>
   <string name="onboarding_chapter_preparing_direct_contact_title">The sensor layer must have direct contact to the baseplate</string>
   <string name="onboarding_chapter_preparing_place_sl_description">With the turquoise ring facing up, place the sensor layer on your baseplate. The long sensor layer arm can point in the direction that suits you.</string>
   <string name="onboarding_chapter_preparing_place_sl_title">Place sensor layer on baseplate</string>
@@ -702,7 +634,6 @@ Do not apply any accessories to your baseplate yet. If you need to cut or warm y
   <string name="onboarding_complete_description">TestProduct will now keep you informed of any signs of leakage. You can return to this Setup Guide or learn more about TestProduct in the app\'s Guides, accessed in the app menu.</string>
   <string name="onboarding_complete_title">Setup complete</string>
   <string name="onboarding_confirmation_button">Continue</string>
-  <string name="onboarding_confirmation_description">You\'re now ready to move on to setting up TestProduct.</string>
   <string name="onboarding_confirmation_title">Profile saved</string>
   <string name="onboarding_dc1_description">You\'ll soon be asked to agree to our Data Policy and Terms of Use. Before you do, here are a few highlights that you might like to know.</string>
   <string name="onboarding_dc1_primary_button">Continue</string>
@@ -758,9 +689,7 @@ Do not apply any accessories to your baseplate yet. If you need to cut or warm y
   <string name="onboarding_health_insurance_4">onboarding_health_insurance_4</string>
   <string name="onboarding_insurance_hint">Select from list</string>
   <string name="onboarding_insurance_title">Your insurance provider</string>
-  <string name="onboarding_l1_description">Coloplast will not track your location at any time. Non-continuous location use should not drain your battery.
-
-Your transmitter broadcasts its location to your phone so they can find each other and reconnect when Bluetooth connection is lost. Bluetooth connection is critical for TestProduct to keep you informed at all times.</string>
+  <string name="onboarding_l1_description">Coloplast will not track your location at any time. Non-continuous location use should not drain your battery.\n\nYour transmitter broadcasts its location to your phone so they can find each other and reconnect when Bluetooth connection is lost. Bluetooth connection is critical for TestProduct to keep you informed at all times.</string>
   <string name="onboarding_l1_title">Avoid missing leaks by allowing location access</string>
   <string name="onboarding_l2_description">Selecting \'Allow once\', when prompted, is essential to allowing TestProduct to keep you informed when you don\'t have this app open.</string>
   <string name="onboarding_l2_title">Allow once</string>
@@ -822,8 +751,7 @@ Your transmitter broadcasts its location to your phone so they can find each oth
   <string name="onboarding_su3_title">Your email</string>
   <string name="onboarding_su4_description">Please choose a password for your profile</string>
   <string name="onboarding_su4_title">Create a password</string>
-  <string name="onboarding_su5_description">Please enter your mobile phone number. 
-You\'ll receive a verification code next.</string>
+  <string name="onboarding_su5_description">Please enter your mobile phone number. \nYou\'ll receive a verification code next.</string>
   <string name="onboarding_su5_title">Your mobile number</string>
   <string name="onboarding_su6_description">To validate your phone number, please enter the 4-digit security code sent to your phone</string>
   <string name="onboarding_su6_error">Invalid code</string>
@@ -837,11 +765,10 @@ You\'ll receive a verification code next.</string>
   <string name="onboarding_tu_link">Read Full Terms of Use</string>
   <string name="onboarding_tu_title">TestProduct Terms of Use</string>
   <string name="onboarding_value_proposition_screen_1_description">TestProduct is a digital appliance monitor that detects and notifies you about leakage - giving you the peace of mind to get on with being you.</string>
-  <string name="onboarding_value_proposition_screen_1_title">Welcome to the 
-TestProduct app</string>
+  <string name="onboarding_value_proposition_screen_1_title">Welcome to the \nTestProduct app</string>
   <string name="onboarding_value_proposition_screen_2_description">Designed to be used together with your ostomy appliance, the advanced sensor technology detects leakage when it develops.</string>
   <string name="onboarding_value_proposition_screen_2_title">Advanced sensor technology</string>
-  <string name="onboarding_value_proposition_screen_3_description">TestProduct is connected to your smartphone via Bluetooth, and will notify discreetly when leakage is detected, it also allows you to discreetly check the status of your baseplate directly in the app.</string>
+  <string name="onboarding_value_proposition_screen_3_description">TestProduct is connected to your smartphone via Bluetooth, and will notify discreetly when leakage is detected. It also allows you to discreetly check the status of your baseplate directly in the app.</string>
   <string name="onboarding_value_proposition_screen_3_title">Notifications directly to your smartphone</string>
   <string name="overlay_battery_critical">Charge soon to stay informed.</string>
   <string name="overlay_battery_low_title">Transmitter battery low.</string>
@@ -863,7 +790,7 @@ TestProduct app</string>
   <string name="overlay_multiple_transmitters_found_title">Multiple transmitters found</string>
   <string name="overlay_network">Check that you are not in flightmode and that wifi and mobile data is turned on. We cannot recieve necessary data for the study.</string>
   <string name="overlay_network_title">No network connection</string>
-  <string name="overlay_no_breach_title">No breaches registrered</string>
+  <string name="overlay_no_breach_title">No leakage detected</string>
   <string name="profile_pp_email">Email address</string>
   <string name="profile_pp_first_name">First name</string>
   <string name="profile_pp_header_1">My info</string>
@@ -894,7 +821,7 @@ TestProduct app</string>
   <string name="settings_alarm_choose_start">Choose start time</string>
   <string name="settings_alarm_description">Set a daily time window for your bedtime leakage alarm to turn on and off.</string>
   <string name="settings_alarm_end">End</string>
-  <string name="settings_alarm_message">Between the hours of %1$s and %2$s you will receive a ringing alarm if leakage is detected on [either inner or outer leakage sensors] OR [outer leakage sensors only] or if connection is lost.  This will bypass Silent or Do Not Disturb settings.</string>
+  <string name="settings_alarm_message">Between the hours of %1$s and %2$s you will receive a ringing alarm if leakage is detected on either inner or outer leakage sensors or if the connection is lost.  This will bypass Silent or Do Not Disturb settings.</string>
   <string name="settings_alarm_start">Start</string>
   <string name="settings_alarm_title">Schedule bedtime alarm</string>
   <string name="settings_allow_notifications_body">[Missing translation]</string>
@@ -906,9 +833,7 @@ TestProduct app</string>
   <string name="settings_bedtime_alerts_schedule_title">Scheduled for:</string>
   <string name="settings_bedtime_alerts_section_title">Bedtime settings</string>
   <string name="settings_footer_app_version">App version</string>
-  <string name="settings_footer_company_address">Holtedam 1-3
-DK-3050 Humlebæk
-Denmark</string>
+  <string name="settings_footer_company_address">Holtedam 1-3\nDK-3050 Humlebæk\nDenmark</string>
   <string name="settings_footer_company_name">Coloplast A/S</string>
   <string name="settings_footer_study_id">Study Id</string>
   <string name="settings_inner_ring_alarm_body">[Missing translation]</string>
@@ -925,7 +850,7 @@ Denmark</string>
   <string name="settings_schedule_night_mode_title">Schedule night mode</string>
   <string name="settings_sensors_all_description">You will receive a continuous ringing alarm when leakage is detected on either inner or outer leakage sensors.</string>
   <string name="settings_sensors_all_sensors">All sensors</string>
-  <string name="settings_sensors_choose_heylo_tone">TestProduct tone</string>
+  <string name="settings_sensors_choose_heylo_tone">TestProduct Tone</string>
   <string name="settings_sensors_choose_phone_sound_settings">Use phone sound settings</string>
   <string name="settings_sensors_choose_ringtone">Choose ringtone</string>
   <string name="settings_sensors_choose_ringtone_ringtone1">Ringtone one (default)</string>
@@ -986,8 +911,8 @@ Denmark</string>
   <string name="status_location_turned_off_title">Location disabled</string>
   <string name="status_moisture_connector">To stay informed, open up your transmitter fully and dry it off. Dry the sensor layer connector flap too.</string>
   <string name="status_moisture_connector_title">Moisture in connector and transmitter.</string>
-  <string name="status_moisture_detected">It\'s unclear if it\'s a leak, sweat or something else.</string>
-  <string name="status_moisture_detected_title">Something\'s happening.</string>
+  <string name="status_moisture_detected">But it\'s not entirely clear if it\'s leakage. You might want to change your sensor layer.</string>
+  <string name="status_moisture_detected_title">There might be a problem spreading.</string>
   <string name="status_multiple_transmitters">Both are trying to connect with the TestProduct app. To stay informed detach the transmitter that is not on your body.</string>
   <string name="status_multiple_transmitters_title">Two transmitters attached to sensor layers.</string>
   <string name="status_no_con_battery">Charge now to stay informed.</string>
@@ -1024,6 +949,7 @@ Denmark</string>
   <string name="transmitters_title">Transmitters</string>
   <string name="transmitters_users_transmitter">User\'s transmitter</string>
   <string name="onboarding_chapter_connecting_ble_activated_button"></string>
+  <string name="onboarding_confirmation_description">You\'re now ready to move on to setting up TestProduct.</string>
   <string name="settings_override_donotdisturb_overlay_title">Go to settings to allow \'Override Do Not Disturb\'</string>
   <string name="settings_override_donotdisturb_overlay_description">To allow TestProducts Bedtime mode to notify you even when you\'re using Do Not Disturb, go to notification settings, then \'Advanced\' and turn on \'Override Do Not DIsturb\'.</string>
   <string name="settings_override_donotdisturb_overlay_no">No thanks</string>

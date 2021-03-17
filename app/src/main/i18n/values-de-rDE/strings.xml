@@ -175,25 +175,13 @@
   <string name="guide_cb_subtitle">How to check the battery level of your transmitter</string>
   <string name="guide_cb_title">Checking battery level</string>
   <string name="guide_cg_button_text">Read the Location guide</string>
-  <string name="guide_cg_subsection_1_body">Your transmitter relies on Bluetooth to communicate with your smartphone. This means that you need to keep your phone\'s Bluetooth turned on and to keep your phone nearby to stay informed.
-
-Bluetooth connection can be disrupted by distance, thick walls, or the presence of too many other Bluetooth connected devices.
-
-In the top left corner of your Status screen there is a bluetooth symbol. The symbol is turquoise when your phone and transmitter are connected. The symbol is grey if connection is lost.</string>
+  <string name="guide_cg_subsection_1_body">Your transmitter relies on Bluetooth to communicate with your smartphone. This means that you need to keep your phone\'s Bluetooth turned on and to keep your phone nearby to stay informed.\n\nBluetooth connection can be disrupted by distance, thick walls, or the presence of too many other Bluetooth connected devices.\n\nIn the top left corner of your Status screen there is a bluetooth symbol. The symbol is turquoise when your phone and transmitter are connected. The symbol is grey if connection is lost.</string>
   <string name="guide_cg_subsection_1_header">Bluetooth connection keeps you informed</string>
-  <string name="guide_cg_subsection_2_body">When your transmitter loses connection, it has the ability to broadcast its location to your smartphone, so that they can reconnect automatically when they come back into range.
-
-To ensure the most reliable connection to keep you informed, it is recommended to set location access for TestProduct to \'Always\' in your phones settings.
-
-To read more about how TestProduct uses location data and what to do with reoccuring popups asking for you to confirm your location preference, you may wish to read the Location guide:</string>
+  <string name="guide_cg_subsection_2_body">When your transmitter loses connection, it has the ability to broadcast its location to your smartphone, so that they can reconnect automatically when they come back into range.\n\nTo ensure the most reliable connection to keep you informed, it is recommended to set location access for TestProduct to \'Always\' in your phones settings.\n\nTo read more about how TestProduct uses location data and what to do with reoccuring popups asking for you to confirm your location preference, you may wish to read the Location guide:</string>
   <string name="guide_cg_subsection_2_header">Allowing location access can help improve your connection</string>
   <string name="guide_cg_subtitle">Tips for keeping TestProduct connected to stay informed</string>
   <string name="guide_cg_title">Connection guide</string>
-  <string name="guide_ch_article_1_body">Place the transmitter into the cradle of the charger. Insert the supplied cable into the charger. Insert the other end of the cable into a USB power plug – for example, like the one you normally use to charge your phone – and connect to power.
-
-When the status light is blinking, the transmitter is charging. When the status light is constantly on, the transmitter is fully charged. When the status light is off, the charger is not connected to power.
-
-You can charge your transmitter fully within 3 hours. A full charge will last about 2 days.</string>
+  <string name="guide_ch_article_1_body">Place the transmitter into the cradle of the charger. Insert the supplied cable into the charger. Insert the other end of the cable into a USB power plug – for example, like the one you normally use to charge your phone – and connect to power.\n\nWhen the status light is blinking, the transmitter is charging. When the status light is constantly on, the transmitter is fully charged. When the status light is off, the charger is not connected to power.\n\nYou can charge your transmitter fully within 3 hours. A full charge will last about 2 days.</string>
   <string name="guide_ch_article_1_header">How to charge your transmitter</string>
   <string name="guide_ch_subtitle">Everything you need to know about charging your transmitter</string>
   <string name="guide_ch_title">Charging guide</string>
@@ -222,19 +210,9 @@ You can charge your transmitter fully within 3 hours. A full charge will last ab
   <string name="guide_charging_1_text">guide_charging_1_text</string>
   <string name="guide_charging_title">guide_charging_title</string>
   <string name="guide_cl_article_1_body">It is important to keep your transmitter and charger clean so that they function properly.</string>
-  <string name="guide_cl_article_2_body">Disengage your transmitter lid by pulling the lid firmly until it is opened up. You should be able to see the metal connector pins inside the transmitter.
-
-Clean the transmitter regularly using a soft cloth. You can clean it using water or cleaning agents like mild soap or alcohol. 
-
-Wipe the transmitter with a dry cloth after cleaning, making sure the metal connector pins, lid and sides (inside and outside) are completely dry. 
-
-Remember to close the disengaged lid fully, before attempting attaching again.
-
-For more on drying your transmitter, take a look at the Drying guide:</string>
+  <string name="guide_cl_article_2_body">Disengage your transmitter lid by pulling the lid firmly until it is opened up. You should be able to see the metal connector pins inside the transmitter.\n\nClean the transmitter regularly using a soft cloth. You can clean it using water or cleaning agents like mild soap or alcohol. \n\nWipe the transmitter with a dry cloth after cleaning, making sure the metal connector pins, lid and sides (inside and outside) are completely dry. \n\nRemember to close the disengaged lid fully, before attempting attaching again.\n\nFor more on drying your transmitter, take a look at the Drying guide:</string>
   <string name="guide_cl_article_2_header">Cleaning your transmitter</string>
-  <string name="guide_cl_article_3_body">You can clean your charger using a dry cloth. 
-
-Do not use water or cleaning agents.</string>
+  <string name="guide_cl_article_3_body">You can clean your charger using a dry cloth. \n\nDo not use water or cleaning agents.</string>
   <string name="guide_cl_article_3_header">Cleaning your charger</string>
   <string name="guide_cl_button_text">Read the Drying Guide</string>
   <string name="guide_cl_card_description">guide_cl_card_description</string>
@@ -285,25 +263,14 @@ Do not use water or cleaning agents.</string>
   <string name="guide_connection">guide_connection</string>
   <string name="guide_critical_app_update_title">guide_critical_app_update_title</string>
   <string name="guide_critical_firmware_update_title">guide_critical_firmware_update_title</string>
-  <string name="guide_da_article_1_body">If your baseplate and/or sensor layer adhesive becomes wet during application you may experience poor adhesion to the skin, and TestProduct may not be able to detect leakage effectively.
-
-Make sure you carefully wipe both your ostomy and surrounding skin dry immediately before applying a new baseplate/adhesive with sensor layer attached. 
-
-Make sure your supporting products are completely dry before attaching your baseplate/adhesive.
-
-Try not to touch the ostomy with the centre hole of the baseplate/adhesive whilst applying to the body.</string>
+  <string name="guide_da_article_1_body">If your baseplate and/or sensor layer adhesive becomes wet during application you may experience poor adhesion to the skin, and TestProduct may not be able to detect leakage effectively.\n\nMake sure you carefully wipe both your ostomy and surrounding skin dry immediately before applying a new baseplate/adhesive with sensor layer attached. \n\nMake sure your supporting products are completely dry before attaching your baseplate/adhesive.\n\nTry not to touch the ostomy with the centre hole of the baseplate/adhesive whilst applying to the body.</string>
   <string name="guide_da_article_1_header">Dry application of TestProduct is essential to enable leak detection.</string>
   <string name="guide_da_subtitle">Keeping skin and product dry will give you the best TestProduct experience</string>
   <string name="guide_da_title">Dry applying tips</string>
   <string name="guide_dg_article_1_body">If the connection between your transmitter and sensor layer connector flap becomes wet, TestProduct may struggle to keep you informed. It is important to dry these parts when needed, for example, after showering.</string>
-  <string name="guide_dg_article_2_body">It is recommended to remove your transmitter before swimming. You may leave it on for showering/bathing but you should dry out the transmitter (and sensor layer – see below) afterwards.
-To dry off your transmitter, first disengage the lid by pulling the lid firmly until it is opened up. You should be able to see the metal connector pins inside the transmitter.
-Dry the transmitter using a soft cloth. Make sure the metal connector pins, lid and sides (inside and outside) are completely dry before attempting to attach to a sensor layer.
-Remember to close the disengaged lid fully (so the lid is level with the surface of the transmitter) before proceeding to lift the lid to a fixed, lifted position for attaching.</string>
+  <string name="guide_dg_article_2_body">It is recommended to remove your transmitter before swimming. You may leave it on for showering/bathing but you should dry out the transmitter (and sensor layer – see below) afterwards.\nTo dry off your transmitter, first disengage the lid by pulling the lid firmly until it is opened up. You should be able to see the metal connector pins inside the transmitter.\nDry the transmitter using a soft cloth. Make sure the metal connector pins, lid and sides (inside and outside) are completely dry before attempting to attach to a sensor layer.\nRemember to close the disengaged lid fully (so the lid is level with the surface of the transmitter) before proceeding to lift the lid to a fixed, lifted position for attaching.</string>
   <string name="guide_dg_article_2_header">Drying your transmitter</string>
-  <string name="guide_dg_article_3_body">After showering, bathing or swimming, thoroughly dry the connector flap on your sensor layer before reattaching your transmitter. 
-
-Place a thin cotton cloth or absorbing paper (e.g. toilet paper or kitchen paper towel) between the white flap and the sensor layer and press down. This will ensure that any moisture is removed.</string>
+  <string name="guide_dg_article_3_body">After showering, bathing or swimming, thoroughly dry the connector flap on your sensor layer before reattaching your transmitter. \n\nPlace a thin cotton cloth or absorbing paper (e.g. toilet paper or kitchen paper towel) between the white flap and the sensor layer and press down. This will ensure that any moisture is removed.</string>
   <string name="guide_dg_article_3_header">Drying your sensor layer</string>
   <string name="guide_dg_card_description">guide_dg_card_description</string>
   <string name="guide_dg_card_title">guide_dg_card_title</string>

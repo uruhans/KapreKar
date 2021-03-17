@@ -193,7 +193,7 @@ To read more about how TestProduct uses location data and what to do with reoccu
 
 When the status light is blinking, the transmitter is charging. When the status light is constantly on, the transmitter is fully charged. When the status light is off, the charger is not connected to power.
 
-You can charge your transmitter fully within 3 hours. A full charge will last about 2 days. </string>
+You can charge your transmitter fully within 3 hours. A full charge will last about 2 days.</string>
   <string name="guide_ch_article_1_header">How to charge your transmitter</string>
   <string name="guide_ch_subtitle">Everything you need to know about charging your transmitter</string>
   <string name="guide_ch_title">Charging guide</string>
@@ -239,7 +239,7 @@ Do not use water or cleaning agents.</string>
   <string name="guide_cl_button_text">Read the Drying Guide</string>
   <string name="guide_cl_card_description">guide_cl_card_description</string>
   <string name="guide_cl_card_title">guide_cl_card_title</string>
-  <string name="guide_cl_subtitle">Everything you need to know about cleaning all the parts of your TestProduct system </string>
+  <string name="guide_cl_subtitle">Everything you need to know about cleaning all the parts of your TestProduct system</string>
   <string name="guide_cl_title">Cleaning guide</string>
   <string name="guide_cleaning">guide_cleaning</string>
   <string name="guide_cleaning_1_text">guide_cleaning_1_text</string>
@@ -478,7 +478,7 @@ Place a thin cotton cloth or absorbing paper (e.g. toilet paper or kitchen paper
   <string name="lock_dirt_k">lock_dirt_K</string>
   <string name="lock_inner_blind_d">lock_inner_blind_D</string>
   <string name="lock_multiple_m">lock_multiple_M</string>
-  <string name="lock_no_info_v">lock_no_info_V</string>
+  <string name="lock_no_info_v">Kein Sender angeschlossen.</string>
   <string name="lock_not_found_p">lock_not_found_P</string>
   <string name="lock_notification_action_snooze">lock_notification_action_snooze</string>
   <string name="lock_notification_app_update">lock_notification_app_update</string>
@@ -667,7 +667,6 @@ Place a thin cotton cloth or absorbing paper (e.g. toilet paper or kitchen paper
   <string name="onboarding_complete_description">onboarding_complete_description</string>
   <string name="onboarding_complete_title">onboarding_complete_title</string>
   <string name="onboarding_confirmation_button">onboarding_confirmation_button</string>
-  <string name="onboarding_confirmation_description">onboarding_confirmation_description</string>
   <string name="onboarding_confirmation_title">onboarding_confirmation_title</string>
   <string name="onboarding_dc1_description">onboarding_dc1_description</string>
   <string name="onboarding_dc1_primary_button">onboarding_dc1_primary_button</string>
@@ -855,7 +854,7 @@ Place a thin cotton cloth or absorbing paper (e.g. toilet paper or kitchen paper
   <string name="settings_alarm_choose_start">settings_alarm_choose_start</string>
   <string name="settings_alarm_description">settings_alarm_description</string>
   <string name="settings_alarm_end">settings_alarm_end</string>
-  <string name="settings_alarm_message">[Missing translation %1$s and %2$s]</string>
+  <string name="settings_alarm_message">Missing translation %1$s and %2$s</string>
   <string name="settings_alarm_start">settings_alarm_start</string>
   <string name="settings_alarm_title">settings_alarm_title</string>
   <string name="settings_allow_notifications_body">settings_allow_notifications_body</string>
@@ -953,17 +952,17 @@ Place a thin cotton cloth or absorbing paper (e.g. toilet paper or kitchen paper
   <string name="status_no_con_battery_title">status_no_con_battery_title</string>
   <string name="status_no_tms_added">status_no_tms_added</string>
   <string name="status_no_tms_added_title">status_no_tms_added_title</string>
-  <string name="status_not_in_use">status_not_in_use</string>
+  <string name="status_not_in_use">Schließen Sie Ihren Sender an, um auf dem Laufenden zu bleiben.</string>
   <string name="status_not_in_use_blind">status_not_in_use_blind</string>
   <string name="status_not_in_use_blind_full">status_not_in_use_blind_full</string>
   <string name="status_not_in_use_blind_full_title">status_not_in_use_blind_full_title</string>
   <string name="status_not_in_use_blind_partial">status_not_in_use_blind_partial</string>
   <string name="status_not_in_use_blind_partial_title">status_not_in_use_blind_partial_title</string>
   <string name="status_not_in_use_blind_title">status_not_in_use_blind_title</string>
-  <string name="status_not_in_use_title">status_not_in_use_title</string>
+  <string name="status_not_in_use_title">Kein Sender angeschlossen.</string>
   <string name="status_outer_breach">status_outer_breach</string>
   <string name="status_outer_breach_title">status_outer_breach_title</string>
-  <string name="status_read_more"></string>
+  <string name="status_read_more">Read more</string>
   <string name="status_searching">status_searching</string>
   <string name="status_wet_mount">status_wet_mount</string>
   <string name="status_wet_mount_title">status_wet_mount_title</string>
@@ -983,4 +982,9 @@ Place a thin cotton cloth or absorbing paper (e.g. toilet paper or kitchen paper
   <string name="transmitters_title">transmitters_title</string>
   <string name="transmitters_users_transmitter">transmitters_users_transmitter</string>
   <string name="onboarding_chapter_connecting_ble_activated_button">onboarding_chapter_connecting_ble_activated_button</string>
+  <string name="onboarding_confirmation_description">You\'re now ready to move on to setting up TestProduct.</string>
+  <string name="settings_override_donotdisturb_overlay_title">Go to settings to allow \'Override Do Not Disturb\'</string>
+  <string name="settings_override_donotdisturb_overlay_description">To allow TestProducts Bedtime mode to notify you even when you\'re using Do Not Disturb, go to notification settings, then \'Advanced\' and turn on \'Override Do Not DIsturb\'.</string>
+  <string name="settings_override_donotdisturb_overlay_no">No thanks</string>
+  <string name="settings_override_donotdisturb_overlay_goto">Go to notifications settings</string>
 </resources>

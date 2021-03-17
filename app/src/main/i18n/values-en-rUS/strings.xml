@@ -248,7 +248,7 @@ Do not use water or cleaning agents.</string>
   <string name="guide_cl_button_text">Read the Drying Guide</string>
   <string name="guide_cl_card_description">Everything you need to know about cleaning the parts of your TestProduct system</string>
   <string name="guide_cl_card_title">Cleaning guide</string>
-  <string name="guide_cl_subtitle">Everything you need to know about cleaning the parts of your TestProduct system </string>
+  <string name="guide_cl_subtitle">Everything you need to know about cleaning the parts of your TestProduct system</string>
   <string name="guide_cl_title">Cleaning guide</string>
   <string name="guide_cleaning">Cleaning guide</string>
   <string name="guide_cleaning_1_text">[English translation is missing]</string>
@@ -458,7 +458,7 @@ Pay close attention to apply your baseplate and sensor layer to clean, dry skin.
   <string name="guides_ag_card_title">Applying guide</string>
   <string name="guides_ap_card_description">Get to know all the parts of the TestProduct system</string>
   <string name="guides_ap_card_title">App tour</string>
-  <string name="guides_at_card_description">A step-by-step guides to setting up a new transmitter</string>
+  <string name="guides_at_card_description">A step-by-step guide to setting up a new transmitter</string>
   <string name="guides_at_card_title">Add a transmitter</string>
   <string name="guides_cb_card_description">How to check the battery level of your transmitter</string>
   <string name="guides_cb_card_title">Check battery level</string>
@@ -702,7 +702,6 @@ Do not apply any accessories to your baseplate yet. If you need to cut or warm y
   <string name="onboarding_complete_description">TestProduct will now keep you informed of any signs of leakage. You can return to this Setup Guide or learn more about TestProduct in the app\'s Guides, accessed in the app menu.</string>
   <string name="onboarding_complete_title">Setup complete</string>
   <string name="onboarding_confirmation_button">Continue</string>
-  <string name="onboarding_confirmation_description">You\'re now ready to move on to setting up TestProduct.</string>
   <string name="onboarding_confirmation_title">Profile saved</string>
   <string name="onboarding_dc1_description">You\'ll soon be asked to agree to our Data Policy and Terms of Use. Before you do, here are a few highlights that you might like to know.</string>
   <string name="onboarding_dc1_primary_button">Continue</string>
@@ -986,8 +985,8 @@ Denmark</string>
   <string name="status_location_turned_off_title">Location disabled</string>
   <string name="status_moisture_connector">To stay informed, open up your transmitter fully and dry it off. Dry the sensor layer connector flap too.</string>
   <string name="status_moisture_connector_title">Moisture in connector and transmitter.</string>
-  <string name="status_moisture_detected">It\'s unclear if it\'s a leak, sweat or something else.</string>
-  <string name="status_moisture_detected_title">Something\'s happening.</string>
+  <string name="status_moisture_detected">But it\'s not entirely clear if it\'s leakage. You might want to change your sensor layer.</string>
+  <string name="status_moisture_detected_title">There might be a problem spreading.</string>
   <string name="status_multiple_transmitters">Both are trying to connect with the TestProduct app. To stay informed detach the transmitter that is not on your body.</string>
   <string name="status_multiple_transmitters_title">Two transmitters attached to sensor layers.</string>
   <string name="status_no_con_battery">Charge now to stay informed.</string>
@@ -1024,4 +1023,9 @@ Denmark</string>
   <string name="transmitters_title">Transmitters</string>
   <string name="transmitters_users_transmitter">User\'s transmitter</string>
   <string name="onboarding_chapter_connecting_ble_activated_button"></string>
+  <string name="onboarding_confirmation_description">You\'re now ready to move on to setting up TestProduct.</string>
+  <string name="settings_override_donotdisturb_overlay_title">Go to settings to allow \'Override Do Not Disturb\'</string>
+  <string name="settings_override_donotdisturb_overlay_description">To allow TestProducts Bedtime mode to notify you even when you\'re using Do Not Disturb, go to notification settings, then \'Advanced\' and turn on \'Override Do Not DIsturb\'.</string>
+  <string name="settings_override_donotdisturb_overlay_no">No thanks</string>
+  <string name="settings_override_donotdisturb_overlay_goto">Go to notifications settings</string>
 </resources>

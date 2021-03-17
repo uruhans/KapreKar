@@ -68,7 +68,12 @@ class DeviceConnection(
               it.peripheral?.patch?.innerSensor3 == SensorStatus.UNKNOWN &&
               it.peripheral?.patch?.wearSensor == SensorStatus.UNKNOWN &&
               it.peripheral?.patch?.outerSensor == SensorStatus.UNKNOWN &&
-              it.peripheral?.transmitter?.rawRotationalAngle == -1
+              it.peripheral?.transmitter?.waterIngressDetection == WaterIngressDetection.UNKNOWN &&
+              it.peripheral?.transmitter?.attached == Attached.ATTACHED_ON_PATCH &&
+              it.peripheral?.transmitter?.patchType == PatchType.UNKNOWN &&
+              (it.peripheral?.transmitter?.compromised == -1 || it.peripheral?.transmitter?.compromised == 255) &&
+              it.peripheral?.transmitter?.rawRotationalAngle == -1 &&
+              it.peripheral?.transmitter?.batteryState == BatteryState.UNKNOWN
             ).not()
           }
       }

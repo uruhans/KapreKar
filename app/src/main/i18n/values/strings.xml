@@ -1024,4 +1024,8 @@ Denmark</string>
   <string name="transmitters_title">Transmitters</string>
   <string name="transmitters_users_transmitter">User\'s transmitter</string>
   <string name="onboarding_chapter_connecting_ble_activated_button"></string>
+  <string name="settings_override_donotdisturb_overlay_title">Go to settings to allow \'Override Do Not Disturb\'</string>
+  <string name="settings_override_donotdisturb_overlay_description">To allow TestProducts Bedtime mode to notify you even when you\'re using Do Not Disturb, go to notification settings, then \'Advanced\' and turn on \'Override Do Not DIsturb\'.</string>
+  <string name="settings_override_donotdisturb_overlay_no">No thanks</string>
+  <string name="settings_override_donotdisturb_overlay_goto">Go to notifications settings</string>
 </resources>

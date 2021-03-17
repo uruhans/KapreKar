@@ -11,6 +11,8 @@ import com.coloplast.olympus.shared.types.Sensors
 import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.common.dialogs.TimePickerDialogController
 import com.coloplast.olympus.ui.common.extensions.onValueChanged
+import com.coloplast.olympus.ui.dialogs.ImageDialogController
+import com.coloplast.olympus.utils.OSUtils
 import org.koin.core.inject
 import java.time.LocalTime
 
@@ -20,11 +22,13 @@ import java.time.LocalTime
  * Copyright by Dawn Health A/S. All rights reserved.
  */
 class BedtimeAlarmController: BaseController<ControllerBedtimeAlarmBinding>(),
-  TimePickerDialogController.Listener {
+  TimePickerDialogController.Listener, ImageDialogController.Listener {
 
   private val preferences: PreferencesImpl by inject()
 
   private var dialog: TimePickerDialogController? = null
+
+  private var imageDialogController: ImageDialogController? = null
 
   val allSensorsSelected = ObservableBoolean(preferences.bedtimeAlertSensor == Sensors.ALL)
   val timeStrings = ObservableArrayList<Any>()
@@ -94,11 +98,53 @@ class BedtimeAlarmController: BaseController<ControllerBedtimeAlarmBinding>(),
       true -> Sensors.ALL
       false -> Sensors.OUTER
     }
-    //TODO save selection
-    parentController?.handleBack()
+
+    showBedTimePreferencesOverlay()
   }
 
   fun onDiscard() = parentController?.handleBack()
+
+  private fun showBedTimePreferencesOverlay() {
+    imageDialogController = ImageDialogController.create(
+      this,
+      REQUEST_CODE_BEDTIME_OVERLAY,
+      R.string.settings_override_donotdisturb_overlay_title,
+      R.string.settings_override_donotdisturb_overlay_description,
+      R.string.settings_override_donotdisturb_overlay_goto,
+      R.string.settings_override_donotdisturb_overlay_no,
+      topImage = R.drawable.ic_info_circle,
+      0,
+      true,
+      true
+    )
+
+    imageDialogController?.show()
+  }
+
+  override fun onPositiveButtonClicked(requestCode: Int) {
+    removeDialog()
+    parentController?.handleBack()
+    openAppSettings()
+  }
+
+  override fun onNegativeButtonClicked(requestCode: Int) {
+    removeDialog()
+    parentController?.handleBack()
+  }
+
+  private fun openAppSettings(){
+    val notificationChannel = activity!!.getString(R.string.lock_notification_channel_id)
+    OSUtils.openAppSettings(activity!!, notificationChannel)
+  }
+
+  override fun onCloseClicked(requestCode: Int) {
+    removeDialog()
+  }
+
+  private fun removeDialog() {
+    imageDialogController?.dismissDialog(false)
+    imageDialogController = null
+  }
 
   override fun getLayout(): Int = R.layout.controller_bedtime_alarm
 
@@ -107,6 +153,7 @@ class BedtimeAlarmController: BaseController<ControllerBedtimeAlarmBinding>(),
     private const val TAG_CONTROLLER = "bedtime_alarm_controller"
     private const val TIME_START_REQUEST_CODE = 1001
     private const val TIME_END_REQUEST_CODE = 1002
+    private const val REQUEST_CODE_BEDTIME_OVERLAY = 1003
 
     fun routerTransaction(): RouterTransaction {
       return RouterTransaction.with(BedtimeAlarmController()).tag(TAG_CONTROLLER)

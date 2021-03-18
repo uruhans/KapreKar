@@ -308,6 +308,7 @@ class BluetoothManagerImpl(
           .toSingle { statusVector }
           .onErrorReturn { statusVector }
       }
+      .doOnNext { Timber.wtf("[$macAddress]") }
       .compose(OlympusWirelessProtocol.statusTransformer)
   }
 

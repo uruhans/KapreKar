@@ -61,21 +61,8 @@ class DeviceConnection(
       .flatMap {
         bluetoothManager.bleDeviceResultObservable(macAddress)
           .retryWhen { it }
-          .filter {(
-              it.peripheral?.patch?.cutguardSensor == SensorStatus.UNKNOWN &&
-              it.peripheral?.patch?.innerSensor1 == SensorStatus.UNKNOWN &&
-              it.peripheral?.patch?.innerSensor2 == SensorStatus.UNKNOWN &&
-              it.peripheral?.patch?.innerSensor3 == SensorStatus.UNKNOWN &&
-              it.peripheral?.patch?.wearSensor == SensorStatus.UNKNOWN &&
-              it.peripheral?.patch?.outerSensor == SensorStatus.UNKNOWN &&
-              it.peripheral?.transmitter?.waterIngressDetection == WaterIngressDetection.UNKNOWN &&
-              it.peripheral?.transmitter?.attached == Attached.ATTACHED_ON_PATCH &&
-              it.peripheral?.transmitter?.patchType == PatchType.UNKNOWN &&
-              (it.peripheral?.transmitter?.compromised == -1 || it.peripheral?.transmitter?.compromised == 255) &&
-              it.peripheral?.transmitter?.rawRotationalAngle == -1 &&
-              it.peripheral?.transmitter?.batteryState == BatteryState.UNKNOWN
-            ).not()
-          }
+          // filter out the returning resetVector after we've reset the transmitter
+          .filter { it.peripheral?.isResetVector()?.not() ?: true }
       }
       .map { DeviceResult.DeviceUpdateResult(it) }
       .flatMap { deviceUpdateResult ->

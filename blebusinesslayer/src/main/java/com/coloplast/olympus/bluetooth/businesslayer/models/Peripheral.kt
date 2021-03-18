@@ -1,7 +1,6 @@
 package com.coloplast.olympus.bluetooth.businesslayer.models
 
-import com.coloplast.olympus.bluetooth.businesslayer.enums.Attached
-import com.coloplast.olympus.bluetooth.businesslayer.enums.PowerLevel
+import com.coloplast.olympus.bluetooth.businesslayer.enums.*
 import com.coloplast.olympus.shared.moshi.MoshiSerializable
 
 /**
@@ -35,5 +34,20 @@ data class Peripheral(val patch: Patch, val transmitter: Transmitter, private va
       // firmware error
       transmitter.fwError.toByte()
     )
+  }
+
+  fun isResetVector() : Boolean {
+    return patch.cutguardSensor == SensorStatus.UNKNOWN &&
+        patch.innerSensor1 == SensorStatus.UNKNOWN &&
+        patch.innerSensor2 == SensorStatus.UNKNOWN &&
+        patch.innerSensor3 == SensorStatus.UNKNOWN &&
+        patch.wearSensor == SensorStatus.UNKNOWN &&
+        patch.outerSensor == SensorStatus.UNKNOWN &&
+        transmitter.waterIngressDetection == WaterIngressDetection.UNKNOWN &&
+        transmitter.attached == Attached.ATTACHED_ON_PATCH &&
+        transmitter.patchType == PatchType.UNKNOWN &&
+        (transmitter.compromised == -1 || transmitter.compromised == 255) &&
+        transmitter.rawRotationalAngle == -1 &&
+        transmitter.batteryState == BatteryState.UNKNOWN
   }
 }

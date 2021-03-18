@@ -18,13 +18,6 @@ if [[ $resp =~ $regex ]] ; then
   url=$(echo ${BASH_REMATCH[1]} | tr -d '\')
   curl -o $download_dir$filename --url $url
   unzip -o $download_dir$filename -d $i18n_dir
-
-  checksum=$(sha256sum $download_dir$filename)
-
-  echo
-  echo "//------------ Checksum ---------------//"
-  echo $checksum
-  echo "//------------ Checksum ---------------//"
 else
   echo 'could not find bundle_url in response'
   echo $resp

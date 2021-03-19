@@ -7,11 +7,13 @@ import com.coloplast.olympus.shared.moshi.MoshiSerializable
  * Once we are connected the Peripheral contains the actual data from the BleDevice
  */
 data class Peripheral(val patch: Patch, val transmitter: Transmitter, private val powerLevel: PowerLevel, val isBatteryUpdate: Boolean = false): MoshiSerializable {
+
   val battery = Battery(transmitter.batteryState, powerLevel)
+
   fun getStitchArray(): ByteArray {
     return byteArrayOf(
       // sensors
-      patch.cutguardSensor.id.toByte(),
+      SensorStatus.CUT_GUARD_OK.id.toByte(), // we always force an OK down
       patch.innerSensor1.id.toByte(),
       patch.innerSensor2.id.toByte(),
       patch.innerSensor3.id.toByte(),
@@ -22,7 +24,7 @@ data class Peripheral(val patch: Patch, val transmitter: Transmitter, private va
       // ATTACHED
       Attached.ATTACHED_ON_PATCH.id.toByte(),
       // PatchType
-      -1,
+      transmitter.patchType.id.toByte(),
       // Compromised
       -1,
       // rotationalAngle

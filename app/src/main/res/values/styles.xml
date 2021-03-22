@@ -367,4 +367,8 @@
     <item name="android:background">@drawable/button_selectable</item>
   </style>
 
+  <style name="Profile.TextViews" parent="TextStyle.Roboto.Regular.Grey">
+    <item name="android:textSize">@dimen/text_18</item>
+  </style>
+
 </resources>

@@ -8,13 +8,14 @@ import com.coloplast.olympus.databinding.ControllerInsuranceSu7Binding
 import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.common.extensions.onValueChanged
 import com.coloplast.olympus.ui.common.listeners.FlowListener
+import com.coloplast.olympus.ui.common.widgets.SpinnerView
 import com.coloplast.olympus.ui.feature.onboarding.signup.createprofile.types.HealthInsurance
 
 /**
  * Created by Kike Bodi (ebp@dawnhealth.com) on 06/07/2020.
  * Copyright by Dawn Health A/S. All rights reserved.
  */
-class InsuranceSU7Controller: BaseController<ControllerInsuranceSu7Binding>() {
+class InsuranceSU7Controller: BaseController<ControllerInsuranceSu7Binding>(), SpinnerView.Listener {
 
   val insuranceValues by lazy {
     HealthInsurance.values()
@@ -26,13 +27,15 @@ class InsuranceSU7Controller: BaseController<ControllerInsuranceSu7Binding>() {
       onValueChanged { insuranceSelected.set(true) }
     )
   }
+  lateinit var insuranceSpinner: SpinnerView
 
   override fun attachVariables(viewBinding: ControllerInsuranceSu7Binding) {
     viewBinding.controller = this
   }
 
   override fun onViewBound(viewBinding: ControllerInsuranceSu7Binding) {
-    //noop
+    insuranceSpinner = viewBinding.insuranceSpinner
+    insuranceSpinner.setMenuItems(insuranceValues)
   }
 
   fun onNextClicked(){
@@ -43,6 +46,12 @@ class InsuranceSU7Controller: BaseController<ControllerInsuranceSu7Binding>() {
     }
   }
 
+  override fun onItemSelected(id: Int, index: Int) {
+    insuranceSelected.set(true)
+    insuranceSpinnerPosition.set(index)
+    insuranceSpinner.textView.setText(insuranceValues.get(index))
+  }
+
   override fun getLayout(): Int = R.layout.controller_insurance_su_7
 
   companion object{
@@ -51,4 +60,5 @@ class InsuranceSU7Controller: BaseController<ControllerInsuranceSu7Binding>() {
     fun getRouterTransaction() = RouterTransaction.with(InsuranceSU7Controller())
       .tag(TAG_CONTROLLER)
   }
+
 }

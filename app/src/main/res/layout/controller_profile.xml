@@ -62,7 +62,7 @@
           android:text="@string/profile_pp_first_name" />
 
         <EditText
-          style="@style/TextStyle.Roboto.Regular.Grey"
+          style="@style/Profile.TextViews"
           android:layout_width="match_parent"
           android:layout_height="56dp"
           android:layout_marginTop="@dimen/spacing_quarter"
@@ -82,7 +82,7 @@
           android:text="@string/profile_pp_last_name" />
 
         <EditText
-          style="@style/TextStyle.Roboto.Regular.Grey"
+          style="@style/Profile.TextViews"
           android:layout_width="match_parent"
           android:layout_height="56dp"
           android:layout_marginTop="@dimen/spacing_quarter"
@@ -101,7 +101,7 @@
           android:text="@string/profile_pp_telephone" />
 
         <EditText
-          style="@style/TextStyle.Roboto.Regular.Grey"
+          style="@style/Profile.TextViews"
           android:layout_width="match_parent"
           android:layout_height="56dp"
           android:layout_marginTop="@dimen/spacing_quarter"
@@ -120,7 +120,7 @@
           android:text="@string/profile_pp_email" />
 
         <EditText
-          style="@style/TextStyle.Roboto.Regular.Grey"
+          style="@style/Profile.TextViews"
           android:layout_width="match_parent"
           android:layout_height="56dp"
           android:layout_marginTop="@dimen/spacing_quarter"
@@ -151,32 +151,13 @@
           android:layout_marginTop="@dimen/spacing_standard"
           android:text="@string/profile_pp_stoma_type" />
 
-        <LinearLayout
+        <com.coloplast.olympus.ui.common.widgets.SpinnerView
+          android:id="@+id/stoma_spinner"
           android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:background="@drawable/edittext_background"
-          android:orientation="horizontal">
-
-          <com.coloplast.olympus.ui.common.widgets.NoDefaultSpinner
-            android:layout_width="0dp"
-            android:layout_height="@dimen/cardview_button_height_default"
-            android:layout_weight="1"
-            android:clickable="@{controller.editingEnabled}"
-            android:enabled="@{controller.editingEnabled}"
-            android:entries="@{controller.stomaValues}"
-            android:prompt="@string/onboarding_insurance_hint"
-            android:selectedItemPosition="@={controller.stomaSpinnerPosition}"
-            android:spinnerMode="dialog" />
-
-          <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginEnd="@dimen/spacing_standard"
-            android:src="@drawable/ic_baseline_keyboard_arrow_down_24"
-            app:tintDrawable="@{R.color.chevron_dropdown}" />
-
-        </LinearLayout>
+          android:layout_height="@dimen/cardview_button_height_default"
+          app:prompt="@string/onboarding_stoma_type_hint"
+          app:bckground="@drawable/edittext_background"
+          app:listener="@{controller}"/>
 
         <TextView
           style="@style/TextStyle.Roboto.Regular.ClearGrey.14"
@@ -185,32 +166,13 @@
           android:layout_marginTop="@dimen/spacing_standard"
           android:text="@string/profile_pp_stoma_surgery_date" />
 
-        <LinearLayout
+        <com.coloplast.olympus.ui.common.widgets.SpinnerView
+          android:id="@+id/stoma_surgery_spinner"
           android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:background="@drawable/edittext_background"
-          android:orientation="horizontal">
-
-          <com.coloplast.olympus.ui.common.widgets.NoDefaultSpinner
-            android:layout_width="0dp"
-            android:layout_height="@dimen/cardview_button_height_default"
-            android:layout_weight="1"
-            android:clickable="@{controller.editingEnabled}"
-            android:enabled="@{controller.editingEnabled}"
-            android:entries="@{controller.surgeryDateValues}"
-            android:prompt="@string/onboarding_insurance_hint"
-            android:selectedItemPosition="@={controller.surgerySpinnerPosition}"
-            android:spinnerMode="dialog" />
-
-          <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginEnd="@dimen/spacing_standard"
-            android:src="@drawable/ic_baseline_keyboard_arrow_down_24"
-            app:tintDrawable="@{R.color.chevron_dropdown}" />
-
-        </LinearLayout>
+          android:layout_height="@dimen/cardview_button_height_default"
+          app:prompt="@string/onboarding_stoma_type_hint"
+          app:bckground="@drawable/edittext_background"
+          app:listener="@{controller}"/>
 
         <TextView
           style="@style/TextStyle.Roboto.Regular.ClearGrey.14"
@@ -220,32 +182,13 @@
           android:text="@string/profile_pp_health_insurance"
           app:visibleOrGone="@{controller.showHealthInsurance}" />
 
-        <LinearLayout
+        <com.coloplast.olympus.ui.common.widgets.SpinnerView
+          android:id="@+id/insurance_spinner"
           android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:background="@drawable/edittext_background"
-          android:orientation="horizontal">
-
-          <com.coloplast.olympus.ui.common.widgets.NoDefaultSpinner
-            android:layout_width="0dp"
-            android:layout_height="@dimen/cardview_button_height_default"
-            android:layout_weight="1"
-            android:clickable="@{controller.editingEnabled}"
-            android:enabled="@{controller.editingEnabled}"
-            android:entries="@{controller.insuranceValues}"
-            android:prompt="@string/onboarding_insurance_hint"
-            android:selectedItemPosition="@={controller.insuranceSpinnerPosition}"
-            android:spinnerMode="dialog" />
-
-          <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginEnd="@dimen/spacing_standard"
-            android:src="@drawable/ic_baseline_keyboard_arrow_down_24"
-            app:tintDrawable="@{R.color.chevron_dropdown}" />
-
-        </LinearLayout>
+          android:layout_height="@dimen/cardview_button_height_default"
+          app:prompt="@string/onboarding_stoma_type_hint"
+          app:bckground="@drawable/edittext_background"
+          app:listener="@{controller}"/>
 
         <View
           android:layout_width="match_parent"
@@ -267,33 +210,13 @@
           android:layout_marginTop="@dimen/spacing_standard"
           android:text="@string/profile_pp_sensor_layer_description" />
 
-        <LinearLayout
+        <com.coloplast.olympus.ui.common.widgets.SpinnerView
+          android:id="@+id/sensorLayerSize_spinner"
           android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:background="@drawable/edittext_background"
-          android:orientation="horizontal">
-
-          <com.coloplast.olympus.ui.common.widgets.NoDefaultSpinner
-            android:layout_width="0dp"
-            android:layout_height="@dimen/cardview_button_height_default"
-            android:layout_weight="1"
-            android:clickable="@{controller.editingEnabled}"
-            android:enabled="@{controller.editingEnabled}"
-            android:entries="@{controller.sensorLayerSizeValues}"
-            android:prompt="@string/onboarding_insurance_hint"
-            android:selectedItemPosition="@={controller.sensorLayerSizeSpinnerPosition}"
-            android:spinnerMode="dialog" />
-
-          <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginEnd="@dimen/spacing_standard"
-            android:src="@drawable/ic_baseline_keyboard_arrow_down_24"
-            app:tintDrawable="@{R.color.chevron_dropdown}" />
-
-        </LinearLayout>
-
+          android:layout_height="@dimen/cardview_button_height_default"
+          app:prompt="@string/onboarding_stoma_type_hint"
+          app:bckground="@drawable/edittext_background"
+          app:listener="@{controller}"/>
 
         <Button
           style="@style/Button"

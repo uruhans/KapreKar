@@ -17,12 +17,11 @@
 
         <TextView
             android:id="@+id/input"
-            style="@style/Text.Medium"
+            style="@style/Profile.TextViews"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:singleLine="true"
-            android:paddingStart="12dp"
+            android:paddingStart="@dimen/spacing_standard"
             android:focusable="true"
             android:clickable="true"
             android:gravity="center_vertical"
@@ -30,16 +29,15 @@
             android:cursorVisible="false"
             android:inputType="none"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             />
 
         <ImageView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0"
-            android:paddingEnd="12dp"
-            android:gravity="center_vertical"
+            android:layout_height="24dp"
+            android:paddingEnd="@dimen/spacing_standard"
             android:src="@drawable/ic_chevron"
             app:layout_constraintTop_toTopOf="@+id/input"
             app:layout_constraintBottom_toBottomOf="@+id/input"

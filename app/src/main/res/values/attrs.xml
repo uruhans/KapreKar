@@ -3,5 +3,6 @@
     <declare-styleable name="SpinnerView">
         <attr name="selectableList" format="reference" />
         <attr name="prompt" format="string" />
+        <attr name="bckground" format="reference" />
     </declare-styleable>
 </resources>

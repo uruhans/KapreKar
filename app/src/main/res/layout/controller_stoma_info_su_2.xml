@@ -66,7 +66,7 @@
         app:prompt="@string/onboarding_stoma_type_hint"
         app:listener="@{controller}"/>
 
-      <com.coloplast.olympus.ui.common.widgets.NoDefaultSpinner
+      <!--com.coloplast.olympus.ui.common.widgets.NoDefaultSpinner
         android:layout_width="match_parent"
         android:layout_height="@dimen/cardview_button_height_default"
         android:layout_marginStart="@dimen/spacing_larger"
@@ -77,7 +77,7 @@
         android:prompt="@string/onboarding_stoma_type_hint"
         android:entries="@{controller.stomaTypeValues}"
         android:selectedItemPosition="@={controller.stomaTypeSpinnerPosition}"
-        />
+        /-->
 
       <TextView
         android:layout_width="match_parent"
@@ -89,7 +89,7 @@
         android:layout_marginEnd="@dimen/spacing_larger" />
 
       <com.coloplast.olympus.ui.common.widgets.SpinnerView
-        android:id="@+id/stoma_date_spinner"
+        android:id="@+id/stoma_surgery_spinner"
         android:layout_width="match_parent"
         android:layout_height="@dimen/cardview_button_height_default"
         android:layout_marginStart="@dimen/spacing_larger"
@@ -98,7 +98,7 @@
         app:prompt="@string/onboarding_stoma_type_hint"
         app:listener="@{controller}"/>
 
-      <com.coloplast.olympus.ui.common.widgets.NoDefaultSpinner
+      <!--com.coloplast.olympus.ui.common.widgets.NoDefaultSpinner
         android:layout_width="match_parent"
         android:layout_height="@dimen/cardview_button_height_default"
         android:layout_marginStart="@dimen/spacing_larger"
@@ -109,7 +109,7 @@
         android:prompt="@string/onboarding_first_stoma_surgery_hint"
         android:entries="@{controller.stomaSurgeryDateValues}"
         android:selectedItemPosition="@={controller.stomaSurgeryDateSpinnerPosition}"
-        />
+        /-->
 
     </LinearLayout>
 

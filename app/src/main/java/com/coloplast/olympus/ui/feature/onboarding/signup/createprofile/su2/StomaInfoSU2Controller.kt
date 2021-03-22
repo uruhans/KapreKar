@@ -42,19 +42,19 @@ class StomaInfoSU2Controller: BaseController<ControllerStomaInfoSu2Binding>(), S
     )
   }
 
-  lateinit var stoma_spinner: SpinnerView
-  lateinit var stoma_date_spinner: SpinnerView
+  lateinit var stomaSpinner: SpinnerView
+  lateinit var stomaDateSpinner: SpinnerView
 
   override fun attachVariables(viewBinding: ControllerStomaInfoSu2Binding) {
     viewBinding.controller = this
   }
 
   override fun onViewBound(viewBinding: ControllerStomaInfoSu2Binding) {
-    stoma_spinner = viewBinding.stomaSpinner
-    stoma_spinner.setMenuItems(stomaTypeValues)
+    stomaSpinner = viewBinding.stomaSpinner
+    stomaSpinner.setMenuItems(stomaTypeValues)
 
-    stoma_date_spinner = viewBinding.stomaDateSpinner
-    stoma_date_spinner.setMenuItems(stomaSurgeryDateValues)
+    stomaDateSpinner = viewBinding.stomaSurgerySpinner
+    stomaDateSpinner.setMenuItems(stomaSurgeryDateValues)
   }
 
   fun onNextClicked(){
@@ -68,6 +68,19 @@ class StomaInfoSU2Controller: BaseController<ControllerStomaInfoSu2Binding>(), S
     }
   }
 
+  override fun onItemSelected(id: Int, index: Int) {
+    if (id == stomaSpinner.id) {
+      stomaTypeSelected.set(true)
+      stomaTypeSpinnerPosition.set(index)
+      stomaSpinner.textView.setText(stomaTypeValues.get(index))
+    }
+    else if (id == stomaDateSpinner.id) {
+      stomaSurgeryDateSelected.set(true)
+      stomaSurgeryDateSpinnerPosition.set(index)
+      stomaDateSpinner.textView.setText(stomaSurgeryDateValues.get(index))
+    }
+  }
+
   override fun getLayout(): Int = R.layout.controller_stoma_info_su_2
 
   companion object{
@@ -77,16 +90,4 @@ class StomaInfoSU2Controller: BaseController<ControllerStomaInfoSu2Binding>(), S
       .tag(TAG_CONTROLLER)
   }
 
-  override fun onItemIndexSelected(id: Int, index: Int) {
-    if (id == stoma_spinner.id) {
-      stomaTypeSelected.set(true)
-      stomaTypeSpinnerPosition.set(index)
-      stoma_spinner.textView.setText(stomaTypeValues.get(index))
-    }
-    else if (id == stoma_date_spinner.id) {
-      stomaSurgeryDateSelected.set(true)
-      stomaSurgeryDateSpinnerPosition.set(index)
-      stoma_date_spinner.textView.setText(stomaSurgeryDateValues.get(index))
-    }
-  }
 }

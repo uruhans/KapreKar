@@ -9,6 +9,7 @@ import android.view.WindowManager
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.content.res.AppCompatResources
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.SpinnerBinding
 
@@ -19,10 +20,9 @@ class SpinnerView @JvmOverloads constructor(
 
     private lateinit var menuItems: List<CharSequence>
     private var title: String
-    private var selectedIndex: Int = 0
 
     interface Listener {
-        fun onItemIndexSelected(id: Int, index: Int)
+        fun onItemSelected(id: Int, index: Int)
     }
 
     lateinit var listener: Listener
@@ -42,7 +42,7 @@ class SpinnerView @JvmOverloads constructor(
         .apply {
             view = this@SpinnerView
             textView = this.input
-            textView.setOnClickListener(CustomOnClickListener())
+            textView.setOnClickListener(SpinnerOnClickListener())
         }
 
     init {
@@ -50,6 +50,12 @@ class SpinnerView @JvmOverloads constructor(
             val refId = getResourceId(R.styleable.SpinnerView_selectableList, 0)
             if (refId != 0) {
                 menuItems = context.resources.getStringArray(refId).toList()
+            }
+
+            if (hasValue(R.styleable.SpinnerView_bckground)) {
+                val resId = getResourceId(R.styleable.SpinnerView_bckground, -1)
+                val drawable = AppCompatResources.getDrawable(getContext(), resId)
+                textView.setBackground(drawable)
             }
 
             if (hasValue(R.styleable.SpinnerView_prompt)) {
@@ -81,10 +87,10 @@ class SpinnerView @JvmOverloads constructor(
     }
 
     private fun callbackSelectedItemIndex(index: Int) {
-        listener.onItemIndexSelected(this.id, index)
+        listener.onItemSelected(this.id, index)
     }
 
-    inner class CustomOnClickListener : OnClickListener {
+    inner class SpinnerOnClickListener : OnClickListener {
         override fun onClick(v: View?) {
             showDialog()
         }

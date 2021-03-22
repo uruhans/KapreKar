@@ -13,6 +13,7 @@ import com.coloplast.olympus.shared.models.User
 import com.coloplast.olympus.ui.common.CustomToolbarController
 import com.coloplast.olympus.ui.common.DrawerStateDispatcher
 import com.coloplast.olympus.ui.common.WebViewController
+import com.coloplast.olympus.ui.common.widgets.SpinnerView
 import com.coloplast.olympus.ui.dialogs.ImageDialogController
 import com.coloplast.olympus.ui.feature.home.HomeController
 import com.coloplast.olympus.ui.feature.onboarding.setup.model.SensorLayerSizeType
@@ -28,7 +29,7 @@ import io.reactivex.functions.Function
 import org.koin.core.inject
 
 class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
-  ProfileView, ImageDialogController.Listener {
+  ProfileView, ImageDialogController.Listener, SpinnerView.Listener {
 
   private val viewModel: ProfileViewModel by inject()
   private val logoutRelay: PublishRelay<Unit> = PublishRelay.create()
@@ -74,6 +75,11 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
 
   val dataPolicyAccepted = ObservableBoolean()
   val noUserDataPolicyAccepted = ObservableBoolean()
+
+  lateinit var stomaSpinner: SpinnerView
+  lateinit var surgeryDateSpinner: SpinnerView
+  lateinit var insuranceSpinner: SpinnerView
+  lateinit var sensorLayerSizeSpinner: SpinnerView
 
   private lateinit var user: User
   private var infoChanged = false
@@ -158,6 +164,18 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
   override fun onViewBound(viewBinding: ControllerProfileBinding) {
     super.onViewBound(viewBinding)
     compositeDisposable.add(viewModel.bind(this))
+
+    stomaSpinner = viewBinding.stomaSpinner
+    stomaSpinner.setMenuItems(stomaValues)
+
+    surgeryDateSpinner = viewBinding.stomaSurgerySpinner
+    surgeryDateSpinner.setMenuItems(surgeryDateValues)
+
+    insuranceSpinner = viewBinding.insuranceSpinner
+    insuranceSpinner.setMenuItems(insuranceValues)
+
+    sensorLayerSizeSpinner = viewBinding.sensorLayerSizeSpinner
+    sensorLayerSizeSpinner.setMenuItems(sensorLayerSizeValues)
   }
 
   override fun render(): Function<Observable<ProfileUiModel>, Disposable> {
@@ -194,21 +212,24 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
     email.set(user.email)
 
     user.sensorPatchSize?.let {
-
       sensorLayerSizeSpinnerPosition.set(it)
+      sensorLayerSizeSpinner.textView.setText(sensorLayerSizeValues.get(it))
     }
 
     user.stomaType?.let {
       stomaSpinnerPosition.set(it)
+      stomaSpinner.textView.setText(stomaValues.get(it))
     }
 
     user.surgeryDateInterval?.let {
       surgerySpinnerPosition.set(it)
+      surgeryDateSpinner.textView.setText(surgeryDateValues.get(it))
     }
 
     user.insuranceType?.let {
       showHealthInsurance.set(true)
       insuranceSpinnerPosition.set(it)
+      insuranceSpinner.textView.setText(insuranceValues.get(it))
     }
 
     dataPolicyAccepted.set(user.consent)
@@ -375,6 +396,27 @@ class ProfileController : CustomToolbarController<ControllerProfileBinding>(),
       }
       else -> {
         super.onDialogDismissed(requestCode)
+      }
+    }
+  }
+
+  override fun onItemSelected(id: Int, index: Int) {
+    when (id) {
+      stomaSpinner.id -> {
+        stomaSpinnerPosition.set(index)
+        stomaSpinner.textView.setText(stomaValues.get(index))
+      }
+      surgeryDateSpinner.id -> {
+        surgerySpinnerPosition.set(index)
+        surgeryDateSpinner.textView.setText(surgeryDateValues.get(index))
+      }
+      insuranceSpinner.id -> {
+        insuranceSpinnerPosition.set(index)
+        insuranceSpinner.textView.setText(insuranceValues.get(index))
+      }
+      sensorLayerSizeSpinner.id -> {
+        sensorLayerSizeSpinnerPosition.set(index)
+        sensorLayerSizeSpinner.textView.setText(sensorLayerSizeValues.get(index))
       }
     }
   }

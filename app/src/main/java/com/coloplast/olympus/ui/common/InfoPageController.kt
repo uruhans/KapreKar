@@ -21,6 +21,7 @@ class InfoPageController(args: Bundle) : BaseController<ControllerInfoBinding>(a
   val showCloseButton = args.getBoolean(INFO_SHOW_CLOSE_BUTTON)
 
   val showNegativeButton = negativeButtonTextId > 0
+  val showBottomMargin = (negativeButtonTextId == 0) && (positiveButtonTextId > 0)
 
   override fun attachVariables(viewBinding: ControllerInfoBinding) {
     viewBinding.controller = this

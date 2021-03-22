@@ -8,6 +8,7 @@ import com.coloplast.olympus.databinding.ControllerStomaInfoSu2Binding
 import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.common.extensions.onValueChanged
 import com.coloplast.olympus.ui.common.listeners.FlowListener
+import com.coloplast.olympus.ui.common.widgets.SpinnerView
 import com.coloplast.olympus.ui.feature.onboarding.signup.createprofile.models.SU2Model
 import com.coloplast.olympus.ui.feature.onboarding.signup.createprofile.types.StomaSurgeryDate
 import com.coloplast.olympus.ui.feature.onboarding.signup.createprofile.types.StomaType
@@ -17,7 +18,7 @@ import com.coloplast.olympus.ui.feature.onboarding.signup.createprofile.types.St
  * Created by Kike Bodi (ebp@dawnhealth.com) on 01/07/2020.
  * Copyright by Dawn Health A/S. All rights reserved.
  */
-class StomaInfoSU2Controller: BaseController<ControllerStomaInfoSu2Binding>() {
+class StomaInfoSU2Controller: BaseController<ControllerStomaInfoSu2Binding>(), SpinnerView.Listener {
 
   val stomaTypeValues by lazy {
     StomaType.values()
@@ -41,12 +42,19 @@ class StomaInfoSU2Controller: BaseController<ControllerStomaInfoSu2Binding>() {
     )
   }
 
+  lateinit var stoma_spinner: SpinnerView
+  lateinit var stoma_date_spinner: SpinnerView
+
   override fun attachVariables(viewBinding: ControllerStomaInfoSu2Binding) {
     viewBinding.controller = this
   }
 
   override fun onViewBound(viewBinding: ControllerStomaInfoSu2Binding) {
-    //noop
+    stoma_spinner = viewBinding.stomaSpinner
+    stoma_spinner.setMenuItems(stomaTypeValues)
+
+    stoma_date_spinner = viewBinding.stomaDateSpinner
+    stoma_date_spinner.setMenuItems(stomaSurgeryDateValues)
   }
 
   fun onNextClicked(){
@@ -67,5 +75,18 @@ class StomaInfoSU2Controller: BaseController<ControllerStomaInfoSu2Binding>() {
 
     fun getRouterTransaction() = RouterTransaction.with(StomaInfoSU2Controller())
       .tag(TAG_CONTROLLER)
+  }
+
+  override fun onItemIndexSelected(id: Int, index: Int) {
+    if (id == stoma_spinner.id) {
+      stomaTypeSelected.set(true)
+      stomaTypeSpinnerPosition.set(index)
+      stoma_spinner.textView.setText(stomaTypeValues.get(index))
+    }
+    else if (id == stoma_date_spinner.id) {
+      stomaSurgeryDateSelected.set(true)
+      stomaSurgeryDateSpinnerPosition.set(index)
+      stoma_date_spinner.textView.setText(stomaSurgeryDateValues.get(index))
+    }
   }
 }

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="SpinnerView">
+        <attr name="selectableList" format="reference" />
+        <attr name="prompt" format="string" />
+    </declare-styleable>
+</resources>

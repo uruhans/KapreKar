@@ -345,6 +345,12 @@
     <item name="android:textSize">30sp</item>
   </style>
 
+  <style name="TextStyle.Guide.Information" parent="TextStyle.Coloplast.Bold.Italic">
+    <item name="android:lineSpacingExtra">4dp</item>
+    <item name="android:textSize">22sp</item>
+    <item name="android:textColor">@color/text_grey</item>
+  </style>
+
   <style name="Button">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">@dimen/cardview_button_height_default</item>

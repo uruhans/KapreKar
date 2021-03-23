@@ -77,9 +77,14 @@
         android:layout_marginBottom="@dimen/spacing_standard"
         android:gravity="center"
         android:onClick="@{() -> controller.onNegativeButtonClicked()}"
-        app:visibleOrInvisible="@{controller.showNegativeButton}"
+        app:visibleOrGone="@{controller.showNegativeButton}"
         app:safeText="@{controller.negativeButtonTextId}" />
 
+      <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/spacing_standard"
+        app:visibleOrGone="@{controller.showBottomMargin}"/>
     </LinearLayout>
 
   </androidx.constraintlayout.widget.ConstraintLayout>

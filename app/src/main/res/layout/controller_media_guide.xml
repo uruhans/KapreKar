@@ -59,7 +59,7 @@
 
       <TextView
         android:id="@+id/title"
-        style="@style/Headline.Small"
+        style="@style/TextStyle.Guide.Information"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/spacing_standard"
@@ -88,6 +88,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginStart="@dimen/spacing_double"
+      app:visibleOrGone="@{!controller.showContinueButton}"
       app:currentIndex="@{controller.position}"
       app:layout_constraintBottom_toBottomOf="@id/next_button"
       app:layout_constraintStart_toStartOf="parent"
@@ -105,8 +106,19 @@
       android:onClick="@{() -> controller.onNextClicked()}"
       android:src="@drawable/ic_arrow"
       android:tint="@color/white"
+      app:visibleOrGone="@{!controller.showContinueButton}"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+      style="@style/Button.Selectable"
+      android:text="@string/generic_continue"
+      android:enabled="@{controller.nextEnabled}"
+      android:onClick="@{() -> controller.onNextClicked()}"
+      app:visibleOrGone="@{controller.showContinueButton}"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent" />
 
   </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

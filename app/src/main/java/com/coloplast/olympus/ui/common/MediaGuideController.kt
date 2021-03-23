@@ -30,6 +30,7 @@ open class MediaGuideController(args: Bundle) : BaseController<ControllerMediaGu
   open var nextEnabled: Boolean = args.getBoolean(ENABLE_NEXT)
   open var showBackButton: Boolean = args.getBoolean(SHOW_BACK_BUTTON)
   open var showCloseButton: Boolean = args.getBoolean(SHOW_CLOSE_BUTTON)
+  open var showContinueButton: Boolean = args.getBoolean(SHOW_CONTINUE_BUTTON)
 
   interface Listener {
     fun onQuestionClicked(screen: String)
@@ -65,6 +66,7 @@ open class MediaGuideController(args: Bundle) : BaseController<ControllerMediaGu
     private const val SHOW_BACK_BUTTON = "SHOW_BACK_BUTTON"
     private const val SHOW_CLOSE_BUTTON = "SHOW_CLOSE_BUTTON"
     private const val ENABLE_NEXT = "ENABLE_NEXT"
+    private const val SHOW_CONTINUE_BUTTON = "SHOW_CONTINUE_BUTTON"
 
     fun routerTransaction(
       @AnyRes resourceId: Int,
@@ -77,7 +79,8 @@ open class MediaGuideController(args: Bundle) : BaseController<ControllerMediaGu
       showBackButton: Boolean = true,
       showCloseButton: Boolean = true,
       screenName: String = "MEDIA_CONTROLLER_GUIDE",
-      enableNExt: Boolean = true
+      enableNExt: Boolean = true,
+      showContinueButton: Boolean = false
     ): RouterTransaction {
       val args = Bundle().apply {
         putInt(RESOURCE_ID, resourceId)
@@ -91,6 +94,7 @@ open class MediaGuideController(args: Bundle) : BaseController<ControllerMediaGu
         putBoolean(SHOW_CLOSE_BUTTON, showCloseButton)
         putString(SCREEN_NAME, screenName)
         putBoolean(ENABLE_NEXT, enableNExt)
+        putBoolean(SHOW_CONTINUE_BUTTON, showContinueButton)
       }
       return RouterTransaction.with(MediaGuideController(args))
         .tag(screenName)

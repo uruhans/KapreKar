@@ -56,6 +56,7 @@
       style="@style/Button"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
+      android:layout_marginBottom="@dimen/spacing_small"
       android:onClick="@{() -> controller.onCreateProfileClicked()}"
       android:text="@string/onboarding_landing_create_profile_button" />
 

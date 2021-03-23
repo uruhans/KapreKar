@@ -52,7 +52,7 @@
       android:id="@+id/continue_button"
       style="@style/Button"
       android:layout_marginTop="@dimen/spacing_standard"
-      android:layout_marginBottom="@dimen/spacing_standard"
+      android:layout_marginBottom="@dimen/spacing_small"
       android:layout_marginStart="@dimen/spacing_standard"
       android:layout_marginEnd="@dimen/spacing_standard"
       android:onClick="@{() -> controller.onContinueClicked()}"

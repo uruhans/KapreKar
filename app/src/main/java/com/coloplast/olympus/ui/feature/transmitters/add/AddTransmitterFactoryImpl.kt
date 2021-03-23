@@ -73,7 +73,8 @@ class AddTransmitterFactoryImpl : FlowFactory<AddTransmitterModel>() {
         position = 5,
         totalCount = 5,
         screenName = transactionTag,
-        showCloseButton = false
+        showCloseButton = false,
+        showContinueButton = true
       )
       AddTransmitterFlow.AddTransmitterAT9 -> AddTransmitterAT9Controller.routerTransaction(model.transmitterNameToSearchFor)
       AddTransmitterFlow.AddTransmitterAT10 -> GenericConfirmationController.routerTransaction(

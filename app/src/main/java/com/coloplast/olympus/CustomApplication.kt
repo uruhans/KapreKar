@@ -26,7 +26,7 @@ class CustomApplication : Application() {
     AppSettings.initialize(this, BuildConfig.ServerUrl, BuildConfig.AzureUrl, BuildConfig.AzureCode)
 
     Timber.plant(Timber.DebugTree())
-    Timber.plant(FileLoggingTree())
+    Timber.plant(FileLoggingTree(BuildConfig.EnableFileDebugging))
 
     startKoin {
       // currently a workaround for koin as not having Level.ERROR causes a runtime crash

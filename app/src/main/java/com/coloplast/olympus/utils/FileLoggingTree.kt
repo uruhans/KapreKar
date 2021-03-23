@@ -8,8 +8,12 @@ import java.io.FileWriter
 import java.text.SimpleDateFormat
 import java.util.*
 
-class FileLoggingTree : DebugTree() {
+class FileLoggingTree(private val loggingEnabled: Boolean = true) : DebugTree() {
   override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
+    if(!loggingEnabled) {
+      return
+    }
+
     if(priority != Log.ASSERT) {
       return
     }

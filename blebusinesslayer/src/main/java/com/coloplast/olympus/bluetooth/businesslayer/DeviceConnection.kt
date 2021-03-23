@@ -1,6 +1,6 @@
 package com.coloplast.olympus.bluetooth.businesslayer
 
-import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
+import com.coloplast.olympus.bluetooth.businesslayer.enums.*
 import com.coloplast.olympus.bluetooth.businesslayer.models.DeviceResult
 import com.coloplast.olympus.businesslayer.interfaces.SystemUpdateComponent
 import com.coloplast.olympus.businesslayer.interfaces.TransmitterComponent
@@ -61,6 +61,8 @@ class DeviceConnection(
       .flatMap {
         bluetoothManager.bleDeviceResultObservable(macAddress)
           .retryWhen { it }
+          // filter out the returning resetVector after we've reset the transmitter
+          .filter { it.peripheral?.isResetVector()?.not() ?: true }
       }
       .map { DeviceResult.DeviceUpdateResult(it) }
       .flatMap { deviceUpdateResult ->

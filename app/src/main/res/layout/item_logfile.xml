@@ -13,14 +13,22 @@
     android:layout_height="56dp"
     android:onClick="@{() -> item.onLogClicked()}"
     android:background="?attr/selectableItemBackground"
-    android:orientation="vertical">
+    android:orientation="horizontal">
 
     <TextView
       style="@style/Headline.Small"
-      android:layout_width="match_parent"
+      android:layout_width="0dp"
       android:layout_height="match_parent"
       android:gravity="center"
+      android:layout_weight="1"
       android:text="@{item.name}" />
 
+    <Button
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:onClick="@{() -> item.onEmailClicked()}"
+      android:text="Email" />
+
   </LinearLayout>
+
 </layout>

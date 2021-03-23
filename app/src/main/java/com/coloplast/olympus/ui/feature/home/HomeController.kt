@@ -608,11 +608,13 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
         )
       }
       SideMenuType.VERSION -> {
-        getContentRouter().pushController(
-          LogsController.routerTransaction()
-            .pushChangeHandler(VerticalChangeHandler())
-            .popChangeHandler(VerticalChangeHandler())
-        )
+        if(BuildConfig.EnableFileDebugging) {
+          getContentRouter().pushController(
+            LogsController.routerTransaction()
+              .pushChangeHandler(VerticalChangeHandler())
+              .popChangeHandler(VerticalChangeHandler())
+          )
+        }
       }
       SideMenuType.PROFILE -> {
         router.pushController(

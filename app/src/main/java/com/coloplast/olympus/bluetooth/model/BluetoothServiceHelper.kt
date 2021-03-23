@@ -4,6 +4,7 @@ import com.coloplast.olympus.patchsplit.AutoPatchDetectionEngine
 import com.coloplast.olympus.patchsplit.models.ApsAction
 import com.coloplast.olympus.ui.feature.TransmitterManager
 import com.coloplast.olympus.ui.feature.UpdatedStateChange
+import timber.log.Timber
 
 class BluetoothServiceHelper(
   private val transmitterManager: TransmitterManager,
@@ -27,6 +28,7 @@ class BluetoothServiceHelper(
      * continue to have a valid detach and get into an infinite loop of RESET/SPLIT mechanism
      */
     if(apsAction != ApsAction.Nothing) {
+      Timber.wtf("Aps Method [$apsMethod]")
       transmitterManager.clearLatestDetach()
     }
 

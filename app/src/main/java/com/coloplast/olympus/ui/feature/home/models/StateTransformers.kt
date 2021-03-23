@@ -19,6 +19,7 @@ object StateTransformers {
           TransmitterState.DETACHED -> UiState.TRANSMITTER_DETACHED_V
           TransmitterState.BATTERY_SHUTTING_DOWN -> UiState.NO_BATTERY_R
           TransmitterState.BATTERY_CHARGING -> UiState.TRANSMITTER_BATTERY_CHARGING_W
+          TransmitterState.PATCH_BROKEN -> UiState.CUTGUARD_BROKEN_I
           TransmitterState.OK -> {
             when (peripheral.patch.getState()) {
               PatchState.OK -> UiState.OK_A

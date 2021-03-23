@@ -56,7 +56,7 @@ data class UserDTO(
         user.phoneNumber,
         user.insuranceType,
         user.sensorPatchSize,
-        user.consent ?: false
+        user.consent
       )
     }
   }

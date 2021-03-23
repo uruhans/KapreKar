@@ -4,8 +4,8 @@
   xmlns:tools="http://schemas.android.com/tools">
 
   <data>
-
     <import type="com.coloplast.olympus.utils.DeviceUtils" />
+    <import type="com.coloplast.olympus.BuildConfig" />
 
     <import type="com.coloplast.olympus.ui.feature.home.models.SideMenuType" />
 
@@ -153,6 +153,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/spacing_triple"
         android:gravity="center_horizontal"
+        android:enabled="@{BuildConfig.EnableFileDebugging}"
         android:onClick="@{() -> controller.onSideMenuClicked(SideMenuType.VERSION)}"
         android:text="@{DeviceUtils.getAppVersion()}"
         tools:text="Olympus v1.0 (2323)" />

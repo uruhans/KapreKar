@@ -22,7 +22,7 @@ class GuidesFlowController: BaseFlowController() {
 
   private fun getInitialController(): RouterTransaction {
     val transaction = GuideMenuController.routerTransaction()
-    transaction.controller()
+    transaction.controller
       .targetController = this
 
     return transaction

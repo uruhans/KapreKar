@@ -18,7 +18,7 @@ object Navigation {
   inline fun <reified T> locateControllerOfType(): Maybe<T> {
     return Maybe.create { emitter ->
       val controller: T? = getContentRouter()?.backstack.orEmpty()
-        .map { it.controller() }
+        .map { it.controller }
         .filterIsInstance(T::class.java)
         .first()
     

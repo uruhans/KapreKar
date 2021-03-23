@@ -51,16 +51,29 @@
         android:layout_marginBottom="@dimen/spacing_small"
         android:text="@string/settings_sounds_alerts_body" />
 
-      <TextView
+      <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
         android:paddingTop="@dimen/spacing_small"
         android:paddingBottom="@dimen/spacing_small"
-        android:text="@string/settings_sounds_settings_link"
-        style="@style/TextStyle.Roboto.Medium.Turquoise.18"
-        android:background="?attr/selectableItemBackground"
         android:focusable="true"
-        android:onClick="@{settingsClickListener}"/>
+        android:onClick="@{settingsClickListener}">
+        <TextView
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:text="@string/settings_sounds_settings_link"
+          style="@style/TextStyle.Roboto.Medium.Turquoise.18"
+          android:background="?attr/selectableItemBackground"/>
+        <ImageView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_weight="0"
+          android:gravity="center_vertical"
+          android:src="@drawable/ic_chevron_right"/>
+      </LinearLayout>
 
       <include layout="@layout/item_recyclerview_section_divider" />
 
@@ -97,17 +110,29 @@
         android:layout_marginBottom="@dimen/spacing_small"
         android:text="@string/settings_sounds_ringing_alerts_body" />
 
-      <TextView
+      <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
         android:paddingTop="@dimen/spacing_small"
         android:paddingBottom="@dimen/spacing_small"
-        android:text="@string/settings_sounds_ringing_alerts_link_preferences"
-        style="@style/TextStyle.Roboto.Medium.Turquoise.18"
-        android:background="?attr/selectableItemBackground"
         android:focusable="true"
-        android:onClick="@{sensorsClickListener}"/>
-
+        android:onClick="@{sensorsClickListener}">
+        <TextView
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:text="@string/settings_sounds_ringing_alerts_link_preferences"
+          style="@style/TextStyle.Roboto.Medium.Turquoise.18"
+          android:background="?attr/selectableItemBackground"/>
+        <ImageView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_weight="0"
+          android:gravity="center_vertical"
+          android:src="@drawable/ic_chevron_right"/>
+      </LinearLayout>
     </LinearLayout>
 
   </androidx.cardview.widget.CardView>

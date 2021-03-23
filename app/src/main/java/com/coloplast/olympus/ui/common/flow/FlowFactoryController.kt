@@ -40,7 +40,7 @@ abstract class FlowFactoryController<T : FlowFactoryModel>(args: Bundle? = null)
   override fun next(routerTransaction: RouterTransaction) {
     pushController(routerTransaction)
 
-    afterControllerPushed(routerTransaction.controller())
+    afterControllerPushed(routerTransaction.controller)
   }
 
   @CallSuper
@@ -56,7 +56,7 @@ abstract class FlowFactoryController<T : FlowFactoryModel>(args: Bundle? = null)
     getFlowFactory().previous()
 
     if(super.handleBack()) {
-      afterControllerPopped(getFlowChildRouter().backstack.lastOrNull()?.controller())
+      afterControllerPopped(getFlowChildRouter().backstack.lastOrNull()?.controller)
       return true
     }
 

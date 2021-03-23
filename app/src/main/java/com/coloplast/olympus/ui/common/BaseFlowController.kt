@@ -111,7 +111,7 @@ abstract class BaseFlowController : BaseController<ControllerFlowBinding>, FlowL
       routerTransaction: RouterTransaction,
       overrideDefaultChangeHandlers: Boolean = false
   ) {
-    routerTransaction.controller()
+    routerTransaction.controller
         .targetController = this
     
     if(!getFlowChildRouter().hasRootController()) {

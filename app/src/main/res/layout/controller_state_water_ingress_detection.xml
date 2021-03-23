@@ -57,7 +57,7 @@
         android:layout_gravity="center"
         android:fontFamily="sans-serif-medium"
         android:gravity="center"
-        android:text="@string/guide_cleaning"
+        android:text="@string/guide_dg_title"
         android:textSize="18sp" />
 
     </androidx.cardview.widget.CardView>

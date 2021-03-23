@@ -6,6 +6,7 @@ import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerStateInnerBlindLeakBinding
 import com.coloplast.olympus.ui.feature.guides.SingleGuideFlowController
 import com.coloplast.olympus.ui.feature.guides.articles.models.GuideType
+import com.coloplast.olympus.ui.feature.guides.flows.applying.GuideApplyingTransmitterFlowController
 import com.coloplast.olympus.ui.feature.home.models.PatchVisible
 
 class InnerBlindLeakController : BaseHomeUIController<ControllerStateInnerBlindLeakBinding>(), PatchVisible {
@@ -21,10 +22,9 @@ class InnerBlindLeakController : BaseHomeUIController<ControllerStateInnerBlindL
 
   fun onGuideClicked() {
     getContentRouter().pushController(
-      SingleGuideFlowController.routerTransaction(GuideType.APPLICATION)
+      GuideApplyingTransmitterFlowController.routerTransaction()
         .pushChangeHandler(VerticalChangeHandler())
-        .popChangeHandler(VerticalChangeHandler())
-    )
+        .popChangeHandler(VerticalChangeHandler()))
   }
 
   override fun getLayout(): Int {

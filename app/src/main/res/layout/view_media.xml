@@ -24,7 +24,7 @@
             android:layout_height="match_parent"
             app:visibleOrGone="@{!view.isVideo}"
             android:layout_gravity="center"
-            android:scaleType="fitXY"
+            android:scaleType="centerCrop"
             app:safeResource="@{view.resId}"/>
     </FrameLayout>
 </layout>

@@ -118,7 +118,7 @@
   <string name="guide_ap12_title">Planlæg sengetidstilstand</string>
   <string name="guide_ap13_subtitle">Du er nu blevet introduceret til de grundlæggende ting i brugen af TestProdukt. Du kan genbesøge denne tour og finde mere information i guides menuen via app\'ens hovedmenu.</string>
   <string name="guide_ap13_title">Tour\'en er færdig</string>
-  <string name="guide_ap14_button">Go to Status</string>
+  <string name="guide_ap14_button">Gå til Status</string>
   <string name="guide_ap14_subtitle">TestProdukt vil holde dig informeret hvis der skulle opstå tegn på lækage.</string>
   <string name="guide_ap14_title">TestProduktet er påsat</string>
   <string name="guide_ap2_subtitle">Din statusskærm er app\'ens hovedskærm. Den viser status på din basisplande. Du vil få besked hvis der opfanges lækages.</string>
@@ -149,7 +149,7 @@
   <string name="guide_at2_item1">Transmitter du ønsker at tilføje</string>
   <string name="guide_at2_item2">oplader til transmitteren og oplader kabel</string>
   <string name="guide_at2_item3">Adgang til strømforsyning</string>
-  <string name="guide_at2_item4">Et USB stick (evt mobiloplader)</string>
+  <string name="guide_at2_item4">Et USB stik (f.eks. mobiloplader)</string>
   <string name="guide_at2_item5">guide_at2_item5</string>
   <string name="guide_at2_title">Du får brug for</string>
   <string name="guide_at3_body">Find identifikationsnummeret på den mørkegrå side af transmitteren.</string>
@@ -177,11 +177,11 @@
   <string name="guide_cg_button_text">Læs Lokalitetsguiden</string>
   <string name="guide_cg_subsection_1_body">Din transmitter er afhængig af Bluetooth for at kommunikere med din smartphone/app. Det betyder, at du skal lade din telefons Bluetooth være tændt/aktiveret og tæt på for at forblive informeret. \n\nBluetooth-forbindelse kan forstyrres af afstand, tykke vægge eller tilstedeværelsen af for mange andre Bluetooth-tilsluttede enheder.\n\nI øverste venstre hjørne af din statusskærm er der et Bluetooth-symbol. Symbolet er turkist, når din telefon og Transmitter er tilsluttet hinanden. Symbolet er gråt, hvis forbindelsen går tabt.</string>
   <string name="guide_cg_subsection_1_header">Bluetooth sikrer at du bliver informeret</string>
-  <string name="guide_cg_subsection_2_body">Når Transmitteren mister forbindelsen, har den mulighed for at sende sin placering til din smartphone, så de automatisk kan genoprette forbindelsen, når de igen er inden for rækkevidde.\n\nFor at sikre den mest pålidelige forbindelse anbefales det at indstille lokalitetstjenesten for Testproduct til \'Altid\' i dine telefonindstillinger. Coloplast bruger ikke oplysninger om placering til noget andet formål.\n\nDu har mulighed for at læse Lokationsguiden, hvis du vil vide mere om Testprodukts brug af lokationsdata og de tilbagevendende notifikationer omkring din præference til brugen af din lokationsdata: </string>
+  <string name="guide_cg_subsection_2_body">Når Transmitteren mister forbindelsen, har den mulighed for at sende sin placering til din smartphone, så de automatisk kan genoprette forbindelsen, når de igen er inden for rækkevide.\n\nFor at sikre den mest pålidelige forbindelse anbefales det at indstille lokalitetstjenesten for Testproduct til \'Altid\' i dine telefonindstillinger. Coloplast bruger ikke oplysninger om placering til noget andet formål.\n\nDu har mulighed for at læse Lokationsguiden, hvis du vil vide mere om Testprodukts brug af lokationsdata og de tilbagevendende notifikationer omkring din præference til brugen af din lokationsdata: </string>
   <string name="guide_cg_subsection_2_header">Ved at tillade adgang til din placering forbedrer du forbindelse mellem telefonen og transmitteren.</string>
   <string name="guide_cg_subtitle">Tips til at sikre at Testprodukt forbliver forbundet så du kan blive informeret</string>
   <string name="guide_cg_title">Forbindelsesguide</string>
-  <string name="guide_ch_article_1_body">Placer transmitteren i opladeren og indsæt det medfølgende stik i opladeren. Forbind den anden ende af kablet til en USB strømforsyning -  dette kunne for eksempel være den du normalt bruger til at oplade din telefon. Dette sættes nu i en stikkontakt. \n\nNår opladeren blinker betyder det at den lader op. Transmitteren er fuldt opladt når lyset på opladeren er konstant. Hvis lyset på opladeren ikke er tændt, så er opladeren ikke tilsluttet en størmkilde. \n\nDin transmitter er fuldt opladt indenfor 3 timer, og en opladning holder omkring 2 dage.</string>
+  <string name="guide_ch_article_1_body">Placer transmitteren i opladeren og indsæt det medfølgende stik i opladeren. Forbind den anden ende af kablet til en USB strømforsyning -  dette kunne for eksempel være den du normalt bruger til at oplade din telefon. Denne sættes nu i en stikkontakt. \n\nNår opladeren blinker betyder det at den lader op. Transmitteren er fuldt opladt når lyset på opladeren er konstant. Hvis lyset på opladeren ikke er tændt, så er opladeren ikke tilsluttet en strømkilde. \n\nDin transmitter er fuldt opladt indenfor 3 timer, og en opladning holder omkring 2 dage.</string>
   <string name="guide_ch_article_1_header">Sådan oplader du din transmitter</string>
   <string name="guide_ch_subtitle">Alt du skal vide om at oplade din tranmitter</string>
   <string name="guide_ch_title">Guide til opladning</string>
@@ -263,7 +263,7 @@
   <string name="guide_connection">Guide til at genskabe forbindelsen</string>
   <string name="guide_critical_app_update_title">Opdater nu</string>
   <string name="guide_critical_firmware_update_title">Opdater nu</string>
-  <string name="guide_da_article_1_body">Hvis din basisplade og/eller dit sensorlag bliver vådt under påsætning kan du opleve dårlig klæbeevne til huden og det kan være Testprdukt ikke vil kunne opfange lækage korrekt. \n\nHusk at tørre stomi og huden omkring stomien umiddelbart før du påsætter et nyt stomiprodukt med sensorlag. \n\nHvis muligt husk at sikre at eventuelle tilbehørsprodukter er helt tørre før du påsætter dit stomiprodukt.\n\nPrøv at udgå at stomien røre klæberen/basispladen under påsætning..</string>
+  <string name="guide_da_article_1_body">Hvis din basisplade og/eller dit sensorlag bliver vådt under påsætning kan du opleve dårlig klæbeevne til huden og det kan være TestProdukt ikke vil kunne opfange lækage korrekt. \n\nHusk at tørre stomi og huden omkring stomien umiddelbart før du påsætter et nyt stomiprodukt med sensorlag. \n\nHvis muligt husk at sikre at eventuelle tilbehørsprodukter er helt tørre før du påsætter dit stomiprodukt.\n\nPrøv at udgå at stomien røre klæberen/basispladen under påsætning..</string>
   <string name="guide_da_article_1_header">Korrekt påsætning af Testprodukt er vigtig for at sikre monitorering</string>
   <string name="guide_da_subtitle">Ved at holde huden og klæberen tør sikrer du den bedste oplevelse af Testprodukt</string>
   <string name="guide_da_title">Tips til påsætning</string>
@@ -326,7 +326,7 @@
   <string name="guide_lg10_title_ios">Du er nu igennem guiden</string>
   <string name="guide_lg2_subtitle">Adgang til lokalitet sikrer at din mobiltelefon og transmitter forbliver forbundet med minimalt postyr i daglidagens uundgåelige forstyrrelser.</string>
   <string name="guide_lg2_title">Lokalitetstjenester</string>
-  <string name="guide_lg3_subtitle">Hvis du og din transmitter kommer for langt væk fra din mobiltelefon (f.eks hvis du bærer skrald ud) kan forbindelsen bliver afbrudt.</string>
+  <string name="guide_lg3_subtitle">Hvis du og din transmitter kommer for langt væk fra din mobiltelefon (f.eks hvis du bærer skrald ud) kan forbindelsen blive afbrudt.</string>
   <string name="guide_lg3_title">Afbrudt forbindelse</string>
   <string name="guide_lg4_subtitle">Hvis forbindelsen mellem din transmitter og din telefon går tabt, så vil transmitteren dele sin lokation til din telefon, så at de automatisk kan oprette forbindelse igen når den er inden for rækkevide.</string>
   <string name="guide_lg4_title">Genopret nemt forbindelsen</string>
@@ -338,11 +338,11 @@
   <string name="guide_lg6_subtitle_ios">Fra tid til anden vil din mobiltelefon bede dig bekræfte dine lokalitetstjenester og vil måske også vise et kort over, hvor din lokalitet er brugt henne.</string>
   <string name="guide_lg6_title">Lokalitetstjenester og databeskyttelse</string>
   <string name="guide_lg6_title_ios">Lokalitets pop-ups</string>
-  <string name="guide_lg7_subtitle">Da lokalitetstjeneste ikke er i brug hele tiden og kun bruges til at forbinde igen, skulle dette dræne dit batter unødigt.</string>
+  <string name="guide_lg7_subtitle">Da lokalitetstjeneste ikke er i brug hele tiden og kun bruges til at forbinde igen, burde dette ikke dræne dit batter unødigt.</string>
   <string name="guide_lg7_subtitle_ios">Kortet viser hvor lokalitetstjenester har været brugt til at forbinde mobiltelefon og transmitter igen. Coloplast vil aldrig spore eller gemme din lokalitet.</string>
   <string name="guide_lg7_title">Vil det dræne mit batteri i telefonen?</string>
   <string name="guide_lg7_title_ios">Hvad viser kortet?</string>
-  <string name="guide_lg8_subtitle">Nu ved du overordnet hvordan din lokalitetstjeneste bliver brugt til at forbinde din mobiltelefon med transmitteren igen. Husk at sætte lokalitetstjenester til \"altid\"for at blive informeret hele tiden.</string>
+  <string name="guide_lg8_subtitle">Nu ved du overordnet hvordan din lokalitetstjeneste bliver brugt til at forbinde din mobiltelefon med transmitteren igen. Husk at sætte lokalitetstjenester til \"altid\" for at blive informeret hele tiden.</string>
   <string name="guide_lg8_subtitle_ios">Undgå at sætte lokalitetstjenester til \"kun ved brug\" for så vil du ikke blive informeret om lækage hvis app\'en er lukket ned eller telefonen er låst.</string>
   <string name="guide_lg8_title">Du er nu igennem guiden</string>
   <string name="guide_lg8_title_ios">Undgå \"kun ved brug\"</string>
@@ -365,11 +365,11 @@
   <string name="guide_update_transmitter_4_action">Luk</string>
   <string name="guide_update_transmitter_4_body">Tak fordi du opdaterede. Dit Testprodukts transmitter er opdateret og klar til brug.</string>
   <string name="guide_update_transmitter_4_title">Opdatering  fuldført</string>
-  <string name="guide_us_body_1">Når TestProdukt er påsat under din stomiklæber, så holder sensorerne øje med tegn på lækage og sender meddelselser til din mobiltelefon via transmitteren.\n\nUdover at opfange lækage, vil TestProdukt også give besked om hvad som sker med din sensorlag. Dette vil give gøre det lettere at forstå hvad du evt skal gøre.</string>
-  <string name="guide_us_body_2">TestProdukt vil opfange lækage under din basisplade men vil ikke altid kunne identificere om det er afførring, sved eller andet. I dette tilfælde vil du få besked på at \"tjekke snart\".\n\nTestProduktvil stadig forsøge at holde dig informeret om yderligere udvikling - for eksempel  give besked, hvis der opdages lækage med sikkerhed på andre dele af din bundplade. Det er dog vigtigt at huske på, at sensorerne, der registrerede den måske begyndende lækage, nu er \'brugt\' og sandsynligvis ikke er i stand til at opdage yderligere lækage. For at holde dig fuldt informeret samt  have den fulde beskyttelse af alle tilgængelige sensorer, vil du muligvis skifte dit produkt.</string>
+  <string name="guide_us_body_1">Når TestProdukt er påsat under din stomiklæber, så holder sensorerne øje med tegn på lækage og sender meddelselser til din mobiltelefon via transmitteren.\n\nUdover at opfange lækage, vil TestProdukt også give besked om hvad som sker med dit sensorlag. Dette vil give gøre det lettere at forstå hvad du evt. skal gøre.</string>
+  <string name="guide_us_body_2">TestProdukt vil opfange lækage under din basisplade men vil ikke altid kunne identificere om det er afførring, sved eller andet. I dette tilfælde vil du få besked på at \"tjekke snart\".\n\nTestProdukt vil stadig forsøge at holde dig informeret om yderligere udvikling - for eksempel give besked, hvis der opdages lækage med sikkerhed på andre dele af din bundplade. Det er dog vigtigt at huske på, at sensorerne, der registrerede den måske begyndende lækage, nu er \'brugt\' og sandsynligvis ikke er i stand til at opdage yderligere lækage. For at holde dig fuldt informeret samt have den fulde beskyttelse af alle tilgængelige sensorer, vil du muligvis skifte dit produkt.</string>
   <string name="guide_us_body_3">Over tid vil dit sensorlag blive udsat for fugt fra din hud eller stomi. Hvis sensorerne absorberer for meget fugt, kan sensorerne blive \"brugt\" og ikke være i stand til at opfange afførring og informere dig, hvis lækagen udvikler sig. Du vil få besked hvis sensorerne er \"brugt\"\n\nDet kan være at din basisplade stadig klæber til din hud, men sensorerne ikke er aktive. For at få korrekte notifikationer, vil du måske skifte dit sensorlag.</string>
   <string name="guide_us_body_4">På grund af kontakt med våd hud eller din stomi under påsætning er sensorerne allerede \'brugt\' og er ikke længere i stand til at opfage lækage.\n\nHvis din statusskærm viser \'Inderste sensorer er våde\', er kun de indre sensorer blevet påvirket, og de yderste sensorer fungerer stadig.\n\nHvis din statusskærm viser \'Din hud er våd\', er alle sensorer blevet påvirket - i dette tilfælde vil du måske skifte dit sensorlag for at holde dig informeret.\n\nVær opmærksom på at anvende din basisplade og sensorlaget på ren og tør hud. For nyttige råd, læs \'Tips om påsætning\'.</string>
-  <string name="guide_us_body_5">Sensorlaget du lige har påsat, er beskadiget enten under opbevaring, håndtering eller påsætning af sensorlaget og det vil ikke kunne opfange eller sende notifikationern om lækage før du har skiftet til et nyt sensorlag.</string>
+  <string name="guide_us_body_5">Sensorlaget du lige har påsat, er beskadiget enten under opbevaring, håndtering eller påsætning af sensorlaget og det vil ikke kunne opfange eller sende notifikationer om lækage før du har skiftet til et nyt sensorlag.</string>
   <string name="guide_us_body_link_1">Gå til Påsætningsguide</string>
   <string name="guide_us_body_link_2">Gå til Påsætningstips</string>
   <string name="guide_us_subtitle_1">Få detaljer om TestProdukt sensorer og hvad du skal gøre med statusopdateringer om sensorer</string>
@@ -504,7 +504,7 @@
   <string name="onboarding_chapter_applying_attach_description">Indsæt konnektorflappen i transmitterens åbning og skub Transmitteren helt ind. Tryk ned på låget til den er helt lukket, så der lyder et lille klik.</string>
   <string name="onboarding_chapter_applying_attach_title">Påsæt transmitteren</string>
   <string name="onboarding_chapter_applying_attached_description">Godt gået! Din transmitter er nu sat korrekt på sensorlaget under din basisplade/klæber. Den er nu klar til at holde øje med tegn på lækage og vil give dig besked på din mobiltelefon.</string>
-  <string name="onboarding_chapter_applying_attached_title">Trasmitteren er påsat</string>
+  <string name="onboarding_chapter_applying_attached_title">Transmitteren er påsat</string>
   <string name="onboarding_chapter_applying_check_lid_fixed_description">Låget på din transmitter bør nu  være i en fikseret, løftet position. Du bør ikke kunne åbne det yderligere uden at skuklle bruge en del kræfter.</string>
   <string name="onboarding_chapter_applying_check_lid_fixed_title">Tjek at låget er i en let åben og fikseret position.</string>
   <string name="onboarding_chapter_applying_checklist_description">Lad os nu se på, hvordan at man påsætter TestProdukt på din krop.</string>
@@ -541,7 +541,7 @@
   <string name="onboarding_chapter_applying_take_out_title">Tag transmitteren ud</string>
   <string name="onboarding_chapter_applying_tm_not_attached_button_restart">Gense guiden</string>
   <string name="onboarding_chapter_applying_tm_not_attached_button_support">Ring og få vejledning</string>
-  <string name="onboarding_chapter_applying_tm_not_attached_description">For at sikre, at du kommer godt i gang med TestProduct ™, skal du omhyggeligt prøve og følge trinene i vejledningen igen. Husk at lukke transmitteren helt nedover konnektorflappen.</string>
+  <string name="onboarding_chapter_applying_tm_not_attached_description">For at sikre, at du kommer godt i gang med TestProdukt™, skal du omhyggeligt prøve og følge trinene i vejledningen igen. Husk at lukke transmitteren helt nedover konnektorflappen.</string>
   <string name="onboarding_chapter_applying_tm_not_attached_title">Din transmitter er ikke sat korrekt på</string>
   <string name="onboarding_chapter_applying_transmitter_checker_button">Jeg er ikke sikker</string>
   <string name="onboarding_chapter_applying_transmitter_checker_description">For at sikre at du er på rette vej - hvilken position har låget på transmitteren?</string>
@@ -554,7 +554,7 @@
   <string name="onboarding_chapter_applying_wait_description">Hvis du forsøger at sætte en transmitter på med låget åbent, kan det gøre skade på produktet. Bare rolig, hvis ikke det lykkedes første gang - det bliver snart en vane. Tag et kig i guiden over hvordan du påsætter en transmitter. Hvis du stadig har problemer så har du mulighed for at kontakte vores supportteam.</string>
   <string name="onboarding_chapter_applying_wait_title">Vent. Lad ikke et åbent transmitterlåg ødelægge forbindelsen.</string>
   <string name="onboarding_chapter_connecting_allow_location_description">For at fortsætte skal du gå til Indstillinger på din telefon og tillade Lokalitetstjenester for Testproduktet.</string>
-  <string name="onboarding_chapter_connecting_allow_location_title">Slå Lokalitetstjenester til på din telefon</string>
+  <string name="onboarding_chapter_connecting_allow_location_title">Slå Lokalitetstjenester til</string>
   <string name="onboarding_chapter_connecting_avoid_leaks_description">Coloplast sporer ikke din placering på noget tidspunkt. Og brug af Lokalitetstjenester vil ikke dræne dit batteri unødigt.\n\nHvis din telefon mister forbindelsen til din transmitter sender den  sin placering til din telefon, så  Bluetooth-forbindelsen kan genoprettes. Bluetooth-forbindelsen er afgørende for, at Testproduktet løbende kan holde dig opdateret.</string>
   <string name="onboarding_chapter_connecting_avoid_leaks_title">TestProduct har brug for din placering, så du aldrig går glip af en lækage.</string>
   <string name="onboarding_chapter_connecting_ble_activated_button"></string>
@@ -600,7 +600,7 @@
   <string name="onboarding_chapter_intro_setup_guide">Opsætningsguide</string>
   <string name="onboarding_chapter_intro_setup_guide_message">Denne guide vil trin for trin føre dig gennem processen i opsætningen af Testprodukt, så du efterfølgende kan bruge det sammen med dit nuværende stomiprodukt.</string>
   <string name="onboarding_chapter_intro_transmitter_description">Dette er din transmitter. Den kommunikerer med din mobiltelefon via Bluetooth, og holder dig orienteret om eventuelle lækager.</string>
-  <string name="onboarding_chapter_intro_transmitter_lid_description">Din transmitter har et låg på forsiden. Låget kan åbnes \"ét klik\" til en fikseret åben position, hvor den nu er klar til at blive påsat et sensorlag. </string>
+  <string name="onboarding_chapter_intro_transmitter_lid_description">Din transmitter har et låg på forsiden. Låget kan åbnes \"ét klik\" til en fikseret åben position, hvor den nu er klar til at blive påsat et sensorlag.</string>
   <string name="onboarding_chapter_intro_transmitter_lid_title">Sådan åbnes låget på transmitteren</string>
   <string name="onboarding_chapter_intro_transmitter_title">Transmitteren</string>
   <string name="onboarding_chapter_preparing_change_come_back_later_button">Jeg kommer tilbage senere</string>
@@ -684,7 +684,7 @@
   <string name="onboarding_fp3_title">Vælg et nyt password</string>
   <string name="onboarding_fp4_button_text">Gå til login</string>
   <string name="onboarding_fp4_description">Du kan nu bruge din nye adgangskode til at logge in i Testprodukt app\'en</string>
-  <string name="onboarding_fp4_title">Nulstill adgangskode</string>
+  <string name="onboarding_fp4_title">Adgangangskode nulstillet</string>
   <string name="onboarding_health_insurance_1">onboarding_health_insurance_1</string>
   <string name="onboarding_health_insurance_2">onboarding_health_insurance_2</string>
   <string name="onboarding_health_insurance_3">onboarding_health_insurance_3</string>
@@ -889,7 +889,7 @@
   <string name="settings_vibration_title">Vibrationer</string>
   <string name="status_all_ok">Appen informerer dig hvis der sker ændringer</string>
   <string name="status_all_ok_title">Alt ser fint ud.</string>
-  <string name="status_ble_turned_off">Slå Bluetooth til for at holde dig opdateret (er din telefon i flytilstand?)</string>
+  <string name="status_ble_turned_off">Slå Bluetooth til for at holde dig opdateret.</string>
   <string name="status_ble_turned_off_title">Bluetooth er slået fra.</string>
   <string name="status_broken_sensors">Overvej at skifte sensorlag for at holde dig opdateret.</string>
   <string name="status_broken_sensors_title">Beskadigede sensorer.</string>

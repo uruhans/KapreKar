@@ -247,6 +247,13 @@ class NotificationCenter(
   }
 
   /**
+   * remove list of notifications by id
+   */
+  fun clearAllWithId(idList: List<Int>) {
+    idList.forEach { id ->  notificationManager.cancel(id) }
+  }
+
+  /**
    * remove a specific notification that is currently displayed (or ignore if notification doesn't exist - manually removed or never shown)
    */
   fun cancel(notificationId: Int) {

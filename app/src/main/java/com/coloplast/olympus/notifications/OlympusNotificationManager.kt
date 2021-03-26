@@ -57,7 +57,15 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
         NotificationPayload(state.notificationId(), R.string.lock_notification_ble_off)
       }
       UiState.LOCATION_SERVICES_NOT_ENABLED -> { null }
-      UiState.CONNECTING -> { null }
+      UiState.CONNECTING -> {
+        notificationCenter.clearAllWithId(
+          listOf(
+            UiState.BLUETOOTH_NOT_ENABLED.notificationId(),
+            UiState.NO_BATTERY_R.notificationId()
+          )
+        )
+        null
+      }
       UiState.SCANNING -> { null }
       UiState.DISCONNECTED -> { null }
       UiState.SHOW_WELCOME -> { null }
@@ -68,8 +76,27 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
       UiState.TRANSMITTER_NOT_FOUND -> { null }
       UiState.SOMETHING_ELSE,
       UiState.OK_A -> {
-        // we will clear all notifications that may be shown - now that everything is OK - we don't need earlier notification warnings
-        notificationCenter.clear()
+        // we will clear all notifications, except MULTIPLE_TRANSMITTERS, FIRMWARE_AVAILABLE and APP_UPDATE_AVAILABLE
+        notificationCenter.clearAllWithId(
+          listOf(
+            UiState.BLUETOOTH_NOT_ENABLED.notificationId(),
+            UiState.INNER_BREACH_B.notificationId(),
+            UiState.OUTER_BREACH_C.notificationId(),
+            UiState.PAY_ATTENTION_F.notificationId(),
+            UiState.CUTGUARD_BROKEN_I.notificationId(),
+            UiState.INNER_BLIND_D.notificationId(),
+            UiState.TOTAL_BLIND_E.notificationId(),
+            UiState.WET_MOUNT_G.notificationId(),
+            UiState.WET_MOUNT_X.notificationId(),
+            UiState.WATER_INGRESS_DETECTION_J.notificationId(),
+            UiState.CUTGUARD_DIRT_IN_TRANSMITTER_K.notificationId(),
+            UiState.INNER_BLIND_LEAK_L.notificationId(),
+            UiState.NO_BATTERY_R.notificationId(),
+            UiState.TRANSMITTER_DETACHED_V.notificationId(),
+            UiState.TRANSMITTER_BATTERY_CHARGING_W.notificationId(),
+            OverlayState.BATTERY_LOW.notificationId(),
+            OverlayState.BLE_CONNECTION_LOST.notificationId()
+          ))
         null
       }
       UiState.INNER_BREACH_B -> {
@@ -87,7 +114,9 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
       UiState.TOTAL_BLIND_E -> {
         NotificationPayload(state.notificationId(), R.string.lock_notification_total_blind)
       }
-      UiState.PAY_ATTENTION_F -> { null }
+      UiState.PAY_ATTENTION_F -> {
+        NotificationPayload(state.notificationId(), R.string.lock_notification_sweat)
+      }
       UiState.WET_MOUNT_G -> {
         NotificationPayload(state.notificationId(), R.string.status_wet_mount_title)
       }
@@ -110,7 +139,12 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
         NotificationPayload(state.notificationId(), R.string.lock_no_info_v)
       }
       UiState.TRANSMITTER_BATTERY_CHARGING_W -> {
-        notificationCenter.clear()
+        notificationCenter.clearAllWithId(
+          listOf(
+            UiState.NO_BATTERY_R.notificationId(),
+            UiState.TRANSMITTER_DETACHED_V.notificationId(),
+            OverlayState.BATTERY_LOW.notificationId()
+          ))
         null
       }
     }

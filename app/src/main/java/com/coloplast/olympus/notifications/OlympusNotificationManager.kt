@@ -58,8 +58,7 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
       }
       UiState.LOCATION_SERVICES_NOT_ENABLED -> { null }
       UiState.CONNECTING -> {
-        NotificationPayload(id = Int.MIN_VALUE,
-          notificationsToRemove = listOf(
+        NotificationPayload(notificationsToRemove = listOf(
             UiState.BLUETOOTH_NOT_ENABLED.notificationId(),
             UiState.NO_BATTERY_R.notificationId(),
             OverlayState.BLE_CONNECTION_LOST.notificationId()
@@ -77,8 +76,7 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
       UiState.SOMETHING_ELSE,
       UiState.OK_A -> {
         // we will clear all notifications, except MULTIPLE_TRANSMITTERS, FIRMWARE_AVAILABLE and APP_UPDATE_AVAILABLE
-        NotificationPayload(id = Int.MIN_VALUE,
-          notificationsToRemove = listOf(
+        NotificationPayload(notificationsToRemove = listOf(
             UiState.BLUETOOTH_NOT_ENABLED.notificationId(),
             UiState.INNER_BREACH_B.notificationId(),
             UiState.OUTER_BREACH_C.notificationId(),
@@ -139,8 +137,7 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
         NotificationPayload(state.notificationId(), R.string.lock_no_info_v)
       }
       UiState.TRANSMITTER_BATTERY_CHARGING_W -> {
-        NotificationPayload(id = Int.MIN_VALUE,
-          notificationsToRemove = listOf(
+        NotificationPayload(notificationsToRemove = listOf(
             UiState.NO_BATTERY_R.notificationId(),
             UiState.TRANSMITTER_DETACHED_V.notificationId(),
             OverlayState.BATTERY_LOW.notificationId()

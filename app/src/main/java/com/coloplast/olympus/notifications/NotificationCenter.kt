@@ -93,6 +93,10 @@ class NotificationCenter(
       cancel(id)
     }
 
+    if (payload.id == Int.MIN_VALUE) {
+      return
+    }
+
     if (notificationManager.activeNotifications.any { it.id == payload.id }) {
       return
     }

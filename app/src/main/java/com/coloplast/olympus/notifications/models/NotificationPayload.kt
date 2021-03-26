@@ -10,8 +10,8 @@ import androidx.annotation.StringRes
  * notificationsToRemove: a list of notification id's to remove
  */
 class NotificationPayload(
-  val id: Int,
-  @StringRes val body: Int,
+  val id: Int = Int.MIN_VALUE,
+  @StringRes val body: Int = 0,
   val notificationsToRemove: List<Int> = emptyList(),
   val title: Int? = null
 )

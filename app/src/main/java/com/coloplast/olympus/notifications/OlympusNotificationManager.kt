@@ -58,13 +58,13 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
       }
       UiState.LOCATION_SERVICES_NOT_ENABLED -> { null }
       UiState.CONNECTING -> {
-        notificationCenter.clearAllWithId(
-          listOf(
+        NotificationPayload(id = Int.MIN_VALUE,
+          notificationsToRemove = listOf(
             UiState.BLUETOOTH_NOT_ENABLED.notificationId(),
-            UiState.NO_BATTERY_R.notificationId()
+            UiState.NO_BATTERY_R.notificationId(),
+            OverlayState.BLE_CONNECTION_LOST.notificationId()
           )
         )
-        null
       }
       UiState.SCANNING -> { null }
       UiState.DISCONNECTED -> { null }
@@ -77,8 +77,8 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
       UiState.SOMETHING_ELSE,
       UiState.OK_A -> {
         // we will clear all notifications, except MULTIPLE_TRANSMITTERS, FIRMWARE_AVAILABLE and APP_UPDATE_AVAILABLE
-        notificationCenter.clearAllWithId(
-          listOf(
+        NotificationPayload(id = Int.MIN_VALUE,
+          notificationsToRemove = listOf(
             UiState.BLUETOOTH_NOT_ENABLED.notificationId(),
             UiState.INNER_BREACH_B.notificationId(),
             UiState.OUTER_BREACH_C.notificationId(),
@@ -96,8 +96,8 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
             UiState.TRANSMITTER_BATTERY_CHARGING_W.notificationId(),
             OverlayState.BATTERY_LOW.notificationId(),
             OverlayState.BLE_CONNECTION_LOST.notificationId()
-          ))
-        null
+          )
+        )
       }
       UiState.INNER_BREACH_B -> {
         NotificationPayload(state.notificationId(), R.string.lock_notification_inner)
@@ -139,13 +139,13 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
         NotificationPayload(state.notificationId(), R.string.lock_no_info_v)
       }
       UiState.TRANSMITTER_BATTERY_CHARGING_W -> {
-        notificationCenter.clearAllWithId(
-          listOf(
+        NotificationPayload(id = Int.MIN_VALUE,
+          notificationsToRemove = listOf(
             UiState.NO_BATTERY_R.notificationId(),
             UiState.TRANSMITTER_DETACHED_V.notificationId(),
             OverlayState.BATTERY_LOW.notificationId()
-          ))
-        null
+          )
+        )
       }
     }
 

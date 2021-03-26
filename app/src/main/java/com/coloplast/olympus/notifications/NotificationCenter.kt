@@ -93,6 +93,10 @@ class NotificationCenter(
       cancel(id)
     }
 
+    if (payload.id == Int.MIN_VALUE) {
+      return
+    }
+
     if (notificationManager.activeNotifications.any { it.id == payload.id }) {
       return
     }
@@ -244,13 +248,6 @@ class NotificationCenter(
    */
   fun clear() {
     notificationManager.cancelAll()
-  }
-
-  /**
-   * remove list of notifications by id
-   */
-  fun clearAllWithId(idList: List<Int>) {
-    idList.forEach { id ->  notificationManager.cancel(id) }
   }
 
   /**

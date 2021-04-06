@@ -32,6 +32,7 @@ import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.common.DrawerState
 import com.coloplast.olympus.ui.common.conductor.ResizeChangeHandler
 import com.coloplast.olympus.ui.common.dialogs.BaseDialogController
+import com.coloplast.olympus.ui.common.widgets.AnimatedProgressView
 import com.coloplast.olympus.ui.common.widgets.PatchView
 import com.coloplast.olympus.ui.dialogs.ImageDialogController
 import com.coloplast.olympus.ui.dialogs.PatchDialogController
@@ -103,6 +104,8 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
   private var previousBleState: BluetoothState = BluetoothState.UNDEFINED
   private var lastResetOrStitch: Instant? = null
 
+  lateinit var progressAnimator: AnimatedProgressView
+
   constructor() : super()
   constructor(args: Bundle?) : super(args)
 
@@ -128,6 +131,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
   override fun onViewBound(viewBinding: ControllerHomeBinding) {
     stateRouter = Conductor.attachRouter(activity!!, viewBinding.contentContainer, args)
     compositeDisposable.add(viewModel.bind(this))
+    progressAnimator = viewBinding.progressAnimator
 
     // we want to force an update if we are coming from the background
     if (currentUiState != UiState.INITIAL) {
@@ -679,6 +683,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
 
   override fun onDestroyView(view: View) {
     connectionStateDisposable.clear()
+    progressAnimator.stopAnimation()
     super.onDestroyView(view)
   }
 

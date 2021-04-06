@@ -32,7 +32,6 @@ class GuideController(args: Bundle) : BaseController<ControllerGuideBinding>(arg
       ButtonType.ACTION,
       ButtonType.LINK -> {
         val routerTransaction = when (guideType) {
-          GuideType.APPLICATION_TIPS -> routerTransaction(GuideType.APPLICATION)
           GuideType.CONNECTION -> LocationGuideFlowController.routerTransaction()
           GuideType.CLEANING -> routerTransaction(GuideType.DRYING)
           GuideType.UNDERSTANDING_SENSORS -> {

@@ -18,7 +18,7 @@ android {
     versionName "2.0.0"
     testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-    buildConfigField("boolean", "EnableFileDebugging", "false")
+    buildConfigField("boolean", "EnableFileDebugging", "true")
     buildConfigField("Long", "BuildTime", System.currentTimeMillis() + "L")
     buildConfigField("String", "AppCenterSecret", "\"b1dc9278-cd5e-4670-a328-5936c7343ce9\"")
   }

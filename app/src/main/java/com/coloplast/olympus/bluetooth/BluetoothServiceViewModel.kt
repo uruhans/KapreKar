@@ -56,7 +56,7 @@ class BluetoothServiceViewModel(
       .map { true }
 
     // this is a continuous ping that notifies us every 6 seconds
-    val continuousPingObservable = Observable.interval(6, TimeUnit.SECONDS)
+    val continuousPingObservable = Observable.interval(12, TimeUnit.SECONDS)
       .map { true }
 
     // we merge these these pings, that will notify us that we want to try
@@ -87,6 +87,14 @@ class BluetoothServiceViewModel(
       .map { TxModel(it, bluetoothManager.bleConnectionStateObservable(it.id).blockingFirst()) }
       // only continue if the current transmitter is disconnected
       .filter { it.connectionState == BleConnectionState.DISCONNECTED }
+      .flatMap { txModel ->
+        bluetoothManager.scanSpecificBeacon(txModel.transmitter.id)
+          .takeUntil(Observable.timer(5, TimeUnit.SECONDS))
+          .takeUntil { it == txModel.transmitter.id }
+          .take(1)
+          .map { txModel }
+      }
+      .delay(1, TimeUnit.SECONDS)
       .doOnNext { Timber.wtf("Trying to connect to [${it.transmitter.name}] with macAddress: [${it.transmitter.id}]") }
       // then map the txModel => transmitter
       .map { it.transmitter }

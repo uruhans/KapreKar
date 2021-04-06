@@ -63,6 +63,8 @@ class BluetoothManagerImpl(
      * check here -> https://github.com/Polidea/RxAndroidBle/wiki/FAQ:-UndeliverableException
      */
     RxJavaPlugins.setErrorHandler {
+      Timber.wtf(it)
+
       when {
         // ignore if undeliverable (others should have received it first) - Rx issue ->
         // https://github.com/Polidea/RxAndroidBle/wiki/FAQ:-UndeliverableException
@@ -308,7 +310,6 @@ class BluetoothManagerImpl(
           .toSingle { statusVector }
           .onErrorReturn { statusVector }
       }
-      .doOnNext { Timber.wtf("[$macAddress]") }
       .compose(OlympusWirelessProtocol.statusTransformer)
   }
 

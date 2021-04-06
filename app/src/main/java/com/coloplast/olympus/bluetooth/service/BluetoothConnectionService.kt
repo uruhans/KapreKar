@@ -158,6 +158,8 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
           }
         }
         is BluetoothServiceModel.Disconnected -> {
+          Timber.wtf("$it")
+
           connectionAttempts[it.macAddress] = connectionAttempts[it.macAddress]?.plus(1) ?: 1
 
           if((transmitterManager.isActiveTransmitter(it.macAddress) || transmitterManager.isOnlyTransmitterAdded(it.macAddress)) && connectionAttempts[it.macAddress]!! >= 3) {

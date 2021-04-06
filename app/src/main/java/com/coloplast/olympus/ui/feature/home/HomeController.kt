@@ -509,13 +509,13 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
     }
 
     if(lastResetOrStitch == null || timeSinceLast > 12) {
-      Timber.wtf("ApsAction: [${stateChange.apsAction}] on transmitter ${transmitterName.get()}")
+      Timber.d("ApsAction: [${stateChange.apsAction}] on transmitter ${transmitterName.get()}")
 
       if(stateChange.apsAction == ApsAction.Split) {
-        Timber.wtf("OLD patchId: [${preferences.getCurrentPatchId()}]")
+        Timber.d("OLD patchId: [${preferences.getCurrentPatchId()}]")
         preferences.incrementPatchId()
         patchChangeTime = LocalTime.now()
-        Timber.wtf("NEW patchId: [${preferences.getCurrentPatchId()}]")
+        Timber.d("NEW patchId: [${preferences.getCurrentPatchId()}]")
       }
 
       stateChange.resetOrStitchCandidate?.let {

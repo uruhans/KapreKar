@@ -92,7 +92,7 @@ class HomeViewModel(
     )
 
     val stitchTransmitterObservable = uiView.requestStitching()
-      .doOnNext { obj -> Timber.wtf("ResetOrStitch: [${obj.dataPackage.joinToString { it.toInt().toString() }}]") }
+      .doOnNext { obj -> Timber.d("ResetOrStitch: [${obj.dataPackage.joinToString { it.toInt().toString() }}]") }
       .switchMap { stitch ->
         bluetoothManager.stitchOrResetTransmitter(stitch.macAddress, stitch.dataPackage)
           .toSingle<HomeUiModel> { HomeUiModel.StitchOrResetComplete() }

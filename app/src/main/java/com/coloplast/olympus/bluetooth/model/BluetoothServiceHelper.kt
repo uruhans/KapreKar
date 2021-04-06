@@ -28,7 +28,7 @@ class BluetoothServiceHelper(
      * continue to have a valid detach and get into an infinite loop of RESET/SPLIT mechanism
      */
     if(apsAction != ApsAction.Nothing) {
-      Timber.wtf("Aps Method [$apsMethod]")
+      Timber.d("Aps Method [$apsMethod]")
       transmitterManager.clearLatestDetach()
     }
 

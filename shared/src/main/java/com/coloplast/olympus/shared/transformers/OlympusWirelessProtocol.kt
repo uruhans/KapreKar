@@ -62,7 +62,7 @@ object OlympusWirelessProtocol {
 
   fun statusPackageTransformer(value: ByteArray, log: Boolean = true): StatusPackage {
     if(log) {
-      Timber.wtf("StatusVector: ${value.joinToString { it.toInt().toString() }}")
+      Timber.d("StatusVector: ${value.joinToString { it.toInt().toString() }}")
     }
 
     val sensor0 = value[0].toUByte()

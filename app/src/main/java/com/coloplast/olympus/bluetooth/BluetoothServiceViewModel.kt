@@ -39,9 +39,7 @@ class BluetoothServiceViewModel(
 
     val bluetoothStateObservable = bluetoothManager.bluetoothStateObservable()
       .filter { it == BluetoothState.BLUETOOTH_NOT_ENABLED }
-      .doOnNext {
-          insertAppStateInDb(UiState.BLUETOOTH_NOT_ENABLED.toLetter())
-      }
+      .doOnNext { insertAppStateInDb(UiState.BLUETOOTH_NOT_ENABLED.toLetter()) }
 
     // this observable pings us when we want to retry a connection attempt
     // and is usually started by the user elsewhere in the app
@@ -89,7 +87,7 @@ class BluetoothServiceViewModel(
       .map { TxModel(it, bluetoothManager.bleConnectionStateObservable(it.id).blockingFirst()) }
       // only continue if the current transmitter is disconnected
       .filter { it.connectionState == BleConnectionState.DISCONNECTED }
-      .doOnNext { Timber.d("Trying to connect to [${it.transmitter.name}] with macAddress: [${it.transmitter.id}]") }
+      .doOnNext { Timber.wtf("Trying to connect to [${it.transmitter.name}] with macAddress: [${it.transmitter.id}]") }
       // then map the txModel => transmitter
       .map { it.transmitter }
       // then map the transmitter => macAddress

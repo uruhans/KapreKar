@@ -3,18 +3,15 @@ package com.coloplast.olympus.ui.feature.guides.articles.models
 import com.coloplast.olympus.shared.types.TypeWithId
 
 enum class GuideType(override val id: Int): TypeWithId {
-  APPLICATION(0),
-  APPLICATION_TIPS(1),
-  CHARGING(2),
-  CLEANING(3),
-  CONNECTION(4),
-  GET_STARTED(5),
-  LEARN_MORE(6),
-  DRY_APPLYING_TIPS(7),
-  DRYING(8),
-  CHECK_BATTERY(9),
-  DELETE_TRANSMITTER(10),
-  UNDERSTANDING_SENSORS(11),
+  CHARGING(0),
+  CLEANING(1),
+  CONNECTION(2),
+  LEARN_MORE(3),
+  DRY_APPLYING_TIPS(4),
+  DRYING(5),
+  CHECK_BATTERY(6),
+  DELETE_TRANSMITTER(7),
+  UNDERSTANDING_SENSORS(8),
   UNKNOWN(-1);
   
   companion object {

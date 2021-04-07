@@ -94,7 +94,7 @@ class AddTransmitterAT9ViewModel(
                   .delay(3, TimeUnit.SECONDS)
                   .map<SearchTransmitterUiModel> { SearchTransmitterUiModel.ConnectionSuccessful(scanResult.macAddress) }
                   // if a connection has not happened within a 30 second window, we assume something is wrong
-                  .takeUntil(Observable.timer(30, TimeUnit.SECONDS)
+                  .takeUntil(Observable.timer(60, TimeUnit.SECONDS)
                     .flatMap {
                       // we therefore delete the transmitter from the database again
                       transmitterComponent.deleteTransmitter(scanResult.macAddress)

@@ -60,16 +60,16 @@ class BluetoothHandler(private val context: Context, isDebugging: Boolean) {
   }
 
   fun connectRxBleDevice(rxBleDevice: RxBleDevice, serviceChangedUUID: UUID, mtuSize: Int = 185): Observable<RxBleConnection> {
-    return rxBleDevice.establishConnection(false)
-      // this delay is added in order to get the system to properly connect and update services properly (will not work without this delay)
-      .delay(2, TimeUnit.SECONDS)
-      .flatMap { rxBleConnection ->
-        rxBleDeviceConnectionStateObservable(rxBleDevice)
-          .filter { it == RxBleConnection.RxBleConnectionState.CONNECTED }
-          .flatMapSingle { rxBleConnection.requestMtu(mtuSize) }
-          .flatMap {
-            BleDeviceBondingManager.createBond(context, rxBleDevice)
-              .filter { rxBleDevice.bluetoothDevice.bondState == BluetoothDevice.BOND_BONDED }
+    return BleDeviceBondingManager.createBond(context, rxBleDevice)
+      .filter { rxBleDevice.bluetoothDevice.bondState == BluetoothDevice.BOND_BONDED }
+      .flatMap { device ->
+        device.establishConnection(false)
+          // this delay is added in order to get the system to properly connect and update services properly (will not work without this delay)
+          .delay(2, TimeUnit.SECONDS)
+          .flatMap { rxBleConnection ->
+            rxBleDeviceConnectionStateObservable(rxBleDevice)
+              .filter { it == RxBleConnection.RxBleConnectionState.CONNECTED }
+              .flatMapSingle { rxBleConnection.requestMtu(mtuSize) }
               .flatMapSingle { rxBleConnection.discoverServices() }
               // setup indication on the ServiceChanged characteristic
               .flatMap { rxBleConnection.setupIndication(serviceChangedUUID, NotificationSetupMode.DEFAULT) }

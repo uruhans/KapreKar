@@ -80,7 +80,7 @@ class HomeViewModel(
         return@flatMap Observable.just(uiModel)
       }
 
-    val animationResetObservable = Observable.interval(1, 10, TimeUnit.SECONDS)
+    val animationResetObservable = Observable.interval(10, 10, TimeUnit.SECONDS)
       .map { HomeUiModel.AnimationReset() }
 
     val rawPackageUpdateObservable = StateDispatcher.rawPackageUpdateObservable()

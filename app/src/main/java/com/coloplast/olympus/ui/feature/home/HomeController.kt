@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.GravityCompat
+import androidx.core.view.isVisible
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.databinding.ObservableInt
@@ -201,6 +202,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
         is HomeUiModel.ScanningStopped -> {
           if (currentUiState == UiState.CONNECTING) {
             changeUiState(UiState.TRANSMITTER_NOT_FOUND)
+            isConnected.set(false)
           }
         }
         is HomeUiModel.DeviceDisconnected -> {
@@ -297,8 +299,15 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
           lastCheck.set(uiModel.lastUpdate)
         }
         is HomeUiModel.AnimationReset -> {
-          updateAnimation.set(true)
-          updateAnimation.notifyChange()
+          // no reason to update progress if it's not visible
+          if(getBinding().progressAnimator.isVisible) {
+            updateAnimation.set(true)
+            updateAnimation.notifyChange()
+          }
+
+          if(currentUiState == UiState.CONNECTING) {
+            changeUiState(UiState.TRANSMITTER_NOT_FOUND)
+          }
         }
       }
     }

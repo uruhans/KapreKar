@@ -63,15 +63,23 @@ class BluetoothManagerImpl(
      * check here -> https://github.com/Polidea/RxAndroidBle/wiki/FAQ:-UndeliverableException
      */
     RxJavaPlugins.setErrorHandler {
-      Timber.wtf(it)
+      val e = if(it is UndeliverableException) {
+        it.cause
+      }
+      else {
+        it
+      }
 
-      when {
+      when(e) {
         // ignore if undeliverable (others should have received it first) - Rx issue ->
         // https://github.com/Polidea/RxAndroidBle/wiki/FAQ:-UndeliverableException
-        it is UndeliverableException && it.cause is BleException -> return@setErrorHandler
-        it is UndeliverableException && it.cause is BleDisconnectedException -> throw DisconnectException(it)
-        it is UndeliverableException && it.cause is BleGattCallbackTimeoutException -> throw GattCallbackTimeoutException(it)
-        it is UndeliverableException && it.cause is BleGattException -> throw GattException(it)
+        is NullPointerException,
+        is IllegalArgumentException,
+        is IllegalStateException -> Thread.currentThread().uncaughtExceptionHandler?.uncaughtException(Thread.currentThread(), e)
+        is BleException -> return@setErrorHandler
+        is BleDisconnectedException -> throw DisconnectException(it)
+        is BleGattCallbackTimeoutException -> throw GattCallbackTimeoutException(it)
+        is BleGattException -> throw GattException(it)
         else -> {
           Crashes.trackError(it)
           return@setErrorHandler

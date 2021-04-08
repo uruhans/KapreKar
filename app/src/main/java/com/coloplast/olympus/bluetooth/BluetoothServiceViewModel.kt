@@ -12,10 +12,8 @@ import com.coloplast.olympus.businesslayer.interfaces.TransmitterComponent
 import com.coloplast.olympus.ui.feature.home.models.StateTransformers
 import com.coloplast.olympus.ui.feature.statemachine.OverlayStateMachineImpl
 import com.coloplast.olympus.ui.feature.statemachine.UiStateMachineImpl
-import com.coloplast.olympus.ui.feature.statemachine.models.OverlayState
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
 import com.coloplast.olympus.utils.DeviceUtils
-import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -88,8 +86,7 @@ class BluetoothServiceViewModel(
       // only continue if the current transmitter is disconnected
       .filter { it.connectionState == BleConnectionState.DISCONNECTED }
       .flatMap { txModel ->
-        bluetoothManager.scanBeacons()
-          .filter { it == txModel.transmitter.id }
+        bluetoothManager.scanSpecificTransmitter(txModel.transmitter.id)
           .takeUntil(Observable.timer(5, TimeUnit.SECONDS))
           .takeUntil { it == txModel.transmitter.id }
           .take(1)

@@ -14,8 +14,7 @@ import io.reactivex.Observable
 import java.util.*
 
 interface BluetoothManager {
-  fun scanBeacons() : Observable<String>
-  fun scanSpecificBeacon(macAddress: String) : Observable<String>
+  fun scanSpecificTransmitter(macAddress: String) : Observable<String>
   
   fun bluetoothStateObservable(): Observable<BluetoothState>
   fun initiateBleScanning(uuidFilter: UUID?): Observable<ScanResult>

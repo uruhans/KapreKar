@@ -116,12 +116,10 @@ class BluetoothManagerImpl(
       }
   }
 
-  override fun scanBeacons(): Observable<String> {
-    return bluetoothHandler.scanBeacons(OlympusWirelessProtocol.UUID)
-  }
-
-  override fun scanSpecificBeacon(macAddress: String): Observable<String> {
-    return bluetoothHandler.scanBeacons(OlympusWirelessProtocol.UUID, macAddress)
+  override fun scanSpecificTransmitter(macAddress: String): Observable<String> {
+    return bluetoothHandler.scanBleDevices(OlympusWirelessProtocol.UUID)
+      .map { it.bleDevice.macAddress }
+      .filter { it == macAddress }
   }
 
   /**

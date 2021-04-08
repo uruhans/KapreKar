@@ -6,6 +6,7 @@ import com.coloplast.olympus.businesslayer.interfaces.SystemUpdateComponent
 import com.coloplast.olympus.businesslayer.interfaces.TransmitterComponent
 import com.coloplast.olympus.shared.models.UpdateResult
 import io.reactivex.Observable
+import timber.log.Timber
 
 class DeviceConnection(
   private val bluetoothManager: BluetoothManager,
@@ -57,6 +58,7 @@ class DeviceConnection(
       .cacheWithInitialCapacity(1)
 
     val notificationSubscriptionObservable = connectedBleDeviceObservable
+      .doOnNext { Timber.wtf("bleDeviceResultObservable") }
       // this one subscribes to notifications and returns a peripheral object containing the latest state of the device
       .flatMap {
         bluetoothManager.bleDeviceResultObservable(macAddress)
@@ -87,6 +89,7 @@ class DeviceConnection(
       }
 
     val rawDataPackageObservable = connectedBleDeviceObservable
+      .doOnNext { Timber.wtf("setupOlympusRawDataPackageNotifications") }
       // subscribe to raw data packages
       .flatMap {
         bluetoothManager.setupOlympusRawDataPackageNotifications(macAddress)

@@ -88,7 +88,8 @@ class BluetoothServiceViewModel(
       // only continue if the current transmitter is disconnected
       .filter { it.connectionState == BleConnectionState.DISCONNECTED }
       .flatMap { txModel ->
-        bluetoothManager.scanSpecificBeacon(txModel.transmitter.id)
+        bluetoothManager.scanBeacons()
+          .filter { it == txModel.transmitter.id }
           .takeUntil(Observable.timer(5, TimeUnit.SECONDS))
           .takeUntil { it == txModel.transmitter.id }
           .take(1)

@@ -11,8 +11,9 @@ class BluetoothServiceHelper(
   private val apsEngine: AutoPatchDetectionEngine
 ) {
 
-  fun handleTransmitterUpdate(stateChange: StateChange) : UpdatedStateChange {
-    val updatedStateChange = transmitterManager.determineCurrentlyActiveTransmitterAndReturnStateChangeFromIt(stateChange)
+  fun handleTransmitterUpdate(stateChange: StateChange) : UpdatedStateChange? {
+    val updatedStateChange = transmitterManager.determineCurrentlyActiveTransmitterAndReturnStateChangeFromIt(stateChange) ?: return null
+
     val lastValidDetach = transmitterManager.latestDetach()
     val previousStatusVector = transmitterManager.previousState(updatedStateChange.stateChange.getMacAddress())
     val cycleResult = apsEngine.determineAttachCycle(updatedStateChange, lastValidDetach?.isValid() ?: false, previousStatusVector?.bleDevice?.isWidOrCutguardBlocked() ?: false)

@@ -62,7 +62,7 @@ class TransmitterManager(
    *  - Stores the stateChange for later use
    *  - Incoming stateChange might not be from the same transmitter as the one being returned
    */
-  fun determineCurrentlyActiveTransmitterAndReturnStateChangeFromIt(stateChange: StateChange): UpdatedStateChange {
+  fun determineCurrentlyActiveTransmitterAndReturnStateChangeFromIt(stateChange: StateChange): UpdatedStateChange? {
     addToHistory(stateChange)
 
     val otherConnectedAndAttached = isOtherConnectedAndAttached(stateChange.getMacAddress())
@@ -116,15 +116,18 @@ class TransmitterManager(
         else {
           wasPreviousUiStateMultipleTx = false
           val otherStateChange = latestStateFromOtherTransmitter(stateChange.getMacAddress())
-          return if(otherStateChange != null) {
-            UpdatedStateChange(otherStateChange)
+          if(otherStateChange != null) {
+            return UpdatedStateChange(otherStateChange)
           }
-          else {
-            // we set the active transmitter
-            // this case might occur when the currently active transmitter is DISCONNECTED
-            setActiveTransmitter(stateChange)
-            UpdatedStateChange(stateChange, true)
-          }
+
+          return null
+//          else {
+//            Timber.wtf("NOT HERE")
+//            // we set the active transmitter
+//            // this case might occur when the currently active transmitter is DISCONNECTED
+//            setActiveTransmitter(stateChange)
+//            UpdatedStateChange(stateChange, true)
+//          }
         }
       }
     }

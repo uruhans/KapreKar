@@ -166,6 +166,9 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
             connectionAttempts[it.macAddress] = 0
             val latestState = transmitterManager.getLatestState(it.macAddress)
             val bleDevice = latestState?.bleDevice ?: BleDevice("", it.macAddress, BleConnectionState.DISCONNECTED)
+
+            bleDevice.connectionState = BleConnectionState.DISCONNECTED
+
             StateDispatcher.dispatchStateForActiveTransmitter(StateChange(UiState.TRANSMITTER_NOT_FOUND, bleDevice = bleDevice))
             return@ui
           }

@@ -33,7 +33,6 @@ import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.common.DrawerState
 import com.coloplast.olympus.ui.common.conductor.ResizeChangeHandler
 import com.coloplast.olympus.ui.common.dialogs.BaseDialogController
-import com.coloplast.olympus.ui.common.widgets.AnimatedProgressView
 import com.coloplast.olympus.ui.common.widgets.PatchView
 import com.coloplast.olympus.ui.dialogs.ImageDialogController
 import com.coloplast.olympus.ui.dialogs.PatchDialogController
@@ -208,6 +207,10 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
         is HomeUiModel.DeviceDisconnected -> {
           isConnected.set(false)
           changeUiState(UiState.CONNECTING)
+        }
+        is HomeUiModel.ServiceNotAvailable -> {
+          isConnected.set(false)
+          changeUiState(UiState.TRANSMITTER_NOT_FOUND)
         }
         is HomeUiModel.NoTransmittersFound -> {
           if(Utils.locationEnabled()) {

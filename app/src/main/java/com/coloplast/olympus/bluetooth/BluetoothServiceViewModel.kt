@@ -35,6 +35,13 @@ class BluetoothServiceViewModel(
   override fun bind(serviceResult: BluetoothServiceResult<BluetoothServiceModel>): Disposable {
     val compositeDisposable = CompositeDisposable()
 
+    // an observable to listen to ServiceAlive events and respond with at Ping event
+    // to notify that the service is alive and running
+    val serviceAliveObservable = ServiceDispatcher.serviceEventObservable()
+      .ofType(ServiceEvent.ServiceAlive::class.java)
+      .doOnNext { Timber.d("[ServiceAlive] Received - Replying") }
+      .doOnNext { ServiceDispatcher.dispatchEvent(ServiceEvent.Ping()) }
+
     val bluetoothStateObservable = bluetoothManager.bluetoothStateObservable()
       .filter { it == BluetoothState.BLUETOOTH_NOT_ENABLED }
       .doOnNext { insertAppStateInDb(UiState.BLUETOOTH_NOT_ENABLED.toLetter()) }
@@ -83,8 +90,10 @@ class BluetoothServiceViewModel(
       .throttleLatest(5, TimeUnit.SECONDS)
       // get the current connection state of the transmitter immediately
       .map { TxModel(it, bluetoothManager.bleConnectionStateObservable(it.id).blockingFirst()) }
+      //.doOnNext { Timber.d("Device [${it.transmitter.name}] is [${it.connectionState}]") }
       // only continue if the current transmitter is disconnected
       .filter { it.connectionState == BleConnectionState.DISCONNECTED }
+      //.doOnNext { Timber.d("Scanning for [${it.transmitter.name}] [${it.transmitter.id}]") }
       .flatMap { txModel ->
         bluetoothManager.scanSpecificTransmitter(txModel.transmitter.id)
           .takeUntil(Observable.timer(5, TimeUnit.SECONDS))
@@ -138,6 +147,7 @@ class BluetoothServiceViewModel(
           }
         }
       }
+    compositeDisposable.add(serviceAliveObservable.subscribe())
     compositeDisposable.add(bluetoothStateObservable.subscribe())
     compositeDisposable.add(connectionObservable.bind(serviceResult.onResult()))
     compositeDisposable.add(reconnectionAttemptsObservable.subscribe())

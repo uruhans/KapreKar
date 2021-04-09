@@ -19,5 +19,6 @@ sealed class HomeUiModel : UiModel {
   data class Initial(val nothing: Unit = Unit) : HomeUiModel()
   data class DeviceDisconnected(private val disconnected: Unit = Unit) : HomeUiModel()
   data class RawDataPackageUpdate(val macAddress: String, val lastUpdate: LocalDateTime = LocalDateTime.now()) : HomeUiModel()
+  data class ServiceNotAvailable(val alive: Unit = Unit) : HomeUiModel()
 
 }

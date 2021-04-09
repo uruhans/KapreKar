@@ -43,7 +43,7 @@ class MockViewModelV2(compromisedVault: CompromisedVault, randomizer: Random? = 
     `when`(bluetoothManager.isConnected(Mockito.anyString())).thenReturn(isConnected)
   }
 
-  fun run(bleDevice: BleDevice) : UpdatedStateChange {
+  fun run(bleDevice: BleDevice) : UpdatedStateChange? {
     val deviceResult = DeviceResult.DeviceUpdateResult(bleDevice)
 
     val stateModel = StateTransformers.bleToUiState(deviceResult)
@@ -54,7 +54,7 @@ class MockViewModelV2(compromisedVault: CompromisedVault, randomizer: Random? = 
     return runService(StateChange(newUiState, newOverlayState, deviceResult.bleDevice))
   }
 
-  private fun runService(stateChange: StateChange) : UpdatedStateChange {
+  private fun runService(stateChange: StateChange) : UpdatedStateChange? {
     return bluetoothServiceHelper.handleTransmitterUpdate(stateChange)
   }
 

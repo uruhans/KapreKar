@@ -60,7 +60,7 @@ class BluetoothServiceViewModel(
       // however, we dont really care about the result, we just want the ping
       .map { true }
 
-    // this is a continuous ping that notifies us every 6 seconds
+    // this is a continuous ping that notifies us every 12 seconds
     val continuousPingObservable = Observable.interval(12, TimeUnit.SECONDS)
       .map { true }
 

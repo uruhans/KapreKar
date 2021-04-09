@@ -24,7 +24,6 @@ import com.coloplast.olympus.bluetooth.model.StateChange
 import com.coloplast.olympus.notifications.OlympusNotificationManager
 import com.coloplast.olympus.patchsplit.models.CompromisedVault
 import com.coloplast.olympus.ui.feature.TransmitterManager
-import com.coloplast.olympus.ui.feature.home.models.UiStateModel
 import com.coloplast.olympus.ui.feature.statemachine.models.OverlayState
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
 import io.reactivex.Observable
@@ -159,8 +158,6 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
           }
         }
         is BluetoothServiceModel.Disconnected -> {
-          Timber.wtf("1")
-
           connectionAttempts[it.macAddress] = connectionAttempts[it.macAddress]?.plus(1) ?: 1
 
           val latestState = transmitterManager.getLatestState(it.macAddress)
@@ -170,7 +167,6 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
           StateDispatcher.dispatch(StateChange(UiState.DISCONNECTED, bleDevice = bleDevice))
 
           if((transmitterManager.isActiveTransmitter(it.macAddress) || transmitterManager.isOnlyTransmitterAdded(it.macAddress)) && connectionAttempts[it.macAddress]!! >= 3) {
-            Timber.wtf("2")
             connectionAttempts[it.macAddress] = 0
 
             val disconnectedStateChange = StateChange(UiState.TRANSMITTER_NOT_FOUND, bleDevice = bleDevice)
@@ -181,83 +177,12 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
           val otherTxStateChange = transmitterManager.onTransmitterDisconnect(it.macAddress)
 
           if(transmitterManager.isActiveTransmitter(it.macAddress) && latestState != null) {
-            Timber.wtf("5")
             olympusNotificationManager.send(it.macAddress, OverlayState.BLE_CONNECTION_LOST)
             StateDispatcher.dispatchStateForActiveTransmitter(StateChange(latestState.state, OverlayState.BLE_CONNECTION_LOST, bleDevice))
           }
           else if(otherTxStateChange != null) {
             StateDispatcher.dispatchStateForActiveTransmitter(otherTxStateChange)
           }
-
-
-//          Timber.wtf("3")
-//          if(otherTxStateChange != null) {
-//            Timber.wtf("4")
-//            if(!otherTxStateChange.bleDevice.isConnected()) {
-//              Timber.wtf("5")
-//
-//              val disconnectStateChange = if(otherTxStateChange.bleDevice.isAttached()) {
-//                olympusNotificationManager.send(it.macAddress, OverlayState.BLE_CONNECTION_LOST)
-//                StateChange(otherTxStateChange.state, OverlayState.BLE_CONNECTION_LOST, otherTxStateChange.bleDevice)
-//              }
-//              else {
-//                StateChange(otherTxStateChange.state, OverlayState.NONE, otherTxStateChange.bleDevice)
-//              }
-//
-//              StateDispatcher.dispatch(disconnectStateChange)
-//              StateDispatcher.dispatchStateForActiveTransmitter(disconnectStateChange)
-//            }
-//            else {
-//              Timber.wtf("6")
-//              val updatedStateChange = transmitterManager.determineCurrentlyActiveTransmitterAndReturnStateChangeFromIt(otherTxStateChange)
-//              StateDispatcher.dispatch(updatedStateChange.stateChange)
-//              StateDispatcher.dispatchStateForActiveTransmitter(updatedStateChange.stateChange)
-//            }
-//          }
-//          else {
-//            Timber.wtf("7")
-//            val latestState = transmitterManager.getLatestState(it.macAddress)
-//
-//            if(transmitterManager.isActiveTransmitter(it.macAddress)) {
-//              Timber.wtf("8")
-//              latestState?.let { state ->
-//                Timber.wtf("9")
-//                state.bleDevice.connectionState = BleConnectionState.DISCONNECTED
-//
-//                // we only want to display overlay and send notification if the disconnection occurred on the active transmitter
-//                // and that transmitter was attached
-//                if(state.bleDevice.isAttached()) {
-//                  // so immediately send a notification
-//                  olympusNotificationManager.send(it.macAddress, OverlayState.BLE_CONNECTION_LOST)
-//                }
-//
-//                val disconnectState = StateChange(state.state, OverlayState.NONE, state.bleDevice)
-//
-//                StateDispatcher.dispatch(disconnectState)
-//                StateDispatcher.dispatchStateForActiveTransmitter(disconnectState)
-//              }
-//            }
-//            else {
-//              Timber.wtf("10")
-//              latestState?.let { state ->
-//                Timber.wtf("11")
-//                val updatedStateChange = transmitterManager.determineCurrentlyActiveTransmitterAndReturnStateChangeFromIt(state)
-//
-//                // if the updated statechange is the same as the current one that just disconnected - lets force it into disconnected
-//                if(updatedStateChange.stateChange.getMacAddress() == it.macAddress) {
-//                  updatedStateChange.stateChange.bleDevice.connectionState = BleConnectionState.DISCONNECTED
-//                }
-//
-//                StateDispatcher.dispatch(updatedStateChange.stateChange)
-//                // we dont want to send this state to the active transmitter dispatcher as we dont have any active transmitter here
-//                // but we *do* want to send it if it's the only transmitter added to the system
-//                if(transmitterManager.isOnlyTransmitterAdded(it.macAddress)) {
-//                  Timber.wtf("12")
-//                  StateDispatcher.dispatchStateForActiveTransmitter(updatedStateChange.stateChange)
-//                }
-//              }
-//            }
-//          }
         }
         is BluetoothServiceModel.ScanningStarted -> {
           StateDispatcher.dispatchScanning()

@@ -2,13 +2,11 @@ package com.coloplast.olympus.ui.feature.home
 
 import com.artemzin.rxui.kotlin.bind
 import com.coloplast.olympus.Me
-import com.coloplast.olympus.bluetooth.ServiceDispatcher
 import com.coloplast.olympus.bluetooth.StateDispatcher
 import com.coloplast.olympus.bluetooth.businesslayer.BluetoothManager
 import com.coloplast.olympus.bluetooth.businesslayer.ServiceStateDispatcher
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
-import com.coloplast.olympus.bluetooth.model.ServiceEvent
 import com.coloplast.olympus.businesslayer.interfaces.AppStateComponent
 import com.coloplast.olympus.businesslayer.interfaces.TransmitterComponent
 import com.coloplast.olympus.businesslayer.interfaces.UserComponent
@@ -137,27 +135,6 @@ class HomeViewModel(
               }
           }
         }
-
-    // This observable should check if the BluetoothConnectionService is alive and running
-    // it does this by sending a ServiceAlive event to the ServiceViewModel - which will then respond with a Ping event with "true"
-    // if it does not reply - the observable will "complete" after 3 seconds and automatically send a "false" back indicating the service is not running
-    val serviceAlivePingObservable = ServiceDispatcher.serviceEventObservable()
-      .ofType(ServiceEvent.Ping::class.java)
-      .doOnNext { Timber.wtf("Service alive: [${it.alive}]") }
-      .map { it.alive }
-      .takeUntil(Observable.timer(3, TimeUnit.SECONDS))
-      .last(false)
-      .toObservable()
-      .doOnNext { Timber.wtf("Service alive: [${it}]") }
-      .filter { !it }
-      .doOnNext { serviceStateDispatcher.startService() }
-      .map { HomeUiModel.ServiceNotAvailable() as HomeUiModel }
-
-    val verifyServiceAliveObservable = Completable.fromCallable { ServiceDispatcher.dispatchEvent(ServiceEvent.ServiceAlive()) }
-
-    disposable.add(serviceAlivePingObservable.bind(uiView.render()))
-    disposable.add(verifyServiceAliveObservable.subscribe())
-    // END service restart
 
     disposable.add(synchronizeDataObservable.subscribe())
     disposable.add(Observable.merge(stateUpdate, bluetoothStateObservable, animationAndRawPackageObservable, noTransmittersObservable).bind(uiView.render()))

@@ -35,13 +35,6 @@ class BluetoothServiceViewModel(
   override fun bind(serviceResult: BluetoothServiceResult<BluetoothServiceModel>): Disposable {
     val compositeDisposable = CompositeDisposable()
 
-    // an observable to listen to ServiceAlive events and respond with at Ping event
-    // to notify that the service is alive and running
-    val serviceAliveObservable = ServiceDispatcher.serviceEventObservable()
-      .ofType(ServiceEvent.ServiceAlive::class.java)
-      .doOnNext { Timber.d("[ServiceAlive] Received - Replying") }
-      .doOnNext { ServiceDispatcher.dispatchEvent(ServiceEvent.Ping()) }
-
     val bluetoothStateObservable = bluetoothManager.bluetoothStateObservable()
       .filter { it == BluetoothState.BLUETOOTH_NOT_ENABLED }
       .doOnNext { insertAppStateInDb(UiState.BLUETOOTH_NOT_ENABLED.toLetter()) }
@@ -96,9 +89,12 @@ class BluetoothServiceViewModel(
       //.doOnNext { Timber.d("Scanning for [${it.transmitter.name}] [${it.transmitter.id}]") }
       .flatMap { txModel ->
         bluetoothManager.scanSpecificTransmitter(txModel.transmitter.id)
-          .takeUntil(Observable.timer(5, TimeUnit.SECONDS))
+          .takeUntil(Observable.timer(3, TimeUnit.SECONDS))
           .takeUntil { it == txModel.transmitter.id }
           .take(1)
+          .map { true }
+          .onErrorReturn { false }
+          .filter { it }
           .map { txModel }
       }
       .delay(1, TimeUnit.SECONDS)
@@ -107,8 +103,8 @@ class BluetoothServiceViewModel(
       .map { it.transmitter }
       // then map the transmitter => macAddress
       .map { it.id }
-      .publish()
-      .refCount()
+//      .publish()
+//      .refCount()
 
     /**
      * There is a case where the reconnection attempts are preventing users from adding a 2nd transmitter.
@@ -147,7 +143,7 @@ class BluetoothServiceViewModel(
           }
         }
       }
-    compositeDisposable.add(serviceAliveObservable.subscribe())
+
     compositeDisposable.add(bluetoothStateObservable.subscribe())
     compositeDisposable.add(connectionObservable.bind(serviceResult.onResult()))
     compositeDisposable.add(reconnectionAttemptsObservable.subscribe())

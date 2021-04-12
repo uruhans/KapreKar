@@ -85,7 +85,7 @@ val koinModule = module {
 
   /* ViewModels */
   factory { BluetoothServiceViewModel(get(), get(), get(), get()) }
-  single { SplashViewModel(get(), get()) }
+  single { SplashViewModel(get(), get(), get()) }
   single { HomeViewModel(get(), get(), get(), get(), get(), get()) }
   single { TransmittersViewModel(get(), get(), get()) }
   single { AddTransmitterAT9ViewModel(get(), get(), get()) }

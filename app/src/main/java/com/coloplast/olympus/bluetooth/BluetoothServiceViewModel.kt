@@ -120,7 +120,7 @@ class BluetoothServiceViewModel(
     val disconnectTransmitterObservable = ServiceDispatcher.serviceEventObservable()
       .filter { it is ServiceEvent.DisconnectTransmitter }
       .map { it as ServiceEvent.DisconnectTransmitter }
-      .delay(200, TimeUnit.MILLISECONDS)
+      //.delay(2000, TimeUnit.MILLISECONDS)
 
     // the observable that handles the connection
     val connectionObservable = immediateConnectionObservable
@@ -210,9 +210,6 @@ class BluetoothServiceViewModel(
         stateLetter?.let { letter ->
           insertAppStateInDb(letter)
         }
-      }
-      .doOnError {
-        ServiceDispatcher.dispatchEvent(ServiceEvent.DisconnectTransmitter(macAddress))
       }
       .onErrorReturn {
         // return a disconnect to the service

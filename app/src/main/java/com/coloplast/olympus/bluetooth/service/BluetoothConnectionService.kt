@@ -13,14 +13,12 @@ import com.coloplast.olympus.BuildConfig
 import com.coloplast.olympus.R
 import com.coloplast.olympus.activities.MainActivity
 import com.coloplast.olympus.bluetooth.BluetoothServiceViewModel
+import com.coloplast.olympus.bluetooth.ServiceDispatcher
 import com.coloplast.olympus.bluetooth.StateDispatcher
 import com.coloplast.olympus.bluetooth.businesslayer.ServiceStateDispatcher
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.bluetooth.businesslayer.models.BleDevice
-import com.coloplast.olympus.bluetooth.model.BluetoothServiceHelper
-import com.coloplast.olympus.bluetooth.model.BluetoothServiceModel
-import com.coloplast.olympus.bluetooth.model.BluetoothServiceResult
-import com.coloplast.olympus.bluetooth.model.StateChange
+import com.coloplast.olympus.bluetooth.model.*
 import com.coloplast.olympus.notifications.OlympusNotificationManager
 import com.coloplast.olympus.patchsplit.models.CompromisedVault
 import com.coloplast.olympus.ui.feature.TransmitterManager
@@ -183,6 +181,8 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
           else if(otherTxStateChange != null) {
             StateDispatcher.dispatchStateForActiveTransmitter(otherTxStateChange)
           }
+
+          ServiceDispatcher.dispatchEvent(ServiceEvent.DisconnectTransmitter(it.macAddress))
         }
         is BluetoothServiceModel.ScanningStarted -> {
           StateDispatcher.dispatchScanning()

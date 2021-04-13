@@ -156,7 +156,9 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
           }
         }
         is BluetoothServiceModel.Disconnected -> {
-          connectionAttempts[it.macAddress] = connectionAttempts[it.macAddress]?.plus(1) ?: 1
+          synchronized(connectionAttempts) {
+            connectionAttempts[it.macAddress] = connectionAttempts[it.macAddress]?.plus(1) ?: 1
+          }
 
           val latestState = transmitterManager.getLatestState(it.macAddress)
           val bleDevice = latestState?.bleDevice ?: BleDevice("", it.macAddress, BleConnectionState.DISCONNECTED)
@@ -165,8 +167,10 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
           StateDispatcher.dispatch(StateChange(UiState.DISCONNECTED, bleDevice = bleDevice))
 
           if((transmitterManager.isActiveTransmitter(it.macAddress) || transmitterManager.isOnlyTransmitterAdded(it.macAddress)) && connectionAttempts[it.macAddress]!! >= 3) {
-            connectionAttempts[it.macAddress] = 0
-
+            synchronized(connectionAttempts) {
+              connectionAttempts[it.macAddress] = 0
+            }
+            
             val disconnectedStateChange = StateChange(UiState.TRANSMITTER_NOT_FOUND, bleDevice = bleDevice)
             StateDispatcher.dispatchStateForActiveTransmitter(disconnectedStateChange)
             return@ui
@@ -181,8 +185,6 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
           else if(otherTxStateChange != null) {
             StateDispatcher.dispatchStateForActiveTransmitter(otherTxStateChange)
           }
-
-          ServiceDispatcher.dispatchEvent(ServiceEvent.DisconnectTransmitter(it.macAddress))
         }
         is BluetoothServiceModel.ScanningStarted -> {
           StateDispatcher.dispatchScanning()
@@ -195,6 +197,7 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
     createNotificationChannel()
 
     val pendingIntent: PendingIntent = Intent(this, MainActivity::class.java).let { notificationIntent ->
+      notificationIntent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
       PendingIntent.getActivity(this, 0, notificationIntent, 0)
     }
 

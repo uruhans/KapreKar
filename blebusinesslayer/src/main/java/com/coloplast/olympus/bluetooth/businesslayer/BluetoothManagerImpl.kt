@@ -139,11 +139,6 @@ class BluetoothManagerImpl(
     }
   }
 
-  override fun initiateBleScanning(uuidFilter: UUID?): Observable<ScanResult> {
-    return bluetoothHandler.scanBleDevices(uuidFilter)
-      .map { ScanResult(it.bleDevice.name?.trim(), it.bleDevice.macAddress, it.rssi) }
-  }
-
   /**
    * Initiate a scan of ble devices filtered by the Olympus Wireless Protocol UUID to limit results only to specific devices
    * - output -> BleDevice containing BleDevice Name, MacAddress and current ConnectionState
@@ -163,19 +158,6 @@ class BluetoothManagerImpl(
       .flatMap { rxBleDevice ->
         bluetoothHandler.rxBleDeviceConnectionStateObservable(rxBleDevice)
           .map { BleDevice(rxBleDevice.name, rxBleDevice.macAddress, BleConnectionState.fromRxBleState(it)) }
-      }
-  }
-
-  override fun bleDisconnectedObservable(macAddress: String): Observable<BleConnectionState> {
-    return bleConnectionStateObservable(macAddress)
-      .filter { it == BleConnectionState.DISCONNECTED || it == BleConnectionState.DISCONNECTING }
-      .flatMap { bleConnectionState ->
-        getBleDevice(macAddress)
-          .doOnNext {
-            removeDeviceFromConnectedList(it)
-            removeConnectionFromList(it.macAddress)
-          }
-          .map { bleConnectionState }
       }
   }
 
@@ -358,13 +340,6 @@ class BluetoothManagerImpl(
         .flatMap { it }
         .compose(OlympusWirelessProtocol.compromisedTransformer)
     }
-  }
-
-  override fun connectedDevicesObservable(): Observable<List<BleDevice>> {
-    return bleDeviceRelay.publish()
-      .refCount()
-      // todo - this does not contain the latest peripheral - it probably should
-      .startWith(bleDevices.map { BleDevice(it.value.name, it.value.macAddress, BleConnectionState.fromRxBleState(it.value.connectionState)) })
   }
 
   override fun connectedDeviceObservable(macAddress: String): Observable<BleDevice> {

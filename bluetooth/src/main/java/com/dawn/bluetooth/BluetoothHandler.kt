@@ -72,7 +72,7 @@ class BluetoothHandler(private val context: Context, isDebugging: Boolean) {
               .flatMapSingle { rxBleConnection.requestMtu(mtuSize) }
               .flatMapSingle { rxBleConnection.discoverServices() }
               // setup indication on the ServiceChanged characteristic
-              .flatMap { rxBleConnection.setupIndication(serviceChangedUUID, NotificationSetupMode.DEFAULT) }
+              .flatMap { rxBleConnection.setupNotification(serviceChangedUUID, NotificationSetupMode.DEFAULT) }
               .map { rxBleConnection }
           }
       }

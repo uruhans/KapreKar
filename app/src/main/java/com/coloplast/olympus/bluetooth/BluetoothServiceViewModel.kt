@@ -64,6 +64,7 @@ class BluetoothServiceViewModel(
       databaseTransmittersObservable,
       retryObservable
     )
+      //.subscribeOn(Schedulers.io())
       .filter { bluetoothManager.bluetoothStateObservable().blockingFirst() == BluetoothState.READY}
       // only attempt reconnect if we want to
       .filter { shouldReconnect.get() }
@@ -89,22 +90,18 @@ class BluetoothServiceViewModel(
       //.doOnNext { Timber.d("Scanning for [${it.transmitter.name}] [${it.transmitter.id}]") }
       .flatMap { txModel ->
         bluetoothManager.scanSpecificTransmitter(txModel.transmitter.id)
-          .takeUntil(Observable.timer(3, TimeUnit.SECONDS))
           .takeUntil { it == txModel.transmitter.id }
-          .take(1)
+          .buffer(1)
           .map { true }
           .onErrorReturn { false }
           .filter { it }
           .map { txModel }
       }
-      .delay(1, TimeUnit.SECONDS)
       .doOnNext { Timber.wtf("Trying to connect to [${it.transmitter.name}] with macAddress: [${it.transmitter.id}]") }
       // then map the txModel => transmitter
       .map { it.transmitter }
       // then map the transmitter => macAddress
       .map { it.id }
-//      .publish()
-//      .refCount()
 
     /**
      * There is a case where the reconnection attempts are preventing users from adding a 2nd transmitter.
@@ -120,7 +117,7 @@ class BluetoothServiceViewModel(
     val disconnectTransmitterObservable = ServiceDispatcher.serviceEventObservable()
       .filter { it is ServiceEvent.DisconnectTransmitter }
       .map { it as ServiceEvent.DisconnectTransmitter }
-      //.delay(2000, TimeUnit.MILLISECONDS)
+      .delay(500, TimeUnit.MILLISECONDS)
 
     // the observable that handles the connection
     val connectionObservable = immediateConnectionObservable
@@ -210,6 +207,9 @@ class BluetoothServiceViewModel(
         stateLetter?.let { letter ->
           insertAppStateInDb(letter)
         }
+      }
+      .doOnError {
+        ServiceDispatcher.dispatchEvent(ServiceEvent.DisconnectTransmitter(macAddress))
       }
       .onErrorReturn {
         // return a disconnect to the service

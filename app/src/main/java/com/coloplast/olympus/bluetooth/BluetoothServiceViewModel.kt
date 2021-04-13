@@ -1,5 +1,6 @@
 package com.coloplast.olympus.bluetooth
 
+import android.os.Build
 import com.artemzin.rxui.kotlin.bind
 import com.coloplast.olympus.bluetooth.businesslayer.BluetoothManager
 import com.coloplast.olympus.bluetooth.businesslayer.DeviceConnection
@@ -64,8 +65,7 @@ class BluetoothServiceViewModel(
       databaseTransmittersObservable,
       retryObservable
     )
-      //.subscribeOn(Schedulers.io())
-      .filter { bluetoothManager.bluetoothStateObservable().blockingFirst() == BluetoothState.READY}
+      .filter { bluetoothManager.bluetoothStateObservable().blockingFirst() == BluetoothState.READY }
       // only attempt reconnect if we want to
       .filter { shouldReconnect.get() }
       .flatMap {
@@ -89,14 +89,21 @@ class BluetoothServiceViewModel(
       .filter { it.connectionState == BleConnectionState.DISCONNECTED }
       //.doOnNext { Timber.d("Scanning for [${it.transmitter.name}] [${it.transmitter.id}]") }
       .flatMap { txModel ->
-        bluetoothManager.scanSpecificTransmitter(txModel.transmitter.id)
-          .takeUntil { it == txModel.transmitter.id }
-          .buffer(1)
-          .map { true }
-          .onErrorReturn { false }
-          .filter { it }
-          .map { txModel }
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
+          Timber.wtf("(SDK_INT(${Build.VERSION.SDK_INT}) > Oreo 8.0.0) -> No scanning")
+          Observable.just(txModel)
+        }
+        else {
+          bluetoothManager.scanSpecificTransmitter(txModel.transmitter.id)
+            .takeUntil { it == txModel.transmitter.id }
+            .buffer(1)
+            .map { true }
+            .onErrorReturn { false }
+            .filter { it }
+            .map { txModel }
+        }
       }
+      .delay(1, TimeUnit.SECONDS)
       .doOnNext { Timber.wtf("Trying to connect to [${it.transmitter.name}] with macAddress: [${it.transmitter.id}]") }
       // then map the txModel => transmitter
       .map { it.transmitter }
@@ -225,6 +232,4 @@ class BluetoothServiceViewModel(
       .doOnError { throwable -> Timber.e(throwable) }
       .blockingGet()
   }
-
-
 }

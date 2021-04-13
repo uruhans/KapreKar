@@ -34,6 +34,7 @@ import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.time.LocalDateTime
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 class BluetoothManagerImpl(
   private val transmitterComponent: TransmitterComponent,
@@ -118,6 +119,7 @@ class BluetoothManagerImpl(
 
   override fun scanSpecificTransmitter(macAddress: String): Observable<String> {
     return bluetoothHandler.scanBleDevices(OlympusWirelessProtocol.UUID)
+      .takeUntil(Observable.timer(3, TimeUnit.SECONDS))
       .map { it.bleDevice.macAddress }
       .filter { it == macAddress }
   }

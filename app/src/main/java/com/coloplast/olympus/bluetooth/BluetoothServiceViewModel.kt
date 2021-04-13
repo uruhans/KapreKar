@@ -1,5 +1,6 @@
 package com.coloplast.olympus.bluetooth
 
+import android.os.Build
 import com.artemzin.rxui.kotlin.bind
 import com.coloplast.olympus.bluetooth.businesslayer.BluetoothManager
 import com.coloplast.olympus.bluetooth.businesslayer.DeviceConnection
@@ -64,7 +65,7 @@ class BluetoothServiceViewModel(
       databaseTransmittersObservable,
       retryObservable
     )
-      .filter { bluetoothManager.bluetoothStateObservable().blockingFirst() == BluetoothState.READY}
+      .filter { bluetoothManager.bluetoothStateObservable().blockingFirst() == BluetoothState.READY }
       // only attempt reconnect if we want to
       .filter { shouldReconnect.get() }
       .flatMap {
@@ -88,14 +89,22 @@ class BluetoothServiceViewModel(
       .filter { it.connectionState == BleConnectionState.DISCONNECTED }
       //.doOnNext { Timber.d("Scanning for [${it.transmitter.name}] [${it.transmitter.id}]") }
       .flatMap { txModel ->
-        bluetoothManager.scanSpecificTransmitter(txModel.transmitter.id)
-          .takeUntil(Observable.timer(3, TimeUnit.SECONDS))
-          .takeUntil { it == txModel.transmitter.id }
-          .take(1)
-          .map { true }
-          .onErrorReturn { false }
-          .filter { it }
-          .map { txModel }
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
+          Timber.wtf("(SDK_INT(${Build.VERSION.SDK_INT}) > Oreo 8.0.0) -> No scanning")
+          Observable.just(txModel)
+        }
+        else {
+          Timber.d("Start scanning for ${txModel.transmitter.name}...")
+          bluetoothManager.scanSpecificTransmitter(txModel.transmitter.id)
+            .takeUntil(Observable.timer(3, TimeUnit.SECONDS))
+            .doOnNext { Timber.wtf("Scanning found transmitter ${txModel.transmitter.name}") }
+            .takeUntil { it == txModel.transmitter.id }
+            .take(1)
+            .map { true }
+            .onErrorReturn { false }
+            .filter { it }
+            .map { txModel }
+        }
       }
       .delay(1, TimeUnit.SECONDS)
       .doOnNext { Timber.wtf("Trying to connect to [${it.transmitter.name}] with macAddress: [${it.transmitter.id}]") }

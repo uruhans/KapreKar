@@ -113,6 +113,10 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
           StateDispatcher.dispatch(it.statusChange)
         }
         is BluetoothServiceModel.DeviceUpdate -> {
+          synchronized(connectionAttempts) {
+            connectionAttempts[it.statusChange.getMacAddress()] = 0
+          }
+
           // this will dispatch the state change to any who observes it (none if app is in background)
           StateDispatcher.dispatch(it.statusChange)
 
@@ -156,6 +160,8 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
           }
         }
         is BluetoothServiceModel.Disconnected -> {
+          Timber.wtf("[onResult] Disconnected")
+
           synchronized(connectionAttempts) {
             connectionAttempts[it.macAddress] = connectionAttempts[it.macAddress]?.plus(1) ?: 1
           }
@@ -172,6 +178,8 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
             }
             
             val disconnectedStateChange = StateChange(UiState.TRANSMITTER_NOT_FOUND, bleDevice = bleDevice)
+
+            Timber.wtf("[onResult] TRANSMITTER_NOT_FOUND")
             StateDispatcher.dispatchStateForActiveTransmitter(disconnectedStateChange)
             return@ui
           }
@@ -180,11 +188,16 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
 
           if(transmitterManager.isActiveTransmitter(it.macAddress) && latestState != null) {
             olympusNotificationManager.send(it.macAddress, OverlayState.BLE_CONNECTION_LOST)
+
+            Timber.wtf("[onResult] BLE_CONNECTION_LOST")
             StateDispatcher.dispatchStateForActiveTransmitter(StateChange(latestState.state, OverlayState.BLE_CONNECTION_LOST, bleDevice))
           }
           else if(otherTxStateChange != null) {
+            Timber.wtf("[onResult] otherTxStateChange")
             StateDispatcher.dispatchStateForActiveTransmitter(otherTxStateChange)
           }
+
+          Timber.wtf("[onResult] END")
         }
         is BluetoothServiceModel.ScanningStarted -> {
           StateDispatcher.dispatchScanning()

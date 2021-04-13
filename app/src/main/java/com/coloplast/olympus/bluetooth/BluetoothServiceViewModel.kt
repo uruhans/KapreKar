@@ -109,6 +109,7 @@ class BluetoothServiceViewModel(
       .map { it.transmitter }
       // then map the transmitter => macAddress
       .map { it.id }
+      .share()
 
     /**
      * There is a case where the reconnection attempts are preventing users from adding a 2nd transmitter.
@@ -122,9 +123,14 @@ class BluetoothServiceViewModel(
       .doOnNext { shouldReconnect.set(it.shouldReconnect) }
 
     val disconnectTransmitterObservable = ServiceDispatcher.serviceEventObservable()
+      // hack to prevent it from running (for testing)
+      .map { ServiceEvent.Ping() as ServiceEvent }
       .filter { it is ServiceEvent.DisconnectTransmitter }
       .map { it as ServiceEvent.DisconnectTransmitter }
+      .doOnNext { Timber.wtf("[disconnectTransmitterObservable] Should disconnect observable - 1") }
       .delay(3000, TimeUnit.MILLISECONDS)
+      .doOnNext { Timber.wtf("[disconnectTransmitterObservable] Should disconnect observable - 2") }
+      .map { BluetoothServiceModel.Disconnected(it.macAddress) as BluetoothServiceModel }
 
     // the observable that handles the connection
     val connectionObservable = immediateConnectionObservable
@@ -134,22 +140,39 @@ class BluetoothServiceViewModel(
       // then we do the actual connection
       .flatMap { macAddress ->
         connectObservable(macAddress)
-        .takeUntil(
-          disconnectTransmitterObservable
-            .filter { it.macAddress == macAddress }
-        )
-        // added to be completely sure that we are terminating the connection
-        .onTerminateDetach()
-        // log disconnected state
-        .doOnNext {
-          if (it is BluetoothServiceModel.Disconnected) {
-            insertAppStateInDb(UiState.DISCONNECTED.toLetter())
+          .onErrorReturn {
+            Timber.wtf(it)
+            Timber.wtf("[onErrorReturn] was hit")
+            BluetoothServiceModel.Disconnected(macAddress)
           }
-        }
+          // log disconnected state
+//          .takeUntil(
+//            disconnectTransmitterObservable
+//              .filter { it.macAddress == macAddress }
+//              .doOnNext { Timber.wtf("takeUntil was hit") }
+//          )
+          .doOnNext {
+            if(it is BluetoothServiceModel.Disconnected) {
+              Timber.wtf("$it")
+              //insertAppStateInDb(UiState.DISCONNECTED.toLetter())
+              ServiceDispatcher.dispatchEvent(ServiceEvent.DisconnectTransmitter(macAddress))
+            }
+          }
+          .doOnError { Timber.wtf("111 [doOnError] was hit") }
+          .doOnTerminate { Timber.wtf("111 [doOnTerminate] was hit") }
+          .doOnDispose { Timber.wtf("111 [doOnDispose] was hit") }
+          .doOnComplete { Timber.wtf("111 [doOnComplete] was hit") }
       }
+      // added to be completely sure that we are terminating the connection
+//        .onTerminateDetach()
+      .doOnError { Timber.wtf("[doOnError] was hit") }
+      .doOnTerminate { Timber.wtf("[doOnTerminate] was hit") }
+      .doOnDispose { Timber.wtf("[doOnDispose] was hit") }
+      .doOnComplete { Timber.wtf("[doOnComplete] was hit") }
+      .share()
 
     compositeDisposable.add(bluetoothStateObservable.subscribe())
-    compositeDisposable.add(connectionObservable.bind(serviceResult.onResult()))
+    compositeDisposable.add(Observable.merge(connectionObservable, disconnectTransmitterObservable).share().bind(serviceResult.onResult()))
     compositeDisposable.add(reconnectionAttemptsObservable.subscribe())
 
     return compositeDisposable
@@ -175,7 +198,7 @@ class BluetoothServiceViewModel(
              * that will seem like a "real" statusVector, but in fact is only a battery update (containing the old statusVector)
              * which could go and mess things up for the APS system (but we still want to send the battery updates to the screens)
              */
-            if(deviceResult.bleDevice.peripheral?.isBatteryUpdate == true) {
+            if (deviceResult.bleDevice.peripheral?.isBatteryUpdate == true) {
               BluetoothServiceModel.BatteryUpdate(stateChange)
             }
             else {
@@ -201,7 +224,7 @@ class BluetoothServiceViewModel(
         }
       }
       .doOnNext {
-        val stateLetter = when(it) {
+        val stateLetter = when (it) {
           is BluetoothServiceModel.DeviceUpdate -> {
             it.statusChange.state.toLetter()
           }
@@ -215,19 +238,21 @@ class BluetoothServiceViewModel(
           insertAppStateInDb(letter)
         }
       }
-      .doOnError {
-        ServiceDispatcher.dispatchEvent(ServiceEvent.DisconnectTransmitter(macAddress))
-      }
-      .onErrorReturn {
-        // return a disconnect to the service
-        BluetoothServiceModel.Disconnected(macAddress)
-      }
+//      .doOnError {
+//        Timber.wtf("[doOnError] was hit")
+//        ServiceDispatcher.dispatchEvent(ServiceEvent.DisconnectTransmitter(macAddress))
+//      }
+//      .onErrorReturn {
+//        // return a disconnect to the service
+//        Timber.wtf("[onErrorReturn] was hit")
+//        BluetoothServiceModel.Disconnected(macAddress)
+//      }
   }
 
   private fun insertAppStateInDb(stateLetter: String): Throwable? {
     return appStateComponent.insertAppState(stateLetter, logFromService = true)
       .subscribeOn(Schedulers.io())
-        //LifecycleObserver has a 700 ms delay
+      //LifecycleObserver has a 700 ms delay
       .delay(800, TimeUnit.MILLISECONDS)
       .doOnError { throwable -> Timber.e(throwable) }
       .blockingGet()

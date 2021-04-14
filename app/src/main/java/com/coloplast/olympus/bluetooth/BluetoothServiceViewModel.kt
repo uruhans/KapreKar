@@ -84,10 +84,8 @@ class BluetoothServiceViewModel(
       .throttleLatest(5, TimeUnit.SECONDS)
       // get the current connection state of the transmitter immediately
       .map { TxModel(it, bluetoothManager.bleConnectionStateObservable(it.id).blockingFirst()) }
-      //.doOnNext { Timber.d("Device [${it.transmitter.name}] is [${it.connectionState}]") }
       // only continue if the current transmitter is disconnected
       .filter { it.connectionState == BleConnectionState.DISCONNECTED }
-      //.doOnNext { Timber.d("Scanning for [${it.transmitter.name}] [${it.transmitter.id}]") }
       .flatMap { txModel ->
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
           Timber.wtf("(SDK_INT(${Build.VERSION.SDK_INT}) > Oreo 8.0.0) -> No scanning")
@@ -122,16 +120,6 @@ class BluetoothServiceViewModel(
       .doOnNext { Timber.d("reconnectionAttemptsObservable was hit shouldReconnect=[${it.shouldReconnect}]") }
       .doOnNext { shouldReconnect.set(it.shouldReconnect) }
 
-    val disconnectTransmitterObservable = ServiceDispatcher.serviceEventObservable()
-      // hack to prevent it from running (for testing)
-      .map { ServiceEvent.Ping() as ServiceEvent }
-      .filter { it is ServiceEvent.DisconnectTransmitter }
-      .map { it as ServiceEvent.DisconnectTransmitter }
-      .doOnNext { Timber.wtf("[disconnectTransmitterObservable] Should disconnect observable - 1") }
-      .delay(3000, TimeUnit.MILLISECONDS)
-      .doOnNext { Timber.wtf("[disconnectTransmitterObservable] Should disconnect observable - 2") }
-      .map { BluetoothServiceModel.Disconnected(it.macAddress) as BluetoothServiceModel }
-
     // the observable that handles the connection
     val connectionObservable = immediateConnectionObservable
       // just as a precaution, we check the connection state for the transmitter again
@@ -145,34 +133,17 @@ class BluetoothServiceViewModel(
             Timber.wtf("[onErrorReturn] was hit")
             BluetoothServiceModel.Disconnected(macAddress)
           }
-          // log disconnected state
-//          .takeUntil(
-//            disconnectTransmitterObservable
-//              .filter { it.macAddress == macAddress }
-//              .doOnNext { Timber.wtf("takeUntil was hit") }
-//          )
           .doOnNext {
             if(it is BluetoothServiceModel.Disconnected) {
               Timber.wtf("$it")
               //insertAppStateInDb(UiState.DISCONNECTED.toLetter())
-              ServiceDispatcher.dispatchEvent(ServiceEvent.DisconnectTransmitter(macAddress))
             }
           }
-          .doOnError { Timber.wtf("111 [doOnError] was hit") }
-          .doOnTerminate { Timber.wtf("111 [doOnTerminate] was hit") }
-          .doOnDispose { Timber.wtf("111 [doOnDispose] was hit") }
-          .doOnComplete { Timber.wtf("111 [doOnComplete] was hit") }
       }
-      // added to be completely sure that we are terminating the connection
-//        .onTerminateDetach()
-      .doOnError { Timber.wtf("[doOnError] was hit") }
-      .doOnTerminate { Timber.wtf("[doOnTerminate] was hit") }
-      .doOnDispose { Timber.wtf("[doOnDispose] was hit") }
-      .doOnComplete { Timber.wtf("[doOnComplete] was hit") }
       .share()
 
     compositeDisposable.add(bluetoothStateObservable.subscribe())
-    compositeDisposable.add(Observable.merge(connectionObservable, disconnectTransmitterObservable).share().bind(serviceResult.onResult()))
+    compositeDisposable.add(connectionObservable.share().bind(serviceResult.onResult()))
     compositeDisposable.add(reconnectionAttemptsObservable.subscribe())
 
     return compositeDisposable
@@ -238,15 +209,6 @@ class BluetoothServiceViewModel(
           insertAppStateInDb(letter)
         }
       }
-//      .doOnError {
-//        Timber.wtf("[doOnError] was hit")
-//        ServiceDispatcher.dispatchEvent(ServiceEvent.DisconnectTransmitter(macAddress))
-//      }
-//      .onErrorReturn {
-//        // return a disconnect to the service
-//        Timber.wtf("[onErrorReturn] was hit")
-//        BluetoothServiceModel.Disconnected(macAddress)
-//      }
   }
 
   private fun insertAppStateInDb(stateLetter: String): Throwable? {

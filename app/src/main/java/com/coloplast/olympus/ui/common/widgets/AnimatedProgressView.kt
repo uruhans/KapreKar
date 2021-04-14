@@ -4,6 +4,7 @@ import android.animation.ValueAnimator
 import android.content.Context
 import android.util.AttributeSet
 import android.widget.FrameLayout
+import com.coloplast.olympus.shared.AppSettings
 import com.coloplast.olympus.utils.DeviceUtils
 
 class AnimatedProgressView @JvmOverloads constructor(
@@ -11,7 +12,8 @@ class AnimatedProgressView @JvmOverloads constructor(
 ) : FrameLayout(context, attrs, defStyleAttr), ValueAnimator.AnimatorUpdateListener {
   
   private var animationTimeInSeconds = 9
-  private val animator: ValueAnimator = ValueAnimator.ofInt(0, DeviceUtils.screenWidth())
+  private val screenWidth = AppSettings.applicationContext.resources.displayMetrics.widthPixels
+  private val animator: ValueAnimator = ValueAnimator.ofInt(0, screenWidth)
   
   init {
     animator.repeatMode = ValueAnimator.RESTART
@@ -28,7 +30,7 @@ class AnimatedProgressView @JvmOverloads constructor(
     }
   }
   
-  fun startAnimation() {
+  private fun startAnimation() {
     if (animator.isStarted || animator.isRunning) {
       animator.cancel()
       animator.currentPlayTime = 0

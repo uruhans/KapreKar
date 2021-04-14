@@ -25,11 +25,8 @@ object DeviceUtils {
     return BuildConfig.VERSION_NAME
   }
 
-  fun screenWidth(): Int {
-    return AppSettings.applicationContext.resources.displayMetrics.widthPixels
-  }
-
   fun logDirectory() : File {
     return File(AppSettings.applicationContext.filesDir.absolutePath, "log")
   }
+
 }

@@ -45,6 +45,7 @@ import com.coloplast.olympus.ui.feature.uistates.WelcomeViewModel
 import com.coloplast.olympus.ui.feature.update.FirmwareUpdateFactoryImpl
 import com.coloplast.olympus.ui.feature.update.charging.FirmwareUpdateChargingViewModel
 import com.coloplast.olympus.ui.feature.update.progress.FirmwareProgressViewModel
+import com.coloplast.olympus.utils.DisplayUtils
 import com.coloplast.olympus.work.SyncWorker
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
@@ -54,6 +55,7 @@ val koinModule = module {
   single { PreferencesImpl(androidContext()) }
   // a workaround to prevent the code from breaking after creating an interface for the old Preferences class used for testing
   single<Preferences> { get<PreferencesImpl>() }
+  single { DisplayUtils() }
 
   single { Me(get()) }
   factory { SyncWorker(get(), get(), get()) }

@@ -19,6 +19,7 @@ import com.coloplast.olympus.ui.common.models.Navigation
 import com.coloplast.olympus.ui.feature.home.HomeController
 import com.coloplast.olympus.ui.feature.onboarding.LandingController
 import com.coloplast.olympus.ui.feature.splash.SplashController
+import com.coloplast.olympus.utils.DisplayUtils
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -32,12 +33,15 @@ class MainActivity : AppCompatActivity() {
   private val currentUser: Me by inject()
   private val serviceStateDispatcher: ServiceStateDispatcher by inject()
   private val bluetoothManager: BluetoothManager by inject()
+  private val displayUtils: DisplayUtils by inject()
 
   private val compositeDisposable = CompositeDisposable()
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
+
+    displayUtils.registerDisplayStateReceiver(this)
 
     // we find the top level of the android view hierarchy
     val contentFrameLayout: ContentFrameLayout = findViewById(android.R.id.content)
@@ -140,6 +144,8 @@ class MainActivity : AppCompatActivity() {
 
   override fun onDestroy() {
     super.onDestroy()
+
+    displayUtils.unregisterDisplayStateReceiver(this)
 
     if (!compositeDisposable.isDisposed) {
       compositeDisposable.dispose()

@@ -58,4 +58,8 @@ object OSUtils {
     }
     context.startActivity(intent)
   }
+
+  fun isVersionOrAbove(androidVersion: Int) : Boolean {
+    return Build.VERSION.SDK_INT >= androidVersion
+  }
 }

@@ -15,6 +15,8 @@ import com.coloplast.olympus.ui.feature.statemachine.OverlayStateMachineImpl
 import com.coloplast.olympus.ui.feature.statemachine.UiStateMachineImpl
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
 import com.coloplast.olympus.utils.DeviceUtils
+import com.coloplast.olympus.utils.DisplayUtils
+import com.coloplast.olympus.utils.OSUtils
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -27,7 +29,8 @@ class BluetoothServiceViewModel(
   private val bluetoothManager: BluetoothManager,
   private val transmitterComponent: TransmitterComponent,
   private val deviceConnection: DeviceConnection,
-  private val appStateComponent: AppStateComponent
+  private val appStateComponent: AppStateComponent,
+  private val displayUtils: DisplayUtils
 ) : ServiceViewModel<BluetoothServiceModel, BluetoothServiceResult<BluetoothServiceModel>>() {
 
   private val reversed = AtomicBoolean(false)
@@ -87,7 +90,8 @@ class BluetoothServiceViewModel(
       // only continue if the current transmitter is disconnected
       .filter { it.connectionState == BleConnectionState.DISCONNECTED }
       .flatMap { txModel ->
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
+        /* android O - OREO && DISPLAY IS OFF */
+        if (OSUtils.isVersionOrAbove(26) && displayUtils.isDisplayOn().not()) {
           Timber.wtf("(SDK_INT(${Build.VERSION.SDK_INT}) > Oreo 8.0.0) -> No scanning")
           Observable.just(txModel)
         }

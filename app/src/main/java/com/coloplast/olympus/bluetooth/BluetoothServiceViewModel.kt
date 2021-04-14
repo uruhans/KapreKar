@@ -144,7 +144,7 @@ class BluetoothServiceViewModel(
           .doOnNext {
             if(it is BluetoothServiceModel.Disconnected) {
               Timber.wtf("$it")
-              //insertAppStateInDb(UiState.DISCONNECTED.toLetter())
+              insertAppStateInDb(UiState.DISCONNECTED.toLetter())
             }
           }
       }

@@ -243,20 +243,20 @@ class BluetoothManagerImpl(
     return Observable.combineLatest(
       setupOlympusStatusVectorNotifications(macAddress),
       setupBatteryPowerNotifications(macAddress),
-      { statusVector: StatusVector, powerLevel: PowerLevel ->
+      { statusVector: StatusVector, powerLevel: Pair<PowerLevel, Int> ->
+        Timber.wtf("statusVector [${macAddress}]")
+
         var isBatteryUpdate: Boolean
 
         synchronized(currentPowerLevel) {
-          isBatteryUpdate = if(currentPowerLevel[macAddress] == null) false else powerLevel.percentage != currentPowerLevel[macAddress]
+          isBatteryUpdate = currentPowerLevel[macAddress] ?: 0 < powerLevel.second
+          currentPowerLevel[macAddress] = powerLevel.second
         }
 
-        Peripheral(statusVector.patch, statusVector.transmitter, powerLevel, isBatteryUpdate)
+        Timber.wtf("isBatteryUpdate [$isBatteryUpdate]")
+
+        Peripheral(statusVector.patch, statusVector.transmitter, powerLevel.first, isBatteryUpdate)
       })
-      .doOnNext {
-        synchronized(currentPowerLevel) {
-          currentPowerLevel[macAddress] = it.battery.powerLevel.percentage
-        }
-      }
   }
 
   /**
@@ -265,7 +265,7 @@ class BluetoothManagerImpl(
    * - upon subscription this observable with do a READ CHARACTERISTIC in order to get the initial state of the characteristics
    * - output -> PowerLevel describing the current powerlevel of the transmitter (0-100% is converted into NEAR_EMPTY, LOW, MEDIUM and HIGH)
    */
-  private fun setupBatteryPowerNotifications(macAddress: String): Observable<PowerLevel> {
+  private fun setupBatteryPowerNotifications(macAddress: String): Observable<Pair<PowerLevel, Int>> {
     val rxBleConnection = bleConnections[macAddress]!!
 
     return rxBleConnection.setupNotification(BatteryPowerService.Characteristics.POWER)
@@ -279,6 +279,7 @@ class BluetoothManagerImpl(
           .onErrorReturn { batteryPackage }
       }
       .compose(BatteryPowerService.transformer)
+      .map { Pair(it, (currentPowerLevel[macAddress] ?: 0) + 1) }
   }
 
   /**

@@ -134,15 +134,24 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
         is BluetoothServiceModel.BatteryUpdate -> {
           StateDispatcher.dispatch(it.statusChange)
 
-          if(transmitterManager.isActiveTransmitter(it.statusChange.getMacAddress())) {
+          val isOnlyTransmitter = transmitterManager.isOnlyTransmitterAdded(it.statusChange.getMacAddress())
+
+          if(transmitterManager.isActiveTransmitter(it.statusChange.getMacAddress()) || isOnlyTransmitter) {
+
+            if(isOnlyTransmitter) {
+              transmitterManager.determineCurrentlyActiveTransmitterAndReturnStateChangeFromIt(it.statusChange)
+            }
+
             olympusNotificationManager.send(it.statusChange.getMacAddress(), it.statusChange.state)
             olympusNotificationManager.send(it.statusChange.getMacAddress(), it.statusChange.overlayState)
+
+            it.statusChange.isBatteryUpdate = true
 
             // this has been removed, because it was causing issues with the status screen
             // ie: deviceUpdate comes with UiState.MultipleTransmitters - but then the batteryUpdate
             // who doesn't know about multiple transmitters overrides it with *this* particular statusUpdate
             // causing the home screen to show the wrong status
-            // StateDispatcher.dispatchStateForActiveTransmitter(it.statusChange)
+             StateDispatcher.dispatchStateForActiveTransmitter(it.statusChange)
           }
         }
         is BluetoothServiceModel.RawDataPackageUpdate -> {

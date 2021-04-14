@@ -120,6 +120,10 @@ class BluetoothServiceViewModel(
       .doOnNext { Timber.d("reconnectionAttemptsObservable was hit shouldReconnect=[${it.shouldReconnect}]") }
       .doOnNext { shouldReconnect.set(it.shouldReconnect) }
 
+    val disconnectTransmitterObservable = ServiceDispatcher.serviceEventObservable()
+      .filter { it is ServiceEvent.DisconnectTransmitter }
+      .map { it as ServiceEvent.DisconnectTransmitter }
+
     // the observable that handles the connection
     val connectionObservable = immediateConnectionObservable
       // just as a precaution, we check the connection state for the transmitter again
@@ -128,6 +132,10 @@ class BluetoothServiceViewModel(
       // then we do the actual connection
       .flatMap { macAddress ->
         connectObservable(macAddress)
+          .takeUntil(
+            disconnectTransmitterObservable
+              .filter { it.macAddress == macAddress }
+          )
           .onErrorReturn {
             Timber.wtf(it)
             Timber.wtf("[onErrorReturn] was hit")

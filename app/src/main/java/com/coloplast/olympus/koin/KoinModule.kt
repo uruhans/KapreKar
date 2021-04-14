@@ -73,7 +73,7 @@ val koinModule = module {
 
   single { CompromisedVault() }
   single<AutoPatchDetectionEngine> { AutoPatchDetectionEngineImpl(get()) }
-  single { TransmitterManager(get(), get()) }
+  single { TransmitterManager(get(), get(), get()) }
   single { BreachesOccurred(get()) }
   single { ServiceStateDispatcher() }
 

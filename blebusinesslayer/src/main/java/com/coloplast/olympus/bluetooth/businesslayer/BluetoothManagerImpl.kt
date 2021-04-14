@@ -241,19 +241,15 @@ class BluetoothManagerImpl(
    */
   private fun peripheralObservable(macAddress: String): Observable<Peripheral> {
     return Observable.combineLatest(
-      setupOlympusStatusVectorNotifications(macAddress),
       setupBatteryPowerNotifications(macAddress),
-      { statusVector: StatusVector, powerLevel: Pair<PowerLevel, Int> ->
-        Timber.wtf("statusVector [${macAddress}]")
-
+      setupOlympusStatusVectorNotifications(macAddress),
+      {  powerLevel: Pair<PowerLevel, Int>, statusVector: StatusVector ->
         var isBatteryUpdate: Boolean
 
         synchronized(currentPowerLevel) {
           isBatteryUpdate = currentPowerLevel[macAddress] ?: 0 < powerLevel.second
           currentPowerLevel[macAddress] = powerLevel.second
         }
-
-        Timber.wtf("isBatteryUpdate [$isBatteryUpdate]")
 
         Peripheral(statusVector.patch, statusVector.transmitter, powerLevel.first, isBatteryUpdate)
       })

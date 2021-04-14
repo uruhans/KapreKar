@@ -13,7 +13,8 @@ data class StateChange(
   val bleDevice: BleDevice,
   var apsAction: ApsAction = ApsAction.Nothing,
   val timestamp: Long = Instant.now().epochSecond,
-  var resetOrStitchCandidate: ByteArray? = null
+  var resetOrStitchCandidate: ByteArray? = null,
+  var isBatteryUpdate: Boolean = false
 ) : MoshiSerializable {
 
   fun getMacAddress() = bleDevice.macAddress

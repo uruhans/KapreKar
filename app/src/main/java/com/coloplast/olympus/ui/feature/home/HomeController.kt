@@ -279,6 +279,11 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
             imageDialogController = null
           }
 
+          if(stateChange.isBatteryUpdate && currentUiState == stateChange.state) {
+            Timber.wtf("isBatteryUpdate - but updating UiState anyways")
+            return@ui
+          }
+
           // this was added to prevent "blinking" ui when "switching" between OK_A and SOMETHING_ELSE
           if(stateToChangeTo == UiState.SOMETHING_ELSE) {
             Timber.d("Overriding [$stateToChangeTo] => [OK_A]")

@@ -136,7 +136,7 @@ class BluetoothServiceViewModel(
           .doOnNext {
             if(it is BluetoothServiceModel.Disconnected) {
               Timber.wtf("$it")
-              //insertAppStateInDb(UiState.DISCONNECTED.toLetter())
+              insertAppStateInDb(UiState.DISCONNECTED.toLetter())
             }
           }
       }
@@ -213,7 +213,6 @@ class BluetoothServiceViewModel(
 
   private fun insertAppStateInDb(stateLetter: String): Throwable? {
     return appStateComponent.insertAppState(stateLetter, logFromService = true)
-      .subscribeOn(Schedulers.io())
       //LifecycleObserver has a 700 ms delay
       .delay(800, TimeUnit.MILLISECONDS)
       .doOnError { throwable -> Timber.e(throwable) }

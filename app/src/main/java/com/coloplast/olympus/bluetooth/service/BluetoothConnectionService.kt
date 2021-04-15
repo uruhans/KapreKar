@@ -13,7 +13,6 @@ import com.coloplast.olympus.BuildConfig
 import com.coloplast.olympus.R
 import com.coloplast.olympus.activities.MainActivity
 import com.coloplast.olympus.bluetooth.BluetoothServiceViewModel
-import com.coloplast.olympus.bluetooth.ServiceDispatcher
 import com.coloplast.olympus.bluetooth.StateDispatcher
 import com.coloplast.olympus.bluetooth.businesslayer.ServiceStateDispatcher
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
@@ -181,29 +180,36 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
 
           StateDispatcher.dispatch(StateChange(UiState.DISCONNECTED, bleDevice = bleDevice))
 
-          if((transmitterManager.isActiveTransmitter(it.macAddress) || transmitterManager.isOnlyTransmitterAdded(it.macAddress)) && connectionAttempts[it.macAddress]!! >= 3) {
-            synchronized(connectionAttempts) {
-              connectionAttempts[it.macAddress] = 0
-            }
-            
+          if(transmitterManager.isActiveTransmitter(it.macAddress) || transmitterManager.isOnlyTransmitterAdded(it.macAddress)) {
             val disconnectedStateChange = StateChange(UiState.TRANSMITTER_NOT_FOUND, bleDevice = bleDevice)
 
-            Timber.wtf("[onResult] TRANSMITTER_NOT_FOUND")
-            StateDispatcher.dispatchStateForActiveTransmitter(disconnectedStateChange)
-            return@ui
+            if(connectionAttempts[it.macAddress]!! >= 3) {
+              synchronized(connectionAttempts) {
+                connectionAttempts[it.macAddress] = 0
+              }
+
+              Timber.wtf("[onResult] TRANSMITTER_NOT_FOUND")
+              StateDispatcher.dispatchStateForActiveTransmitter(disconnectedStateChange)
+            }
+            else {
+              olympusNotificationManager.send(it.macAddress, OverlayState.BLE_CONNECTION_LOST)
+
+              if(latestState != null) {
+                Timber.wtf("[onResult] BLE_CONNECTION_LOST")
+                StateDispatcher.dispatchStateForActiveTransmitter(StateChange(latestState.state, OverlayState.BLE_CONNECTION_LOST, bleDevice))
+              }
+              else {
+                StateDispatcher.dispatchStateForActiveTransmitter(disconnectedStateChange)
+              }
+            }
           }
+          else {
+            val otherTxStateChange = transmitterManager.onTransmitterDisconnect(it.macAddress)
 
-          val otherTxStateChange = transmitterManager.onTransmitterDisconnect(it.macAddress)
-
-          if(transmitterManager.isActiveTransmitter(it.macAddress) && latestState != null) {
-            olympusNotificationManager.send(it.macAddress, OverlayState.BLE_CONNECTION_LOST)
-
-            Timber.wtf("[onResult] BLE_CONNECTION_LOST")
-            StateDispatcher.dispatchStateForActiveTransmitter(StateChange(latestState.state, OverlayState.BLE_CONNECTION_LOST, bleDevice))
-          }
-          else if(otherTxStateChange != null) {
-            Timber.wtf("[onResult] otherTxStateChange")
-            StateDispatcher.dispatchStateForActiveTransmitter(otherTxStateChange)
+            if(otherTxStateChange != null) {
+              Timber.wtf("[onResult] otherTxStateChange")
+              StateDispatcher.dispatchStateForActiveTransmitter(otherTxStateChange)
+            }
           }
 
           Timber.wtf("[onResult] END")

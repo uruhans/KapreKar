@@ -115,12 +115,10 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
       //if(currentUiState == UiState.LOCATION_SERVICES_NOT_ENABLED) {
         compositeDisposable.clear()
         compositeDisposable.add(viewModel.bind(this))
-/*      }
-      else {
+//      }
+//      else {
         changeUiState(currentUiState, true)
-      }
-
- */
+//      }
     }
   }
 

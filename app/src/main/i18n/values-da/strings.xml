@@ -946,8 +946,8 @@
   <string name="transmitters_add_transmitter">Tilføj transmitter</string>
   <string name="transmitters_attached">Påsat</string>
   <string name="transmitters_delete">Slet</string>
-  <string name="transmitters_done">Færdig</string>
-  <string name="transmitters_edit">Rediger</string>
+  <string name="transmitters_done">Done</string>
+  <string name="transmitters_edit">Edit</string>
   <string name="transmitters_no_transmitters_added_body">Ingen transmittere er påsat endnu.</string>
   <string name="transmitters_not_attached">Ikke påsat</string>
   <string name="transmitters_not_detectable">Kan ikke detektere</string>

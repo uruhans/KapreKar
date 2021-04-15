@@ -39,9 +39,21 @@ class BluetoothServiceViewModel(
   override fun bind(serviceResult: BluetoothServiceResult<BluetoothServiceModel>): Disposable {
     val compositeDisposable = CompositeDisposable()
 
+    val appStateLoggerObservable = ServiceDispatcher.serviceEventObservable()
+      .ofType(ServiceEvent.AppStateLogger::class.java)
+      .delay(800, TimeUnit.MILLISECONDS)
+      .flatMap {
+        appStateComponent.insertAppState(it.letter, logFromService = true)
+          //LifecycleObserver has a 700 ms delay
+          .subscribeOn(Schedulers.io())
+          .toSingle { it }
+          .toObservable()
+      }
+      .filter { false }
+
     val bluetoothStateObservable = bluetoothManager.bluetoothStateObservable()
       .filter { it == BluetoothState.BLUETOOTH_NOT_ENABLED }
-      .doOnNext { insertAppStateInDb(UiState.BLUETOOTH_NOT_ENABLED.toLetter()) }
+      .doOnNext { ServiceDispatcher.dispatchEvent(ServiceEvent.AppStateLogger(UiState.BLUETOOTH_NOT_ENABLED.toLetter())) }
 
     // this observable pings us when we want to retry a connection attempt
     // and is usually started by the user elsewhere in the app
@@ -75,8 +87,8 @@ class BluetoothServiceViewModel(
         // here we get all transmitters stored locally in the database
         // we are doing it as a single because we dont want it to notify us when database changes occur
         transmitterComponent.getTransmittersAsSingle()
-          .map { if (reversed.get()) it.reversed() else it }
           .subscribeOn(Schedulers.io())
+          .map { if (reversed.get()) it.reversed() else it }
           .toObservable()
           .doOnNext { reversed.set(!reversed.get()) }
       }
@@ -147,13 +159,13 @@ class BluetoothServiceViewModel(
           }
           .doOnNext {
             if(it is BluetoothServiceModel.Disconnected) {
-              Timber.wtf("$it")
-              insertAppStateInDb(UiState.DISCONNECTED.toLetter())
+              ServiceDispatcher.dispatchEvent(ServiceEvent.AppStateLogger(UiState.DISCONNECTED.toLetter()))
             }
           }
       }
       .share()
 
+    compositeDisposable.add(appStateLoggerObservable.subscribe())
     compositeDisposable.add(bluetoothStateObservable.subscribe())
     compositeDisposable.add(connectionObservable.share().bind(serviceResult.onResult()))
     compositeDisposable.add(reconnectionAttemptsObservable.subscribe())
@@ -218,16 +230,8 @@ class BluetoothServiceViewModel(
         }
 
         stateLetter?.let { letter ->
-          insertAppStateInDb(letter)
+          ServiceDispatcher.dispatchEvent(ServiceEvent.AppStateLogger(letter))
         }
       }
-  }
-
-  private fun insertAppStateInDb(stateLetter: String): Throwable? {
-    return appStateComponent.insertAppState(stateLetter, logFromService = true)
-      //LifecycleObserver has a 700 ms delay
-      .delay(800, TimeUnit.MILLISECONDS)
-      .doOnError { throwable -> Timber.e(throwable) }
-      .blockingGet()
   }
 }

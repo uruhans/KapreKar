@@ -18,6 +18,7 @@ import com.coloplast.olympus.bluetooth.businesslayer.ServiceStateDispatcher
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.bluetooth.businesslayer.models.BleDevice
 import com.coloplast.olympus.bluetooth.model.*
+import com.coloplast.olympus.bluetooth.overrides.WetMountOverride
 import com.coloplast.olympus.notifications.OlympusNotificationManager
 import com.coloplast.olympus.patchsplit.models.CompromisedVault
 import com.coloplast.olympus.ui.feature.TransmitterManager
@@ -45,6 +46,8 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
   private val serviceStateDispatcher: ServiceStateDispatcher by inject()
   private val compromisedVault: CompromisedVault by inject()
   private val bluetoothServiceHelper: BluetoothServiceHelper by inject()
+
+  private val wetMountOverride = WetMountOverride()
 
   private val compositeDisposable = CompositeDisposable()
 
@@ -119,7 +122,11 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
           // this will dispatch the state change to any who observes it (none if app is in background)
           StateDispatcher.dispatch(it.statusChange)
 
-          val updatedStateChange = bluetoothServiceHelper.handleTransmitterUpdate(it.statusChange) ?: return@ui
+          // run through the active transmitter / APS v2
+          var updatedStateChange = bluetoothServiceHelper.handleTransmitterUpdate(it.statusChange) ?: return@ui
+
+          // run through wet mount overrider to see if we have a wet mount
+          updatedStateChange = wetMountOverride.handleOverride(updatedStateChange)
 
           // this will allow for notifications to be send when app is in the background
           olympusNotificationManager.send(updatedStateChange.stateChange.getMacAddress(), updatedStateChange.stateChange.state)

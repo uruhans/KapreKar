@@ -4,6 +4,7 @@ enum class Attached(val id: Int) {
   DETACHED(0),
   ATTACHED_ON_PATCH(1),
   ATTACHED_ON_BODY(2),
+  DETACH_BLE_OFF(128),
   ATTACHED_BLE_OFF(129),
   ATTACHED_BODY_BLE(130),
   UNKNOWN(-1);

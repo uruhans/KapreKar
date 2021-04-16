@@ -112,13 +112,9 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
 
     // we want to force an update if we are coming from the background
     if (currentUiState != UiState.INITIAL) {
-      //if(currentUiState == UiState.LOCATION_SERVICES_NOT_ENABLED) {
-        compositeDisposable.clear()
-        compositeDisposable.add(viewModel.bind(this))
-//      }
-//      else {
-        changeUiState(currentUiState, true)
-//      }
+      compositeDisposable.clear()
+      compositeDisposable.add(viewModel.bind(this))
+      changeUiState(currentUiState, true)
     }
   }
 

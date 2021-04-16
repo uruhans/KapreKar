@@ -124,13 +124,6 @@ class TransmitterManager(
           }
 
           return null
-//          else {
-//            Timber.wtf("NOT HERE")
-//            // we set the active transmitter
-//            // this case might occur when the currently active transmitter is DISCONNECTED
-//            setActiveTransmitter(stateChange)
-//            UpdatedStateChange(stateChange, true)
-//          }
         }
       }
     }

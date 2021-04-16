@@ -43,6 +43,6 @@ data class BleDevice(val name: String?, val macAddress: String, var connectionSt
   }
 
   fun isDetached(): Boolean {
-    return peripheral?.transmitter?.attached == Attached.DETACHED
+    return peripheral?.transmitter?.attached == Attached.DETACHED || peripheral?.transmitter?.attached == Attached.DETACH_BLE_OFF
   }
 }

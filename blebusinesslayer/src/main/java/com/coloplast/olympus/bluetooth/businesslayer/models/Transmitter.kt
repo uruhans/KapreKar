@@ -25,9 +25,9 @@ data class Transmitter(
       waterIngressDetection == WaterIngressDetection.WATER_INGRESS -> TransmitterState.WATER_INGRESS_DETECTION
       batteryState == BatteryState.SHUTTING_DOWN -> TransmitterState.BATTERY_SHUTTING_DOWN
       batteryState == BatteryState.CHARGING -> TransmitterState.BATTERY_CHARGING
-      attached == Attached.DETACHED -> TransmitterState.DETACHED
+      attached == Attached.DETACHED || attached == Attached.DETACH_BLE_OFF -> TransmitterState.DETACHED
       patchType == PatchType.UNKNOWN -> TransmitterState.PATCH_BROKEN
-      (waterIngressDetection == WaterIngressDetection.OK || waterIngressDetection == WaterIngressDetection.UNKNOWN) && (attached != Attached.UNKNOWN && attached != Attached.DETACHED) -> TransmitterState.OK
+      (waterIngressDetection == WaterIngressDetection.OK || waterIngressDetection == WaterIngressDetection.UNKNOWN) && (attached != Attached.UNKNOWN && attached != Attached.DETACHED && attached != Attached.DETACH_BLE_OFF) -> TransmitterState.OK
       else -> TransmitterState.UNKNOWN
     }
   }

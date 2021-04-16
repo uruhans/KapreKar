@@ -131,7 +131,7 @@ class NotificationCenter(
           triggerRingingAlarmNotification(payload, snoozePendingIntent, macAddress)
         }
         else {
-          triggerRegularNotification(payload, snoozePendingIntent)
+          triggerRegularNotification(payload, snoozePendingIntent, macAddress)
         }
       }
       UiState.INNER_BREACH_B.notificationId() -> {
@@ -142,10 +142,10 @@ class NotificationCenter(
         }
         else {
           // only outer sensors enabled. Send regular notification.
-          triggerRegularNotification(payload, snoozePendingIntent)
+          triggerRegularNotification(payload, snoozePendingIntent, macAddress)
         }
       }
-      else -> triggerRegularNotification(payload, snoozePendingIntent)
+      else -> triggerRegularNotification(payload, snoozePendingIntent, macAddress)
     }
   }
 
@@ -199,15 +199,21 @@ class NotificationCenter(
       notificationBuilder.setContentTitle(context.getString(it))
     }
 
-    // and display it to the user
-    with(NotificationManagerCompat.from(context)) {
-      notify(payload.id, notificationBuilder.build())
+    if (payload.postPonedMilliseconds > 0L) {
+      broadCastPostponedNotification(payload, macAddress)
+    }
+    else {
+      // and display it to the user
+      with(NotificationManagerCompat.from(context)) {
+        notify(payload.id, notificationBuilder.build())
+      }
     }
   }
 
   private fun triggerRegularNotification(
     payload: NotificationPayload,
-    snoozePendingIntent: PendingIntent
+    snoozePendingIntent: PendingIntent,
+    macAddress: String
   ) {
 
     val notificationBuilder = NotificationCompat.Builder(context, statusNotificationsChannelId)
@@ -233,9 +239,26 @@ class NotificationCenter(
 
     notificationBuilder.setContentText(context.getString(payload.body))
 
-    with(NotificationManagerCompat.from(context)) {
-      notify(payload.id, notificationBuilder.build())
+    if (payload.postPonedMilliseconds > 0L) {
+      broadCastPostponedNotification(payload, macAddress)
     }
+    else {
+      with(NotificationManagerCompat.from(context)) {
+        notify(payload.id, notificationBuilder.build())
+      }
+    }
+  }
+
+  private fun broadCastPostponedNotification(payload: NotificationPayload, macAddress: String) {
+    val postponedIntent = Intent().apply {
+      action = INTENT_FILTER_ACTION_POSTPONED
+      setClass(context, NotificationBroadcastReceiver::class.java)
+      putExtra(SCHEDULED_NOTIFICATION_ID, payload.id)
+      putExtra(MACADDRESS, macAddress)
+      putExtra(POSTPONED_MILLISECONDS, payload.postPonedMilliseconds)
+
+    }
+    context.sendBroadcast(postponedIntent)
   }
 
   @RequiresApi(26)
@@ -293,6 +316,8 @@ class NotificationCenter(
 
   companion object {
     // intent filters for the broadcast receiver, so we can reschedule a notification and later show it again
+    const val INTENT_FILTER_ACTION_POSTPONED =
+      "${BuildConfig.APPLICATION_ID}.NOTIFICATION_ACTION_POSTPONED"
     const val INTENT_FILTER_ACTION_SNOOZE =
       "${BuildConfig.APPLICATION_ID}.NOTIFICATION_ACTION_SNOOZE"
     const val INTENT_FILTER_ACTION_DISMISS =
@@ -302,5 +327,6 @@ class NotificationCenter(
     // the notification id that we wish to show
     const val SCHEDULED_NOTIFICATION_ID = "SCHEDULED_NOTIFICATION_ID"
     const val MACADDRESS = "MACADDRESS"
+    const val POSTPONED_MILLISECONDS = "POSTPONED_MILLISECONDS"
   }
 }

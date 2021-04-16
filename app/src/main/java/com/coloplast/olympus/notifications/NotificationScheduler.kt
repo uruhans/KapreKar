@@ -10,13 +10,14 @@ import android.os.Build
  * A class to re-schedule notifications if the user snoozes a notification
  *
  * snooze time is 15 minutes
+ * postpone time is 5 minutes
  */
 class NotificationScheduler {
 
-  fun snoozeNotification(context: Context, macAddress: String, notificationId: Int) {
+  fun snoozeNotification(context: Context, macAddress: String, notificationId: Int, postponedMilliseconds: Long = 0L) {
     val pendingIntent = createPendingAlarmIntent(context, macAddress, notificationId)
-    val triggerAtMillis = System.currentTimeMillis() + SNOOZE_TIME_MILLIS
-    
+    val triggerAtMillis = System.currentTimeMillis() + if (postponedMilliseconds > 0L) postponedMilliseconds else SNOOZE_TIME_MILLIS
+
     // schedule the next alarm for this notification
     if (Build.VERSION.SDK_INT >= 23) {
       with(context.getSystemService(Context.ALARM_SERVICE) as AlarmManager) {
@@ -45,11 +46,11 @@ class NotificationScheduler {
       putExtra(NotificationCenter.SCHEDULED_NOTIFICATION_ID, notificationId)
       putExtra(NotificationCenter.MACADDRESS, macAddress)
     }
-    
     return PendingIntent.getBroadcast(context, notificationId, intent, PendingIntent.FLAG_ONE_SHOT)
   }
 
   companion object {
     val SNOOZE_TIME_MILLIS = 15L * 60 * 1000 // 15 minutes
+    val POSTPONED_TIME_MILLIS = 5L * 60 * 1000 // 5 minutes
   }
 }

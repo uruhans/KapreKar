@@ -199,7 +199,7 @@ class NotificationCenter(
       notificationBuilder.setContentTitle(context.getString(it))
     }
 
-    if (payload.shouldPostpone) {
+    if (payload.postPonedMilliseconds > 0L) {
       broadCastPostponedNotification(payload, macAddress)
     }
     else {
@@ -239,7 +239,7 @@ class NotificationCenter(
 
     notificationBuilder.setContentText(context.getString(payload.body))
 
-    if (payload.shouldPostpone) {
+    if (payload.postPonedMilliseconds > 0L) {
       broadCastPostponedNotification(payload, macAddress)
     }
     else {
@@ -255,6 +255,8 @@ class NotificationCenter(
       setClass(context, NotificationBroadcastReceiver::class.java)
       putExtra(SCHEDULED_NOTIFICATION_ID, payload.id)
       putExtra(MACADDRESS, macAddress)
+      putExtra(POSTPONED_MILLISECONDS, payload.postPonedMilliseconds)
+
     }
     context.sendBroadcast(postponedIntent)
   }
@@ -325,5 +327,6 @@ class NotificationCenter(
     // the notification id that we wish to show
     const val SCHEDULED_NOTIFICATION_ID = "SCHEDULED_NOTIFICATION_ID"
     const val MACADDRESS = "MACADDRESS"
+    const val POSTPONED_MILLISECONDS = "POSTPONED_MILLISECONDS"
   }
 }

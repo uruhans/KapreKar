@@ -14,9 +14,9 @@ import android.os.Build
  */
 class NotificationScheduler {
 
-  fun snoozeNotification(context: Context, macAddress: String, notificationId: Int, isPostponed: Boolean = false) {
+  fun snoozeNotification(context: Context, macAddress: String, notificationId: Int, postponedMilliseconds: Long = 0L) {
     val pendingIntent = createPendingAlarmIntent(context, macAddress, notificationId)
-    val triggerAtMillis = System.currentTimeMillis() + if (isPostponed) POSTPONED_TIME_MILLIS else SNOOZE_TIME_MILLIS
+    val triggerAtMillis = System.currentTimeMillis() + if (postponedMilliseconds > 0L) postponedMilliseconds else SNOOZE_TIME_MILLIS
 
     // schedule the next alarm for this notification
     if (Build.VERSION.SDK_INT >= 23) {

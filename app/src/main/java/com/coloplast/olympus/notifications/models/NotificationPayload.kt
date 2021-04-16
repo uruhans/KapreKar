@@ -14,5 +14,5 @@ class NotificationPayload(
   @StringRes val body: Int = 0,
   val notificationsToRemove: List<Int> = emptyList(),
   val title: Int? = null,
-  val shouldPostpone: Boolean = false
+  val postPonedMilliseconds: Long = 0L
 )

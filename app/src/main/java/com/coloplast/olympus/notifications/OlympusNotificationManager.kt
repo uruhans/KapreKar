@@ -157,8 +157,8 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
    */
   fun send(macAddress: String, state: OverlayState) {
     // this will stop sending multiple notifications of same type immediately right after
-    if(latestState[macAddress] == state.notificationId()) {
-       return
+    if(isSameIdAndSnoozing(macAddress, state.notificationId())) {
+      return
     }
 
     latestState[macAddress] = state.notificationId()
@@ -180,6 +180,16 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
     }
   }
 
+  private fun isSameIdAndSnoozing(macAddress: String, notificationId: Int): Boolean {
+    if(latestState[macAddress] == notificationId) {
+      lastNotification?.let {
+        val snoozing = (Instant.now().toEpochMilli() - it.toEpochMilli()) <= NotificationScheduler.SNOOZE_TIME_MILLIS
+        return snoozing
+      }
+    }
+    return false
+  }
+  
   /**
    * cancel (remove) a specific notification
    */

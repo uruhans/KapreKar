@@ -4,6 +4,7 @@ import com.artemzin.rxui.kotlin.bind
 import com.coloplast.olympus.Me
 import com.coloplast.olympus.bluetooth.StateDispatcher
 import com.coloplast.olympus.bluetooth.businesslayer.BluetoothManager
+import com.coloplast.olympus.bluetooth.businesslayer.ServiceStateDispatcher
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
 import com.coloplast.olympus.businesslayer.interfaces.AppStateComponent
@@ -28,7 +29,8 @@ class HomeViewModel(
   private val bluetoothManager: BluetoothManager,
   private val transmitterComponent: TransmitterComponent,
   private val userComponent: UserComponent,
-  private val appStateComponent: AppStateComponent
+  private val appStateComponent: AppStateComponent,
+  private val serviceStateDispatcher: ServiceStateDispatcher
 ) : BaseHomeViewModel() {
 
   override fun bind(uiView: HomeView): Disposable {
@@ -37,7 +39,7 @@ class HomeViewModel(
     val currentBluetoothStateObservable: Observable<BluetoothState> = bluetoothManager.bluetoothStateObservable()
     val bluetoothStateObservable: Observable<HomeUiModel> = currentBluetoothStateObservable
       .flatMap<HomeUiModel> {
-      return@flatMap currentBluetoothStateObservable
+        return@flatMap currentBluetoothStateObservable
           .flatMap {
             if (it == BluetoothState.LOCATION_PERMISSION_NOT_GRANTED || it == BluetoothState.BLUETOOTH_NOT_ENABLED) {
               dbInsertAppState(UiState.BLUETOOTH_NOT_ENABLED)
@@ -45,7 +47,7 @@ class HomeViewModel(
                 .toObservable()
             }
             else {
-              return@flatMap Observable.just(HomeUiModel.BluetoothIssue(it))
+              Observable.just(HomeUiModel.BluetoothIssue(it))
             }
           }
       }
@@ -67,20 +69,21 @@ class HomeViewModel(
         }
       }
       .flatMap { uiModel ->
-        if(uiModel is HomeUiModel.DeviceUpdate) {
-          val state = if(uiModel.stateChange.bleDevice.isConnected().not()) {
+        if (uiModel is HomeUiModel.DeviceUpdate) {
+          val state = if (uiModel.stateChange.bleDevice.isConnected().not()) {
             UiState.DISCONNECTED
-          } else {
+          }
+          else {
             uiModel.stateChange.state
           }
           return@flatMap dbInsertAppState(state)
-              .toSingle { uiModel }
-              .toObservable()
+            .toSingle { uiModel }
+            .toObservable()
         }
         return@flatMap Observable.just(uiModel)
       }
 
-    val animationResetObservable = Observable.interval(1, 10, TimeUnit.SECONDS)
+    val animationResetObservable = Observable.interval(10, 10, TimeUnit.SECONDS)
       .map { HomeUiModel.AnimationReset() }
 
     val rawPackageUpdateObservable = StateDispatcher.rawPackageUpdateObservable()
@@ -92,7 +95,7 @@ class HomeViewModel(
     )
 
     val stitchTransmitterObservable = uiView.requestStitching()
-      .doOnNext { obj -> Timber.wtf("ResetOrStitch: [${obj.dataPackage.joinToString { it.toInt().toString() }}]") }
+      .doOnNext { obj -> Timber.d("ResetOrStitch: [${obj.dataPackage.joinToString { it.toInt().toString() }}]") }
       .switchMap { stitch ->
         bluetoothManager.stitchOrResetTransmitter(stitch.macAddress, stitch.dataPackage)
           .toSingle<HomeUiModel> { HomeUiModel.StitchOrResetComplete() }
@@ -124,11 +127,12 @@ class HomeViewModel(
             return@flatMap Observable.just(HomeUiModel.BluetoothIssue(it))
           }
           else {
-             return@flatMap transmittersObservable
-                .flatMap { dbInsertAppState(UiState.TRANSMITTERS_EMPTY)
+            return@flatMap transmittersObservable
+              .flatMap {
+                dbInsertAppState(UiState.TRANSMITTERS_EMPTY)
                   .toSingle { HomeUiModel.NoTransmittersFound() }
                   .toObservable()
-                }
+              }
           }
         }
 

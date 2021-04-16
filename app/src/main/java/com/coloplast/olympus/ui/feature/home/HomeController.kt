@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.GravityCompat
+import androidx.core.view.isVisible
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.databinding.ObservableInt
@@ -32,7 +33,6 @@ import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.common.DrawerState
 import com.coloplast.olympus.ui.common.conductor.ResizeChangeHandler
 import com.coloplast.olympus.ui.common.dialogs.BaseDialogController
-import com.coloplast.olympus.ui.common.widgets.AnimatedProgressView
 import com.coloplast.olympus.ui.common.widgets.PatchView
 import com.coloplast.olympus.ui.dialogs.ImageDialogController
 import com.coloplast.olympus.ui.dialogs.PatchDialogController
@@ -112,13 +112,9 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
 
     // we want to force an update if we are coming from the background
     if (currentUiState != UiState.INITIAL) {
-      if(currentUiState == UiState.LOCATION_SERVICES_NOT_ENABLED) {
-        compositeDisposable.clear()
-        compositeDisposable.add(viewModel.bind(this))
-      }
-      else {
-        changeUiState(currentUiState, true)
-      }
+      compositeDisposable.clear()
+      compositeDisposable.add(viewModel.bind(this))
+      changeUiState(currentUiState, true)
     }
   }
 
@@ -201,11 +197,16 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
         is HomeUiModel.ScanningStopped -> {
           if (currentUiState == UiState.CONNECTING) {
             changeUiState(UiState.TRANSMITTER_NOT_FOUND)
+            isConnected.set(false)
           }
         }
         is HomeUiModel.DeviceDisconnected -> {
           isConnected.set(false)
           changeUiState(UiState.CONNECTING)
+        }
+        is HomeUiModel.ServiceNotAvailable -> {
+          isConnected.set(false)
+          changeUiState(UiState.TRANSMITTER_NOT_FOUND)
         }
         is HomeUiModel.NoTransmittersFound -> {
           if(Utils.locationEnabled()) {
@@ -272,6 +273,11 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
             imageDialogController = null
           }
 
+          if(stateChange.isBatteryUpdate && currentUiState == stateChange.state) {
+            Timber.wtf("isBatteryUpdate - but updating UiState anyways")
+            return@ui
+          }
+
           // this was added to prevent "blinking" ui when "switching" between OK_A and SOMETHING_ELSE
           if(stateToChangeTo == UiState.SOMETHING_ELSE) {
             Timber.d("Overriding [$stateToChangeTo] => [OK_A]")
@@ -297,8 +303,15 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
           lastCheck.set(uiModel.lastUpdate)
         }
         is HomeUiModel.AnimationReset -> {
-          updateAnimation.set(true)
-          updateAnimation.notifyChange()
+          // no reason to update progress if it's not visible
+          if(getBinding().progressAnimator.isVisible) {
+            updateAnimation.set(true)
+            updateAnimation.notifyChange()
+          }
+
+          if(currentUiState == UiState.CONNECTING) {
+            changeUiState(UiState.TRANSMITTER_NOT_FOUND)
+          }
         }
       }
     }
@@ -509,13 +522,13 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
     }
 
     if(lastResetOrStitch == null || timeSinceLast > 12) {
-      Timber.wtf("ApsAction: [${stateChange.apsAction}] on transmitter ${transmitterName.get()}")
+      Timber.d("ApsAction: [${stateChange.apsAction}] on transmitter ${transmitterName.get()}")
 
       if(stateChange.apsAction == ApsAction.Split) {
-        Timber.wtf("OLD patchId: [${preferences.getCurrentPatchId()}]")
+        Timber.d("OLD patchId: [${preferences.getCurrentPatchId()}]")
         preferences.incrementPatchId()
         patchChangeTime = LocalTime.now()
-        Timber.wtf("NEW patchId: [${preferences.getCurrentPatchId()}]")
+        Timber.d("NEW patchId: [${preferences.getCurrentPatchId()}]")
       }
 
       stateChange.resetOrStitchCandidate?.let {

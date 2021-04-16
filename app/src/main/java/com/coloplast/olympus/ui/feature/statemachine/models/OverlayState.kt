@@ -36,7 +36,7 @@ enum class OverlayState {
      * try to determine whether or not the notificationId coming in is an OverlayState notificationId
      */
     fun isOverlayState(notificationId: Int) : Boolean {
-      return notificationId / MAGIC_NUMBER > 1f
+      return notificationId.toFloat() / MAGIC_NUMBER > 1f
     }
   }
 }

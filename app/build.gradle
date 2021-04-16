@@ -18,7 +18,6 @@ android {
     versionName "2.0.0"
     testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-    buildConfigField("boolean", "EnableFileDebugging", "false")
     buildConfigField("Long", "BuildTime", System.currentTimeMillis() + "L")
     buildConfigField("String", "AppCenterSecret", "\"b1dc9278-cd5e-4670-a328-5936c7343ce9\"")
   }
@@ -32,6 +31,8 @@ android {
   flavorDimensions "type"
   productFlavors {
     dev {
+      buildConfigField("boolean", "EnableFileDebugging", "true")
+
       applicationIdSuffix ".dev"
       buildConfigField("String", "Suffix", "\" - DEV\"")
 
@@ -40,6 +41,8 @@ android {
       buildConfigField("String", "AzureCode", "\"1aiab34Rsqn2jSVcyXevoG9rvS0HjS9lqf5g8XsUV8BnzRVk3a9u1g==\"")
     }
     cli {
+      buildConfigField("boolean", "EnableFileDebugging", "false")
+
       applicationIdSuffix ".cli"
       buildConfigField("String", "Suffix", "\" - CLI\"")
 
@@ -48,6 +51,8 @@ android {
       buildConfigField("String", "AzureCode", "\"goQ2ylfRfYlgfIKf1uQ/F2C32bFyp9qVZsWwtxPupJYrvGxBiDaXPA==\"")
     }
     tpa {
+      buildConfigField("boolean", "EnableFileDebugging", "true")
+
       applicationIdSuffix ".tpa"
       buildConfigField("String", "Suffix", "\" - TPA\"")
 
@@ -56,6 +61,8 @@ android {
       buildConfigField("String", "AzureCode", "\"yBcdDaPPWKYaL160/7aXnd55ehvzukND6ng3oawFaApU1xd891QtwQ==\"")
     }
     internal {
+      buildConfigField("boolean", "EnableFileDebugging", "true")
+
       applicationIdSuffix ".internal"
       buildConfigField("String", "Suffix", "\" - internal\"")
 
@@ -64,6 +71,8 @@ android {
       buildConfigField("String", "AzureCode", "\"yBcdDaPPWKYaL160/7aXnd55ehvzukND6ng3oawFaApU1xd891QtwQ==\"")
     }
     googlePlay {
+      buildConfigField("boolean", "EnableFileDebugging", "false")
+
       buildConfigField("String", "Suffix", "\"\"")
 
       buildConfigField("String", "ServerUrl", "\"https://cp-fc-be-prod.azurewebsites.net\"")

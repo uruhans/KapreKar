@@ -11,7 +11,7 @@ class CompromisedVault {
 
   fun set(compromised: Int, timestamp: LocalDateTime = LocalDateTime.now()) {
     if (compromised != -1 && compromised != 255 ) {
-      Timber.wtf("Updated running compromised: [$compromised]")
+      Timber.d("Updated running compromised: [$compromised]")
       this.timestamp = timestamp
       running = compromised
     }

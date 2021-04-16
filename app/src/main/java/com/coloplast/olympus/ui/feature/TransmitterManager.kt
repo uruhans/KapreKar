@@ -3,12 +3,14 @@ package com.coloplast.olympus.ui.feature
 import com.coloplast.olympus.bluetooth.businesslayer.BluetoothManager
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.bluetooth.model.StateChange
+import com.coloplast.olympus.businesslayer.interfaces.TransmitterComponent
 import com.coloplast.olympus.patchsplit.models.LatestDetachVector
 import com.coloplast.olympus.shared.moshi.deserialize
 import com.coloplast.olympus.shared.moshi.serialize
 import com.coloplast.olympus.shared.preferences.Preferences
 import com.coloplast.olympus.ui.common.Stack
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
+import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import java.time.LocalDateTime
 import java.time.ZoneOffset
@@ -18,7 +20,8 @@ import java.time.ZoneOffset
  */
 class TransmitterManager(
   private val preferences: Preferences,
-  val bluetoothManager: BluetoothManager
+  val bluetoothManager: BluetoothManager,
+  private val transmitterComponent: TransmitterComponent
 ) {
 
   private var latestDetachVector: LatestDetachVector? = null
@@ -62,7 +65,7 @@ class TransmitterManager(
    *  - Stores the stateChange for later use
    *  - Incoming stateChange might not be from the same transmitter as the one being returned
    */
-  fun determineCurrentlyActiveTransmitterAndReturnStateChangeFromIt(stateChange: StateChange): UpdatedStateChange {
+  fun determineCurrentlyActiveTransmitterAndReturnStateChangeFromIt(stateChange: StateChange): UpdatedStateChange? {
     addToHistory(stateChange)
 
     val otherConnectedAndAttached = isOtherConnectedAndAttached(stateChange.getMacAddress())
@@ -116,15 +119,11 @@ class TransmitterManager(
         else {
           wasPreviousUiStateMultipleTx = false
           val otherStateChange = latestStateFromOtherTransmitter(stateChange.getMacAddress())
-          return if(otherStateChange != null) {
-            UpdatedStateChange(otherStateChange)
+          if(otherStateChange != null) {
+            return UpdatedStateChange(otherStateChange)
           }
-          else {
-            // we set the active transmitter
-            // this case might occur when the currently active transmitter is DISCONNECTED
-            setActiveTransmitter(stateChange)
-            UpdatedStateChange(stateChange, true)
-          }
+
+          return null
         }
       }
     }
@@ -214,7 +213,10 @@ class TransmitterManager(
   }
 
   fun isOnlyTransmitterAdded(macAddress: String) : Boolean {
-    return transmitterStateHistory[macAddress] == null || (transmitterStateHistory[macAddress] != null && transmitterStateHistory.size == 1)
+    return transmitterComponent.getTransmittersAsSingle()
+      .subscribeOn(Schedulers.io())
+      .blockingGet()
+      .size == 1
   }
 
   fun deleteTransmitterHistory(macAddress: String) {

@@ -60,41 +60,21 @@ class BluetoothHandler(private val context: Context, isDebugging: Boolean) {
   }
 
   fun connectRxBleDevice(rxBleDevice: RxBleDevice, serviceChangedUUID: UUID, mtuSize: Int = 185): Observable<RxBleConnection> {
-    return rxBleDevice.establishConnection(false)
-      // this delay is added in order to get the system to properly connect and update services properly (will not work without this delay)
-      .delay(2, TimeUnit.SECONDS)
-      .flatMap { rxBleConnection ->
-        rxBleDeviceConnectionStateObservable(rxBleDevice)
-          .filter { it == RxBleConnection.RxBleConnectionState.CONNECTED }
-          .flatMapSingle { rxBleConnection.requestMtu(mtuSize) }
-          .flatMap {
-            BleDeviceBondingManager.createBond(context, rxBleDevice)
-              .filter { rxBleDevice.bluetoothDevice.bondState == BluetoothDevice.BOND_BONDED }
+    return BleDeviceBondingManager.createBond(context, rxBleDevice)
+      .filter { rxBleDevice.bluetoothDevice.bondState == BluetoothDevice.BOND_BONDED }
+      .flatMap { device ->
+        device.establishConnection(false)
+          // this delay is added in order to get the system to properly connect and update services properly (will not work without this delay)
+          .delay(2, TimeUnit.SECONDS)
+          .flatMap { rxBleConnection ->
+            rxBleDeviceConnectionStateObservable(rxBleDevice)
+              .filter { it == RxBleConnection.RxBleConnectionState.CONNECTED }
+              .flatMapSingle { rxBleConnection.requestMtu(mtuSize) }
               .flatMapSingle { rxBleConnection.discoverServices() }
               // setup indication on the ServiceChanged characteristic
-              .flatMap { rxBleConnection.setupIndication(serviceChangedUUID, NotificationSetupMode.DEFAULT) }
+              .flatMap { rxBleConnection.setupNotification(serviceChangedUUID, NotificationSetupMode.DEFAULT) }
               .map { rxBleConnection }
           }
       }
-  }
-
-  fun scanBeacons(uuidFilter: UUID?, macAddress: String? = null): Observable<String> {
-    val scanSettings = ScanSettings.Builder()
-      .setScanMode(ScanSettings.SCAN_MODE_LOW_POWER)
-      .setCallbackType(ScanSettings.CALLBACK_TYPE_ALL_MATCHES)
-      .build()
-
-    val scanFilter = ScanFilter.Builder()
-    if (uuidFilter != null) {
-      scanFilter.setServiceUuid(ParcelUuid(uuidFilter))
-    }
-
-    macAddress?.let {
-      scanFilter.setDeviceAddress(macAddress)
-    }
-
-    return rxBleClient.scanBleDevices(scanSettings, scanFilter.build())
-      //.map { IBeacon.fromScanData(it.scanRecord.bytes, it.rssi, it.bleDevice.bluetoothDevice) }
-      .map { it.bleDevice.macAddress }
   }
 }

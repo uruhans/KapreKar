@@ -4,7 +4,6 @@ import android.content.Context
 import android.location.LocationManager
 import com.coloplast.olympus.shared.AppSettings
 
-
 object Utils {
 
   private const val UK_PREFIX_1 = "+44"

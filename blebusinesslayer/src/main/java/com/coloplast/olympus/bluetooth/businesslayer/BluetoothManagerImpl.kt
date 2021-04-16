@@ -34,6 +34,7 @@ import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.time.LocalDateTime
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 class BluetoothManagerImpl(
   private val transmitterComponent: TransmitterComponent,
@@ -63,13 +64,23 @@ class BluetoothManagerImpl(
      * check here -> https://github.com/Polidea/RxAndroidBle/wiki/FAQ:-UndeliverableException
      */
     RxJavaPlugins.setErrorHandler {
-      when {
+      val e = if(it is UndeliverableException) {
+        it.cause
+      }
+      else {
+        it
+      }
+
+      when(e) {
         // ignore if undeliverable (others should have received it first) - Rx issue ->
         // https://github.com/Polidea/RxAndroidBle/wiki/FAQ:-UndeliverableException
-        it is UndeliverableException && it.cause is BleException -> return@setErrorHandler
-        it is UndeliverableException && it.cause is BleDisconnectedException -> throw DisconnectException(it)
-        it is UndeliverableException && it.cause is BleGattCallbackTimeoutException -> throw GattCallbackTimeoutException(it)
-        it is UndeliverableException && it.cause is BleGattException -> throw GattException(it)
+        is NullPointerException,
+        is IllegalArgumentException,
+        is IllegalStateException -> Thread.currentThread().uncaughtExceptionHandler?.uncaughtException(Thread.currentThread(), e)
+        is BleException -> return@setErrorHandler
+        is BleDisconnectedException -> throw DisconnectException(it)
+        is BleGattCallbackTimeoutException -> throw GattCallbackTimeoutException(it)
+        is BleGattException -> throw GattException(it)
         else -> {
           Crashes.trackError(it)
           return@setErrorHandler
@@ -106,12 +117,11 @@ class BluetoothManagerImpl(
       }
   }
 
-  override fun scanBeacons(): Observable<String> {
-    return bluetoothHandler.scanBeacons(OlympusWirelessProtocol.UUID)
-  }
-
-  override fun scanSpecificBeacon(macAddress: String): Observable<String> {
-    return bluetoothHandler.scanBeacons(OlympusWirelessProtocol.UUID, macAddress)
+  override fun scanSpecificTransmitter(macAddress: String): Observable<String> {
+    return bluetoothHandler.scanBleDevices(OlympusWirelessProtocol.UUID)
+      .takeUntil(Observable.timer(3, TimeUnit.SECONDS))
+      .map { it.bleDevice.macAddress }
+      .filter { it == macAddress }
   }
 
   /**
@@ -129,11 +139,6 @@ class BluetoothManagerImpl(
 
       emitter.onNext(rxBleDevice)
     }
-  }
-
-  override fun initiateBleScanning(uuidFilter: UUID?): Observable<ScanResult> {
-    return bluetoothHandler.scanBleDevices(uuidFilter)
-      .map { ScanResult(it.bleDevice.name?.trim(), it.bleDevice.macAddress, it.rssi) }
   }
 
   /**
@@ -155,19 +160,6 @@ class BluetoothManagerImpl(
       .flatMap { rxBleDevice ->
         bluetoothHandler.rxBleDeviceConnectionStateObservable(rxBleDevice)
           .map { BleDevice(rxBleDevice.name, rxBleDevice.macAddress, BleConnectionState.fromRxBleState(it)) }
-      }
-  }
-
-  override fun bleDisconnectedObservable(macAddress: String): Observable<BleConnectionState> {
-    return bleConnectionStateObservable(macAddress)
-      .filter { it == BleConnectionState.DISCONNECTED || it == BleConnectionState.DISCONNECTING }
-      .flatMap { bleConnectionState ->
-        getBleDevice(macAddress)
-          .doOnNext {
-            removeDeviceFromConnectedList(it)
-            removeConnectionFromList(it.macAddress)
-          }
-          .map { bleConnectionState }
       }
   }
 
@@ -249,22 +241,18 @@ class BluetoothManagerImpl(
    */
   private fun peripheralObservable(macAddress: String): Observable<Peripheral> {
     return Observable.combineLatest(
-      setupOlympusStatusVectorNotifications(macAddress),
       setupBatteryPowerNotifications(macAddress),
-      { statusVector: StatusVector, powerLevel: PowerLevel ->
+      setupOlympusStatusVectorNotifications(macAddress),
+      {  powerLevel: Pair<PowerLevel, Int>, statusVector: StatusVector ->
         var isBatteryUpdate: Boolean
 
         synchronized(currentPowerLevel) {
-          isBatteryUpdate = if(currentPowerLevel[macAddress] == null) false else powerLevel.percentage != currentPowerLevel[macAddress]
+          isBatteryUpdate = currentPowerLevel[macAddress] ?: 0 < powerLevel.second
+          currentPowerLevel[macAddress] = powerLevel.second
         }
 
-        Peripheral(statusVector.patch, statusVector.transmitter, powerLevel, isBatteryUpdate)
+        Peripheral(statusVector.patch, statusVector.transmitter, powerLevel.first, isBatteryUpdate)
       })
-      .doOnNext {
-        synchronized(currentPowerLevel) {
-          currentPowerLevel[macAddress] = it.battery.powerLevel.percentage
-        }
-      }
   }
 
   /**
@@ -273,7 +261,7 @@ class BluetoothManagerImpl(
    * - upon subscription this observable with do a READ CHARACTERISTIC in order to get the initial state of the characteristics
    * - output -> PowerLevel describing the current powerlevel of the transmitter (0-100% is converted into NEAR_EMPTY, LOW, MEDIUM and HIGH)
    */
-  private fun setupBatteryPowerNotifications(macAddress: String): Observable<PowerLevel> {
+  private fun setupBatteryPowerNotifications(macAddress: String): Observable<Pair<PowerLevel, Int>> {
     val rxBleConnection = bleConnections[macAddress]!!
 
     return rxBleConnection.setupNotification(BatteryPowerService.Characteristics.POWER)
@@ -287,6 +275,7 @@ class BluetoothManagerImpl(
           .onErrorReturn { batteryPackage }
       }
       .compose(BatteryPowerService.transformer)
+      .map { Pair(it, (currentPowerLevel[macAddress] ?: 0) + 1) }
   }
 
   /**
@@ -308,7 +297,6 @@ class BluetoothManagerImpl(
           .toSingle { statusVector }
           .onErrorReturn { statusVector }
       }
-      .doOnNext { Timber.wtf("[$macAddress]") }
       .compose(OlympusWirelessProtocol.statusTransformer)
   }
 
@@ -351,13 +339,6 @@ class BluetoothManagerImpl(
         .flatMap { it }
         .compose(OlympusWirelessProtocol.compromisedTransformer)
     }
-  }
-
-  override fun connectedDevicesObservable(): Observable<List<BleDevice>> {
-    return bleDeviceRelay.publish()
-      .refCount()
-      // todo - this does not contain the latest peripheral - it probably should
-      .startWith(bleDevices.map { BleDevice(it.value.name, it.value.macAddress, BleConnectionState.fromRxBleState(it.value.connectionState)) })
   }
 
   override fun connectedDeviceObservable(macAddress: String): Observable<BleDevice> {

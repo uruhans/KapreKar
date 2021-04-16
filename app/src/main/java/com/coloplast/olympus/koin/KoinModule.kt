@@ -45,6 +45,7 @@ import com.coloplast.olympus.ui.feature.uistates.WelcomeViewModel
 import com.coloplast.olympus.ui.feature.update.FirmwareUpdateFactoryImpl
 import com.coloplast.olympus.ui.feature.update.charging.FirmwareUpdateChargingViewModel
 import com.coloplast.olympus.ui.feature.update.progress.FirmwareProgressViewModel
+import com.coloplast.olympus.utils.DisplayUtils
 import com.coloplast.olympus.work.SyncWorker
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
@@ -54,6 +55,7 @@ val koinModule = module {
   single { PreferencesImpl(androidContext()) }
   // a workaround to prevent the code from breaking after creating an interface for the old Preferences class used for testing
   single<Preferences> { get<PreferencesImpl>() }
+  single { DisplayUtils() }
 
   single { Me(get()) }
   factory { SyncWorker(get(), get(), get()) }
@@ -66,12 +68,12 @@ val koinModule = module {
 
   /* Bluetooth */
   single<BluetoothManager> { BluetoothManagerImpl(get(), androidContext(), BuildConfig.DEBUG) }
-  factory { DeviceConnection(get(), get(), get()) }
+  single { DeviceConnection(get(), get(), get()) }
   single<FirmwareManager> { FirmwareManagerImpl(get(), get(), get()) }
 
   single { CompromisedVault() }
   single<AutoPatchDetectionEngine> { AutoPatchDetectionEngineImpl(get()) }
-  single { TransmitterManager(get(), get()) }
+  single { TransmitterManager(get(), get(), get()) }
   single { BreachesOccurred(get()) }
   single { ServiceStateDispatcher() }
 
@@ -84,9 +86,9 @@ val koinModule = module {
   single<AppStateComponent> { AppStateComponentImpl() }
 
   /* ViewModels */
-  factory { BluetoothServiceViewModel(get(), get(), get(), get()) }
-  single { SplashViewModel(get(), get()) }
-  single { HomeViewModel(get(), get(), get(), get(), get()) }
+  single { BluetoothServiceViewModel(get(), get(), get(), get(), get()) }
+  single { SplashViewModel(get(), get(), get()) }
+  single { HomeViewModel(get(), get(), get(), get(), get(), get()) }
   single { TransmittersViewModel(get(), get(), get()) }
   single { AddTransmitterAT9ViewModel(get(), get(), get()) }
   single { AwaitingConnectionViewModel(get()) }

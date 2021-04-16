@@ -33,7 +33,7 @@ class MockViewModel() {
     Assert.assertNotNull(transmitterManager)
   }
 
-  fun run(bleDevice: BleDevice) : UpdatedStateChange {
+  fun run(bleDevice: BleDevice) : UpdatedStateChange? {
     val deviceResult = DeviceResult.DeviceUpdateResult(bleDevice)
 
     val stateModel = StateTransformers.bleToUiState(deviceResult)
@@ -44,7 +44,7 @@ class MockViewModel() {
     return runService(StateChange(newUiState, newOverlayState, deviceResult.bleDevice))
   }
 
-  private fun runService(stateChange: StateChange) : UpdatedStateChange {
+  private fun runService(stateChange: StateChange) : UpdatedStateChange? {
     val updatedStateChange = transmitterManager.determineCurrentlyActiveTransmitterAndReturnStateChangeFromIt(stateChange)
     //transmitterManager.determinePatchCommand(updatedStateChange)
     return updatedStateChange

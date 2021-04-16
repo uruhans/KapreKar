@@ -11,8 +11,9 @@ class BluetoothServiceHelper(
   private val apsEngine: AutoPatchDetectionEngine
 ) {
 
-  fun handleTransmitterUpdate(stateChange: StateChange) : UpdatedStateChange {
-    val updatedStateChange = transmitterManager.determineCurrentlyActiveTransmitterAndReturnStateChangeFromIt(stateChange)
+  fun handleTransmitterUpdate(stateChange: StateChange) : UpdatedStateChange? {
+    val updatedStateChange = transmitterManager.determineCurrentlyActiveTransmitterAndReturnStateChangeFromIt(stateChange) ?: return null
+
     val lastValidDetach = transmitterManager.latestDetach()
     val previousStatusVector = transmitterManager.previousState(updatedStateChange.stateChange.getMacAddress())
     val cycleResult = apsEngine.determineAttachCycle(updatedStateChange, lastValidDetach?.isValid() ?: false, previousStatusVector?.bleDevice?.isWidOrCutguardBlocked() ?: false)
@@ -28,7 +29,7 @@ class BluetoothServiceHelper(
      * continue to have a valid detach and get into an infinite loop of RESET/SPLIT mechanism
      */
     if(apsAction != ApsAction.Nothing) {
-      Timber.wtf("Aps Method [$apsMethod]")
+      Timber.d("Aps Method [$apsMethod]")
       transmitterManager.clearLatestDetach()
     }
 

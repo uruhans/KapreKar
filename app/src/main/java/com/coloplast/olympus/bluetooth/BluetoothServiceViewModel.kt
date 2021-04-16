@@ -1,5 +1,6 @@
 package com.coloplast.olympus.bluetooth
 
+import android.os.Build
 import com.artemzin.rxui.kotlin.bind
 import com.coloplast.olympus.bluetooth.businesslayer.BluetoothManager
 import com.coloplast.olympus.bluetooth.businesslayer.DeviceConnection
@@ -12,10 +13,10 @@ import com.coloplast.olympus.businesslayer.interfaces.TransmitterComponent
 import com.coloplast.olympus.ui.feature.home.models.StateTransformers
 import com.coloplast.olympus.ui.feature.statemachine.OverlayStateMachineImpl
 import com.coloplast.olympus.ui.feature.statemachine.UiStateMachineImpl
-import com.coloplast.olympus.ui.feature.statemachine.models.OverlayState
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
 import com.coloplast.olympus.utils.DeviceUtils
-import io.reactivex.Completable
+import com.coloplast.olympus.utils.DisplayUtils
+import com.coloplast.olympus.utils.OSUtils
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -28,7 +29,8 @@ class BluetoothServiceViewModel(
   private val bluetoothManager: BluetoothManager,
   private val transmitterComponent: TransmitterComponent,
   private val deviceConnection: DeviceConnection,
-  private val appStateComponent: AppStateComponent
+  private val appStateComponent: AppStateComponent,
+  private val displayUtils: DisplayUtils
 ) : ServiceViewModel<BluetoothServiceModel, BluetoothServiceResult<BluetoothServiceModel>>() {
 
   private val reversed = AtomicBoolean(false)
@@ -37,11 +39,21 @@ class BluetoothServiceViewModel(
   override fun bind(serviceResult: BluetoothServiceResult<BluetoothServiceModel>): Disposable {
     val compositeDisposable = CompositeDisposable()
 
+    val appStateLoggerObservable = ServiceDispatcher.serviceEventObservable()
+      .ofType(ServiceEvent.AppStateLogger::class.java)
+      .delay(800, TimeUnit.MILLISECONDS)
+      .flatMap {
+        appStateComponent.insertAppState(it.letter, logFromService = true)
+          //LifecycleObserver has a 700 ms delay
+          .subscribeOn(Schedulers.io())
+          .toSingle { it }
+          .toObservable()
+      }
+      .filter { false }
+
     val bluetoothStateObservable = bluetoothManager.bluetoothStateObservable()
       .filter { it == BluetoothState.BLUETOOTH_NOT_ENABLED }
-      .doOnNext {
-          insertAppStateInDb(UiState.BLUETOOTH_NOT_ENABLED.toLetter())
-      }
+      .doOnNext { ServiceDispatcher.dispatchEvent(ServiceEvent.AppStateLogger(UiState.BLUETOOTH_NOT_ENABLED.toLetter())) }
 
     // this observable pings us when we want to retry a connection attempt
     // and is usually started by the user elsewhere in the app
@@ -57,8 +69,8 @@ class BluetoothServiceViewModel(
       // however, we dont really care about the result, we just want the ping
       .map { true }
 
-    // this is a continuous ping that notifies us every 6 seconds
-    val continuousPingObservable = Observable.interval(6, TimeUnit.SECONDS)
+    // this is a continuous ping that notifies us every 12 seconds
+    val continuousPingObservable = Observable.interval(12, TimeUnit.SECONDS)
       .map { true }
 
     // we merge these these pings, that will notify us that we want to try
@@ -68,15 +80,15 @@ class BluetoothServiceViewModel(
       databaseTransmittersObservable,
       retryObservable
     )
-      .filter { bluetoothManager.bluetoothStateObservable().blockingFirst() == BluetoothState.READY}
+      .filter { bluetoothManager.bluetoothStateObservable().blockingFirst() == BluetoothState.READY }
       // only attempt reconnect if we want to
       .filter { shouldReconnect.get() }
       .flatMap {
         // here we get all transmitters stored locally in the database
         // we are doing it as a single because we dont want it to notify us when database changes occur
         transmitterComponent.getTransmittersAsSingle()
-          .map { if (reversed.get()) it.reversed() else it }
           .subscribeOn(Schedulers.io())
+          .map { if (reversed.get()) it.reversed() else it }
           .toObservable()
           .doOnNext { reversed.set(!reversed.get()) }
       }
@@ -89,13 +101,29 @@ class BluetoothServiceViewModel(
       .map { TxModel(it, bluetoothManager.bleConnectionStateObservable(it.id).blockingFirst()) }
       // only continue if the current transmitter is disconnected
       .filter { it.connectionState == BleConnectionState.DISCONNECTED }
-      .doOnNext { Timber.d("Trying to connect to [${it.transmitter.name}] with macAddress: [${it.transmitter.id}]") }
+      .flatMap { txModel ->
+        /* android O - OREO && DISPLAY IS OFF */
+        if (OSUtils.isVersionOrAbove(26) && displayUtils.isDisplayOn().not()) {
+          Timber.wtf("(SDK_INT(${Build.VERSION.SDK_INT}) > Oreo 8.0.0) -> No scanning")
+          Observable.just(txModel)
+        }
+        else {
+          bluetoothManager.scanSpecificTransmitter(txModel.transmitter.id)
+            .takeUntil { it == txModel.transmitter.id }
+            .buffer(1)
+            .map { true }
+            .onErrorReturn { false }
+            .filter { it }
+            .map { txModel }
+        }
+      }
+      .delay(1, TimeUnit.SECONDS)
+      .doOnNext { Timber.wtf("Trying to connect to [${it.transmitter.name}] with macAddress: [${it.transmitter.id}]") }
       // then map the txModel => transmitter
       .map { it.transmitter }
       // then map the transmitter => macAddress
       .map { it.id }
-      .publish()
-      .refCount()
+      .share()
 
     /**
      * There is a case where the reconnection attempts are preventing users from adding a 2nd transmitter.
@@ -111,7 +139,6 @@ class BluetoothServiceViewModel(
     val disconnectTransmitterObservable = ServiceDispatcher.serviceEventObservable()
       .filter { it is ServiceEvent.DisconnectTransmitter }
       .map { it as ServiceEvent.DisconnectTransmitter }
-      .delay(200, TimeUnit.MILLISECONDS)
 
     // the observable that handles the connection
     val connectionObservable = immediateConnectionObservable
@@ -121,21 +148,26 @@ class BluetoothServiceViewModel(
       // then we do the actual connection
       .flatMap { macAddress ->
         connectObservable(macAddress)
-        .takeUntil(
-          disconnectTransmitterObservable
-            .filter { it.macAddress == macAddress }
-        )
-        // added to be completely sure that we are terminating the connection
-        .onTerminateDetach()
-        // log disconnected state
-        .doOnNext {
-          if (it is BluetoothServiceModel.Disconnected) {
-            insertAppStateInDb(UiState.DISCONNECTED.toLetter())
+          .takeUntil(
+            disconnectTransmitterObservable
+              .filter { it.macAddress == macAddress }
+          )
+          .onErrorReturn {
+            Timber.wtf(it)
+            Timber.wtf("[onErrorReturn] was hit")
+            BluetoothServiceModel.Disconnected(macAddress)
           }
-        }
+          .doOnNext {
+            if(it is BluetoothServiceModel.Disconnected) {
+              ServiceDispatcher.dispatchEvent(ServiceEvent.AppStateLogger(UiState.DISCONNECTED.toLetter()))
+            }
+          }
       }
+      .share()
+
+    compositeDisposable.add(appStateLoggerObservable.subscribe())
     compositeDisposable.add(bluetoothStateObservable.subscribe())
-    compositeDisposable.add(connectionObservable.bind(serviceResult.onResult()))
+    compositeDisposable.add(connectionObservable.share().bind(serviceResult.onResult()))
     compositeDisposable.add(reconnectionAttemptsObservable.subscribe())
 
     return compositeDisposable
@@ -161,7 +193,7 @@ class BluetoothServiceViewModel(
              * that will seem like a "real" statusVector, but in fact is only a battery update (containing the old statusVector)
              * which could go and mess things up for the APS system (but we still want to send the battery updates to the screens)
              */
-            if(deviceResult.bleDevice.peripheral?.isBatteryUpdate == true) {
+            if (deviceResult.bleDevice.peripheral?.isBatteryUpdate == true) {
               BluetoothServiceModel.BatteryUpdate(stateChange)
             }
             else {
@@ -187,7 +219,7 @@ class BluetoothServiceViewModel(
         }
       }
       .doOnNext {
-        val stateLetter = when(it) {
+        val stateLetter = when (it) {
           is BluetoothServiceModel.DeviceUpdate -> {
             it.statusChange.state.toLetter()
           }
@@ -198,26 +230,8 @@ class BluetoothServiceViewModel(
         }
 
         stateLetter?.let { letter ->
-          insertAppStateInDb(letter)
+          ServiceDispatcher.dispatchEvent(ServiceEvent.AppStateLogger(letter))
         }
       }
-      .doOnError {
-        ServiceDispatcher.dispatchEvent(ServiceEvent.DisconnectTransmitter(macAddress))
-      }
-      .onErrorReturn {
-        // return a disconnect to the service
-        BluetoothServiceModel.Disconnected(macAddress)
-      }
   }
-
-  private fun insertAppStateInDb(stateLetter: String): Throwable? {
-    return appStateComponent.insertAppState(stateLetter, logFromService = true)
-      .subscribeOn(Schedulers.io())
-        //LifecycleObserver has a 700 ms delay
-      .delay(800, TimeUnit.MILLISECONDS)
-      .doOnError { throwable -> Timber.e(throwable) }
-      .blockingGet()
-  }
-
-
 }

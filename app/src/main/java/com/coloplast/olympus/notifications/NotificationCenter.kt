@@ -200,13 +200,7 @@ class NotificationCenter(
     }
 
     if (payload.shouldPostpone) {
-      val postponedIntent = Intent().apply {
-        action = INTENT_FILTER_ACTION_POSTPONED
-        setClass(context, NotificationBroadcastReceiver::class.java)
-        putExtra(SCHEDULED_NOTIFICATION_ID, payload.id)
-        putExtra(MACADDRESS, macAddress)
-      }
-      context.sendBroadcast(postponedIntent)
+      broadCastPostponedNotification(payload, macAddress)
     }
     else {
       // and display it to the user
@@ -246,19 +240,23 @@ class NotificationCenter(
     notificationBuilder.setContentText(context.getString(payload.body))
 
     if (payload.shouldPostpone) {
-      val postponedIntent = Intent().apply {
-        action = INTENT_FILTER_ACTION_POSTPONED
-        setClass(context, NotificationBroadcastReceiver::class.java)
-        putExtra(SCHEDULED_NOTIFICATION_ID, payload.id)
-        putExtra(MACADDRESS, macAddress)
-      }
-      context.sendBroadcast(postponedIntent)
+      broadCastPostponedNotification(payload, macAddress)
     }
     else {
       with(NotificationManagerCompat.from(context)) {
         notify(payload.id, notificationBuilder.build())
       }
     }
+  }
+
+  private fun broadCastPostponedNotification(payload: NotificationPayload, macAddress: String) {
+    val postponedIntent = Intent().apply {
+      action = INTENT_FILTER_ACTION_POSTPONED
+      setClass(context, NotificationBroadcastReceiver::class.java)
+      putExtra(SCHEDULED_NOTIFICATION_ID, payload.id)
+      putExtra(MACADDRESS, macAddress)
+    }
+    context.sendBroadcast(postponedIntent)
   }
 
   @RequiresApi(26)

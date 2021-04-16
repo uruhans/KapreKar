@@ -13,5 +13,6 @@ class NotificationPayload(
   val id: Int = Int.MIN_VALUE,
   @StringRes val body: Int = 0,
   val notificationsToRemove: List<Int> = emptyList(),
-  val title: Int? = null
+  val title: Int? = null,
+  val shouldPostpone: Boolean = false
 )

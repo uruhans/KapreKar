@@ -25,8 +25,12 @@ class NotificationBroadcastReceiver : BroadcastReceiver(), KoinComponent {
     val action = intent?.action ?: ""
     intent?.extras?.getInt(NotificationCenter.SCHEDULED_NOTIFICATION_ID)?.let { notificationId ->
       when(action){
+        NotificationCenter.INTENT_FILTER_ACTION_POSTPONED -> {
+          val macAddress = intent.extras?.getString(NotificationCenter.MACADDRESS)!!
+          // postpone the notification
+          notificationScheduler.snoozeNotification(context!!, macAddress, notificationId, true)
+        }
         NotificationCenter.INTENT_FILTER_ACTION_SNOOZE -> {
-
           val macAddress = intent.extras?.getString(NotificationCenter.MACADDRESS)!!
 
           // snooze the notification

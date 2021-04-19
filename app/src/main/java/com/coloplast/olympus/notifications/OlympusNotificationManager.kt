@@ -2,6 +2,7 @@ package com.coloplast.olympus.notifications
 
 import com.coloplast.olympus.R
 import com.coloplast.olympus.notifications.models.NotificationPayload
+import com.coloplast.olympus.shared.AppSettings
 import com.coloplast.olympus.ui.feature.statemachine.models.OverlayState
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
 import java.time.Instant
@@ -149,6 +150,10 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
     latestState[macAddress] = state.notificationId()
 
     payload?.let {
+      //No Notifications if App is in foreground
+      if (AppSettings.appInBackground.not()) {
+        return
+      }
       notificationCenter.show(it, macAddress)
       lastNotification = Instant.now()
     }

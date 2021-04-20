@@ -35,6 +35,10 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
    * send notifications based on current UiState
    */
   fun send(macAddress: String, state: UiState) {
+    //No Notifications if App is in foreground
+    if (AppSettings.appInBackground.not()) {
+      return
+    }
     // this will stop sending multiple notifications of same type immediately right after
     if(latestState[macAddress] == state.notificationId()) {
       return
@@ -150,10 +154,6 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
     latestState[macAddress] = state.notificationId()
 
     payload?.let {
-      //No Notifications if App is in foreground
-      if (AppSettings.appInBackground.not()) {
-        return
-      }
       notificationCenter.show(it, macAddress)
       lastNotification = Instant.now()
     }
@@ -163,7 +163,10 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
    * Send notification based on current OverlayState
    */
   fun send(macAddress: String, state: OverlayState, shouldPostpone: Boolean = false) {
-
+    //No Notifications if App is in foreground
+    if (AppSettings.appInBackground.not()) {
+      return
+    }
      if(shouldPostpone && latestState[macAddress] == OverlayState.BLE_CONNECTION_LOST.notificationId()) {
       return
     }

@@ -11,13 +11,17 @@ import java.time.LocalTime
 
   if two inner sensor are : leak || blinded || pay attention ,ie. has a value of 1,3 or 4 show screen "X"
   if the outer sensor are : leak || blinded || pay attention, ie. has a value of 1,3 or 4 show screen "G"
-*/
-class WetMountOverride : Override {
+**/
+class TimedOverride : Override {
 
   private val timeframeSeconds = 320
   private var lastPatchChange: LocalTime? = null
 
   override fun handleOverride(updatedStateChange: UpdatedStateChange): UpdatedStateChange {
+    return handleWetMount(updatedStateChange)
+  }
+
+  private fun handleWetMount(updatedStateChange: UpdatedStateChange): UpdatedStateChange {
     // if the patch is a brand new patch - ie: we are splitting
     if(updatedStateChange.stateChange.apsAction == ApsAction.Split) {
       // set the timestamp

@@ -18,7 +18,7 @@ import com.coloplast.olympus.bluetooth.businesslayer.ServiceStateDispatcher
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.bluetooth.businesslayer.models.BleDevice
 import com.coloplast.olympus.bluetooth.model.*
-import com.coloplast.olympus.bluetooth.overrides.WetMountOverride
+import com.coloplast.olympus.bluetooth.overrides.TimedOverride
 import com.coloplast.olympus.notifications.OlympusNotificationManager
 import com.coloplast.olympus.patchsplit.models.CompromisedVault
 import com.coloplast.olympus.ui.feature.TransmitterManager
@@ -47,7 +47,7 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
   private val compromisedVault: CompromisedVault by inject()
   private val bluetoothServiceHelper: BluetoothServiceHelper by inject()
 
-  private val wetMountOverride = WetMountOverride()
+  private val wetMountOverride = TimedOverride()
 
   private val compositeDisposable = CompositeDisposable()
 

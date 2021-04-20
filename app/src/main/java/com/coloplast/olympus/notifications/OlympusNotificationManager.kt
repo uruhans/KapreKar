@@ -134,7 +134,7 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
         NotificationPayload(state.notificationId(), R.string.lock_notification_disconnection_battery)
       }
       UiState.TRANSMITTER_DETACHED_V -> {
-        NotificationPayload(state.notificationId(), R.string.lock_no_info_v)
+        null
       }
       UiState.TRANSMITTER_BATTERY_CHARGING_W -> {
         NotificationPayload(notificationsToRemove = listOf(

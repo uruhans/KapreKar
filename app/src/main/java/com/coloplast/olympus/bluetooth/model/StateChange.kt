@@ -8,7 +8,7 @@ import com.coloplast.olympus.ui.feature.statemachine.models.UiState
 import java.time.Instant
 
 data class StateChange(
-  val state: UiState = UiState.NO_CHANGE,
+  var state: UiState = UiState.NO_CHANGE,
   val overlayState: OverlayState = OverlayState.NONE,
   val bleDevice: BleDevice,
   var apsAction: ApsAction = ApsAction.Nothing,

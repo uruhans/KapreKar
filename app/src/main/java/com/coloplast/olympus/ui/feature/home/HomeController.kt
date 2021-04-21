@@ -99,7 +99,6 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
   private var stateRouter: Router? = null
 
   private var patchDialog: PatchDialogController? = null
-  private var patchChangeTime: LocalTime? = null
 
   private var previousBleState: BluetoothState = BluetoothState.UNDEFINED
   private var lastResetOrStitch: Instant? = null
@@ -241,29 +240,6 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
           }
 
           var stateToChangeTo = stateChange.state
-
-          // Special case for Wet Mount
-          // if we get a wet mount or outer leak within 4 minutes (240 seconds)
-          // we override the ui state to wet mount
-          val timeBetween = LocalTime.now().minusNanos(patchChangeTime?.toNanoOfDay() ?: 0)
-
-          if (timeBetween.toSecondOfDay() <= 320) {
-            val patch = stateChange.bleDevice.peripheral?.patch
-            if (patch != null) {
-              if (patch.isOuterSensorWet) {
-                stateToChangeTo = UiState.WET_MOUNT_G
-              }
-              else if (patch.isInnerSensorsWet) {
-                stateToChangeTo = UiState.WET_MOUNT_X
-              }
-            }
-            // clear the variable so we dont hit this wet mount again the next time
-            patchChangeTime = null
-          }
-          else {
-            // if we are passed 4 minutes we dont need this variable any more
-            patchChangeTime = null
-          }
 
           if (stateChange.overlayState == OverlayState.BLE_CONNECTION_LOST) {
             isConnected.set(false)
@@ -527,7 +503,6 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
       if(stateChange.apsAction == ApsAction.Split) {
         Timber.d("OLD patchId: [${preferences.getCurrentPatchId()}]")
         preferences.incrementPatchId()
-        patchChangeTime = LocalTime.now()
         Timber.d("NEW patchId: [${preferences.getCurrentPatchId()}]")
       }
 

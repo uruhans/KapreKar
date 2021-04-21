@@ -2,6 +2,6 @@ package com.coloplast.olympus.bluetooth.overrides
 
 import com.coloplast.olympus.ui.feature.UpdatedStateChange
 
-interface Override {
+interface StateOverride {
   fun handleOverride(updatedStateChange: UpdatedStateChange) : UpdatedStateChange
 }

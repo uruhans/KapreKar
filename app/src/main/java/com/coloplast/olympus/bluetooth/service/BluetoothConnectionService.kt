@@ -206,7 +206,7 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
               StateDispatcher.dispatchStateForActiveTransmitter(disconnectedStateChange)
             }
             else {
-              olympusNotificationManager.send(it.macAddress, OverlayState.BLE_CONNECTION_LOST)
+              olympusNotificationManager.send(it.macAddress, OverlayState.BLE_CONNECTION_LOST, true)
 
               if(latestState != null) {
                 Timber.wtf("[onResult] BLE_CONNECTION_LOST")

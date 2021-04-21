@@ -2,6 +2,7 @@ package com.coloplast.olympus.notifications
 
 import com.coloplast.olympus.R
 import com.coloplast.olympus.notifications.models.NotificationPayload
+import com.coloplast.olympus.shared.AppSettings
 import com.coloplast.olympus.ui.feature.statemachine.models.OverlayState
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
 import java.time.Instant
@@ -34,6 +35,10 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
    * send notifications based on current UiState
    */
   fun send(macAddress: String, state: UiState) {
+    //No Notifications if App is in foreground
+    if (AppSettings.appInBackground.not()) {
+      return
+    }
     // this will stop sending multiple notifications of same type immediately right after
     if(latestState[macAddress] == state.notificationId()) {
       return
@@ -134,7 +139,7 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
         NotificationPayload(state.notificationId(), R.string.lock_notification_disconnection_battery)
       }
       UiState.TRANSMITTER_DETACHED_V -> {
-        NotificationPayload(state.notificationId(), R.string.lock_no_info_v)
+        null
       }
       UiState.TRANSMITTER_BATTERY_CHARGING_W -> {
         NotificationPayload(notificationsToRemove = listOf(
@@ -146,6 +151,8 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
       }
     }
 
+    latestState[macAddress] = state.notificationId()
+
     payload?.let {
       notificationCenter.show(it, macAddress)
       lastNotification = Instant.now()
@@ -155,13 +162,14 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
   /**
    * Send notification based on current OverlayState
    */
-  fun send(macAddress: String, state: OverlayState) {
-    // this will stop sending multiple notifications of same type immediately right after
-    if(isSameIdAndSnoozing(macAddress, state.notificationId())) {
+  fun send(macAddress: String, state: OverlayState, shouldPostpone: Boolean = false) {
+    //No Notifications if App is in foreground
+    if (AppSettings.appInBackground.not()) {
       return
     }
-
-    latestState[macAddress] = state.notificationId()
+     if(shouldPostpone && latestState[macAddress] == OverlayState.BLE_CONNECTION_LOST.notificationId()) {
+      return
+    }
 
     val payload = when(state) {
       OverlayState.NONE -> { null }
@@ -170,9 +178,11 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
         NotificationPayload(state.notificationId(), R.string.lock_notification_battery_critical)
       }
       OverlayState.BLE_CONNECTION_LOST -> {
-        NotificationPayload(state.notificationId(), R.string.lock_notification_ble_disconnected)
+        NotificationPayload(state.notificationId(), R.string.lock_notification_ble_disconnected, postPonedMilliseconds = if (shouldPostpone) NotificationScheduler.POSTPONED_TIME_MILLIS else 0L)
       }
     }
+
+    latestState[macAddress] = state.notificationId()
 
     payload?.let {
       notificationCenter.show(it, macAddress)
@@ -180,16 +190,6 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
     }
   }
 
-  private fun isSameIdAndSnoozing(macAddress: String, notificationId: Int): Boolean {
-    if(latestState[macAddress] == notificationId) {
-      lastNotification?.let {
-        val snoozing = (Instant.now().toEpochMilli() - it.toEpochMilli()) <= NotificationScheduler.SNOOZE_TIME_MILLIS
-        return snoozing
-      }
-    }
-    return false
-  }
-  
   /**
    * cancel (remove) a specific notification
    */

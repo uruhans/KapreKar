@@ -4,13 +4,12 @@ import com.coloplast.olympus.patchsplit.models.ApsAction
 import com.coloplast.olympus.ui.feature.UpdatedStateChange
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
 import timber.log.Timber
-import java.time.LocalDateTime
-import java.time.ZoneOffset
+import java.time.Instant
 
 class TimedStateOverride : StateOverride {
 
   private val timeframeSeconds = 320
-  private var lastPatchChange: LocalDateTime? = null
+  private var lastPatchChange: Instant? = null
 
   override fun handleOverride(updatedStateChange: UpdatedStateChange): UpdatedStateChange {
     return handleWetMount(updatedStateChange)
@@ -27,13 +26,13 @@ class TimedStateOverride : StateOverride {
     // if the patch is a brand new patch - ie: we are splitting
     if (updatedStateChange.stateChange.apsAction == ApsAction.Split) {
       // set the timestamp
-      lastPatchChange = LocalDateTime.now()
+      lastPatchChange = Instant.now()
       // but ignore everything else for now
       return updatedStateChange
     }
 
     lastPatchChange?.let {
-      val timeSincePatchChange = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC).minus(it.toEpochSecond(ZoneOffset.UTC))
+      val timeSincePatchChange = Instant.now().epochSecond.minus(it.epochSecond)
       val isWithinTimeframe = timeSincePatchChange <= timeframeSeconds
 
       if (isWithinTimeframe) {

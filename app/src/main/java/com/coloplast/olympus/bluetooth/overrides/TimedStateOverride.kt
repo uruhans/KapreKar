@@ -31,27 +31,29 @@ class TimedStateOverride : StateOverride {
       return updatedStateChange
     }
 
-    val timeSincePatchChange = LocalTime.now().minusSeconds(lastPatchChange?.second?.toLong() ?: 0L)
-    val isWithinTimeframe = timeSincePatchChange.second <= timeframeSeconds
+    lastPatchChange?.let {
+      val timeSincePatchChange = LocalTime.now().minusSeconds(it.second.toLong())
+      val isWithinTimeframe = timeSincePatchChange.second <= timeframeSeconds
 
-    if (isWithinTimeframe) {
-      updatedStateChange.stateChange.bleDevice.peripheral?.patch?.let {
-        val newState = when {
-          it.isOuterSensorWet -> UiState.WET_MOUNT_G
-          it.isInnerSensorsWet -> UiState.WET_MOUNT_X
-          else -> UiState.NO_CHANGE
-        }
+      if (isWithinTimeframe) {
+        updatedStateChange.stateChange.bleDevice.peripheral?.patch?.let {
+          val newState = when {
+            it.isOuterSensorWet -> UiState.WET_MOUNT_G
+            it.isInnerSensorsWet -> UiState.WET_MOUNT_X
+            else -> UiState.NO_CHANGE
+          }
 
-        if (newState != UiState.NO_CHANGE) {
-          Timber.wtf("TimedStateOverride [${updatedStateChange.stateChange.state}] => [$newState]")
-          updatedStateChange.stateChange.state = newState
-          lastPatchChange = null
+          if (newState != UiState.NO_CHANGE) {
+            Timber.wtf("TimedStateOverride [${updatedStateChange.stateChange.state}] => [$newState]")
+            updatedStateChange.stateChange.state = newState
+            lastPatchChange = null
+          }
         }
       }
-    }
-    else {
-      // if we have passed 320 seconds we dont need this variable any more
-      lastPatchChange = null
+      else {
+        // if we have passed 320 seconds we dont need this variable any more
+        lastPatchChange = null
+      }
     }
 
     return updatedStateChange

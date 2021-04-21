@@ -13,6 +13,7 @@ import com.coloplast.olympus.BuildConfig
 import com.coloplast.olympus.R
 import com.coloplast.olympus.activities.MainActivity
 import com.coloplast.olympus.bluetooth.BluetoothServiceViewModel
+import com.coloplast.olympus.bluetooth.ServiceDispatcher
 import com.coloplast.olympus.bluetooth.StateDispatcher
 import com.coloplast.olympus.bluetooth.businesslayer.ServiceStateDispatcher
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
@@ -136,6 +137,9 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
           }
 
           StateDispatcher.dispatchStateForActiveTransmitter(updatedStateChange.stateChange)
+
+          // app state logging
+          ServiceDispatcher.dispatchEvent(ServiceEvent.AppStateLogger(updatedStateChange.stateChange.state.toLetter()))
         }
         is BluetoothServiceModel.BatteryUpdate -> {
           StateDispatcher.dispatch(it.statusChange)
@@ -159,6 +163,9 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
             // causing the home screen to show the wrong status
              StateDispatcher.dispatchStateForActiveTransmitter(it.statusChange)
           }
+
+          // app state logging
+          ServiceDispatcher.dispatchEvent(ServiceEvent.AppStateLogger(it.statusChange.overlayState.toLetter()))
         }
         is BluetoothServiceModel.RawDataPackageUpdate -> {
           val activeTransmitter = transmitterManager.isActiveTransmitter(it.macAddress)

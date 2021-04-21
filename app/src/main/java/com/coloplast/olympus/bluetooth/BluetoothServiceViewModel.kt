@@ -158,7 +158,7 @@ class BluetoothServiceViewModel(
             BluetoothServiceModel.Disconnected(macAddress)
           }
           .doOnNext {
-            if(it is BluetoothServiceModel.Disconnected) {
+            if (it is BluetoothServiceModel.Disconnected) {
               ServiceDispatcher.dispatchEvent(ServiceEvent.AppStateLogger(UiState.DISCONNECTED.toLetter()))
             }
           }
@@ -216,21 +216,6 @@ class BluetoothServiceViewModel(
           is DeviceResult.AppUpdateAvailable -> {
             BluetoothServiceModel.AppUpdateAvailable(StateChange(UiState.APP_UPDATE_AVAILABLE, bleDevice = deviceResult.bleDevice))
           }
-        }
-      }
-      .doOnNext {
-        val stateLetter = when (it) {
-          is BluetoothServiceModel.DeviceUpdate -> {
-            it.statusChange.state.toLetter()
-          }
-          is BluetoothServiceModel.BatteryUpdate -> {
-            it.statusChange.overlayState.toLetter()
-          }
-          else -> null
-        }
-
-        stateLetter?.let { letter ->
-          ServiceDispatcher.dispatchEvent(ServiceEvent.AppStateLogger(letter))
         }
       }
   }

@@ -46,7 +46,6 @@ class TimedStateOverride : StateOverride {
           if (newState != UiState.NO_CHANGE) {
             Timber.wtf("TimedStateOverride [${updatedStateChange.stateChange.state}] => [$newState]")
             updatedStateChange.stateChange.state = newState
-            lastPatchChange = null
           }
         }
       }

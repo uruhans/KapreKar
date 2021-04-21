@@ -36,10 +36,10 @@ class TimedStateOverride : StateOverride {
       val isWithinTimeframe = timeSincePatchChange.second <= timeframeSeconds
 
       if (isWithinTimeframe) {
-        updatedStateChange.stateChange.bleDevice.peripheral?.patch?.let {
+        updatedStateChange.stateChange.bleDevice.peripheral?.patch?.let { patch ->
           val newState = when {
-            it.isOuterSensorWet -> UiState.WET_MOUNT_G
-            it.isInnerSensorsWet -> UiState.WET_MOUNT_X
+            patch.isOuterSensorWet -> UiState.WET_MOUNT_G
+            patch.isInnerSensorsWet -> UiState.WET_MOUNT_X
             else -> UiState.NO_CHANGE
           }
 

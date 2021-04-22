@@ -34,7 +34,7 @@ class SetupGuideSG2 : BaseController<ControllerStartupGuide2Binding>(), TopMenuV
     }
   }
 
-  override fun showBackButton(): Boolean = true
+  override fun showBackButton(): Boolean = false
 
   override fun showCloseButton(): Boolean = false
 

@@ -42,6 +42,8 @@ class SetupGuideIntroSGI1Controller : BaseController<ControllerStartupGuideIntro
     return R.layout.controller_startup_guide_intro_1
   }
 
+  override fun showBackButton(): Boolean = false
+
   override fun showCloseButton(): Boolean = false
 
   companion object {

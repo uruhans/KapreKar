@@ -45,7 +45,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver(), KoinComponent {
           val macAddress = intent.extras?.getString(NotificationCenter.MACADDRESS)!!
 
           // show the notification
-          notificationManager.send(macAddress, notificationId, isScheduledNotification = true)
+          notificationManager.send(macAddress, notificationId, shouldPostpone= false, isScheduledNotification = true)
         }
       }
     }

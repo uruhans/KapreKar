@@ -22,9 +22,9 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
    * send a notification solely based on a notification id
    * - this will then try to figure out what type of notification it is, and then send the correct type (UiState, OverlayState)
    */
-  fun send(macAddress: String, notificationId: Int, isScheduledNotification: Boolean = false) {
+  fun send(macAddress: String, notificationId: Int, shouldPostpone: Boolean = false, isScheduledNotification: Boolean = false) {
     if(OverlayState.isOverlayState(notificationId)) {
-      send(macAddress, OverlayState.fromNotificationId(notificationId), false, isScheduledNotification)
+      send(macAddress, OverlayState.fromNotificationId(notificationId), shouldPostpone, isScheduledNotification)
     }
     else {
       send(macAddress, UiState.fromNotificationId(notificationId), isScheduledNotification)
@@ -34,7 +34,7 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
   /**
    * send notifications based on current UiState
    */
-  fun send(macAddress: String, state: UiState, isScheduledNotification: Boolean) {
+  fun send(macAddress: String, state: UiState, isScheduledNotification: Boolean = false) {
     if (ignoreNotification(macAddress, false, isScheduledNotification)) {
       latestState[macAddress] = state.notificationId()
       return
@@ -154,7 +154,7 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
   /**
    * Send notification based on current OverlayState
    */
-  fun send(macAddress: String, state: OverlayState, shouldPostpone: Boolean = false, isScheduledNotification: Boolean) {
+  fun send(macAddress: String, state: OverlayState, shouldPostpone: Boolean = false, isScheduledNotification: Boolean = false) {
     if (ignoreNotification(macAddress, shouldPostpone, isScheduledNotification)) {
       latestState[macAddress] = state.notificationId()
       return
@@ -187,7 +187,7 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
     if(macAddress.isEmpty()) {
       return true
     }
-    if (isScheduledNotification && (latestState[macAddress] == UiState.OK_A.notificationId())) {
+    if (isScheduledNotification && (latestState[macAddress] != OverlayState.BLE_CONNECTION_LOST.notificationId())) {
       return true
     }
     return false

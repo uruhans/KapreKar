@@ -48,7 +48,7 @@
         android:gravity="center_vertical"
         android:textColor="@color/grey"
         android:text="@{controller.transmitterName}"
-        app:visibleOrInvisible="@{controller.isConnected &amp;&amp; !controller.isProduction}"
+        app:visibleOrInvisible="@{controller.isConnected &amp;&amp; controller.enableDebugInfo}"
         app:layout_constraintBottom_toBottomOf="@+id/icon_bluetooth"
         app:layout_constraintStart_toEndOf="@+id/icon_bluetooth"
         app:layout_constraintTop_toTopOf="@+id/icon_bluetooth" />

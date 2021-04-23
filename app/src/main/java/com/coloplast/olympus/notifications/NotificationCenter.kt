@@ -151,7 +151,7 @@ class NotificationCenter(
 
   private fun isItNightTime(): Boolean {
     val now = LocalTime.now()
-    return (now > preferences.bedtimeStart || now < preferences.bedtimeEnd)
+    return (now.isAfter(preferences.bedtimeStart) || now.isBefore(preferences.bedtimeEnd))
   }
 
   private fun triggerRingingAlarmNotification(

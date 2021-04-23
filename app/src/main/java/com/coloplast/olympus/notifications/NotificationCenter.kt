@@ -188,11 +188,6 @@ class NotificationCenter(
         context.getString(R.string.lock_notification_action_snooze),
         snoozePendingIntent
       )
-      .addAction(
-        R.drawable.ic_baseline_cancel_24,
-        context.getString(R.string.generic_dismiss),
-        dismissPendingIntent
-      )
       .setFullScreenIntent(dismissPendingIntent, true)
 
     payload.title?.let {

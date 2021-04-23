@@ -22,66 +22,81 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
    * send a notification solely based on a notification id
    * - this will then try to figure out what type of notification it is, and then send the correct type (UiState, OverlayState)
    */
-  fun send(macAddress: String, notificationId: Int) {
-    if(OverlayState.isOverlayState(notificationId)) {
-      send(macAddress, OverlayState.fromNotificationId(notificationId))
+  fun send(macAddress: String, notificationId: Int, shouldPostpone: Boolean = false, isScheduledNotification: Boolean = false) {
+    if (OverlayState.isOverlayState(notificationId)) {
+      send(macAddress, OverlayState.fromNotificationId(notificationId), shouldPostpone, isScheduledNotification)
     }
     else {
-      send(macAddress, UiState.fromNotificationId(notificationId))
+      send(macAddress, UiState.fromNotificationId(notificationId), isScheduledNotification)
     }
   }
 
   /**
    * send notifications based on current UiState
    */
-  fun send(macAddress: String, state: UiState) {
-    //No Notifications if App is in foreground
-    if (AppSettings.appInBackground.not()) {
+  fun send(macAddress: String, state: UiState, isScheduledNotification: Boolean = false) {
+    if (ignoreNotification(macAddress, false, isScheduledNotification)) {
       return
-    }
-    // this will stop sending multiple notifications of same type immediately right after
-    if(latestState[macAddress] == state.notificationId()) {
-      return
-    }
-
-    if(macAddress.isNotEmpty()) {
-      latestState[macAddress] = state.notificationId()
     }
 
     val payload = when (state) {
       UiState.FIRMWARE_AVAILABLE -> {
-        NotificationPayload(state.notificationId(), R.string.lock_notification_firmware_update, title = R.string.lock_notification_firmware_update_title)
+        NotificationPayload(
+          state.notificationId(),
+          R.string.lock_notification_firmware_update,
+          title = R.string.lock_notification_firmware_update_title
+        )
       }
       UiState.APP_UPDATE_AVAILABLE -> {
         NotificationPayload(state.notificationId(), R.string.lock_notification_app_update, title = R.string.lock_notification_app_update_title)
       }
-      UiState.NO_CHANGE -> { null }
-      UiState.TRANSMITTER_DELETED -> { null }
-      UiState.INITIAL -> { null }
+      UiState.NO_CHANGE -> {
+        null
+      }
+      UiState.TRANSMITTER_DELETED -> {
+        null
+      }
+      UiState.INITIAL -> {
+        null
+      }
       UiState.BLUETOOTH_NOT_ENABLED -> {
         NotificationPayload(state.notificationId(), R.string.lock_notification_ble_off)
       }
-      UiState.LOCATION_SERVICES_NOT_ENABLED -> { null }
+      UiState.LOCATION_SERVICES_NOT_ENABLED -> {
+        null
+      }
       UiState.CONNECTING -> {
-        NotificationPayload(notificationsToRemove = listOf(
+        NotificationPayload(
+          notificationsToRemove = listOf(
             UiState.BLUETOOTH_NOT_ENABLED.notificationId(),
             UiState.NO_BATTERY_R.notificationId(),
             OverlayState.BLE_CONNECTION_LOST.notificationId()
           )
         )
       }
-      UiState.SCANNING -> { null }
-      UiState.DISCONNECTED -> { null }
-      UiState.SHOW_WELCOME -> { null }
+      UiState.SCANNING -> {
+        null
+      }
+      UiState.DISCONNECTED -> {
+        null
+      }
+      UiState.SHOW_WELCOME -> {
+        null
+      }
       UiState.MULTIPLE_TRANSMITTERS -> {
         NotificationPayload(state.notificationId(), R.string.lock_notification_multiple_transmitters)
       }
-      UiState.TRANSMITTERS_EMPTY -> { null }
-      UiState.TRANSMITTER_NOT_FOUND -> { null }
+      UiState.TRANSMITTERS_EMPTY -> {
+        null
+      }
+      UiState.TRANSMITTER_NOT_FOUND -> {
+        null
+      }
       UiState.SOMETHING_ELSE,
       UiState.OK_A -> {
         // we will clear all notifications, except MULTIPLE_TRANSMITTERS, FIRMWARE_AVAILABLE and APP_UPDATE_AVAILABLE
-        NotificationPayload(notificationsToRemove = listOf(
+        NotificationPayload(
+          notificationsToRemove = listOf(
             UiState.BLUETOOTH_NOT_ENABLED.notificationId(),
             UiState.INNER_BREACH_B.notificationId(),
             UiState.OUTER_BREACH_C.notificationId(),
@@ -142,7 +157,8 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
         null
       }
       UiState.TRANSMITTER_BATTERY_CHARGING_W -> {
-        NotificationPayload(notificationsToRemove = listOf(
+        NotificationPayload(
+          notificationsToRemove = listOf(
             UiState.NO_BATTERY_R.notificationId(),
             UiState.TRANSMITTER_DETACHED_V.notificationId(),
             OverlayState.BATTERY_LOW.notificationId()
@@ -162,23 +178,25 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
   /**
    * Send notification based on current OverlayState
    */
-  fun send(macAddress: String, state: OverlayState, shouldPostpone: Boolean = false) {
-    //No Notifications if App is in foreground
-    if (AppSettings.appInBackground.not()) {
-      return
-    }
-     if(shouldPostpone && latestState[macAddress] == OverlayState.BLE_CONNECTION_LOST.notificationId()) {
+  fun send(macAddress: String, state: OverlayState, shouldPostpone: Boolean = false, isScheduledNotification: Boolean = false) {
+    if (ignoreNotification(macAddress, shouldPostpone, isScheduledNotification)) {
       return
     }
 
-    val payload = when(state) {
-      OverlayState.NONE -> { null }
+    val payload = when (state) {
+      OverlayState.NONE -> {
+        null
+      }
       OverlayState.BATTERY_LOW -> {
         // this is temporary and not *real* code - but here to present a way to do overlay state notifications
         NotificationPayload(state.notificationId(), R.string.lock_notification_battery_critical)
       }
       OverlayState.BLE_CONNECTION_LOST -> {
-        NotificationPayload(state.notificationId(), R.string.lock_notification_ble_disconnected, postPonedMilliseconds = if (shouldPostpone) NotificationScheduler.POSTPONED_TIME_MILLIS else 0L)
+        NotificationPayload(
+          state.notificationId(),
+          R.string.lock_notification_ble_disconnected,
+          postPonedMilliseconds = if (shouldPostpone) NotificationScheduler.POSTPONED_TIME_MILLIS else 0L
+        )
       }
     }
 
@@ -187,6 +205,17 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
     payload?.let {
       notificationCenter.show(it, macAddress)
       lastNotification = Instant.now()
+    }
+  }
+
+  private fun ignoreNotification(macAddress: String, shouldPostpone: Boolean, isScheduledNotification: Boolean): Boolean {
+    return when {
+      AppSettings.appInBackground.not() && shouldPostpone.not() ||
+      macAddress.isEmpty() ||
+      isScheduledNotification && (latestState[macAddress] != OverlayState.BLE_CONNECTION_LOST.notificationId()) -> {
+        true
+      }
+      else -> false
     }
   }
 

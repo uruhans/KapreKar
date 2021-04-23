@@ -151,7 +151,7 @@ class NotificationCenter(
 
   private fun isItNightTime(): Boolean {
     val now = LocalTime.now()
-    return (now > preferences.bedtimeStart || now < preferences.bedtimeEnd)
+    return (now.isAfter(preferences.bedtimeStart) || now.isBefore(preferences.bedtimeEnd))
   }
 
   private fun triggerRingingAlarmNotification(
@@ -188,11 +188,6 @@ class NotificationCenter(
         context.getString(R.string.lock_notification_action_snooze),
         snoozePendingIntent
       )
-      .addAction(
-        R.drawable.ic_baseline_cancel_24,
-        context.getString(R.string.generic_dismiss),
-        dismissPendingIntent
-      )
       .setFullScreenIntent(dismissPendingIntent, true)
 
     payload.title?.let {
@@ -226,7 +221,7 @@ class NotificationCenter(
       .setContentIntent(getPendingIntent())
       // NO SOUND when we are in the app
       .setSilent(AppSettings.appInBackground.not())
-      .setAutoCancel(false)
+      .setAutoCancel(true)
       .addAction(
         R.drawable.ic_baseline_snooze_24,
         context.getString(R.string.lock_notification_action_snooze),

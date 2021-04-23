@@ -32,6 +32,7 @@ android {
   productFlavors {
     dev {
       buildConfigField("boolean", "EnableFileDebugging", "true")
+      buildConfigField("boolean", "EnableDebugInfo", "true")
 
       applicationIdSuffix ".dev"
       buildConfigField("String", "Suffix", "\" - DEV\"")
@@ -42,6 +43,7 @@ android {
     }
     cli {
       buildConfigField("boolean", "EnableFileDebugging", "false")
+      buildConfigField("boolean", "EnableDebugInfo", "false")
 
       applicationIdSuffix ".cli"
       buildConfigField("String", "Suffix", "\" - CLI\"")
@@ -52,6 +54,7 @@ android {
     }
     tpa {
       buildConfigField("boolean", "EnableFileDebugging", "true")
+      buildConfigField("boolean", "EnableDebugInfo", "true")
 
       applicationIdSuffix ".tpa"
       buildConfigField("String", "Suffix", "\" - TPA\"")
@@ -62,6 +65,7 @@ android {
     }
     internal {
       buildConfigField("boolean", "EnableFileDebugging", "true")
+      buildConfigField("boolean", "EnableDebugInfo", "true")
 
       applicationIdSuffix ".internal"
       buildConfigField("String", "Suffix", "\" - internal\"")
@@ -72,6 +76,7 @@ android {
     }
     googlePlay {
       buildConfigField("boolean", "EnableFileDebugging", "false")
+      buildConfigField("boolean", "EnableDebugInfo", "false")
 
       buildConfigField("String", "Suffix", "\"\"")
 

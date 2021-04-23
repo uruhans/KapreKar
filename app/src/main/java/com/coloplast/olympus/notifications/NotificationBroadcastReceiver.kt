@@ -26,13 +26,13 @@ class NotificationBroadcastReceiver : BroadcastReceiver(), KoinComponent {
     intent?.extras?.getInt(NotificationCenter.SCHEDULED_NOTIFICATION_ID)?.let { notificationId ->
       when(action){
         NotificationCenter.INTENT_FILTER_ACTION_POSTPONED -> {
-          val macAddress = intent.extras?.getString(NotificationCenter.MACADDRESS)!!
+          val macAddress = intent.extras?.getString(NotificationCenter.MACADDRESS) ?: ""
           val postponedMilliseconds = intent.extras?.getLong(NotificationCenter.POSTPONED_MILLISECONDS)!!
           // postpone the notification
           notificationScheduler.snoozeNotification(context!!, macAddress, notificationId, postponedMilliseconds)
         }
         NotificationCenter.INTENT_FILTER_ACTION_SNOOZE -> {
-          val macAddress = intent.extras?.getString(NotificationCenter.MACADDRESS)!!
+          val macAddress = intent.extras?.getString(NotificationCenter.MACADDRESS) ?: ""
 
           // snooze the notification
           notificationScheduler.snoozeNotification(context!!, macAddress, notificationId)
@@ -42,10 +42,10 @@ class NotificationBroadcastReceiver : BroadcastReceiver(), KoinComponent {
         }
         NotificationCenter.INTENT_FILTER_ACTION_DISMISS -> notificationManager.cancel(notificationId)
         NotificationCenter.INTENT_FILTER_SHOW_NOTIFICATION -> {
-          val macAddress = intent.extras?.getString(NotificationCenter.MACADDRESS)!!
+          val macAddress = intent.extras?.getString(NotificationCenter.MACADDRESS) ?: ""
 
           // show the notification
-          notificationManager.send(macAddress, notificationId)
+          notificationManager.send(macAddress, notificationId, isScheduledNotification = true)
         }
       }
     }

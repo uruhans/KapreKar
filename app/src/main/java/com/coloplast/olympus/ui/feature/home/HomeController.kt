@@ -90,7 +90,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
   val isLastCheckVisible = ObservableBoolean(false)
 
   val transmitterName = ObservableField<String>()
-  val isProduction = BuildConfig.Suffix.isEmpty()
+  val enableDebugInfo = BuildConfig.EnableDebugInfo
 
   private var currentUiState = UiState.INITIAL
   private var currentOverlayState = OverlayState.NONE

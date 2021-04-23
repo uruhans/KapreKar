@@ -142,6 +142,10 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
           ServiceDispatcher.dispatchEvent(ServiceEvent.AppStateLogger(updatedStateChange.stateChange.state.toLetter()))
         }
         is BluetoothServiceModel.BatteryUpdate -> {
+          synchronized(connectionAttempts) {
+            connectionAttempts[it.statusChange.getMacAddress()] = 0
+          }
+
           StateDispatcher.dispatch(it.statusChange)
 
           val isOnlyTransmitter = transmitterManager.isOnlyTransmitterAdded(it.statusChange.getMacAddress())

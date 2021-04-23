@@ -156,7 +156,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
             }
             BluetoothState.BLUETOOTH_NOT_ENABLED -> {
               isConnected.set(false)
-              olympusNotificationManager.send("", UiState.BLUETOOTH_NOT_ENABLED)
+              olympusNotificationManager.send("", UiState.BLUETOOTH_NOT_ENABLED, isScheduledNotification = false)
               changeUiState(UiState.BLUETOOTH_NOT_ENABLED)
             }
             BluetoothState.LOCATION_SERVICES_NOT_ENABLED -> {

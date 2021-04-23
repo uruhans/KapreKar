@@ -22,30 +22,22 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
    * send a notification solely based on a notification id
    * - this will then try to figure out what type of notification it is, and then send the correct type (UiState, OverlayState)
    */
-  fun send(macAddress: String, notificationId: Int) {
+  fun send(macAddress: String, notificationId: Int, isScheduledNotification: Boolean = false) {
     if(OverlayState.isOverlayState(notificationId)) {
-      send(macAddress, OverlayState.fromNotificationId(notificationId))
+      send(macAddress, OverlayState.fromNotificationId(notificationId), false, isScheduledNotification)
     }
     else {
-      send(macAddress, UiState.fromNotificationId(notificationId))
+      send(macAddress, UiState.fromNotificationId(notificationId), isScheduledNotification)
     }
   }
 
   /**
    * send notifications based on current UiState
    */
-  fun send(macAddress: String, state: UiState) {
-    //No Notifications if App is in foreground
-    if (AppSettings.appInBackground.not()) {
-      return
-    }
-    // this will stop sending multiple notifications of same type immediately right after
-    if(latestState[macAddress] == state.notificationId()) {
-      return
-    }
-
-    if(macAddress.isNotEmpty()) {
+  fun send(macAddress: String, state: UiState, isScheduledNotification: Boolean) {
+    if (ignoreNotification(macAddress, false, isScheduledNotification)) {
       latestState[macAddress] = state.notificationId()
+      return
     }
 
     val payload = when (state) {
@@ -162,12 +154,9 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
   /**
    * Send notification based on current OverlayState
    */
-  fun send(macAddress: String, state: OverlayState, shouldPostpone: Boolean = false) {
-    //No Notifications if App is in foreground
-    if (AppSettings.appInBackground.not()) {
-      return
-    }
-     if(shouldPostpone && latestState[macAddress] == OverlayState.BLE_CONNECTION_LOST.notificationId()) {
+  fun send(macAddress: String, state: OverlayState, shouldPostpone: Boolean = false, isScheduledNotification: Boolean) {
+    if (ignoreNotification(macAddress, shouldPostpone, isScheduledNotification)) {
+      latestState[macAddress] = state.notificationId()
       return
     }
 
@@ -188,6 +177,20 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
       notificationCenter.show(it, macAddress)
       lastNotification = Instant.now()
     }
+  }
+
+  private fun ignoreNotification(macAddress: String, shouldPostpone: Boolean, isScheduledNotification: Boolean): Boolean {
+    //No Notifications if App is in foreground or postponed
+    if (AppSettings.appInBackground.not() && shouldPostpone.not()) {
+      return true
+    }
+    if(macAddress.isEmpty()) {
+      return true
+    }
+    if (isScheduledNotification && (latestState[macAddress] == UiState.OK_A.notificationId())) {
+      return true
+    }
+    return false
   }
 
   /**

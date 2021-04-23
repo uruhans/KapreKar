@@ -96,7 +96,7 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
       when (it) {
         is BluetoothServiceModel.FirmwareUpdateAvailable -> {
           if(transmitterManager.isActiveTransmitter(it.statusChange.getMacAddress())) {
-            olympusNotificationManager.send(it.statusChange.getMacAddress(), UiState.FIRMWARE_AVAILABLE)
+            olympusNotificationManager.send(it.statusChange.getMacAddress(), UiState.FIRMWARE_AVAILABLE, isScheduledNotification = false)
             StateDispatcher.dispatchStateForActiveTransmitter(it.statusChange)
           }
 
@@ -107,7 +107,7 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
         is BluetoothServiceModel.AppUpdateAvailable -> {
           if(transmitterManager.isActiveTransmitter(it.statusChange.getMacAddress())) {
 
-            olympusNotificationManager.send(it.statusChange.getMacAddress(), UiState.APP_UPDATE_AVAILABLE)
+            olympusNotificationManager.send(it.statusChange.getMacAddress(), UiState.APP_UPDATE_AVAILABLE, isScheduledNotification = false)
             StateDispatcher.dispatchStateForActiveTransmitter(it.statusChange)
           }
 
@@ -130,7 +130,7 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
           updatedStateChange = timedStateOverride.handleOverride(updatedStateChange)
 
           // this will allow for notifications to be send when app is in the background
-          olympusNotificationManager.send(updatedStateChange.stateChange.getMacAddress(), updatedStateChange.stateChange.state)
+          olympusNotificationManager.send(updatedStateChange.stateChange.getMacAddress(), updatedStateChange.stateChange.state, isScheduledNotification = false)
 
           if(updatedStateChange.stateChange != it.statusChange) {
             StateDispatcher.dispatch(updatedStateChange.stateChange)
@@ -152,8 +152,8 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
               transmitterManager.determineCurrentlyActiveTransmitterAndReturnStateChangeFromIt(it.statusChange)
             }
 
-            olympusNotificationManager.send(it.statusChange.getMacAddress(), it.statusChange.state)
-            olympusNotificationManager.send(it.statusChange.getMacAddress(), it.statusChange.overlayState)
+            olympusNotificationManager.send(it.statusChange.getMacAddress(), it.statusChange.state, isScheduledNotification = false)
+            olympusNotificationManager.send(it.statusChange.getMacAddress(), it.statusChange.overlayState, isScheduledNotification = false)
 
             it.statusChange.isBatteryUpdate = true
 
@@ -206,7 +206,7 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
               StateDispatcher.dispatchStateForActiveTransmitter(disconnectedStateChange)
             }
             else {
-              olympusNotificationManager.send(it.macAddress, OverlayState.BLE_CONNECTION_LOST, true)
+              olympusNotificationManager.send(it.macAddress, OverlayState.BLE_CONNECTION_LOST, true, isScheduledNotification = false)
 
               if(latestState != null) {
                 Timber.wtf("[onResult] BLE_CONNECTION_LOST")

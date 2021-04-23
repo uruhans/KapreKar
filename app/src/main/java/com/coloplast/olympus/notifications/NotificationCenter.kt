@@ -226,7 +226,7 @@ class NotificationCenter(
       .setContentIntent(getPendingIntent())
       // NO SOUND when we are in the app
       .setSilent(AppSettings.appInBackground.not())
-      .setAutoCancel(false)
+      .setAutoCancel(true)
       .addAction(
         R.drawable.ic_baseline_snooze_24,
         context.getString(R.string.lock_notification_action_snooze),

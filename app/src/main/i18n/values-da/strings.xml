@@ -441,7 +441,7 @@
   <string name="guides_us_card_title">Om sensorer</string>
   <string name="lala1">For at sikre den mest pålidelige forbindelse anbefales det at indstille placeringsadgang for TestProdukt til \'Altid\' i dine telefonindstillinger. Coloplast bruger ikke oplysninger om placering til noget andet formål.</string>
   <string name="lala2">Læs i Lokalitetsguiden, hvis du ønsker at vide mere om hvad TestProdukt bruger lokalitetsdata til og hvad du skal gøre med de gentagne pop-up notifikationer som spørger om at bekræfte at du vil dele lokalitet:</string>
-  <string name="launch_screen_title">Testprodukt</string>
+  <string name="launch_screen_title">CP321</string>
   <string name="lock_dirt_k">Blokeret transmitterforbindelse.</string>
   <string name="lock_inner_blind_d">Indre sensorer virker ikke</string>
   <string name="lock_multiple_m">To transmittere er sat på sensorlag. Fjern den du ikke bruger.</string>

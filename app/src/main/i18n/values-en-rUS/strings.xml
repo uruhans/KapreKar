@@ -441,7 +441,7 @@
   <string name="guides_us_card_title">Understanding sensors</string>
   <string name="lala1">To ensure the most reliable connection to keep you informed, it is recommended to set location access for TestProduct to \'Always\' in your phones settings.</string>
   <string name="lala2">To read more about how TestProduct uses location data and what to do with reoccuring popups asking for you to confirm your location preference, you may wish to read the Location guide:</string>
-  <string name="launch_screen_title">SUS</string>
+  <string name="launch_screen_title">CP321</string>
   <string name="lock_dirt_k">Blocked transmitter connection.</string>
   <string name="lock_inner_blind_d">Inner sensors worn out.</string>
   <string name="lock_multiple_m">Two transmitters attached to sensor layers.</string>

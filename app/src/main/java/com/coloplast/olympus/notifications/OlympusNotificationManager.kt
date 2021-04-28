@@ -94,7 +94,7 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
         null
       }
       UiState.TRANSMITTER_NOT_FOUND -> {
-        null
+        NotificationPayload(state.notificationId(), R.string.lock_not_found_p)
       }
       UiState.SOMETHING_ELSE,
       UiState.OK_A -> {

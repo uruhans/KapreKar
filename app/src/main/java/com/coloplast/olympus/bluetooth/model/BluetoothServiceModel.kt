@@ -15,4 +15,5 @@ sealed class BluetoothServiceModel {
   data class Disconnected(val macAddress: String) : BluetoothServiceModel()
   data class ScanningStarted(val ignored: Unit = Unit) : BluetoothServiceModel()
   data class BluetoothDisabled(val state: UiState) : BluetoothServiceModel()
+  data class NoTransmittersFound(val macAddress: String, val didScan: Boolean = true) : BluetoothServiceModel()
 }

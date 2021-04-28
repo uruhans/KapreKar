@@ -5,6 +5,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import com.coloplast.olympus.BuildConfig
 
 /**
  * A class to re-schedule notifications if the user snoozes a notification
@@ -50,7 +51,7 @@ class NotificationScheduler {
   }
 
   companion object {
-    val SNOOZE_TIME_MILLIS = 15L * 60 * 1000 // 15 minutes
-    val POSTPONED_TIME_MILLIS = 5L * 60 * 1000 // 5 minutes
+    val SNOOZE_TIME_MILLIS = if(BuildConfig.EnableDebugInfo) 1L * 60 * 1000 else 15L * 60 * 1000 // 15 minutes
+    val POSTPONED_TIME_MILLIS = if(BuildConfig.EnableDebugInfo) 1L * 60 * 1000 else 5L * 60 * 1000 // 5 minutes
   }
 }

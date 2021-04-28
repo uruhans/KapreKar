@@ -63,7 +63,7 @@ val koinModule = module {
   /* Notifications */
   single { androidContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }
   single { NotificationCenter(androidContext(), get(), get()) }
-  single { OlympusNotificationManager(get()) }
+  single { OlympusNotificationManager(get(), get()) }
   single { NotificationScheduler() }
 
   /* Bluetooth */

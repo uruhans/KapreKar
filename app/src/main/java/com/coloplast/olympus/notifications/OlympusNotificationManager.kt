@@ -5,7 +5,7 @@ import com.coloplast.olympus.notifications.models.NotificationPayload
 import com.coloplast.olympus.shared.AppSettings
 import com.coloplast.olympus.ui.feature.statemachine.models.OverlayState
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
-import timber.log.Timber
+import com.coloplast.olympus.utils.DisplayUtils
 import java.time.Instant
 
 /**
@@ -14,7 +14,10 @@ import java.time.Instant
  *
  * NOTICE: some notifications have not been implemented yet as they have not been implemented in the UI yet
  */
-class OlympusNotificationManager(private val notificationCenter: NotificationCenter) {
+class OlympusNotificationManager(
+  private val notificationCenter: NotificationCenter,
+  private val displayUtils: DisplayUtils
+  ) {
 
   private val latestState = mutableMapOf<String, Int>()
   private var lastNotification: Instant? = null
@@ -36,10 +39,7 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
    * send notifications based on current UiState
    */
   fun send(macAddress: String, state: UiState, isScheduledNotification: Boolean = false) {
-    Timber.wtf("[${state}]")
-
     if (ignoreNotification(macAddress, state.notificationId(), false, isScheduledNotification)) {
-      Timber.wtf("[${state}] ignored")
       return
     }
 
@@ -183,10 +183,7 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
    * Send notification based on current OverlayState
    */
   fun send(macAddress: String, state: OverlayState, shouldPostpone: Boolean = false, isScheduledNotification: Boolean = false) {
-    Timber.wtf("[${state}]")
-
     if (ignoreNotification(macAddress, state.notificationId(), shouldPostpone, isScheduledNotification)) {
-      Timber.wtf("[${state}] ignored")
       return
     }
 

@@ -97,8 +97,36 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
         is BluetoothServiceModel.BluetoothDisabled -> {
           olympusNotificationManager.send("", it.state)
         }
+        is BluetoothServiceModel.NoTransmittersFound -> {
+          synchronized(connectionAttempts) {
+            connectionAttempts[it.macAddress] = connectionAttempts[it.macAddress]?.plus(1) ?: 1
+          }
+
+          if (transmitterManager.isActiveTransmitter(it.macAddress) || transmitterManager.isOnlyTransmitterAdded(it.macAddress)) {
+            val latestState = transmitterManager.getLatestState(it.macAddress)
+            val bleDevice = latestState?.bleDevice ?: BleDevice("", it.macAddress, BleConnectionState.DISCONNECTED)
+            bleDevice.connectionState = BleConnectionState.DISCONNECTED
+
+            val disconnectedStateChange = StateChange(UiState.TRANSMITTER_NOT_FOUND, bleDevice = bleDevice)
+
+            val attempts = if(BuildConfig.EnableDebugInfo) 15 else 50
+
+            if (connectionAttempts[it.macAddress]!! >= attempts) {
+              synchronized(connectionAttempts) {
+                connectionAttempts[it.macAddress] = 0
+              }
+
+              Timber.wtf("[onResult] TRANSMITTER_NOT_FOUND")
+
+              olympusNotificationManager.send(it.macAddress, UiState.TRANSMITTER_NOT_FOUND)
+              ServiceDispatcher.dispatchEvent(ServiceEvent.AppStateLogger(UiState.TRANSMITTER_NOT_FOUND.toLetter()))
+
+              StateDispatcher.dispatchStateForActiveTransmitter(disconnectedStateChange)
+            }
+          }
+        }
         is BluetoothServiceModel.FirmwareUpdateAvailable -> {
-          if(transmitterManager.isActiveTransmitter(it.statusChange.getMacAddress())) {
+          if (transmitterManager.isActiveTransmitter(it.statusChange.getMacAddress())) {
             olympusNotificationManager.send(it.statusChange.getMacAddress(), UiState.FIRMWARE_AVAILABLE)
             StateDispatcher.dispatchStateForActiveTransmitter(it.statusChange)
           }
@@ -108,7 +136,7 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
           StateDispatcher.dispatch(it.statusChange)
         }
         is BluetoothServiceModel.AppUpdateAvailable -> {
-          if(transmitterManager.isActiveTransmitter(it.statusChange.getMacAddress())) {
+          if (transmitterManager.isActiveTransmitter(it.statusChange.getMacAddress())) {
 
             olympusNotificationManager.send(it.statusChange.getMacAddress(), UiState.APP_UPDATE_AVAILABLE)
             StateDispatcher.dispatchStateForActiveTransmitter(it.statusChange)
@@ -135,7 +163,7 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
           // this will allow for notifications to be send when app is in the background
           olympusNotificationManager.send(updatedStateChange.stateChange.getMacAddress(), updatedStateChange.stateChange.state)
 
-          if(updatedStateChange.stateChange != it.statusChange) {
+          if (updatedStateChange.stateChange != it.statusChange) {
             StateDispatcher.dispatch(updatedStateChange.stateChange)
           }
 
@@ -153,9 +181,9 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
 
           val isOnlyTransmitter = transmitterManager.isOnlyTransmitterAdded(it.statusChange.getMacAddress())
 
-          if(transmitterManager.isActiveTransmitter(it.statusChange.getMacAddress()) || isOnlyTransmitter) {
+          if (transmitterManager.isActiveTransmitter(it.statusChange.getMacAddress()) || isOnlyTransmitter) {
 
-            if(isOnlyTransmitter) {
+            if (isOnlyTransmitter) {
               transmitterManager.determineCurrentlyActiveTransmitterAndReturnStateChangeFromIt(it.statusChange)
             }
 
@@ -168,7 +196,7 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
             // ie: deviceUpdate comes with UiState.MultipleTransmitters - but then the batteryUpdate
             // who doesn't know about multiple transmitters overrides it with *this* particular statusUpdate
             // causing the home screen to show the wrong status
-             StateDispatcher.dispatchStateForActiveTransmitter(it.statusChange)
+            StateDispatcher.dispatchStateForActiveTransmitter(it.statusChange)
           }
 
           // app state logging
@@ -184,16 +212,12 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
         is BluetoothServiceModel.CompromisedPackageUpdate -> {
           // only add the running compromised value to the vault if it's coming from
           // the currently active transmitter
-          if(transmitterManager.isActiveTransmitter(it.macAddress)) {
+          if (transmitterManager.isActiveTransmitter(it.macAddress)) {
             compromisedVault.set(it.compromisedPackage.running, it.lastUpdate)
           }
         }
         is BluetoothServiceModel.Disconnected -> {
           Timber.wtf("[onResult] Disconnected")
-
-          synchronized(connectionAttempts) {
-            connectionAttempts[it.macAddress] = connectionAttempts[it.macAddress]?.plus(1) ?: 1
-          }
 
           val latestState = transmitterManager.getLatestState(it.macAddress)
           val bleDevice = latestState?.bleDevice ?: BleDevice("", it.macAddress, BleConnectionState.DISCONNECTED)
@@ -201,37 +225,23 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
 
           StateDispatcher.dispatch(StateChange(UiState.DISCONNECTED, bleDevice = bleDevice))
 
-          if(transmitterManager.isActiveTransmitter(it.macAddress) || transmitterManager.isOnlyTransmitterAdded(it.macAddress)) {
+          if (transmitterManager.isActiveTransmitter(it.macAddress) || transmitterManager.isOnlyTransmitterAdded(it.macAddress)) {
             val disconnectedStateChange = StateChange(UiState.TRANSMITTER_NOT_FOUND, bleDevice = bleDevice)
 
-            if(connectionAttempts[it.macAddress]!! >= 3) {
-              synchronized(connectionAttempts) {
-                connectionAttempts[it.macAddress] = 0
-              }
+            olympusNotificationManager.send(it.macAddress, OverlayState.BLE_CONNECTION_LOST, true)
 
-              Timber.wtf("[onResult] TRANSMITTER_NOT_FOUND")
-
-              olympusNotificationManager.send(it.macAddress, UiState.TRANSMITTER_NOT_FOUND)
-              ServiceDispatcher.dispatchEvent(ServiceEvent.AppStateLogger(UiState.TRANSMITTER_NOT_FOUND.toLetter()))
-
-              StateDispatcher.dispatchStateForActiveTransmitter(disconnectedStateChange)
+            if (latestState != null) {
+              Timber.wtf("[onResult] BLE_CONNECTION_LOST")
+              StateDispatcher.dispatchStateForActiveTransmitter(StateChange(latestState.state, OverlayState.BLE_CONNECTION_LOST, bleDevice))
             }
             else {
-              olympusNotificationManager.send(it.macAddress, OverlayState.BLE_CONNECTION_LOST, true)
-
-              if(latestState != null) {
-                Timber.wtf("[onResult] BLE_CONNECTION_LOST")
-                StateDispatcher.dispatchStateForActiveTransmitter(StateChange(latestState.state, OverlayState.BLE_CONNECTION_LOST, bleDevice))
-              }
-              else {
-                StateDispatcher.dispatchStateForActiveTransmitter(disconnectedStateChange)
-              }
+              StateDispatcher.dispatchStateForActiveTransmitter(disconnectedStateChange)
             }
           }
           else {
             val otherTxStateChange = transmitterManager.onTransmitterDisconnect(it.macAddress)
 
-            if(otherTxStateChange != null) {
+            if (otherTxStateChange != null) {
               Timber.wtf("[onResult] otherTxStateChange")
               StateDispatcher.dispatchStateForActiveTransmitter(otherTxStateChange)
             }

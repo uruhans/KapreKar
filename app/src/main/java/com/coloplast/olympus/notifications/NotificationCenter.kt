@@ -198,6 +198,10 @@ class NotificationCenter(
       broadCastPostponedNotification(payload, macAddress)
     }
     else {
+      if(postponed?.id == payload.id) {
+        postponed = null
+      }
+
       // and display it to the user
       with(NotificationManagerCompat.from(context)) {
         notify(payload.id, notificationBuilder.build())
@@ -244,7 +248,13 @@ class NotificationCenter(
     }
   }
 
+  private var postponed : NotificationPayload? = null
+
   private fun broadCastPostponedNotification(payload: NotificationPayload, macAddress: String) {
+    if(postponed?.id == payload.id) {
+      return
+    }
+
     val postponedIntent = Intent().apply {
       action = INTENT_FILTER_ACTION_POSTPONED
       setClass(context, NotificationBroadcastReceiver::class.java)
@@ -253,6 +263,8 @@ class NotificationCenter(
       putExtra(POSTPONED_MILLISECONDS, payload.postPonedMilliseconds)
 
     }
+
+    postponed = payload
     context.sendBroadcast(postponedIntent)
   }
 

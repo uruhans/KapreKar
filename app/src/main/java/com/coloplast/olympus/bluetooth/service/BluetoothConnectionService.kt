@@ -207,6 +207,8 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
               }
 
               Timber.wtf("[onResult] TRANSMITTER_NOT_FOUND")
+
+              ServiceDispatcher.dispatchEvent(ServiceEvent.AppStateLogger(UiState.TRANSMITTER_NOT_FOUND.toLetter()))
               StateDispatcher.dispatchStateForActiveTransmitter(disconnectedStateChange)
             }
             else {

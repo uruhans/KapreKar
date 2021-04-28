@@ -54,6 +54,7 @@ class BluetoothServiceViewModel(
     val bluetoothStateObservable = bluetoothManager.bluetoothStateObservable()
       .filter { it == BluetoothState.BLUETOOTH_NOT_ENABLED }
       .doOnNext { ServiceDispatcher.dispatchEvent(ServiceEvent.AppStateLogger(UiState.BLUETOOTH_NOT_ENABLED.toLetter())) }
+      .map { BluetoothServiceModel.BluetoothDisabled(UiState.BLUETOOTH_NOT_ENABLED) as BluetoothServiceModel }
 
     // this observable pings us when we want to retry a connection attempt
     // and is usually started by the user elsewhere in the app
@@ -166,7 +167,7 @@ class BluetoothServiceViewModel(
       .share()
 
     compositeDisposable.add(appStateLoggerObservable.subscribe())
-    compositeDisposable.add(bluetoothStateObservable.subscribe())
+    compositeDisposable.add(bluetoothStateObservable.bind(serviceResult.onResult()))
     compositeDisposable.add(connectionObservable.share().bind(serviceResult.onResult()))
     compositeDisposable.add(reconnectionAttemptsObservable.subscribe())
 

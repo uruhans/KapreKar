@@ -94,6 +94,9 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
       Timber.d("$it")
 
       when (it) {
+        is BluetoothServiceModel.BluetoothDisabled -> {
+          olympusNotificationManager.send("", it.state)
+        }
         is BluetoothServiceModel.FirmwareUpdateAvailable -> {
           if(transmitterManager.isActiveTransmitter(it.statusChange.getMacAddress())) {
             olympusNotificationManager.send(it.statusChange.getMacAddress(), UiState.FIRMWARE_AVAILABLE)
@@ -208,7 +211,9 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
 
               Timber.wtf("[onResult] TRANSMITTER_NOT_FOUND")
 
+              olympusNotificationManager.send(it.macAddress, UiState.TRANSMITTER_NOT_FOUND)
               ServiceDispatcher.dispatchEvent(ServiceEvent.AppStateLogger(UiState.TRANSMITTER_NOT_FOUND.toLetter()))
+
               StateDispatcher.dispatchStateForActiveTransmitter(disconnectedStateChange)
             }
             else {

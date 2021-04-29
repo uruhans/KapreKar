@@ -140,12 +140,13 @@ class HomeViewModel(
 
 
     val requestResetOverlayObservable = uiView.requestResetOverlay()
-      .switchMap {
+      .switchMapMaybe {
         StateDispatcher.activeTransmitterStateChangeObservable()
+          .firstOrError()
           .filter { it is DataResult.Success }
           .map { it as DataResult.Success }
           .map { it.data }
-          .doOnNext {
+          .map {
             if(it.overlayState != OverlayState.NONE) {
               Timber.wtf("OverlayState reset")
               val newState = StateChange(it.state, OverlayState.NONE, it.bleDevice, it.apsAction, it.timestamp, it.resetOrStitchCandidate, it.isBatteryUpdate)

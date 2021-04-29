@@ -22,6 +22,7 @@ import com.coloplast.olympus.shared.preferences.PreferencesImpl
 import com.coloplast.olympus.shared.types.Sensors
 import com.coloplast.olympus.ui.feature.statemachine.models.OverlayState
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
+import timber.log.Timber
 import java.time.LocalTime
 
 /**
@@ -260,6 +261,8 @@ class NotificationCenter(
       putExtra(POSTPONED_MILLISECONDS, payload.postPonedMilliseconds)
 
     }
+
+    Timber.wtf("Handle Postponed Notification")
 
     postponed = payload
     context.sendBroadcast(postponedIntent)

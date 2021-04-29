@@ -82,9 +82,11 @@ object StateDispatcher {
   }
 
 
-  fun dispatchStateForActiveTransmitter(stateChange: StateChange) {
+  fun dispatchStateForActiveTransmitter(stateChange: StateChange, notify: Boolean = true) {
     activeTxLatestState = stateChange
-    activeTxStateChangeRelay.accept(DataResult.Success(stateChange))
+    if(notify) {
+      activeTxStateChangeRelay.accept(DataResult.Success(stateChange))
+    }
   }
 
   fun activeTransmitterStateChangeObservable(): Observable<DataResult<StateChange>> {

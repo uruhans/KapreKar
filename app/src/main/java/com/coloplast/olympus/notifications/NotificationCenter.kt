@@ -48,6 +48,8 @@ class NotificationCenter(
   private val ringingAlertChannelDescription =
     context.getString(R.string.lock_ringing_alarm_notification_channel_description)
 
+  private var postponed : NotificationPayload? = null
+
   init {
     // make sure we have a notification channel for the notification
     createNotificationChannels()
@@ -194,19 +196,7 @@ class NotificationCenter(
       notificationBuilder.setContentTitle(context.getString(it))
     }
 
-    if (payload.postPonedMilliseconds > 0L) {
-      broadCastPostponedNotification(payload, macAddress)
-    }
-    else {
-      if(postponed?.id == payload.id) {
-        postponed = null
-      }
-
-      // and display it to the user
-      with(NotificationManagerCompat.from(context)) {
-        notify(payload.id, notificationBuilder.build())
-      }
-    }
+    notify(macAddress, payload, notificationBuilder.build())
   }
 
   private fun triggerRegularNotification(
@@ -238,17 +228,24 @@ class NotificationCenter(
 
     notificationBuilder.setContentText(context.getString(payload.body))
 
+    notify(macAddress, payload, notificationBuilder.build())
+  }
+
+  private fun notify(macAddress: String, payload: NotificationPayload, notification: Notification) {
     if (payload.postPonedMilliseconds > 0L) {
       broadCastPostponedNotification(payload, macAddress)
     }
     else {
+      if(postponed?.id == payload.id) {
+        postponed = null
+      }
+
+      // and display it to the user
       with(NotificationManagerCompat.from(context)) {
-        notify(payload.id, notificationBuilder.build())
+        notify(payload.id, notification)
       }
     }
   }
-
-  private var postponed : NotificationPayload? = null
 
   private fun broadCastPostponedNotification(payload: NotificationPayload, macAddress: String) {
     if(postponed?.id == payload.id) {

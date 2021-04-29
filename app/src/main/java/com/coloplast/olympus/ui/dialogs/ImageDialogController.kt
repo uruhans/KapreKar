@@ -16,6 +16,9 @@ class ImageDialogController(args: Bundle) : BaseDialogController<ControllerDialo
 
   interface Listener : BaseDialogController.Listener {
     fun onCloseClicked(requestCode: Int)
+    fun onManualCloseClicked(requestCode: Int) {
+      onCloseClicked(requestCode)
+    }
   }
 
   val titleResId = ObservableInt(R.string.generic_error)
@@ -70,6 +73,10 @@ class ImageDialogController(args: Bundle) : BaseDialogController<ControllerDialo
 
   fun onCloseClicked() {
     getListener(Listener::class.java)?.onCloseClicked(requestCode)
+  }
+
+  fun onManualCloseClicked() {
+    getListener(Listener::class.java)?.onManualCloseClicked(requestCode)
   }
 
   fun onDismissClicked() {

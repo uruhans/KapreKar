@@ -14,10 +14,7 @@ import java.time.Instant
  *
  * NOTICE: some notifications have not been implemented yet as they have not been implemented in the UI yet
  */
-class OlympusNotificationManager(
-  private val notificationCenter: NotificationCenter,
-  private val displayUtils: DisplayUtils
-  ) {
+class OlympusNotificationManager(private val notificationCenter: NotificationCenter) {
 
   private val latestState = mutableMapOf<String, Int>()
   private var lastNotification: Instant? = null

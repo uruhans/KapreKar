@@ -5,7 +5,6 @@ import com.coloplast.olympus.notifications.models.NotificationPayload
 import com.coloplast.olympus.shared.AppSettings
 import com.coloplast.olympus.ui.feature.statemachine.models.OverlayState
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
-import com.coloplast.olympus.utils.DisplayUtils
 import java.time.Instant
 
 /**
@@ -39,6 +38,9 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
     if (ignoreNotification(macAddress, state.notificationId(), false, isScheduledNotification)) {
       return
     }
+
+    val removeBleDisconnected = listOf(
+      UiState.BLUETOOTH_NOT_ENABLED.notificationId())
 
     val payload = when (state) {
       UiState.FIRMWARE_AVAILABLE -> {
@@ -85,7 +87,7 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
         null
       }
       UiState.MULTIPLE_TRANSMITTERS -> {
-        NotificationPayload(state.notificationId(), R.string.lock_notification_multiple_transmitters)
+        NotificationPayload(state.notificationId(), R.string.lock_notification_multiple_transmitters, notificationsToRemove = removeBleDisconnected)
       }
       UiState.TRANSMITTERS_EMPTY -> {
         null
@@ -119,40 +121,40 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
         )
       }
       UiState.INNER_BREACH_B -> {
-        NotificationPayload(state.notificationId(), R.string.lock_notification_inner)
+        NotificationPayload(state.notificationId(), R.string.lock_notification_inner, notificationsToRemove = removeBleDisconnected)
       }
       UiState.OUTER_BREACH_C -> {
-        NotificationPayload(state.notificationId(), R.string.lock_notification_outer)
+        NotificationPayload(state.notificationId(), R.string.lock_notification_outer, notificationsToRemove = removeBleDisconnected)
       }
       UiState.CUTGUARD_BROKEN_I -> {
-        NotificationPayload(state.notificationId(), R.string.lock_notification_broken)
+        NotificationPayload(state.notificationId(), R.string.lock_notification_broken, notificationsToRemove = removeBleDisconnected)
       }
       UiState.INNER_BLIND_D -> {
-        NotificationPayload(state.notificationId(), R.string.lock_notification_inner_blind)
+        NotificationPayload(state.notificationId(), R.string.lock_notification_inner_blind, notificationsToRemove = removeBleDisconnected)
       }
       UiState.TOTAL_BLIND_E -> {
-        NotificationPayload(state.notificationId(), R.string.lock_notification_total_blind)
+        NotificationPayload(state.notificationId(), R.string.lock_notification_total_blind, notificationsToRemove = removeBleDisconnected)
       }
       UiState.PAY_ATTENTION_F -> {
-        NotificationPayload(state.notificationId(), R.string.lock_notification_sweat)
+        NotificationPayload(state.notificationId(), R.string.lock_notification_sweat, notificationsToRemove = removeBleDisconnected)
       }
       UiState.WET_MOUNT_G -> {
-        NotificationPayload(state.notificationId(), R.string.status_wet_mount_title)
+        NotificationPayload(state.notificationId(), R.string.status_wet_mount_title, notificationsToRemove = removeBleDisconnected)
       }
       UiState.WET_MOUNT_X -> {
-        NotificationPayload(state.notificationId(), R.string.status_inner_blind_mount_title)
+        NotificationPayload(state.notificationId(), R.string.status_inner_blind_mount_title, notificationsToRemove = removeBleDisconnected)
       }
       UiState.WATER_INGRESS_DETECTION_J -> {
-        NotificationPayload(state.notificationId(), R.string.lock_notification_water)
+        NotificationPayload(state.notificationId(), R.string.lock_notification_water, notificationsToRemove = removeBleDisconnected)
       }
       UiState.CUTGUARD_DIRT_IN_TRANSMITTER_K -> {
-        NotificationPayload(state.notificationId(), R.string.lock_notification_dirt)
+        NotificationPayload(state.notificationId(), R.string.lock_notification_dirt, notificationsToRemove = removeBleDisconnected)
       }
       UiState.INNER_BLIND_LEAK_L -> {
-        NotificationPayload(state.notificationId(), R.string.lock_notification_inner_blind_leak_l)
+        NotificationPayload(state.notificationId(), R.string.lock_notification_inner_blind_leak_l, notificationsToRemove = removeBleDisconnected)
       }
       UiState.NO_BATTERY_R -> {
-        NotificationPayload(state.notificationId(), R.string.lock_notification_disconnection_battery)
+        NotificationPayload(state.notificationId(), R.string.lock_notification_disconnection_battery, notificationsToRemove = removeBleDisconnected)
       }
       UiState.TRANSMITTER_DETACHED_V -> {
         null
@@ -162,7 +164,8 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
           notificationsToRemove = listOf(
             UiState.NO_BATTERY_R.notificationId(),
             UiState.TRANSMITTER_DETACHED_V.notificationId(),
-            OverlayState.BATTERY_LOW.notificationId()
+            OverlayState.BATTERY_LOW.notificationId(),
+            OverlayState.BLE_CONNECTION_LOST.notificationId()
           )
         )
       }

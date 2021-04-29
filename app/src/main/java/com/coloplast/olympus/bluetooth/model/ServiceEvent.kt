@@ -6,4 +6,5 @@ sealed class ServiceEvent {
   data class DisconnectTransmitter(val macAddress: String) : ServiceEvent()
 
   data class AppStateLogger(val letter: String) : ServiceEvent()
+  data class NoTransmittersFound(val macAddress: String, val didScan: Boolean = true) : ServiceEvent()
 }

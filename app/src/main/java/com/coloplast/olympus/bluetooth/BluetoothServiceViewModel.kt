@@ -51,9 +51,14 @@ class BluetoothServiceViewModel(
       }
       .filter { false }
 
+    val noTransmittersFoundObservable = ServiceDispatcher.serviceEventObservable()
+      .ofType(ServiceEvent.NoTransmittersFound::class.java)
+      .map { BluetoothServiceModel.NoTransmittersFound(it.macAddress, it.didScan) as BluetoothServiceModel }
+
     val bluetoothStateObservable = bluetoothManager.bluetoothStateObservable()
       .filter { it == BluetoothState.BLUETOOTH_NOT_ENABLED }
       .doOnNext { ServiceDispatcher.dispatchEvent(ServiceEvent.AppStateLogger(UiState.BLUETOOTH_NOT_ENABLED.toLetter())) }
+      .map { BluetoothServiceModel.BluetoothDisabled(UiState.BLUETOOTH_NOT_ENABLED) as BluetoothServiceModel }
 
     // this observable pings us when we want to retry a connection attempt
     // and is usually started by the user elsewhere in the app
@@ -105,9 +110,11 @@ class BluetoothServiceViewModel(
         /* android O - OREO && DISPLAY IS OFF */
         if (OSUtils.isVersionOrAbove(26) && displayUtils.isDisplayOn().not()) {
           Timber.wtf("(SDK_INT(${Build.VERSION.SDK_INT}) > Oreo 8.0.0) -> No scanning")
+          ServiceDispatcher.dispatchEvent(ServiceEvent.NoTransmittersFound(txModel.transmitter.id, false))
           Observable.just(txModel)
         }
         else {
+          ServiceDispatcher.dispatchEvent(ServiceEvent.NoTransmittersFound(txModel.transmitter.id))
           bluetoothManager.scanSpecificTransmitter(txModel.transmitter.id)
             .takeUntil { it == txModel.transmitter.id }
             .buffer(1)
@@ -166,7 +173,7 @@ class BluetoothServiceViewModel(
       .share()
 
     compositeDisposable.add(appStateLoggerObservable.subscribe())
-    compositeDisposable.add(bluetoothStateObservable.subscribe())
+    compositeDisposable.add(Observable.merge(bluetoothStateObservable, noTransmittersFoundObservable).bind(serviceResult.onResult()))
     compositeDisposable.add(connectionObservable.share().bind(serviceResult.onResult()))
     compositeDisposable.add(reconnectionAttemptsObservable.subscribe())
 

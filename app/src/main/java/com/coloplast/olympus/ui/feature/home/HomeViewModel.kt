@@ -7,6 +7,7 @@ import com.coloplast.olympus.bluetooth.businesslayer.BluetoothManager
 import com.coloplast.olympus.bluetooth.businesslayer.ServiceStateDispatcher
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BleConnectionState
 import com.coloplast.olympus.bluetooth.businesslayer.enums.BluetoothState
+import com.coloplast.olympus.bluetooth.model.StateChange
 import com.coloplast.olympus.businesslayer.interfaces.AppStateComponent
 import com.coloplast.olympus.businesslayer.interfaces.TransmitterComponent
 import com.coloplast.olympus.businesslayer.interfaces.UserComponent
@@ -14,6 +15,7 @@ import com.coloplast.olympus.shared.models.CurrentUser
 import com.coloplast.olympus.shared.models.DataResult
 import com.coloplast.olympus.ui.feature.home.models.BaseHomeViewModel
 import com.coloplast.olympus.ui.feature.home.models.HomeUiModel
+import com.coloplast.olympus.ui.feature.statemachine.models.OverlayState
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
 import io.reactivex.Completable
 import io.reactivex.Observable
@@ -136,6 +138,23 @@ class HomeViewModel(
           }
         }
 
+
+    val requestResetOverlayObservable = uiView.requestResetOverlay()
+      .switchMap {
+        StateDispatcher.activeTransmitterStateChangeObservable()
+          .filter { it is DataResult.Success }
+          .map { it as DataResult.Success }
+          .map { it.data }
+          .doOnNext {
+            if(it.overlayState != OverlayState.NONE) {
+              Timber.wtf("OverlayState reset")
+              val newState = StateChange(it.state, OverlayState.NONE, it.bleDevice, it.apsAction, it.timestamp, it.resetOrStitchCandidate, it.isBatteryUpdate)
+              StateDispatcher.dispatchStateForActiveTransmitter(newState, false)
+            }
+          }
+      }
+
+    disposable.add(requestResetOverlayObservable.subscribe())
     disposable.add(synchronizeDataObservable.subscribe())
     disposable.add(Observable.merge(stateUpdate, bluetoothStateObservable, animationAndRawPackageObservable, noTransmittersObservable).bind(uiView.render()))
     disposable.add(stitchTransmitterObservable.bind(uiView.render()))

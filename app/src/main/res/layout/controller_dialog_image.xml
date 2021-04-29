@@ -50,7 +50,7 @@
             android:layout_marginTop="@dimen/spacing_standard"
             android:layout_marginEnd="@dimen/spacing_standard"
             android:foreground="?attr/actionBarItemBackground"
-            android:onClick="@{() -> controller.onCloseClicked()}"
+            android:onClick="@{() -> controller.onManualCloseClicked()}"
             android:src="@drawable/main_sidemenu_close"
             app:visibleOrGone="@{controller.dismissAllowed}" />
 

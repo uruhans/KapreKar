@@ -72,6 +72,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
 
   private val requestConnectionStateRelay = PublishRelay.create<String>()
   private val stitchOrResetRelay = PublishRelay.create<StitchOrResetObject>()
+  private val resetOverlayStateRelay = PublishRelay.create<Unit>()
 
   private val connectionStateDisposable = CompositeDisposable()
 
@@ -244,6 +245,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
             isConnected.set(false)
           }
           else if(stateChange.overlayState == OverlayState.NONE && imageDialogController?.requestCode == REQUEST_CODE_CONNECTION_LOST) {
+            currentOverlayState = OverlayState.NONE
             imageDialogController?.dismissDialog(false)
             imageDialogController = null
           }
@@ -425,7 +427,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
   }
 
   private fun changeOverlayState(overlayState: OverlayState) {
-    if (currentOverlayState == overlayState) {
+    if (currentOverlayState == overlayState && imageDialogController != null) {
       return
     }
 
@@ -539,6 +541,7 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
       }
     }
 
+    currentOverlayState = OverlayState.NONE
     imageDialogController = null
   }
 
@@ -546,10 +549,29 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
     when (requestCode) {
       REQUEST_CODE_CONNECTION_LOST,
       REQUEST_CODE_BATTERY_LOW -> {
+        currentOverlayState = OverlayState.NONE
         imageDialogController?.dismissDialog(false)
         imageDialogController = null
       }
     }
+  }
+
+  override fun onManualCloseClicked(requestCode: Int) {
+    when (requestCode) {
+      REQUEST_CODE_CONNECTION_LOST,
+      REQUEST_CODE_BATTERY_LOW -> {
+        currentOverlayState = OverlayState.NONE
+        imageDialogController?.dismissDialog(false)
+        imageDialogController = null
+
+        resetOverlayStateRelay.accept(Unit)
+      }
+    }
+  }
+
+  override fun requestResetOverlay(): Observable<Unit> {
+    return resetOverlayStateRelay
+      .share()
   }
 
   fun onMenuClicked() {

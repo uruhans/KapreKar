@@ -5,6 +5,7 @@ import com.coloplast.olympus.notifications.models.NotificationPayload
 import com.coloplast.olympus.shared.AppSettings
 import com.coloplast.olympus.ui.feature.statemachine.models.OverlayState
 import com.coloplast.olympus.ui.feature.statemachine.models.UiState
+import com.coloplast.olympus.utils.DisplayUtils
 import java.time.Instant
 
 /**
@@ -35,7 +36,7 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
    * send notifications based on current UiState
    */
   fun send(macAddress: String, state: UiState, isScheduledNotification: Boolean = false) {
-    if (ignoreNotification(macAddress, false, isScheduledNotification)) {
+    if (ignoreNotification(macAddress, state.notificationId(), false, isScheduledNotification)) {
       return
     }
 
@@ -90,7 +91,7 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
         null
       }
       UiState.TRANSMITTER_NOT_FOUND -> {
-        null
+        NotificationPayload(state.notificationId(), R.string.lock_not_found_p)
       }
       UiState.SOMETHING_ELSE,
       UiState.OK_A -> {
@@ -179,7 +180,7 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
    * Send notification based on current OverlayState
    */
   fun send(macAddress: String, state: OverlayState, shouldPostpone: Boolean = false, isScheduledNotification: Boolean = false) {
-    if (ignoreNotification(macAddress, shouldPostpone, isScheduledNotification)) {
+    if (ignoreNotification(macAddress, state.notificationId(), shouldPostpone, isScheduledNotification)) {
       return
     }
 
@@ -208,11 +209,11 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
     }
   }
 
-  private fun ignoreNotification(macAddress: String, shouldPostpone: Boolean, isScheduledNotification: Boolean): Boolean {
+  private fun ignoreNotification(macAddress: String, notificationId: Int, shouldPostpone: Boolean, isScheduledNotification: Boolean): Boolean {
     return when {
-      AppSettings.appInBackground.not() && shouldPostpone.not() ||
-      macAddress.isEmpty() ||
-      isScheduledNotification && (latestState[macAddress] != OverlayState.BLE_CONNECTION_LOST.notificationId()) -> {
+          (AppSettings.appInBackground.not() && shouldPostpone.not()) ||
+          (macAddress.isEmpty() && notificationId != UiState.BLUETOOTH_NOT_ENABLED.notificationId()) ||
+          (isScheduledNotification && (latestState[macAddress] != OverlayState.BLE_CONNECTION_LOST.notificationId())) -> {
         true
       }
       else -> false

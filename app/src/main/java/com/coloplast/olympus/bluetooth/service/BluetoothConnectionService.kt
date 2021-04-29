@@ -109,7 +109,7 @@ class BluetoothConnectionService : Service(), KoinComponent, BluetoothServiceRes
 
             val disconnectedStateChange = StateChange(UiState.TRANSMITTER_NOT_FOUND, bleDevice = bleDevice)
 
-            val attempts = if(BuildConfig.EnableDebugInfo) 15 else 50
+            val attempts = if(BuildConfig.EnableDebugInfo) 15 else 25
 
             if (connectionAttempts[it.macAddress]!! >= attempts) {
               synchronized(connectionAttempts) {

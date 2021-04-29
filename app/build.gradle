@@ -53,8 +53,8 @@ android {
       buildConfigField("String", "AzureCode", "\"goQ2ylfRfYlgfIKf1uQ/F2C32bFyp9qVZsWwtxPupJYrvGxBiDaXPA==\"")
     }
     tpa {
-      buildConfigField("boolean", "EnableFileDebugging", "true")
-      buildConfigField("boolean", "EnableDebugInfo", "true")
+      buildConfigField("boolean", "EnableFileDebugging", "false")
+      buildConfigField("boolean", "EnableDebugInfo", "false")
 
       applicationIdSuffix ".tpa"
       buildConfigField("String", "Suffix", "\" - TPA\"")

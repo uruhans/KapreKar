@@ -15,7 +15,7 @@ class DbAppState(
   @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
   val internalAppState: String,
   @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
-  val patchId: String,
+  val patchId: String?,
   @ColumnInfo(typeAffinity = ColumnInfo.INTEGER)
   val timestamp: Instant,
   @ColumnInfo(typeAffinity = ColumnInfo.INTEGER)
@@ -27,7 +27,7 @@ class DbAppState(
       id,
       appState,
       internalAppState,
-      patchId,
+      patchId ?: "",
       timestamp,
       syncState
     )

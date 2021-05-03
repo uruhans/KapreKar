@@ -61,7 +61,7 @@ object DatabaseMigrations {
           "id INTEGER".toExisting(),
           "appState TEXT NOT NULL".toExisting(),
           "internalAppState TEXT NOT NULL".toExisting(),
-          "patchId TEXT NOT NULL".toNothing(),
+          "patchId TEXT".toNothing(),
           "timestamp INTEGER NOT NULL".toExisting(),
           "syncState INTEGER NOT NULL".toExisting()
         ),

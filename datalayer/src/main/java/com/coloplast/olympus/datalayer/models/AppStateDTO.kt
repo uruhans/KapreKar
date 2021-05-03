@@ -9,12 +9,14 @@ class AppStateDTO(
   val appState: String,
   @Json(name = "InternalAppState")
   val internalAppState: String,
+  @Json(name = "PatchId")
+  val patchId: String,
   @Json(name = "TimeStamp")
   val timeStamp: Long
 ) : TransmitterValue {
   companion object {
-    fun fromAppState(appState: String, internalAppState: String, timeStamp: Instant) : AppStateDTO {
-      return AppStateDTO(appState, internalAppState, timeStamp.epochSecond)
+    fun fromAppState(appState: String, internalAppState: String, patchId: String, timeStamp: Instant) : AppStateDTO {
+      return AppStateDTO(appState, internalAppState, patchId, timeStamp.epochSecond)
     }
   }
 }

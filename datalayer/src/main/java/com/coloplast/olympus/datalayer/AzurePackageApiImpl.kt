@@ -84,6 +84,6 @@ class AzurePackageApiImpl : AzurePackageApi {
   }
 
   private fun getAppStateListDTO(appStates: List<AppState>): List<AppStateDTO> {
-    return appStates.map { AppStateDTO.fromAppState(it.appState, it.internalAppState, it.timestamp) }
+    return appStates.map { AppStateDTO.fromAppState(it.appState, it.internalAppState, it.patchId, it.timestamp) }
   }
 }

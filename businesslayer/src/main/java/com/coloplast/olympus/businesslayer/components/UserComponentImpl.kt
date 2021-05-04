@@ -15,6 +15,7 @@ import com.coloplast.olympus.shared.preferences.PreferencesImpl
 import com.coloplast.olympus.shared.types.SyncState
 import io.reactivex.*
 import io.reactivex.Observable
+import timber.log.Timber
 import java.util.*
 
 class UserComponentImpl(private val preferences: PreferencesImpl) : UserComponent {
@@ -174,7 +175,10 @@ class UserComponentImpl(private val preferences: PreferencesImpl) : UserComponen
           preferences.setToken(it.token)
           it.user.toUser()
         }
-        .flatMap { database.insertOrUpdateUser(it) }
+        .flatMap { user ->
+          database.insertOrUpdateUser(user)
+            .doOnError { Timber.wtf(it) }
+        }
         .map<CurrentUser> { CurrentUser.LoggedIn(it) }
         .onErrorReturn { CurrentUser.LoggedOut() }
     }

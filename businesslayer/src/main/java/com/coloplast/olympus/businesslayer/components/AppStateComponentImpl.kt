@@ -7,13 +7,14 @@ import com.coloplast.olympus.datalayer.AzurePackageApiImpl
 import com.coloplast.olympus.shared.AppSettings
 import com.coloplast.olympus.shared.models.AppState
 import com.coloplast.olympus.shared.models.DataResult
+import com.coloplast.olympus.shared.preferences.PreferencesImpl
 import com.coloplast.olympus.shared.types.SyncState
 import io.reactivex.Completable
 import io.reactivex.Observable
 import timber.log.Timber
 import java.util.*
 
-class AppStateComponentImpl() : AppStateComponent {
+class AppStateComponentImpl(private val preferencesImpl: PreferencesImpl) : AppStateComponent {
 
   private val dbService = DbServiceImpl()
   private val azureService = AzurePackageApiImpl()
@@ -30,8 +31,8 @@ class AppStateComponentImpl() : AppStateComponent {
 
     val fromForeground = !AppSettings.appInBackground && !logFromService
     val appStatePackage =
-      if (fromForeground) AppState(appState = appState)
-      else AppState(internalAppState = appState)
+      if (fromForeground) AppState(appState = appState, patchId = preferencesImpl.getUniqueDevicePatchId())
+      else AppState(internalAppState = appState, patchId = preferencesImpl.getUniqueDevicePatchId())
 
     val isDuplicate = ((appStatePackage.appState == lastAppState?.appState) && (appStatePackage.internalAppState == lastAppState?.internalAppState))
     if (isDuplicate) {

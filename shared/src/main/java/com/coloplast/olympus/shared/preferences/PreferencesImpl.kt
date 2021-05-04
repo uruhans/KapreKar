@@ -54,6 +54,10 @@ class PreferencesImpl(applicationContext: Context) : Preferences {
     AppSettings.userToken = ""
   }
 
+  fun getUniqueDevicePatchId() : String {
+    return "$deviceId-${patchId}"
+  }
+
   fun setCurrentOnboardingProgression(currentStep: OnboardingProgression) {
     currentOnboardingProgression = currentStep.id
   }

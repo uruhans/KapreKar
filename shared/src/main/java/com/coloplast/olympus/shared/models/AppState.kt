@@ -7,6 +7,7 @@ class AppState(
   val id: Int? = null,
   val appState: String = "",
   val internalAppState: String = "",
+  val patchId: String,
   val timestamp: Instant = Instant.now(),
   val syncState: SyncState = SyncState.Pending
 )

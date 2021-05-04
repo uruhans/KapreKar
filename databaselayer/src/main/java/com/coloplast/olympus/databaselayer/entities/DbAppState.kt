@@ -12,7 +12,10 @@ class DbAppState(
   @PrimaryKey val id: Int?,
   @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
   val appState: String,
+  @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
   val internalAppState: String,
+  @ColumnInfo(typeAffinity = ColumnInfo.TEXT)
+  val patchId: String?,
   @ColumnInfo(typeAffinity = ColumnInfo.INTEGER)
   val timestamp: Instant,
   @ColumnInfo(typeAffinity = ColumnInfo.INTEGER)
@@ -24,6 +27,7 @@ class DbAppState(
       id,
       appState,
       internalAppState,
+      patchId ?: "",
       timestamp,
       syncState
     )
@@ -36,6 +40,7 @@ class DbAppState(
         appState.id,
         appState.appState,
         appState.internalAppState,
+        appState.patchId,
         appState.timestamp,
         appState.syncState
       )

@@ -2,6 +2,7 @@ package com.coloplast.olympus.ui.feature.onboarding.signup
 
 import com.coloplast.olympus.shared.models.User
 import com.coloplast.olympus.ui.common.models.flow.FlowFactoryModel
+import com.coloplast.olympus.utils.DeviceUtils
 
 
 /**
@@ -13,6 +14,6 @@ class SignupFactoryModel: FlowFactoryModel {
   var skip: Boolean = false
 
   // Create user variables
-  val user = User()
+  val user = User(appVersion = DeviceUtils.getVersionNameAndCode())
   lateinit var phoneValidationCode: String
 }

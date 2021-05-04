@@ -17,7 +17,9 @@ data class UserDTO(
   val phoneNumber: String? = null,
   val healthInsuranceId: Int? = null,
   val sensorPatchSize: Int? = null,
-  val consent: Boolean = false
+  val consent: Boolean = false,
+  val appVersion: String? = null,
+  val platform: String? = null
 ) {
 
   /**
@@ -39,6 +41,8 @@ data class UserDTO(
       healthInsuranceId,
       sensorPatchSize,
       consent,
+      appVersion ?: "",
+      platform ?: "",
       SyncState.Uploaded
     )
   }
@@ -56,7 +60,9 @@ data class UserDTO(
         user.phoneNumber,
         user.insuranceType,
         user.sensorPatchSize,
-        user.consent
+        user.consent,
+        user.appVersion,
+        user.platform
       )
     }
   }

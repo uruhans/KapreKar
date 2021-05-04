@@ -22,6 +22,8 @@ class DbUser(
   val insuranceType: Int?,
   val sensorPatchSize: Int?,
   val consent: Boolean,
+  val appVersion: String?,
+  val platform: String?,
   @ColumnInfo(typeAffinity = ColumnInfo.INTEGER)
   var syncState: SyncState
 ) {
@@ -39,6 +41,8 @@ class DbUser(
       insuranceType,
       sensorPatchSize,
       consent,
+      appVersion ?: "",
+      platform ?: "",
       syncState
     )
   }
@@ -56,6 +60,8 @@ class DbUser(
         user.insuranceType,
         user.sensorPatchSize,
         user.consent,
+        user.appVersion,
+        user.platform,
         user.syncState
       )
     }

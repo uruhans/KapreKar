@@ -20,6 +20,7 @@ class ApiServiceImpl : ApiService {
         user.lastName,
         user.email,
         user.password,
+        user.country,
         user.stomaType,
         user.surgeryDateInterval,
         user.phoneNumber,

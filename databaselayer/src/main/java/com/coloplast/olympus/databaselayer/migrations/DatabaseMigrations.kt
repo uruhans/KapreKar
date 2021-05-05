@@ -103,10 +103,47 @@ object DatabaseMigrations {
     }
   }
 
+  /**
+   * =======================
+   * DbUser Table Change
+   * =======================
+   * - New column: country (TEXT)
+   *
+   * - UPDATE new Column with first 3 letters of phoneNumber (ie: +45)
+   */
+  private val MIGRATION_7_8 = object : Migration(7, 8) {
+    override fun migrate(database: SupportSQLiteDatabase) {
+      DbMigrationsHelper.alterTable(
+        db = database,
+        tableName = "DbUser",
+        columns = mapOf(
+          "id TEXT NOT NULL".toExisting(),
+          "firstName TEXT".toExisting(),
+          "lastName TEXT".toExisting(),
+          "email TEXT".toExisting(),
+          "country TEXT".toNothing(), // creates the new column (and make default value NULL)
+          "stomaType INTEGER".toExisting(),
+          "surgeryDateInterval INTEGER".toExisting(),
+          "phoneNumber TEXT".toExisting(),
+          "insuranceType INTEGER".toExisting(),
+          "sensorPatchSize INTEGER".toExisting(),
+          "consent INTEGER NOT NULL".toExisting(),
+          "appVersion TEXT".toExisting(),
+          "platform TEXT".toExisting(),
+          "syncState INTEGER NOT NULL".toExisting()
+        ),
+        primaryKeys = listOf("id")
+      )
+
+      database.execSQL("UPDATE DbUser SET country = (SELECT SUBSTR(phoneNumber, 1, 3) FROM DbUser)")
+    }
+  }
+
   val migrations : Array<Migration> = arrayOf(
     MIGRATION_3_4,
     MIGRATION_4_5,
     MIGRATION_5_6,
     MIGRATION_6_7,
+    MIGRATION_7_8,
   )
 }

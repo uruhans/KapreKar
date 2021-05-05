@@ -14,7 +14,7 @@ object DatabaseMigrations {
    * - New column: sensorPatchSize (INTEGER)
    *
    */
-  private val MIGRATION_3_4 = object : Migration(3, 4) {
+  val MIGRATION_3_4 = object : Migration(3, 4) {
     override fun migrate(database: SupportSQLiteDatabase) {
       DbMigrationsHelper.alterTable(
         db = database,
@@ -39,7 +39,7 @@ object DatabaseMigrations {
     }
   }
 
-  private val MIGRATION_4_5 = object : Migration(4, 5) {
+  val MIGRATION_4_5 = object : Migration(4, 5) {
     override fun migrate(database: SupportSQLiteDatabase) {
       /* no-op */
     }
@@ -52,7 +52,7 @@ object DatabaseMigrations {
    * - New column: patchId (TEXT)
    *
    */
-  private val MIGRATION_5_6 = object : Migration(5, 6) {
+  val MIGRATION_5_6 = object : Migration(5, 6) {
     override fun migrate(database: SupportSQLiteDatabase) {
       DbMigrationsHelper.alterTable(
         db = database,
@@ -78,7 +78,7 @@ object DatabaseMigrations {
    * - New column: platform (TEXT)
    *
    */
-  private val MIGRATION_6_7 = object : Migration(6, 7) {
+  val MIGRATION_6_7 = object : Migration(6, 7) {
     override fun migrate(database: SupportSQLiteDatabase) {
       DbMigrationsHelper.alterTable(
         db = database,

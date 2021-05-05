@@ -20,18 +20,21 @@ class ApiServiceImpl : ApiService {
         user.lastName,
         user.email,
         user.password,
+        user.country,
         user.stomaType,
         user.surgeryDateInterval,
         user.phoneNumber,
         user.insuranceType,
         user.sensorPatchSize,
-        user.consent
+        user.consent,
+        user.appVersion,
+        user.platform
       )
     )
   }
 
-  override fun createAnonymousUser(): Observable<UserResponseDTO> {
-    return api.createUser(UserDTO())
+  override fun createAnonymousUser(appVersion: String): Observable<UserResponseDTO> {
+    return api.createUser(UserDTO(appVersion = appVersion))
   }
 
   override fun updateUser(user: User): Completable {

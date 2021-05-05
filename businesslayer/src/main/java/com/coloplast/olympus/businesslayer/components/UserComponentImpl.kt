@@ -54,10 +54,24 @@ class UserComponentImpl(private val preferences: PreferencesImpl) : UserComponen
   override fun automaticLogin(userId: UUID, appVersion: String): Observable<CurrentUser> {
     return getLocalUser(userId)
       .flatMap {
-        it.appVersion = appVersion
-        it.platform = "Android"
+        var update = false
 
-        updateUser(it)
+        if(it.appVersion != appVersion) {
+          it.appVersion = appVersion
+          update = true
+        }
+
+        if(it.platform != "Android") {
+          it.platform = "Android"
+          update = true
+        }
+
+        if(update) {
+          updateUser(it)
+        }
+        else {
+          Observable.just(it)
+        }
       }
       .map<CurrentUser> { CurrentUser.LoggedIn(it) }
       .onErrorReturn { CurrentUser.LoggedOut() }

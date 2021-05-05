@@ -115,7 +115,6 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
             UiState.NO_BATTERY_R.notificationId(),
             UiState.TRANSMITTER_DETACHED_V.notificationId(),
             UiState.TRANSMITTER_BATTERY_CHARGING_W.notificationId(),
-            OverlayState.BATTERY_LOW.notificationId(),
             OverlayState.BLE_CONNECTION_LOST.notificationId()
           )
         )

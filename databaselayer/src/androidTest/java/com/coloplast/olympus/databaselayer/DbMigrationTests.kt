@@ -41,7 +41,7 @@ class DbMigrationTests {
             "INSERT INTO DbUser " +
             "(Id, firstName, lastName, email, stomaType, surgeryDateInterval, phoneNumber, insuranceType, sensorPatchSize, consent, appVersion, platform, syncState) " +
             "VALUES " +
-            "('${userId}', 'David', 'J', 'DJ@DJ.DJ', 0, 0, '+4531218084', 0, 0, 1, '2.0.0.1860', 'Android', 2)"
+            "('${userId}', 'David', 'J', 'DJ@DJ.DJ', 0, 0, '+4512345678', 0, 0, 1, '2.0.0.1860', 'Android', 2)"
       )
 
       try {

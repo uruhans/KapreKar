@@ -15,5 +15,7 @@ class User(
   var insuranceType: Int? = null,
   var sensorPatchSize: Int? = null,
   var consent: Boolean = false,
+  var appVersion: String,
+  var platform: String = "Android",
   var syncState: SyncState = SyncState.Pending
 )

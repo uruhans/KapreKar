@@ -51,8 +51,27 @@ class UserComponentImpl(private val preferences: PreferencesImpl) : UserComponen
       .onErrorReturn { CurrentUser.Empty() }
   }
 
-  override fun automaticLogin(userId: UUID): Observable<CurrentUser> {
+  override fun automaticLogin(userId: UUID, appVersion: String): Observable<CurrentUser> {
     return getLocalUser(userId)
+      .flatMap {
+        var update = false
+
+        if(it.appVersion != appVersion) {
+          it.appVersion = appVersion
+          update = true
+        }
+
+        if(it.platform != "Android") {
+          it.platform = "Android"
+          update = true
+        }
+
+        if(update) {
+          it.syncState = SyncState.Pending
+        }
+
+        updateUser(it)
+      }
       .map<CurrentUser> { CurrentUser.LoggedIn(it) }
       .onErrorReturn { CurrentUser.LoggedOut() }
   }

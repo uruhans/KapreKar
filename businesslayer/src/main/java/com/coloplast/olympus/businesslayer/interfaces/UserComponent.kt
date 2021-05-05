@@ -15,7 +15,7 @@ interface UserComponent {
 
   fun createUser(user: User): Observable<CurrentUser>
   fun login(credentials: Credentials): Observable<CurrentUser>
-  fun automaticLogin(userId: UUID): Observable<CurrentUser>
+  fun automaticLogin(userId: UUID, appVersion: String): Observable<CurrentUser>
 
   fun requestSecurityCode(email: String): Completable
   fun validateSecurityCode(securityCode: Int, email: String): Completable

@@ -21,6 +21,10 @@ object DeviceUtils {
     }
   }
 
+  fun getVersionNameAndCode(): String {
+    return "${BuildConfig.VERSION_NAME}.${BuildConfig.VERSION_CODE}"
+  }
+
   fun versionName(): String {
     return BuildConfig.VERSION_NAME
   }

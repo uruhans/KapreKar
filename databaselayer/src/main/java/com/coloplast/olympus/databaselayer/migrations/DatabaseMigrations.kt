@@ -14,7 +14,7 @@ object DatabaseMigrations {
    * - New column: sensorPatchSize (INTEGER)
    *
    */
-  private val MIGRATION_3_4 = object : Migration(3, 4) {
+  val MIGRATION_3_4 = object : Migration(3, 4) {
     override fun migrate(database: SupportSQLiteDatabase) {
       DbMigrationsHelper.alterTable(
         db = database,
@@ -39,7 +39,7 @@ object DatabaseMigrations {
     }
   }
 
-  private val MIGRATION_4_5 = object : Migration(4, 5) {
+  val MIGRATION_4_5 = object : Migration(4, 5) {
     override fun migrate(database: SupportSQLiteDatabase) {
       /* no-op */
     }
@@ -52,7 +52,7 @@ object DatabaseMigrations {
    * - New column: patchId (TEXT)
    *
    */
-  private val MIGRATION_5_6 = object : Migration(5, 6) {
+  val MIGRATION_5_6 = object : Migration(5, 6) {
     override fun migrate(database: SupportSQLiteDatabase) {
       DbMigrationsHelper.alterTable(
         db = database,
@@ -61,8 +61,41 @@ object DatabaseMigrations {
           "id INTEGER".toExisting(),
           "appState TEXT NOT NULL".toExisting(),
           "internalAppState TEXT NOT NULL".toExisting(),
-          "patchId TEXT".toNothing(),
+          "patchId TEXT".toNothing(),     // creates the new column (and make default value NULL)
           "timestamp INTEGER NOT NULL".toExisting(),
+          "syncState INTEGER NOT NULL".toExisting()
+        ),
+        primaryKeys = listOf("id")
+      )
+    }
+  }
+
+  /**
+   * =======================
+   * DbUser Table Change
+   * =======================
+   * - New column: appVersion (TEXT)
+   * - New column: platform (TEXT)
+   *
+   */
+  val MIGRATION_6_7 = object : Migration(6, 7) {
+    override fun migrate(database: SupportSQLiteDatabase) {
+      DbMigrationsHelper.alterTable(
+        db = database,
+        tableName = "DbUser",
+        columns = mapOf(
+          "id TEXT NOT NULL".toExisting(),
+          "firstName TEXT".toExisting(),
+          "lastName TEXT".toExisting(),
+          "email TEXT".toExisting(),
+          "stomaType INTEGER".toExisting(),
+          "surgeryDateInterval INTEGER".toExisting(),
+          "phoneNumber TEXT".toExisting(),
+          "insuranceType INTEGER".toExisting(),
+          "sensorPatchSize INTEGER".toExisting(),
+          "consent INTEGER NOT NULL".toExisting(),
+          "appVersion TEXT".toNothing(),  // creates the new column (and make default value NULL)
+          "platform TEXT".toNothing(),    // creates the new column (and make default value NULL)
           "syncState INTEGER NOT NULL".toExisting()
         ),
         primaryKeys = listOf("id")
@@ -73,6 +106,7 @@ object DatabaseMigrations {
   val migrations : Array<Migration> = arrayOf(
     MIGRATION_3_4,
     MIGRATION_4_5,
-    MIGRATION_5_6
+    MIGRATION_5_6,
+    MIGRATION_6_7,
   )
 }

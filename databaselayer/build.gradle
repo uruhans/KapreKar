@@ -14,6 +14,13 @@ android {
 
     testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     consumerProguardFiles "consumer-rules.pro"
+
+    javaCompileOptions {
+      annotationProcessorOptions {
+        arguments += ["room.schemaLocation":
+                              "$projectDir/schemas".toString()]
+      }
+    }
   }
 
   buildTypes {
@@ -27,6 +34,11 @@ android {
 
     sourceCompatibility JavaVersion.VERSION_1_8
     targetCompatibility JavaVersion.VERSION_1_8
+  }
+
+  sourceSets {
+    // Adds exported schema location as test app assets.
+    androidTest.assets.srcDirs += files("$projectDir/schemas".toString())
   }
 }
 
@@ -44,6 +56,7 @@ dependencies {
   implementation "androidx.room:room-rxjava2:$room_version"
   api "com.jakewharton.timber:timber:$timber_version"
 
+  androidTestImplementation "androidx.room:room-testing:$room_version"
   testImplementation 'junit:junit:4.13.1'
   androidTestImplementation 'androidx.test.ext:junit:1.1.2'
   androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'

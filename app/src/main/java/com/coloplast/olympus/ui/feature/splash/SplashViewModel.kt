@@ -8,6 +8,7 @@ import com.coloplast.olympus.shared.preferences.PreferencesImpl
 import com.coloplast.olympus.ui.common.BaseViewModel
 import com.coloplast.olympus.ui.common.models.GenericUiModel
 import com.coloplast.olympus.ui.common.models.UiView
+import com.coloplast.olympus.utils.DeviceUtils
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -37,7 +38,7 @@ class SplashViewModel(
             else {
               val userId = UUID.fromString(preferences.userLoggedIn)
 
-              userComponent.automaticLogin(userId)
+              userComponent.automaticLogin(userId, appVersion = DeviceUtils.getVersionNameAndCode())
                 .subscribeOn(Schedulers.io())
                 .map { currentUser ->
                   me.setCurrentUser(currentUser, false)

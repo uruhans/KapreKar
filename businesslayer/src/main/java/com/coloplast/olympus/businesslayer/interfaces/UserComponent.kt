@@ -13,7 +13,7 @@ interface UserComponent {
 
   fun clearLocalStorage(): Observable<SyncResult>
 
-  fun createUser(user: User): Observable<CurrentUser>
+  fun createUser(user: User, appVersion: String): Observable<CurrentUser>
   fun login(credentials: Credentials): Observable<CurrentUser>
   fun automaticLogin(userId: UUID, appVersion: String): Observable<CurrentUser>
 

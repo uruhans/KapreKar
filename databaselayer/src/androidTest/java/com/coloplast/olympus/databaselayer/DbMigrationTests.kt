@@ -57,13 +57,42 @@ class DbMigrationTests {
       // Prepare for the next version.
       close()
     }
+  }
 
-//    // Re-open the database with version 2 and provide
-//    // MIGRATION_1_2 as the migration process.
-//    db = helper.runMigrationsAndValidate(TEST_DB, 4, true, DatabaseMigrations.MIGRATION_3_4)
-//
-//    // MigrationTestHelper automatically verifies the schema changes,
-//    // but you need to validate that the data was migrated properly.
-//  }
+  @Test
+  @Throws(IOException::class)
+  fun migration7to8() {
+    val userId = UUID.randomUUID().toString()
+
+    var db = helper.createDatabase(TEST_DB, 7).apply {
+      // db has schema version 7. insert some data using SQL queries.
+      // You cannot use DAO classes because they expect the latest schema.
+
+      execSQL(
+        "" +
+            "INSERT INTO DbUser " +
+            "(Id, firstName, lastName, email, stomaType, surgeryDateInterval, phoneNumber, insuranceType, sensorPatchSize, consent, appVersion, platform, syncState) " +
+            "VALUES " +
+            "('${userId}', 'David', 'J', 'DJ@DJ.DJ', 0, 0, '+4512345678', 0, 0, 1, '2.0.0.1860', 'Android', 2)"
+      )
+
+      // Prepare for the next version.
+      close()
+    }
+
+    // Re-open the database with version 8 and provide
+    // MIGRATION_7_8 as the migration process.
+    db = helper.runMigrationsAndValidate(TEST_DB, 8, true, DatabaseMigrations.MIGRATION_7_8)
+
+    // MigrationTestHelper automatically verifies the schema changes,
+    // but you need to validate that the data was migrated properly.
+
+    val cursor = db.query("SELECT country FROM DbUser")
+    cursor.moveToFirst()
+
+    val country = cursor.getString(0)
+
+    println("Country: [$country]")
+    Assert.assertTrue(country == "+45")
   }
 }

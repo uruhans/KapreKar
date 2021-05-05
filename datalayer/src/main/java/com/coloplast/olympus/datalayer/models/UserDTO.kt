@@ -12,7 +12,7 @@ data class UserDTO(
   val lastName: String? = null,
   val email: String? = null,
   val password: String? = null,
-  val country: String? = null,
+  val countryCode: String? = null,
   val stomaTypeId: Int? = null,
   val stomaSurgeryDateId: Int? = null,
   val phoneNumber: String? = null,
@@ -20,7 +20,7 @@ data class UserDTO(
   val sensorPatchSize: Int? = null,
   val consent: Boolean = false,
   val appVersion: String? = null,
-  val platform: String? = null
+  val platform: String? = "Android"
 ) {
 
   /**
@@ -36,7 +36,7 @@ data class UserDTO(
       lastName,
       email,
       password,
-      country,
+      countryCode,
       stomaTypeId,
       stomaSurgeryDateId,
       phoneNumber,

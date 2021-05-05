@@ -30,11 +30,14 @@ class UserComponentImpl(private val preferences: PreferencesImpl) : UserComponen
       .onErrorReturn { SyncResult.Error() }
   }
 
-  override fun createUser(user: User): Observable<CurrentUser> =
+  override fun createUser(user: User, appVersion: String): Observable<CurrentUser> =
     if (user.email.isNullOrBlank()) {
-      apiService.createAnonymousUser()
+      apiService.createAnonymousUser(appVersion)
     }
     else {
+      user.appVersion = appVersion
+      user.platform = "Android"
+
       if(user.id != null) {
         apiService.updateUser(user)
           .toSingle { UserResponseDTO(preferences.getToken(), UserDTO.fromUser(user)) }

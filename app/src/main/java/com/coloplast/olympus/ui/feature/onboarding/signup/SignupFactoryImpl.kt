@@ -88,7 +88,10 @@ class SignupFactoryImpl : FlowFactory<SignupFactoryModel>() {
         model.user.password = result as String
       }
       SignupFlow.PhoneSU5 -> {
-        model.user.phoneNumber = result as String
+        val pair = result as Pair<String, String>
+
+        model.user.country = pair.first
+        model.user.phoneNumber = pair.second
       }
       SignupFlow.PhoneValidationSU6 -> {
         model.phoneValidationCode = result as String

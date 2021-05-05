@@ -10,6 +10,7 @@ import com.coloplast.olympus.ui.common.BaseViewModel
 import com.coloplast.olympus.ui.common.models.GenericUiModel
 import com.coloplast.olympus.ui.common.rx.DelayedLoadingTransformer
 import com.coloplast.olympus.ui.common.rx.GenericUiModelTransformer
+import com.coloplast.olympus.utils.DeviceUtils
 import com.coloplast.olympus.utils.Utils
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
@@ -28,7 +29,7 @@ class SignupViewModel(
     val onCreateUser: Observable<GenericUiModel> =
       uiView.onCreateUser()
         .switchMap { user ->
-          userComponent.createUser(user)
+          userComponent.createUser(user, DeviceUtils.getVersionNameAndCode())
             .subscribeOn(Schedulers.io())
             .map {
               me.setCurrentUser(it)
@@ -67,7 +68,7 @@ class SignupViewModel(
               // If not, continue with the flow, otherwise we can create the user already.
               .flatMap { isUkNumber ->
                 if (isUkNumber) {
-                  userComponent.createUser(model.user)
+                  userComponent.createUser(model.user, DeviceUtils.getVersionNameAndCode())
                     .map {
                       me.setCurrentUser(it)
                       Callback.USER_CREATED

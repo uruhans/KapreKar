@@ -39,7 +39,7 @@ class PhoneSU5Controller: BaseController<ControllerPhoneSu5Binding>() {
     if(validPhone.get()){
       val prefix = applicationContext!!.resources.getStringArray(R.array.prefixes)[prefixSpinnerPosition.get()]
       val phoneWithPrefix = prefix + phone.get()
-      getListener(FlowListener::class.java)!!.onNextClicked(phoneWithPrefix)
+      getListener(FlowListener::class.java)!!.onNextClicked(Pair(prefix, phoneWithPrefix))
     }
   }
 

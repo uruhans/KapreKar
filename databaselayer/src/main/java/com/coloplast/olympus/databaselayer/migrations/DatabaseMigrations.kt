@@ -111,7 +111,7 @@ object DatabaseMigrations {
    *
    * - UPDATE new Column with first 3 letters of phoneNumber (ie: +45)
    */
-  private val MIGRATION_7_8 = object : Migration(7, 8) {
+  val MIGRATION_7_8 = object : Migration(7, 8) {
     override fun migrate(database: SupportSQLiteDatabase) {
       DbMigrationsHelper.alterTable(
         db = database,

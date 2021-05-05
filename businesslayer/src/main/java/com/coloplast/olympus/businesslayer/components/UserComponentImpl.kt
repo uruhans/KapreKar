@@ -67,11 +67,10 @@ class UserComponentImpl(private val preferences: PreferencesImpl) : UserComponen
         }
 
         if(update) {
-          updateUser(it)
+          it.syncState = SyncState.Pending
         }
-        else {
-          Observable.just(it)
-        }
+
+        updateUser(it)
       }
       .map<CurrentUser> { CurrentUser.LoggedIn(it) }
       .onErrorReturn { CurrentUser.LoggedOut() }

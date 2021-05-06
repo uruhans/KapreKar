@@ -31,7 +31,7 @@ class PreferencesImpl(applicationContext: Context) : Preferences {
   private var onboardingCompletedTimeStamp: Long by bindSharedPreference(applicationContext, ONBOARDING_COMPLETED_TIMESTAMP, 0)
   private var currentOnboardingProgression : Int by bindSharedPreference(applicationContext, CURRENT_ONBOARDING_PROGRESSION, OnboardingProgression.NOT_STARTED.id)
 
-  private var patchId: Int by bindSharedPreference(applicationContext, CURRENT_PATCH_ID, 0)
+  private var patchId: Int by bindSharedPreference(applicationContext, CURRENT_PATCH_ID, 1)
   private var deviceId: String by bindSharedPreference(applicationContext, CURRENT_DEVICE_ID, "")
 
   init {

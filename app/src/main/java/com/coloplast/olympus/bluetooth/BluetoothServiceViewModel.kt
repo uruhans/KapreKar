@@ -41,10 +41,8 @@ class BluetoothServiceViewModel(
 
     val appStateLoggerObservable = ServiceDispatcher.serviceEventObservable()
       .ofType(ServiceEvent.AppStateLogger::class.java)
-      .delay(800, TimeUnit.MILLISECONDS)
       .flatMap {
         appStateComponent.insertAppState(it.letter, logFromService = true)
-          //LifecycleObserver has a 700 ms delay
           .subscribeOn(Schedulers.io())
           .toSingle { it }
           .toObservable()

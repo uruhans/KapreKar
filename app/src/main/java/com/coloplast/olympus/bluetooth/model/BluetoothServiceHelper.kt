@@ -20,9 +20,11 @@ class BluetoothServiceHelper(
     val apsMethod = apsEngine.determineApsMethod(cycleResult)
     val apsAction = apsEngine.determineApsAction(apsMethod)
 
-    updatedStateChange.apsMethod = apsMethod
-    updatedStateChange.stateChange.apsAction = apsAction
-    updatedStateChange.stateChange.resetOrStitchCandidate = apsEngine.resetOrStitchCandidate(apsAction, lastValidDetach?.stateChange)
+    if (lastValidDetach != null) {
+      updatedStateChange.apsMethod = apsMethod
+      updatedStateChange.stateChange.apsAction = apsAction
+      updatedStateChange.stateChange.resetOrStitchCandidate = apsEngine.resetOrStitchCandidate(apsAction, lastValidDetach?.stateChange)
+    }
 
     /**
      * We need to clear the latest detach vector once it's been used, or else we will

@@ -29,7 +29,9 @@ class ForgotPasswordFactoryImpl: FlowFactory<ForgotPasswordModel>() {
       ForgotPasswordFlow.ForgotPasswordFP4 -> GenericConfirmationController.routerTransaction(
         titleId = R.string.onboarding_fp4_title,
         descriptionId = R.string.onboarding_fp4_description,
-        buttonId = R.string.onboarding_fp4_button_text
+        buttonId = R.string.onboarding_fp4_button_text,
+        showBackButton = false,
+        showCloseButton = false
       )
       else -> null
     }

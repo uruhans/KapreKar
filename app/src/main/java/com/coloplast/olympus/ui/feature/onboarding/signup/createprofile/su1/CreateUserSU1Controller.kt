@@ -8,6 +8,7 @@ import com.bluelinelabs.conductor.RouterTransaction
 import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerCreateUserSu1Binding
 import com.coloplast.olympus.ui.common.BaseController
+import com.coloplast.olympus.ui.common.flow.TopMenuVisibilityListener
 import com.coloplast.olympus.ui.common.listeners.FlowListener
 import com.coloplast.olympus.ui.feature.onboarding.signup.createprofile.models.SU1Model
 
@@ -16,7 +17,7 @@ import com.coloplast.olympus.ui.feature.onboarding.signup.createprofile.models.S
  * Created by Kike Bodi (ebp@dawnhealth.com) on 01/07/2020.
  * Copyright by Dawn Health A/S. All rights reserved.
  */
-class CreateUserSU1Controller: BaseController<ControllerCreateUserSu1Binding>() {
+class CreateUserSU1Controller: BaseController<ControllerCreateUserSu1Binding>(), TopMenuVisibilityListener {
 
   val name = ObservableField<String>()
   val validName = ObservableBoolean(true)
@@ -58,6 +59,10 @@ class CreateUserSU1Controller: BaseController<ControllerCreateUserSu1Binding>() 
   }
 
   override fun getLayout(): Int = R.layout.controller_create_user_su_1
+
+
+  override fun showBackButton(): Boolean = false
+  override fun showCloseButton(): Boolean = false
 
   companion object{
     private const val TAG_CONTROLLER = "create_user_su1_controller"

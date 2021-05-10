@@ -40,7 +40,7 @@
       app:visibleOrGone="@{item.buttonType == ButtonType.LINK}"
       style="@style/Button.Borderless"
       android:textAllCaps="false"
-      android:textAlignment="viewStart" />
+      android:gravity="center_vertical|start" />
   </FrameLayout>
 
   <!--<androidx.cardview.widget.CardView

@@ -33,7 +33,7 @@
       android:layout_marginTop="@dimen/spacing_large"
       app:safeText="@{item.header}"
       app:visibleOrGone="@{item.showHeader}"
-      android:textAlignment="viewStart"
+      android:gravity="center_vertical|start"
       tools:text="@string/guide_get_started_title" />
 
     <TextView
@@ -45,7 +45,7 @@
       android:layout_marginBottom="@dimen/spacing_standard"
       app:safeText="@{item.subHeader}"
       app:visibleOrGone="@{item.showSubHeader}"
-      android:textAlignment="viewStart"
+      android:gravity="center_vertical|start"
       tools:text="@string/guide_get_started_sub_title_1" />
 
   </LinearLayout>

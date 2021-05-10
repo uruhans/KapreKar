@@ -18,7 +18,8 @@ class AppStateComponentImpl(private val preferencesImpl: PreferencesImpl) : AppS
 
   private val dbService = DbServiceImpl()
   private val azureService = AzurePackageApiImpl()
-  private var lastAppState: AppState? = null
+  private var lastAppState: String = ""
+  private var lastInternalAppState: String = ""
 
   override fun insertAppState(
     appState: String,
@@ -30,17 +31,25 @@ class AppStateComponentImpl(private val preferencesImpl: PreferencesImpl) : AppS
     }
 
     val fromForeground = !AppSettings.appInBackground && !logFromService
-    val appStatePackage =
-      if (fromForeground) AppState(appState = appState, patchId = preferencesImpl.getUniqueDevicePatchId())
-      else AppState(internalAppState = appState, patchId = preferencesImpl.getUniqueDevicePatchId())
 
-    val isDuplicate = ((appStatePackage.appState == lastAppState?.appState) && (appStatePackage.internalAppState == lastAppState?.internalAppState))
+    val isDuplicate = (fromForeground && appState == lastAppState) ||
+        (fromForeground.not() && appState == lastInternalAppState)
+
     if (isDuplicate) {
       return Completable.complete()
     }
-
-    lastAppState = appStatePackage
-    return dbService.insertAppState(appStatePackage)
+    else {
+      val appStatePackage: AppState
+      if (fromForeground){
+        lastAppState = appState
+        appStatePackage = AppState(appState = appState, patchId = preferencesImpl.getUniqueDevicePatchId())
+      }
+      else {
+        lastInternalAppState = appState
+        appStatePackage = AppState(internalAppState = appState, patchId = preferencesImpl.getUniqueDevicePatchId())
+      }
+      return dbService.insertAppState(appStatePackage)
+    }
   }
 
   override fun deleteAppStatesAlreadySynced(): Observable<SyncResult> {

@@ -495,15 +495,14 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
       timeSinceLast = Instant.now().epochSecond - lastResetOrStitch!!.epochSecond
     }
 
+    if(stateChange.apsAction == ApsAction.Split) {
+      Timber.d("OLD patchId: [${preferences.getCurrentPatchId()}]")
+      preferences.incrementPatchId()
+      Timber.d("NEW patchId: [${preferences.getCurrentPatchId()}]")
+    }
+
     if(lastResetOrStitch == null || timeSinceLast > 12) {
       Timber.d("ApsAction: [${stateChange.apsAction}] on transmitter ${transmitterName.get()}")
-
-      if(stateChange.apsAction == ApsAction.Split) {
-        Timber.d("OLD patchId: [${preferences.getCurrentPatchId()}]")
-        preferences.incrementPatchId()
-        Timber.d("NEW patchId: [${preferences.getCurrentPatchId()}]")
-      }
-
       stateChange.resetOrStitchCandidate?.let {
         lastResetOrStitch = Instant.now()
         stitchOrResetRelay.accept(StitchOrResetObject(stateChange.getMacAddress(), it))

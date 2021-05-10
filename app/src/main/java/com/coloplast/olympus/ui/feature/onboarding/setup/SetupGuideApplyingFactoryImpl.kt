@@ -161,6 +161,7 @@ class SetupGuideApplyingFactoryImpl : FlowFactory<ApplyingFlowModel>() {
           R.string.onboarding_chapter_applying_ready_attach_title,
           R.string.onboarding_chapter_applying_ready_attach_description,
           R.string.generic_continue,
+          showBackButton = false,
           showCloseButton = false
         )
       }

@@ -26,6 +26,7 @@ class SetupGuidePreparingFactoryImpl : FlowFactory<EmptyModel>() {
           R.string.onboarding_chapter_preparing_change_description,
           positiveButtonTextId = R.string.generic_continue,
           negativeButtonTextId = R.string.onboarding_chapter_preparing_change_come_back_later_button,
+          showBackButton = false,
           showCloseButton = false
         )
       }

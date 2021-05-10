@@ -7,6 +7,7 @@ import com.coloplast.olympus.R
 import com.coloplast.olympus.databinding.ControllerStomaInfoSu2Binding
 import com.coloplast.olympus.ui.common.BaseController
 import com.coloplast.olympus.ui.common.extensions.onValueChanged
+import com.coloplast.olympus.ui.common.flow.TopMenuVisibilityListener
 import com.coloplast.olympus.ui.common.listeners.FlowListener
 import com.coloplast.olympus.ui.common.widgets.SpinnerView
 import com.coloplast.olympus.ui.feature.onboarding.signup.createprofile.models.SU2Model
@@ -18,7 +19,7 @@ import com.coloplast.olympus.ui.feature.onboarding.signup.createprofile.types.St
  * Created by Kike Bodi (ebp@dawnhealth.com) on 01/07/2020.
  * Copyright by Dawn Health A/S. All rights reserved.
  */
-class StomaInfoSU2Controller: BaseController<ControllerStomaInfoSu2Binding>(), SpinnerView.Listener {
+class StomaInfoSU2Controller: BaseController<ControllerStomaInfoSu2Binding>(), SpinnerView.Listener, TopMenuVisibilityListener {
 
   val stomaTypeValues by lazy {
     StomaType.values()
@@ -82,6 +83,7 @@ class StomaInfoSU2Controller: BaseController<ControllerStomaInfoSu2Binding>(), S
   }
 
   override fun getLayout(): Int = R.layout.controller_stoma_info_su_2
+  override fun showCloseButton(): Boolean = false
 
   companion object{
     private const val TAG_CONTROLLER = "stoma_info_su_2_controller"

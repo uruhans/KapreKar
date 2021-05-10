@@ -81,7 +81,9 @@ class AddTransmitterFactoryImpl : FlowFactory<AddTransmitterModel>() {
         imageId = R.drawable.ic_checkmark,
         titleId = R.string.guide_at10_title,
         descriptionId = R.string.guide_at10_body,
-        buttonId = R.string.generic_continue
+        buttonId = R.string.generic_continue,
+        showBackButton = false,
+        showCloseButton = false
       )
       AddTransmitterFlow.Completed -> null
     }

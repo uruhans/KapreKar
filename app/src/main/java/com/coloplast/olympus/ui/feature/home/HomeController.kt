@@ -350,9 +350,6 @@ class HomeController : BaseController<ControllerHomeBinding>, HomeView, BaseDial
         UiState.TRANSMITTER_DETACHED_V -> {
           TransmitterDetachedController.routerTransaction()
         }
-        UiState.TRANSMITTER_BATTERY_CHARGING_W -> {
-          TransmitterChargingController.routerTransaction()
-        }
         UiState.WET_MOUNT_X -> {
           WetMountController.routerTransaction(R.string.status_inner_blind_mount_title, R.string.status_inner_blind_mount_description)
         }

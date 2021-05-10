@@ -300,7 +300,8 @@
           android:layout_marginBottom="@dimen/spacing_half"
           android:onClick="@{() -> controller.onPolicyAgreementClicked()}"
           android:text="@string/onboarding_dc5_link1_text"
-          android:textAlignment="textStart"
+          android:layout_marginTop="@dimen/spacing_small"
+          android:gravity="center_vertical|start"
           android:textAllCaps="false"
           android:textSize="@dimen/text_18" />
 
@@ -426,7 +427,7 @@
           android:layout_marginBottom="@dimen/spacing_half"
           android:onClick="@{() -> controller.onPolicyAgreementClicked()}"
           android:text="@string/profile_pp_no_profile_consent_read_policy"
-          android:textAlignment="textStart"
+          android:gravity="center_vertical|start"
           android:textAllCaps="false"
           android:textSize="@dimen/text_18"
           app:layout_constraintStart_toStartOf="parent"

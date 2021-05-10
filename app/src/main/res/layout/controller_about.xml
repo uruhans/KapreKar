@@ -70,7 +70,8 @@
           android:layout_height="wrap_content"
           android:onClick="@{() -> controller.onLinkClicked(R.string.about_ap_heylo_website_link)}"
           android:text="@string/about_ap_heylo_website_text"
-          android:textAlignment="textStart"
+          android:layout_marginTop="@dimen/spacing_small"
+          android:gravity="center_vertical|start"
           android:textAllCaps="false" />
 
         <Button
@@ -79,7 +80,7 @@
           android:layout_height="wrap_content"
           android:onClick="@{() -> controller.onLinkClicked(R.string.about_ap_heylo_compatible_phones_link)}"
           android:text="@string/about_ap_heylo_compatible_phones_text"
-          android:textAlignment="textStart"
+          android:gravity="center_vertical|start"
           android:textAllCaps="false" />
 
         <View
@@ -108,7 +109,8 @@
           android:layout_height="wrap_content"
           android:onClick="@{() -> controller.onLinkClicked(R.string.about_ap_section1_link)}"
           android:text="@string/about_ap_heylo_coloplast_website"
-          android:textAlignment="textStart"
+          android:layout_marginTop="@dimen/spacing_small"
+          android:gravity="center_vertical|start"
           android:textAllCaps="false" />
 
         <View
@@ -137,7 +139,8 @@
           android:layout_height="wrap_content"
           android:onClick="@{() -> controller.onEmailClicked(R.string.contact_cp_support_email)}"
           android:text="@string/contact_cp_support_email"
-          android:textAlignment="textStart"
+          android:layout_marginTop="@dimen/spacing_small"
+          android:gravity="center_vertical|start"
           android:textAllCaps="false" />
 
         <View
@@ -166,7 +169,8 @@
           android:layout_height="wrap_content"
           android:onClick="@{() -> controller.onLinkClicked(R.string.about_ap_heylo_website_link)}"
           android:text="@string/about_ap_heylo_website_text"
-          android:textAlignment="textStart"
+          android:layout_marginTop="@dimen/spacing_small"
+          android:gravity="center_vertical|start"
           android:textAllCaps="false" />
 
         <View
@@ -195,7 +199,8 @@
           android:layout_height="wrap_content"
           android:onClick="@{() -> controller.onLinkClicked(R.string.about_ap_heylo_terms_of_use_website_link)}"
           android:text="@string/about_ap_heylo_terms_of_use_text"
-          android:textAlignment="textStart"
+          android:layout_marginTop="@dimen/spacing_small"
+          android:gravity="center_vertical|start"
           android:textAllCaps="false" />
 
         <Button
@@ -204,7 +209,7 @@
           android:layout_height="wrap_content"
           android:onClick="@{() -> controller.onLinkClicked(R.string.about_ap_heylo_privacy_policy_link)}"
           android:text="@string/about_ap_heylo_privacy_policy_text"
-          android:textAlignment="textStart"
+          android:gravity="center_vertical|start"
           android:textAllCaps="false" />
 
         <View

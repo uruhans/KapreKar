@@ -7,6 +7,7 @@ import android.os.Build
 import android.text.Html
 import android.text.SpannableString
 import android.text.style.StyleSpan
+import android.view.View
 import android.widget.TextView
 import androidx.annotation.ColorRes
 import androidx.annotation.StringRes
@@ -127,6 +128,16 @@ fun TextView.applyBold(source: String) {
   }
   
   text = spannableString
+}
+
+@BindingAdapter("boldOrRegular")
+fun TextView.boldOrRegular(bold: Boolean) {
+  if (bold) {
+    this@boldOrRegular.setTypeface(this@boldOrRegular.getTypeface(), Typeface.BOLD)
+  }
+  else {
+    this@boldOrRegular.setTypeface(null, Typeface.NORMAL)
+  }
 }
 
 @BindingAdapter("html")

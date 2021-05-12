@@ -30,6 +30,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         app:safeText="@{item.questionId}"
+        app:boldOrRegular="@{item.showContent}"
         tools:text="How do I charge my transmitter"
         style="@style/TextStyle.Coloplast.Regular.DarkGrey.20"/>
 

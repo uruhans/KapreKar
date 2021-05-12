@@ -917,8 +917,10 @@
   <string name="status_location_turned_off_title">Lokalitetstjenester slået fra</string>
   <string name="status_moisture_connector">Hold dig opdateret ved at åbne transmitteren helt og tørre den.</string>
   <string name="status_moisture_connector_title">Fugt i konnektor og transmitter.</string>
-  <string name="status_moisture_detected">Men det er ikke helt klart, om det er en lækage. Du skal måske skifte dit sensorlag.</string>
-  <string name="status_moisture_detected_title">Der sker noget</string>
+  <string name="status_moisture_detected">Men det er ikke helt klart, om det er en lækage.</string>
+  <string name="status_moisture_detected_title">Der er måske et problem.</string>
+  <string name="status_moisture_outer_detected">Men det er ikke sikker at det er en lækage. Du vil måske skifte dit sensorlag.</string>
+  <string name="status_moisture_outer_detected_title">Der er måske et problem og det spreder sig.</string>
   <string name="status_multiple_transmitters">Afmonter en transmitter for at holde dig opdateret.</string>
   <string name="status_multiple_transmitters_title">To transmittere er sat på sensorlag.</string>
   <string name="status_no_con_battery">Oplad nu for at holde dig opdateret.</string>

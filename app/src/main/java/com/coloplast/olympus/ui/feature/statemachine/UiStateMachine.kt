@@ -16,7 +16,8 @@ interface UiStateMachine {
   fun outerBreach_C(newState: UiState): Boolean
   fun innerBlind_D(newState: UiState): Boolean
   fun totalBlind_E(newState: UiState): Boolean
-  fun payAttention_F(newState: UiState): Boolean
+  fun payAttention_F2(newState: UiState): Boolean
+  fun payAttention_F3(newState: UiState): Boolean
   fun cutguardBroken_I(newState: UiState): Boolean
   fun waterIngressDetection_J(newState: UiState): Boolean
   fun cutguardDirtInTransmitter_K(newState: UiState): Boolean

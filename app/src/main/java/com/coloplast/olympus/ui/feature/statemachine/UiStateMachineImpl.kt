@@ -19,7 +19,8 @@ class UiStateMachineImpl : BaseUiStateMachine() {
       UiState.OUTER_BREACH_C,
       UiState.INNER_BLIND_D,
       UiState.TOTAL_BLIND_E,
-      UiState.PAY_ATTENTION_F,
+      UiState.PAY_ATTENTION_F2,
+      UiState.PAY_ATTENTION_F3,
       UiState.WET_MOUNT_G,
       UiState.CUTGUARD_BROKEN_I,
       UiState.WATER_INGRESS_DETECTION_J,
@@ -44,7 +45,8 @@ class UiStateMachineImpl : BaseUiStateMachine() {
       UiState.OUTER_BREACH_C,
       UiState.INNER_BLIND_D,
       UiState.TOTAL_BLIND_E,
-      UiState.PAY_ATTENTION_F,
+      UiState.PAY_ATTENTION_F2,
+      UiState.PAY_ATTENTION_F3,
       UiState.WET_MOUNT_G,
       UiState.CUTGUARD_BROKEN_I,
       UiState.WATER_INGRESS_DETECTION_J,
@@ -68,7 +70,8 @@ class UiStateMachineImpl : BaseUiStateMachine() {
       UiState.OUTER_BREACH_C,
       UiState.INNER_BLIND_D,
       UiState.TOTAL_BLIND_E,
-      UiState.PAY_ATTENTION_F,
+      UiState.PAY_ATTENTION_F2,
+      UiState.PAY_ATTENTION_F3,
       UiState.WET_MOUNT_G,
       UiState.CUTGUARD_BROKEN_I,
       UiState.WATER_INGRESS_DETECTION_J,
@@ -91,7 +94,8 @@ class UiStateMachineImpl : BaseUiStateMachine() {
       UiState.SOMETHING_ELSE,
       UiState.OK_A,
       UiState.OUTER_BREACH_C,
-      UiState.PAY_ATTENTION_F,
+      UiState.PAY_ATTENTION_F2,
+      UiState.PAY_ATTENTION_F3,
       UiState.CUTGUARD_BROKEN_I,
       UiState.WATER_INGRESS_DETECTION_J,
       UiState.CUTGUARD_DIRT_IN_TRANSMITTER_K,
@@ -135,7 +139,8 @@ class UiStateMachineImpl : BaseUiStateMachine() {
       UiState.INNER_BREACH_B,
       UiState.OUTER_BREACH_C,
       UiState.TOTAL_BLIND_E,
-      UiState.PAY_ATTENTION_F,
+      UiState.PAY_ATTENTION_F2,
+      UiState.PAY_ATTENTION_F3,
       UiState.CUTGUARD_BROKEN_I,
       UiState.WATER_INGRESS_DETECTION_J,
       UiState.TRANSMITTER_DETACHED_V,
@@ -158,7 +163,8 @@ class UiStateMachineImpl : BaseUiStateMachine() {
       UiState.OK_A,
       UiState.INNER_BREACH_B,
       UiState.OUTER_BREACH_C,
-      UiState.PAY_ATTENTION_F,
+      UiState.PAY_ATTENTION_F2,
+      UiState.PAY_ATTENTION_F3,
       UiState.CUTGUARD_BROKEN_I,
       UiState.TRANSMITTER_DETACHED_V,
       UiState.CUTGUARD_DIRT_IN_TRANSMITTER_K,
@@ -173,7 +179,30 @@ class UiStateMachineImpl : BaseUiStateMachine() {
     }
   }
 
-  override fun payAttention_F(newState: UiState): Boolean {
+  override fun payAttention_F2(newState: UiState): Boolean {
+    return when (newState) {
+      UiState.BLUETOOTH_NOT_ENABLED,
+      UiState.SOMETHING_ELSE,
+      UiState.OK_A,
+      UiState.INNER_BREACH_B,
+      UiState.OUTER_BREACH_C,
+      UiState.TOTAL_BLIND_E,
+      UiState.CUTGUARD_BROKEN_I,
+      UiState.WATER_INGRESS_DETECTION_J,
+      UiState.TRANSMITTER_DETACHED_V,
+      UiState.CUTGUARD_DIRT_IN_TRANSMITTER_K,
+      UiState.NO_BATTERY_R,
+      UiState.INNER_BLIND_LEAK_L,
+      UiState.TRANSMITTER_BATTERY_CHARGING_W,
+      UiState.WET_MOUNT_X,
+      UiState.DISCONNECTED -> {
+        true
+      }
+      else -> false
+    }
+  }
+
+  override fun payAttention_F3(newState: UiState): Boolean {
     return when (newState) {
       UiState.BLUETOOTH_NOT_ENABLED,
       UiState.SOMETHING_ELSE,
@@ -204,7 +233,8 @@ class UiStateMachineImpl : BaseUiStateMachine() {
       UiState.INNER_BREACH_B,
       UiState.OUTER_BREACH_C,
       UiState.TOTAL_BLIND_E,
-      UiState.PAY_ATTENTION_F,
+      UiState.PAY_ATTENTION_F2,
+      UiState.PAY_ATTENTION_F3,
       UiState.CUTGUARD_BROKEN_I,
       UiState.TRANSMITTER_DETACHED_V,
       UiState.CUTGUARD_DIRT_IN_TRANSMITTER_K,
@@ -227,7 +257,8 @@ class UiStateMachineImpl : BaseUiStateMachine() {
       UiState.INNER_BREACH_B,
       UiState.OUTER_BREACH_C,
       UiState.TOTAL_BLIND_E,
-      UiState.PAY_ATTENTION_F,
+      UiState.PAY_ATTENTION_F2,
+      UiState.PAY_ATTENTION_F3,
       UiState.CUTGUARD_BROKEN_I,
       UiState.TRANSMITTER_DETACHED_V,
       UiState.CUTGUARD_DIRT_IN_TRANSMITTER_K,
@@ -250,7 +281,8 @@ class UiStateMachineImpl : BaseUiStateMachine() {
       UiState.INNER_BREACH_B,
       UiState.OUTER_BREACH_C,
       UiState.TOTAL_BLIND_E,
-      UiState.PAY_ATTENTION_F,
+      UiState.PAY_ATTENTION_F2,
+      UiState.PAY_ATTENTION_F3,
       UiState.CUTGUARD_BROKEN_I,
       UiState.WATER_INGRESS_DETECTION_J,
       UiState.TRANSMITTER_DETACHED_V,
@@ -274,7 +306,8 @@ class UiStateMachineImpl : BaseUiStateMachine() {
       UiState.INNER_BREACH_B,
       UiState.OUTER_BREACH_C,
       UiState.TOTAL_BLIND_E,
-      UiState.PAY_ATTENTION_F,
+      UiState.PAY_ATTENTION_F2,
+      UiState.PAY_ATTENTION_F3,
       UiState.CUTGUARD_BROKEN_I,
       UiState.WATER_INGRESS_DETECTION_J,
       UiState.TRANSMITTER_DETACHED_V,

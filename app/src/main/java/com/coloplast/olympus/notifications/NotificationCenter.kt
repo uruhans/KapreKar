@@ -128,7 +128,8 @@ class NotificationCenter(
       UiState.WATER_INGRESS_DETECTION_J.notificationId(),
       UiState.CUTGUARD_DIRT_IN_TRANSMITTER_K.notificationId(),
       UiState.TOTAL_BLIND_E.notificationId(),
-      UiState.PAY_ATTENTION_F.notificationId(),
+      UiState.PAY_ATTENTION_F2.notificationId(),
+      UiState.PAY_ATTENTION_F3.notificationId(),
       UiState.OUTER_BREACH_C.notificationId() -> {
         if (isItNightTime() || preferences.areRingingAlertsEnabled) {
           triggerRingingAlarmNotification(payload, snoozePendingIntent, macAddress)

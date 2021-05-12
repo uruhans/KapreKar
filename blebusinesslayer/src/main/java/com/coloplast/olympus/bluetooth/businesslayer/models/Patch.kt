@@ -33,7 +33,7 @@ data class Patch(
   //check outer sensor has breach or some sweat or is blinded
   val isOuterSensorWet =  outerSensor == SensorStatus.BREACH || outerSensor == SensorStatus.BLINDED || outerSensor == SensorStatus.PAY_ATTENTION
   // do any of the inner sensors have a state of PAY_ATTENTION
-  private val innerSensorPayAttention = innerSensors.any { it == SensorStatus.PAY_ATTENTION }
+  val innerSensorPayAttention = innerSensors.any { it == SensorStatus.PAY_ATTENTION }
   // a list of inner sensors that are currently in the BLINDED state
   private val innerSensorBlinded: List<SensorStatus> = innerSensors.filter { it == SensorStatus.BLINDED }
   // figure out if *any* of the sensors are broken - if the cutguard sensor is < 17 OR 18 or any of the other sensors are set to CutGuardBroken Or CutGuardDirt
@@ -53,10 +53,11 @@ data class Patch(
       outerSensor == SensorStatus.BREACH -> PatchState.OUTER_LEAK
       // PRIORITY 10
       outerSensor == SensorStatus.PAY_ATTENTION && innerSensorBreach -> PatchState.PAY_ATTENTION_10
+      outerSensor == SensorStatus.PAY_ATTENTION -> PatchState.PAY_ATTENTION_10
       // PRIORITY 11
       innerSensorBreach -> PatchState.INNER_LEAK
       // PRIORITY 12
-      innerSensorPayAttention || outerSensor == SensorStatus.PAY_ATTENTION -> PatchState.PAY_ATTENTION_12
+      innerSensorPayAttention -> PatchState.PAY_ATTENTION_12
       // PRIORITY 13
       outerSensor == SensorStatus.BLINDED -> PatchState.TOTAL_BLIND
       // PRIORITY 14

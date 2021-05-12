@@ -151,12 +151,12 @@ class PatchView @JvmOverloads constructor(
         }
       }
       else {
-        if (newPatch.outerSensor == SensorStatus.BREACH) {
+        if (newPatch.outerSensor == SensorStatus.BREACH || newPatch.outerSensor == SensorStatus.PAY_ATTENTION) {
           patchIcons.add(R.drawable.ic_detailed_plate_outer)
           animatePulse = PulseAnim.OUTER
         }
         
-        if (newPatch.innerSensorBreach) {
+        if (newPatch.innerSensorBreach || newPatch.innerSensorPayAttention) {
           patchIcons.add(R.drawable.ic_detailed_plate_inner_full)
           if (animatePulse == PulseAnim.NONE) {
             animatePulse = PulseAnim.INNER

@@ -917,8 +917,10 @@
   <string name="status_location_turned_off_title">Location disabled</string>
   <string name="status_moisture_connector">To stay informed, open up your transmitter fully and dry it off.</string>
   <string name="status_moisture_connector_title">Moisture in connector and transmitter.</string>
-  <string name="status_moisture_detected">But it\'s not entirely clear if it\'s leakage. You might want to change your sensor layer.</string>
-  <string name="status_moisture_detected_title">Something\'s happening</string>
+  <string name="status_moisture_detected">But it\'s not entirely clear if it\'s leakage.</string>
+  <string name="status_moisture_detected_title">There might be a problem.</string>
+  <string name="status_moisture_outer_detected">But it\'s not entirely clear if it\'s leakage. You might want to change your sensor layer.</string>
+  <string name="status_moisture_outer_detected_title">There might be a problem spreading.</string>
   <string name="status_multiple_transmitters">To stay informed, detach one transmitter.</string>
   <string name="status_multiple_transmitters_title">Two transmitters attached.</string>
   <string name="status_no_con_battery">Charge now to stay informed.</string>

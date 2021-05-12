@@ -919,6 +919,8 @@
   <string name="status_moisture_connector_title">status_moisture_connector_title</string>
   <string name="status_moisture_detected">status_moisture_detected</string>
   <string name="status_moisture_detected_title">status_moisture_detected_title</string>
+  <string name="status_moisture_outer_detected"></string>
+  <string name="status_moisture_outer_detected_title"></string>
   <string name="status_multiple_transmitters">status_multiple_transmitters</string>
   <string name="status_multiple_transmitters_title">status_multiple_transmitters_title</string>
   <string name="status_no_con_battery">status_no_con_battery</string>

@@ -27,8 +27,8 @@ object StateTransformers {
               PatchState.OUTER_LEAK -> UiState.OUTER_BREACH_C
               PatchState.INNER_BLIND -> UiState.INNER_BLIND_D
               PatchState.TOTAL_BLIND -> UiState.TOTAL_BLIND_E
-              PatchState.PAY_ATTENTION_10,
-              PatchState.PAY_ATTENTION_12 -> UiState.PAY_ATTENTION_F
+              PatchState.PAY_ATTENTION_10 -> UiState.PAY_ATTENTION_F3
+              PatchState.PAY_ATTENTION_12 -> UiState.PAY_ATTENTION_F2
               PatchState.CUTGUARD_CUT_BROKEN -> UiState.CUTGUARD_BROKEN_I
               PatchState.CUTGUARD_DIRT_IN_TRANSMITTER -> UiState.CUTGUARD_DIRT_IN_TRANSMITTER_K
               else -> UiState.SOMETHING_ELSE

@@ -78,8 +78,11 @@ abstract class BaseUiStateMachine : UiStateMachine {
       UiState.TOTAL_BLIND_E -> {
         { totalBlind_E(it) }
       }
-      UiState.PAY_ATTENTION_F -> {
-        { payAttention_F(it) }
+      UiState.PAY_ATTENTION_F2 -> {
+        { payAttention_F2(it) }
+      }
+      UiState.PAY_ATTENTION_F3 -> {
+        { payAttention_F3(it) }
       }
       UiState.CUTGUARD_BROKEN_I -> {
         { cutguardBroken_I(it) }

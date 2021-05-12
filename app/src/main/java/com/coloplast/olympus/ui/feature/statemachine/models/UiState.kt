@@ -21,7 +21,8 @@ enum class UiState {
   OUTER_BREACH_C,
   INNER_BLIND_D,
   TOTAL_BLIND_E,
-  PAY_ATTENTION_F,
+  PAY_ATTENTION_F2,
+  PAY_ATTENTION_F3,
   WET_MOUNT_G,
   CUTGUARD_BROKEN_I,
   WATER_INGRESS_DETECTION_J,
@@ -50,7 +51,8 @@ enum class UiState {
       OUTER_BREACH_C -> "C"
       INNER_BLIND_D -> "D"
       TOTAL_BLIND_E -> "E"
-      PAY_ATTENTION_F -> "F"
+      PAY_ATTENTION_F2 -> "F2"
+      PAY_ATTENTION_F3 -> "F3"
       WET_MOUNT_G -> "G"
       CUTGUARD_BROKEN_I -> "I"
       WATER_INGRESS_DETECTION_J -> "J"

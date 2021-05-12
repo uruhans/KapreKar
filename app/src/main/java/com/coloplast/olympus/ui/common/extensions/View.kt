@@ -102,6 +102,12 @@ fun View.expandOrCollapse(expand: Boolean) {
   }
 }
 
+@BindingAdapter("rotateUpDown")
+fun View.rotateUpDown(rotateUp: Boolean) {
+  val rotationAngle = if (rotateUp) 180f else 0f
+  this@rotateUpDown.animate().rotation(rotationAngle).setDuration(400).setInterpolator(DecelerateInterpolator(1.5f)).start()
+}
+
 fun View.isSoftKeyboardVisible(): Boolean {
   return WindowInsetsCompat
     .toWindowInsetsCompat(rootWindowInsets)

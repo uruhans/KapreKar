@@ -18,9 +18,10 @@
     <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginTop="@dimen/spacing_standard"
-      android:layout_marginBottom="@dimen/spacing_standard"
-      android:layout_marginEnd="@dimen/spacing_standard"
+      android:paddingTop="@dimen/spacing_standard"
+      android:paddingBottom="@dimen/spacing_standard"
+      android:paddingEnd="@dimen/spacing_standard"
+      android:background="?attr/selectableItemBackground"
       android:orientation="horizontal"
       android:onClick="@{() -> ObservableBooleanKt.toggle(item.showContent)}">
 
@@ -37,7 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/spacing_standard"
         android:src="@drawable/ic_chevron"
-        android:rotation="@{item.showContent ? 180f : 0f}"
+        app:rotateUpDown="@{item.showContent}"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

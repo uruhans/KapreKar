@@ -103,7 +103,8 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
             UiState.BLUETOOTH_NOT_ENABLED.notificationId(),
             UiState.INNER_BREACH_B.notificationId(),
             UiState.OUTER_BREACH_C.notificationId(),
-            UiState.PAY_ATTENTION_F.notificationId(),
+            UiState.PAY_ATTENTION_F2.notificationId(),
+            UiState.PAY_ATTENTION_F3.notificationId(),
             UiState.CUTGUARD_BROKEN_I.notificationId(),
             UiState.INNER_BLIND_D.notificationId(),
             UiState.TOTAL_BLIND_E.notificationId(),
@@ -134,8 +135,11 @@ class OlympusNotificationManager(private val notificationCenter: NotificationCen
       UiState.TOTAL_BLIND_E -> {
         NotificationPayload(state.notificationId(), R.string.lock_notification_total_blind, notificationsToRemove = removeBleDisconnected)
       }
-      UiState.PAY_ATTENTION_F -> {
-        NotificationPayload(state.notificationId(), R.string.lock_notification_sweat, notificationsToRemove = removeBleDisconnected)
+      UiState.PAY_ATTENTION_F2 -> {
+        NotificationPayload(state.notificationId(), R.string.status_moisture_detected_title, notificationsToRemove = removeBleDisconnected)
+      }
+      UiState.PAY_ATTENTION_F3 -> {
+        NotificationPayload(state.notificationId(), R.string.status_moisture_outer_detected_title, notificationsToRemove = removeBleDisconnected)
       }
       UiState.WET_MOUNT_G -> {
         NotificationPayload(state.notificationId(), R.string.status_wet_mount_title, notificationsToRemove = removeBleDisconnected)

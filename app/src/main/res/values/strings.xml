@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">KapreKar</string>
+    <string name="kaprekar_headline">Kaprekar\'s constant</string>
+    <string name="kaprekar_number">6174</string>
+    <string name="kaprekar_meaning">6174, or Kaprekar\'s constant, is a constant that comes up when we take a 4-digit integer, form the largest and smallest numbers from its digits, and then subtract these two numbers. Iterating this process of forming and subtracting, we will always end up with the number 6174. (Max iterations is 7)</string>
+    <string name="input_number">Input: %s</string>
+</resources>

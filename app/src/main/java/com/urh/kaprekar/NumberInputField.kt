@@ -40,7 +40,7 @@ import androidx.core.text.isDigitsOnly
 import com.urh.kaprekar.ui.theme.KapreKarTheme
 
 @Composable
-fun OtpInputField(
+fun DigitInputField(
     number: Int?,
     focusRequester: FocusRequester,
     onFocusChanged: (Boolean) -> Unit,
@@ -128,7 +128,7 @@ fun OtpInputField(
 @Composable
 private fun OtpInputFieldPreview() {
     KapreKarTheme {
-        OtpInputField(
+        DigitInputField(
             number = null,
             focusRequester = remember { FocusRequester() },
             onFocusChanged = {},

@@ -29,6 +29,7 @@ fun NumberScreen(
     onAction: (NumberAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -61,11 +62,11 @@ fun NumberScreen(
             horizontalArrangement = Arrangement.spacedBy(22.dp, Alignment.CenterHorizontally)
         ) {
             state.code.forEachIndexed { index, number ->
-                OtpInputField(
+                DigitInputField(
                     number = number,
                     focusRequester = focusRequesters[index],
                     onFocusChanged = { isFocused ->
-                        if(isFocused) {
+                        if (isFocused) {
                             onAction(NumberAction.OnChangeFieldFocused(index))
                         }
                     },

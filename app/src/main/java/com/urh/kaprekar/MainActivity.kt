@@ -19,6 +19,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.urh.kaprekar.ui.theme.KapreKarTheme
+import org.koin.androidx.compose.KoinAndroidContext
+import org.koin.core.context.KoinContext
 
 
 const val FAB_EXPLODE_BOUNDS_KEY = "FAB_EXPLODE_BOUNDS_KEY"

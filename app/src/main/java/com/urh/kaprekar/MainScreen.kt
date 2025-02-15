@@ -26,15 +26,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun SharedTransitionScope.MainScreen(
     fabColor: Color,
     animatedVisibilityScope: AnimatedVisibilityScope,
     onFabClick: (Int) -> Unit,
+    viewModel: NumberViewModel = koinViewModel()
 ) {
-    val viewModel = viewModel<NumberViewModel>()
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     val number by remember {

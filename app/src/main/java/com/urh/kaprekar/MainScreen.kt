@@ -10,8 +10,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.rounded.ThumbUp
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -26,6 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.urh.kaprekar.ui.theme.KapreKarTheme
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -64,7 +64,7 @@ fun SharedTransitionScope.MainScreen(
                        )
                ) {
                    Icon(
-                       imageVector = Icons.Default.Settings,
+                       imageVector = KapreKarTheme.icons.ThumbUp,
                        tint = Color.Unspecified,
                        contentDescription = "Add item"
                    )

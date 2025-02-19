@@ -17,6 +17,7 @@ private val DarkColorScheme = darkColorScheme(
     secondary = PurpleGrey80,
     tertiary = Pink80,
     onSurface = onSurface,
+    onSecondary = onSecondary,
     surface = SurfaceContainer,
     onTertiary = Success
 )
@@ -26,6 +27,7 @@ private val LightColorScheme = lightColorScheme(
     secondary = PurpleGrey40,
     tertiary = Pink40,
     onSurface = onSurfaceLight,
+    onSecondary = onSecondaryLight,
     surface = SurfaceContainerLight,
     onTertiary = SuccessLight
 
@@ -44,7 +46,7 @@ private val LightColorScheme = lightColorScheme(
 fun KapreKarTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {

@@ -89,12 +89,12 @@ fun NumberScreen(
             textAlign = TextAlign.Start,
             color = KapreKarTheme.colorScheme.onSurface,
             fontSize = 14.sp,
-            fontWeight = FontWeight.Light,
+            fontWeight = FontWeight.Normal,
             style = TextStyle(
                 platformStyle = PlatformTextStyle(
                     includeFontPadding = false
                 ),
-                lineHeight = 14.sp,
+                lineHeight = 16.sp,
                 letterSpacing = 0.sp
             )
         )

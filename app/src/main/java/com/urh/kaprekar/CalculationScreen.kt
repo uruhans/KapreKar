@@ -175,17 +175,19 @@ fun ResultCard(
             ) {
                 Text(
                     text = calculationState.numberDescending.toString(),
+                    color = KapreKarTheme.colorScheme.onSecondary,
                     textAlign = TextAlign.End
                 )
                 Text(
                     text = "- " + calculationState.numberAscending.toString(),
+                    color = KapreKarTheme.colorScheme.onSecondary,
                     textAlign = TextAlign.End
                 )
                 HorizontalLine(color = Color.LightGray)
                 Text(
                     text = calculationState.result.toString(),
                     fontSize = if (isLastResult) 24.sp else 20.sp,
-                    color = if (isLastResult) KapreKarTheme.colorScheme.primary else Color.Unspecified,
+                    color = if (isLastResult) KapreKarTheme.colorScheme.primary else KapreKarTheme.colorScheme.onSecondary,
                     textAlign = TextAlign.End
                 )
                 HorizontalLine(color = Color.LightGray)

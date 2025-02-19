@@ -6,8 +6,9 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.rounded.ThumbUp
@@ -24,10 +25,12 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.urh.kaprekar.ui.theme.KapreKarTheme
 import org.koin.androidx.compose.koinViewModel
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun SharedTransitionScope.MainScreen(
     fabColor: Color,
@@ -49,8 +52,8 @@ fun SharedTransitionScope.MainScreen(
                visible = state.code.none { it == null } &&
                        (state.code.distinct().size > 1) &&
                        (state.code.get(0) != 0),
-               enter = fadeIn(),
-               exit = fadeOut()
+               enter = scaleIn(tween(durationMillis = 400, delayMillis = 400)) ,// fadeIn(),
+               exit = scaleOut(tween(durationMillis = 400))
            ) {
                FloatingActionButton(
                    onClick = { if (state.code.all { it != null }) onFabClick(number) },
@@ -62,6 +65,7 @@ fun SharedTransitionScope.MainScreen(
                            ),
                            animatedVisibilityScope = animatedVisibilityScope
                        )
+                       .padding(end = 12.dp, bottom = 12.dp)
                ) {
                    Icon(
                        imageVector = KapreKarTheme.icons.ThumbUp,

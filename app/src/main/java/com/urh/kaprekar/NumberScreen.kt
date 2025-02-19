@@ -1,7 +1,9 @@
 package com.urh.kaprekar
 
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -11,14 +13,17 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.rounded.Delete
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
@@ -37,6 +42,10 @@ fun NumberScreen(
     modifier: Modifier = Modifier
 ) {
 
+    val wobbleDegrees: Float = 15f
+    val wobbleDurationMillis: Int = 400
+    val totalDurationMillis: Long = 2200
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -49,9 +58,10 @@ fun NumberScreen(
             text = stringResource(R.string.kaprekar_headline),
             textAlign = TextAlign.Center,
             color = KapreKarTheme.colorScheme.onSurface,
-            fontSize = 36.sp,
-            fontWeight = FontWeight.Light,
+            fontSize = 34.sp,
+            fontWeight = FontWeight.Normal,
         )
+
         Text(
             text = stringResource(R.string.kaprekar_number),
             textAlign = TextAlign.Center,
@@ -62,15 +72,36 @@ fun NumberScreen(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        Column(horizontalAlignment = CenterHorizontally) {
+        Column(horizontalAlignment = Alignment.End) {
             AnimatedContent(
                 targetState = state.code.none { it == null },
                 label = ""
-            ) { hide ->
-                if (hide) {
+            ) { show ->
+                if (show) {
+                    val rotation = remember { Animatable(0f) }
+                    LaunchedEffect(Unit) {
+                        val numberOfWobbles = totalDurationMillis / wobbleDurationMillis
+                        for (i in 0 until numberOfWobbles) {
+                            rotation.animateTo(
+                                targetValue = -wobbleDegrees,
+                                animationSpec = tween(durationMillis = wobbleDurationMillis / 2, easing = LinearEasing)
+                            )
+                            rotation.animateTo(
+                                targetValue = wobbleDegrees,
+                                animationSpec = tween(durationMillis = wobbleDurationMillis / 2, easing = LinearEasing)
+                            )
+                        }
+                        rotation.snapTo(0f)
+                    }
                     Icon(
-                        imageVector = KapreKarTheme.icons.Delete, contentDescription = null,
-                        Modifier.clickable { onDelete() }
+                        painter = painterResource(id = R.drawable.delete),
+                        contentDescription = null,
+                        tint = KapreKarTheme.colorScheme.surface,
+                        modifier = Modifier
+                            .size(58.dp)
+                            .padding(bottom = 8.dp, end = 22.dp)
+                            .rotate(rotation.value)
+                            .clickable { onDelete() }
                     )
                 }
             }
@@ -102,8 +133,6 @@ fun NumberScreen(
                 }
             }
         }
-
-
 
         Text(
             modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp),

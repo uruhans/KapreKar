@@ -126,7 +126,7 @@ fun DigitInputField(
 
 @PreviewLightDark
 @Composable
-private fun OtpInputFieldPreview() {
+private fun DigitInputFieldPreview() {
     KapreKarTheme {
         DigitInputField(
             number = null,

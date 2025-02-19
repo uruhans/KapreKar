@@ -111,6 +111,9 @@ fun SharedTransitionScope.MainScreen(
                }
                viewModel.onAction(action)
            },
+           onDelete = {
+               viewModel.onDelete()
+           },
            modifier = Modifier
                .padding(innerPadding)
                .consumeWindowInsets(innerPadding)

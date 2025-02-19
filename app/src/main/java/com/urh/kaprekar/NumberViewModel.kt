@@ -10,6 +10,10 @@ class NumberViewModel : ViewModel() {
     private val _state = MutableStateFlow(NumberState())
     val state = _state.asStateFlow()
 
+    fun onDelete() {
+        _state.update { it.copy(focusedIndex = null, isValid = null, code = listOf(null, null, null, null)) }
+    }
+
     fun onAction(action: NumberAction) {
         when (action) {
             is NumberAction.OnChangeFieldFocused -> {

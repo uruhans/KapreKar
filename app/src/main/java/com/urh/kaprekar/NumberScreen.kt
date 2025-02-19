@@ -1,5 +1,8 @@
 package com.urh.kaprekar
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -8,9 +11,12 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.rounded.Delete
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.res.stringResource
@@ -27,6 +33,7 @@ fun NumberScreen(
     state: NumberState,
     focusRequesters: List<FocusRequester>,
     onAction: (NumberAction) -> Unit,
+    onDelete: () -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -55,33 +62,48 @@ fun NumberScreen(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        Row(
-            modifier = Modifier
-                .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(22.dp, Alignment.CenterHorizontally)
-        ) {
-            state.code.forEachIndexed { index, number ->
-                DigitInputField(
-                    number = number,
-                    focusRequester = focusRequesters[index],
-                    onFocusChanged = { isFocused ->
-                        if (isFocused) {
-                            onAction(NumberAction.OnChangeFieldFocused(index))
-                        }
-                    },
-                    onNumberChanged = { newNumber ->
-                        onAction(NumberAction.OnEnterNumber(newNumber, index))
-                    },
-                    onKeyboardBack = {
-                        onAction(NumberAction.OnKeyboardBack)
-                    },
-                    modifier = Modifier
-                        .weight(1f)
-                        .aspectRatio(1f)
-                )
+        Column(horizontalAlignment = CenterHorizontally) {
+            AnimatedContent(
+                targetState = state.code.none { it == null },
+                label = ""
+            ) { hide ->
+                if (hide) {
+                    Icon(
+                        imageVector = KapreKarTheme.icons.Delete, contentDescription = null,
+                        Modifier.clickable { onDelete() }
+                    )
+                }
+            }
+            Row(
+                modifier = Modifier
+                    .padding(16.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(22.dp, Alignment.CenterHorizontally)
+            ) {
+                state.code.forEachIndexed { index, number ->
+                    DigitInputField(
+                        number = number,
+                        focusRequester = focusRequesters[index],
+                        onFocusChanged = { isFocused ->
+                            if (isFocused) {
+                                onAction(NumberAction.OnChangeFieldFocused(index))
+                            }
+                        },
+                        onNumberChanged = { newNumber ->
+                            onAction(NumberAction.OnEnterNumber(newNumber, index))
+                        },
+                        onKeyboardBack = {
+                            onAction(NumberAction.OnKeyboardBack)
+                        },
+                        modifier = Modifier
+                            .weight(1f)
+                            .aspectRatio(1f)
+                    )
+                }
             }
         }
+
+
 
         Text(
             modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp),

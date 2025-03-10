@@ -13,14 +13,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.urh.kaprekar.ui.theme.KapreKarTheme
-import org.koin.androidx.compose.KoinAndroidContext
-import org.koin.core.context.KoinContext
 
 
 const val FAB_EXPLODE_BOUNDS_KEY = "FAB_EXPLODE_BOUNDS_KEY"
@@ -32,7 +29,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             KapreKarTheme {
                 val navController = rememberNavController()
-                val fabColor = Color.LightGray
+                val fabColor = KapreKarTheme.colorScheme.surface
                 SharedTransitionLayout {
                     NavHost(
                         navController = navController,
@@ -56,7 +53,7 @@ class MainActivity : ComponentActivity() {
                             Box(
                                 modifier = Modifier
                                     .fillMaxSize()
-                                    .background(fabColor)
+                                    .background(fabColor.copy(alpha = 0.8f))
                                     .sharedBounds(
                                         sharedContentState = rememberSharedContentState(
                                             key = FAB_EXPLODE_BOUNDS_KEY

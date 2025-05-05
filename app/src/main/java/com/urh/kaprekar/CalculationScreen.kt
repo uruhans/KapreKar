@@ -1,8 +1,10 @@
 package com.urh.kaprekar
 
+import android.app.Activity
 import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,23 +30,31 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewLightDark
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.urh.kaprekar.imageshare.ImageInfo
 import com.urh.kaprekar.ui.theme.KapreKarTheme
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun CalculationScreen(
     id: Int,
+    onShareBitmap: (ImageInfo) -> Unit = {},
     viewModel: CalculationViewModel = koinViewModel()
 ) {
     val systemTopPadding = WindowInsets.systemBars.asPaddingValues().calculateTopPadding()
@@ -54,8 +64,10 @@ fun CalculationScreen(
     CalculationView(
         id = id,
         kapreKarNumberList = kapreKarNumberList,
-        systemTopPadding = systemTopPadding
+        systemTopPadding = systemTopPadding,
+        onShareBitmap = onShareBitmap
     )
+
 }
 
 @Composable
@@ -63,7 +75,12 @@ private fun CalculationView(
     id: Int,
     kapreKarNumberList: List<CalculationState>,
     systemTopPadding: Dp = 0.dp,
+    onShareBitmap: (ImageInfo) -> Unit = {}
 ) {
+    val currentContext = LocalContext.current
+    val compositionCoroutineScope: CoroutineScope = rememberCoroutineScope()
+    val screenDensity: Density = LocalDensity.current
+
     Column(
         modifier = Modifier
             .fillMaxSize(),
@@ -78,7 +95,20 @@ private fun CalculationView(
                     .padding(top = systemTopPadding),
             ) {
                 Box(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth()
+                        .clickable {
+                            compositionCoroutineScope.launch {
+                                val composableSnapshot = ImageInfo(
+                                    currentActivity = currentContext as Activity,
+                                    screenDensity = screenDensity,
+                                    composableView = {
+                                        KapreKarTheme {
+                                            CalculationDetails(kapreKarNumberList)
+                                        }
+                                    })
+                                onShareBitmap(composableSnapshot)
+                            }
+                        },
                 ) {
                     Text(
                         modifier = Modifier.align(Alignment.Center),
@@ -88,48 +118,52 @@ private fun CalculationView(
                         textAlign = TextAlign.Center,
                     )
                 }
+                CalculationDetails(kapreKarNumberList)
+            }
+        }
+    }
+}
 
-                Spacer(modifier = Modifier.padding(16.dp))
-                HorizontalLine()
-                Spacer(modifier = Modifier.padding(16.dp))
+@Composable
+private fun CalculationDetails(kapreKarNumberList: List<CalculationState>) {
+    Spacer(modifier = Modifier.padding(16.dp))
+    HorizontalLine()
+    Spacer(modifier = Modifier.padding(16.dp))
 
-                if (kapreKarNumberList.size > 1) {
-                    Box(
-                        modifier = Modifier.fillMaxWidth(),
-                    ) {
-                        Text(
-                            modifier = Modifier.align(Alignment.Center),
-                            text = "Iterations: ${kapreKarNumberList.size}"
-                        )
-                    }
-                    Spacer(modifier = Modifier.padding(8.dp))
-                    LazyVerticalGrid(
-                        modifier = Modifier.padding(start = 64.dp),
-                        columns = GridCells.Adaptive(130.dp),
+    if (kapreKarNumberList.size > 1) {
+        Box(
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            Text(
+                modifier = Modifier.align(Alignment.Center),
+                text = "Iterations: ${kapreKarNumberList.size}"
+            )
+        }
+        Spacer(modifier = Modifier.padding(8.dp))
+        LazyVerticalGrid(
+            modifier = Modifier.padding(start = 64.dp),
+            columns = GridCells.Adaptive(130.dp),
 
-                        contentPadding = PaddingValues(
-                            top = 16.dp,
-                            end = 12.dp,
-                            bottom = 16.dp
-                        ),
-                        content = {
-                            items(kapreKarNumberList.size) { index ->
-                                ResultCard(
-                                    calculationState = kapreKarNumberList[index],
-                                    isLastResult = index == kapreKarNumberList.size - 1
-                                )
-                            }
-                        }
+            contentPadding = PaddingValues(
+                top = 16.dp,
+                end = 12.dp,
+                bottom = 16.dp
+            ),
+            content = {
+                items(kapreKarNumberList.size) { index ->
+                    ResultCard(
+                        calculationState = kapreKarNumberList[index],
+                        isLastResult = index == kapreKarNumberList.size - 1
                     )
-                } else {
-                    Box(
-                        modifier = Modifier.fillMaxWidth(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                       ResultCard(calculationState = kapreKarNumberList[0], isLastResult = true)
-                    }
                 }
             }
+        )
+    } else {
+        Box(
+            modifier = Modifier.fillMaxWidth(),
+            contentAlignment = Alignment.Center
+        ) {
+            ResultCard(calculationState = kapreKarNumberList[0], isLastResult = true)
         }
     }
 }

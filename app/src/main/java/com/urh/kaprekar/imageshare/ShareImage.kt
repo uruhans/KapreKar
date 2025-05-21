@@ -30,7 +30,8 @@ class ShareImage (
                 shareIntent = Intent().apply {
                     action = Intent.ACTION_SEND
                     putExtra(Intent.EXTRA_STREAM, uri)
-                    type = "image/*"
+                    //type = "image/*"
+                    type = "message/rfc822"
                     flags = FLAG_ACTIVITY_NEW_TASK
                 }
             }

@@ -11,6 +11,7 @@ import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.rounded.ThumbUp
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -23,8 +24,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.urh.kaprekar.ui.theme.KapreKarTheme
@@ -68,7 +71,8 @@ fun SharedTransitionScope.MainScreen(
                        .padding(end = 12.dp, bottom = 12.dp)
                ) {
                    Icon(
-                       imageVector = KapreKarTheme.icons.ThumbUp,
+                       modifier = Modifier.size(32.dp),
+                       imageVector = ImageVector.vectorResource(id = R.drawable.stiliseret_naese),
                        tint = Color.Unspecified,
                        contentDescription = "Add item"
                    )

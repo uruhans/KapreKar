@@ -8,7 +8,6 @@ import android.app.PendingIntent
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
@@ -47,8 +46,8 @@ class MainApplication: Application() {
     private fun showNotification() {
         val intent = Intent().apply {
             component = ComponentName("com.plcoding.deeplinkingguidetypesafenavigation", "com.plcoding.deeplinkingguidetypesafenavigation.MainActivity")
-            //DeepLink
-            data = "https://$DEEPLINK_DOMAIN/VC3-9999XY".toUri()
+            //DeepLink with param data
+            data = "http://$DEEPLINK_DOMAIN/VC3-9999XY".toUri() //"https://$DEEPLINK_DOMAIN/VC3-9999XY".toUri()
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
 
@@ -64,7 +63,7 @@ class MainApplication: Application() {
             .setContentTitle("Open App Y")
             .setContentText("Tap to launch deeplink in DeeplinkingGuideTypeSafeNavigation")
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            .setContentIntent(pendingIntent) // This is key
+            .setContentIntent(pendingIntent)
             .setAutoCancel(true)
             .build()
 

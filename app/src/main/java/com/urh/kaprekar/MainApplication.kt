@@ -16,7 +16,7 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.GlobalContext.startKoin
 
-const val DEEPLINK_DOMAIN = "pl-coding.com"
+const val DEEPLINK_DOMAIN = "veolive.com"
 
 class MainApplication: Application() {
     override fun onCreate() {
@@ -45,9 +45,9 @@ class MainApplication: Application() {
     @SuppressLint("QueryPermissionsNeeded")
     private fun showNotification() {
         val intent = Intent().apply {
-            component = ComponentName("com.plcoding.deeplinkingguidetypesafenavigation", "com.plcoding.deeplinkingguidetypesafenavigation.MainActivity")
+            component = ComponentName("com.veolive.deeplinkingguidetypesafenavigation", "com.veolive.deeplinkingguidetypesafenavigation.MainActivity")
             //DeepLink with param data
-            data = "http://$DEEPLINK_DOMAIN/VC3-9999XY".toUri() //"https://$DEEPLINK_DOMAIN/VC3-9999XY".toUri()
+            data = "http://$DEEPLINK_DOMAIN/VC3-9999XY".toUri() //"http://$DEEPLINK_DOMAIN/VC3-9999XY".toUri()
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
 
@@ -60,8 +60,8 @@ class MainApplication: Application() {
 
         val notification = NotificationCompat.Builder(this, "channel_id")
             .setSmallIcon(R.drawable.ic_launcher_foreground)
-            .setContentTitle("Open App Y")
-            .setContentText("Tap to launch deeplink in DeeplinkingGuideTypeSafeNavigation")
+            .setContentTitle("Open DeeplinkApp")
+            .setContentText("Tap to launch deeplinkApp")
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)

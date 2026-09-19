@@ -6,4 +6,13 @@ import kotlinx.serialization.Serializable
 data object MainRoute
 
 @Serializable
+data object KaprekarRoute
+
+@Serializable
+data object CollatzRoute
+
+@Serializable
+data object PalindromRoute
+
+@Serializable
 data class CalculationRoute(val movieId: Int)

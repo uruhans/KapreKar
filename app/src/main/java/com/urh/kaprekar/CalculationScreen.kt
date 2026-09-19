@@ -39,6 +39,7 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.urh.kaprekar.ui.theme.KapreKarAppTheme
 import com.urh.kaprekar.ui.theme.KapreKarTheme
 import org.koin.androidx.compose.koinViewModel
 
@@ -210,7 +211,7 @@ fun ResultCard(
 @Composable
 @PreviewLightDark
 fun CalculationViewPreview() {
-    KapreKarTheme {
+    KapreKarAppTheme {
         val id = 1234
         val kapreKarNumberList =
             listOf(CalculationState(1234, 4321, 3087), CalculationState(2358, 8532, 6174))
@@ -222,8 +223,7 @@ fun CalculationViewPreview() {
 @Composable
 @PreviewLightDark
 fun ResultCardPreview() {
-    KapreKarTheme {
+    KapreKarAppTheme {
         ResultCard(calculationState = CalculationState(1234, 4321, 3087))
-
     }
 }

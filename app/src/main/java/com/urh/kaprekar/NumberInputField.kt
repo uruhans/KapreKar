@@ -37,6 +37,7 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.text.isDigitsOnly
+import com.urh.kaprekar.ui.theme.KapreKarAppTheme
 import com.urh.kaprekar.ui.theme.KapreKarTheme
 
 @Composable
@@ -126,10 +127,10 @@ fun DigitInputField(
 
 @PreviewLightDark
 @Composable
-private fun DigitInputFieldPreview() {
-    KapreKarTheme {
+fun DigitInputFieldPreview() {
+    KapreKarAppTheme {
         DigitInputField(
-            number = null,
+            number = 8,
             focusRequester = remember { FocusRequester() },
             onFocusChanged = {},
             onKeyboardBack = {},

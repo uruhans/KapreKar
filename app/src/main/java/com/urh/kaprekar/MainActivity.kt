@@ -17,6 +17,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.urh.kaprekar.ui.theme.KapreKarAppTheme
 import com.urh.kaprekar.ui.theme.KapreKarTheme
 
 
@@ -27,7 +28,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            KapreKarTheme {
+            KapreKarAppTheme {
                 val navController = rememberNavController()
                 val fabColor = KapreKarTheme.colorScheme.surface
                 SharedTransitionLayout {
@@ -38,6 +39,28 @@ class MainActivity : ComponentActivity() {
                             .fillMaxSize()
                     ) {
                         composable<MainRoute> {
+                            LandingScreen(
+                                onKaprekarClick = {
+                                    navController.navigate(KaprekarRoute)
+                                },
+                                onCollatzClick = {
+                                    navController.navigate(CollatzRoute)
+                                },
+                                onPalindromClick = {
+                                    navController.navigate(PalindromRoute)
+                                }
+                            )
+                        }
+
+                        composable<CollatzRoute> {
+                            CollatzView()
+                        }
+
+                        composable<PalindromRoute> {
+                            PalindromView()
+                        }
+
+                        composable<KaprekarRoute> {
                             MainScreen(
                                 fabColor = fabColor,
                                 animatedVisibilityScope = this,

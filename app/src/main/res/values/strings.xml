@@ -1,7 +1,19 @@
 <resources>
     <string name="app_name">KapreKar</string>
+    <string name="collatz_title">Collatz</string>
+    <string name="collatz_description">Collatz-formodningen (3n + 1 problemet):\nEn af matematikkens mest berømte iterative processer.\nVælg et helt tal. Hvis det er lige, dividerer du med 2. Hvis det er ulige, ganger du med 3 og lægger 1 til.\nUanset hvilket tal du starter med, formodes det, at du altid ender i den samme uendelige løkke: 4 -&gt; 2 -&gt; 1.</string>
+    <string name="collatz_dialog_title">Beregn Collatz-følgen</string>
+    <string name="palindron_title">Palindrom</string>
+    <string name="palindron_description">Lychrel-tal og Palindrom-processen:\nTag et tal, vend rækkefølgen af cifrene om, og læg de to tal sammen. Gentag processen. For de fleste tal vil dette hurtigt skabe et palindrom (et tal der læses ens forfra og bagfra). Tal, hvor dette aldrig sker, kaldes Lychrel-tal. Det mindste formodede Lychrel-tal er 196.</string>
+    <string name="collatz_dialog_label">Heltal</string>
+    <string name="collatz_dialog_range">Indtast et tal fra 1 til 1.000.000</string>
+    <string name="collatz_dialog_calculate">Beregn</string>
+    <string name="collatz_dialog_cancel">Annuller</string>
+    <string name="kaprekar_title">KapreKar</string>
+    <string name="kaprekar_description">Opdag vejen til Kaprekars konstant med et hvilket som helst gyldigt firecifret tal.</string>
+    <string name="landing_button">Indtast et tal</string>
     <string name="kaprekar_headline">Kaprekar\'s constant</string>
     <string name="kaprekar_number">6174</string>
-    <string name="kaprekar_meaning">6174, or Kaprekar\'s constant, is a constant that comes up when we take a 4-digit integer, form the largest and smallest numbers from its digits, and then subtract these two numbers. Iterating this process of forming and subtracting, we will always end up with the number 6174. (Max iterations is 7)</string>
+    <string name="kaprekar_meaning">6174, også kaldet Kaprekars konstant, er en konstant, der opstår, når vi tager et firecifret heltal, danner det største og det mindste tal af dets cifre og derefter trækker de to tal fra hinanden. Når denne proces med at danne og subtrahere tallene gentages, ender vi altid med tallet 6174. (Det maksimale antal iterationer er 7)</string>
     <string name="input_number">Input: %s</string>
 </resources>

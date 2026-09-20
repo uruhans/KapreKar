@@ -45,7 +45,7 @@ fun CollatzView(
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     CollatzContent(
-        state = state,
+        result = state.calculationResult,
         onCalculateClick = viewModel::getCollatzSequence,
         modifier = modifier
     )
@@ -53,7 +53,7 @@ fun CollatzView(
 
 @Composable
 private fun CollatzContent(
-    state: CollatzState,
+    result: String,
     onCalculateClick: (Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -89,7 +89,7 @@ private fun CollatzContent(
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            text = stringResource(R.string.collatz_description),
+            text = stringResource(R.string.collatz_explanation),
             color = KapreKarTheme.colorScheme.onSurface,
             fontSize = 18.sp,
             lineHeight = 26.sp,
@@ -98,10 +98,10 @@ private fun CollatzContent(
 
         Spacer(modifier = Modifier.height(40.dp))
 
-        if (state.calculationResult.isNotEmpty()) {
+        if (result.isNotEmpty()) {
             Text(
-                text = state.calculationResult,
-                color = KapreKarTheme.colorScheme.onSurface,
+                text = result,
+                color = KapreKarTheme.colorScheme.onBackground,
                 textAlign = TextAlign.Start
             )
         }
@@ -124,6 +124,17 @@ private fun CollatzContent(
                 fontWeight = FontWeight.SemiBold
             )
         }
+    }
+}
+
+@PreviewLightDark
+@Composable
+private fun CollatzContentPreview() {
+    KapreKarAppTheme {
+        CollatzContent(
+            result = "Start: 27\nSteps: 111\nPeak: 9232\n27 → 82 → 41 → 124 → 62 → 31 ...",
+            onCalculateClick = {}
+        )
     }
 }
 
@@ -174,15 +185,4 @@ private fun CollatzInputDialog(
             }
         }
     )
-}
-
-@PreviewLightDark
-@Composable
-fun CollatzViewPreview() {
-    KapreKarAppTheme {
-        CollatzContent(
-            state = CollatzState(),
-            onCalculateClick = {}
-        )
-    }
 }

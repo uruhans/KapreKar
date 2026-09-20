@@ -45,7 +45,7 @@ fun PalindromView(
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     PalindromContent(
-        state = state,
+        result = state.calculationResult,
         onCalculateClick = viewModel::getPalindromSequence,
         modifier = modifier
     )
@@ -53,7 +53,7 @@ fun PalindromView(
 
 @Composable
 private fun PalindromContent(
-    state: PalindromState,
+    result: String,
     onCalculateClick: (Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -89,7 +89,7 @@ private fun PalindromContent(
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            text = stringResource(R.string.palindron_description),
+            text = stringResource(R.string.palindron_explanation),
             color = KapreKarTheme.colorScheme.onSurface,
             fontSize = 18.sp,
             lineHeight = 26.sp,
@@ -98,10 +98,10 @@ private fun PalindromContent(
 
         Spacer(modifier = Modifier.height(40.dp))
 
-        if (state.calculationResult.isNotEmpty()) {
+        if (result.isNotEmpty()) {
             Text(
-                text = state.calculationResult,
-                color = KapreKarTheme.colorScheme.onSurface,
+                text = result,
+                color = KapreKarTheme.colorScheme.onBackground,
                 textAlign = TextAlign.Start
             )
         }
@@ -181,7 +181,7 @@ private fun PalindromInputDialog(
 fun PalindromViewPreview() {
     KapreKarAppTheme {
         PalindromContent(
-            state = PalindromState(),
+            result = "121 is a palindrome",
             onCalculateClick = {}
         )
     }

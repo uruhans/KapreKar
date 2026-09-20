@@ -41,6 +41,7 @@ fun LandingScreen(
             .background(MaterialTheme.colorScheme.background)
             .verticalScroll(rememberScrollState())
     ) {
+        Spacer(modifier = Modifier.height(32.dp))
         KapreKarContent(onStartClick = onKaprekarClick)
         HorizontalDivider(
             modifier = Modifier.padding(horizontal = 32.dp),
@@ -99,7 +100,7 @@ fun KapreKarContent(
             )
         ) {
             Text(
-                text = stringResource(R.string.landing_button),
+                text = stringResource(R.string.kaprekar_title),
                 fontSize = 18.sp,
                 fontWeight = FontWeight.SemiBold
             )
@@ -151,7 +152,7 @@ private fun CollatzContent(
             )
         ) {
             Text(
-                text = stringResource(R.string.landing_button),
+                text = stringResource(R.string.collatz_title),
                 fontSize = 18.sp,
                 fontWeight = FontWeight.SemiBold
             )
@@ -205,7 +206,7 @@ private fun PalindromContent(
             )
         ) {
             Text(
-                text = stringResource(R.string.landing_button),
+                text = stringResource(R.string.palindron_title),
                 fontSize = 18.sp,
                 fontWeight = FontWeight.SemiBold
             )

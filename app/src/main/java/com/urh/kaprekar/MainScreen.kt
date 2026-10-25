@@ -9,7 +9,9 @@ import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.rounded.ThumbUp
 import androidx.compose.material3.FloatingActionButton
@@ -101,26 +103,30 @@ fun SharedTransitionScope.MainScreen(
            }
        }
 
-       NumberScreen(
-           state = state,
-           focusRequesters = focusRequesters,
-           onAction = { action ->
-               when(action) {
-                   is NumberAction.OnEnterNumber -> {
-                       if(action.number != null) {
-                           focusRequesters[action.index].freeFocus()
+       Box(modifier = Modifier.fillMaxSize()) {
+           MathBackground()
+
+           NumberScreen(
+               state = state,
+               focusRequesters = focusRequesters,
+               onAction = { action ->
+                   when(action) {
+                       is NumberAction.OnEnterNumber -> {
+                           if(action.number != null) {
+                               focusRequesters[action.index].freeFocus()
+                           }
                        }
+                       else -> Unit
                    }
-                   else -> Unit
-               }
-               viewModel.onAction(action)
-           },
-           onDelete = {
-               viewModel.onDelete()
-           },
-           modifier = Modifier
-               .padding(innerPadding)
-               .consumeWindowInsets(innerPadding)
-       )
+                   viewModel.onAction(action)
+               },
+               onDelete = {
+                   viewModel.onDelete()
+               },
+               modifier = Modifier
+                   .padding(innerPadding)
+                   .consumeWindowInsets(innerPadding)
+           )
+       }
    }
 }

@@ -65,69 +65,77 @@ private fun CalculationView(
     kapreKarNumberList: List<CalculationState>,
     systemTopPadding: Dp = 0.dp,
 ) {
-    Column(
+    Box(
         modifier = Modifier
-            .fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
     ) {
-        AnimatedVisibility(
-            visible = kapreKarNumberList.isNotEmpty()
+        MathBackground()
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Column(
-                modifier = Modifier
-                    .padding(top = systemTopPadding),
+            AnimatedVisibility(
+                visible = kapreKarNumberList.isNotEmpty()
             ) {
-                Box(
-                    modifier = Modifier.fillMaxWidth(),
+                Column(
+                    modifier = Modifier
+                        .padding(top = systemTopPadding),
                 ) {
-                    Text(
-                        modifier = Modifier.align(Alignment.Center),
-                        text = stringResource(R.string.input_number, id.toString()),
-                        style = typography.bodyLarge,
-                        fontSize = 28.sp,
-                        textAlign = TextAlign.Center,
-                    )
-                }
-
-                Spacer(modifier = Modifier.padding(16.dp))
-                HorizontalLine()
-                Spacer(modifier = Modifier.padding(16.dp))
-
-                if (kapreKarNumberList.size > 1) {
                     Box(
                         modifier = Modifier.fillMaxWidth(),
                     ) {
                         Text(
                             modifier = Modifier.align(Alignment.Center),
-                            text = "Iterations: ${kapreKarNumberList.size}"
+                            text = stringResource(R.string.input_number, id.toString()),
+                            style = typography.bodyLarge,
+                            fontSize = 28.sp,
+                            textAlign = TextAlign.Center,
                         )
                     }
-                    Spacer(modifier = Modifier.padding(8.dp))
-                    LazyVerticalGrid(
-                        modifier = Modifier.padding(start = 64.dp),
-                        columns = GridCells.Adaptive(130.dp),
 
-                        contentPadding = PaddingValues(
-                            top = 16.dp,
-                            end = 12.dp,
-                            bottom = 16.dp
-                        ),
-                        content = {
-                            items(kapreKarNumberList.size) { index ->
-                                ResultCard(
-                                    calculationState = kapreKarNumberList[index],
-                                    isLastResult = index == kapreKarNumberList.size - 1
-                                )
-                            }
+                    Spacer(modifier = Modifier.padding(16.dp))
+                    HorizontalLine()
+                    Spacer(modifier = Modifier.padding(16.dp))
+
+                    if (kapreKarNumberList.size > 1) {
+                        Box(
+                            modifier = Modifier.fillMaxWidth(),
+                        ) {
+                            Text(
+                                modifier = Modifier.align(Alignment.Center),
+                                text = "Iterations: ${kapreKarNumberList.size}"
+                            )
                         }
-                    )
-                } else {
-                    Box(
-                        modifier = Modifier.fillMaxWidth(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                       ResultCard(calculationState = kapreKarNumberList[0], isLastResult = true)
+                        Spacer(modifier = Modifier.padding(8.dp))
+                        LazyVerticalGrid(
+                            modifier = Modifier.padding(start = 64.dp),
+                            columns = GridCells.Adaptive(130.dp),
+
+                            contentPadding = PaddingValues(
+                                top = 16.dp,
+                                end = 12.dp,
+                                bottom = 16.dp
+                            ),
+                            content = {
+                                items(kapreKarNumberList.size) { index ->
+                                    ResultCard(
+                                        calculationState = kapreKarNumberList[index],
+                                        isLastResult = index == kapreKarNumberList.size - 1
+                                    )
+                                }
+                            }
+                        )
+                    } else {
+                        Box(
+                            modifier = Modifier.fillMaxWidth(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                           ResultCard(calculationState = kapreKarNumberList[0], isLastResult = true)
+                        }
                     }
                 }
             }

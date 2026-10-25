@@ -3,6 +3,7 @@ package com.urh.kaprekar
 import androidx.compose.foundation.background
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -35,24 +36,35 @@ fun LandingScreen(
     onPalindromClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Column(
+    Box(
         modifier = modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
-            .verticalScroll(rememberScrollState())
     ) {
-        Spacer(modifier = Modifier.height(32.dp))
-        KapreKarContent(onStartClick = onKaprekarClick)
-        HorizontalDivider(
-            modifier = Modifier.padding(horizontal = 32.dp),
-            color = KapreKarTheme.colorScheme.onSurface.copy(alpha = 0.25f)
-        )
-        CollatzContent(onStartClick = onCollatzClick)
-        HorizontalDivider(
-            modifier = Modifier.padding(horizontal = 32.dp),
-            color = KapreKarTheme.colorScheme.onSurface.copy(alpha = 0.25f)
-        )
-        PalindromContent(onStartClick = onPalindromClick)
+        MathBackground()
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+        ) {
+            Spacer(modifier = Modifier.height(32.dp))
+            KapreKarContent(onStartClick = onKaprekarClick)
+/*
+            HorizontalDivider(
+                modifier = Modifier.padding(horizontal = 32.dp),
+                color = KapreKarTheme.colorScheme.onSurface.copy(alpha = 0.25f)
+            )
+ */
+            CollatzContent(onStartClick = onCollatzClick)
+/*
+            HorizontalDivider(
+                modifier = Modifier.padding(horizontal = 32.dp),
+                color = KapreKarTheme.colorScheme.onSurface.copy(alpha = 0.25f)
+            )
+ */
+            PalindromContent(onStartClick = onPalindromClick)
+        }
     }
 }
 
@@ -64,7 +76,6 @@ fun KapreKarContent(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.background)
             .padding(horizontal = 32.dp, vertical = 48.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
@@ -116,7 +127,6 @@ private fun CollatzContent(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.background)
             .padding(horizontal = 32.dp, vertical = 48.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
@@ -168,7 +178,6 @@ private fun PalindromContent(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.background)
             .padding(horizontal = 32.dp, vertical = 48.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
